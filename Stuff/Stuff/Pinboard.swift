@@ -23,7 +23,7 @@ struct Post: Codable {
     let meta: String
     let shared: Bool
     let tags: [String]
-    let time: Date?  // TODO: Is there an elegant way to parse this as a date?
+    let time: Date?
     let toRead: Bool
 
     enum CodingKeys: String, CodingKey {

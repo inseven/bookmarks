@@ -55,25 +55,10 @@ struct Post: Codable {
         href = URL(string: try container.decode(String.self, forKey: .href))
         hash = try container.decode(String.self, forKey: .hash)
         meta = try container.decode(String.self, forKey: .meta)
-
-        let shared = try container.decode(Boolean.self, forKey: .shared)
-        switch (shared) {
-        case .yes:
-            self.shared = true
-        case .no:
-            self.shared = false
-        }
-
+        shared = try container.decode(Boolean.self, forKey: .shared) == .yes ? true : false
         tags = try container.decode(String.self, forKey: .tags).split(separator: " ").map(String.init)
         time = ISO8601DateFormatter.init().date(from: try container.decode(String.self, forKey: .time))
-
-        let toRead = try container.decode(Boolean.self, forKey: .toRead)
-        switch (toRead) {
-        case .yes:
-            self.toRead = true
-        case .no:
-            self.toRead = false
-        }
+        toRead = try container.decode(Boolean.self, forKey: .toRead) == .yes ? true : false
     }
 }
 

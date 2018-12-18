@@ -10,6 +10,7 @@ import UIKit
 
 class Cell: UICollectionViewCell {
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var imageView: UIImageView!
 }
 
 class ViewController: UICollectionViewController {
@@ -47,6 +48,7 @@ class ViewController: UICollectionViewController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! Cell
         let post = self.posts[indexPath.row]
         cell.titleLabel.text = post.description
+        cell.imageView.image = nil
 
         guard let url = post.href else {
             print("Unable to get URL for cell")
@@ -59,7 +61,45 @@ class ViewController: UICollectionViewController {
                 print("Unable to get contents of URL for cell")
                 return
             }
-            print(data)
+            guard let doc = TFHpple(htmlData: data) else {
+                print("Unable to parse the data")
+                return
+            }
+            guard let elements = doc.search(withXPathQuery: "//meta[@property='og:image']/@content") as? [TFHppleElement] else {
+                print("Unable to find open graph image tag")
+                return
+            }
+            guard let element = elements.first else {
+                print("Unable to find open graph image tag")
+                return
+            }
+            guard let content = element.content else {
+                print("Image tag had no content")
+                return
+            }
+            guard let imageURL = URL(string: content) else {
+                print("Invalid URL")
+                return
+            }
+            guard let imageData = try? Data.init(contentsOf: imageURL) else {
+                print("Unable to download image")
+                return
+            }
+            guard let image = UIImage.init(data: imageData) else {
+                print("Unable to construct image")
+                return
+            }
+            print("Successfully downloaded image")
+            DispatchQueue.main.async { [weak self] in  // TODO: Sync?
+                guard let self = self else {
+                    return
+                }
+                // TODO: What happens if the cell locations have changed?
+                guard let cell = self.collectionView.cellForItem(at: indexPath) as? Cell else {
+                    return
+                }
+                cell.imageView.image = image
+            }
         }
         task.resume()
 

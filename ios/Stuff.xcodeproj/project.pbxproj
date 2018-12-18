@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D864E46C21C93FB400EAB9AD /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = D864E46721C93FB400EAB9AD /* TFHpple.m */; };
+		D864E46D21C93FB400EAB9AD /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = D864E46A21C93FB400EAB9AD /* TFHppleElement.m */; };
+		D864E46E21C93FB400EAB9AD /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = D864E46B21C93FB400EAB9AD /* XPathQuery.m */; };
+		D864E47121C93FD200EAB9AD /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D864E47021C93FD200EAB9AD /* libxml2.2.tbd */; };
 		D8D3BBFA21C6AEBC00D6FB97 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BBF921C6AEBC00D6FB97 /* AppDelegate.swift */; };
 		D8D3BBFC21C6AEBC00D6FB97 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BBFB21C6AEBC00D6FB97 /* ViewController.swift */; };
 		D8D3BBFF21C6AEBC00D6FB97 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8D3BBFD21C6AEBC00D6FB97 /* Main.storyboard */; };
@@ -36,6 +40,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D864E46621C93FB400EAB9AD /* TFHppleElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHppleElement.h; sourceTree = "<group>"; };
+		D864E46721C93FB400EAB9AD /* TFHpple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFHpple.m; sourceTree = "<group>"; };
+		D864E46821C93FB400EAB9AD /* XPathQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPathQuery.h; sourceTree = "<group>"; };
+		D864E46921C93FB400EAB9AD /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHpple.h; sourceTree = "<group>"; };
+		D864E46A21C93FB400EAB9AD /* TFHppleElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFHppleElement.m; sourceTree = "<group>"; };
+		D864E46B21C93FB400EAB9AD /* XPathQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPathQuery.m; sourceTree = "<group>"; };
+		D864E47021C93FD200EAB9AD /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
+		D864E47221C9417F00EAB9AD /* Stuff-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Stuff-Bridging-Header.h"; sourceTree = "<group>"; };
 		D8D3BBF621C6AEBC00D6FB97 /* Stuff.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stuff.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8D3BBF921C6AEBC00D6FB97 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D8D3BBFB21C6AEBC00D6FB97 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -58,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D864E47121C93FD200EAB9AD /* libxml2.2.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +91,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D864E46521C93FB400EAB9AD /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				D864E46621C93FB400EAB9AD /* TFHppleElement.h */,
+				D864E46721C93FB400EAB9AD /* TFHpple.m */,
+				D864E46821C93FB400EAB9AD /* XPathQuery.h */,
+				D864E46921C93FB400EAB9AD /* TFHpple.h */,
+				D864E46A21C93FB400EAB9AD /* TFHppleElement.m */,
+				D864E46B21C93FB400EAB9AD /* XPathQuery.m */,
+			);
+			name = Classes;
+			path = hpple/Pod/Classes;
+			sourceTree = SOURCE_ROOT;
+		};
+		D864E46F21C93FD200EAB9AD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D864E47021C93FD200EAB9AD /* libxml2.2.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D8D3BBED21C6AEBC00D6FB97 = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +120,7 @@
 				D8D3BC0D21C6AEBD00D6FB97 /* StuffTests */,
 				D8D3BC1821C6AEBD00D6FB97 /* StuffUITests */,
 				D8D3BBF721C6AEBC00D6FB97 /* Products */,
+				D864E46F21C93FD200EAB9AD /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,6 +137,7 @@
 		D8D3BBF821C6AEBC00D6FB97 /* Stuff */ = {
 			isa = PBXGroup;
 			children = (
+				D864E46521C93FB400EAB9AD /* Classes */,
 				D8D3BBF921C6AEBC00D6FB97 /* AppDelegate.swift */,
 				D8D3BBFB21C6AEBC00D6FB97 /* ViewController.swift */,
 				D8D3BBFD21C6AEBC00D6FB97 /* Main.storyboard */,
@@ -109,6 +146,7 @@
 				D8D3BC0521C6AEBD00D6FB97 /* Info.plist */,
 				D8D3BC2721C72D6800D6FB97 /* Result.swift */,
 				D8D3BC2921C72F7600D6FB97 /* Pinboard.swift */,
+				D864E47221C9417F00EAB9AD /* Stuff-Bridging-Header.h */,
 			);
 			path = Stuff;
 			sourceTree = "<group>";
@@ -262,6 +300,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D864E46D21C93FB400EAB9AD /* TFHppleElement.m in Sources */,
+				D864E46E21C93FB400EAB9AD /* XPathQuery.m in Sources */,
+				D864E46C21C93FB400EAB9AD /* TFHpple.m in Sources */,
 				D8D3BC2A21C72F7600D6FB97 /* Pinboard.swift in Sources */,
 				D8D3BBFC21C6AEBC00D6FB97 /* ViewController.swift in Sources */,
 				D8D3BC2821C72D6800D6FB97 /* Result.swift in Sources */,
@@ -371,6 +412,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -426,6 +468,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -449,6 +492,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.Stuff;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Stuff/Stuff-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -467,6 +511,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.Stuff;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Stuff/Stuff-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

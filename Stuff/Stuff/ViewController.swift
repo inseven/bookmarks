@@ -8,6 +8,10 @@
 
 import UIKit
 
+class Cell: UICollectionViewCell {
+    @IBOutlet weak var titleLabel: UILabel!
+}
+
 class ViewController: UICollectionViewController {
 
     var posts: [Post]!
@@ -29,7 +33,6 @@ class ViewController: UICollectionViewController {
                 print("Failed to fetch the posts with error \(error)")
             }
         }
-        // Do any additional setup after loading the view, typically from a nib.
     }
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -41,9 +44,33 @@ class ViewController: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! Cell
+        let post = self.posts[indexPath.row]
+        cell.titleLabel.text = post.description
+
+        guard let url = post.href else {
+            print("Unable to get URL for cell")
+            return cell
+        }
+
+        // Download the contents of the page.
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard let data = data else {
+                print("Unable to get contents of URL for cell")
+                return
+            }
+            print(data)
+        }
+        task.resume()
+
+        return cell
     }
 
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // TODO: Rename href to URL and make none-nullable
+        let post = self.posts[indexPath.row]
+        UIApplication.shared.open(post.href!)
+    }
 
 }
 

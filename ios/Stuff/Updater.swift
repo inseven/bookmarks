@@ -32,7 +32,10 @@ class Updater {
                     guard let url = post.href else {
                         continue
                     }
-                    items.append(Item(identifier: post.hash, title: post.description ?? "", url: url))
+                    items.append(Item(identifier: post.hash,
+                                      title: post.description ?? "",
+                                      url: url,
+                                      tags: post.tags))
                 }
                 self.store.save(items: items) { (success) in
                     print("Saved items with success \(success)")

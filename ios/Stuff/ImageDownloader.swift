@@ -92,6 +92,7 @@ class ImageDownloader {
                 store.save(items: [Item(identifier: item.identifier,
                                         title: item.title,
                                         url: item.url,
+                                        tags: item.tags,
                                         thumbnail: thumbnail)]) { (success) in
                     print("Updated item!")
                 }

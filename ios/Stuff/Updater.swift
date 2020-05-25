@@ -29,13 +29,16 @@ class Updater {
                 }
                 var items: [Item] = []
                 for post in posts {
-                    guard let url = post.href else {
-                        continue
+                    guard
+                        let url = post.href,
+                        let date = post.time else {
+                            continue
                     }
                     items.append(Item(identifier: post.hash,
                                       title: post.description ?? "",
                                       url: url,
-                                      tags: post.tags))
+                                      tags: post.tags,
+                                      date: date))
                 }
                 self.store.save(items: items) { (success) in
                     print("Saved items with success \(success)")

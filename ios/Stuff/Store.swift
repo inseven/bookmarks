@@ -15,13 +15,15 @@ class Item {
     let title: String
     let url: URL
     let tags: [String]
+    let date: Date
     let thumbnail: UIImage?
 
-    init(identifier: String, title: String, url: URL, tags: [String], thumbnail: UIImage? = nil) {
+    init(identifier: String, title: String, url: URL, tags: [String], date: Date, thumbnail: UIImage? = nil) {
         self.identifier = identifier
         self.title = title
         self.url = url
         self.tags = tags
+        self.date = date
         self.thumbnail = thumbnail
     }
 
@@ -83,7 +85,7 @@ class Store {
 
                 let filters = filter.components(separatedBy: NSCharacterSet.whitespacesAndNewlines)
                 var fields = Array(item.tags)
-                fields.append(item.title)
+                fields.append(contentsOf: [item.title, item.url.absoluteString])
                 return filters.reduce(true) { (result, filter) -> Bool in
                     return result && fields.reduce(false) { (result, field) -> Bool in
                         return result || field.like(filter)
@@ -91,7 +93,13 @@ class Store {
                 }
 
             }
-            let identifiers = items.sorted(by: { $0.title < $1.title }).map { $0.identifier }
+
+            let identifiers = items.sorted { (lhs, rhs) -> Bool in
+                if lhs.title == rhs.title {
+                    return lhs.date < rhs.date
+                }
+                return lhs.title < rhs.title
+            }.map { $0.identifier }
             self.targetQueue.async {
                 completion(.success(identifiers));
             }

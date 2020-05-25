@@ -93,6 +93,7 @@ class ImageDownloader {
                                         title: item.title,
                                         url: item.url,
                                         tags: item.tags,
+                                        date: item.date,
                                         thumbnail: thumbnail)]) { (success) in
                     print("Updated item!")
                 }

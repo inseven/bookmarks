@@ -51,7 +51,7 @@ class ViewController: UIViewController  {
                         print("-> Discarded result for '\(item.title)'")
                         return
                     }
-                    cell.titleLabel.text = item.title
+                    cell.titleLabel.text = !item.title.isEmpty ? item.title : item.url.absoluteString
                     cell.imageView.image = item.thumbnail
                 }
             }

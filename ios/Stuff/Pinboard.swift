@@ -79,7 +79,7 @@ class Pinboard {
         self.token = token
     }
 
-    func fetch(completion: @escaping (Result<[Post]>) -> Void) {
+    func fetch(completion: @escaping (Result<[Post], Error>) -> Void) {
         guard let base = URL(string: baseURL) else {
             DispatchQueue.global(qos: .default).async {
                 completion(.failure(PinboardError.invalidURL(message: "Unable to construct parse base URL")))

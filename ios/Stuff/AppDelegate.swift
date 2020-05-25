@@ -12,8 +12,17 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var store: Store!
+    var updater: Updater!
+    var imageDownloader: ImageDownloader!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        store = Store(path: documentsDirectory.appendingPathComponent("store.plist"), targetQueue: .main)
+        updater = Updater(store: store, token: "jbmorley:08f37da5d082080ae1a5")
+        imageDownloader = ImageDownloader(store: store)
+        updater.start()
+        imageDownloader.start()
         return true
     }
 

@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="oz4-IC-l2l">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ghh-6s-Hh1">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Stuff-->
+        <!--Bookmarks-->
         <scene sceneID="yM7-3Y-KnW">
             <objects>
                 <collectionViewController id="tuy-sB-9g6" customClass="ViewController" customModule="Stuff" customModuleProvider="target" sceneMemberID="viewController">
@@ -35,7 +33,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="340" height="200"/>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y1y-yB-hJa">
-                                            <rect key="frame" x="20" y="40" width="300" height="140"/>
+                                            <rect key="frame" x="20" y="20" width="300" height="160"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -60,22 +58,42 @@
                             </collectionViewCell>
                         </cells>
                         <connections>
-                            <outlet property="dataSource" destination="tuy-sB-9g6" id="Ohc-2W-Vq9"/>
                             <outlet property="delegate" destination="tuy-sB-9g6" id="oxk-fb-QBb"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" title="Stuff" id="pwL-iH-sKz"/>
+                    <navigationItem key="navigationItem" title="Bookmarks" id="pwL-iH-sKz"/>
+                    <connections>
+                        <outlet property="collectionView" destination="JJa-KJ-ufq" id="IQj-cE-quI"/>
+                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TGQ-3F-U0w" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="645.60000000000002" y="-654.42278860569718"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Tab Bar Controller-->
+        <scene sceneID="KOo-GD-1V9">
+            <objects>
+                <tabBarController id="ghh-6s-Hh1" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ZxN-Ru-Y6U">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="oz4-IC-l2l" kind="relationship" relationship="viewControllers" id="iui-W2-8cs"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aO3-ci-Z3R" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1129" y="-654"/>
+        </scene>
+        <!--Item-->
         <scene sceneID="Dyu-YY-Udq">
             <objects>
                 <navigationController id="oz4-IC-l2l" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="71A-Uc-UrE"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Y6A-Pa-JcA">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>

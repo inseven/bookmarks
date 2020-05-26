@@ -24,6 +24,14 @@ extension UIImage {
 
 }
 
+extension URLComponents {
+
+    init?(unsafeString: String) {
+        self.init(string: unsafeString.replacingOccurrences(of: " ", with: "%20"))
+    }
+
+}
+
 class Document {
 
     let location: URL
@@ -97,7 +105,7 @@ class Document {
         guard let content = element.content else {
             throw OpenGraphError.invalidArgument(message: "Image tag had no content")
         }
-        guard let components = URLComponents(string: content) else {
+        guard let components = URLComponents(unsafeString: content) else {
             throw OpenGraphError.invalidArgument(message: "Unable to create URL components")
         }
         guard let url = components.url(relativeTo: self.location) else {

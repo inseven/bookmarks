@@ -32,6 +32,10 @@ class ViewController: UIViewController  {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! Cell
             cell.titleLabel.text = nil
             cell.imageView.image = nil
+            cell.layer.masksToBounds = true
+            cell.layer.cornerRadius = 10
+            cell.layer.cornerCurve = .continuous
+
             let uuid = UUID()
             cell.uuid = uuid
             self.store.item(identifier: identifier) { (result) in

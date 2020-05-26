@@ -83,7 +83,13 @@ class ViewController: UIViewController  {
 
         collectionView.dataSource = dataSource
         navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
         collectionView.collectionViewLayout = createLayout()
+
+        self.navigationController?.navigationBar.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(ViewController.sampleTapGestureTapped(recognizer:))))
+    }
+
+    @objc func sampleTapGestureTapped(recognizer: UITapGestureRecognizer) {
     }
 
     private func createLayout() -> UICollectionViewLayout {

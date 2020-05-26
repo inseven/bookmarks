@@ -57,7 +57,7 @@
 		D864E47021C93FD200EAB9AD /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 		D864E47221C9417F00EAB9AD /* Stuff-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Stuff-Bridging-Header.h"; sourceTree = "<group>"; };
 		D8A3A51E247C918000C3B8B4 /* ThumbnailManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailManager.swift; sourceTree = "<group>"; };
-		D8D3BBF621C6AEBC00D6FB97 /* Bookmarks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bookmarks.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8D3BBF621C6AEBC00D6FB97 /* Stuff.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stuff.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8D3BBF921C6AEBC00D6FB97 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D8D3BBFB21C6AEBC00D6FB97 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		D8D3BBFE21C6AEBC00D6FB97 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -135,7 +135,7 @@
 		D8D3BBF721C6AEBC00D6FB97 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D8D3BBF621C6AEBC00D6FB97 /* Bookmarks.app */,
+				D8D3BBF621C6AEBC00D6FB97 /* Stuff.app */,
 				D8D3BC0A21C6AEBD00D6FB97 /* StuffTests.xctest */,
 				D8D3BC1521C6AEBD00D6FB97 /* StuffUITests.xctest */,
 			);
@@ -198,7 +198,7 @@
 			);
 			name = Stuff;
 			productName = Stuff;
-			productReference = D8D3BBF621C6AEBC00D6FB97 /* Bookmarks.app */;
+			productReference = D8D3BBF621C6AEBC00D6FB97 /* Stuff.app */;
 			productType = "com.apple.product-type.application";
 		};
 		D8D3BC0921C6AEBD00D6FB97 /* StuffTests */ = {
@@ -507,7 +507,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.Stuff;
-				PRODUCT_NAME = Bookmarks;
+				PRODUCT_NAME = Stuff;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Stuff/Stuff-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -526,7 +526,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.Stuff;
-				PRODUCT_NAME = Bookmarks;
+				PRODUCT_NAME = Stuff;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Stuff/Stuff-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";

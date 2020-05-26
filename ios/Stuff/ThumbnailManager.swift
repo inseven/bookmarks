@@ -33,23 +33,6 @@ class ThumbnailManager {
         return self.path.appendingPathComponent(item.identifier).appendingPathExtension("png")
     }
 
-//    private func thumbnail(for url: URL) throws -> UIImage {
-//        dispatchPrecondition(condition: .onQueue(syncQueue))
-//        let semaphore = DispatchSemaphore(value: 0)
-//        var result: Result<UIImage, Error> = .failure(StoreError.notFound)
-//        downloadThumbnail(for: url) { (completionResult) in
-//            result = completionResult
-//            semaphore.signal()
-//        }
-//        semaphore.wait()
-//        switch result {
-//        case .failure(let error):
-//            throw error
-//        case .success(let item):
-//            return item
-//        }
-//    }
-
     static func image(path: URL) throws -> UIImage {
         guard let image = UIImage.init(data: try Data(contentsOf: path)) else {
             throw StoreError.notFound

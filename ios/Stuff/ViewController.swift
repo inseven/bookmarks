@@ -14,10 +14,6 @@ class Cell: UICollectionViewCell {
     var uuid: UUID?
 }
 
-enum OpenGraphError: Error {
-    case invalidArgument(message: String)
-}
-
 enum Section : CaseIterable {
   case one
 }

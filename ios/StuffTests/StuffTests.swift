@@ -11,24 +11,33 @@ import XCTest
 
 class StuffTests: XCTestCase {
 
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
+    func thumbnail(for url: String) -> UIImage? {
 
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+        let expectation = self.expectation(description: "Download thumbnail")
+        guard let url = URL(string: url) else {
+            XCTFail("Failed to parse URL")
+            return nil
         }
+
+        var image: UIImage?
+        downloadThumbnail(for: url) { (result) in
+            defer { expectation.fulfill() }
+            guard case .success(let blockImage) = result else {
+                return
+            }
+            image = blockImage
+            XCTAssertNotNil(image)
+        }
+        self.wait(for: [expectation], timeout: 5)
+        return image
+    }
+
+    func testThumbnail() {
+
+        XCTAssertNotNil(thumbnail(for: "https://www.raspberrypi.org/products/raspberry-pi-high-quality-camera/"))
+        XCTAssertNil(thumbnail(for: "http://lesscss.org"))
+        XCTAssertNotNil(thumbnail(for: "http://2064.io"))
+
     }
 
 }

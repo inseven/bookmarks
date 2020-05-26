@@ -29,6 +29,7 @@ class Item {
 
 }
 
+
 enum StoreError: Error {
     case notFound
 }
@@ -73,6 +74,11 @@ class Store {
         syncQueue.sync {
             observers.append(observer)
         }
+    }
+
+    func thumbnailPath(item: Item) -> URL {
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        return documentsDirectory.appendingPathComponent(item.identifier).appendingPathExtension("png")
     }
 
     func identifiers(filter: String? = nil, completion: @escaping (Result<[String], StoreError>) -> Void) {

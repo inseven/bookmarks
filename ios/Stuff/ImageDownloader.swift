@@ -9,6 +9,14 @@
 import Foundation
 import UIKit
 
+extension UIImage {
+
+    convenience init?(path: URL) throws {
+        self.init(data: try Data(contentsOf: path))
+    }
+
+}
+
 class ImageDownloader {
 
     enum State {
@@ -18,12 +26,14 @@ class ImageDownloader {
 
     let syncQueue: DispatchQueue
     let store: Store
+    let path: URL
     var state: State // Synchronized on syncQueue
 
-    init(store: Store) {
+    init(store: Store, path: URL) {
         self.syncQueue = DispatchQueue(label: "syncQueue")
         self.store = store
         self.state = .idle
+        self.path = path
     }
 
     private func thumbnail(for url: URL) throws -> UIImage {
@@ -86,15 +96,41 @@ class ImageDownloader {
                 guard item.thumbnail == nil else {
                     continue
                 }
-                guard let thumbnail = try? self.thumbnail(for: item.url) else {
+
+                // Check to see if there's already a file on disk.
+                let path = self.path.appendingPathComponent(item.identifier).appendingPathExtension("png")
+                var thumbnail: UIImage?
+                print("Checking for thumbnail at path \(path.absoluteString)...")
+                do {
+                    
+                    thumbnail = try UIImage(path: path)
+                    print("Successfully loaded thumbnail from disk")
+                } catch {
+                    print("Failed to load thumbnail from disk with error \(error)")
+                }
+
+                if thumbnail == nil {
+                    thumbnail = try? self.thumbnail(for: item.url)
+                }
+
+                guard let safeThumbnail = thumbnail else {
                     continue
                 }
+
+                do {
+                    let data = safeThumbnail.pngData()
+                    try data?.write(to: path, options: .atomic)
+                    print("Successfully wrote thumbnail to path \(path.absoluteString)")
+                } catch {
+                    print("Failed to write thumbnail to file with error \(error)")
+                }
+
                 store.save(items: [Item(identifier: item.identifier,
                                         title: item.title,
                                         url: item.url,
                                         tags: item.tags,
                                         date: item.date,
-                                        thumbnail: thumbnail)]) { (success) in
+                                        thumbnail: safeThumbnail)]) { (success) in
                     print("Updated item!")
                 }
             }

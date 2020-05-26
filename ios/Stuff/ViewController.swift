@@ -28,12 +28,8 @@ class ViewController: UIViewController  {
     private lazy var searchController = makeSearchController()
     @IBOutlet var collectionView: UICollectionView!
 
-    var store: Store {
-        get {
-            let delegate = UIApplication.shared.delegate as! AppDelegate
-            return delegate.store
-        }
-    }
+    var thumbnailManager: ThumbnailManager!
+    var store: Store!
 
     func makeDataSource() -> UICollectionViewDiffableDataSource<Section, String> {
         return UICollectionViewDiffableDataSource(collectionView: collectionView) { (collectionView, indexPath, identifier) -> UICollectionViewCell? in
@@ -47,12 +43,23 @@ class ViewController: UIViewController  {
                 case .failure(let error):
                     print("Failed to fetch item with error \(error)")
                 case .success(let item):
-                    if (cell.uuid != uuid) {
-                        print("-> Discarded result for '\(item.title)'")
+                    guard cell.uuid == uuid else {
                         return
                     }
                     cell.titleLabel.text = !item.title.isEmpty ? item.title : item.url.absoluteString
-                    cell.imageView.image = item.thumbnail
+                    self.thumbnailManager.thumbnail(for: item) { (result) in
+                        switch result {
+                        case .failure(let error):
+                            print("Failed to get thumbnail for \(item.url) with error \(error)")
+                        case .success(let image):
+                            DispatchQueue.main.async {
+                                guard cell.uuid == uuid else {
+                                    return
+                                }
+                                cell.imageView.image = image
+                            }
+                        }
+                    }
                 }
             }
             return cell
@@ -68,7 +75,12 @@ class ViewController: UIViewController  {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+        store = delegate.store
+        thumbnailManager = delegate.thumbnailManager
         store.add(observer: self)
+
         collectionView.dataSource = dataSource
         navigationItem.searchController = searchController
     }

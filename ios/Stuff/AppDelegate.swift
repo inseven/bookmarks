@@ -15,14 +15,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var store: Store!
     var updater: Updater!
     var imageDownloader: ImageDownloader!
+    var thumbnailManager: ThumbnailManager!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        do {
+            try FileManager.default.createDirectory(at: documentsDirectory, withIntermediateDirectories: true, attributes: nil)
+        } catch {
+            print("Failed to create documents directory with error \(error)")
+        }
         store = Store(path: documentsDirectory.appendingPathComponent("store.plist"), targetQueue: .main)
         updater = Updater(store: store, token: "jbmorley:08f37da5d082080ae1a5")
-        imageDownloader = ImageDownloader(store: store)
+        thumbnailManager = ThumbnailManager(path: documentsDirectory)
         updater.start()
-        imageDownloader.start()
         return true
     }
 

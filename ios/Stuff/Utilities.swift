@@ -152,34 +152,14 @@ func simpleThumbnail(for url: URL, completion: @escaping (Result<UIImage, Error>
 }
 
 func downloadThumbnail(for url: URL, completion: @escaping (Result<UIImage, Error>) -> Void) {
-
     let userInteractiveCompletion = Utilities.completion(on: DispatchQueue.global(qos: .userInteractive), completion: completion)
     simpleThumbnail(for: url) { (result) in
-
-//        guard case .success = result else {
-//            // TODO: Perform the dispatch to main in the webview downloader itself.
-//            DispatchQueue.main.async {
-//                let downloader = WebViewDownloader(url: url)
-//                downloader.start { (result) in
-//                    switch result {
-//                    case .success(let imageUrl):
-//                        DispatchQueue.global(qos: .background).async {
-//                            guard let image = UIImage.init(contentsOf: imageUrl) else {
-//                                userInteractiveCompletion(.failure(OpenGraphError.invalidArgument(message: "Unable to fetch image")))
-//                                return
-//                            }
-//                            userInteractiveCompletion(.success(image))
-//                            print("\(downloader)")
-//                        }
-//                    case .failure(let error):
-//                        userInteractiveCompletion(.failure(error))
-//                    }
-//                }
-//            }
-//            return
-//        }
-
+        guard case .success = result else {
+            WebViewDownloader.thumbnail(for: url) { (result) in
+                userInteractiveCompletion(result)
+            }
+            return
+        }
         userInteractiveCompletion(result)
     }
-
 }

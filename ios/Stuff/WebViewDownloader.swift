@@ -19,6 +19,29 @@ class WebViewDownloader: NSObject, WKNavigationDelegate {
     let url: URL
     var completion: ((Result<URL, Error>) -> Void)?
 
+    static func thumbnail(for url: URL, completion: @escaping (Result<UIImage, Error>) -> Void) {
+        let userInteractiveCompletion = Utilities.completion(on: .global(qos: .userInteractive), completion: completion)
+        DispatchQueue.main.async {
+            let downloader = WebViewDownloader(url: url)
+            downloader.start { (result) in
+                switch result {
+                case .success(let imageUrl):
+                    DispatchQueue.global(qos: .background).async {
+                        guard let image = UIImage.init(contentsOf: imageUrl) else {
+                            userInteractiveCompletion(.failure(OpenGraphError.invalidArgument(message: "Unable to fetch image")))
+                            return
+                        }
+                        userInteractiveCompletion(.success(image))
+                        print("\(downloader)")
+                    }
+                case .failure(let error):
+                    userInteractiveCompletion(.failure(error))
+                }
+            }
+        }
+        return
+    }
+
     init(url: URL) {
         webView = WKWebView(frame: CGRect(x: 0, y: 0, width: 1000, height: 1000)) // TODO: Consider iPhone size
         self.url = url

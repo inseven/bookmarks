@@ -8,74 +8,37 @@
 
 import Foundation
 import UIKit
+import Combine
 
-//extension UIImage {
-//
-//    convenience init(path: URL) throws {
-//        self.init(data: try Data(contentsOf: path)) ?? throw
-//    }
-//
-//}
 
 class ThumbnailManager {
 
-    let syncQueue: DispatchQueue
     let targetQueue: DispatchQueue
-    let path: URL
+    let imageCache: ImageCache
 
-    init(path: URL) {
-        self.syncQueue = DispatchQueue(label: "syncQueue")
+    init(imageCache: ImageCache) {
         self.targetQueue = DispatchQueue(label: "targetQueue", attributes: .concurrent)
-        self.path = path
-    }
-
-    func path(for item: Item) -> URL {
-        return self.path.appendingPathComponent(item.identifier).appendingPathExtension("png")
-    }
-
-    static func image(path: URL) throws -> UIImage {
-        guard let image = UIImage.init(data: try Data(contentsOf: path)) else {
-            throw StoreError.notFound
-        }
-        return image
-    }
-
-    static func write(image: UIImage, path: URL) {
-        do {
-            let data = image.pngData()
-            try data?.write(to: path, options: .atomic)
-            print("Successfully wrote thumbnail to path \(path.absoluteString)")
-        } catch {
-            print("Failed to write thumbnail to file with error \(error)")
-        }
+        self.imageCache = imageCache
     }
 
     func thumbnail(for item: Item, completion: @escaping (Result<UIImage, Error>) -> Void) {
-        dispatchPrecondition(condition: .notOnQueue(syncQueue))
-        syncQueue.async {
-
-            let path = self.path(for: item)
-            if let image = try? ThumbnailManager.image(path: path) {
-                self.targetQueue.async {
-                    completion(.success(image))
-                }
+        let targetQueueCompletion = Utilities.completion(on: self.targetQueue, completion: completion)
+        self.imageCache.get(identifier: item.identifier) { (result) in
+            if case .success(let image) = result {
+                targetQueueCompletion(.success(image))
                 return
             }
-
             downloadThumbnail(for: item.url) { (result) in
-
-                self.targetQueue.async {
-                    completion(result)
+                defer { targetQueueCompletion(result) }
+                guard case let .success(image) = result else {
+                    return
                 }
-
-                if case let .success(image) = result {
-                    self.syncQueue.async {
-                        ThumbnailManager.write(image: image, path: path)
+                self.imageCache.set(identifier: item.identifier, image: image) { (result) in
+                    if case .failure(let error) = result {
+                        print("Failed to cache image with error \(error)")
                     }
                 }
-
             }
-
         }
     }
 }

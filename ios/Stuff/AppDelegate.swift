@@ -8,13 +8,15 @@
 
 import UIKit
 
+// TODO: Debug button to clear the image cache.
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    // TODO: Consider lazy variables.
     var window: UIWindow?
     var store: Store!
     var updater: Updater!
-    var imageDownloader: ImageDownloader!
     var thumbnailManager: ThumbnailManager!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -26,7 +28,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         store = Store(path: documentsDirectory.appendingPathComponent("store.plist"), targetQueue: .main)
         updater = Updater(store: store, token: "jbmorley:08f37da5d082080ae1a5")
-        thumbnailManager = ThumbnailManager(path: documentsDirectory)
+//        let imageCache = FileImageCache(path: documentsDirectory)
+        let imageCache = MemoryImageCache()
+        thumbnailManager = ThumbnailManager(imageCache: imageCache)
         updater.start()
         return true
     }

@@ -32,6 +32,18 @@ extension URLComponents {
 
 }
 
+class Utilities {
+
+    static func completion<T, U>(on queue: DispatchQueue, completion: @escaping (Result<T, U>) -> Void) -> (Result<T, U>) -> Void {
+        return { (result) in
+            queue.async {
+                completion(result)
+            }
+        }
+    }
+
+}
+
 class Document {
 
     let location: URL
@@ -119,23 +131,7 @@ class Document {
 
 }
 
-func downloadThumbnail(for url: URL, completion: @escaping (Result<UIImage, Error>) -> Void) {
-
-    // TODO: Consider trying HTTPS first.
-
-    //        // Force HTTPS.
-    //        guard var components = URLComponents(string: url.absoluteString) else {
-    //            completion(.failure(OpenGraphError.invalidArgument(message: "Unable to create URL components")))
-    //            return
-    //        }
-    //
-    //        components.scheme = "https"
-    //
-    //        guard let secureUrl = components.url else {
-    //            completion(.failure(OpenGraphError.invalidArgument(message: "Unable to create secure URL")))
-    //            return
-    //        }
-
+func simpleThumbnail(for url: URL, completion: @escaping (Result<UIImage, Error>) -> Void) {
     let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
         guard let data = data else {
             completion(.failure(OpenGraphError.invalidArgument(message: "Unable to get contents of URL for cell")))
@@ -145,16 +141,45 @@ func downloadThumbnail(for url: URL, completion: @escaping (Result<UIImage, Erro
             completion(.failure(OpenGraphError.invalidArgument(message: "Unable to parse the data")))
             return
         }
-
         let document = Document(location: url, contents: doc)
-        if let image = document.openGraphImage {
-            completion(.success(image))
+        guard let image = document.openGraphImage else {
+            completion(.failure(OpenGraphError.invalidArgument(message: "Failed to find image")))
             return
         }
-
-        completion(.failure(OpenGraphError.invalidArgument(message: "Failed to find image")))
-
+        completion(.success(image))
     }
     task.resume()
+}
+
+func downloadThumbnail(for url: URL, completion: @escaping (Result<UIImage, Error>) -> Void) {
+
+    let userInteractiveCompletion = Utilities.completion(on: DispatchQueue.global(qos: .userInteractive), completion: completion)
+    simpleThumbnail(for: url) { (result) in
+
+//        guard case .success = result else {
+//            // TODO: Perform the dispatch to main in the webview downloader itself.
+//            DispatchQueue.main.async {
+//                let downloader = WebViewDownloader(url: url)
+//                downloader.start { (result) in
+//                    switch result {
+//                    case .success(let imageUrl):
+//                        DispatchQueue.global(qos: .background).async {
+//                            guard let image = UIImage.init(contentsOf: imageUrl) else {
+//                                userInteractiveCompletion(.failure(OpenGraphError.invalidArgument(message: "Unable to fetch image")))
+//                                return
+//                            }
+//                            userInteractiveCompletion(.success(image))
+//                            print("\(downloader)")
+//                        }
+//                    case .failure(let error):
+//                        userInteractiveCompletion(.failure(error))
+//                    }
+//                }
+//            }
+//            return
+//        }
+
+        userInteractiveCompletion(result)
+    }
 
 }

@@ -17,6 +17,7 @@
 		D8A3A51F247C918000C3B8B4 /* ThumbnailManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A3A51E247C918000C3B8B4 /* ThumbnailManager.swift */; };
 		D8AAFE4F247F66EF00B62492 /* WebViewDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AAFE4E247F66EF00B62492 /* WebViewDownloader.swift */; };
 		D8AAFE51248018BC00B62492 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AAFE50248018BC00B62492 /* ImageCache.swift */; };
+		D8AAFE5324804FDF00B62492 /* WebViewDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AAFE5224804FDF00B62492 /* WebViewDownloader.swift */; };
 		D8D3BBFA21C6AEBC00D6FB97 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BBF921C6AEBC00D6FB97 /* AppDelegate.swift */; };
 		D8D3BBFC21C6AEBC00D6FB97 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BBFB21C6AEBC00D6FB97 /* ViewController.swift */; };
 		D8D3BBFF21C6AEBC00D6FB97 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8D3BBFD21C6AEBC00D6FB97 /* Main.storyboard */; };
@@ -59,6 +60,7 @@
 		D8A3A51E247C918000C3B8B4 /* ThumbnailManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailManager.swift; sourceTree = "<group>"; };
 		D8AAFE4E247F66EF00B62492 /* WebViewDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewDownloader.swift; sourceTree = "<group>"; };
 		D8AAFE50248018BC00B62492 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
+		D8AAFE5224804FDF00B62492 /* WebViewDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewDownloader.swift; sourceTree = "<group>"; };
 		D8D3BBF621C6AEBC00D6FB97 /* Stuff.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stuff.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8D3BBF921C6AEBC00D6FB97 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D8D3BBFB21C6AEBC00D6FB97 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 			isa = PBXGroup;
 			children = (
 				D864E46521C93FB400EAB9AD /* Classes */,
+				D8AAFE5224804FDF00B62492 /* WebViewDownloader.swift */,
 				D8D3BBF921C6AEBC00D6FB97 /* AppDelegate.swift */,
 				D81D01A0247B29B500C8324B /* Updater.swift */,
 				D81D019E247B24D600C8324B /* Utilities.swift */,
@@ -320,6 +323,7 @@
 				D864E46E21C93FB400EAB9AD /* XPathQuery.m in Sources */,
 				D8AAFE4F247F66EF00B62492 /* WebViewDownloader.swift in Sources */,
 				D864E46C21C93FB400EAB9AD /* TFHpple.m in Sources */,
+				D8AAFE5324804FDF00B62492 /* WebViewDownloader.swift in Sources */,
 				D81D019D247B0AA200C8324B /* Store.swift in Sources */,
 				D8A3A51F247C918000C3B8B4 /* ThumbnailManager.swift in Sources */,
 				D8D3BC2A21C72F7600D6FB97 /* Pinboard.swift in Sources */,

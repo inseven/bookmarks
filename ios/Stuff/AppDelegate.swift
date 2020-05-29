@@ -34,6 +34,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        imageCache = MemoryImageCache()
         thumbnailManager = ThumbnailManager(imageCache: imageCache)
         updater.start()
+
+        window?.tintColor = UIColor(red:0.30, green:0.12, blue:0.55, alpha:1.0)
+
         return true
     }
 

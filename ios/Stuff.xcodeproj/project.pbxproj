@@ -72,7 +72,7 @@
 		D8A3A51E247C918000C3B8B4 /* ThumbnailManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailManager.swift; sourceTree = "<group>"; };
 		D8AAFE50248018BC00B62492 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		D8AAFE5224804FDF00B62492 /* WebViewDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewDownloader.swift; sourceTree = "<group>"; };
-		D8D3BBF621C6AEBC00D6FB97 /* Stuff.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stuff.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8D3BBF621C6AEBC00D6FB97 /* Bookmarks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bookmarks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8D3BBF921C6AEBC00D6FB97 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D8D3BBFB21C6AEBC00D6FB97 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		D8D3BBFE21C6AEBC00D6FB97 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -160,7 +160,7 @@
 		D8D3BBF721C6AEBC00D6FB97 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D8D3BBF621C6AEBC00D6FB97 /* Stuff.app */,
+				D8D3BBF621C6AEBC00D6FB97 /* Bookmarks.app */,
 				D8D3BC0A21C6AEBD00D6FB97 /* StuffTests.xctest */,
 				D8D3BC1521C6AEBD00D6FB97 /* StuffUITests.xctest */,
 			);
@@ -229,7 +229,7 @@
 			);
 			name = Stuff;
 			productName = Stuff;
-			productReference = D8D3BBF621C6AEBC00D6FB97 /* Stuff.app */;
+			productReference = D8D3BBF621C6AEBC00D6FB97 /* Bookmarks.app */;
 			productType = "com.apple.product-type.application";
 		};
 		D8D3BC0921C6AEBD00D6FB97 /* StuffTests */ = {
@@ -545,8 +545,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.Stuff;
-				PRODUCT_NAME = Stuff;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks;
+				PRODUCT_NAME = Bookmarks;
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Stuff/Stuff-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -566,8 +566,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.Stuff;
-				PRODUCT_NAME = Stuff;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks;
+				PRODUCT_NAME = Bookmarks;
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Stuff/Stuff-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

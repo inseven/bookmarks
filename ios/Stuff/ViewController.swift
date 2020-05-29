@@ -115,7 +115,7 @@ class ViewController: UIViewController  {
         collectionView.dataSource = dataSource
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
-        collectionView.collectionViewLayout = createLayout()
+        collectionView.collectionViewLayout = createLayout(size: view.bounds.size)
     }
 
     override func buildMenu(with builder: UIMenuBuilder) {
@@ -135,20 +135,29 @@ class ViewController: UIViewController  {
         searchController.searchBar.becomeFirstResponder()
     }
 
-    private func createLayout() -> UICollectionViewLayout {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3),
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        coordinator.animate(alongsideTransition: { (_) in
+            self.collectionView.setCollectionViewLayout(self.createLayout(size: size), animated: true)
+        }, completion: nil)
+
+    }
+
+    private func createLayout(size: CGSize) -> UICollectionViewLayout {
+        let columns =  Int(floor(size.width / 300.0))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .fractionalHeight(1))
         let spacing: CGFloat = 20.0
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: spacing)
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                heightDimension: .absolute(280))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
-                                                       subitems: [item, item])
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: columns)
         group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: spacing, bottom: 0, trailing: 0)
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = spacing
         section.contentInsets = NSDirectionalEdgeInsets(top: spacing, leading: 0.0, bottom: 0.0, trailing: 0.0)
+
+
 
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout

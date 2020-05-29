@@ -102,6 +102,7 @@ class ViewController: UIViewController  {
     @IBAction func emptyCache(_ sender: Any) {
         imageCache.clear() { (result) in
             DispatchQueue.main.async {
+                self.collectionView.reloadData()
                 var message = ""
                 switch result {
                 case .success:
@@ -109,7 +110,6 @@ class ViewController: UIViewController  {
                 case .failure(let error):
                     message = "Failed to clear the cache with error \(error)"
                 }
-
                 let alert = UIAlertController(title: "Cache", message: message, preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                 self.present(alert, animated: true, completion: nil)

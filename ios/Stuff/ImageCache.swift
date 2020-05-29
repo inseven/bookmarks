@@ -114,6 +114,7 @@ class FileImageCache: ImageCache {
             let targetQueueCompletion = Utilities.completion(on: self.targetQueue, completion: completion)
             do {
                 try FileManager.default.removeItem(at: self.path)
+                try! FileManager.default.createDirectory(at: self.path, withIntermediateDirectories: true)
                 targetQueueCompletion(.success(true))
             } catch {
                 targetQueueCompletion(.failure(error))

@@ -171,14 +171,15 @@ class WebViewDownloader: NSObject, WKNavigationDelegate, Downloader {
 
         Array.from( document.getElementsByTagName('img') ).sort( function(a, b) {
             return (b.clientWidth * b.clientHeight)-(a.clientWidth * a.clientHeight);
-        } ).filter( function( img ) {
+        } )/* .filter( function( img ) {
             return window.getComputedStyle( img ) != 'none';
-        } ).filter( function( img ) {
+        } ) */.filter( function( img ) {
+            return true;
             var bounding = img.getBoundingClientRect();
-            return (bounding.top >= 0 &&
-                    bounding.left >= 0 &&
-                    bounding.right <= (window.innerWidth || document.documentElement.clientWidth) &&
-                    bounding.bottom <= (window.innerHeight || document.documentElement.clientHeight))
+            return (bounding.bottom >= 0 ||
+                    bounding.right >= 0 ||
+                    bounding.left <= (window.innerWidth || document.documentElement.clientWidth) ||
+                    bounding.top <= (window.innerHeight || document.documentElement.clientHeight))
         } ).map( function( img ) {
             return img.src;
         } ).filter( function( src ) {
@@ -201,7 +202,7 @@ class WebViewDownloader: NSObject, WKNavigationDelegate, Downloader {
                 backgroundCompletion(.failure(WebViewDownloaderError.notFound))
                 return
             }
-            print("DownloadManager: \(self.description) => \(images))")
+            print("DownloadManager: \(self.url.absoluteString) => \(images))")
             guard
                 let selection = images.first,
                 let url = URL(string: selection) else {

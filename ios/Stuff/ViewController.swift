@@ -12,6 +12,7 @@ class Cell: UICollectionViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
     var uuid: UUID?
+    var downloader: Downloader?
 }
 
 enum Section : CaseIterable {
@@ -26,12 +27,19 @@ class ViewController: UIViewController  {
 
     var thumbnailManager: ThumbnailManager!
     var store: Store!
+    var imageCache: ImageCache!
 
     func makeDataSource() -> UICollectionViewDiffableDataSource<Section, String> {
         return UICollectionViewDiffableDataSource(collectionView: collectionView) { (collectionView, indexPath, identifier) -> UICollectionViewCell? in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! Cell
+
             cell.titleLabel.text = nil
             cell.imageView.image = nil
+            if let downloader = cell.downloader {
+                downloader.cancel()
+                cell.downloader = nil
+            }
+
             cell.layer.masksToBounds = true
             cell.layer.cornerRadius = 10
             cell.layer.cornerCurve = .continuous
@@ -47,10 +55,10 @@ class ViewController: UIViewController  {
                         return
                     }
                     cell.titleLabel.text = !item.title.isEmpty ? item.title : item.url.absoluteString
-                    self.thumbnailManager.thumbnail(for: item) { (result) in
+                    let downloader = self.thumbnailManager.thumbnail(for: item) { (result) in
                         switch result {
-                        case .failure(let error):
-                            print("Failed to get thumbnail for \(item.url) with error \(error)")
+                        case .failure:
+                            return
                         case .success(let image):
                             DispatchQueue.main.async {
                                 guard cell.uuid == uuid else {
@@ -60,6 +68,7 @@ class ViewController: UIViewController  {
                             }
                         }
                     }
+                    cell.downloader = downloader
                 }
             }
             return cell
@@ -79,6 +88,7 @@ class ViewController: UIViewController  {
         let delegate = UIApplication.shared.delegate as! AppDelegate
         store = delegate.store
         thumbnailManager = delegate.thumbnailManager
+        imageCache = delegate.imageCache
         store.add(observer: self)
 
         collectionView.dataSource = dataSource
@@ -87,6 +97,24 @@ class ViewController: UIViewController  {
         collectionView.collectionViewLayout = createLayout()
 
         self.navigationController?.navigationBar.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(ViewController.sampleTapGestureTapped(recognizer:))))
+    }
+
+    @IBAction func emptyCache(_ sender: Any) {
+        imageCache.clear() { (result) in
+            DispatchQueue.main.async {
+                var message = ""
+                switch result {
+                case .success:
+                    message = "Successfully cleared the cache!"
+                case .failure(let error):
+                    message = "Failed to clear the cache with error \(error)"
+                }
+
+                let alert = UIAlertController(title: "Cache", message: message, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
     }
 
     @objc func sampleTapGestureTapped(recognizer: UITapGestureRecognizer) {
@@ -148,6 +176,15 @@ extension ViewController: UICollectionViewDelegate {
                 }
             }
         }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard
+            let cell = cell as? Cell,
+            let downloader = cell.downloader else {
+            return
+        }
+        downloader.cancel()
     }
 
 }

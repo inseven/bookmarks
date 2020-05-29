@@ -102,10 +102,6 @@ class Store {
 
             let identifiers = items.sorted { (lhs, rhs) -> Bool in
                 return lhs.date > rhs.date
-//                if lhs.title == rhs.title {
-//                    return lhs.date < rhs.date
-//                }
-//                return lhs.title < rhs.title
             }.map { $0.identifier }
             self.targetQueue.async {
                 completion(.success(identifiers));

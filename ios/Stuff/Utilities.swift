@@ -150,16 +150,3 @@ func simpleThumbnail(for url: URL, completion: @escaping (Result<UIImage, Error>
     }
     task.resume()
 }
-
-func downloadThumbnail(for url: URL, completion: @escaping (Result<UIImage, Error>) -> Void) {
-    let userInteractiveCompletion = Utilities.completion(on: DispatchQueue.global(qos: .userInteractive), completion: completion)
-    simpleThumbnail(for: url) { (result) in
-        guard case .success = result else {
-            WebViewDownloader.thumbnail(for: url) { (result) in
-                userInteractiveCompletion(result)
-            }
-            return
-        }
-        userInteractiveCompletion(result)
-    }
-}

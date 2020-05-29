@@ -17,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var store: Store!
     var updater: Updater!
+    var imageCache: ImageCache!
     var thumbnailManager: ThumbnailManager!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -28,8 +29,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         store = Store(path: documentsDirectory.appendingPathComponent("store.plist"), targetQueue: .main)
         updater = Updater(store: store, token: "jbmorley:08f37da5d082080ae1a5")
-//        let imageCache = FileImageCache(path: documentsDirectory)
-        let imageCache = MemoryImageCache()
+        imageCache = FileImageCache(path: documentsDirectory.appendingPathComponent("thumbnails"))
+//        imageCache = MemoryImageCache()
         thumbnailManager = ThumbnailManager(imageCache: imageCache)
         updater.start()
         return true

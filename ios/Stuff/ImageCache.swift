@@ -13,6 +13,7 @@ protocol ImageCache {
 
     func set(identifier: String, image: UIImage, completion: @escaping (Result<Bool, Error>) -> Void)
     func get(identifier: String, completion: @escaping (Result<UIImage, Error>) -> Void)
+    func clear(completion: @escaping (Result<Bool, Error>) -> Void)
 
 }
 
@@ -32,7 +33,6 @@ class MemoryImageCache: ImageCache {
     }
 
     func set(identifier: String, image: UIImage, completion: @escaping (Result<Bool, Error>) -> Void) {
-        dispatchPrecondition(condition: .notOnQueue(syncQueue))
         let targetQueueCompletion = Utilities.completion(on: self.targetQueue, completion: completion)
         syncQueue.async {
             self.cache.setObject(image, forKey: identifier as NSString)
@@ -41,7 +41,6 @@ class MemoryImageCache: ImageCache {
     }
 
     func get(identifier: String, completion: @escaping (Result<UIImage, Error>) -> Void) {
-        dispatchPrecondition(condition: .notOnQueue(syncQueue))
         let targetQueueCompletion = Utilities.completion(on: self.targetQueue, completion: completion)
         syncQueue.async {
             guard let image = self.cache.object(forKey: identifier as NSString) else {
@@ -49,6 +48,14 @@ class MemoryImageCache: ImageCache {
                 return
             }
             targetQueueCompletion(.success(image))
+        }
+    }
+
+    func clear(completion: @escaping (Result<Bool, Error>) -> Void) {
+        syncQueue.async {
+            let targetQueueCompletion = Utilities.completion(on: self.targetQueue, completion: completion)
+            self.cache.removeAllObjects()
+            targetQueueCompletion(.success(true))
         }
     }
 
@@ -64,6 +71,7 @@ class FileImageCache: ImageCache {
         self.path = path
         self.syncQueue = DispatchQueue(label: "syncQueue")
         self.targetQueue = targetQueue ?? DispatchQueue(label: "targetQueue")
+        try! FileManager.default.createDirectory(at: path, withIntermediateDirectories: true)
     }
 
     func path(for identifier: String) -> URL {
@@ -71,7 +79,6 @@ class FileImageCache: ImageCache {
     }
 
     func set(identifier: String, image: UIImage, completion: @escaping (Result<Bool, Error>) -> Void) {
-        dispatchPrecondition(condition: .notOnQueue(syncQueue))
         syncQueue.async {
             let targetQueueCompletion = Utilities.completion(on: self.targetQueue, completion: completion)
             do {
@@ -86,7 +93,6 @@ class FileImageCache: ImageCache {
     }
 
     func get(identifier: String, completion: @escaping (Result<UIImage, Error>) -> Void) {
-        dispatchPrecondition(condition: .notOnQueue(syncQueue))
         syncQueue.async {
             let targetQueueCompletion = Utilities.completion(on: self.targetQueue, completion: completion)
             let path = self.path(for: identifier)
@@ -97,6 +103,18 @@ class FileImageCache: ImageCache {
                     return
                 }
                 targetQueueCompletion(.success(image))
+            } catch {
+                targetQueueCompletion(.failure(error))
+            }
+        }
+    }
+
+    func clear(completion: @escaping (Result<Bool, Error>) -> Void) {
+        syncQueue.async {
+            let targetQueueCompletion = Utilities.completion(on: self.targetQueue, completion: completion)
+            do {
+                try FileManager.default.removeItem(at: self.path)
+                targetQueueCompletion(.success(true))
             } catch {
                 targetQueueCompletion(.failure(error))
             }

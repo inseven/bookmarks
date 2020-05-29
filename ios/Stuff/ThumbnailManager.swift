@@ -21,24 +21,26 @@ class ThumbnailManager {
         self.imageCache = imageCache
     }
 
-    func thumbnail(for item: Item, completion: @escaping (Result<UIImage, Error>) -> Void) {
+    func thumbnail(for item: Item, completion: @escaping (Result<UIImage, Error>) -> Void) -> Downloader? {
         let targetQueueCompletion = Utilities.completion(on: self.targetQueue, completion: completion)
+        let downloader = DownloadManager.shared.downloader(for: item.url) { (result) in
+            defer { targetQueueCompletion(result) }
+            guard case let .success(image) = result else {
+                return
+            }
+            self.imageCache.set(identifier: item.identifier, image: image) { (result) in
+                if case .failure(let error) = result {
+                    print("Failed to cache image with error \(error)")
+                }
+            }
+        }
         self.imageCache.get(identifier: item.identifier) { (result) in
             if case .success(let image) = result {
                 targetQueueCompletion(.success(image))
                 return
             }
-            downloadThumbnail(for: item.url) { (result) in
-                defer { targetQueueCompletion(result) }
-                guard case let .success(image) = result else {
-                    return
-                }
-                self.imageCache.set(identifier: item.identifier, image: image) { (result) in
-                    if case .failure(let error) = result {
-                        print("Failed to cache image with error \(error)")
-                    }
-                }
-            }
+            DownloadManager.shared.schedule(downloader as! WebViewDownloader)
         }
+        return downloader
     }
 }

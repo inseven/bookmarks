@@ -19,7 +19,6 @@ protocol Downloader {
     func cancel()
 }
 
-
 class DownloadManager {
 
     static let shared = DownloadManager()

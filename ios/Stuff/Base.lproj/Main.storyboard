@@ -83,9 +83,9 @@
                         <viewLayoutGuide key="safeArea" id="0JQ-cM-bzL"/>
                     </view>
                     <navigationItem key="navigationItem" title="Bookmarks" id="Fjn-ri-EEf">
-                        <barButtonItem key="rightBarButtonItem" title="Clear Cache" id="bQv-Js-Xh9">
+                        <barButtonItem key="leftBarButtonItem" title="Settings" id="9di-za-QP7">
                             <connections>
-                                <action selector="emptyCache:" destination="1XB-28-LyZ" id="TW4-kv-mWN"/>
+                                <segue destination="xip-k2-MfR" kind="presentation" id="V8T-94-2kY"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -95,7 +95,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8pw-kb-Bba" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="753" y="-654"/>
+            <point key="canvasLocation" x="601" y="-654"/>
         </scene>
         <!--Item-->
         <scene sceneID="Dyu-YY-Udq">
@@ -113,6 +113,38 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mVf-3c-VGM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-222" y="-654"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="4Jv-ye-xq0">
+            <objects>
+                <navigationController id="xip-k2-MfR" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="oBx-mt-tnx">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="lmm-py-S7X" kind="relationship" relationship="rootViewController" id="AW1-TH-b3J"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Znf-AQ-IAu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1388" y="-654"/>
+        </scene>
+        <!--Settings-->
+        <scene sceneID="NFU-Cm-ahf">
+            <objects>
+                <viewController id="lmm-py-S7X" customClass="SettingsViewController" customModule="Stuff" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="r41-xb-i97">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="Z1m-Qn-Sf2"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Settings" id="B61-wW-HVM"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2D3-8Z-d7J" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2164" y="-654"/>
         </scene>
     </scenes>
 </document>

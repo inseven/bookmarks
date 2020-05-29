@@ -8,14 +8,38 @@
 
 import Foundation
 
+protocol UpdaterObserver: AnyObject {
+
+}
+
 class Updater {
 
+    let syncQueue: DispatchQueue
+    let targetQueue: DispatchQueue
     let store: Store
     let token: String
+    var observers: [UpdaterObserver] // Synchronized on syncQueue
 
     init(store: Store, token: String) {
         self.store = store
         self.token = token
+        self.syncQueue = DispatchQueue(label: "syncQueue")
+        self.targetQueue = DispatchQueue(label: "targetQueue", attributes: .concurrent)
+        self.observers = []
+    }
+
+    func add(observer: UpdaterObserver) {
+        dispatchPrecondition(condition: .notOnQueue(syncQueue))
+        syncQueue.sync {
+            self.observers.append(observer)
+        }
+    }
+
+    func remove(observer: UpdaterObserver) {
+        dispatchPrecondition(condition: .notOnQueue(syncQueue))
+        syncQueue.sync {
+            self.observers.removeAll { ( $0 === observer ) }
+        }
     }
 
     func start() {

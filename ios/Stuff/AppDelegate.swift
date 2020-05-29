@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var updater: Updater!
     var imageCache: ImageCache!
     var thumbnailManager: ThumbnailManager!
+    var settings = Settings()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -28,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("Failed to create documents directory with error \(error)")
         }
         store = Store(path: documentsDirectory.appendingPathComponent("store.plist"), targetQueue: .main)
-        updater = Updater(store: store, token: "jbmorley:08f37da5d082080ae1a5")
+        updater = Updater(store: store, token: settings.pinboardApiKey)
         imageCache = FileImageCache(path: documentsDirectory.appendingPathComponent("thumbnails"))
 //        imageCache = MemoryImageCache()
         thumbnailManager = ThumbnailManager(imageCache: imageCache)
@@ -49,6 +50,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
+    }
+
+    override func buildMenu(with builder: UIMenuBuilder) {
+        guard builder.system == UIMenuSystem.main else { return }
+        let find = UIKeyCommand(title: "Find", image: nil, action: #selector(ViewController.findShortcut), input: "f", modifierFlags: [.command])
+        let newMenu = UIMenu(title: "File", options: .displayInline, children: [find])
+        builder.insertChild(newMenu, atStartOfMenu: .file)
     }
 
 }

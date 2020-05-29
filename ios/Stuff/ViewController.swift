@@ -19,6 +19,26 @@ enum Section : CaseIterable {
   case one
 }
 
+class CancellableSearchController: UISearchController {
+
+    lazy var customSearchBar = CancellableSarchBar()
+    override var searchBar: UISearchBar { customSearchBar }
+
+}
+
+class CancellableSarchBar: UISearchBar {
+
+    override var keyCommands: [UIKeyCommand]? {
+        [UIKeyCommand(input: UIKeyCommand.inputEscape, modifierFlags: [], action: #selector(cancel))]
+    }
+
+    @objc func cancel() {
+        self.searchTextField.text = ""
+        self.delegate?.searchBarCancelButtonClicked?(self)
+    }
+
+}
+
 class ViewController: UIViewController  {
 
     private lazy var dataSource = makeDataSource()
@@ -76,8 +96,9 @@ class ViewController: UIViewController  {
     }
 
     func makeSearchController() -> UISearchController {
-        let searchController = UISearchController(searchResultsController: nil)
+        let searchController = CancellableSearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
         return searchController
     }
@@ -95,29 +116,23 @@ class ViewController: UIViewController  {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         collectionView.collectionViewLayout = createLayout()
-
-        self.navigationController?.navigationBar.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(ViewController.sampleTapGestureTapped(recognizer:))))
     }
 
-    @IBAction func emptyCache(_ sender: Any) {
-        imageCache.clear() { (result) in
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-                var message = ""
-                switch result {
-                case .success:
-                    message = "Successfully cleared the cache!"
-                case .failure(let error):
-                    message = "Failed to clear the cache with error \(error)"
-                }
-                let alert = UIAlertController(title: "Cache", message: message, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-            }
-        }
+    override func buildMenu(with builder: UIMenuBuilder) {
+        guard builder.system == UIMenuSystem.main else { return }
+        let find = UIKeyCommand(title: "Search", image: nil, action: #selector(ViewController.findShortcut), input: "f", modifierFlags: [.command])
+        let newMenu = UIMenu(title: "File", options: .displayInline, children: [find])
+        builder.insertChild(newMenu, atStartOfMenu: .file)
     }
 
-    @objc func sampleTapGestureTapped(recognizer: UITapGestureRecognizer) {
+    override var performsActionsWhilePresentingModally: Bool { false }
+    override var canBecomeFirstResponder: Bool { true }
+    override var keyCommands: [UIKeyCommand]? {
+        [UIKeyCommand(title: "Find", image: nil, action: #selector(findShortcut), input: "f", modifierFlags: [.command])]
+    }
+
+    @objc func findShortcut() {
+        searchController.searchBar.becomeFirstResponder()
     }
 
     private func createLayout() -> UICollectionViewLayout {
@@ -137,7 +152,7 @@ class ViewController: UIViewController  {
 
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
-     }
+    }
 
     func update() {
         store.identifiers(filter: searchController.searchBar.searchTextField.text) { (result) in
@@ -159,6 +174,14 @@ extension ViewController: UISearchResultsUpdating {
 
     func updateSearchResults(for searchController: UISearchController) {
         update()
+    }
+
+}
+
+extension ViewController: UISearchBarDelegate {
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        self.searchController.dismiss(animated: true, completion: nil)
     }
 
 }

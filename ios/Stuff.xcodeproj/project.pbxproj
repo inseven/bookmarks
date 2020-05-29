@@ -13,6 +13,9 @@
 		D832EEBD24816655004C64E3 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = D832EEBC24816655004C64E3 /* Document.swift */; };
 		D832EEBF248166FC004C64E3 /* MemoryImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D832EEBE248166FC004C64E3 /* MemoryImageCache.swift */; };
 		D832EEC124816735004C64E3 /* FileImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D832EEC024816735004C64E3 /* FileImageCache.swift */; };
+		D832EEC5248168D2004C64E3 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D832EEC4248168D2004C64E3 /* SettingsViewController.swift */; };
+		D832EEC724816901004C64E3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D832EEC624816901004C64E3 /* SettingsView.swift */; };
+		D832EEC924818EF6004C64E3 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D832EEC824818EF6004C64E3 /* Settings.swift */; };
 		D864E46C21C93FB400EAB9AD /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = D864E46721C93FB400EAB9AD /* TFHpple.m */; };
 		D864E46D21C93FB400EAB9AD /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = D864E46A21C93FB400EAB9AD /* TFHppleElement.m */; };
 		D864E46E21C93FB400EAB9AD /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = D864E46B21C93FB400EAB9AD /* XPathQuery.m */; };
@@ -54,6 +57,10 @@
 		D832EEBC24816655004C64E3 /* Document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
 		D832EEBE248166FC004C64E3 /* MemoryImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryImageCache.swift; sourceTree = "<group>"; };
 		D832EEC024816735004C64E3 /* FileImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileImageCache.swift; sourceTree = "<group>"; };
+		D832EEC4248168D2004C64E3 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		D832EEC624816901004C64E3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		D832EEC824818EF6004C64E3 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		D832EECA2481B6D1004C64E3 /* Stuff.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Stuff.entitlements; sourceTree = "<group>"; };
 		D864E46621C93FB400EAB9AD /* TFHppleElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHppleElement.h; sourceTree = "<group>"; };
 		D864E46721C93FB400EAB9AD /* TFHpple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFHpple.m; sourceTree = "<group>"; };
 		D864E46821C93FB400EAB9AD /* XPathQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPathQuery.h; sourceTree = "<group>"; };
@@ -163,6 +170,7 @@
 		D8D3BBF821C6AEBC00D6FB97 /* Stuff */ = {
 			isa = PBXGroup;
 			children = (
+				D832EECA2481B6D1004C64E3 /* Stuff.entitlements */,
 				D864E47221C9417F00EAB9AD /* Stuff-Bridging-Header.h */,
 				D8D3BC0521C6AEBD00D6FB97 /* Info.plist */,
 				D8D3BBF921C6AEBC00D6FB97 /* AppDelegate.swift */,
@@ -179,6 +187,9 @@
 				D864E46521C93FB400EAB9AD /* Classes */,
 				D8D3BC0221C6AEBD00D6FB97 /* LaunchScreen.storyboard */,
 				D8D3BBFD21C6AEBC00D6FB97 /* Main.storyboard */,
+				D832EEC4248168D2004C64E3 /* SettingsViewController.swift */,
+				D832EEC624816901004C64E3 /* SettingsView.swift */,
+				D832EEC824818EF6004C64E3 /* Settings.swift */,
 			);
 			path = Stuff;
 			sourceTree = "<group>";
@@ -337,8 +348,11 @@
 				D832EEBF248166FC004C64E3 /* MemoryImageCache.swift in Sources */,
 				D8AAFE51248018BC00B62492 /* ImageCache.swift in Sources */,
 				D864E46E21C93FB400EAB9AD /* XPathQuery.m in Sources */,
+				D832EEC724816901004C64E3 /* SettingsView.swift in Sources */,
+				D832EEC924818EF6004C64E3 /* Settings.swift in Sources */,
 				D864E46C21C93FB400EAB9AD /* TFHpple.m in Sources */,
 				D8AAFE5324804FDF00B62492 /* WebViewDownloader.swift in Sources */,
+				D832EEC5248168D2004C64E3 /* SettingsViewController.swift in Sources */,
 				D81D019D247B0AA200C8324B /* Store.swift in Sources */,
 				D8A3A51F247C918000C3B8B4 /* ThumbnailManager.swift in Sources */,
 				D8D3BC2A21C72F7600D6FB97 /* Pinboard.swift in Sources */,
@@ -523,6 +537,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Stuff/Stuff.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
 				INFOPLIST_FILE = Stuff/Info.plist;
@@ -532,6 +547,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.Stuff;
 				PRODUCT_NAME = Stuff;
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Stuff/Stuff-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -542,6 +558,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Stuff/Stuff.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
 				INFOPLIST_FILE = Stuff/Info.plist;
@@ -551,6 +568,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.Stuff;
 				PRODUCT_NAME = Stuff;
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Stuff/Stuff-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

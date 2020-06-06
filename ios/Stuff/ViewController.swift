@@ -6,6 +6,7 @@
 //  Copyright © 2018 InSeven Limited. All rights reserved.
 //
 
+import SafariServices
 import UIKit
 
 class Cell: UICollectionViewCell {
@@ -15,7 +16,7 @@ class Cell: UICollectionViewCell {
     var downloader: Downloader?
 }
 
-enum Section : CaseIterable {
+enum CollectionSection : CaseIterable {
   case one
 }
 
@@ -48,8 +49,9 @@ class ViewController: UIViewController  {
     var thumbnailManager: ThumbnailManager!
     var store: Store!
     var imageCache: ImageCache!
+    var settings: Settings!
 
-    func makeDataSource() -> UICollectionViewDiffableDataSource<Section, String> {
+    func makeDataSource() -> UICollectionViewDiffableDataSource<CollectionSection, String> {
         return UICollectionViewDiffableDataSource(collectionView: collectionView) { (collectionView, indexPath, identifier) -> UICollectionViewCell? in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! Cell
 
@@ -110,7 +112,10 @@ class ViewController: UIViewController  {
         store = delegate.store
         thumbnailManager = delegate.thumbnailManager
         imageCache = delegate.imageCache
+        settings = delegate.settings
         store.add(observer: self)
+
+        navigationController?.navigationBar.prefersLargeTitles = true
 
         collectionView.dataSource = dataSource
         navigationItem.searchController = searchController
@@ -168,8 +173,8 @@ class ViewController: UIViewController  {
             case .failure(let error):
                 print("Failed to fetch store identifiers with error \(error)")
             case .success(let identifiers):
-                var snapshot = NSDiffableDataSourceSnapshot<Section, String>()
-                snapshot.appendSections(Section.allCases)
+                var snapshot = NSDiffableDataSourceSnapshot<CollectionSection, String>()
+                snapshot.appendSections(CollectionSection.allCases)
                 snapshot.appendItems(identifiers, toSection: .one)
                 self.dataSource.apply(snapshot, animatingDifferences: true)
             }
@@ -199,11 +204,18 @@ extension ViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let identifier = dataSource.itemIdentifier(for: indexPath) {
             self.store.item(identifier: identifier) { (result) in
+                dispatchPrecondition(condition: .onQueue(.main))
                 switch result {
                 case .failure(let error):
                     print("Failed to get item with error \(error)")
                 case .success(let item):
-                    UIApplication.shared.open(item.url)
+                    if self.settings.useInAppBrowser {
+                        let controller = SFSafariViewController(url: item.url)
+                        controller.delegate = self
+                        self.present(controller, animated: true, completion: nil)
+                    } else {
+                        UIApplication.shared.open(item.url)
+                    }
                 }
             }
         }
@@ -224,6 +236,14 @@ extension ViewController: StoreObserver {
 
     func storeDidUpdate(store: Store) {
         update()
+    }
+
+}
+
+extension ViewController: SFSafariViewControllerDelegate {
+
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        self.navigationController?.popToViewController(self, animated: true)
     }
 
 }

@@ -18,7 +18,8 @@ final class SettingsViewState: ObservableObject {
 class SettingsViewController: UIHostingController<SettingsView> {
 
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder, rootView: SettingsView(settings: Settings()))
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+        super.init(coder: aDecoder, rootView: SettingsView(settings: delegate.settings))
         self.rootView.delegate = self
     }
 

@@ -20,14 +20,21 @@ struct SettingsView: View {
     var body: some View {
         VStack {
             Form {
-                TextField("Pinboard API Key", text: $settings.pinboardApiKey)
-                Button(action: {
-                    guard let delegate = self.delegate else {
-                        return
+                Section() {
+                    TextField("Pinboard API Key", text: $settings.pinboardApiKey)
+                }
+                Section() {
+                    Toggle("Use In-App Browser", isOn: $settings.useInAppBrowser)
+                }
+                Section() {
+                    Button(action: {
+                        guard let delegate = self.delegate else {
+                            return
+                        }
+                        delegate.clearCache()
+                    }) {
+                        Text("Clear Cache").foregroundColor(.red)
                     }
-                    delegate.clearCache()
-                }) {
-                    Text("Clear Cache")
                 }
             }
         }

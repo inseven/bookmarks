@@ -80,8 +80,10 @@ class ViewController: UIViewController  {
                     cell.titleLabel.text = !item.title.isEmpty ? item.title : item.url.absoluteString
                     cell.future = self.thumbnailManager.thumbnail(for: item)
                         .receive(on: DispatchQueue.main)
-                        .sink(receiveCompletion: { (error) in
-                            print("Failed to download thumbnail with error \(error)")
+                        .sink(receiveCompletion: { (completion) in
+                            if case .failure(let error) = completion {
+                                print("Failed to download thumbnail with error \(error)")
+                            }
                         }, receiveValue: { (image) in
                             guard cell.uuid == uuid else {
                                 return

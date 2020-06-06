@@ -6,6 +6,7 @@
 //  Copyright © 2020 InSeven Limited. All rights reserved.
 //
 
+import Combine
 import Foundation
 import UIKit
 
@@ -38,6 +39,14 @@ class Utilities {
         return { (result) in
             queue.async {
                 completion(result)
+            }
+        }
+    }
+
+    static func meta(for url: URL) -> Future<UIImage, Error> {
+        return Future { (promise) in
+            simpleThumbnail(for: url) { (result) in
+                promise(result)
             }
         }
     }

@@ -22,14 +22,14 @@ protocol Downloader {
 
 class DownloadManager {
 
-    static let shared = DownloadManager()
-
     let syncQueue: DispatchQueue
+    let limit: Int
     var pending: [AnyHashable]
     var active: Set<AnyHashable>
 
-    init() {
+    init(limit: Int) {
         syncQueue = DispatchQueue(label: "syncQueue")
+        self.limit = limit
         pending = []
         active = Set()
     }
@@ -42,7 +42,7 @@ class DownloadManager {
             return downloader.description
         }
 
-        print("DownloadManager: \(self.pending.count) pending, \(self.active.count) active \(urls)")
+        print("DownloadManager (limit=\(self.limit): \(self.pending.count) pending, \(self.active.count) active \(urls)")
     }
 
     private func add<T>(_ downloader: T) where T: Hashable {
@@ -68,7 +68,7 @@ class DownloadManager {
         dispatchPrecondition(condition: .onQueue(syncQueue))
         defer { self.debug() }
         guard
-            self.active.count < 3,
+            self.active.count < limit,
             !self.pending.isEmpty,
             let next = self.pending.removeLast() as? WebViewDownloader else {
                 return
@@ -102,18 +102,8 @@ class DownloadManager {
         self.add(downloader)
     }
 
-    func future(for url: URL) -> Future<UIImage, Error> {
-        var downloader: Downloader? = nil
-        let future = Future<UIImage, Error> { (promise) in
-            downloader = self.downloader(for: url) { (result) in
-                promise(result)
-            }
-        }
-        _ = future.handleEvents(receiveCancel: {
-            downloader?.cancel()
-        })
-        schedule(downloader as! WebViewDownloader)
-        return future
+    func thumbnail(for url: URL) -> WebViewThumbnailPublisher {
+        return WebViewThumbnailPublisher(manager: self, url: url)
     }
 
 }
@@ -122,9 +112,8 @@ final class WebViewThumbnailSubscription<SubscriberType: Subscriber>: Subscripti
     private var subscriber: SubscriberType?
     private var downloader: Downloader
 
-    init(subscriber: SubscriberType, url: URL) {
+    init(subscriber: SubscriberType, manager: DownloadManager, url: URL) {
         self.subscriber = subscriber
-        let manager = DownloadManager.shared
         self.downloader = manager.downloader(for: url) { (result) in
             switch result {
             case .success(let image):
@@ -150,14 +139,16 @@ class WebViewThumbnailPublisher: Publisher {
     typealias Output = UIImage
     typealias Failure = Error
 
+    let manager: DownloadManager
     let url: URL
 
-    init(url: URL) {
+    init(manager: DownloadManager, url: URL) {
+        self.manager = manager
         self.url = url
     }
 
     func receive<S>(subscriber: S) where S : Subscriber, S.Failure == WebViewThumbnailPublisher.Failure, S.Input == WebViewThumbnailPublisher.Output {
-        let subscription = WebViewThumbnailSubscription(subscriber: subscriber, url: url)
+        let subscription = WebViewThumbnailSubscription(subscriber: subscriber, manager: manager, url: url)
         subscriber.receive(subscription: subscription)
     }
 }

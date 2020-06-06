@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var updater: Updater!
     var imageCache: ImageCache!
     var thumbnailManager: ThumbnailManager!
+    var downloadManager: DownloadManager!
     var settings = Settings()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -32,7 +33,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         updater = Updater(store: store, token: settings.pinboardApiKey)
         imageCache = FileImageCache(path: documentsDirectory.appendingPathComponent("thumbnails"))
 //        imageCache = MemoryImageCache()
-        thumbnailManager = ThumbnailManager(imageCache: imageCache)
+        downloadManager = DownloadManager(limit: settings.maximumConcurrentThumbnailDownloads)
+        thumbnailManager = ThumbnailManager(imageCache: imageCache, downloadManager: downloadManager)
         updater.start()
         return true
     }

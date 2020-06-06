@@ -15,10 +15,12 @@ class ThumbnailManager {
 
     let targetQueue: DispatchQueue
     let imageCache: ImageCache
+    let downloadManager: DownloadManager
 
-    init(imageCache: ImageCache) {
+    init(imageCache: ImageCache, downloadManager: DownloadManager) {
         self.targetQueue = DispatchQueue(label: "targetQueue", attributes: .concurrent)
         self.imageCache = imageCache
+        self.downloadManager = downloadManager
     }
 
     func cachedImage(for item: Item) -> Future<UIImage, Error> {
@@ -31,7 +33,8 @@ class ThumbnailManager {
 
     func thumbnail(for item: Item) -> AnyPublisher<UIImage, Error> {
         return cachedImage(for: item)
-            .catch{ _ in WebViewThumbnailPublisher(url: item.url) }
+            .catch{ _ in Utilities.meta(for: item.url) }
+            .catch{ _ in self.downloadManager.thumbnail(for: item.url) }
             .map({ (image) -> UIImage in
                 self.imageCache.set(identifier: item.identifier, image: image) { (result) in
                     if case .failure(let error) = result {
@@ -43,26 +46,4 @@ class ThumbnailManager {
             .eraseToAnyPublisher()
     }
 
-//    func thumbnail(for item: Item, completion: @escaping (Result<UIImage, Error>) -> Void) -> Downloader? {
-//        let targetQueueCompletion = Utilities.completion(on: self.targetQueue, completion: completion)
-//        let downloader = DownloadManager.shared.downloader(for: item.url) { (result) in
-//            defer { targetQueueCompletion(result) }
-//            guard case let .success(image) = result else {
-//                return
-//            }
-//            self.imageCache.set(identifier: item.identifier, image: image) { (result) in
-//                if case .failure(let error) = result {
-//                    print("Failed to cache image with error \(error)")
-//                }
-//            }
-//        }
-//        self.imageCache.get(identifier: item.identifier) { (result) in
-//            if case .success(let image) = result {
-//                targetQueueCompletion(.success(image))
-//                return
-//            }
-//            DownloadManager.shared.schedule(downloader as! WebViewDownloader)
-//        }
-//        return downloader
-//    }
 }

@@ -122,6 +122,7 @@ class ViewController: UIViewController  {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         collectionView.collectionViewLayout = createLayout(size: view.bounds.size)
+        collectionView.insetsLayoutMarginsFromSafeArea = false
     }
 
     override func buildMenu(with builder: UIMenuBuilder) {
@@ -148,22 +149,20 @@ class ViewController: UIViewController  {
     }
 
     private func createLayout(size: CGSize) -> UICollectionViewLayout {
+        let interItemSpacing: CGFloat = 16.0
+        let bounds = CGRect(origin: CGPoint(), size: size)
+        let frame = bounds.inset(by: collectionView.layoutMargins)
         let columns =  Int(floor(size.width / 300.0))
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .fractionalHeight(1))
-        let spacing: CGFloat = 20.0
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: spacing)
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                heightDimension: .absolute(280))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: columns)
-        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: spacing, bottom: 0, trailing: 0)
+        group.interItemSpacing = .fixed(interItemSpacing)
         let section = NSCollectionLayoutSection(group: group)
-        section.interGroupSpacing = spacing
-        section.contentInsets = NSDirectionalEdgeInsets(top: spacing, leading: 0.0, bottom: 0.0, trailing: 0.0)
-
-
-
+        section.interGroupSpacing = interItemSpacing
+        section.contentInsets = NSDirectionalEdgeInsets(top: frame.origin.x, leading: frame.origin.x, bottom: frame.origin.x, trailing: frame.origin.x)
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
     }

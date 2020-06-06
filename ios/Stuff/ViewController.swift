@@ -240,6 +240,47 @@ extension ViewController: UICollectionViewDelegate {
         future.cancel()
     }
 
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        guard let identifier = dataSource.itemIdentifier(for: indexPath) else {
+            return nil
+        }
+        return makeFeedContextMenu(identifier: identifier)
+    }
+
+
+    func getShareAction(identifier: String) -> UIAction? {
+        let action = UIAction(title: "Share", image: UIImage(systemName: "square.and.arrow.up")) { action in
+            self.store.item(identifier: identifier) { (result) in
+                switch result {
+                case .failure(let error):
+                    print("Failed to get item with error \(error)")
+                case .success(let item):
+                    let activityViewController = UIActivityViewController(activityItems: [item.url], applicationActivities: nil)
+                    self.present(activityViewController, animated: true, completion: nil)
+                }
+            }
+            print("Clicked!")
+        }
+        return action
+    }
+
+    func makeFeedContextMenu(identifier: String) -> UIContextMenuConfiguration {
+        return UIContextMenuConfiguration(identifier: identifier as NSCopying, previewProvider: nil, actionProvider: { [ weak self] suggestedActions in
+
+            guard let self = self else { return nil }
+
+            var actions = [UIAction]()
+
+            if let shareAction = self.getShareAction(identifier: identifier) {
+                actions.append(shareAction)
+            }
+
+            return UIMenu(title: "", children: actions)
+
+        })
+
+    }
+
 }
 
 extension ViewController: StoreObserver {

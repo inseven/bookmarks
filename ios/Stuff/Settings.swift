@@ -11,6 +11,7 @@ import Foundation
 enum SettingsKey: String {
     case pinboardApiKey = "pinboard-api-key"
     case useInAppBrowser = "use-in-app-browser"
+    case maximumConcurrentThumbnailDownloads = "maximum-concurrent-thumbnail-downloads"
 }
 
 final class Settings: ObservableObject {
@@ -33,10 +34,21 @@ final class Settings: ObservableObject {
         }
     }
 
+    @Published var maximumConcurrentThumbnailDownloads: Int {
+        didSet {
+            defaults.set(maximumConcurrentThumbnailDownloads, forKey: SettingsKey.maximumConcurrentThumbnailDownloads.rawValue)
+            defaults.synchronize()
+        }
+    }
+
     init() {
         let defaults = UserDefaults.standard
-        self.pinboardApiKey = defaults.string(forKey: SettingsKey.pinboardApiKey.rawValue) ?? ""
-        self.useInAppBrowser = defaults.bool(forKey: SettingsKey.useInAppBrowser.rawValue)
+        pinboardApiKey = defaults.string(forKey: SettingsKey.pinboardApiKey.rawValue) ?? ""
+        useInAppBrowser = defaults.bool(forKey: SettingsKey.useInAppBrowser.rawValue)
+        maximumConcurrentThumbnailDownloads = defaults.integer(forKey: SettingsKey.maximumConcurrentThumbnailDownloads.rawValue)
+        if maximumConcurrentThumbnailDownloads == 0 {
+            maximumConcurrentThumbnailDownloads = 3
+        }
     }
 
 }

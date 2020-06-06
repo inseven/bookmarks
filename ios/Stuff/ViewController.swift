@@ -6,6 +6,7 @@
 //  Copyright © 2018 InSeven Limited. All rights reserved.
 //
 
+import Combine
 import SafariServices
 import UIKit
 
@@ -13,7 +14,7 @@ class Cell: UICollectionViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
     var uuid: UUID?
-    var downloader: Downloader?
+    var future: AnyCancellable?
 }
 
 enum CollectionSection : CaseIterable {
@@ -57,9 +58,9 @@ class ViewController: UIViewController  {
 
             cell.titleLabel.text = nil
             cell.imageView.image = nil
-            if let downloader = cell.downloader {
-                downloader.cancel()
-                cell.downloader = nil
+            if let future = cell.future {
+                future.cancel()
+                cell.future = nil
             }
 
             cell.layer.masksToBounds = true
@@ -77,20 +78,16 @@ class ViewController: UIViewController  {
                         return
                     }
                     cell.titleLabel.text = !item.title.isEmpty ? item.title : item.url.absoluteString
-                    let downloader = self.thumbnailManager.thumbnail(for: item) { (result) in
-                        switch result {
-                        case .failure:
-                            return
-                        case .success(let image):
-                            DispatchQueue.main.async {
-                                guard cell.uuid == uuid else {
-                                    return
-                                }
-                                cell.imageView.image = image
+                    cell.future = self.thumbnailManager.thumbnail(for: item)
+                        .receive(on: DispatchQueue.main)
+                        .sink(receiveCompletion: { (error) in
+                            print("Failed to download thumbnail with error \(error)")
+                        }, receiveValue: { (image) in
+                            guard cell.uuid == uuid else {
+                                return
                             }
-                        }
-                    }
-                    cell.downloader = downloader
+                            cell.imageView.image = image
+                        })
                 }
             }
             return cell
@@ -237,10 +234,10 @@ extension ViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard
             let cell = cell as? Cell,
-            let downloader = cell.downloader else {
+            let future = cell.future else {
             return
         }
-        downloader.cancel()
+        future.cancel()
     }
 
 }

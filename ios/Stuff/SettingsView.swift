@@ -26,6 +26,13 @@ struct SettingsView: View {
                 Section() {
                     Toggle("Use In-App Browser", isOn: $settings.useInAppBrowser)
                 }
+                Section(header: Text("Thumbnails")) {
+                    Picker("Concurrent Downloads", selection: $settings.maximumConcurrentThumbnailDownloads) {
+                        ForEach(1 ..< 4) {
+                            Text("\($0)").tag($0)
+                        }
+                    }
+                }
                 Section() {
                     Button(action: {
                         guard let delegate = self.delegate else {

@@ -6,6 +6,7 @@
 //  Copyright © 2020 InSeven Limited. All rights reserved.
 //
 
+import Combine
 import Foundation
 import WebKit
 
@@ -67,7 +68,7 @@ class DownloadManager {
         dispatchPrecondition(condition: .onQueue(syncQueue))
         defer { self.debug() }
         guard
-            self.active.count < 1,
+            self.active.count < 3,
             !self.pending.isEmpty,
             let next = self.pending.removeLast() as? WebViewDownloader else {
                 return
@@ -101,6 +102,64 @@ class DownloadManager {
         self.add(downloader)
     }
 
+    func future(for url: URL) -> Future<UIImage, Error> {
+        var downloader: Downloader? = nil
+        let future = Future<UIImage, Error> { (promise) in
+            downloader = self.downloader(for: url) { (result) in
+                promise(result)
+            }
+        }
+        _ = future.handleEvents(receiveCancel: {
+            downloader?.cancel()
+        })
+        schedule(downloader as! WebViewDownloader)
+        return future
+    }
+
+}
+
+final class WebViewThumbnailSubscription<SubscriberType: Subscriber>: Subscription where SubscriberType.Input == UIImage, SubscriberType.Failure == Error {
+    private var subscriber: SubscriberType?
+    private var downloader: Downloader
+
+    init(subscriber: SubscriberType, url: URL) {
+        self.subscriber = subscriber
+        let manager = DownloadManager.shared
+        self.downloader = manager.downloader(for: url) { (result) in
+            switch result {
+            case .success(let image):
+                _ = subscriber.receive(image)
+                subscriber.receive(completion: .finished)
+            case .failure(let error):
+                subscriber.receive(completion: .failure(error))
+            }
+        }
+        manager.schedule(downloader as! WebViewDownloader)
+    }
+
+    func request(_ demand: Subscribers.Demand) {}
+
+    func cancel() {
+        subscriber = nil
+        downloader.cancel()
+    }
+}
+
+class WebViewThumbnailPublisher: Publisher {
+
+    typealias Output = UIImage
+    typealias Failure = Error
+
+    let url: URL
+
+    init(url: URL) {
+        self.url = url
+    }
+
+    func receive<S>(subscriber: S) where S : Subscriber, S.Failure == WebViewThumbnailPublisher.Failure, S.Input == WebViewThumbnailPublisher.Output {
+        let subscription = WebViewThumbnailSubscription(subscriber: subscriber, url: url)
+        subscriber.receive(subscription: subscription)
+    }
 }
 
 class WebViewDownloader: NSObject, WKNavigationDelegate, Downloader {
@@ -128,11 +187,11 @@ class WebViewDownloader: NSObject, WKNavigationDelegate, Downloader {
             precondition(self.state == .idle)
             self.state = .running
             self.webView = WKWebView(frame: CGRect(x: 0, y: 0, width: 1000, height: 1000))
-            let delegate = UIApplication.shared.delegate as! AppDelegate
-            let navigationController = delegate.window?.rootViewController as! UINavigationController
-            let controller = navigationController.viewControllers.first!
-            controller.view.addSubview(self.webView)
-            controller.view.sendSubviewToBack(self.webView)
+//            let delegate = UIApplication.shared.delegate as! AppDelegate
+//            let navigationController = delegate.window?.rootViewController as! UINavigationController
+//            let controller = navigationController.viewControllers.first!
+//            controller.view.addSubview(self.webView)
+//            controller.view.sendSubviewToBack(self.webView)
             self.webView.navigationDelegate = self
             self.webView.load(URLRequest(url: self.url))
         }
@@ -235,3 +294,16 @@ class WebViewDownloader: NSObject, WKNavigationDelegate, Downloader {
     }
 
 }
+
+
+//struct ThumbnailPublisher<UIImage>: Publisher {
+//
+//    typealias Output = UIImage
+//    typealias Failure = Error
+//
+//    func receive<S>(subscriber: S) where S : Subscriber, Self.Failure == S.Failure, Self.Output == S.Input {
+//        let subscription = Subscription(subscriber: subscriber)
+//        subscriber.receive(subscription: subscription)
+//    }
+//
+//}

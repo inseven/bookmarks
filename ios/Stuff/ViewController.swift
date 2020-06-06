@@ -261,7 +261,6 @@ extension ViewController: UICollectionViewDelegate {
                     self.present(activityViewController, animated: true, completion: nil)
                 }
             }
-            print("Clicked!")
         }
         return action
     }

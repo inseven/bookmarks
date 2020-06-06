@@ -10,7 +10,7 @@
         <!--Bookmarks-->
         <scene sceneID="ENC-Fj-a57">
             <objects>
-                <viewController id="1XB-28-LyZ" customClass="ViewController" customModule="Stuff" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="1XB-28-LyZ" customClass="ViewController" customModule="Bookmarks" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="uOI-si-WvL">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -26,7 +26,7 @@
                                     <inset key="sectionInset" minX="16" minY="16" maxX="16" maxY="16"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="X2f-go-Lj4" customClass="Cell" customModule="Stuff" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="X2f-go-Lj4" customClass="Cell" customModule="Bookmarks" customModuleProvider="target">
                                         <rect key="frame" x="17.5" y="16" width="340" height="260"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
@@ -85,7 +85,7 @@
                     <navigationItem key="navigationItem" title="Bookmarks" id="Fjn-ri-EEf">
                         <barButtonItem key="leftBarButtonItem" title="Settings" id="9di-za-QP7">
                             <connections>
-                                <segue destination="xip-k2-MfR" kind="presentation" id="V8T-94-2kY"/>
+                                <segue destination="xip-k2-MfR" kind="presentation" identifier="Settings" id="V8T-94-2kY"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -133,7 +133,7 @@
         <!--Settings-->
         <scene sceneID="NFU-Cm-ahf">
             <objects>
-                <viewController id="lmm-py-S7X" customClass="SettingsViewController" customModule="Stuff" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="lmm-py-S7X" customClass="SettingsViewController" customModule="Bookmarks" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="r41-xb-i97">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

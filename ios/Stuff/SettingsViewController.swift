@@ -9,13 +9,17 @@
 import UIKit
 import SwiftUI
 
+protocol SettingsViewControllerDelegate: AnyObject {
+    func settingsViewControllerDidFinish(_ controller: SettingsViewController)
+}
+
 final class SettingsViewState: ObservableObject {
-
     @Published var enabled: Bool = true
-
 }
 
 class SettingsViewController: UIHostingController<SettingsView> {
+
+    weak var delegate: SettingsViewControllerDelegate?
 
     required init?(coder aDecoder: NSCoder) {
         let delegate = UIApplication.shared.delegate as! AppDelegate
@@ -25,6 +29,14 @@ class SettingsViewController: UIHostingController<SettingsView> {
 
     override func viewDidLoad() {
         self.rootView.delegate = self
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped))
+    }
+
+    @objc func doneTapped() {
+        guard let delegate = self.delegate else {
+            return
+        }
+        delegate.settingsViewControllerDidFinish(self)
     }
 
 }
@@ -36,8 +48,6 @@ extension SettingsViewController: SettingsViewDelegate {
         let delegate = UIApplication.shared.delegate as! AppDelegate
         delegate.imageCache.clear() { (result) in
             DispatchQueue.main.async {
-                // TODO:
-//                self.collectionView.reloadData()
                 var message = ""
                 switch result {
                 case .success:

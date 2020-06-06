@@ -181,6 +181,19 @@ class ViewController: UIViewController  {
         }
     }
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "Settings" {
+            guard
+                let navigationController = segue.destination as? UINavigationController,
+                let viewController = navigationController.viewControllers.first,
+                let settingsViewController = viewController as? SettingsViewController else {
+                print("Failed to get destination view controller")
+                return
+            }
+            settingsViewController.delegate = self
+        }
+    }
+
 }
 
 extension ViewController: UISearchResultsUpdating {
@@ -244,6 +257,14 @@ extension ViewController: SFSafariViewControllerDelegate {
 
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
         self.navigationController?.popToViewController(self, animated: true)
+    }
+
+}
+
+extension ViewController: SettingsViewControllerDelegate {
+
+    func settingsViewControllerDidFinish(_ controller: SettingsViewController) {
+        controller.dismiss(animated: true, completion: nil)
     }
 
 }

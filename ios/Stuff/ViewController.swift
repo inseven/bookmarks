@@ -58,6 +58,7 @@ class ViewController: UIViewController  {
 
             cell.titleLabel.text = nil
             cell.imageView.image = nil
+            cell.imageView.backgroundColor = nil
             if let future = cell.future {
                 future.cancel()
                 cell.future = nil
@@ -88,6 +89,7 @@ class ViewController: UIViewController  {
                             guard cell.uuid == uuid else {
                                 return
                             }
+                            cell.imageView.backgroundColor = .white
                             cell.imageView.image = image
                         })
                 }

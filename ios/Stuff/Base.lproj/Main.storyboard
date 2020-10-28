@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="oz4-IC-l2l">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="oz4-IC-l2l">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17504.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -18,7 +19,7 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="zSC-Sx-jhE">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" sectionInsetReference="safeArea" id="z3D-kM-Ioa">
                                     <size key="itemSize" width="340" height="260"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -49,7 +50,7 @@
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                             </subviews>
-                                                            <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                                             <constraints>
                                                                 <constraint firstItem="QuF-CK-5ON" firstAttribute="top" secondItem="tME-Jq-CFB" secondAttribute="top" constant="20" symbolic="YES" id="Htj-5c-bmh"/>
                                                                 <constraint firstItem="QuF-CK-5ON" firstAttribute="leading" secondItem="tME-Jq-CFB" secondAttribute="leading" constant="20" symbolic="YES" id="t3L-na-v6S"/>
@@ -61,7 +62,7 @@
                                                 </stackView>
                                             </subviews>
                                         </view>
-                                        <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstItem="Xbd-7U-8sN" firstAttribute="leading" secondItem="X2f-go-Lj4" secondAttribute="leading" id="Mrb-1U-gyr"/>
                                             <constraint firstAttribute="trailing" secondItem="Xbd-7U-8sN" secondAttribute="trailing" id="R0z-qB-TTq"/>
@@ -79,13 +80,18 @@
                                 </connections>
                             </collectionView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="0JQ-cM-bzL"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" title="Bookmarks" id="Fjn-ri-EEf">
                         <barButtonItem key="leftBarButtonItem" title="Settings" id="9di-za-QP7">
                             <connections>
                                 <segue destination="xip-k2-MfR" kind="presentation" identifier="Settings" id="V8T-94-2kY"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Prototype" id="0kD-M1-o4b">
+                            <connections>
+                                <segue destination="tGW-hS-roU" kind="show" id="dfz-Qb-LYq"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -137,8 +143,8 @@
                     <view key="view" contentMode="scaleToFill" id="r41-xb-i97">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="Z1m-Qn-Sf2"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" title="Settings" id="B61-wW-HVM"/>
                 </viewController>
@@ -146,5 +152,29 @@
             </objects>
             <point key="canvasLocation" x="2164" y="-654"/>
         </scene>
+        <!--Content View Controller-->
+        <scene sceneID="BR0-QV-czA">
+            <objects>
+                <viewController id="tGW-hS-roU" customClass="ContentViewController" customModule="Bookmarks" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="gZj-85-mhw">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="eaf-Z1-YKk"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="JsA-ps-c80"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="682-Qy-N5h" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1388" y="-1362"/>
+        </scene>
     </scenes>
+    <resources>
+        <systemColor name="secondarySystemBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>

@@ -36,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         downloadManager = DownloadManager(limit: settings.maximumConcurrentThumbnailDownloads)
         thumbnailManager = ThumbnailManager(imageCache: imageCache, downloadManager: downloadManager)
         updater.start()
+
         return true
     }
 

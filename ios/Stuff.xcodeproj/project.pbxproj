@@ -10,6 +10,8 @@
 		D81D019D247B0AA200C8324B /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81D019C247B0AA200C8324B /* Store.swift */; };
 		D81D019F247B24D600C8324B /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81D019E247B24D600C8324B /* Utilities.swift */; };
 		D81D01A1247B29B500C8324B /* Updater.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81D01A0247B29B500C8324B /* Updater.swift */; };
+		D81E7484254A0D1B002336DC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81E7483254A0D1B002336DC /* ContentView.swift */; };
+		D81E7489254A0D6C002336DC /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81E7488254A0D6C002336DC /* ContentViewController.swift */; };
 		D832EEBD24816655004C64E3 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = D832EEBC24816655004C64E3 /* Document.swift */; };
 		D832EEBF248166FC004C64E3 /* MemoryImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D832EEBE248166FC004C64E3 /* MemoryImageCache.swift */; };
 		D832EEC124816735004C64E3 /* FileImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D832EEC024816735004C64E3 /* FileImageCache.swift */; };
@@ -55,6 +57,8 @@
 		D81D019C247B0AA200C8324B /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		D81D019E247B24D600C8324B /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		D81D01A0247B29B500C8324B /* Updater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Updater.swift; sourceTree = "<group>"; };
+		D81E7483254A0D1B002336DC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D81E7488254A0D6C002336DC /* ContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		D832EEBC24816655004C64E3 /* Document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
 		D832EEBE248166FC004C64E3 /* MemoryImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryImageCache.swift; sourceTree = "<group>"; };
 		D832EEC024816735004C64E3 /* FileImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileImageCache.swift; sourceTree = "<group>"; };
@@ -193,6 +197,8 @@
 				D832EEC624816901004C64E3 /* SettingsView.swift */,
 				D832EEC824818EF6004C64E3 /* Settings.swift */,
 				D8A131F3248C4FDA006E71BE /* DownloadManager.swift */,
+				D81E7483254A0D1B002336DC /* ContentView.swift */,
+				D81E7488254A0D6C002336DC /* ContentViewController.swift */,
 			);
 			path = Stuff;
 			sourceTree = "<group>";
@@ -352,12 +358,14 @@
 				D8AAFE51248018BC00B62492 /* ImageCache.swift in Sources */,
 				D864E46E21C93FB400EAB9AD /* XPathQuery.m in Sources */,
 				D832EEC724816901004C64E3 /* SettingsView.swift in Sources */,
+				D81E7484254A0D1B002336DC /* ContentView.swift in Sources */,
 				D832EEC924818EF6004C64E3 /* Settings.swift in Sources */,
 				D864E46C21C93FB400EAB9AD /* TFHpple.m in Sources */,
 				D8AAFE5324804FDF00B62492 /* WebViewDownloader.swift in Sources */,
 				D832EEC5248168D2004C64E3 /* SettingsViewController.swift in Sources */,
 				D81D019D247B0AA200C8324B /* Store.swift in Sources */,
 				D8A3A51F247C918000C3B8B4 /* ThumbnailManager.swift in Sources */,
+				D81E7489254A0D6C002336DC /* ContentViewController.swift in Sources */,
 				D8D3BC2A21C72F7600D6FB97 /* Pinboard.swift in Sources */,
 				D81D01A1247B29B500C8324B /* Updater.swift in Sources */,
 				D8A131F4248C4FDA006E71BE /* DownloadManager.swift in Sources */,
@@ -543,9 +551,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Stuff/Stuff.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
 				INFOPLIST_FILE = Stuff/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -565,9 +574,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Stuff/Stuff.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
 				INFOPLIST_FILE = Stuff/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

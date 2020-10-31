@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUI
 import UIKit
 
 enum StoreError: Error {
@@ -28,14 +29,14 @@ extension String {
 
 }
 
-class Store {
+class Store: ObservableObject {
 
     let syncQueue: DispatchQueue
     let targetQueue: DispatchQueue
     let path: URL
     var items: [String: Item] // Synchronized on syncQueue
     var observers: [StoreObserver] // Synchronized on syncQueue
-    var rawItems: [Item] = [] // Synchronized on the main thread.
+    @Published var rawItems: [Item] = [] // Synchronized on the main thread.
 
     init(path: URL, targetQueue: DispatchQueue?) {
         syncQueue = DispatchQueue(label: "syncQueue")

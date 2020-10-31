@@ -91,7 +91,6 @@ struct BookmarkCell: View {
         .cornerRadius(10)
         .onAppear {
             publisher = AppDelegate.shared.thumbnailManager.thumbnail(for: item)
-                .flatMap { $0.resize(height: 200 * UIScreen.main.scale) }
                 .receive(on: DispatchQueue.main)
                 .sink(receiveCompletion: { (completion) in
                     if case .failure(let error) = completion {

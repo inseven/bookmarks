@@ -13,6 +13,10 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    static var shared: AppDelegate {
+        UIApplication.shared.delegate as! AppDelegate
+    }
+
     // TODO: Consider lazy variables.
     var window: UIWindow?
     var store: Store!

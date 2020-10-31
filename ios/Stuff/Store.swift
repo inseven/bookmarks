@@ -9,27 +9,6 @@
 import Foundation
 import UIKit
 
-class Item {
-
-    let identifier: String
-    let title: String
-    let url: URL
-    let tags: [String]
-    let date: Date
-    let thumbnail: UIImage?
-
-    init(identifier: String, title: String, url: URL, tags: [String], date: Date, thumbnail: UIImage? = nil) {
-        self.identifier = identifier
-        self.title = title
-        self.url = url
-        self.tags = tags
-        self.date = date
-        self.thumbnail = thumbnail
-    }
-
-}
-
-
 enum StoreError: Error {
     case notFound
 }
@@ -56,6 +35,7 @@ class Store {
     let path: URL
     var items: [String: Item] // Synchronized on syncQueue
     var observers: [StoreObserver] // Synchronized on syncQueue
+    var rawItems: [Item] = [] // Synchronized on the main thread.
 
     init(path: URL, targetQueue: DispatchQueue?) {
         syncQueue = DispatchQueue(label: "syncQueue")
@@ -139,6 +119,9 @@ class Store {
                     observer.storeDidUpdate(store: self)
                 }
             }
+        }
+        DispatchQueue.main.async {
+            self.rawItems = items
         }
     }
 

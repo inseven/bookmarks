@@ -113,16 +113,21 @@ struct BookmarkCell: View {
 
 struct ContentView: View {
 
-    var store: Store
+    @ObservedObject var store: Store
 
     var body: some View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 250), spacing: 16)], spacing: 16) {
                 ForEach(store.rawItems) { item in
-                    BookmarkCell(item: item)
-                        .onTapGesture {
-                            UIApplication.shared.open(item.url)
-                        }
+                    Button(action: {
+                        UIApplication.shared.open(item.url)
+                    }, label: {
+                        BookmarkCell(item: item)
+                            .foregroundColor(.primary)
+                    })
+                    .contextMenu(ContextMenu(menuItems: {
+                        Text("Share")
+                    }))
                 }
             }
             .padding()

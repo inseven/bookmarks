@@ -31,12 +31,22 @@ extension String {
 
 class Store: ObservableObject {
 
+    static let itemsKey = "items"
+
     let syncQueue: DispatchQueue
     let targetQueue: DispatchQueue
     let path: URL
     var items: [String: Item] // Synchronized on syncQueue
     var observers: [StoreObserver] // Synchronized on syncQueue
-    @Published var rawItems: [Item] = [] // Synchronized on the main thread.
+
+    var rawItems: [Item] = [] {
+        didSet {
+            let encodedItems: Data = try! NSKeyedArchiver.archivedData(withRootObject: rawItems, requiringSecureCoding: true)
+            UserDefaults.standard.set(encodedItems, forKey: Store.itemsKey)
+            UserDefaults.standard.synchronize()
+            self.objectWillChange.send()
+        }
+    }
 
     init(path: URL, targetQueue: DispatchQueue?) {
         syncQueue = DispatchQueue(label: "syncQueue")
@@ -48,6 +58,10 @@ class Store: ObservableObject {
         self.path = path
         items = [:]
         observers = []
+        if let encodedItems = UserDefaults.standard.object(forKey: Store.itemsKey) as? Data,
+           let rawItems = try? NSKeyedUnarchiver.unarchivedArrayOfObjects(ofClass: Item.self, from: encodedItems) {
+            self.rawItems = rawItems
+        }
     }
 
     func add(observer: StoreObserver) {

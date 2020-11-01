@@ -17,9 +17,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.shared.delegate as! AppDelegate
     }
 
+    lazy var store: Store! = {
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        do {
+            try FileManager.default.createDirectory(at: documentsDirectory, withIntermediateDirectories: true, attributes: nil)
+        } catch {
+            print("Failed to create documents directory with error \(error)")
+        }
+        return Store(path: documentsDirectory.appendingPathComponent("store.plist"), targetQueue: .main)
+    }()
+
     // TODO: Consider lazy variables.
     var window: UIWindow?
-    var store: Store!
     var updater: Updater!
     var imageCache: ImageCache!
     var thumbnailManager: ThumbnailManager!

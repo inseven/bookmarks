@@ -33,8 +33,8 @@ class ThumbnailManager {
 
     func thumbnail(for item: Item) -> AnyPublisher<UIImage, Error> {
         return cachedImage(for: item)
-            .catch { _ in Utilities.meta(for: item.url) }
-            .catch { _ in self.downloadManager.thumbnail(for: item.url).flatMap { $0.resize(height: 200) } }
+            .catch { _ in Utilities.meta(for: item.url).flatMap { $0.resize(height: 200 * UIScreen.main.scale) } }
+            .catch { _ in self.downloadManager.thumbnail(for: item.url).flatMap { $0.resize(height: 200 * UIScreen.main.scale) } }
             .map({ (image) -> UIImage in
                 self.imageCache.set(identifier: item.identifier, image: image) { (result) in
                     if case .failure(let error) = result {

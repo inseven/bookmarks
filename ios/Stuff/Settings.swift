@@ -21,24 +21,16 @@ final class Settings: ObservableObject {
     }
 
     @Published var pinboardApiKey: String {
-        didSet {
-            defaults.set(pinboardApiKey, forKey: SettingsKey.pinboardApiKey.rawValue)
-            defaults.synchronize()
-        }
+        didSet { defaults.set(pinboardApiKey, forKey: SettingsKey.pinboardApiKey.rawValue) }
     }
 
     @Published var useInAppBrowser: Bool {
-        didSet {
-            defaults.set(useInAppBrowser, forKey: SettingsKey.useInAppBrowser.rawValue)
-            defaults.synchronize()
-        }
+        didSet { defaults.set(useInAppBrowser, forKey: SettingsKey.useInAppBrowser.rawValue) }
     }
 
     @Published var maximumConcurrentThumbnailDownloads: Int {
-        didSet {
-            defaults.set(maximumConcurrentThumbnailDownloads, forKey: SettingsKey.maximumConcurrentThumbnailDownloads.rawValue)
-            defaults.synchronize()
-        }
+        didSet { defaults.set(maximumConcurrentThumbnailDownloads,
+                              forKey: SettingsKey.maximumConcurrentThumbnailDownloads.rawValue) }
     }
 
     init() {

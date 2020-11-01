@@ -113,7 +113,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="1XB-28-LyZ" kind="relationship" relationship="rootViewController" id="eQy-93-Lg5"/>
+                        <segue destination="tGW-hS-roU" kind="relationship" relationship="rootViewController" id="nnT-qX-Vzn"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mVf-3c-VGM" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -169,6 +169,9 @@
             <point key="canvasLocation" x="1388" y="-1362"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="nnT-qX-Vzn"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="secondarySystemBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

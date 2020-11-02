@@ -118,15 +118,15 @@ struct ContentView: View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 250), spacing: 16)], spacing: 16) {
                 ForEach(store.rawItems) { item in
-                    Button(action: {
-                        UIApplication.shared.open(item.url)
-                    }, label: {
-                        BookmarkCell(item: item)
-                            .foregroundColor(.primary)
-                    })
-                    .contextMenu(ContextMenu(menuItems: {
-                        Text("Share")
-                    }))
+                    BookmarkCell(item: item)
+                        .onTapGesture {
+                            UIApplication.shared.open(item.url)
+                        }
+                        .contextMenu(ContextMenu(menuItems: {
+                            Button("Share") {
+                                print("Share")
+                            }
+                        }))
                 }
             }
             .padding()

@@ -14,4 +14,9 @@ class ContentViewController: UIHostingController<ContentView> {
         super.init(coder: aDecoder, rootView: ContentView(store: AppDelegate.shared.store))
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+
 }

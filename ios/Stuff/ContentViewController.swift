@@ -10,8 +10,6 @@ import SwiftUI
 
 class ContentViewController: UIHostingController<ContentView> {
 
-    weak var delegate: SettingsViewControllerDelegate?
-
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder, rootView: ContentView(store: AppDelegate.shared.store))
     }

@@ -39,8 +39,9 @@ class Store: ObservableObject {
     var items: [String: Item] // Synchronized on syncQueue
     var observers: [StoreObserver] // Synchronized on syncQueue
 
-    var rawItems: [Item] = [] {
+    @Published var rawItems: [Item] = [] {
         didSet {
+            dispatchPrecondition(condition: .onQueue(.main))
             let encodedItems: Data = try! NSKeyedArchiver.archivedData(withRootObject: rawItems, requiringSecureCoding: true)
             UserDefaults.standard.set(encodedItems, forKey: Store.itemsKey)
             UserDefaults.standard.synchronize()

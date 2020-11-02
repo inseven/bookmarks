@@ -8,8 +8,6 @@
 
 import UIKit
 
-// TODO: Debug button to clear the image cache.
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -17,13 +15,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.shared.delegate as! AppDelegate
     }
 
+    lazy var documentsDirectory: URL = {
+        let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        try! FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
+        return url
+    }()
+
     lazy var store: Store! = {
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        do {
-            try FileManager.default.createDirectory(at: documentsDirectory, withIntermediateDirectories: true, attributes: nil)
-        } catch {
-            print("Failed to create documents directory with error \(error)")
-        }
         return Store(path: documentsDirectory.appendingPathComponent("store.plist"), targetQueue: .main)
     }()
 
@@ -36,13 +34,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var settings = Settings()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        do {
-            try FileManager.default.createDirectory(at: documentsDirectory, withIntermediateDirectories: true, attributes: nil)
-        } catch {
-            print("Failed to create documents directory with error \(error)")
-        }
-        store = Store(path: documentsDirectory.appendingPathComponent("store.plist"), targetQueue: .main)
         updater = Updater(store: store, token: settings.pinboardApiKey)
         imageCache = FileImageCache(path: documentsDirectory.appendingPathComponent("thumbnails"))
 //        imageCache = MemoryImageCache()
@@ -50,7 +41,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         thumbnailManager = ThumbnailManager(imageCache: imageCache, downloadManager: downloadManager)
         updater.start()
 
+        #if targetEnvironment(macCatalyst)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(nsApplicationDidBecomeActive),
+                                       name: NSNotification.Name("NSApplicationDidBecomeActiveNotification"),
+                                       object: nil)
+        #endif
+
         return true
+    }
+
+    @objc
+    func nsApplicationDidBecomeActive() {
+        self.updater.start()
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -60,6 +63,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
+        self.updater.start()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {

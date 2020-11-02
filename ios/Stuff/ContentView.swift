@@ -54,6 +54,12 @@ struct BookmarkCell: View {
 
     var thumbnail: some View {
         ZStack {
+            Text(title)
+                .lineLimit(3)
+                .multilineTextAlignment(.center)
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
+                .padding()
+                .background(Color(UIColor.tertiarySystemBackground))
             if let image = image {
                 Image(uiImage: image)
                     .resizable()
@@ -61,13 +67,7 @@ struct BookmarkCell: View {
                     .frame(minWidth: 0, maxWidth: .infinity)
                     .clipped()
                     .background(Color.white)
-            } else {
-                Text(title)
-                    .lineLimit(3)
-                    .multilineTextAlignment(.center)
-                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
-                    .padding()
-                    .background(Color(UIColor.tertiarySystemBackground))
+                    .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.5)))
             }
         }
     }

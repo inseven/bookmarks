@@ -136,13 +136,25 @@ struct ContentView: View {
             }
             .padding()
         }
+        .sheet(item: $sheet) { sheet in
+            switch sheet {
+            case .settings:
+                NavigationView {
+                    SettingsView(settings: AppDelegate.shared.settings)
+                }
+            }
+        }
         .navigationTitle("Bookmarks")
         .navigationBarItems(leading: Button(action: {
-            print("Show settings!")
+            sheet = .settings
         }) {
             Text("Settings")
                 .fontWeight(.regular)
         })
     }
 
+}
+
+extension ContentView.SheetType: Identifiable {
+    public var id: Self { self }
 }

@@ -14,6 +14,8 @@ protocol SettingsViewDelegate: NSObject {
 
 struct SettingsView: View {
 
+    @Environment(\.presentationMode) var presentationMode
+
     @ObservedObject var settings: Settings
     weak var delegate: SettingsViewDelegate?
 
@@ -45,6 +47,13 @@ struct SettingsView: View {
                 }
             }
         }
+        .navigationBarTitle("Settings", displayMode: .inline)
+        .navigationBarItems(trailing: Button(action: {
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            Text("Done")
+                .fontWeight(.regular)
+        })
     }
 }
 

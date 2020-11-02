@@ -112,7 +112,12 @@ struct BookmarkCell: View {
 
 struct ContentView: View {
 
+    enum SheetType {
+        case settings
+    }
+
     @ObservedObject var store: Store
+    @State var sheet: SheetType?
 
     var body: some View {
         ScrollView {
@@ -132,6 +137,12 @@ struct ContentView: View {
             .padding()
         }
         .navigationTitle("Bookmarks")
+        .navigationBarItems(leading: Button(action: {
+            print("Show settings!")
+        }) {
+            Text("Settings")
+                .fontWeight(.regular)
+        })
     }
 
 }

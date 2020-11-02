@@ -136,6 +136,17 @@
 			path = Cache;
 			sourceTree = "<group>";
 		};
+		D8578479254FF56E00AE241C /* Interface */ = {
+			isa = PBXGroup;
+			children = (
+				D81E7483254A0D1B002336DC /* ContentView.swift */,
+				D832EEC624816901004C64E3 /* SettingsView.swift */,
+				D832EEC4248168D2004C64E3 /* SettingsViewController.swift */,
+				D8D3BBFB21C6AEBC00D6FB97 /* ViewController.swift */,
+			);
+			path = Interface;
+			sourceTree = "<group>";
+		};
 		D864E46521C93FB400EAB9AD /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -182,6 +193,7 @@
 		D8D3BBF821C6AEBC00D6FB97 /* Stuff */ = {
 			isa = PBXGroup;
 			children = (
+				D8578479254FF56E00AE241C /* Interface */,
 				D832EECA2481B6D1004C64E3 /* Stuff.entitlements */,
 				D864E47221C9417F00EAB9AD /* Stuff-Bridging-Header.h */,
 				D8D3BC0521C6AEBD00D6FB97 /* Info.plist */,
@@ -192,18 +204,14 @@
 				D8A3A51E247C918000C3B8B4 /* ThumbnailManager.swift */,
 				D81D01A0247B29B500C8324B /* Updater.swift */,
 				D81D019E247B24D600C8324B /* Utilities.swift */,
-				D8D3BBFB21C6AEBC00D6FB97 /* ViewController.swift */,
 				D8AAFE5224804FDF00B62492 /* WebViewDownloader.swift */,
 				D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */,
 				D832EEC224816764004C64E3 /* Cache */,
 				D864E46521C93FB400EAB9AD /* Classes */,
 				D8D3BC0221C6AEBD00D6FB97 /* LaunchScreen.storyboard */,
 				D8D3BBFD21C6AEBC00D6FB97 /* Main.storyboard */,
-				D832EEC4248168D2004C64E3 /* SettingsViewController.swift */,
-				D832EEC624816901004C64E3 /* SettingsView.swift */,
 				D832EEC824818EF6004C64E3 /* Settings.swift */,
 				D8A131F3248C4FDA006E71BE /* DownloadManager.swift */,
-				D81E7483254A0D1B002336DC /* ContentView.swift */,
 				D81E7488254A0D6C002336DC /* ContentViewController.swift */,
 				D8D3E4F2254D8EBB00A72446 /* Item.swift */,
 				D8D3E4F7254D957700A72446 /* View+Utilities.swift */,

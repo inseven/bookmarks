@@ -8,101 +8,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Bookmarks-->
-        <scene sceneID="ENC-Fj-a57">
-            <objects>
-                <viewController id="1XB-28-LyZ" customClass="ViewController" customModule="Bookmarks" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="uOI-si-WvL">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="zSC-Sx-jhE">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" sectionInsetReference="safeArea" id="z3D-kM-Ioa">
-                                    <size key="itemSize" width="340" height="260"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="16" minY="16" maxX="16" maxY="16"/>
-                                </collectionViewFlowLayout>
-                                <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="X2f-go-Lj4" customClass="Cell" customModule="Bookmarks" customModuleProvider="target">
-                                        <rect key="frame" x="17.5" y="16" width="340" height="260"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                            <rect key="frame" x="0.0" y="0.0" width="340" height="260"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Xbd-7U-8sN">
-                                                    <rect key="frame" x="114.5" y="0.0" width="340" height="200"/>
-                                                    <subviews>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bsR-b6-Ccw">
-                                                            <rect key="frame" x="0.0" y="0.0" width="340" height="208"/>
-                                                        </imageView>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tME-Jq-CFB">
-                                                            <rect key="frame" x="0.0" y="208" width="340" height="52"/>
-                                                            <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QuF-CK-5ON">
-                                                                    <rect key="frame" x="20" y="20" width="300" height="12"/>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                    <nil key="textColor"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                            </subviews>
-                                                            <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
-                                                            <constraints>
-                                                                <constraint firstItem="QuF-CK-5ON" firstAttribute="top" secondItem="tME-Jq-CFB" secondAttribute="top" constant="20" symbolic="YES" id="Htj-5c-bmh"/>
-                                                                <constraint firstItem="QuF-CK-5ON" firstAttribute="leading" secondItem="tME-Jq-CFB" secondAttribute="leading" constant="20" symbolic="YES" id="t3L-na-v6S"/>
-                                                                <constraint firstAttribute="trailing" secondItem="QuF-CK-5ON" secondAttribute="trailing" constant="20" symbolic="YES" id="zAS-yq-GPd"/>
-                                                                <constraint firstAttribute="bottom" secondItem="QuF-CK-5ON" secondAttribute="bottom" constant="20" symbolic="YES" id="zdp-28-baO"/>
-                                                            </constraints>
-                                                        </view>
-                                                    </subviews>
-                                                </stackView>
-                                            </subviews>
-                                        </view>
-                                        <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
-                                        <constraints>
-                                            <constraint firstItem="Xbd-7U-8sN" firstAttribute="leading" secondItem="X2f-go-Lj4" secondAttribute="leading" id="Mrb-1U-gyr"/>
-                                            <constraint firstAttribute="trailing" secondItem="Xbd-7U-8sN" secondAttribute="trailing" id="R0z-qB-TTq"/>
-                                            <constraint firstItem="Xbd-7U-8sN" firstAttribute="top" secondItem="X2f-go-Lj4" secondAttribute="top" id="RDn-4A-rjt"/>
-                                            <constraint firstAttribute="bottom" secondItem="Xbd-7U-8sN" secondAttribute="bottom" id="vHB-ER-325"/>
-                                        </constraints>
-                                        <connections>
-                                            <outlet property="imageView" destination="bsR-b6-Ccw" id="gVY-Uv-rCf"/>
-                                            <outlet property="titleLabel" destination="QuF-CK-5ON" id="qaM-BN-3EK"/>
-                                        </connections>
-                                    </collectionViewCell>
-                                </cells>
-                                <connections>
-                                    <outlet property="delegate" destination="1XB-28-LyZ" id="Pht-0g-yrd"/>
-                                </connections>
-                            </collectionView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="0JQ-cM-bzL"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Bookmarks" id="Fjn-ri-EEf">
-                        <barButtonItem key="leftBarButtonItem" title="Settings" id="9di-za-QP7">
-                            <connections>
-                                <segue destination="xip-k2-MfR" kind="presentation" identifier="Settings" id="V8T-94-2kY"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Prototype" id="0kD-M1-o4b">
-                            <connections>
-                                <segue destination="tGW-hS-roU" kind="show" id="dfz-Qb-LYq"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="collectionView" destination="zSC-Sx-jhE" id="WM9-ra-8gK"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="8pw-kb-Bba" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="601" y="-654"/>
-        </scene>
         <!--Item-->
         <scene sceneID="Dyu-YY-Udq">
             <objects>
@@ -120,38 +25,6 @@
             </objects>
             <point key="canvasLocation" x="-222" y="-654"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="4Jv-ye-xq0">
-            <objects>
-                <navigationController id="xip-k2-MfR" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="oBx-mt-tnx">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="lmm-py-S7X" kind="relationship" relationship="rootViewController" id="AW1-TH-b3J"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Znf-AQ-IAu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1388" y="-654"/>
-        </scene>
-        <!--Settings-->
-        <scene sceneID="NFU-Cm-ahf">
-            <objects>
-                <viewController id="lmm-py-S7X" customClass="SettingsViewController" customModule="Bookmarks" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="r41-xb-i97">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="Z1m-Qn-Sf2"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Settings" id="B61-wW-HVM"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="2D3-8Z-d7J" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2164" y="-654"/>
-        </scene>
         <!--Content View Controller-->
         <scene sceneID="BR0-QV-czA">
             <objects>
@@ -166,16 +39,10 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="682-Qy-N5h" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1388" y="-1362"/>
+            <point key="canvasLocation" x="679" y="-654"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="nnT-qX-Vzn"/>
-    </inferredMetricsTieBreakers>
     <resources>
-        <systemColor name="secondarySystemBackgroundColor">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

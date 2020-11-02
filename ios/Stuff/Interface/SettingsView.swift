@@ -8,16 +8,11 @@
 
 import SwiftUI
 
-protocol SettingsViewDelegate: NSObject {
-    func clearCache()
-}
-
 struct SettingsView: View {
 
     @Environment(\.presentationMode) var presentationMode
 
     @ObservedObject var settings: Settings
-    weak var delegate: SettingsViewDelegate?
 
     var body: some View {
         VStack {
@@ -37,10 +32,19 @@ struct SettingsView: View {
                 }
                 Section() {
                     Button(action: {
-                        guard let delegate = self.delegate else {
-                            return
+                        AppDelegate.shared.imageCache.clear() { (result) in
+                            DispatchQueue.main.async {
+                                var message = ""
+                                switch result {
+                                case .success:
+                                    message = "Successfully cleared the cache!"
+                                case .failure(let error):
+                                    message = "Failed to clear the cache with error \(error)"
+                                }
+                                let alert = UIAlertController(title: "Cache", message: message, preferredStyle: .alert)
+                                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                            }
                         }
-                        delegate.clearCache()
                     }) {
                         Text("Clear Cache").foregroundColor(.red)
                     }

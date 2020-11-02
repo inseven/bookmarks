@@ -42,6 +42,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         updater.start()
 
         #if targetEnvironment(macCatalyst)
+
+        if let titlebar = window?.windowScene?.titlebar {
+            titlebar.titleVisibility = .hidden
+            titlebar.toolbar = nil
+        }
+
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(nsApplicationDidBecomeActive),
                                        name: NSNotification.Name("NSApplicationDidBecomeActiveNotification"),

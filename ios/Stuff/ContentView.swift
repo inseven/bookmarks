@@ -67,7 +67,7 @@ struct BookmarkCell: View {
                     .frame(minWidth: 0, maxWidth: .infinity)
                     .clipped()
                     .background(Color.white)
-                    .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.5)))
+                    .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.3)))
             }
         }
     }

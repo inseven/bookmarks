@@ -10,9 +10,15 @@ import SwiftUI
 
 struct SettingsView: View {
 
+    enum AlertType {
+        case error(error: Error)
+        case success(message: String)
+    }
+
     @Environment(\.presentationMode) var presentationMode
 
     @ObservedObject var settings: Settings
+    @State var alert: AlertType?
 
     var body: some View {
         VStack {
@@ -34,15 +40,12 @@ struct SettingsView: View {
                     Button(action: {
                         AppDelegate.shared.imageCache.clear() { (result) in
                             DispatchQueue.main.async {
-                                var message = ""
                                 switch result {
                                 case .success:
-                                    message = "Successfully cleared the cache!"
+                                    alert = .success(message: "Successfully cleared the cache!")
                                 case .failure(let error):
-                                    message = "Failed to clear the cache with error \(error)"
+                                    alert = .error(error: error)
                                 }
-                                let alert = UIAlertController(title: "Cache", message: message, preferredStyle: .alert)
-                                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                             }
                         }
                     }) {
@@ -58,5 +61,24 @@ struct SettingsView: View {
             Text("Done")
                 .fontWeight(.regular)
         })
+        .alert(item: $alert) { alert in
+            switch alert {
+            case .error(let error):
+                return Alert(title: Text("Error"), message: Text(error.localizedDescription))
+            case .success(let message):
+                return Alert(title: Text("Success"), message: Text(message))
+            }
+        }
+    }
+}
+
+extension SettingsView.AlertType: Identifiable {
+    public var id: String {
+        switch self {
+        case .error:
+            return "error"
+        case .success:
+            return "success"
+        }
     }
 }

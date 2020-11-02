@@ -1,3 +1,6 @@
 [submodule "ios/hpple"]
 	path = ios/hpple
 	url = git@github.com:topfunky/hpple.git
+[submodule "ios/dependencies/SwiftlySearch"]
+	path = ios/dependencies/SwiftlySearch
+	url = git@github.com:jbmorley/SwiftlySearch.git

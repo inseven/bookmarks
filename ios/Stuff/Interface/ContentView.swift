@@ -118,11 +118,21 @@ struct ContentView: View {
 
     @ObservedObject var store: Store
     @State var sheet: SheetType?
+    @State var search = ""
+
+    var items: [Item] {
+        store.rawItems.filter {
+            search.isEmpty ||
+                $0.title.localizedStandardContains(search) ||
+                $0.url.absoluteString.localizedStandardContains(search) ||
+                $0.tags.contains(where: { $0.localizedStandardContains(search) } )
+        }
+    }
 
     var body: some View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 250), spacing: 16)], spacing: 16) {
-                ForEach(store.rawItems) { item in
+                ForEach(items) { item in
                     BookmarkCell(item: item)
                         .onTapGesture {
                             UIApplication.shared.open(item.url)
@@ -136,6 +146,7 @@ struct ContentView: View {
             }
             .padding()
         }
+        .navigationBarSearch($search)
         .sheet(item: $sheet) { sheet in
             switch sheet {
             case .settings:

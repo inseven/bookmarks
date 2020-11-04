@@ -38,6 +38,7 @@ class Store: ObservableObject {
     let path: URL
     var items: [String: Item] // Synchronized on syncQueue
     var observers: [StoreObserver] // Synchronized on syncQueue
+    var tags: [String] = []
 
     @Published var rawItems: [Item] = [] {
         didSet {
@@ -45,6 +46,7 @@ class Store: ObservableObject {
             let encodedItems: Data = try! NSKeyedArchiver.archivedData(withRootObject: rawItems, requiringSecureCoding: true)
             UserDefaults.standard.set(encodedItems, forKey: Store.itemsKey)
             UserDefaults.standard.synchronize()
+            tags = Array(Set(rawItems.map { Set($0.tags) }.reduce([], +)))
             self.objectWillChange.send()
         }
     }

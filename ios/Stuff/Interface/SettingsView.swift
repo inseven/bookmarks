@@ -15,6 +15,7 @@ struct SettingsView: View {
         case success(message: String)
     }
 
+    @Environment(\.manager) var manager: BookmarksManager
     @Environment(\.presentationMode) var presentationMode
 
     @ObservedObject var settings: Settings
@@ -23,8 +24,13 @@ struct SettingsView: View {
     var body: some View {
         VStack {
             Form {
-                Section() {
-                    TextField("Pinboard API Key", text: $settings.pinboardApiKey)
+                Section(header: Text("Pinboard")) {
+                    TextField("API Token", text: $settings.pinboardApiKey)
+                    Button(action: {
+                        UIApplication.shared.open(URL(string: "https://pinboard.in/settings/password")!, options: [:], completionHandler: nil)
+                    }, label: {
+                        Text("Get your API token")
+                    })
                 }
                 Section() {
                     Toggle("Use In-App Browser", isOn: $settings.useInAppBrowser)
@@ -38,7 +44,7 @@ struct SettingsView: View {
                 }
                 Section() {
                     Button(action: {
-                        AppDelegate.shared.imageCache.clear() { (result) in
+                        manager.imageCache.clear() { (result) in
                             DispatchQueue.main.async {
                                 switch result {
                                 case .success:

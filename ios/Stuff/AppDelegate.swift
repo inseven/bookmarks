@@ -8,12 +8,12 @@
 
 import UIKit
 
-@UIApplicationMain
+//@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-    static var shared: AppDelegate {
-        UIApplication.shared.delegate as! AppDelegate
-    }
+//
+//    static var shared: AppDelegate {
+//        UIApplication.shared.delegate as! AppDelegate
+//    }
 
     lazy var documentsDirectory: URL = {
         let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!

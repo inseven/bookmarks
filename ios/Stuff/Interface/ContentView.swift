@@ -37,6 +37,8 @@ extension UIImage {
 struct BookmarkCell: View {
 
     var item: Item
+
+    @Environment(\.manager) var manager: BookmarksManager
     @State var image: UIImage?
     @State var publisher: AnyCancellable?
 
@@ -90,7 +92,7 @@ struct BookmarkCell: View {
         .background(Color(UIColor.secondarySystemBackground))
         .cornerRadius(10)
         .onAppear {
-            publisher = AppDelegate.shared.thumbnailManager.thumbnail(for: item)
+            publisher = manager.thumbnailManager.thumbnail(for: item)
                 .receive(on: DispatchQueue.main)
                 .sink(receiveCompletion: { (completion) in
                     if case .failure(let error) = completion {
@@ -110,12 +112,17 @@ struct BookmarkCell: View {
 
 }
 
+extension String: Identifiable {
+    public var id: String { self }
+}
+
 struct ContentView: View {
 
     enum SheetType {
         case settings
     }
 
+    @Environment(\.manager) var manager: BookmarksManager
     @ObservedObject var store: Store
     @State var sheet: SheetType?
     @State var search = ""
@@ -130,38 +137,51 @@ struct ContentView: View {
     }
 
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 250), spacing: 16)], spacing: 16) {
-                ForEach(items) { item in
-                    BookmarkCell(item: item)
-                        .onTapGesture {
-                            UIApplication.shared.open(item.url)
-                        }
-                        .contextMenu(ContextMenu(menuItems: {
-                            Button("Share") {
-                                print("Share")
+        NavigationView {
+            List {
+                Group {
+                    Text("All Tags")
+                }
+                Group {
+                    ForEach(store.tags) { tag in
+                        Text(tag)
+                    }
+                }
+            }
+            .navigationTitle("Tags")
+            ScrollView {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 250), spacing: 16)], spacing: 16) {
+                    ForEach(items) { item in
+                        BookmarkCell(item: item)
+                            .onTapGesture {
+                                UIApplication.shared.open(item.url)
                             }
-                        }))
+                            .contextMenu(ContextMenu(menuItems: {
+                                Button("Share") {
+                                    print("Share")
+                                }
+                            }))
+                    }
+                }
+                .padding()
+            }
+            .navigationBarSearch($search)
+            .sheet(item: $sheet) { sheet in
+                switch sheet {
+                case .settings:
+                    NavigationView {
+                        SettingsView(settings: manager.settings)
+                    }
                 }
             }
-            .padding()
+            .navigationTitle("Bookmarks")
+            .navigationBarItems(leading: Button(action: {
+                sheet = .settings
+            }) {
+                Text("Settings")
+                    .fontWeight(.regular)
+            })
         }
-        .navigationBarSearch($search)
-        .sheet(item: $sheet) { sheet in
-            switch sheet {
-            case .settings:
-                NavigationView {
-                    SettingsView(settings: AppDelegate.shared.settings)
-                }
-            }
-        }
-        .navigationTitle("Bookmarks")
-        .navigationBarItems(leading: Button(action: {
-            sheet = .settings
-        }) {
-            Text("Settings")
-                .fontWeight(.regular)
-        })
     }
 
 }

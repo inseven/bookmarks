@@ -116,6 +116,35 @@ extension String: Identifiable {
     public var id: String { self }
 }
 
+struct SearchBoxModifier: ViewModifier {
+
+    @Binding var text: String
+    @State var hover = false
+
+    func body(content: Content) -> some View {
+        HStack {
+            Image(systemName: "magnifyingglass")
+                .foregroundColor(.secondary)
+            content
+            if !text.isEmpty {
+                Button {
+                    text = ""
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+        .padding(8.0)
+        .background(hover ? Color.pink : Color(UIColor.secondarySystemBackground))
+        .cornerRadius(10)
+        .onHover { hover in
+            self.hover = hover
+        }
+    }
+
+}
+
 struct BookmarksView: View {
 
     enum SheetType {
@@ -141,24 +170,30 @@ struct BookmarksView: View {
     }
 
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
-                ForEach(items) { item in
-                    BookmarkCell(item: item)
-                        .onTapGesture {
-                            UIApplication.shared.open(item.url)
-                        }
-                        .contextMenu(ContextMenu(menuItems: {
-                            Button("Share") {
-                                print("Share")
-                                print(item.identifier)
-                            }
-                        }))
-                }
+        VStack {
+            HStack {
+                TextField("Search", text: $search)
+                    .modifier(SearchBoxModifier(text: $search))
+                    .padding()
             }
-            .padding()
+            ScrollView {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
+                    ForEach(items) { item in
+                        BookmarkCell(item: item)
+                            .onTapGesture {
+                                UIApplication.shared.open(item.url)
+                            }
+                            .contextMenu(ContextMenu(menuItems: {
+                                Button("Share") {
+                                    print("Share")
+                                    print(item.identifier)
+                                }
+                            }))
+                    }
+                }
+                .padding()
+            }
         }
-        .navigationBarSearch($search)
         .sheet(item: $sheet) { sheet in
             switch sheet {
             case .settings:
@@ -177,7 +212,6 @@ struct BookmarksView: View {
     }
 
 }
-
 
 struct ContentView: View {
 
@@ -210,23 +244,9 @@ struct ContentView: View {
                     }
                 }
                 .listStyle(SidebarListStyle())
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(.secondary)
-                    TextField("Filter", text: $filter)
-                    if !filter.isEmpty {
-                        Button {
-                            filter = ""
-                        } label: {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(.secondary)
-                        }
-                    }
-                }
-                .padding(8.0)
-                .background(Color(UIColor.secondarySystemBackground))
-                .cornerRadius(10)
-                .padding()
+                TextField("Filter", text: $filter)
+                    .modifier(SearchBoxModifier(text: $filter))
+                    .padding()
             }
             .navigationBarTitle("Bookmarks")
         }

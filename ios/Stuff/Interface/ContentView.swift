@@ -77,7 +77,7 @@ struct BookmarkCell: View {
     var body: some View {
         VStack(alignment: .leading) {
             thumbnail
-                .frame(height: 200)
+                .frame(height: 100)
                 .clipped()
             VStack(alignment: .leading) {
                 Text(title)
@@ -116,7 +116,7 @@ extension String: Identifiable {
     public var id: String { self }
 }
 
-struct ContentView: View {
+struct BookmarksView: View {
 
     enum SheetType {
         case settings
@@ -124,11 +124,15 @@ struct ContentView: View {
 
     @Environment(\.manager) var manager: BookmarksManager
     @ObservedObject var store: Store
+    var title: String
+    var tag: String?
+
     @State var sheet: SheetType?
     @State var search = ""
 
     var items: [Item] {
         store.rawItems.filter {
+            (tag == nil || $0.tags.contains(tag!)) &&
             search.isEmpty ||
                 $0.title.localizedStandardContains(search) ||
                 $0.url.absoluteString.localizedStandardContains(search) ||
@@ -137,55 +141,99 @@ struct ContentView: View {
     }
 
     var body: some View {
-        NavigationView {
-            List {
-                Group {
-                    Text("All Tags")
-                }
-                Group {
-                    ForEach(store.tags) { tag in
-                        Text(tag)
-                    }
+        ScrollView {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
+                ForEach(items) { item in
+                    BookmarkCell(item: item)
+                        .onTapGesture {
+                            UIApplication.shared.open(item.url)
+                        }
+                        .contextMenu(ContextMenu(menuItems: {
+                            Button("Share") {
+                                print("Share")
+                                print(item.identifier)
+                            }
+                        }))
                 }
             }
-            .navigationTitle("Tags")
-            ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 250), spacing: 16)], spacing: 16) {
-                    ForEach(items) { item in
-                        BookmarkCell(item: item)
-                            .onTapGesture {
-                                UIApplication.shared.open(item.url)
-                            }
-                            .contextMenu(ContextMenu(menuItems: {
-                                Button("Share") {
-                                    print("Share")
+            .padding()
+        }
+        .navigationBarSearch($search)
+        .sheet(item: $sheet) { sheet in
+            switch sheet {
+            case .settings:
+                NavigationView {
+                    SettingsView(settings: manager.settings)
+                }
+            }
+        }
+        .navigationBarTitle(title, displayMode: .inline)
+        .navigationBarItems(leading: Button(action: {
+            sheet = .settings
+        }) {
+            Image(systemName: "gearshape")
+                .foregroundColor(.accentColor)
+        })
+    }
+
+}
+
+
+struct ContentView: View {
+
+    @Environment(\.manager) var manager: BookmarksManager
+    @ObservedObject var store: Store
+    @State var selected = true
+    @State var filter = ""
+
+    var body: some View {
+        NavigationView {
+            VStack {
+                List {
+                    NavigationLink(destination: BookmarksView(store: store, title: "All Bookmarks"), isActive: $selected) {
+                        HStack {
+                            Image(systemName: "globe")
+                                .foregroundColor(.accentColor)
+                            Text("All Bookmarks")
+                        }
+                        }
+                    Section(header: Text("Tags")) {
+                        ForEach(store.tags.filter { filter.isEmpty || $0.localizedStandardContains(filter) }) { tag in
+                            NavigationLink(destination: BookmarksView(store: store, title: tag, tag: tag)) {
+                                HStack {
+                                    Image(systemName: "tag")
+                                        .foregroundColor(.accentColor)
+                                    Text(tag)
                                 }
-                            }))
+                            }
+                        }
                     }
                 }
+                .listStyle(SidebarListStyle())
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(.secondary)
+                    TextField("Filter", text: $filter)
+                    if !filter.isEmpty {
+                        Button {
+                            filter = ""
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
+                .padding(8.0)
+                .background(Color(UIColor.secondarySystemBackground))
+                .cornerRadius(10)
                 .padding()
             }
-            .navigationBarSearch($search)
-            .sheet(item: $sheet) { sheet in
-                switch sheet {
-                case .settings:
-                    NavigationView {
-                        SettingsView(settings: manager.settings)
-                    }
-                }
-            }
-            .navigationTitle("Bookmarks")
-            .navigationBarItems(leading: Button(action: {
-                sheet = .settings
-            }) {
-                Text("Settings")
-                    .fontWeight(.regular)
-            })
+            .navigationBarTitle("Bookmarks")
         }
     }
 
 }
 
-extension ContentView.SheetType: Identifiable {
+extension BookmarksView.SheetType: Identifiable {
     public var id: Self { self }
 }

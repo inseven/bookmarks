@@ -46,7 +46,7 @@ class Store: ObservableObject {
             let encodedItems: Data = try! NSKeyedArchiver.archivedData(withRootObject: rawItems, requiringSecureCoding: true)
             UserDefaults.standard.set(encodedItems, forKey: Store.itemsKey)
             UserDefaults.standard.synchronize()
-            tags = Array(Set(rawItems.map { Set($0.tags) }.reduce([], +)))
+            tags = Array(Set(rawItems.map { Set($0.tags) }.reduce([], +))).sorted { $0.localizedCompare($1) == .orderedAscending }
             self.objectWillChange.send()
         }
     }

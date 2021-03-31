@@ -9,12 +9,16 @@ ROOT_DIRECTORY="${SCRIPT_DIRECTORY}/.."
 
 PROJECT_PATH="${ROOT_DIRECTORY}/ios/Stuff.xcodeproj"
 
+# TODO: Re-enable test builds if possible using a locally generated signing key.
+
 # macOS
-# TODO: Re-enable when a macOS 11 builder is available.
-# xcodebuild \
-#     -project "$PROJECT_PATH" \
-#     -scheme Bookmarks \
-#     clean build test | xcpretty
+xcodebuild \
+    -project "$PROJECT_PATH" \
+    -scheme Bookmarks \
+    clean \
+    build \
+    CODE_SIGN_IDENTITY="" \
+    CODE_SIGNING_REQUIRED=NO
 
 # iOS
 xcodebuild \
@@ -24,5 +28,3 @@ xcodebuild \
     build \
     CODE_SIGN_IDENTITY="" \
     CODE_SIGNING_REQUIRED=NO
-
-# TODO: Re-enable 'test'

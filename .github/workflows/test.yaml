@@ -1,0 +1,23 @@
+name: Test
+
+on:
+  pull_request:
+    branches: [ master ]
+  push:
+    branches: [ master ]
+  schedule:
+    cron:  '0 1 * * *'
+    branches: [ master ]
+
+jobs:
+  test:
+
+    name: Build and test iOS and macOS
+    runs-on: macOS-latest
+
+    steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v1
+    - name: Testing Swift package
+      run: exec ./scripts/test.sh

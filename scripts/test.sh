@@ -20,6 +20,6 @@ PROJECT_PATH="${ROOT_DIRECTORY}/ios/Stuff.xcodeproj"
 xcodebuild \
     -project "$PROJECT_PATH" \
     -scheme Stuff \
-    clean build-for-testing | xcpretty
+    clean build-for-testing
 
 # TODO: Re-enable 'test'

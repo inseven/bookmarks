@@ -18,5 +18,6 @@ jobs:
 
     - name: Checkout repository
       uses: actions/checkout@v1
-    - name: Testing Swift package
+
+    - name: Build tests
       run: exec ./scripts/test.sh

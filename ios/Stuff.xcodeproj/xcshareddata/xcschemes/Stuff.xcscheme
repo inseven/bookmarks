@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D847849B2614E19B00B2318B"
+               BlueprintIdentifier = "D8D3BBF521C6AEBC00D6FB97"
                BuildableName = "Bookmarks.app"
-               BlueprintName = "Bookmarks"
+               BlueprintName = "Stuff"
                ReferencedContainer = "container:Stuff.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,9 +32,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D84784AC2614E19E00B2318B"
-               BuildableName = "BookmarksTests.xctest"
-               BlueprintName = "BookmarksTests"
+               BlueprintIdentifier = "D8D3BC0921C6AEBD00D6FB97"
+               BuildableName = "StuffTests.xctest"
+               BlueprintName = "StuffTests"
                ReferencedContainer = "container:Stuff.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -42,9 +42,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D84784B72614E19E00B2318B"
-               BuildableName = "BookmarksUITests.xctest"
-               BlueprintName = "BookmarksUITests"
+               BlueprintIdentifier = "D8D3BC1421C6AEBD00D6FB97"
+               BuildableName = "StuffUITests.xctest"
+               BlueprintName = "StuffUITests"
                ReferencedContainer = "container:Stuff.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -64,9 +64,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D847849B2614E19B00B2318B"
+            BlueprintIdentifier = "D8D3BBF521C6AEBC00D6FB97"
             BuildableName = "Bookmarks.app"
-            BlueprintName = "Bookmarks"
+            BlueprintName = "Stuff"
             ReferencedContainer = "container:Stuff.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -81,9 +81,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D847849B2614E19B00B2318B"
+            BlueprintIdentifier = "D8D3BBF521C6AEBC00D6FB97"
             BuildableName = "Bookmarks.app"
-            BlueprintName = "Bookmarks"
+            BlueprintName = "Stuff"
             ReferencedContainer = "container:Stuff.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

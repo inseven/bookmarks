@@ -6,8 +6,7 @@ on:
   push:
     branches: [ master ]
   schedule:
-    cron:  '0 1 * * *'
-    branches: [ master ]
+    - cron:  '0 1 * * *'
 
 jobs:
   test:

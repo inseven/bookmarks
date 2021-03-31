@@ -12,7 +12,7 @@ jobs:
   test:
 
     name: Build and test iOS and macOS
-    runs-on: macOS-latest
+    runs-on: macos-11.0
 
     steps:
 

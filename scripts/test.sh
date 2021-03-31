@@ -1,6 +1,8 @@
 #!/bin/bash
 
-set -eo pipefail
+set -e
+set -o pipefail
+set -x
 
 SCRIPT_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 ROOT_DIRECTORY="${SCRIPT_DIRECTORY}/.."
@@ -18,4 +20,4 @@ PROJECT_PATH="${ROOT_DIRECTORY}/ios/Stuff.xcodeproj"
 xcodebuild \
     -project "$PROJECT_PATH" \
     -scheme Stuff \
-    clean build test | xcpretty
+    clean test | xcpretty

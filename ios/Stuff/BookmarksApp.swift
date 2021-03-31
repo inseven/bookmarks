@@ -75,7 +75,7 @@ struct BookmarksApp: App {
     @Environment(\.manager) var manager: BookmarksManager
     @Environment(\.scenePhase) private var phase
 
-    var rainbow = Rainbow()
+//    var rainbow = Rainbow()
 
     var body: some Scene {
         WindowGroup {

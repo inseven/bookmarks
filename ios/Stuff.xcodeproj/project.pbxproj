@@ -35,8 +35,6 @@
 		D8AAFE5324804FDF00B62492 /* WebViewDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AAFE5224804FDF00B62492 /* WebViewDownloader.swift */; };
 		D8BDE1132551AB8100C95945 /* SwiftlySearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BDE1122551AB8100C95945 /* SwiftlySearch.swift */; };
 		D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BDE1172551C56100C95945 /* BookmarksApp.swift */; };
-		D8BDE13D2553C82D00C95945 /* ColorIterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BDE13B2553C82D00C95945 /* ColorIterator.swift */; };
-		D8BDE13E2553C82D00C95945 /* ColorSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BDE13C2553C82D00C95945 /* ColorSequence.swift */; };
 		D8BDE1472554782000C95945 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = D8BDE1462554782000C95945 /* Introspect */; };
 		D8D3BC0121C6AEBD00D6FB97 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */; };
 		D8D3BC0421C6AEBD00D6FB97 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8D3BC0221C6AEBD00D6FB97 /* LaunchScreen.storyboard */; };
@@ -117,8 +115,6 @@
 		D8AAFE5224804FDF00B62492 /* WebViewDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewDownloader.swift; sourceTree = "<group>"; };
 		D8BDE1122551AB8100C95945 /* SwiftlySearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftlySearch.swift; sourceTree = "<group>"; };
 		D8BDE1172551C56100C95945 /* BookmarksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksApp.swift; sourceTree = "<group>"; };
-		D8BDE13B2553C82D00C95945 /* ColorIterator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorIterator.swift; sourceTree = "<group>"; };
-		D8BDE13C2553C82D00C95945 /* ColorSequence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorSequence.swift; sourceTree = "<group>"; };
 		D8D3BBF621C6AEBC00D6FB97 /* Bookmarks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bookmarks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D8D3BC0321C6AEBD00D6FB97 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -339,8 +335,6 @@
 				D8D3E4F2254D8EBB00A72446 /* Item.swift */,
 				D8D3E4F7254D957700A72446 /* View+Utilities.swift */,
 				D8D3E4FC254E753F00A72446 /* NSCoder+Utilities.swift */,
-				D8BDE13B2553C82D00C95945 /* ColorIterator.swift */,
-				D8BDE13C2553C82D00C95945 /* ColorSequence.swift */,
 				D8BDE1172551C56100C95945 /* BookmarksApp.swift */,
 			);
 			path = Stuff;
@@ -624,7 +618,6 @@
 				D8AAFE51248018BC00B62492 /* ImageCache.swift in Sources */,
 				D864E46E21C93FB400EAB9AD /* XPathQuery.m in Sources */,
 				D832EEC724816901004C64E3 /* SettingsView.swift in Sources */,
-				D8BDE13E2553C82D00C95945 /* ColorSequence.swift in Sources */,
 				D8D3E4F3254D8EBB00A72446 /* Item.swift in Sources */,
 				D81E7484254A0D1B002336DC /* ContentView.swift in Sources */,
 				D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */,
@@ -641,7 +634,6 @@
 				D832EEBD24816655004C64E3 /* Document.swift in Sources */,
 				D81D019F247B24D600C8324B /* Utilities.swift in Sources */,
 				D8D3E4FD254E753F00A72446 /* NSCoder+Utilities.swift in Sources */,
-				D8BDE13D2553C82D00C95945 /* ColorIterator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -19,7 +19,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v1
       with:
-        token: ${{ secrets.TOKEN }}
+        ssh-key: ${{ secrets.SSH_KEY }}
         submodules: recursive
 
     - name: Build tests

@@ -2,4 +2,4 @@
 
 [![Test](https://github.com/jbmorley/bookmarks/actions/workflows/test.yaml/badge.svg)](https://github.com/jbmorley/bookmarks/actions/workflows/test.yaml)
 
-Pinboard client for iOS
+Pinboard client for iOS and macOS

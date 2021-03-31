@@ -25,27 +25,6 @@ enum BookmarksError: Error {
     case resizeFailure
 }
 
-extension UIImage {
-
-    func resize(height: CGFloat) -> Future<UIImage, Error> {
-        return Future { promise in
-            DispatchQueue.global(qos: .background).async {
-                let scale = height / self.size.height
-                let width = self.size.width * scale
-                UIGraphicsBeginImageContext(CGSize(width: width, height: height))
-                defer { UIGraphicsEndImageContext() }
-                self.draw(in:CGRect(x:0, y:0, width: width, height:height))
-                guard let image = UIGraphicsGetImageFromCurrentImageContext() else {
-                    promise(.failure(BookmarksError.resizeFailure))
-                    return
-                }
-                promise(.success(image))
-            }
-        }
-
-    }
-}
-
 struct BookmarkCell: View {
 
     var item: Item

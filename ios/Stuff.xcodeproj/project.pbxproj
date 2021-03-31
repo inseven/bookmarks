@@ -25,6 +25,8 @@
 		D84784CE2614E1C500B2318B /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = D864E46B21C93FB400EAB9AD /* XPathQuery.m */; };
 		D84784D52614E1CE00B2318B /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = D864E46A21C93FB400EAB9AD /* TFHppleElement.m */; };
 		D84784DC2614E1D900B2318B /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = D864E46721C93FB400EAB9AD /* TFHpple.m */; };
+		D84785302615360E00B2318B /* URLComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D847852F2615360E00B2318B /* URLComponents.swift */; };
+		D84785382615363200B2318B /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84785372615363200B2318B /* UIImage.swift */; };
 		D864E46C21C93FB400EAB9AD /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = D864E46721C93FB400EAB9AD /* TFHpple.m */; };
 		D864E46D21C93FB400EAB9AD /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = D864E46A21C93FB400EAB9AD /* TFHppleElement.m */; };
 		D864E46E21C93FB400EAB9AD /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = D864E46B21C93FB400EAB9AD /* XPathQuery.m */; };
@@ -101,6 +103,8 @@
 		D84784B82614E19E00B2318B /* BookmarksUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookmarksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D84784BC2614E19E00B2318B /* BookmarksUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksUITests.swift; sourceTree = "<group>"; };
 		D84784BE2614E19E00B2318B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D847852F2615360E00B2318B /* URLComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLComponents.swift; sourceTree = "<group>"; };
+		D84785372615363200B2318B /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		D864E46621C93FB400EAB9AD /* TFHppleElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHppleElement.h; sourceTree = "<group>"; };
 		D864E46721C93FB400EAB9AD /* TFHpple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFHpple.m; sourceTree = "<group>"; };
 		D864E46821C93FB400EAB9AD /* XPathQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPathQuery.h; sourceTree = "<group>"; };
@@ -244,6 +248,8 @@
 			isa = PBXGroup;
 			children = (
 				D81D019E247B24D600C8324B /* Utilities.swift */,
+				D847852F2615360E00B2318B /* URLComponents.swift */,
+				D84785372615363200B2318B /* UIImage.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -621,10 +627,12 @@
 				D8D3E4F3254D8EBB00A72446 /* Item.swift in Sources */,
 				D81E7484254A0D1B002336DC /* ContentView.swift in Sources */,
 				D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */,
+				D84785382615363200B2318B /* UIImage.swift in Sources */,
 				D832EEC924818EF6004C64E3 /* Settings.swift in Sources */,
 				D864E46C21C93FB400EAB9AD /* TFHpple.m in Sources */,
 				D8AAFE5324804FDF00B62492 /* WebViewDownloader.swift in Sources */,
 				D8D3E4F8254D957700A72446 /* View+Utilities.swift in Sources */,
+				D84785302615360E00B2318B /* URLComponents.swift in Sources */,
 				D81D019D247B0AA200C8324B /* Store.swift in Sources */,
 				D8A3A51F247C918000C3B8B4 /* ThumbnailManager.swift in Sources */,
 				D8BDE1132551AB8100C95945 /* SwiftlySearch.swift in Sources */,

@@ -20,6 +20,9 @@ PROJECT_PATH="${ROOT_DIRECTORY}/ios/Stuff.xcodeproj"
 xcodebuild \
     -project "$PROJECT_PATH" \
     -scheme Stuff \
-    clean build-for-testing
+    clean \
+    build \
+    CODE_SIGN_IDENTITY="" \
+    CODE_SIGNING_REQUIRED=NO
 
 # TODO: Re-enable 'test'

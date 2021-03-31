@@ -8,10 +8,11 @@ ROOT_DIRECTORY="${SCRIPT_DIRECTORY}/.."
 PROJECT_PATH="${ROOT_DIRECTORY}/ios/Stuff.xcodeproj"
 
 # macOS
-xcodebuild \
-    -project "$PROJECT_PATH" \
-    -scheme Bookmarks \
-    clean build test | xcpretty
+# TODO: Re-enable when a macOS 11 builder is available.
+# xcodebuild \
+#     -project "$PROJECT_PATH" \
+#     -scheme Bookmarks \
+#     clean build test | xcpretty
 
 # iOS
 xcodebuild \

@@ -12,7 +12,7 @@ jobs:
   test:
 
     name: Build and test iOS and macOS
-    runs-on: macos-11.0
+    runs-on: macOS-latest  # Unfortunately macOS 11 is currently unavailable.
 
     steps:
 

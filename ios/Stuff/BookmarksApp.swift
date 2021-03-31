@@ -67,27 +67,12 @@ class BookmarksManager {
 
 }
 
-class Rainbow {
-
-    var timer: Timer?
-
-    init() {
-        let iterator = UIColor.rainbowSequence(frequency: 0.05, amplitude: 55, center: 200, repeat: true).makeIterator()
-        self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { timer in
-            let color = iterator.next()!
-            UIApplication.shared.windows.forEach { $0.tintColor = color }
-        })
-    }
-}
-
 
 @main
 struct BookmarksApp: App {
 
     @Environment(\.manager) var manager: BookmarksManager
     @Environment(\.scenePhase) private var phase
-
-//    var rainbow = Rainbow()
 
     var body: some Scene {
         WindowGroup {

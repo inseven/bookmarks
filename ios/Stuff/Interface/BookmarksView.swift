@@ -87,3 +87,7 @@ struct BookmarksView: View {
     }
 
 }
+
+extension BookmarksView.SheetType: Identifiable {
+    public var id: Self { self }
+}

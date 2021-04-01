@@ -18,20 +18,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Combine
 import SwiftUI
 
-struct ContentView: View {
+struct SearchBoxModifier: ViewModifier {
 
-    @Environment(\.manager) var manager: BookmarksManager
-    @ObservedObject var store: Store
-    @State var selected = true
-    @State var filter = ""
+    @Binding var text: String
 
-    var body: some View {
-        NavigationView {
-            BookmarksView(store: store, title: "All Bookmarks")
+    func body(content: Content) -> some View {
+        HStack {
+            Image(systemName: "magnifyingglass")
+                .foregroundColor(.secondary)
+            content
+            if !text.isEmpty {
+                Button {
+                    text = ""
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.secondary)
+                }
+            }
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+        .padding(8.0)
+        .background(Color(UIColor.secondarySystemBackground))
+        .cornerRadius(10)
     }
+
 }

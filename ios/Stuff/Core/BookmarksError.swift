@@ -18,20 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Combine
-import SwiftUI
+import Foundation
 
-struct ContentView: View {
-
-    @Environment(\.manager) var manager: BookmarksManager
-    @ObservedObject var store: Store
-    @State var selected = true
-    @State var filter = ""
-
-    var body: some View {
-        NavigationView {
-            BookmarksView(store: store, title: "All Bookmarks")
-        }
-        .navigationViewStyle(StackNavigationViewStyle())
-    }
+enum BookmarksError: Error {
+    case resizeFailure
 }

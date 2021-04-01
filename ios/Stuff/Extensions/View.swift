@@ -18,20 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Combine
 import SwiftUI
 
-struct ContentView: View {
+extension View {
 
-    @Environment(\.manager) var manager: BookmarksManager
-    @ObservedObject var store: Store
-    @State var selected = true
-    @State var filter = ""
-
-    var body: some View {
-        NavigationView {
-            BookmarksView(store: store, title: "All Bookmarks")
-        }
-        .navigationViewStyle(StackNavigationViewStyle())
+    func eraseToAnyView() -> AnyView {
+        return AnyView(self)
     }
+
 }

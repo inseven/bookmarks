@@ -20,8 +20,27 @@
 
 import SwiftUI
 
-extension View {
-    func eraseToAnyView() -> AnyView {
-        return AnyView(self)
+struct SearchBoxModifier: ViewModifier {
+
+    @Binding var text: String
+
+    func body(content: Content) -> some View {
+        HStack {
+            Image(systemName: "magnifyingglass")
+                .foregroundColor(.secondary)
+            content
+            if !text.isEmpty {
+                Button {
+                    text = ""
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+        .padding(8.0)
+        .background(Color(UIColor.secondarySystemBackground))
+        .cornerRadius(10)
     }
+
 }

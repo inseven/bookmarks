@@ -1,4 +1,4 @@
-# Bookmarks for Pinboard
+# Bookmarks
 
 [![Build](https://github.com/jbmorley/bookmarks/actions/workflows/test.yaml/badge.svg?branch=main)](https://github.com/jbmorley/bookmarks/actions/workflows/test.yaml)
 

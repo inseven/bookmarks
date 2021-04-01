@@ -239,11 +239,12 @@
 		D84784E32614E24E00B2318B /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				D8D3BC2921C72F7600D6FB97 /* Pinboard.swift */,
 				D832EEBC24816655004C64E3 /* Document.swift */,
+				D8D3BC2921C72F7600D6FB97 /* Pinboard.swift */,
 				D81D019C247B0AA200C8324B /* Store.swift */,
 				D8A3A51E247C918000C3B8B4 /* ThumbnailManager.swift */,
 				D81D01A0247B29B500C8324B /* Updater.swift */,
+				D8AAFE5224804FDF00B62492 /* WebViewDownloader.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -337,7 +338,6 @@
 				D832EECA2481B6D1004C64E3 /* Stuff.entitlements */,
 				D864E47221C9417F00EAB9AD /* Stuff-Bridging-Header.h */,
 				D8D3BC0521C6AEBD00D6FB97 /* Info.plist */,
-				D8AAFE5224804FDF00B62492 /* WebViewDownloader.swift */,
 				D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */,
 				D832EEC224816764004C64E3 /* Cache */,
 				D864E46521C93FB400EAB9AD /* Classes */,

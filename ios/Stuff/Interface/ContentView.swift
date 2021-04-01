@@ -32,7 +32,6 @@ extension String: Identifiable {
 struct SearchBoxModifier: ViewModifier {
 
     @Binding var text: String
-    @State var hover = false
 
     func body(content: Content) -> some View {
         HStack {
@@ -49,11 +48,8 @@ struct SearchBoxModifier: ViewModifier {
             }
         }
         .padding(8.0)
-        .background(hover ? Color.pink : Color(UIColor.secondarySystemBackground))
+        .background(Color(UIColor.secondarySystemBackground))
         .cornerRadius(10)
-        .onHover { hover in
-            self.hover = hover
-        }
     }
 
 }

@@ -245,13 +245,15 @@
 		D84784E32614E24E00B2318B /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				D84785912615478800B2318B /* BookmarksError.swift */,
 				D832EEBC24816655004C64E3 /* Document.swift */,
+				D8A131F3248C4FDA006E71BE /* DownloadManager.swift */,
 				D8D3BC2921C72F7600D6FB97 /* Pinboard.swift */,
 				D81D019C247B0AA200C8324B /* Store.swift */,
 				D8A3A51E247C918000C3B8B4 /* ThumbnailManager.swift */,
 				D81D01A0247B29B500C8324B /* Updater.swift */,
+				D81D019E247B24D600C8324B /* Utilities.swift */,
 				D8AAFE5224804FDF00B62492 /* WebViewDownloader.swift */,
-				D84785912615478800B2318B /* BookmarksError.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -259,10 +261,9 @@
 		D84784F62614E27A00B2318B /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				D81D019E247B24D600C8324B /* Utilities.swift */,
-				D847852F2615360E00B2318B /* URLComponents.swift */,
-				D84785372615363200B2318B /* UIImage.swift */,
 				D84785892615476B00B2318B /* String.swift */,
+				D84785372615363200B2318B /* UIImage.swift */,
+				D847852F2615360E00B2318B /* URLComponents.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -270,11 +271,11 @@
 		D8578479254FF56E00AE241C /* Interface */ = {
 			isa = PBXGroup;
 			children = (
-				D81E7483254A0D1B002336DC /* ContentView.swift */,
-				D832EEC624816901004C64E3 /* SettingsView.swift */,
-				D8478553261539AA00B2318B /* BookmarksView.swift */,
 				D847855B26153A5000B2318B /* BookmarkCell.swift */,
+				D8478553261539AA00B2318B /* BookmarksView.swift */,
+				D81E7483254A0D1B002336DC /* ContentView.swift */,
 				D84785812615474900B2318B /* SearchBoxModifier.swift */,
+				D832EEC624816901004C64E3 /* SettingsView.swift */,
 			);
 			path = Interface;
 			sourceTree = "<group>";
@@ -352,7 +353,6 @@
 				D864E46521C93FB400EAB9AD /* Classes */,
 				D8D3BC0221C6AEBD00D6FB97 /* LaunchScreen.storyboard */,
 				D832EEC824818EF6004C64E3 /* Settings.swift */,
-				D8A131F3248C4FDA006E71BE /* DownloadManager.swift */,
 				D8D3E4F2254D8EBB00A72446 /* Item.swift */,
 				D8D3E4F7254D957700A72446 /* View+Utilities.swift */,
 				D8D3E4FC254E753F00A72446 /* NSCoder+Utilities.swift */,

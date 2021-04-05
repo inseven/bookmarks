@@ -11,20 +11,16 @@ PROJECT_PATH="${ROOT_DIRECTORY}/ios/Bookmarks.xcodeproj"
 
 # TODO: Re-enable test builds if possible using a locally generated signing key.
 
-# macOS
-xcodebuild \
-    -project "$PROJECT_PATH" \
-    -scheme Bookmarks \
-    clean \
-    build \
-    CODE_SIGN_IDENTITY="" \
-    CODE_SIGNING_REQUIRED=NO
+function build_scheme {
+    xcodebuild \
+        -project "$PROJECT_PATH" \
+        -scheme "$1" \
+        clean \
+        build \
+        CODE_SIGN_IDENTITY="" \
+        CODE_SIGNING_REQUIRED=NO \
+        CODE_SIGNING_ALLOWED=NO
+}
 
-# iOS
-xcodebuild \
-    -project "$PROJECT_PATH" \
-    -scheme Stuff \
-    clean \
-    build \
-    CODE_SIGN_IDENTITY="" \
-    CODE_SIGNING_REQUIRED=NO
+build_scheme Bookmarks
+build_scheme Stuff

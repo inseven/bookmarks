@@ -7,7 +7,7 @@ set -x
 SCRIPT_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 ROOT_DIRECTORY="${SCRIPT_DIRECTORY}/.."
 
-PROJECT_PATH="${ROOT_DIRECTORY}/ios/Stuff.xcodeproj"
+PROJECT_PATH="${ROOT_DIRECTORY}/ios/Bookmarks.xcodeproj"
 
 # TODO: Re-enable test builds if possible using a locally generated signing key.
 

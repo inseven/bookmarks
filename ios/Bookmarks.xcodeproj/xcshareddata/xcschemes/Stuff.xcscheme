@@ -17,7 +17,7 @@
                BlueprintIdentifier = "D8D3BBF521C6AEBC00D6FB97"
                BuildableName = "Bookmarks.app"
                BlueprintName = "Stuff"
-               ReferencedContainer = "container:Stuff.xcodeproj">
+               ReferencedContainer = "container:Bookmarks.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
                BlueprintIdentifier = "D8D3BC0921C6AEBD00D6FB97"
                BuildableName = "StuffTests.xctest"
                BlueprintName = "StuffTests"
-               ReferencedContainer = "container:Stuff.xcodeproj">
+               ReferencedContainer = "container:Bookmarks.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -45,7 +45,7 @@
                BlueprintIdentifier = "D8D3BC1421C6AEBD00D6FB97"
                BuildableName = "StuffUITests.xctest"
                BlueprintName = "StuffUITests"
-               ReferencedContainer = "container:Stuff.xcodeproj">
+               ReferencedContainer = "container:Bookmarks.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -67,7 +67,7 @@
             BlueprintIdentifier = "D8D3BBF521C6AEBC00D6FB97"
             BuildableName = "Bookmarks.app"
             BlueprintName = "Stuff"
-            ReferencedContainer = "container:Stuff.xcodeproj">
+            ReferencedContainer = "container:Bookmarks.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -84,7 +84,7 @@
             BlueprintIdentifier = "D8D3BBF521C6AEBC00D6FB97"
             BuildableName = "Bookmarks.app"
             BlueprintName = "Stuff"
-            ReferencedContainer = "container:Stuff.xcodeproj">
+            ReferencedContainer = "container:Bookmarks.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

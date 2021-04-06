@@ -71,7 +71,7 @@
 		D832EEC024816735004C64E3 /* FileImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileImageCache.swift; sourceTree = "<group>"; };
 		D832EEC624816901004C64E3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D832EEC824818EF6004C64E3 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
-		D832EECA2481B6D1004C64E3 /* Stuff.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Stuff.entitlements; sourceTree = "<group>"; };
+		D832EECA2481B6D1004C64E3 /* Bookmarks.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Bookmarks.entitlements; sourceTree = "<group>"; };
 		D847852F2615360E00B2318B /* URLComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLComponents.swift; sourceTree = "<group>"; };
 		D84785372615363200B2318B /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		D8478553261539AA00B2318B /* BookmarksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksView.swift; sourceTree = "<group>"; };
@@ -86,7 +86,7 @@
 		D864E46A21C93FB400EAB9AD /* TFHppleElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFHppleElement.m; sourceTree = "<group>"; };
 		D864E46B21C93FB400EAB9AD /* XPathQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPathQuery.m; sourceTree = "<group>"; };
 		D864E47021C93FD200EAB9AD /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
-		D864E47221C9417F00EAB9AD /* Stuff-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Stuff-Bridging-Header.h"; sourceTree = "<group>"; };
+		D864E47221C9417F00EAB9AD /* Bookmarks-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bookmarks-Bridging-Header.h"; sourceTree = "<group>"; };
 		D8A131F3248C4FDA006E71BE /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		D8A3A51E247C918000C3B8B4 /* ThumbnailManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailManager.swift; sourceTree = "<group>"; };
 		D8AAFE50248018BC00B62492 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
@@ -220,7 +220,7 @@
 		D8D3BBED21C6AEBC00D6FB97 = {
 			isa = PBXGroup;
 			children = (
-				D8D3BBF821C6AEBC00D6FB97 /* Stuff */,
+				D8D3BBF821C6AEBC00D6FB97 /* Bookmarks */,
 				D8D3BC0D21C6AEBD00D6FB97 /* StuffTests */,
 				D8D3BC1821C6AEBD00D6FB97 /* StuffUITests */,
 				D8D3BBF721C6AEBC00D6FB97 /* Products */,
@@ -238,15 +238,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		D8D3BBF821C6AEBC00D6FB97 /* Stuff */ = {
+		D8D3BBF821C6AEBC00D6FB97 /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
 				D84784F62614E27A00B2318B /* Extensions */,
 				D84784E32614E24E00B2318B /* Core */,
 				D8BDE1112551AB8100C95945 /* SwiftlySearch */,
 				D8578479254FF56E00AE241C /* Interface */,
-				D832EECA2481B6D1004C64E3 /* Stuff.entitlements */,
-				D864E47221C9417F00EAB9AD /* Stuff-Bridging-Header.h */,
+				D832EECA2481B6D1004C64E3 /* Bookmarks.entitlements */,
+				D864E47221C9417F00EAB9AD /* Bookmarks-Bridging-Header.h */,
 				D8D3BC0521C6AEBD00D6FB97 /* Info.plist */,
 				D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */,
 				D832EEC224816764004C64E3 /* Cache */,
@@ -256,7 +256,7 @@
 				D8D3E4F2254D8EBB00A72446 /* Item.swift */,
 				D8BDE1172551C56100C95945 /* BookmarksApp.swift */,
 			);
-			path = Stuff;
+			path = Bookmarks;
 			sourceTree = "<group>";
 		};
 		D8D3BC0D21C6AEBD00D6FB97 /* StuffTests */ = {
@@ -610,11 +610,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Stuff/Stuff.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Bookmarks/Bookmarks.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
-				INFOPLIST_FILE = Stuff/Info.plist;
+				INFOPLIST_FILE = Bookmarks/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -625,7 +625,7 @@
 				PRODUCT_NAME = Bookmarks;
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Stuff/Stuff-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Bookmarks/Bookmarks-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
@@ -635,11 +635,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Stuff/Stuff.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Bookmarks/Bookmarks.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
-				INFOPLIST_FILE = Stuff/Info.plist;
+				INFOPLIST_FILE = Bookmarks/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -650,7 +650,7 @@
 				PRODUCT_NAME = Bookmarks;
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Stuff/Stuff-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Bookmarks/Bookmarks-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};

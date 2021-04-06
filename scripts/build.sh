@@ -22,5 +22,4 @@ function build_scheme {
         CODE_SIGNING_ALLOWED=NO
 }
 
-build_scheme Bookmarks
 build_scheme Stuff

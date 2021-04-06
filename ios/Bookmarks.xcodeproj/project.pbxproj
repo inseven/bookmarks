@@ -72,16 +72,6 @@
 		D832EEC624816901004C64E3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D832EEC824818EF6004C64E3 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		D832EECA2481B6D1004C64E3 /* Stuff.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Stuff.entitlements; sourceTree = "<group>"; };
-		D847849E2614E19B00B2318B /* BookmarksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksApp.swift; sourceTree = "<group>"; };
-		D84784A02614E19B00B2318B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		D84784A22614E19E00B2318B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		D84784A52614E19E00B2318B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		D84784A72614E19E00B2318B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D84784A82614E19E00B2318B /* Bookmarks.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Bookmarks.entitlements; sourceTree = "<group>"; };
-		D84784B12614E19E00B2318B /* BookmarksTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTests.swift; sourceTree = "<group>"; };
-		D84784B32614E19E00B2318B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D84784BC2614E19E00B2318B /* BookmarksUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksUITests.swift; sourceTree = "<group>"; };
-		D84784BE2614E19E00B2318B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D847852F2615360E00B2318B /* URLComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLComponents.swift; sourceTree = "<group>"; };
 		D84785372615363200B2318B /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		D8478553261539AA00B2318B /* BookmarksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksView.swift; sourceTree = "<group>"; };
@@ -154,45 +144,6 @@
 				D832EEC024816735004C64E3 /* FileImageCache.swift */,
 			);
 			path = Cache;
-			sourceTree = "<group>";
-		};
-		D847849D2614E19B00B2318B /* Bookmarks */ = {
-			isa = PBXGroup;
-			children = (
-				D847849E2614E19B00B2318B /* BookmarksApp.swift */,
-				D84784A02614E19B00B2318B /* ContentView.swift */,
-				D84784A22614E19E00B2318B /* Assets.xcassets */,
-				D84784A72614E19E00B2318B /* Info.plist */,
-				D84784A82614E19E00B2318B /* Bookmarks.entitlements */,
-				D84784A42614E19E00B2318B /* Preview Content */,
-			);
-			path = Bookmarks;
-			sourceTree = "<group>";
-		};
-		D84784A42614E19E00B2318B /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				D84784A52614E19E00B2318B /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		D84784B02614E19E00B2318B /* BookmarksTests */ = {
-			isa = PBXGroup;
-			children = (
-				D84784B12614E19E00B2318B /* BookmarksTests.swift */,
-				D84784B32614E19E00B2318B /* Info.plist */,
-			);
-			path = BookmarksTests;
-			sourceTree = "<group>";
-		};
-		D84784BB2614E19E00B2318B /* BookmarksUITests */ = {
-			isa = PBXGroup;
-			children = (
-				D84784BC2614E19E00B2318B /* BookmarksUITests.swift */,
-				D84784BE2614E19E00B2318B /* Info.plist */,
-			);
-			path = BookmarksUITests;
 			sourceTree = "<group>";
 		};
 		D84784E32614E24E00B2318B /* Core */ = {
@@ -272,9 +223,6 @@
 				D8D3BBF821C6AEBC00D6FB97 /* Stuff */,
 				D8D3BC0D21C6AEBD00D6FB97 /* StuffTests */,
 				D8D3BC1821C6AEBD00D6FB97 /* StuffUITests */,
-				D847849D2614E19B00B2318B /* Bookmarks */,
-				D84784B02614E19E00B2318B /* BookmarksTests */,
-				D84784BB2614E19E00B2318B /* BookmarksUITests */,
 				D8D3BBF721C6AEBC00D6FB97 /* Products */,
 				D864E46F21C93FD200EAB9AD /* Frameworks */,
 			);

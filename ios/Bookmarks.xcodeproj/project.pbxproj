@@ -16,15 +16,6 @@
 		D832EEC124816735004C64E3 /* FileImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D832EEC024816735004C64E3 /* FileImageCache.swift */; };
 		D832EEC724816901004C64E3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D832EEC624816901004C64E3 /* SettingsView.swift */; };
 		D832EEC924818EF6004C64E3 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D832EEC824818EF6004C64E3 /* Settings.swift */; };
-		D847849F2614E19B00B2318B /* BookmarksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D847849E2614E19B00B2318B /* BookmarksApp.swift */; };
-		D84784A12614E19B00B2318B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84784A02614E19B00B2318B /* ContentView.swift */; };
-		D84784A32614E19E00B2318B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D84784A22614E19E00B2318B /* Assets.xcassets */; };
-		D84784A62614E19E00B2318B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D84784A52614E19E00B2318B /* Preview Assets.xcassets */; };
-		D84784B22614E19E00B2318B /* BookmarksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84784B12614E19E00B2318B /* BookmarksTests.swift */; };
-		D84784BD2614E19E00B2318B /* BookmarksUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84784BC2614E19E00B2318B /* BookmarksUITests.swift */; };
-		D84784CE2614E1C500B2318B /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = D864E46B21C93FB400EAB9AD /* XPathQuery.m */; };
-		D84784D52614E1CE00B2318B /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = D864E46A21C93FB400EAB9AD /* TFHppleElement.m */; };
-		D84784DC2614E1D900B2318B /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = D864E46721C93FB400EAB9AD /* TFHpple.m */; };
 		D84785302615360E00B2318B /* URLComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D847852F2615360E00B2318B /* URLComponents.swift */; };
 		D84785382615363200B2318B /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84785372615363200B2318B /* UIImage.swift */; };
 		D8478554261539AA00B2318B /* BookmarksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8478553261539AA00B2318B /* BookmarksView.swift */; };
@@ -54,20 +45,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		D84784AE2614E19E00B2318B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D8D3BBEE21C6AEBC00D6FB97 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D847849B2614E19B00B2318B;
-			remoteInfo = Bookmarks;
-		};
-		D84784B92614E19E00B2318B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D8D3BBEE21C6AEBC00D6FB97 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D847849B2614E19B00B2318B;
-			remoteInfo = Bookmarks;
-		};
 		D8D3BC0B21C6AEBD00D6FB97 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D8D3BBEE21C6AEBC00D6FB97 /* Project object */;
@@ -95,17 +72,14 @@
 		D832EEC624816901004C64E3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D832EEC824818EF6004C64E3 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		D832EECA2481B6D1004C64E3 /* Stuff.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Stuff.entitlements; sourceTree = "<group>"; };
-		D847849C2614E19B00B2318B /* Bookmarks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bookmarks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D847849E2614E19B00B2318B /* BookmarksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksApp.swift; sourceTree = "<group>"; };
 		D84784A02614E19B00B2318B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D84784A22614E19E00B2318B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D84784A52614E19E00B2318B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D84784A72614E19E00B2318B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D84784A82614E19E00B2318B /* Bookmarks.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Bookmarks.entitlements; sourceTree = "<group>"; };
-		D84784AD2614E19E00B2318B /* BookmarksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookmarksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D84784B12614E19E00B2318B /* BookmarksTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTests.swift; sourceTree = "<group>"; };
 		D84784B32614E19E00B2318B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D84784B82614E19E00B2318B /* BookmarksUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookmarksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D84784BC2614E19E00B2318B /* BookmarksUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksUITests.swift; sourceTree = "<group>"; };
 		D84784BE2614E19E00B2318B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D847852F2615360E00B2318B /* URLComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLComponents.swift; sourceTree = "<group>"; };
@@ -146,27 +120,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		D84784992614E19B00B2318B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D84784AA2614E19E00B2318B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D84784B52614E19E00B2318B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		D8D3BBF321C6AEBC00D6FB97 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -333,9 +286,6 @@
 				D8D3BBF621C6AEBC00D6FB97 /* Bookmarks.app */,
 				D8D3BC0A21C6AEBD00D6FB97 /* StuffTests.xctest */,
 				D8D3BC1521C6AEBD00D6FB97 /* StuffUITests.xctest */,
-				D847849C2614E19B00B2318B /* Bookmarks.app */,
-				D84784AD2614E19E00B2318B /* BookmarksTests.xctest */,
-				D84784B82614E19E00B2318B /* BookmarksUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -382,59 +332,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D847849B2614E19B00B2318B /* Bookmarks */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = D84784C52614E19E00B2318B /* Build configuration list for PBXNativeTarget "Bookmarks" */;
-			buildPhases = (
-				D84784982614E19B00B2318B /* Sources */,
-				D84784992614E19B00B2318B /* Frameworks */,
-				D847849A2614E19B00B2318B /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = Bookmarks;
-			productName = Bookmarks;
-			productReference = D847849C2614E19B00B2318B /* Bookmarks.app */;
-			productType = "com.apple.product-type.application";
-		};
-		D84784AC2614E19E00B2318B /* BookmarksTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = D84784C62614E19E00B2318B /* Build configuration list for PBXNativeTarget "BookmarksTests" */;
-			buildPhases = (
-				D84784A92614E19E00B2318B /* Sources */,
-				D84784AA2614E19E00B2318B /* Frameworks */,
-				D84784AB2614E19E00B2318B /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				D84784AF2614E19E00B2318B /* PBXTargetDependency */,
-			);
-			name = BookmarksTests;
-			productName = BookmarksTests;
-			productReference = D84784AD2614E19E00B2318B /* BookmarksTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		D84784B72614E19E00B2318B /* BookmarksUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = D84784C72614E19E00B2318B /* Build configuration list for PBXNativeTarget "BookmarksUITests" */;
-			buildPhases = (
-				D84784B42614E19E00B2318B /* Sources */,
-				D84784B52614E19E00B2318B /* Frameworks */,
-				D84784B62614E19E00B2318B /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				D84784BA2614E19E00B2318B /* PBXTargetDependency */,
-			);
-			name = BookmarksUITests;
-			productName = BookmarksUITests;
-			productReference = D84784B82614E19E00B2318B /* BookmarksUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 		D8D3BBF521C6AEBC00D6FB97 /* Stuff */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D8D3BC1E21C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "Stuff" */;
@@ -501,17 +398,6 @@
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = "InSeven Limited";
 				TargetAttributes = {
-					D847849B2614E19B00B2318B = {
-						CreatedOnToolsVersion = 12.4;
-					};
-					D84784AC2614E19E00B2318B = {
-						CreatedOnToolsVersion = 12.4;
-						TestTargetID = D847849B2614E19B00B2318B;
-					};
-					D84784B72614E19E00B2318B = {
-						CreatedOnToolsVersion = 12.4;
-						TestTargetID = D847849B2614E19B00B2318B;
-					};
 					D8D3BBF521C6AEBC00D6FB97 = {
 						CreatedOnToolsVersion = 10.1;
 					};
@@ -544,37 +430,11 @@
 				D8D3BBF521C6AEBC00D6FB97 /* Stuff */,
 				D8D3BC0921C6AEBD00D6FB97 /* StuffTests */,
 				D8D3BC1421C6AEBD00D6FB97 /* StuffUITests */,
-				D847849B2614E19B00B2318B /* Bookmarks */,
-				D84784AC2614E19E00B2318B /* BookmarksTests */,
-				D84784B72614E19E00B2318B /* BookmarksUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		D847849A2614E19B00B2318B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D84784A62614E19E00B2318B /* Preview Assets.xcassets in Resources */,
-				D84784A32614E19E00B2318B /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D84784AB2614E19E00B2318B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D84784B62614E19E00B2318B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		D8D3BBF421C6AEBC00D6FB97 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -601,34 +461,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		D84784982614E19B00B2318B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D84784DC2614E1D900B2318B /* TFHpple.m in Sources */,
-				D84784D52614E1CE00B2318B /* TFHppleElement.m in Sources */,
-				D84784A12614E19B00B2318B /* ContentView.swift in Sources */,
-				D84784CE2614E1C500B2318B /* XPathQuery.m in Sources */,
-				D847849F2614E19B00B2318B /* BookmarksApp.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D84784A92614E19E00B2318B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D84784B22614E19E00B2318B /* BookmarksTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D84784B42614E19E00B2318B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D84784BD2614E19E00B2318B /* BookmarksUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		D8D3BBF221C6AEBC00D6FB97 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -684,16 +516,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		D84784AF2614E19E00B2318B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D847849B2614E19B00B2318B /* Bookmarks */;
-			targetProxy = D84784AE2614E19E00B2318B /* PBXContainerItemProxy */;
-		};
-		D84784BA2614E19E00B2318B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D847849B2614E19B00B2318B /* Bookmarks */;
-			targetProxy = D84784B92614E19E00B2318B /* PBXContainerItemProxy */;
-		};
 		D8D3BC0C21C6AEBD00D6FB97 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D8D3BBF521C6AEBC00D6FB97 /* Stuff */;
@@ -718,152 +540,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		D84784BF2614E19E00B2318B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_ENTITLEMENTS = Bookmarks/Bookmarks.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_ASSET_PATHS = "\"Bookmarks/Preview Content\"";
-				DEVELOPMENT_TEAM = S4WXAUZQEV;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = Bookmarks/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 11.1;
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.Bookmarks;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Debug;
-		};
-		D84784C02614E19E00B2318B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_ENTITLEMENTS = Bookmarks/Bookmarks.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_ASSET_PATHS = "\"Bookmarks/Preview Content\"";
-				DEVELOPMENT_TEAM = S4WXAUZQEV;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = Bookmarks/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 11.1;
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.Bookmarks;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Release;
-		};
-		D84784C12614E19E00B2318B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = S4WXAUZQEV;
-				INFOPLIST_FILE = BookmarksTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 11.1;
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Bookmarks.app/Contents/MacOS/Bookmarks";
-			};
-			name = Debug;
-		};
-		D84784C22614E19E00B2318B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = S4WXAUZQEV;
-				INFOPLIST_FILE = BookmarksTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 11.1;
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Bookmarks.app/Contents/MacOS/Bookmarks";
-			};
-			name = Release;
-		};
-		D84784C32614E19E00B2318B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = S4WXAUZQEV;
-				INFOPLIST_FILE = BookmarksUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 11.1;
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = Bookmarks;
-			};
-			name = Debug;
-		};
-		D84784C42614E19E00B2318B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = S4WXAUZQEV;
-				INFOPLIST_FILE = BookmarksUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 11.1;
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = Bookmarks;
-			};
-			name = Release;
-		};
 		D8D3BC1C21C6AEBD00D6FB97 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1117,33 +793,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D84784C52614E19E00B2318B /* Build configuration list for PBXNativeTarget "Bookmarks" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D84784BF2614E19E00B2318B /* Debug */,
-				D84784C02614E19E00B2318B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		D84784C62614E19E00B2318B /* Build configuration list for PBXNativeTarget "BookmarksTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D84784C12614E19E00B2318B /* Debug */,
-				D84784C22614E19E00B2318B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		D84784C72614E19E00B2318B /* Build configuration list for PBXNativeTarget "BookmarksUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D84784C32614E19E00B2318B /* Debug */,
-				D84784C42614E19E00B2318B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		D8D3BBF121C6AEBC00D6FB97 /* Build configuration list for PBXProject "Bookmarks" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

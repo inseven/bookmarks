@@ -107,10 +107,10 @@
 		D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D8D3BC0321C6AEBD00D6FB97 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D8D3BC0521C6AEBD00D6FB97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D8D3BC0A21C6AEBD00D6FB97 /* StuffTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StuffTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8D3BC0A21C6AEBD00D6FB97 /* BookmarksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookmarksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8D3BC0E21C6AEBD00D6FB97 /* StuffTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StuffTests.swift; sourceTree = "<group>"; };
 		D8D3BC1021C6AEBD00D6FB97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D8D3BC1521C6AEBD00D6FB97 /* StuffUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StuffUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8D3BC1521C6AEBD00D6FB97 /* BookmarksUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookmarksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8D3BC1921C6AEBD00D6FB97 /* StuffUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StuffUITests.swift; sourceTree = "<group>"; };
 		D8D3BC1B21C6AEBD00D6FB97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D8D3BC2921C72F7600D6FB97 /* Pinboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pinboard.swift; sourceTree = "<group>"; };
@@ -284,8 +284,8 @@
 			isa = PBXGroup;
 			children = (
 				D8D3BBF621C6AEBC00D6FB97 /* Bookmarks.app */,
-				D8D3BC0A21C6AEBD00D6FB97 /* StuffTests.xctest */,
-				D8D3BC1521C6AEBD00D6FB97 /* StuffUITests.xctest */,
+				D8D3BC0A21C6AEBD00D6FB97 /* BookmarksTests.xctest */,
+				D8D3BC1521C6AEBD00D6FB97 /* BookmarksUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -332,9 +332,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D8D3BBF521C6AEBC00D6FB97 /* Stuff */ = {
+		D8D3BBF521C6AEBC00D6FB97 /* Bookmarks */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D8D3BC1E21C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "Stuff" */;
+			buildConfigurationList = D8D3BC1E21C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "Bookmarks" */;
 			buildPhases = (
 				D8D3BBF221C6AEBC00D6FB97 /* Sources */,
 				D8D3BBF321C6AEBC00D6FB97 /* Frameworks */,
@@ -344,7 +344,7 @@
 			);
 			dependencies = (
 			);
-			name = Stuff;
+			name = Bookmarks;
 			packageProductDependencies = (
 				D8BDE1462554782000C95945 /* Introspect */,
 			);
@@ -352,9 +352,9 @@
 			productReference = D8D3BBF621C6AEBC00D6FB97 /* Bookmarks.app */;
 			productType = "com.apple.product-type.application";
 		};
-		D8D3BC0921C6AEBD00D6FB97 /* StuffTests */ = {
+		D8D3BC0921C6AEBD00D6FB97 /* BookmarksTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D8D3BC2121C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "StuffTests" */;
+			buildConfigurationList = D8D3BC2121C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "BookmarksTests" */;
 			buildPhases = (
 				D8D3BC0621C6AEBD00D6FB97 /* Sources */,
 				D8D3BC0721C6AEBD00D6FB97 /* Frameworks */,
@@ -365,14 +365,14 @@
 			dependencies = (
 				D8D3BC0C21C6AEBD00D6FB97 /* PBXTargetDependency */,
 			);
-			name = StuffTests;
+			name = BookmarksTests;
 			productName = StuffTests;
-			productReference = D8D3BC0A21C6AEBD00D6FB97 /* StuffTests.xctest */;
+			productReference = D8D3BC0A21C6AEBD00D6FB97 /* BookmarksTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		D8D3BC1421C6AEBD00D6FB97 /* StuffUITests */ = {
+		D8D3BC1421C6AEBD00D6FB97 /* BookmarksUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D8D3BC2421C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "StuffUITests" */;
+			buildConfigurationList = D8D3BC2421C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "BookmarksUITests" */;
 			buildPhases = (
 				D8D3BC1121C6AEBD00D6FB97 /* Sources */,
 				D8D3BC1221C6AEBD00D6FB97 /* Frameworks */,
@@ -383,9 +383,9 @@
 			dependencies = (
 				D8D3BC1721C6AEBD00D6FB97 /* PBXTargetDependency */,
 			);
-			name = StuffUITests;
+			name = BookmarksUITests;
 			productName = StuffUITests;
-			productReference = D8D3BC1521C6AEBD00D6FB97 /* StuffUITests.xctest */;
+			productReference = D8D3BC1521C6AEBD00D6FB97 /* BookmarksUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -427,9 +427,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D8D3BBF521C6AEBC00D6FB97 /* Stuff */,
-				D8D3BC0921C6AEBD00D6FB97 /* StuffTests */,
-				D8D3BC1421C6AEBD00D6FB97 /* StuffUITests */,
+				D8D3BBF521C6AEBC00D6FB97 /* Bookmarks */,
+				D8D3BC0921C6AEBD00D6FB97 /* BookmarksTests */,
+				D8D3BC1421C6AEBD00D6FB97 /* BookmarksUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -518,12 +518,12 @@
 /* Begin PBXTargetDependency section */
 		D8D3BC0C21C6AEBD00D6FB97 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D8D3BBF521C6AEBC00D6FB97 /* Stuff */;
+			target = D8D3BBF521C6AEBC00D6FB97 /* Bookmarks */;
 			targetProxy = D8D3BC0B21C6AEBD00D6FB97 /* PBXContainerItemProxy */;
 		};
 		D8D3BC1721C6AEBD00D6FB97 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D8D3BBF521C6AEBC00D6FB97 /* Stuff */;
+			target = D8D3BBF521C6AEBC00D6FB97 /* Bookmarks */;
 			targetProxy = D8D3BC1621C6AEBD00D6FB97 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -802,7 +802,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D8D3BC1E21C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "Stuff" */ = {
+		D8D3BC1E21C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "Bookmarks" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D8D3BC1F21C6AEBD00D6FB97 /* Debug */,
@@ -811,7 +811,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D8D3BC2121C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "StuffTests" */ = {
+		D8D3BC2121C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "BookmarksTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D8D3BC2221C6AEBD00D6FB97 /* Debug */,
@@ -820,7 +820,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D8D3BC2421C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "StuffUITests" */ = {
+		D8D3BC2421C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "BookmarksUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D8D3BC2521C6AEBD00D6FB97 /* Debug */,

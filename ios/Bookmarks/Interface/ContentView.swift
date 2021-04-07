@@ -25,8 +25,6 @@ struct ContentView: View {
 
     @Environment(\.manager) var manager: BookmarksManager
     @ObservedObject var store: Store
-    @State var selected = true
-    @State var filter = ""
 
     var body: some View {
         NavigationView {

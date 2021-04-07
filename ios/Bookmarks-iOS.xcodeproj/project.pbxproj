@@ -107,13 +107,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		D84784E32614E24E00B2318B /* Core */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Core;
-			sourceTree = "<group>";
-		};
 		D8578479254FF56E00AE241C /* Interface */ = {
 			isa = PBXGroup;
 			children = (
@@ -159,7 +152,6 @@
 		D8D3BBF821C6AEBC00D6FB97 /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
-				D84784E32614E24E00B2318B /* Core */,
 				D8578479254FF56E00AE241C /* Interface */,
 				D832EECA2481B6D1004C64E3 /* Bookmarks.entitlements */,
 				D864E47221C9417F00EAB9AD /* Bookmarks-Bridging-Header.h */,

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D84CE46D261E29A900AF1901 /* Boolean.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CE46C261E29A900AF1901 /* Boolean.swift */; };
 		D84CE484261E2AD000AF1901 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CE483261E2AD000AF1901 /* Post.swift */; };
+		D84CE488261E2B7D00AF1901 /* Pinboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CE487261E2B7D00AF1901 /* Pinboard.swift */; };
 		D8569FCC261E2603006926BF /* BookmarksCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8569FC2261E2603006926BF /* BookmarksCore.framework */; };
 		D8569FD1261E2603006926BF /* BookmarksCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8569FD0261E2603006926BF /* BookmarksCoreTests.swift */; };
 		D8569FD3261E2603006926BF /* BookmarksCore.h in Headers */ = {isa = PBXBuildFile; fileRef = D8569FC5261E2603006926BF /* BookmarksCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -27,6 +28,7 @@
 /* Begin PBXFileReference section */
 		D84CE46C261E29A900AF1901 /* Boolean.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Boolean.swift; sourceTree = "<group>"; };
 		D84CE483261E2AD000AF1901 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		D84CE487261E2B7D00AF1901 /* Pinboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pinboard.swift; sourceTree = "<group>"; };
 		D8569FC2261E2603006926BF /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8569FC5261E2603006926BF /* BookmarksCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BookmarksCore.h; sourceTree = "<group>"; };
 		D8569FC6261E2603006926BF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -58,6 +60,7 @@
 			isa = PBXGroup;
 			children = (
 				D84CE46C261E29A900AF1901 /* Boolean.swift */,
+				D84CE487261E2B7D00AF1901 /* Pinboard.swift */,
 				D84CE483261E2AD000AF1901 /* Post.swift */,
 			);
 			path = Pinboard;
@@ -210,6 +213,7 @@
 			files = (
 				D84CE46D261E29A900AF1901 /* Boolean.swift in Sources */,
 				D84CE484261E2AD000AF1901 /* Post.swift in Sources */,
+				D84CE488261E2B7D00AF1901 /* Pinboard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

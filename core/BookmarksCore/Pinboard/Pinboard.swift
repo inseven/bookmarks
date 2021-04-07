@@ -20,36 +20,34 @@
 
 import Foundation
 
-import BookmarksCore
+public class Pinboard {
 
-class Pinboard {
+    enum Error: Swift.Error {
+        case invalidURL(message: String)
+        case invalidResponse(message: String)
+        case inconsistentState(message: String)
+    }
 
     let baseURL = "https://api.pinboard.in/v1/"
     let postsAll = "posts/all"
 
     let token: String
 
-    enum PinboardError: Error {
-        case invalidURL(message: String)
-        case invalidResponse(message: String)
-        case inconsistentState(message: String)
-    }
-
     public init(token: String) {
         self.token = token
     }
 
-    func fetch(completion: @escaping (Result<[Post], Error>) -> Void) {
+    public func fetch(completion: @escaping (Result<[Post], Swift.Error>) -> Void) {
         guard let base = URL(string: baseURL) else {
             DispatchQueue.global(qos: .default).async {
-                completion(.failure(PinboardError.invalidURL(message: "Unable to construct parse base URL")))
+                completion(.failure(Error.invalidURL(message: "Unable to construct parse base URL")))
             }
             return
         }
         let posts = base.appendingPathComponent(postsAll)
         guard var components = URLComponents(string: posts.absoluteString) else {
             DispatchQueue.global(qos: .default).async {
-                completion(.failure(PinboardError.invalidURL(message: "Unable to parse URL components")))
+                completion(.failure(Error.invalidURL(message: "Unable to parse URL components")))
             }
             return
         }
@@ -59,14 +57,14 @@ class Pinboard {
         ]
         guard let url = components.url else {
             DispatchQueue.global(qos: .default).async {
-                completion(.failure(PinboardError.invalidURL(message: "Unable to construct URL from components")))
+                completion(.failure(Error.invalidURL(message: "Unable to construct URL from components")))
             }
             return
         }
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let data = data else {
                 guard let error = error else {
-                    completion(.failure(PinboardError.inconsistentState(message: "Missing error when processing URL completion")))
+                    completion(.failure(Error.inconsistentState(message: "Missing error when processing URL completion")))
                     return
                 }
                 completion(.failure(error))

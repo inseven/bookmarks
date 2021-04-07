@@ -19,7 +19,12 @@ function build_scheme {
 }
 
 cd "$ROOT_DIRECTORY"
-build_scheme "BookmarksCore iOS" clean build build-for-testing test
+
+xcrun instruments -s devices
+
+build_scheme "BookmarksCore iOS" clean build build-for-testing test \
+  -sdk iphonesimulator \
+  -destination 'platform=iOS Simulator'
 build_scheme "BookmarksCore macOS" clean build build-for-testing test
 build_scheme "Bookmarks iOS" clean build
 build_scheme "Bookmarks macOS" clean build

@@ -735,6 +735,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksCore;
 				PRODUCT_NAME = BookmarksCore;
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -759,6 +760,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksCore;
 				PRODUCT_NAME = BookmarksCore;
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -819,7 +821,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksCore;
 				PRODUCT_NAME = BookmarksCore;
 				SDKROOT = macosx;
@@ -845,7 +847,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksCore;
 				PRODUCT_NAME = BookmarksCore;
 				SDKROOT = macosx;

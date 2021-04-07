@@ -20,6 +20,8 @@
 
 import Foundation
 
+import BookmarksCore
+
 protocol UpdaterObserver: AnyObject {
 
 }

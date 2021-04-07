@@ -20,25 +20,19 @@
 
 import Foundation
 
-// Believe it or not, Pinboard represents booleans as the strings 'yes' and 'no', causing us to play some very silly
-// games.
-enum Boolean: String, Codable {
-    case yes = "yes"
-    case no = "no"
-}
+public struct Post: Codable {
 
-struct Post: Codable {
-    let description: String?
-    let extended: String
-    let hash: String
-    let href: URL?
-    let meta: String
-    let shared: Bool
-    let tags: [String]
-    let time: Date?
-    let toRead: Bool
+    public let description: String?
+    public let extended: String
+    public let hash: String
+    public let href: URL?
+    public let meta: String
+    public let shared: Bool
+    public let tags: [String]
+    public let time: Date?
+    public let toRead: Bool
 
-    enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case description = "description"
         case extended = "extended"
         case hash = "hash"
@@ -50,7 +44,7 @@ struct Post: Codable {
         case toRead = "toread"
     }
 
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         // Unfortunately, the Pinboard API uses 0 as a placeholder for a missing description, so we need to do a little
@@ -72,66 +66,4 @@ struct Post: Codable {
         time = ISO8601DateFormatter.init().date(from: try container.decode(String.self, forKey: .time))
         toRead = try container.decode(Boolean.self, forKey: .toRead) == .yes ? true : false
     }
-}
-
-class Pinboard {
-
-    let baseURL = "https://api.pinboard.in/v1/"
-    let postsAll = "posts/all"
-
-    let token: String
-
-    enum PinboardError: Error {
-        case invalidURL(message: String)
-        case invalidResponse(message: String)
-        case inconsistentState(message: String)
-    }
-
-    public init(token: String) {
-        self.token = token
-    }
-
-    func fetch(completion: @escaping (Result<[Post], Error>) -> Void) {
-        guard let base = URL(string: baseURL) else {
-            DispatchQueue.global(qos: .default).async {
-                completion(.failure(PinboardError.invalidURL(message: "Unable to construct parse base URL")))
-            }
-            return
-        }
-        let posts = base.appendingPathComponent(postsAll)
-        guard var components = URLComponents(string: posts.absoluteString) else {
-            DispatchQueue.global(qos: .default).async {
-                completion(.failure(PinboardError.invalidURL(message: "Unable to parse URL components")))
-            }
-            return
-        }
-        components.queryItems = [
-            URLQueryItem(name: "auth_token", value: token),
-            URLQueryItem(name: "format", value: "json")
-        ]
-        guard let url = components.url else {
-            DispatchQueue.global(qos: .default).async {
-                completion(.failure(PinboardError.invalidURL(message: "Unable to construct URL from components")))
-            }
-            return
-        }
-        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            guard let data = data else {
-                guard let error = error else {
-                    completion(.failure(PinboardError.inconsistentState(message: "Missing error when processing URL completion")))
-                    return
-                }
-                completion(.failure(error))
-                return
-            }
-            do {
-                let posts = try JSONDecoder().decode([Post].self, from: data)
-                completion(.success(posts))
-            } catch {
-                completion(.failure(error))
-            }
-        }
-        task.resume()
-    }
-
 }

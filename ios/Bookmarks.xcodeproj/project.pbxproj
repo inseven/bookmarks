@@ -221,7 +221,7 @@
 			isa = PBXGroup;
 			children = (
 				D8D3BBF821C6AEBC00D6FB97 /* Bookmarks */,
-				D8D3BC0D21C6AEBD00D6FB97 /* StuffTests */,
+				D8D3BC0D21C6AEBD00D6FB97 /* BookmarksTests */,
 				D8D3BC1821C6AEBD00D6FB97 /* StuffUITests */,
 				D8D3BBF721C6AEBC00D6FB97 /* Products */,
 				D864E46F21C93FD200EAB9AD /* Frameworks */,
@@ -259,13 +259,13 @@
 			path = Bookmarks;
 			sourceTree = "<group>";
 		};
-		D8D3BC0D21C6AEBD00D6FB97 /* StuffTests */ = {
+		D8D3BC0D21C6AEBD00D6FB97 /* BookmarksTests */ = {
 			isa = PBXGroup;
 			children = (
 				D8D3BC0E21C6AEBD00D6FB97 /* StuffTests.swift */,
 				D8D3BC1021C6AEBD00D6FB97 /* Info.plist */,
 			);
-			path = StuffTests;
+			path = BookmarksTests;
 			sourceTree = "<group>";
 		};
 		D8D3BC1821C6AEBD00D6FB97 /* StuffUITests */ = {
@@ -663,13 +663,13 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
-				INFOPLIST_FILE = StuffTests/Info.plist;
+				INFOPLIST_FILE = BookmarksTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.StuffTests;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -684,13 +684,13 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
-				INFOPLIST_FILE = StuffTests/Info.plist;
+				INFOPLIST_FILE = BookmarksTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.StuffTests;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -19,7 +19,7 @@ function build_scheme {
 }
 
 cd "$ROOT_DIRECTORY"
-build_scheme "BookmarksCore iOS" clean build
+build_scheme "BookmarksCore iOS" clean build build-for-testing
 build_scheme "BookmarksCore macOS" clean build
 build_scheme "Bookmarks iOS" clean build
 build_scheme "Bookmarks macOS" clean build

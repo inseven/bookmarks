@@ -33,7 +33,7 @@ class BookmarksTests: XCTestCase {
         }
 
         var image: UIImage?
-        simpleThumbnail(for: url) { (result) in
+        Utilities.simpleThumbnail(for: url) { (result) in
             defer { expectation.fulfill() }
             guard case .success(let blockImage) = result else {
                 return

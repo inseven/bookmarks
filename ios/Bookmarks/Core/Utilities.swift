@@ -28,7 +28,28 @@ enum OpenGraphError: Error {
 
 class Utilities {
 
-    static func completion<T, U>(on queue: DispatchQueue, completion: @escaping (Result<T, U>) -> Void) -> (Result<T, U>) -> Void {
+    static func simpleThumbnail(for url: URL, completion: @escaping (Result<UIImage, Error>) -> Void) {
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard let data = data else {
+                completion(.failure(OpenGraphError.invalidArgument(message: "Unable to get contents of URL for cell")))
+                return
+            }
+            guard let doc = TFHpple(htmlData: data) else {
+                completion(.failure(OpenGraphError.invalidArgument(message: "Unable to parse the data")))
+                return
+            }
+            let document = Document(location: url, contents: doc)
+            guard let image = document.openGraphImage else {
+                completion(.failure(OpenGraphError.invalidArgument(message: "Failed to find image")))
+                return
+            }
+            completion(.success(image))
+        }
+        task.resume()
+    }
+
+    static func completion<T, U>(on queue: DispatchQueue,
+                                 completion: @escaping (Result<T, U>) -> Void) -> (Result<T, U>) -> Void {
         return { (result) in
             queue.async {
                 completion(result)
@@ -44,24 +65,4 @@ class Utilities {
         }
     }
 
-}
-
-func simpleThumbnail(for url: URL, completion: @escaping (Result<UIImage, Error>) -> Void) {
-    let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-        guard let data = data else {
-            completion(.failure(OpenGraphError.invalidArgument(message: "Unable to get contents of URL for cell")))
-            return
-        }
-        guard let doc = TFHpple(htmlData: data) else {
-            completion(.failure(OpenGraphError.invalidArgument(message: "Unable to parse the data")))
-            return
-        }
-        let document = Document(location: url, contents: doc)
-        guard let image = document.openGraphImage else {
-            completion(.failure(OpenGraphError.invalidArgument(message: "Failed to find image")))
-            return
-        }
-        completion(.success(image))
-    }
-    task.resume()
 }

@@ -49,7 +49,7 @@
 		D8569FC2261E2603006926BF /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8569FC5261E2603006926BF /* BookmarksCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BookmarksCore.h; sourceTree = "<group>"; };
 		D8569FC6261E2603006926BF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D8569FCB261E2603006926BF /* BookmarksCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookmarksCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8569FCB261E2603006926BF /* BookmarksCore iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BookmarksCore iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8569FD0261E2603006926BF /* BookmarksCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksCoreTests.swift; sourceTree = "<group>"; };
 		D8569FD2261E2603006926BF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D8AA4054261E2E8D00D11421 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -110,7 +110,7 @@
 			children = (
 				D8569FC4261E2603006926BF /* BookmarksCore */,
 				D89D6484261E4B6100DE673D /* BookmarksCore iOS */,
-				D8569FCF261E2603006926BF /* BookmarksCoreTests */,
+				D8569FCF261E2603006926BF /* BookmarksCore iOSTests */,
 				D8CF8C79261E356A00E52E85 /* BookmarksCore macOS */,
 				D8CF8C84261E356A00E52E85 /* BookmarksCore macOSTests */,
 				D8569FC3261E2603006926BF /* Products */,
@@ -121,7 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				D8569FC2261E2603006926BF /* BookmarksCore.framework */,
-				D8569FCB261E2603006926BF /* BookmarksCoreTests.xctest */,
+				D8569FCB261E2603006926BF /* BookmarksCore iOSTests.xctest */,
 				D8CF8C78261E356A00E52E85 /* BookmarksCore.framework */,
 				D8CF8C80261E356A00E52E85 /* BookmarksCore macOSTests.xctest */,
 			);
@@ -138,13 +138,13 @@
 			path = BookmarksCore;
 			sourceTree = "<group>";
 		};
-		D8569FCF261E2603006926BF /* BookmarksCoreTests */ = {
+		D8569FCF261E2603006926BF /* BookmarksCore iOSTests */ = {
 			isa = PBXGroup;
 			children = (
 				D8569FD0261E2603006926BF /* BookmarksCoreTests.swift */,
 				D8569FD2261E2603006926BF /* Info.plist */,
 			);
-			path = BookmarksCoreTests;
+			path = "BookmarksCore iOSTests";
 			sourceTree = "<group>";
 		};
 		D89D6484261E4B6100DE673D /* BookmarksCore iOS */ = {
@@ -221,9 +221,9 @@
 			productReference = D8569FC2261E2603006926BF /* BookmarksCore.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		D8569FCA261E2603006926BF /* BookmarksCoreTests */ = {
+		D8569FCA261E2603006926BF /* BookmarksCore iOSTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D8569FD9261E2603006926BF /* Build configuration list for PBXNativeTarget "BookmarksCoreTests" */;
+			buildConfigurationList = D8569FD9261E2603006926BF /* Build configuration list for PBXNativeTarget "BookmarksCore iOSTests" */;
 			buildPhases = (
 				D8569FC7261E2603006926BF /* Sources */,
 				D8569FC8261E2603006926BF /* Frameworks */,
@@ -234,9 +234,9 @@
 			dependencies = (
 				D8569FCE261E2603006926BF /* PBXTargetDependency */,
 			);
-			name = BookmarksCoreTests;
+			name = "BookmarksCore iOSTests";
 			productName = BookmarksCoreTests;
-			productReference = D8569FCB261E2603006926BF /* BookmarksCoreTests.xctest */;
+			productReference = D8569FCB261E2603006926BF /* BookmarksCore iOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		D8CF8C77261E356A00E52E85 /* BookmarksCore macOS */ = {
@@ -312,7 +312,7 @@
 			projectRoot = "";
 			targets = (
 				D8569FC1261E2603006926BF /* BookmarksCore iOS */,
-				D8569FCA261E2603006926BF /* BookmarksCoreTests */,
+				D8569FCA261E2603006926BF /* BookmarksCore iOSTests */,
 				D8CF8C77261E356A00E52E85 /* BookmarksCore macOS */,
 				D8CF8C7F261E356A00E52E85 /* BookmarksCore macOSTests */,
 			);
@@ -587,13 +587,13 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
-				INFOPLIST_FILE = BookmarksCoreTests/Info.plist;
+				INFOPLIST_FILE = "BookmarksCore iOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksCoreTests;
+				PRODUCT_BUNDLE_IDENTIFIER = "uk.co.inseven.BookmarksCore-iOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -606,13 +606,13 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
-				INFOPLIST_FILE = BookmarksCoreTests/Info.plist;
+				INFOPLIST_FILE = "BookmarksCore iOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksCoreTests;
+				PRODUCT_BUNDLE_IDENTIFIER = "uk.co.inseven.BookmarksCore-iOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -734,7 +734,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D8569FD9261E2603006926BF /* Build configuration list for PBXNativeTarget "BookmarksCoreTests" */ = {
+		D8569FD9261E2603006926BF /* Build configuration list for PBXNativeTarget "BookmarksCore iOSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D8569FDA261E2603006926BF /* Debug */,

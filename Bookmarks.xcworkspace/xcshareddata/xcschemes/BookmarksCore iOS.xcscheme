@@ -29,8 +29,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D8569FCA261E2603006926BF"
-               BuildableName = "BookmarksCoreTests.xctest"
-               BlueprintName = "BookmarksCoreTests"
+               BuildableName = "BookmarksCore iOSTests.xctest"
+               BlueprintName = "BookmarksCore iOSTests"
                ReferencedContainer = "container:core/BookmarksCore.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -47,8 +47,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D8569FCA261E2603006926BF"
-               BuildableName = "BookmarksCoreTests.xctest"
-               BlueprintName = "BookmarksCoreTests"
+               BuildableName = "BookmarksCore iOSTests.xctest"
+               BlueprintName = "BookmarksCore iOSTests"
                ReferencedContainer = "container:core/BookmarksCore.xcodeproj">
             </BuildableReference>
          </TestableReference>

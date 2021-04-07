@@ -195,9 +195,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		D8569FC1261E2603006926BF /* BookmarksCore */ = {
+		D8569FC1261E2603006926BF /* BookmarksCore iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D8569FD6261E2603006926BF /* Build configuration list for PBXNativeTarget "BookmarksCore" */;
+			buildConfigurationList = D8569FD6261E2603006926BF /* Build configuration list for PBXNativeTarget "BookmarksCore iOS" */;
 			buildPhases = (
 				D8569FBD261E2603006926BF /* Headers */,
 				D8569FBE261E2603006926BF /* Sources */,
@@ -208,7 +208,7 @@
 			);
 			dependencies = (
 			);
-			name = BookmarksCore;
+			name = "BookmarksCore iOS";
 			productName = BookmarksCore;
 			productReference = D8569FC2261E2603006926BF /* BookmarksCore.framework */;
 			productType = "com.apple.product-type.framework";
@@ -303,7 +303,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D8569FC1261E2603006926BF /* BookmarksCore */,
+				D8569FC1261E2603006926BF /* BookmarksCore iOS */,
 				D8569FCA261E2603006926BF /* BookmarksCoreTests */,
 				D8CF8C77261E356A00E52E85 /* BookmarksCore macOS */,
 				D8CF8C7F261E356A00E52E85 /* BookmarksCore macOSTests */,
@@ -388,7 +388,7 @@
 /* Begin PBXTargetDependency section */
 		D8569FCE261E2603006926BF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D8569FC1261E2603006926BF /* BookmarksCore */;
+			target = D8569FC1261E2603006926BF /* BookmarksCore iOS */;
 			targetProxy = D8569FCD261E2603006926BF /* PBXContainerItemProxy */;
 		};
 		D8CF8C83261E356A00E52E85 /* PBXTargetDependency */ = {
@@ -542,7 +542,7 @@
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksCore;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = BookmarksCore;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -566,7 +566,7 @@
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksCore;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = BookmarksCore;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -717,7 +717,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D8569FD6261E2603006926BF /* Build configuration list for PBXNativeTarget "BookmarksCore" */ = {
+		D8569FD6261E2603006926BF /* Build configuration list for PBXNativeTarget "BookmarksCore iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D8569FD7261E2603006926BF /* Debug */,

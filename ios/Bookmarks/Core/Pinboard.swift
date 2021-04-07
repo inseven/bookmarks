@@ -22,56 +22,6 @@ import Foundation
 
 import BookmarksCore
 
-// Believe it or not, Pinboard represents booleans as the strings 'yes' and 'no', causing us to play some very silly
-// games.
-
-struct Post: Codable {
-    let description: String?
-    let extended: String
-    let hash: String
-    let href: URL?
-    let meta: String
-    let shared: Bool
-    let tags: [String]
-    let time: Date?
-    let toRead: Bool
-
-    enum CodingKeys: String, CodingKey {
-        case description = "description"
-        case extended = "extended"
-        case hash = "hash"
-        case href = "href"
-        case meta = "meta"
-        case shared = "shared"
-        case tags = "tags"
-        case time = "time"
-        case toRead = "toread"
-    }
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        // Unfortunately, the Pinboard API uses 0 as a placeholder for a missing description, so we need to do a little
-        // dance here to keep everything happy.
-        do {
-            description = try container.decode(String.self, forKey: .description)
-        } catch DecodingError.typeMismatch {
-            // We double check that we can parse the key as a boolean to ensure the structure is as we expect.
-            let _ = try container.decode(Bool.self, forKey: .description)
-            description = nil
-        }
-
-        extended = try container.decode(String.self, forKey: .extended)
-        href = URL(string: try container.decode(String.self, forKey: .href))
-        hash = try container.decode(String.self, forKey: .hash)
-        meta = try container.decode(String.self, forKey: .meta)
-        shared = try container.decode(Boolean.self, forKey: .shared) == .yes ? true : false
-        tags = try container.decode(String.self, forKey: .tags).split(separator: " ").map(String.init)
-        time = ISO8601DateFormatter.init().date(from: try container.decode(String.self, forKey: .time))
-        toRead = try container.decode(Boolean.self, forKey: .toRead) == .yes ? true : false
-    }
-}
-
 class Pinboard {
 
     let baseURL = "https://api.pinboard.in/v1/"

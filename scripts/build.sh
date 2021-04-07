@@ -13,14 +13,13 @@ function build_scheme {
     xcodebuild \
         -workspace Bookmarks.xcworkspace \
         -scheme "$1" \
-        clean \
-        build \
         CODE_SIGN_IDENTITY="" \
         CODE_SIGNING_REQUIRED=NO \
-        CODE_SIGNING_ALLOWED=NO
+        CODE_SIGNING_ALLOWED=NO "${@:2}"
 }
 
 cd "$ROOT_DIRECTORY"
-build_scheme "BookmarksCore"
-build_scheme "Bookmarks iOS"
-build_scheme "Bookmarks macOS"
+build_scheme "BookmarksCore" clean build
+build_scheme "BookmarksCore macOS" clean build
+build_scheme "Bookmarks iOS" clean build
+build_scheme "Bookmarks macOS" clean build

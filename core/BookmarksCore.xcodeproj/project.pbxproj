@@ -15,6 +15,14 @@
 		D8569FD3261E2603006926BF /* BookmarksCore.h in Headers */ = {isa = PBXBuildFile; fileRef = D8569FC5261E2603006926BF /* BookmarksCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8AA4055261E2E8D00D11421 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AA4054261E2E8D00D11421 /* String.swift */; };
 		D8AA4061261E305200D11421 /* NSCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AA4060261E305200D11421 /* NSCoder.swift */; };
+		D8CF8C81261E356A00E52E85 /* BookmarksCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8CF8C78261E356A00E52E85 /* BookmarksCore.framework */; };
+		D8CF8C86261E356A00E52E85 /* BookmarksCore_macOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CF8C85261E356A00E52E85 /* BookmarksCore_macOSTests.swift */; };
+		D8CF8C93261E35A900E52E85 /* BookmarksCore.h in Headers */ = {isa = PBXBuildFile; fileRef = D8569FC5261E2603006926BF /* BookmarksCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D8CF8C9C261E35B100E52E85 /* Boolean.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CE46C261E29A900AF1901 /* Boolean.swift */; };
+		D8CF8CA1261E35B300E52E85 /* Pinboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CE487261E2B7D00AF1901 /* Pinboard.swift */; };
+		D8CF8CA6261E35B600E52E85 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CE483261E2AD000AF1901 /* Post.swift */; };
+		D8CF8CAB261E35B900E52E85 /* NSCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AA4060261E305200D11421 /* NSCoder.swift */; };
+		D8CF8CB0261E35BB00E52E85 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AA4054261E2E8D00D11421 /* String.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -24,6 +32,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = D8569FC1261E2603006926BF;
 			remoteInfo = BookmarksCore;
+		};
+		D8CF8C82261E356A00E52E85 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D8569FB9261E2603006926BF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D8CF8C77261E356A00E52E85;
+			remoteInfo = "BookmarksCore macOS";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -39,6 +54,11 @@
 		D8569FD2261E2603006926BF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D8AA4054261E2E8D00D11421 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		D8AA4060261E305200D11421 /* NSCoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCoder.swift; sourceTree = "<group>"; };
+		D8CF8C78261E356A00E52E85 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8CF8C7B261E356A00E52E85 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D8CF8C80261E356A00E52E85 /* BookmarksCore macOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BookmarksCore macOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8CF8C85261E356A00E52E85 /* BookmarksCore_macOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksCore_macOSTests.swift; sourceTree = "<group>"; };
+		D8CF8C87261E356A00E52E85 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +74,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8569FCC261E2603006926BF /* BookmarksCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D8CF8C75261E356A00E52E85 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D8CF8C7D261E356A00E52E85 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D8CF8C81261E356A00E52E85 /* BookmarksCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +110,8 @@
 			children = (
 				D8569FC4261E2603006926BF /* BookmarksCore */,
 				D8569FCF261E2603006926BF /* BookmarksCoreTests */,
+				D8CF8C79261E356A00E52E85 /* BookmarksCore macOS */,
+				D8CF8C84261E356A00E52E85 /* BookmarksCore macOSTests */,
 				D8569FC3261E2603006926BF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -84,6 +121,8 @@
 			children = (
 				D8569FC2261E2603006926BF /* BookmarksCore.framework */,
 				D8569FCB261E2603006926BF /* BookmarksCoreTests.xctest */,
+				D8CF8C78261E356A00E52E85 /* BookmarksCore.framework */,
+				D8CF8C80261E356A00E52E85 /* BookmarksCore macOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -117,6 +156,23 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		D8CF8C79261E356A00E52E85 /* BookmarksCore macOS */ = {
+			isa = PBXGroup;
+			children = (
+				D8CF8C7B261E356A00E52E85 /* Info.plist */,
+			);
+			path = "BookmarksCore macOS";
+			sourceTree = "<group>";
+		};
+		D8CF8C84261E356A00E52E85 /* BookmarksCore macOSTests */ = {
+			isa = PBXGroup;
+			children = (
+				D8CF8C85261E356A00E52E85 /* BookmarksCore_macOSTests.swift */,
+				D8CF8C87261E356A00E52E85 /* Info.plist */,
+			);
+			path = "BookmarksCore macOSTests";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -125,6 +181,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8569FD3261E2603006926BF /* BookmarksCore.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D8CF8C73261E356A00E52E85 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D8CF8C93261E35A900E52E85 /* BookmarksCore.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,6 +231,42 @@
 			productReference = D8569FCB261E2603006926BF /* BookmarksCoreTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		D8CF8C77261E356A00E52E85 /* BookmarksCore macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D8CF8C8D261E356A00E52E85 /* Build configuration list for PBXNativeTarget "BookmarksCore macOS" */;
+			buildPhases = (
+				D8CF8C73261E356A00E52E85 /* Headers */,
+				D8CF8C74261E356A00E52E85 /* Sources */,
+				D8CF8C75261E356A00E52E85 /* Frameworks */,
+				D8CF8C76261E356A00E52E85 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "BookmarksCore macOS";
+			productName = "BookmarksCore macOS";
+			productReference = D8CF8C78261E356A00E52E85 /* BookmarksCore.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		D8CF8C7F261E356A00E52E85 /* BookmarksCore macOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D8CF8C8E261E356A00E52E85 /* Build configuration list for PBXNativeTarget "BookmarksCore macOSTests" */;
+			buildPhases = (
+				D8CF8C7C261E356A00E52E85 /* Sources */,
+				D8CF8C7D261E356A00E52E85 /* Frameworks */,
+				D8CF8C7E261E356A00E52E85 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D8CF8C83261E356A00E52E85 /* PBXTargetDependency */,
+			);
+			name = "BookmarksCore macOSTests";
+			productName = "BookmarksCore macOSTests";
+			productReference = D8CF8C80261E356A00E52E85 /* BookmarksCore macOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -180,6 +280,12 @@
 						CreatedOnToolsVersion = 12.4;
 					};
 					D8569FCA261E2603006926BF = {
+						CreatedOnToolsVersion = 12.4;
+					};
+					D8CF8C77261E356A00E52E85 = {
+						CreatedOnToolsVersion = 12.4;
+					};
+					D8CF8C7F261E356A00E52E85 = {
 						CreatedOnToolsVersion = 12.4;
 					};
 				};
@@ -199,6 +305,8 @@
 			targets = (
 				D8569FC1261E2603006926BF /* BookmarksCore */,
 				D8569FCA261E2603006926BF /* BookmarksCoreTests */,
+				D8CF8C77261E356A00E52E85 /* BookmarksCore macOS */,
+				D8CF8C7F261E356A00E52E85 /* BookmarksCore macOSTests */,
 			);
 		};
 /* End PBXProject section */
@@ -212,6 +320,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		D8569FC9261E2603006926BF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D8CF8C76261E356A00E52E85 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D8CF8C7E261E356A00E52E85 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -241,6 +363,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D8CF8C74261E356A00E52E85 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D8CF8CA6261E35B600E52E85 /* Post.swift in Sources */,
+				D8CF8CA1261E35B300E52E85 /* Pinboard.swift in Sources */,
+				D8CF8CB0261E35BB00E52E85 /* String.swift in Sources */,
+				D8CF8CAB261E35B900E52E85 /* NSCoder.swift in Sources */,
+				D8CF8C9C261E35B100E52E85 /* Boolean.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D8CF8C7C261E356A00E52E85 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D8CF8C86261E356A00E52E85 /* BookmarksCore_macOSTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -248,6 +390,11 @@
 			isa = PBXTargetDependency;
 			target = D8569FC1261E2603006926BF /* BookmarksCore */;
 			targetProxy = D8569FCD261E2603006926BF /* PBXContainerItemProxy */;
+		};
+		D8CF8C83261E356A00E52E85 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D8CF8C77261E356A00E52E85 /* BookmarksCore macOS */;
+			targetProxy = D8CF8C82261E356A00E52E85 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -464,6 +611,100 @@
 			};
 			name = Release;
 		};
+		D8CF8C89261E356A00E52E85 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "BookmarksCore macOS/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksCore;
+				PRODUCT_NAME = BookmarksCore;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		D8CF8C8A261E356A00E52E85 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "BookmarksCore macOS/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksCore;
+				PRODUCT_NAME = BookmarksCore;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		D8CF8C8B261E356A00E52E85 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				INFOPLIST_FILE = "BookmarksCore macOSTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				PRODUCT_BUNDLE_IDENTIFIER = "uk.co.inseven.BookmarksCore-macOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		D8CF8C8C261E356A00E52E85 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				INFOPLIST_FILE = "BookmarksCore macOSTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				PRODUCT_BUNDLE_IDENTIFIER = "uk.co.inseven.BookmarksCore-macOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -490,6 +731,24 @@
 			buildConfigurations = (
 				D8569FDA261E2603006926BF /* Debug */,
 				D8569FDB261E2603006926BF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D8CF8C8D261E356A00E52E85 /* Build configuration list for PBXNativeTarget "BookmarksCore macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D8CF8C89261E356A00E52E85 /* Debug */,
+				D8CF8C8A261E356A00E52E85 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D8CF8C8E261E356A00E52E85 /* Build configuration list for PBXNativeTarget "BookmarksCore macOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D8CF8C8B261E356A00E52E85 /* Debug */,
+				D8CF8C8C261E356A00E52E85 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

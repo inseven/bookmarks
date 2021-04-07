@@ -20,6 +20,20 @@
                ReferencedContainer = "container:macos/Bookmarks-macOS.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "D8CF8C77261E356A00E52E85"
+               BuildableName = "BookmarksCore.framework"
+               BlueprintName = "BookmarksCore macOS"
+               ReferencedContainer = "container:core/BookmarksCore.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

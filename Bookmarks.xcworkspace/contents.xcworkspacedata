@@ -7,4 +7,7 @@
    <FileRef
       location = "group:ios/Bookmarks-iOS.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:/Users/jbmorley/Projects/bookmarks/macos/Bookmarks-macOS.xcodeproj">
+   </FileRef>
 </Workspace>

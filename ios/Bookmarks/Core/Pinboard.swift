@@ -20,12 +20,10 @@
 
 import Foundation
 
+import BookmarksCore
+
 // Believe it or not, Pinboard represents booleans as the strings 'yes' and 'no', causing us to play some very silly
 // games.
-enum Boolean: String, Codable {
-    case yes = "yes"
-    case no = "no"
-}
 
 struct Post: Codable {
     let description: String?

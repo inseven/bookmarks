@@ -7,13 +7,13 @@ set -x
 SCRIPT_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 ROOT_DIRECTORY="${SCRIPT_DIRECTORY}/.."
 
-PROJECT_PATH="${ROOT_DIRECTORY}/ios/Bookmarks.xcodeproj"
+WORKSPACE_PATH="${ROOT_DIRECTORY}/Bookmarks.xcworkspace"
 
 # TODO: Re-enable test builds if possible using a locally generated signing key.
 
 function build_scheme {
     xcodebuild \
-        -project "$PROJECT_PATH" \
+        -workspace "$WORKSPACE_PATH" \
         -scheme "$1" \
         clean \
         build \

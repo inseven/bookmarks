@@ -19,16 +19,19 @@
 // SOFTWARE.
 
 import Foundation
-import UIKit
 
-class DownloadManager {
+#if os(iOS)
+import UIKit
+#endif
+
+public class DownloadManager {
 
     let syncQueue: DispatchQueue
     let limit: Int
     var pending: [AnyHashable]
     var active: Set<AnyHashable>
 
-    init(limit: Int) {
+    public init(limit: Int) {
         syncQueue = DispatchQueue(label: "syncQueue")
         self.limit = limit
         pending = []
@@ -78,7 +81,7 @@ class DownloadManager {
         next.start()
     }
 
-    func downloader(for url: URL, completion: @escaping (Result<UIImage, Error>) -> Void) -> Downloader {
+    func downloader(for url: URL, completion: @escaping (Result<Image, Error>) -> Void) -> Downloader {
         let userInteractiveCompletion = Utilities.completion(on: .global(qos: .userInteractive), completion: completion)
         var downloader: WebViewDownloader?
         downloader = WebViewDownloader(url: url) { (result) in
@@ -86,7 +89,7 @@ class DownloadManager {
             switch result {
             case .success(let imageUrl):
                 DispatchQueue.global(qos: .background).async {
-                    guard let image = UIImage.init(contentsOf: imageUrl) else {
+                    guard let image = Image.init(contentsOf: imageUrl) else {
                         userInteractiveCompletion(.failure(OpenGraphError.invalidArgument(message: "Unable to fetch image")))
                         return
                     }

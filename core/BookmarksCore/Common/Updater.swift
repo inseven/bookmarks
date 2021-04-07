@@ -19,43 +19,48 @@
 // SOFTWARE.
 
 import Foundation
-import UIKit
-import Combine
 
+public class Updater {
 
-class ThumbnailManager {
-
+    let syncQueue: DispatchQueue
     let targetQueue: DispatchQueue
-    let imageCache: ImageCache
-    let downloadManager: DownloadManager
+    let store: Store
+    let token: String
 
-    init(imageCache: ImageCache, downloadManager: DownloadManager) {
+    public init(store: Store, token: String) {
+        self.store = store
+        self.token = token
+        self.syncQueue = DispatchQueue(label: "syncQueue")
         self.targetQueue = DispatchQueue(label: "targetQueue", attributes: .concurrent)
-        self.imageCache = imageCache
-        self.downloadManager = downloadManager
     }
 
-    func cachedImage(for item: Item) -> Future<UIImage, Error> {
-        return Future { (promise) in
-            self.imageCache.get(identifier: item.identifier) { (result) in
-                promise(result)
+    public func start() {
+        Pinboard(token: self.token).fetch { [weak self] (result) in
+            switch (result) {
+            case .failure(let error):
+                print("Failed to fetch the posts with error \(error)")
+            case .success(let posts):
+                guard let self = self else {
+                    return
+                }
+                var items: [Item] = []
+                for post in posts {
+                    guard
+                        let url = post.href,
+                        let date = post.time else {
+                            continue
+                    }
+                    items.append(Item(identifier: post.hash,
+                                      title: post.description ?? "",
+                                      url: url,
+                                      tags: post.tags,
+                                      date: date))
+                }
+                self.store.save(items: items) { (success) in
+                    print("Saved items with success \(success)")
+                }
             }
         }
-    }
-
-    func thumbnail(for item: Item) -> AnyPublisher<UIImage, Error> {
-        return cachedImage(for: item)
-            .catch { _ in Utilities.meta(for: item.url).flatMap { $0.resize(height: 200 * UIScreen.main.scale) } }
-            .catch { _ in self.downloadManager.thumbnail(for: item.url).flatMap { $0.resize(height: 200 * UIScreen.main.scale) } }
-            .map({ (image) -> UIImage in
-                self.imageCache.set(identifier: item.identifier, image: image) { (result) in
-                    if case .failure(let error) = result {
-                        print("Failed to cache image with error \(error)")
-                    }
-                }
-                return image
-            })
-            .eraseToAnyPublisher()
     }
 
 }

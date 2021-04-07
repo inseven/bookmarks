@@ -19,16 +19,19 @@
 // SOFTWARE.
 
 import Foundation
+
+#if os(iOS)
 import UIKit
-
-protocol ImageCache {
-
-    func set(identifier: String, image: UIImage, completion: @escaping (Result<Bool, Error>) -> Void)
-    func get(identifier: String, completion: @escaping (Result<UIImage, Error>) -> Void)
-    func clear(completion: @escaping (Result<Bool, Error>) -> Void)
-
-}
+#endif
 
 enum ImageCacheError : Error {
     case notFound
+}
+
+public protocol ImageCache {
+
+    func set(identifier: String, image: Image, completion: @escaping (Result<Bool, Error>) -> Void)
+    func get(identifier: String, completion: @escaping (Result<Image, Error>) -> Void)
+    func clear(completion: @escaping (Result<Bool, Error>) -> Void)
+
 }

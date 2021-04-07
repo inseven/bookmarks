@@ -19,18 +19,21 @@
 // SOFTWARE.
 
 import Foundation
+
+#if os(iOS)
 import UIKit
+#endif
 
-class Item: NSObject, NSSecureCoding {
+public class Item: NSObject, NSSecureCoding {
 
-    let identifier: String
-    let title: String
-    let url: URL
-    let tags: [String]
-    let date: Date
-    let thumbnail: UIImage?
+    public let identifier: String
+    public let title: String
+    public let url: URL
+    public let tags: [String]
+    public let date: Date
+    public let thumbnail: Image?
 
-    init(identifier: String, title: String, url: URL, tags: [String], date: Date, thumbnail: UIImage? = nil) {
+    init(identifier: String, title: String, url: URL, tags: [String], date: Date, thumbnail: Image? = nil) {
         self.identifier = identifier
         self.title = title
         self.url = url
@@ -39,7 +42,7 @@ class Item: NSObject, NSSecureCoding {
         self.thumbnail = thumbnail
     }
 
-    static var supportsSecureCoding: Bool { true }
+    public static var supportsSecureCoding: Bool { true }
 
     static let identifierKey = "identifier"
     static let titleKey = "title"
@@ -47,7 +50,7 @@ class Item: NSObject, NSSecureCoding {
     static let tagsKey = "tags"
     static let dateKey = "date"
 
-    func encode(with coder: NSCoder) {
+    public func encode(with coder: NSCoder) {
         coder.encode(identifier, forKey: Item.identifierKey)
         coder.encode(title, forKey: Item.titleKey)
         coder.encode(url, forKey: Item.urlKey)
@@ -55,7 +58,7 @@ class Item: NSObject, NSSecureCoding {
         coder.encode(date, forKey: Item.dateKey)
     }
 
-    convenience required init?(coder: NSCoder) {
+    public convenience required init?(coder: NSCoder) {
         guard let identifier = coder.decodeString(forKey: Item.identifierKey),
               let title = coder.decodeString(forKey: Item.titleKey),
               let url = coder.decodeUrl(forKey: Item.urlKey),

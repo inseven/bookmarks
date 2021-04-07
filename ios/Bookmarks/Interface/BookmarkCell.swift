@@ -21,6 +21,8 @@
 import Combine
 import SwiftUI
 
+import BookmarksCore
+
 struct BookmarkCell: View {
 
     var item: Item
@@ -78,7 +80,7 @@ struct BookmarkCell: View {
         .background(Color(UIColor.secondarySystemBackground))
         .cornerRadius(10)
         .onAppear {
-            publisher = manager.thumbnailManager.thumbnail(for: item)
+            publisher = manager.thumbnailManager.thumbnail(for: item, scale: UIScreen.main.scale)
                 .receive(on: DispatchQueue.main)
                 .sink(receiveCompletion: { (completion) in
                     if case .failure(let error) = completion {

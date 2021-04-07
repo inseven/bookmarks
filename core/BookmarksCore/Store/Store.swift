@@ -20,9 +20,10 @@
 
 import Foundation
 import SwiftUI
-import UIKit
 
-import BookmarksCore
+#if os(iOS)
+import UIKit
+#endif
 
 enum StoreError: Error {
     case notFound
@@ -32,7 +33,7 @@ protocol StoreObserver {
     func storeDidUpdate(store: Store)
 }
 
-class Store: ObservableObject {
+public class Store: ObservableObject {
 
     static let itemsKey = "items"
 
@@ -43,7 +44,7 @@ class Store: ObservableObject {
     var observers: [StoreObserver] // Synchronized on syncQueue
     var tags: [String] = []
 
-    @Published var rawItems: [Item] = [] {
+    @Published public var rawItems: [Item] = [] {
         didSet {
             dispatchPrecondition(condition: .onQueue(.main))
             let encodedItems: Data = try! NSKeyedArchiver.archivedData(withRootObject: rawItems, requiringSecureCoding: true)
@@ -54,7 +55,7 @@ class Store: ObservableObject {
         }
     }
 
-    init(path: URL, targetQueue: DispatchQueue?) {
+    public init(path: URL, targetQueue: DispatchQueue?) {
         syncQueue = DispatchQueue(label: "syncQueue")
         if let targetQueue = targetQueue {
             self.targetQueue = targetQueue

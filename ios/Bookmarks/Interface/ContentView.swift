@@ -21,6 +21,8 @@
 import Combine
 import SwiftUI
 
+import BookmarksCore
+
 struct ContentView: View {
 
     @Environment(\.manager) var manager: BookmarksManager

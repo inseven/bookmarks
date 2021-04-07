@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/jbmorley/Projects/bookmarks/ios/Bookmarks-iOS.xcodeproj">
+      location = "group:ios/Bookmarks-iOS.xcodeproj">
    </FileRef>
 </Workspace>

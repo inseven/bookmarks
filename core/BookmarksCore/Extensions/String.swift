@@ -20,18 +20,13 @@
 
 import Foundation
 
-extension NSCoder {
+extension String {
 
-    func decodeString(forKey key: String) -> String? {
-        return decodeObject(of: NSString.self, forKey: key) as String?
-    }
-
-    func decodeUrl(forKey key: String) -> URL? {
-        return decodeObject(of: NSURL.self, forKey: key) as URL?
-    }
-
-    func decodeDate(forKey key: String) -> Date? {
-        return decodeObject(of: NSDate.self, forKey: key) as Date?
+    public func like(_ search: String) -> Bool {
+        guard !search.isEmpty else {
+            return true
+        }
+        return self.lowercased().contains(search.lowercased())
     }
 
 }

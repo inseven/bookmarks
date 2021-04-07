@@ -22,23 +22,14 @@ import Foundation
 import SwiftUI
 import UIKit
 
+import BookmarksCore
+
 enum StoreError: Error {
     case notFound
 }
 
 protocol StoreObserver {
     func storeDidUpdate(store: Store)
-}
-
-extension String {
-
-    func like(_ search: String) -> Bool {
-        guard !search.isEmpty else {
-            return true
-        }
-        return self.lowercased().contains(search.lowercased())
-    }
-
 }
 
 class Store: ObservableObject {

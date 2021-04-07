@@ -13,6 +13,8 @@
 		D8569FCC261E2603006926BF /* BookmarksCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8569FC2261E2603006926BF /* BookmarksCore.framework */; };
 		D8569FD1261E2603006926BF /* BookmarksCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8569FD0261E2603006926BF /* BookmarksCoreTests.swift */; };
 		D8569FD3261E2603006926BF /* BookmarksCore.h in Headers */ = {isa = PBXBuildFile; fileRef = D8569FC5261E2603006926BF /* BookmarksCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D8AA4055261E2E8D00D11421 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AA4054261E2E8D00D11421 /* String.swift */; };
+		D8AA4061261E305200D11421 /* NSCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AA4060261E305200D11421 /* NSCoder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +37,8 @@
 		D8569FCB261E2603006926BF /* BookmarksCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookmarksCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8569FD0261E2603006926BF /* BookmarksCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksCoreTests.swift; sourceTree = "<group>"; };
 		D8569FD2261E2603006926BF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D8AA4054261E2E8D00D11421 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		D8AA4060261E305200D11421 /* NSCoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCoder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +91,7 @@
 		D8569FC4261E2603006926BF /* BookmarksCore */ = {
 			isa = PBXGroup;
 			children = (
+				D8AA4053261E2E7A00D11421 /* Extensions */,
 				D84CE462261E296F00AF1901 /* Pinboard */,
 				D8569FC5261E2603006926BF /* BookmarksCore.h */,
 				D8569FC6261E2603006926BF /* Info.plist */,
@@ -101,6 +106,15 @@
 				D8569FD2261E2603006926BF /* Info.plist */,
 			);
 			path = BookmarksCoreTests;
+			sourceTree = "<group>";
+		};
+		D8AA4053261E2E7A00D11421 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				D8AA4060261E305200D11421 /* NSCoder.swift */,
+				D8AA4054261E2E8D00D11421 /* String.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -213,6 +227,8 @@
 			files = (
 				D84CE46D261E29A900AF1901 /* Boolean.swift in Sources */,
 				D84CE484261E2AD000AF1901 /* Post.swift in Sources */,
+				D8AA4055261E2E8D00D11421 /* String.swift in Sources */,
+				D8AA4061261E305200D11421 /* NSCoder.swift in Sources */,
 				D84CE488261E2B7D00AF1901 /* Pinboard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

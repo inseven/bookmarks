@@ -20,6 +20,18 @@
 
 import Foundation
 
-extension String: Identifiable {
-    public var id: String { self }
+extension NSCoder {
+
+    public func decodeString(forKey key: String) -> String? {
+        return decodeObject(of: NSString.self, forKey: key) as String?
+    }
+
+    public func decodeUrl(forKey key: String) -> URL? {
+        return decodeObject(of: NSURL.self, forKey: key) as URL?
+    }
+
+    public func decodeDate(forKey key: String) -> Date? {
+        return decodeObject(of: NSDate.self, forKey: key) as Date?
+    }
+
 }

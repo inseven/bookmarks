@@ -15,8 +15,22 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D8569FC1261E2603006926BF"
-               BuildableName = "BookmarksCore_iOS.framework"
+               BuildableName = "BookmarksCore.framework"
                BlueprintName = "BookmarksCore iOS"
+               ReferencedContainer = "container:core/BookmarksCore.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "D8569FCA261E2603006926BF"
+               BuildableName = "BookmarksCoreTests.xctest"
+               BlueprintName = "BookmarksCoreTests"
                ReferencedContainer = "container:core/BookmarksCore.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -61,7 +75,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D8569FC1261E2603006926BF"
-            BuildableName = "BookmarksCore_iOS.framework"
+            BuildableName = "BookmarksCore.framework"
             BlueprintName = "BookmarksCore iOS"
             ReferencedContainer = "container:core/BookmarksCore.xcodeproj">
          </BuildableReference>

@@ -21,4 +21,4 @@ function build_scheme {
 }
 
 cd "$ROOT_DIRECTORY"
-build_scheme Bookmarks
+build_scheme "Bookmarks iOS"

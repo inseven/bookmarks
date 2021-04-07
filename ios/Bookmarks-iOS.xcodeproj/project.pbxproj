@@ -349,7 +349,7 @@
 					};
 				};
 			};
-			buildConfigurationList = D8D3BBF121C6AEBC00D6FB97 /* Build configuration list for PBXProject "Bookmarks" */;
+			buildConfigurationList = D8D3BBF121C6AEBC00D6FB97 /* Build configuration list for PBXProject "Bookmarks-iOS" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -736,7 +736,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D8D3BBF121C6AEBC00D6FB97 /* Build configuration list for PBXProject "Bookmarks" */ = {
+		D8D3BBF121C6AEBC00D6FB97 /* Build configuration list for PBXProject "Bookmarks-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D8D3BC1C21C6AEBD00D6FB97 /* Debug */,

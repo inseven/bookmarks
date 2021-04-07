@@ -25,12 +25,11 @@ struct ContentView: View {
 
     @Environment(\.manager) var manager: BookmarksManager
     @ObservedObject var store: Store
-    @State var selected = true
-    @State var filter = ""
 
     var body: some View {
         NavigationView {
-            BookmarksView(store: store, title: "All Bookmarks")
+            BookmarksView(store: store)
+                .navigationBarTitle("Bookmarks", displayMode: .large)
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }

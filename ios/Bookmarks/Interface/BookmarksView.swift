@@ -28,7 +28,6 @@ struct BookmarksView: View {
 
     @Environment(\.manager) var manager: BookmarksManager
     @ObservedObject var store: Store
-    var title: String
     var tag: String?
 
     @State var sheet: SheetType?
@@ -77,7 +76,6 @@ struct BookmarksView: View {
                 }
             }
         }
-        .navigationBarTitle(title, displayMode: .inline)
         .navigationBarItems(leading: Button(action: {
             sheet = .settings
         }) {

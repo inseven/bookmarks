@@ -31,7 +31,6 @@
 		D8A3A51F247C918000C3B8B4 /* ThumbnailManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A3A51E247C918000C3B8B4 /* ThumbnailManager.swift */; };
 		D8AAFE51248018BC00B62492 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AAFE50248018BC00B62492 /* ImageCache.swift */; };
 		D8AAFE5324804FDF00B62492 /* WebViewDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AAFE5224804FDF00B62492 /* WebViewDownloader.swift */; };
-		D8BDE1132551AB8100C95945 /* SwiftlySearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BDE1122551AB8100C95945 /* SwiftlySearch.swift */; };
 		D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BDE1172551C56100C95945 /* BookmarksApp.swift */; };
 		D8BDE1472554782000C95945 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = D8BDE1462554782000C95945 /* Introspect */; };
 		D8D3BC0121C6AEBD00D6FB97 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */; };
@@ -91,7 +90,6 @@
 		D8A3A51E247C918000C3B8B4 /* ThumbnailManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailManager.swift; sourceTree = "<group>"; };
 		D8AAFE50248018BC00B62492 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		D8AAFE5224804FDF00B62492 /* WebViewDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewDownloader.swift; sourceTree = "<group>"; };
-		D8BDE1122551AB8100C95945 /* SwiftlySearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftlySearch.swift; sourceTree = "<group>"; };
 		D8BDE1172551C56100C95945 /* BookmarksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksApp.swift; sourceTree = "<group>"; };
 		D8D3BBF621C6AEBC00D6FB97 /* Bookmarks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bookmarks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -208,15 +206,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		D8BDE1112551AB8100C95945 /* SwiftlySearch */ = {
-			isa = PBXGroup;
-			children = (
-				D8BDE1122551AB8100C95945 /* SwiftlySearch.swift */,
-			);
-			name = SwiftlySearch;
-			path = dependencies/SwiftlySearch/Sources/SwiftlySearch;
-			sourceTree = SOURCE_ROOT;
-		};
 		D8D3BBED21C6AEBC00D6FB97 = {
 			isa = PBXGroup;
 			children = (
@@ -243,7 +232,6 @@
 			children = (
 				D84784F62614E27A00B2318B /* Extensions */,
 				D84784E32614E24E00B2318B /* Core */,
-				D8BDE1112551AB8100C95945 /* SwiftlySearch */,
 				D8578479254FF56E00AE241C /* Interface */,
 				D832EECA2481B6D1004C64E3 /* Bookmarks.entitlements */,
 				D864E47221C9417F00EAB9AD /* Bookmarks-Bridging-Header.h */,
@@ -431,7 +419,6 @@
 				D84785302615360E00B2318B /* URLComponents.swift in Sources */,
 				D81D019D247B0AA200C8324B /* Store.swift in Sources */,
 				D8A3A51F247C918000C3B8B4 /* ThumbnailManager.swift in Sources */,
-				D8BDE1132551AB8100C95945 /* SwiftlySearch.swift in Sources */,
 				D847858A2615476B00B2318B /* String.swift in Sources */,
 				D84785822615474900B2318B /* SearchBoxModifier.swift in Sources */,
 				D8D3BC2A21C72F7600D6FB97 /* Pinboard.swift in Sources */,

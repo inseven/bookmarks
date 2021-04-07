@@ -36,8 +36,8 @@
 		D8BDE1472554782000C95945 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = D8BDE1462554782000C95945 /* Introspect */; };
 		D8D3BC0121C6AEBD00D6FB97 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */; };
 		D8D3BC0421C6AEBD00D6FB97 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8D3BC0221C6AEBD00D6FB97 /* LaunchScreen.storyboard */; };
-		D8D3BC0F21C6AEBD00D6FB97 /* StuffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BC0E21C6AEBD00D6FB97 /* StuffTests.swift */; };
-		D8D3BC1A21C6AEBD00D6FB97 /* StuffUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BC1921C6AEBD00D6FB97 /* StuffUITests.swift */; };
+		D8D3BC0F21C6AEBD00D6FB97 /* BookmarksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BC0E21C6AEBD00D6FB97 /* BookmarksTests.swift */; };
+		D8D3BC1A21C6AEBD00D6FB97 /* BookmarksUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BC1921C6AEBD00D6FB97 /* BookmarksUITests.swift */; };
 		D8D3BC2A21C72F7600D6FB97 /* Pinboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BC2921C72F7600D6FB97 /* Pinboard.swift */; };
 		D8D3E4F3254D8EBB00A72446 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3E4F2254D8EBB00A72446 /* Item.swift */; };
 		D8D3E4F8254D957700A72446 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3E4F7254D957700A72446 /* View.swift */; };
@@ -71,17 +71,7 @@
 		D832EEC024816735004C64E3 /* FileImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileImageCache.swift; sourceTree = "<group>"; };
 		D832EEC624816901004C64E3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D832EEC824818EF6004C64E3 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
-		D832EECA2481B6D1004C64E3 /* Stuff.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Stuff.entitlements; sourceTree = "<group>"; };
-		D847849E2614E19B00B2318B /* BookmarksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksApp.swift; sourceTree = "<group>"; };
-		D84784A02614E19B00B2318B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		D84784A22614E19E00B2318B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		D84784A52614E19E00B2318B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		D84784A72614E19E00B2318B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D84784A82614E19E00B2318B /* Bookmarks.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Bookmarks.entitlements; sourceTree = "<group>"; };
-		D84784B12614E19E00B2318B /* BookmarksTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTests.swift; sourceTree = "<group>"; };
-		D84784B32614E19E00B2318B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D84784BC2614E19E00B2318B /* BookmarksUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksUITests.swift; sourceTree = "<group>"; };
-		D84784BE2614E19E00B2318B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D832EECA2481B6D1004C64E3 /* Bookmarks.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Bookmarks.entitlements; sourceTree = "<group>"; };
 		D847852F2615360E00B2318B /* URLComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLComponents.swift; sourceTree = "<group>"; };
 		D84785372615363200B2318B /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		D8478553261539AA00B2318B /* BookmarksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksView.swift; sourceTree = "<group>"; };
@@ -96,7 +86,7 @@
 		D864E46A21C93FB400EAB9AD /* TFHppleElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFHppleElement.m; sourceTree = "<group>"; };
 		D864E46B21C93FB400EAB9AD /* XPathQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPathQuery.m; sourceTree = "<group>"; };
 		D864E47021C93FD200EAB9AD /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
-		D864E47221C9417F00EAB9AD /* Stuff-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Stuff-Bridging-Header.h"; sourceTree = "<group>"; };
+		D864E47221C9417F00EAB9AD /* Bookmarks-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bookmarks-Bridging-Header.h"; sourceTree = "<group>"; };
 		D8A131F3248C4FDA006E71BE /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		D8A3A51E247C918000C3B8B4 /* ThumbnailManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailManager.swift; sourceTree = "<group>"; };
 		D8AAFE50248018BC00B62492 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
@@ -107,11 +97,11 @@
 		D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D8D3BC0321C6AEBD00D6FB97 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D8D3BC0521C6AEBD00D6FB97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D8D3BC0A21C6AEBD00D6FB97 /* StuffTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StuffTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		D8D3BC0E21C6AEBD00D6FB97 /* StuffTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StuffTests.swift; sourceTree = "<group>"; };
+		D8D3BC0A21C6AEBD00D6FB97 /* BookmarksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookmarksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8D3BC0E21C6AEBD00D6FB97 /* BookmarksTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTests.swift; sourceTree = "<group>"; };
 		D8D3BC1021C6AEBD00D6FB97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D8D3BC1521C6AEBD00D6FB97 /* StuffUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StuffUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		D8D3BC1921C6AEBD00D6FB97 /* StuffUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StuffUITests.swift; sourceTree = "<group>"; };
+		D8D3BC1521C6AEBD00D6FB97 /* BookmarksUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookmarksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8D3BC1921C6AEBD00D6FB97 /* BookmarksUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksUITests.swift; sourceTree = "<group>"; };
 		D8D3BC1B21C6AEBD00D6FB97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D8D3BC2921C72F7600D6FB97 /* Pinboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pinboard.swift; sourceTree = "<group>"; };
 		D8D3E4F2254D8EBB00A72446 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
@@ -154,45 +144,6 @@
 				D832EEC024816735004C64E3 /* FileImageCache.swift */,
 			);
 			path = Cache;
-			sourceTree = "<group>";
-		};
-		D847849D2614E19B00B2318B /* Bookmarks */ = {
-			isa = PBXGroup;
-			children = (
-				D847849E2614E19B00B2318B /* BookmarksApp.swift */,
-				D84784A02614E19B00B2318B /* ContentView.swift */,
-				D84784A22614E19E00B2318B /* Assets.xcassets */,
-				D84784A72614E19E00B2318B /* Info.plist */,
-				D84784A82614E19E00B2318B /* Bookmarks.entitlements */,
-				D84784A42614E19E00B2318B /* Preview Content */,
-			);
-			path = Bookmarks;
-			sourceTree = "<group>";
-		};
-		D84784A42614E19E00B2318B /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				D84784A52614E19E00B2318B /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		D84784B02614E19E00B2318B /* BookmarksTests */ = {
-			isa = PBXGroup;
-			children = (
-				D84784B12614E19E00B2318B /* BookmarksTests.swift */,
-				D84784B32614E19E00B2318B /* Info.plist */,
-			);
-			path = BookmarksTests;
-			sourceTree = "<group>";
-		};
-		D84784BB2614E19E00B2318B /* BookmarksUITests */ = {
-			isa = PBXGroup;
-			children = (
-				D84784BC2614E19E00B2318B /* BookmarksUITests.swift */,
-				D84784BE2614E19E00B2318B /* Info.plist */,
-			);
-			path = BookmarksUITests;
 			sourceTree = "<group>";
 		};
 		D84784E32614E24E00B2318B /* Core */ = {
@@ -269,12 +220,9 @@
 		D8D3BBED21C6AEBC00D6FB97 = {
 			isa = PBXGroup;
 			children = (
-				D8D3BBF821C6AEBC00D6FB97 /* Stuff */,
-				D8D3BC0D21C6AEBD00D6FB97 /* StuffTests */,
-				D8D3BC1821C6AEBD00D6FB97 /* StuffUITests */,
-				D847849D2614E19B00B2318B /* Bookmarks */,
-				D84784B02614E19E00B2318B /* BookmarksTests */,
-				D84784BB2614E19E00B2318B /* BookmarksUITests */,
+				D8D3BBF821C6AEBC00D6FB97 /* Bookmarks */,
+				D8D3BC0D21C6AEBD00D6FB97 /* BookmarksTests */,
+				D8D3BC1821C6AEBD00D6FB97 /* BookmarksUITests */,
 				D8D3BBF721C6AEBC00D6FB97 /* Products */,
 				D864E46F21C93FD200EAB9AD /* Frameworks */,
 			);
@@ -284,21 +232,21 @@
 			isa = PBXGroup;
 			children = (
 				D8D3BBF621C6AEBC00D6FB97 /* Bookmarks.app */,
-				D8D3BC0A21C6AEBD00D6FB97 /* StuffTests.xctest */,
-				D8D3BC1521C6AEBD00D6FB97 /* StuffUITests.xctest */,
+				D8D3BC0A21C6AEBD00D6FB97 /* BookmarksTests.xctest */,
+				D8D3BC1521C6AEBD00D6FB97 /* BookmarksUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		D8D3BBF821C6AEBC00D6FB97 /* Stuff */ = {
+		D8D3BBF821C6AEBC00D6FB97 /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
 				D84784F62614E27A00B2318B /* Extensions */,
 				D84784E32614E24E00B2318B /* Core */,
 				D8BDE1112551AB8100C95945 /* SwiftlySearch */,
 				D8578479254FF56E00AE241C /* Interface */,
-				D832EECA2481B6D1004C64E3 /* Stuff.entitlements */,
-				D864E47221C9417F00EAB9AD /* Stuff-Bridging-Header.h */,
+				D832EECA2481B6D1004C64E3 /* Bookmarks.entitlements */,
+				D864E47221C9417F00EAB9AD /* Bookmarks-Bridging-Header.h */,
 				D8D3BC0521C6AEBD00D6FB97 /* Info.plist */,
 				D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */,
 				D832EEC224816764004C64E3 /* Cache */,
@@ -308,33 +256,33 @@
 				D8D3E4F2254D8EBB00A72446 /* Item.swift */,
 				D8BDE1172551C56100C95945 /* BookmarksApp.swift */,
 			);
-			path = Stuff;
+			path = Bookmarks;
 			sourceTree = "<group>";
 		};
-		D8D3BC0D21C6AEBD00D6FB97 /* StuffTests */ = {
+		D8D3BC0D21C6AEBD00D6FB97 /* BookmarksTests */ = {
 			isa = PBXGroup;
 			children = (
-				D8D3BC0E21C6AEBD00D6FB97 /* StuffTests.swift */,
+				D8D3BC0E21C6AEBD00D6FB97 /* BookmarksTests.swift */,
 				D8D3BC1021C6AEBD00D6FB97 /* Info.plist */,
 			);
-			path = StuffTests;
+			path = BookmarksTests;
 			sourceTree = "<group>";
 		};
-		D8D3BC1821C6AEBD00D6FB97 /* StuffUITests */ = {
+		D8D3BC1821C6AEBD00D6FB97 /* BookmarksUITests */ = {
 			isa = PBXGroup;
 			children = (
-				D8D3BC1921C6AEBD00D6FB97 /* StuffUITests.swift */,
+				D8D3BC1921C6AEBD00D6FB97 /* BookmarksUITests.swift */,
 				D8D3BC1B21C6AEBD00D6FB97 /* Info.plist */,
 			);
-			path = StuffUITests;
+			path = BookmarksUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D8D3BBF521C6AEBC00D6FB97 /* Stuff */ = {
+		D8D3BBF521C6AEBC00D6FB97 /* Bookmarks */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D8D3BC1E21C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "Stuff" */;
+			buildConfigurationList = D8D3BC1E21C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "Bookmarks" */;
 			buildPhases = (
 				D8D3BBF221C6AEBC00D6FB97 /* Sources */,
 				D8D3BBF321C6AEBC00D6FB97 /* Frameworks */,
@@ -344,7 +292,7 @@
 			);
 			dependencies = (
 			);
-			name = Stuff;
+			name = Bookmarks;
 			packageProductDependencies = (
 				D8BDE1462554782000C95945 /* Introspect */,
 			);
@@ -352,9 +300,9 @@
 			productReference = D8D3BBF621C6AEBC00D6FB97 /* Bookmarks.app */;
 			productType = "com.apple.product-type.application";
 		};
-		D8D3BC0921C6AEBD00D6FB97 /* StuffTests */ = {
+		D8D3BC0921C6AEBD00D6FB97 /* BookmarksTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D8D3BC2121C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "StuffTests" */;
+			buildConfigurationList = D8D3BC2121C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "BookmarksTests" */;
 			buildPhases = (
 				D8D3BC0621C6AEBD00D6FB97 /* Sources */,
 				D8D3BC0721C6AEBD00D6FB97 /* Frameworks */,
@@ -365,14 +313,14 @@
 			dependencies = (
 				D8D3BC0C21C6AEBD00D6FB97 /* PBXTargetDependency */,
 			);
-			name = StuffTests;
+			name = BookmarksTests;
 			productName = StuffTests;
-			productReference = D8D3BC0A21C6AEBD00D6FB97 /* StuffTests.xctest */;
+			productReference = D8D3BC0A21C6AEBD00D6FB97 /* BookmarksTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		D8D3BC1421C6AEBD00D6FB97 /* StuffUITests */ = {
+		D8D3BC1421C6AEBD00D6FB97 /* BookmarksUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D8D3BC2421C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "StuffUITests" */;
+			buildConfigurationList = D8D3BC2421C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "BookmarksUITests" */;
 			buildPhases = (
 				D8D3BC1121C6AEBD00D6FB97 /* Sources */,
 				D8D3BC1221C6AEBD00D6FB97 /* Frameworks */,
@@ -383,9 +331,9 @@
 			dependencies = (
 				D8D3BC1721C6AEBD00D6FB97 /* PBXTargetDependency */,
 			);
-			name = StuffUITests;
+			name = BookmarksUITests;
 			productName = StuffUITests;
-			productReference = D8D3BC1521C6AEBD00D6FB97 /* StuffUITests.xctest */;
+			productReference = D8D3BC1521C6AEBD00D6FB97 /* BookmarksUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -427,9 +375,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D8D3BBF521C6AEBC00D6FB97 /* Stuff */,
-				D8D3BC0921C6AEBD00D6FB97 /* StuffTests */,
-				D8D3BC1421C6AEBD00D6FB97 /* StuffUITests */,
+				D8D3BBF521C6AEBC00D6FB97 /* Bookmarks */,
+				D8D3BC0921C6AEBD00D6FB97 /* BookmarksTests */,
+				D8D3BC1421C6AEBD00D6FB97 /* BookmarksUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -501,7 +449,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8D3BC0F21C6AEBD00D6FB97 /* StuffTests.swift in Sources */,
+				D8D3BC0F21C6AEBD00D6FB97 /* BookmarksTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -509,7 +457,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8D3BC1A21C6AEBD00D6FB97 /* StuffUITests.swift in Sources */,
+				D8D3BC1A21C6AEBD00D6FB97 /* BookmarksUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -518,12 +466,12 @@
 /* Begin PBXTargetDependency section */
 		D8D3BC0C21C6AEBD00D6FB97 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D8D3BBF521C6AEBC00D6FB97 /* Stuff */;
+			target = D8D3BBF521C6AEBC00D6FB97 /* Bookmarks */;
 			targetProxy = D8D3BC0B21C6AEBD00D6FB97 /* PBXContainerItemProxy */;
 		};
 		D8D3BC1721C6AEBD00D6FB97 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D8D3BBF521C6AEBC00D6FB97 /* Stuff */;
+			target = D8D3BBF521C6AEBC00D6FB97 /* Bookmarks */;
 			targetProxy = D8D3BC1621C6AEBD00D6FB97 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -662,11 +610,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Stuff/Stuff.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Bookmarks/Bookmarks.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
-				INFOPLIST_FILE = Stuff/Info.plist;
+				INFOPLIST_FILE = Bookmarks/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -677,7 +625,7 @@
 				PRODUCT_NAME = Bookmarks;
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Stuff/Stuff-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Bookmarks/Bookmarks-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
@@ -687,11 +635,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Stuff/Stuff.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Bookmarks/Bookmarks.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
-				INFOPLIST_FILE = Stuff/Info.plist;
+				INFOPLIST_FILE = Bookmarks/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -702,7 +650,7 @@
 				PRODUCT_NAME = Bookmarks;
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Stuff/Stuff-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Bookmarks/Bookmarks-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
@@ -715,13 +663,13 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
-				INFOPLIST_FILE = StuffTests/Info.plist;
+				INFOPLIST_FILE = BookmarksTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.StuffTests;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -736,13 +684,13 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
-				INFOPLIST_FILE = StuffTests/Info.plist;
+				INFOPLIST_FILE = BookmarksTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.StuffTests;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -756,17 +704,17 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
-				INFOPLIST_FILE = StuffUITests/Info.plist;
+				INFOPLIST_FILE = BookmarksUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.StuffUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Stuff;
+				TEST_TARGET_NAME = Bookmarks;
 			};
 			name = Debug;
 		};
@@ -776,17 +724,17 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
-				INFOPLIST_FILE = StuffUITests/Info.plist;
+				INFOPLIST_FILE = BookmarksUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.StuffUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Stuff;
+				TEST_TARGET_NAME = Bookmarks;
 			};
 			name = Release;
 		};
@@ -802,7 +750,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D8D3BC1E21C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "Stuff" */ = {
+		D8D3BC1E21C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "Bookmarks" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D8D3BC1F21C6AEBD00D6FB97 /* Debug */,
@@ -811,7 +759,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D8D3BC2121C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "StuffTests" */ = {
+		D8D3BC2121C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "BookmarksTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D8D3BC2221C6AEBD00D6FB97 /* Debug */,
@@ -820,7 +768,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D8D3BC2421C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "StuffUITests" */ = {
+		D8D3BC2421C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "BookmarksUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D8D3BC2521C6AEBD00D6FB97 /* Debug */,

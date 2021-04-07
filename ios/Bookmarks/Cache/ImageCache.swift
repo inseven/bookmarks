@@ -18,17 +18,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import SwiftUI
+import Foundation
+import UIKit
 
-struct ContentView: View {
-    var body: some View {
-        Text("Hello, world!")
-            .padding()
-    }
+protocol ImageCache {
+
+    func set(identifier: String, image: UIImage, completion: @escaping (Result<Bool, Error>) -> Void)
+    func get(identifier: String, completion: @escaping (Result<UIImage, Error>) -> Void)
+    func clear(completion: @escaping (Result<Bool, Error>) -> Void)
+
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
+enum ImageCacheError : Error {
+    case notFound
 }

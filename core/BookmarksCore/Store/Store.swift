@@ -66,7 +66,7 @@ public class Store: ObservableObject {
         items = [:]
         observers = []
         if let encodedItems = UserDefaults.standard.object(forKey: Store.itemsKey) as? Data,
-           let rawItems = try? NSKeyedUnarchiver.unarchivedArrayOfObjects(ofClass: Item.self, from: encodedItems) {
+           let rawItems = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: [NSArray.self, Item.self], from: encodedItems) as? [Item] {
             self.rawItems = rawItems
         }
     }

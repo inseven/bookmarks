@@ -15,7 +15,7 @@ function build_scheme {
         -scheme "$1" \
         CODE_SIGN_IDENTITY="" \
         CODE_SIGNING_REQUIRED=NO \
-        CODE_SIGNING_ALLOWED=NO "${@:2}"
+        CODE_SIGNING_ALLOWED=NO "${@:2}" | xcpretty
 }
 
 cd "$ROOT_DIRECTORY"
@@ -24,7 +24,7 @@ xcrun instruments -s devices
 
 build_scheme "BookmarksCore iOS" clean build build-for-testing test \
   -sdk iphonesimulator \
-  -destination 'platform=iOS Simulator'
+  -destination 'platform=iOS Simulator,name=iPhone 12 Pro,OS=14.4'
 build_scheme "BookmarksCore macOS" clean build build-for-testing test
 build_scheme "Bookmarks iOS" clean build
 build_scheme "Bookmarks macOS" clean build

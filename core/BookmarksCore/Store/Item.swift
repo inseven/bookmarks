@@ -19,7 +19,10 @@
 // SOFTWARE.
 
 import Foundation
+
+#if os(iOS)
 import UIKit
+#endif
 
 public class Item: NSObject, NSSecureCoding {
 
@@ -28,9 +31,9 @@ public class Item: NSObject, NSSecureCoding {
     public let url: URL
     public let tags: [String]
     public let date: Date
-    public let thumbnail: UIImage?
+    public let thumbnail: Image?
 
-    init(identifier: String, title: String, url: URL, tags: [String], date: Date, thumbnail: UIImage? = nil) {
+    init(identifier: String, title: String, url: URL, tags: [String], date: Date, thumbnail: Image? = nil) {
         self.identifier = identifier
         self.title = title
         self.url = url

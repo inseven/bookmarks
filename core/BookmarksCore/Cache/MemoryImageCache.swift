@@ -19,20 +19,23 @@
 // SOFTWARE.
 
 import Foundation
+
+#if os(iOS)
 import UIKit
+#endif
 
 class MemoryImageCache: ImageCache {
 
     let syncQueue: DispatchQueue
     let targetQueue: DispatchQueue
-    var cache = NSCache<NSString, UIImage>()
+    var cache = NSCache<NSString, Image>()
 
     init(targetQueue: DispatchQueue? = nil) {
         self.syncQueue = DispatchQueue(label: "syncQueue")
         self.targetQueue = targetQueue ?? DispatchQueue(label: "targetQueue")
     }
 
-    func set(identifier: String, image: UIImage, completion: @escaping (Result<Bool, Error>) -> Void) {
+    func set(identifier: String, image: Image, completion: @escaping (Result<Bool, Error>) -> Void) {
         let targetQueueCompletion = Utilities.completion(on: self.targetQueue, completion: completion)
         syncQueue.async {
             self.cache.setObject(image, forKey: identifier as NSString)
@@ -40,7 +43,7 @@ class MemoryImageCache: ImageCache {
         }
     }
 
-    func get(identifier: String, completion: @escaping (Result<UIImage, Error>) -> Void) {
+    func get(identifier: String, completion: @escaping (Result<Image, Error>) -> Void) {
         let targetQueueCompletion = Utilities.completion(on: self.targetQueue, completion: completion)
         syncQueue.async {
             guard let image = self.cache.object(forKey: identifier as NSString) else {

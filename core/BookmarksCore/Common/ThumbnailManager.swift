@@ -19,8 +19,11 @@
 // SOFTWARE.
 
 import Foundation
-import UIKit
 import Combine
+
+#if os(iOS)
+import UIKit
+#endif
 
 public class ThumbnailManager {
 
@@ -34,7 +37,7 @@ public class ThumbnailManager {
         self.downloadManager = downloadManager
     }
 
-    func cachedImage(for item: Item) -> Future<UIImage, Error> {
+    func cachedImage(for item: Item) -> Future<Image, Error> {
         return Future { (promise) in
             self.imageCache.get(identifier: item.identifier) { (result) in
                 promise(result)
@@ -42,11 +45,11 @@ public class ThumbnailManager {
         }
     }
 
-    public func thumbnail(for item: Item) -> AnyPublisher<UIImage, Error> {
+    public func thumbnail(for item: Item, scale: CGFloat) -> AnyPublisher<Image, Error> {
         return cachedImage(for: item)
-            .catch { _ in Utilities.meta(for: item.url).flatMap { $0.resize(height: 200 * UIScreen.main.scale) } }
-            .catch { _ in self.downloadManager.thumbnail(for: item.url).flatMap { $0.resize(height: 200 * UIScreen.main.scale) } }
-            .map({ (image) -> UIImage in
+            .catch { _ in Utilities.meta(for: item.url).flatMap { $0.resize(height: 200 * scale) } }
+            .catch { _ in self.downloadManager.thumbnail(for: item.url).flatMap { $0.resize(height: 200 * scale) } }
+            .map({ (image) -> Image in
                 self.imageCache.set(identifier: item.identifier, image: image) { (result) in
                     if case .failure(let error) = result {
                         print("Failed to cache image with error \(error)")

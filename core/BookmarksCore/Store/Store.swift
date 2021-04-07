@@ -20,7 +20,10 @@
 
 import Foundation
 import SwiftUI
+
+#if os(iOS)
 import UIKit
+#endif
 
 enum StoreError: Error {
     case notFound

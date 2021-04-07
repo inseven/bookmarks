@@ -19,7 +19,10 @@
 // SOFTWARE.
 
 import Foundation
+
+#if os(iOS)
 import UIKit
+#endif
 
 public class FileImageCache: ImageCache {
 
@@ -38,7 +41,7 @@ public class FileImageCache: ImageCache {
         return self.path.appendingPathComponent(identifier).appendingPathExtension("png")
     }
 
-    public func set(identifier: String, image: UIImage, completion: @escaping (Result<Bool, Error>) -> Void) {
+    public func set(identifier: String, image: Image, completion: @escaping (Result<Bool, Error>) -> Void) {
         syncQueue.async {
             let targetQueueCompletion = Utilities.completion(on: self.targetQueue, completion: completion)
             do {
@@ -52,13 +55,13 @@ public class FileImageCache: ImageCache {
         }
     }
 
-    public func get(identifier: String, completion: @escaping (Result<UIImage, Error>) -> Void) {
+    public func get(identifier: String, completion: @escaping (Result<Image, Error>) -> Void) {
         syncQueue.async {
             let targetQueueCompletion = Utilities.completion(on: self.targetQueue, completion: completion)
             let path = self.path(for: identifier)
             do {
                 let data = try Data(contentsOf: path)
-                guard let image = UIImage.init(data: data) else {
+                guard let image = Image.init(data: data) else {
                     targetQueueCompletion(.failure(StoreError.notFound))
                     return
                 }

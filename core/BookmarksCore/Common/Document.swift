@@ -19,7 +19,10 @@
 // SOFTWARE.
 
 import Foundation
+
+#if os(iOS)
 import UIKit
+#endif
 
 class Document {
 
@@ -31,7 +34,7 @@ class Document {
         self.contents = contents
     }
 
-    var openGraphImage: UIImage? {
+    var openGraphImage: Image? {
         get {
             if let image = try? self.image(for: "//meta[@property='og:image']/@content") {
                 return image
@@ -52,7 +55,7 @@ class Document {
         }
     }
 
-    func image(for query: String) throws -> UIImage {
+    func image(for query: String) throws -> Image {
         guard let elements = contents.search(withXPathQuery: query) as? [TFHppleElement] else {
             throw OpenGraphError.invalidArgument(message: "Unable to find open graph image tag")
         }
@@ -68,7 +71,7 @@ class Document {
         guard let url = components.url(relativeTo: self.location) else {
             throw OpenGraphError.invalidArgument(message: "Inavlid image URL")
         }
-        guard let image = UIImage.init(contentsOf: url) else {
+        guard let image = Image.init(contentsOf: url) else {
             throw OpenGraphError.invalidArgument(message: "Unable to fetch image")
         }
         return image

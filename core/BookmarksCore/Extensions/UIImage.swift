@@ -19,9 +19,14 @@
 // SOFTWARE.
 
 import Combine
-import UIKit
 
-extension UIImage {
+#if os(iOS)
+import UIKit
+#else
+import AppKit
+#endif
+
+extension Image {
 
     convenience init?(contentsOf url: URL) {
         guard let data = try? Data.init(contentsOf: url) else {
@@ -30,9 +35,12 @@ extension UIImage {
         self.init(data: data)
     }
 
-    func resize(height: CGFloat) -> Future<UIImage, Error> {
+    func resize(height: CGFloat) -> Future<Image, Error> {
         return Future { promise in
             DispatchQueue.global(qos: .background).async {
+
+                #if os(iOS)
+
                 let scale = height / self.size.height
                 let width = self.size.width * scale
                 UIGraphicsBeginImageContext(CGSize(width: width, height: height))
@@ -43,9 +51,33 @@ extension UIImage {
                     return
                 }
                 promise(.success(image))
+
+                #else
+
+                // TODO: Actually implement this.
+                promise(.success(self))
+
+                #endif
             }
         }
 
     }
 
 }
+
+#if os(macOS)
+
+extension NSImage {
+
+    func pngData() -> Data? {
+        guard let representation = tiffRepresentation else {
+            return nil
+        }
+        let imageRep = NSBitmapImageRep(data: representation)
+        let pngData = imageRep?.representation(using: .png, properties: [:])
+        return pngData
+    }
+
+}
+
+#endif

@@ -17,7 +17,7 @@
                BlueprintIdentifier = "D8D3BBF521C6AEBC00D6FB97"
                BuildableName = "Bookmarks.app"
                BlueprintName = "Bookmarks"
-               ReferencedContainer = "container:Bookmarks.xcodeproj">
+               ReferencedContainer = "container:ios/Bookmarks-iOS.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
                BlueprintIdentifier = "D8D3BC0921C6AEBD00D6FB97"
                BuildableName = "BookmarksTests.xctest"
                BlueprintName = "BookmarksTests"
-               ReferencedContainer = "container:Bookmarks.xcodeproj">
+               ReferencedContainer = "container:ios/Bookmarks-iOS.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -45,7 +45,7 @@
                BlueprintIdentifier = "D8D3BC1421C6AEBD00D6FB97"
                BuildableName = "BookmarksUITests.xctest"
                BlueprintName = "BookmarksUITests"
-               ReferencedContainer = "container:Bookmarks.xcodeproj">
+               ReferencedContainer = "container:ios/Bookmarks-iOS.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -67,7 +67,7 @@
             BlueprintIdentifier = "D8D3BBF521C6AEBC00D6FB97"
             BuildableName = "Bookmarks.app"
             BlueprintName = "Bookmarks"
-            ReferencedContainer = "container:Bookmarks.xcodeproj">
+            ReferencedContainer = "container:ios/Bookmarks-iOS.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -84,7 +84,7 @@
             BlueprintIdentifier = "D8D3BBF521C6AEBC00D6FB97"
             BuildableName = "Bookmarks.app"
             BlueprintName = "Bookmarks"
-            ReferencedContainer = "container:Bookmarks.xcodeproj">
+            ReferencedContainer = "container:ios/Bookmarks-iOS.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

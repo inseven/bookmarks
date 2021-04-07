@@ -30,7 +30,8 @@ struct ContentView: View {
 
     var body: some View {
         NavigationView {
-            BookmarksView(store: store, title: "All Bookmarks")
+            BookmarksView(store: store)
+                .navigationBarTitle("Bookmarks", displayMode: .large)
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }

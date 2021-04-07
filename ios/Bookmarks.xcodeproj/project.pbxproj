@@ -37,7 +37,7 @@
 		D8D3BC0121C6AEBD00D6FB97 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */; };
 		D8D3BC0421C6AEBD00D6FB97 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8D3BC0221C6AEBD00D6FB97 /* LaunchScreen.storyboard */; };
 		D8D3BC0F21C6AEBD00D6FB97 /* BookmarksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BC0E21C6AEBD00D6FB97 /* BookmarksTests.swift */; };
-		D8D3BC1A21C6AEBD00D6FB97 /* StuffUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BC1921C6AEBD00D6FB97 /* StuffUITests.swift */; };
+		D8D3BC1A21C6AEBD00D6FB97 /* BookmarksUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BC1921C6AEBD00D6FB97 /* BookmarksUITests.swift */; };
 		D8D3BC2A21C72F7600D6FB97 /* Pinboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BC2921C72F7600D6FB97 /* Pinboard.swift */; };
 		D8D3E4F3254D8EBB00A72446 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3E4F2254D8EBB00A72446 /* Item.swift */; };
 		D8D3E4F8254D957700A72446 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3E4F7254D957700A72446 /* View.swift */; };
@@ -101,7 +101,7 @@
 		D8D3BC0E21C6AEBD00D6FB97 /* BookmarksTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTests.swift; sourceTree = "<group>"; };
 		D8D3BC1021C6AEBD00D6FB97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D8D3BC1521C6AEBD00D6FB97 /* BookmarksUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookmarksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		D8D3BC1921C6AEBD00D6FB97 /* StuffUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StuffUITests.swift; sourceTree = "<group>"; };
+		D8D3BC1921C6AEBD00D6FB97 /* BookmarksUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksUITests.swift; sourceTree = "<group>"; };
 		D8D3BC1B21C6AEBD00D6FB97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D8D3BC2921C72F7600D6FB97 /* Pinboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pinboard.swift; sourceTree = "<group>"; };
 		D8D3E4F2254D8EBB00A72446 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
@@ -222,7 +222,7 @@
 			children = (
 				D8D3BBF821C6AEBC00D6FB97 /* Bookmarks */,
 				D8D3BC0D21C6AEBD00D6FB97 /* BookmarksTests */,
-				D8D3BC1821C6AEBD00D6FB97 /* StuffUITests */,
+				D8D3BC1821C6AEBD00D6FB97 /* BookmarksUITests */,
 				D8D3BBF721C6AEBC00D6FB97 /* Products */,
 				D864E46F21C93FD200EAB9AD /* Frameworks */,
 			);
@@ -268,13 +268,13 @@
 			path = BookmarksTests;
 			sourceTree = "<group>";
 		};
-		D8D3BC1821C6AEBD00D6FB97 /* StuffUITests */ = {
+		D8D3BC1821C6AEBD00D6FB97 /* BookmarksUITests */ = {
 			isa = PBXGroup;
 			children = (
-				D8D3BC1921C6AEBD00D6FB97 /* StuffUITests.swift */,
+				D8D3BC1921C6AEBD00D6FB97 /* BookmarksUITests.swift */,
 				D8D3BC1B21C6AEBD00D6FB97 /* Info.plist */,
 			);
-			path = StuffUITests;
+			path = BookmarksUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -457,7 +457,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8D3BC1A21C6AEBD00D6FB97 /* StuffUITests.swift in Sources */,
+				D8D3BC1A21C6AEBD00D6FB97 /* BookmarksUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -704,17 +704,17 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
-				INFOPLIST_FILE = StuffUITests/Info.plist;
+				INFOPLIST_FILE = BookmarksUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.StuffUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Stuff;
+				TEST_TARGET_NAME = Bookmarks;
 			};
 			name = Debug;
 		};
@@ -724,17 +724,17 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
-				INFOPLIST_FILE = StuffUITests/Info.plist;
+				INFOPLIST_FILE = BookmarksUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.StuffUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Stuff;
+				TEST_TARGET_NAME = Bookmarks;
 			};
 			name = Release;
 		};

@@ -20,6 +20,8 @@
 
 import SwiftUI
 
+import BookmarksCore
+
 struct BookmarksView: View {
 
     enum SheetType {

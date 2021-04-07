@@ -22,3 +22,5 @@
 
 FOUNDATION_EXPORT double BookmarksCoreVersionNumber;
 FOUNDATION_EXPORT const unsigned char BookmarksCoreVersionString[];
+
+#import <BookmarksCore/TFHpple.h>

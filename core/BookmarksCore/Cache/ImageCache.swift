@@ -21,14 +21,14 @@
 import Foundation
 import UIKit
 
-protocol ImageCache {
+enum ImageCacheError : Error {
+    case notFound
+}
+
+public protocol ImageCache {
 
     func set(identifier: String, image: UIImage, completion: @escaping (Result<Bool, Error>) -> Void)
     func get(identifier: String, completion: @escaping (Result<UIImage, Error>) -> Void)
     func clear(completion: @escaping (Result<Bool, Error>) -> Void)
 
-}
-
-enum ImageCacheError : Error {
-    case notFound
 }

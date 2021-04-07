@@ -20,6 +20,8 @@
 
 import SwiftUI
 
+import BookmarksCore
+
 struct ManagerEnvironmentKey: EnvironmentKey {
     static var defaultValue = BookmarksManager()
 }
@@ -30,7 +32,6 @@ extension EnvironmentValues {
         set { self[ManagerEnvironmentKey.self] = newValue }
     }
 }
-
 
 class BookmarksManager {
 

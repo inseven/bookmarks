@@ -21,6 +21,8 @@
 import Combine
 import SwiftUI
 
+import BookmarksCore
+
 struct BookmarkCell: View {
 
     var item: Item

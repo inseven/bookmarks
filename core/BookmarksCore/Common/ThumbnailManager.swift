@@ -22,14 +22,13 @@ import Foundation
 import UIKit
 import Combine
 
-
-class ThumbnailManager {
+public class ThumbnailManager {
 
     let targetQueue: DispatchQueue
     let imageCache: ImageCache
     let downloadManager: DownloadManager
 
-    init(imageCache: ImageCache, downloadManager: DownloadManager) {
+    public init(imageCache: ImageCache, downloadManager: DownloadManager) {
         self.targetQueue = DispatchQueue(label: "targetQueue", attributes: .concurrent)
         self.imageCache = imageCache
         self.downloadManager = downloadManager
@@ -43,7 +42,7 @@ class ThumbnailManager {
         }
     }
 
-    func thumbnail(for item: Item) -> AnyPublisher<UIImage, Error> {
+    public func thumbnail(for item: Item) -> AnyPublisher<UIImage, Error> {
         return cachedImage(for: item)
             .catch { _ in Utilities.meta(for: item.url).flatMap { $0.resize(height: 200 * UIScreen.main.scale) } }
             .catch { _ in self.downloadManager.thumbnail(for: item.url).flatMap { $0.resize(height: 200 * UIScreen.main.scale) } }

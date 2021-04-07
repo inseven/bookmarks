@@ -20,23 +20,21 @@
 
 import Foundation
 
-import BookmarksCore
-
-class Updater {
+public class Updater {
 
     let syncQueue: DispatchQueue
     let targetQueue: DispatchQueue
     let store: Store
     let token: String
 
-    init(store: Store, token: String) {
+    public init(store: Store, token: String) {
         self.store = store
         self.token = token
         self.syncQueue = DispatchQueue(label: "syncQueue")
         self.targetQueue = DispatchQueue(label: "targetQueue", attributes: .concurrent)
     }
 
-    func start() {
+    public func start() {
         Pinboard(token: self.token).fetch { [weak self] (result) in
             switch (result) {
             case .failure(let error):

@@ -21,14 +21,14 @@
 import Foundation
 import UIKit
 
-class DownloadManager {
+public class DownloadManager {
 
     let syncQueue: DispatchQueue
     let limit: Int
     var pending: [AnyHashable]
     var active: Set<AnyHashable>
 
-    init(limit: Int) {
+    public init(limit: Int) {
         syncQueue = DispatchQueue(label: "syncQueue")
         self.limit = limit
         pending = []

@@ -109,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				D8569FC4261E2603006926BF /* BookmarksCore */,
+				D89D6484261E4B6100DE673D /* BookmarksCore iOS */,
 				D8569FCF261E2603006926BF /* BookmarksCoreTests */,
 				D8CF8C79261E356A00E52E85 /* BookmarksCore macOS */,
 				D8CF8C84261E356A00E52E85 /* BookmarksCore macOSTests */,
@@ -133,7 +134,6 @@
 				D8AA4053261E2E7A00D11421 /* Extensions */,
 				D84CE462261E296F00AF1901 /* Pinboard */,
 				D8569FC5261E2603006926BF /* BookmarksCore.h */,
-				D8569FC6261E2603006926BF /* Info.plist */,
 			);
 			path = BookmarksCore;
 			sourceTree = "<group>";
@@ -145,6 +145,14 @@
 				D8569FD2261E2603006926BF /* Info.plist */,
 			);
 			path = BookmarksCoreTests;
+			sourceTree = "<group>";
+		};
+		D89D6484261E4B6100DE673D /* BookmarksCore iOS */ = {
+			isa = PBXGroup;
+			children = (
+				D8569FC6261E2603006926BF /* Info.plist */,
+			);
+			path = "BookmarksCore iOS";
 			sourceTree = "<group>";
 		};
 		D8AA4053261E2E7A00D11421 /* Extensions */ = {
@@ -534,7 +542,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = BookmarksCore/Info.plist;
+				INFOPLIST_FILE = "BookmarksCore iOS/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -558,7 +566,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = BookmarksCore/Info.plist;
+				INFOPLIST_FILE = "BookmarksCore iOS/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

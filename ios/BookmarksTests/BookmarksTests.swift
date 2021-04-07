@@ -21,7 +21,7 @@
 import XCTest
 @testable import Bookmarks
 
-class StuffTests: XCTestCase {
+class BookmarksTests: XCTestCase {
 
     // TODO: Reinstate this code.
     func thumbnail(for url: String) -> UIImage? {

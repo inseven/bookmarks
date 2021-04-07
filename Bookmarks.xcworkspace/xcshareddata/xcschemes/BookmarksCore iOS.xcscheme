@@ -14,23 +14,23 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D8D3BBF521C6AEBC00D6FB97"
-               BuildableName = "Bookmarks.app"
-               BlueprintName = "Bookmarks"
-               ReferencedContainer = "container:ios/Bookmarks-iOS.xcodeproj">
+               BlueprintIdentifier = "D8569FC1261E2603006926BF"
+               BuildableName = "BookmarksCore.framework"
+               BlueprintName = "BookmarksCore iOS"
+               ReferencedContainer = "container:core/BookmarksCore.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
             buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D8569FC1261E2603006926BF"
-               BuildableName = "BookmarksCore.framework"
-               BlueprintName = "BookmarksCore iOS"
+               BlueprintIdentifier = "D8569FCA261E2603006926BF"
+               BuildableName = "BookmarksCore iOSTests.xctest"
+               BlueprintName = "BookmarksCore iOSTests"
                ReferencedContainer = "container:core/BookmarksCore.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,20 +46,10 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D8D3BC0921C6AEBD00D6FB97"
-               BuildableName = "BookmarksTests.xctest"
-               BlueprintName = "BookmarksTests"
-               ReferencedContainer = "container:ios/Bookmarks-iOS.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D8D3BC1421C6AEBD00D6FB97"
-               BuildableName = "BookmarksUITests.xctest"
-               BlueprintName = "BookmarksUITests"
-               ReferencedContainer = "container:ios/Bookmarks-iOS.xcodeproj">
+               BlueprintIdentifier = "D8569FCA261E2603006926BF"
+               BuildableName = "BookmarksCore iOSTests.xctest"
+               BlueprintName = "BookmarksCore iOSTests"
+               ReferencedContainer = "container:core/BookmarksCore.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -74,16 +64,6 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D8D3BBF521C6AEBC00D6FB97"
-            BuildableName = "Bookmarks.app"
-            BlueprintName = "Bookmarks"
-            ReferencedContainer = "container:ios/Bookmarks-iOS.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -91,16 +71,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D8D3BBF521C6AEBC00D6FB97"
-            BuildableName = "Bookmarks.app"
-            BlueprintName = "Bookmarks"
-            ReferencedContainer = "container:ios/Bookmarks-iOS.xcodeproj">
+            BlueprintIdentifier = "D8569FC1261E2603006926BF"
+            BuildableName = "BookmarksCore.framework"
+            BlueprintName = "BookmarksCore iOS"
+            ReferencedContainer = "container:core/BookmarksCore.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

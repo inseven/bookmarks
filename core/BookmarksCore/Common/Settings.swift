@@ -20,32 +20,32 @@
 
 import Foundation
 
-enum SettingsKey: String {
+public enum SettingsKey: String {
     case pinboardApiKey = "pinboard-api-key"
     case useInAppBrowser = "use-in-app-browser"
     case maximumConcurrentThumbnailDownloads = "maximum-concurrent-thumbnail-downloads"
 }
 
-final class Settings: ObservableObject {
+final public class Settings: ObservableObject {
 
     var defaults: UserDefaults {
         UserDefaults.standard
     }
 
-    @Published var pinboardApiKey: String {
+    @Published public var pinboardApiKey: String {
         didSet { defaults.set(pinboardApiKey, forKey: SettingsKey.pinboardApiKey.rawValue) }
     }
 
-    @Published var useInAppBrowser: Bool {
+    @Published public var useInAppBrowser: Bool {
         didSet { defaults.set(useInAppBrowser, forKey: SettingsKey.useInAppBrowser.rawValue) }
     }
 
-    @Published var maximumConcurrentThumbnailDownloads: Int {
+    @Published public var maximumConcurrentThumbnailDownloads: Int {
         didSet { defaults.set(maximumConcurrentThumbnailDownloads,
                               forKey: SettingsKey.maximumConcurrentThumbnailDownloads.rawValue) }
     }
 
-    init() {
+    public init() {
         let defaults = UserDefaults.standard
         pinboardApiKey = defaults.string(forKey: SettingsKey.pinboardApiKey.rawValue) ?? ""
         useInAppBrowser = defaults.bool(forKey: SettingsKey.useInAppBrowser.rawValue)

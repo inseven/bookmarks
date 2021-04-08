@@ -9,6 +9,8 @@ ROOT_DIRECTORY="${SCRIPT_DIRECTORY}/.."
 
 # TODO: Re-enable test builds if possible using a locally generated signing key.
 
+IPHONE_DESTINATION="platform=iOS Simulator,name=iPhone 12 Pro,OS=14.4"
+
 function build_scheme {
     xcodebuild \
         -workspace Bookmarks.xcworkspace \
@@ -22,9 +24,18 @@ cd "$ROOT_DIRECTORY"
 
 xcrun instruments -s devices
 
+# BookmarksCore
+build_scheme "BookmarksCore iOS" clean build
 build_scheme "BookmarksCore iOS" clean build build-for-testing test \
   -sdk iphonesimulator \
-  -destination 'platform=iOS Simulator,name=iPhone 12 Pro,OS=14.4'
+  -destination "$IPHONE_DESTINATION"
 build_scheme "BookmarksCore macOS" clean build build-for-testing test
+
+# iOS
 build_scheme "Bookmarks iOS" clean build
+build_scheme "Bookmarks iOS" clean build \
+  -sdk iphonesimulator \
+  -destination "$IPHONE_DESTINATION"
+
+# macOS
 build_scheme "Bookmarks macOS" clean build

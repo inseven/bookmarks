@@ -102,11 +102,6 @@ class WebViewDownloader: NSObject, WKNavigationDelegate, Downloader {
             precondition(self.state == .idle)
             self.state = .running
             self.webView = WKWebView(frame: CGRect(x: 0, y: 0, width: 1000, height: 1000))
-//            let delegate = UIApplication.shared.delegate as! AppDelegate
-//            let navigationController = delegate.window?.rootViewController as! UINavigationController
-//            let controller = navigationController.viewControllers.first!
-//            controller.view.addSubview(self.webView)
-//            controller.view.sendSubviewToBack(self.webView)
             self.webView.navigationDelegate = self
             self.webView.load(URLRequest(url: self.url))
         }
@@ -185,7 +180,6 @@ class WebViewDownloader: NSObject, WKNavigationDelegate, Downloader {
             backgroundCompletion(.success(url))
         }
 
-        self.webView!.removeFromSuperview()
     }
 
     func cancel() {
@@ -196,7 +190,6 @@ class WebViewDownloader: NSObject, WKNavigationDelegate, Downloader {
                 backgroundCompletion(.failure(WebViewDownloaderError.cancelled))
             case .running:
                 self.webView!.stopLoading()
-                self.webView!.removeFromSuperview()
                 backgroundCompletion(.failure(WebViewDownloaderError.cancelled))
             case .stopped:
                 return
@@ -209,16 +202,3 @@ class WebViewDownloader: NSObject, WKNavigationDelegate, Downloader {
     }
 
 }
-
-
-//struct ThumbnailPublisher<UIImage>: Publisher {
-//
-//    typealias Output = UIImage
-//    typealias Failure = Error
-//
-//    func receive<S>(subscriber: S) where S : Subscriber, Self.Failure == S.Failure, Self.Output == S.Input {
-//        let subscription = Subscription(subscriber: subscriber)
-//        subscriber.receive(subscription: subscription)
-//    }
-//
-//}

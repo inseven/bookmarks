@@ -20,11 +20,16 @@
 
 import SwiftUI
 
+import BookmarksCore
+
 @main
 struct BookmarksApp: App {
+
+    @Environment(\.manager) var manager: BookmarksManager
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(store: manager.store)
         }
     }
 }

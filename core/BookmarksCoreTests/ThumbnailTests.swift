@@ -69,7 +69,7 @@ class ThumbnailTests: XCTestCase {
             expectation.fulfill()
         }
         downloader.start()
-        self.wait(for: [expectation], timeout: 20)
+        self.wait(for: [expectation], timeout: 60)
     }
 
     // TODO: URL components resolving.

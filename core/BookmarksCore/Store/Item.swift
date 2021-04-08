@@ -59,10 +59,11 @@ public class Item: NSObject, NSSecureCoding {
     }
 
     public convenience required init?(coder: NSCoder) {
+
         guard let identifier = coder.decodeString(forKey: Item.identifierKey),
               let title = coder.decodeString(forKey: Item.titleKey),
               let url = coder.decodeUrl(forKey: Item.urlKey),
-              let tags = coder.decodeArrayOfObjects(ofClass: NSString.self, forKey: Item.tagsKey) as [String]?,
+              let tags = coder.decodeObject(of: [NSArray.self, NSString.self], forKey: Item.tagsKey) as? [String],
               let date = coder.decodeDate(forKey: Item.dateKey) else {
             return nil
         }

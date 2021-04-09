@@ -22,6 +22,7 @@ import Combine
 import SwiftUI
 
 import BookmarksCore
+import Interact
 
 struct ContentView: View {
 
@@ -39,10 +40,6 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
-            HStack {
-                TextField("Search", text: $search)
-                    .padding()
-            }
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
                     ForEach(items) { item in
@@ -59,6 +56,12 @@ struct ContentView: View {
                     }
                 }
                 .padding()
+            }
+        }
+        .toolbar {
+            ToolbarItem {
+                SearchField(search: $search)
+                    .frame(minWidth: 100, idealWidth: 300, maxWidth: .infinity)
             }
         }
     }

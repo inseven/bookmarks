@@ -1,3 +1,6 @@
 [submodule "ios/hpple"]
 	path = ios/hpple
 	url = git@github.com:topfunky/hpple.git
+[submodule "interact"]
+	path = interact
+	url = git@github.com:jbmorley/interact.git

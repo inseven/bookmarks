@@ -33,9 +33,7 @@ struct ContentView: View {
     var items: [Item] {
         store.rawItems.filter {
             search.isEmpty ||
-                $0.title.localizedStandardContains(search) ||
-                $0.url.absoluteString.localizedStandardContains(search) ||
-                $0.tags.contains(where: { $0.localizedStandardContains(search) } )
+                $0.localizedSearchMatches(string: search)
         }
     }
 

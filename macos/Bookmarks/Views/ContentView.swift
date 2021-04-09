@@ -26,6 +26,7 @@ import Interact
 
 struct ContentView: View {
 
+    @Environment(\.manager) var manager: BookmarksManager
     @ObservedObject var store: Store
     @State var search = ""
 
@@ -59,6 +60,13 @@ struct ContentView: View {
             }
         }
         .toolbar {
+            ToolbarItem {
+                Button {
+                    manager.updater.start()
+                } label: {
+                    SwiftUI.Image(systemName: "arrow.clockwise")
+                }
+            }
             ToolbarItem {
                 SearchField(search: $search)
                     .frame(minWidth: 100, idealWidth: 300, maxWidth: .infinity)

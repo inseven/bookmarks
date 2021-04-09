@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D81EA6032620F3D5000AB851 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = D81EA6022620F3D5000AB851 /* Sparkle */; };
 		D891C454261E32F90024E1A6 /* BookmarksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D891C453261E32F90024E1A6 /* BookmarksApp.swift */; };
 		D891C456261E32F90024E1A6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D891C455261E32F90024E1A6 /* ContentView.swift */; };
 		D891C458261E32FB0024E1A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D891C457261E32FB0024E1A6 /* Assets.xcassets */; };
@@ -52,6 +53,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D81EA5FF2620F3BF000AB851 /* sparkle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sparkle; path = ../sparkle; sourceTree = "<group>"; };
 		D891C450261E32F90024E1A6 /* Bookmarks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bookmarks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D891C453261E32F90024E1A6 /* BookmarksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksApp.swift; sourceTree = "<group>"; };
 		D891C455261E32F90024E1A6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D81EA6032620F3D5000AB851 /* Sparkle in Frameworks */,
 				D8A0D7662620165D00C9F190 /* Interact in Frameworks */,
 				D8CF8CC2261E369D00E52E85 /* BookmarksCore.framework in Frameworks */,
 			);
@@ -103,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				D8A0D75A262015E700C9F190 /* interact */,
+				D81EA5FF2620F3BF000AB851 /* sparkle */,
 				D891C452261E32F90024E1A6 /* Bookmarks */,
 				D891C465261E32FB0024E1A6 /* BookmarksTests */,
 				D891C470261E32FB0024E1A6 /* BookmarksUITests */,
@@ -206,6 +210,7 @@
 			name = Bookmarks;
 			packageProductDependencies = (
 				D8A0D7652620165D00C9F190 /* Interact */,
+				D81EA6022620F3D5000AB851 /* Sparkle */,
 			);
 			productName = Bookmarks;
 			productReference = D891C450261E32F90024E1A6 /* Bookmarks.app */;
@@ -648,6 +653,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D81EA6022620F3D5000AB851 /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Sparkle;
+		};
 		D8A0D7652620165D00C9F190 /* Interact */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Interact;

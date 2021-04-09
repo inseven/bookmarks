@@ -14,6 +14,10 @@
 
 - [macOS](documentation/release-notes-macos.markdown)
 
+## Test Plans
+
+- [macOS](documentation/test-plan-macos.markdown)
+
 ## Licensing
 
 Bookmarks is licensed under the MIT License (see [LICENSE](LICENSE)).

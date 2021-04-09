@@ -41,7 +41,9 @@ struct SettingsView: View {
                 Section(header: Text("Pinboard")) {
                     TextField("API Token", text: $settings.pinboardApiKey)
                     Button(action: {
-                        UIApplication.shared.open(URL(string: "https://pinboard.in/settings/password")!, options: [:], completionHandler: nil)
+                        UIApplication.shared.open(URL(string: "https://pinboard.in/settings/password")!,
+                                                  options: [:],
+                                                  completionHandler: nil)
                     }, label: {
                         Text("Get your API token")
                     })

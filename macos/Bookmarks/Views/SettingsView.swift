@@ -1,4 +1,4 @@
-// Copyright (c) 2020-2021 InSeven Limited
+// Copyright (c) 2018-2021 InSeven Limited
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,17 +22,31 @@ import SwiftUI
 
 import BookmarksCore
 
-@main
-struct BookmarksApp: App {
+struct SettingsView: View {
+
+    private enum Tabs: Hashable {
+        case general
+        case account
+    }
 
     @Environment(\.manager) var manager: BookmarksManager
 
-    var body: some Scene {
-        WindowGroup {
-            ContentView(store: manager.store)
+    var body: some View {
+        EmptyView()
+        TabView {
+            GeneralSettingsView(settings: manager.settings)
+                .tabItem {
+                    Label("General", systemImage: "gear")
+                }
+                .tag(Tabs.general)
+            AccountSettingsView(settings: manager.settings)
+                .tabItem {
+                    Label("Account", systemImage: "at")
+                }
+                .tag(Tabs.account)
         }
-        SwiftUI.Settings {
-            SettingsView()
-        }
+        .padding()
+        .frame(minWidth: 320, maxWidth: .infinity)
     }
+
 }

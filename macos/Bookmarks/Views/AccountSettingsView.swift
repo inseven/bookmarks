@@ -1,4 +1,4 @@
-// Copyright (c) 2020-2021 InSeven Limited
+// Copyright (c) 2018-2021 InSeven Limited
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,17 +22,27 @@ import SwiftUI
 
 import BookmarksCore
 
-@main
-struct BookmarksApp: App {
+struct AccountSettingsView: View {
 
     @Environment(\.manager) var manager: BookmarksManager
 
-    var body: some Scene {
-        WindowGroup {
-            ContentView(store: manager.store)
-        }
-        SwiftUI.Settings {
-            SettingsView()
+    @ObservedObject var settings: BookmarksCore.Settings
+
+    var body: some View {
+        VStack {
+            Form {
+                Section {
+                    TextField("API Token", text: $settings.pinboardApiKey)
+                    Button(action: {
+                        NSWorkspace.shared.open(URL(string: "https://pinboard.in/settings/password")!)
+                    }, label: {
+                        Text("Get your API token")
+                    })
+                    .buttonStyle(LinkButtonStyle())
+                }
+            }
+            Spacer()
         }
     }
+
 }

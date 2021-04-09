@@ -43,13 +43,18 @@ public class Updater {
                 guard let self = self else {
                     return
                 }
+                // Pinboard seems to give us duplicate data so we maintain a set of hashes we've seen to ensure we
+                // only return one of each.
+                var identifiers = Set<String>()
                 var items: [Item] = []
                 for post in posts {
                     guard
                         let url = post.href,
-                        let date = post.time else {
+                        let date = post.time,
+                        !identifiers.contains(post.hash) else {
                             continue
                     }
+                    identifiers.insert(post.hash)
                     items.append(Item(identifier: post.hash,
                                       title: post.description ?? "",
                                       url: url,

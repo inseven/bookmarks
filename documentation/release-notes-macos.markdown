@@ -4,6 +4,9 @@
 
 Changes on `master` pending release.
 
+- Show a placeholder icon when no thumbnail can be found.
+- Fade-in thumbnails.
+
 ## Version 0.1.0
 
 Initial release of a dedicated macOS version.

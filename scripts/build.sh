@@ -25,17 +25,15 @@ cd "$ROOT_DIRECTORY"
 xcrun instruments -s devices
 
 # BookmarksCore
-build_scheme "BookmarksCore iOS" clean build
 build_scheme "BookmarksCore iOS" clean build build-for-testing test \
   -sdk iphonesimulator \
   -destination "$IPHONE_DESTINATION"
 build_scheme "BookmarksCore macOS" clean build build-for-testing test
 
 # iOS
-build_scheme "Bookmarks iOS" clean build
-build_scheme "Bookmarks iOS" clean build \
+build_scheme "Bookmarks iOS" clean build build-for-testing test \
   -sdk iphonesimulator \
   -destination "$IPHONE_DESTINATION"
 
 # macOS
-build_scheme "Bookmarks macOS" clean build
+build_scheme "Bookmarks macOS" clean build build-for-testing

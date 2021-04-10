@@ -35,7 +35,7 @@ public class Updater {
     }
 
     public func start() {
-        Pinboard(token: self.token).fetch { [weak self] (result) in
+        Pinboard(token: self.token).posts_all { [weak self] (result) in
             switch (result) {
             case .failure(let error):
                 print("Failed to fetch the posts with error \(error)")

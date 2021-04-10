@@ -28,8 +28,11 @@ public class Pinboard {
         case inconsistentState(message: String)
     }
 
-    let baseURL = "https://api.pinboard.in/v1/"
-    let postsAll = "posts/all"
+    fileprivate let baseURL = "https://api.pinboard.in/v1/"
+
+    fileprivate enum Path: String {
+        case posts_all = "posts/all"
+    }
 
     let token: String
 
@@ -37,14 +40,14 @@ public class Pinboard {
         self.token = token
     }
 
-    public func fetch(completion: @escaping (Result<[Post], Swift.Error>) -> Void) {
+    public func posts_all(completion: @escaping (Result<[Post], Swift.Error>) -> Void) {
         guard let base = URL(string: baseURL) else {
             DispatchQueue.global(qos: .default).async {
                 completion(.failure(Error.invalidURL(message: "Unable to construct parse base URL")))
             }
             return
         }
-        let posts = base.appendingPathComponent(postsAll)
+        let posts = base.appendingPathComponent(Path.posts_all.rawValue)
         guard var components = URLComponents(string: posts.absoluteString) else {
             DispatchQueue.global(qos: .default).async {
                 completion(.failure(Error.invalidURL(message: "Unable to parse URL components")))

@@ -45,17 +45,18 @@ struct BookmarkCell: View {
 
     var thumbnail: some View {
         ZStack {
-            Text(title)
-                .lineLimit(3)
-                .multilineTextAlignment(.center)
+            SwiftUI.Image(systemName: "safari.fill")
+                .font(.system(size: 48))
+                .foregroundColor(Color(NSColor.tertiaryLabelColor))
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
-                .padding()
             if let image = image {
                     Image(nsImage: image)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
+                        .frame(maxWidth: image.size.width, maxHeight: image.size.height)
                         .background(Color.white)
                         .layoutPriority(-1)
+                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.3)))
             }
         }
         .clipped()

@@ -6,6 +6,7 @@ Changes on `master` pending release.
 
 - Show a placeholder icon when no thumbnail can be found.
 - Fade-in thumbnails.
+- Add application icon.
 
 ## Version 0.1.0
 

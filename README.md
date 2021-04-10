@@ -12,6 +12,7 @@
 
 ## Release Notes
 
+- [iOS](documentation/release-notes-ios.markdown)
 - [macOS](documentation/release-notes-macos.markdown)
 
 ## Test Plans

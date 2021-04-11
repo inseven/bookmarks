@@ -36,12 +36,6 @@ struct BookmarksApp: App {
             switch phase {
             case .active:
                 manager.updater.start()
-                #if targetEnvironment(macCatalyst)
-                if let titlebar = UIApplication.shared.windows.first?.windowScene?.titlebar {
-                    titlebar.titleVisibility = .hidden
-                    titlebar.toolbar = nil
-                }
-                #endif
             case .background:
                 break
             case .inactive:

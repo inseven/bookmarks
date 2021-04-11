@@ -18,21 +18,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import AppKit
 import SwiftUI
 
 import BookmarksCore
 
+class AppDelegate: NSObject, NSApplicationDelegate {
+
+    var manager = BookmarksManager()
+
+    func applicationDidBecomeActive(_ notification: Notification) {
+        manager.updater.start()
+    }
+}
+
 @main
 struct BookmarksApp: App {
 
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @Environment(\.manager) var manager: BookmarksManager
 
     var body: some Scene {
         WindowGroup {
             ContentView(store: manager.store)
+                .environment(\.manager, appDelegate.manager)
         }
         SwiftUI.Settings {
             SettingsView()
+                .environment(\.manager, appDelegate.manager)
         }
     }
 }

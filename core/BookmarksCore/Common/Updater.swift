@@ -35,6 +35,7 @@ public class Updater {
     }
 
     public func start() {
+        print("Updating bookmarks...")
         Pinboard(token: self.token).posts_all { [weak self] (result) in
             switch (result) {
             case .failure(let error):

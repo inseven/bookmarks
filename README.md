@@ -12,12 +12,12 @@
 
 ## Release Notes
 
-- [iOS](documentation/release-notes-ios.markdown)
-- [macOS](documentation/release-notes-macos.markdown)
+- [iOS](documentation/release-notes/ios.markdown)
+- [macOS](documentation/release-notes/macos.markdown)
 
 ## Test Plans
 
-- [macOS](documentation/test-plan-macos.markdown)
+- [macOS](documentation/test-plans/macos.markdown)
 
 ## Licensing
 

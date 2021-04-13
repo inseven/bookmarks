@@ -47,6 +47,10 @@ struct ContentView: View {
                                 NSWorkspace.shared.open(item.url)
                             }
                             .contextMenu(ContextMenu(menuItems: {
+                                Button("Open") {
+                                    NSWorkspace.shared.open(item.url)
+                                }
+                                Divider()
                                 Button("Share") {
                                     print("Share")
                                     print(item.identifier)
@@ -70,5 +74,6 @@ struct ContentView: View {
                     .frame(minWidth: 100, idealWidth: 300, maxWidth: .infinity)
             }
         }
+        .frameAutosaveName("Main Window")
     }
 }

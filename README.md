@@ -8,7 +8,7 @@
 
 ## Download
 
-- [Version 0.1.2 for macOS](https://github.com/jbmorley/bookmarks/releases/download/macOS_0.1.2/Bookmarks-0.1.2.zip)
+- [Version 0.1.2 for macOS](https://github.com/jbmorley/bookmarks/releases/download/macOS_0.1.2/Bookmarks-macOS-0.1.2.zip)
 
 ## Release Notes
 

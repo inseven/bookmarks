@@ -2,13 +2,25 @@
 
 ## Unreleased
 
-Changes on `master` pending release.
+Changes on `main` pending release.
+
+## Version 0.1.2
+
+Approaching feature parity with the initial Catalyst-based macOS build.
+
+**Changes**
 
 - Show a placeholder icon when no thumbnail can be found.
 - Fade-in thumbnails.
 - Add application icon.
+- Bookmarks automatically update when foregrounding the app.
+- Window size is preserved across window closes.
 
-## Version 0.1.0
+**Known Issues**
+
+- Main window position is not preserved across window closes.
+
+## Version 0.1.1
 
 Initial release of a dedicated macOS version.
 

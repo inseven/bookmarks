@@ -15,9 +15,44 @@
 - [iOS](documentation/release-notes/ios.markdown)
 - [macOS](documentation/release-notes/macos.markdown)
 
-## Test Plans
+## Development
+
+### Test Plans
 
 - [macOS](documentation/test-plans/macos.markdown)
+
+### Pull Requests
+
+### Making a Release
+
+#### macOS
+
+1. Increment the version number and build number in Xcode.
+
+2. Update the release notes by adding a new heading for the release (copy the existing formatting), and move the `main` changes about to be released to this new section.
+
+3. Raise a [Pull Request](#pull-requests) for the project and release note changes.
+
+4. Once the Pull Request is approved and merged, check out `main`, and create an archive build with 'Product' > 'Archive'.
+
+5. Export the new build from the 'Organizer' by selecting the build, and clicking the 'Distribute App' button. Choose 'Developer ID', followed by 'Upload', and then accept the subsequent defaults. Once the uploaded binary has been signed by Apple, you will receive a notification through Xcode. Repeat the export steps to save the binary to disk.
+
+6. Compress the newly exported binary by right-click and selecting 'Compress' in Finder, and then rename it to include the platform and version, separated by dashes (e.g., `Bookmarks-macOS-0.1.2.zip`).
+
+7. Create a corresponding git tag of the format `<platform>_<version>` and push it to the server. For example,
+
+   ```bash
+   git tag macOS_0.1.2
+   git push origin macOS_0.1.2
+   ```
+
+8. On the [GitHub Tags page](https://github.com/jbmorley/bookmarks/tags), select '...' to the right of the tag, and choose the 'Create release' option.
+
+9. Update the title accordingly (e.g., 'Version 0.1.2'), copy and paste the release notes from step 3., and attach the compressed binary.
+
+10. Update the download link in the README and raise a Pull Request for the change.
+
+11. 🎉
 
 ## Licensing
 

@@ -77,6 +77,7 @@ struct BookmarkCell: View {
             .padding()
         }
         .background(Color(NSColor.controlBackgroundColor))
+        .contentShape(Rectangle())
         .cornerRadius(10)
         .onAppear {
             // TODO: Determine the appropriate default size for thumbnails.

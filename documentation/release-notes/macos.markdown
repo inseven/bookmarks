@@ -4,6 +4,8 @@
 
 Changes on `main` pending release.
 
+- Fix an issue where clicking on a bookmark sometimes opened the wrong link.
+
 ## Version 0.1.2
 
 Approaching feature parity with the initial Catalyst-based macOS build.

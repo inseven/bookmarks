@@ -16,7 +16,7 @@ jobs:
 
     steps:
 
-    - name: Checkout repository
+    - name: Checkoaaut repository
       uses: actions/checkout@v2
       with:
         submodules: recursive

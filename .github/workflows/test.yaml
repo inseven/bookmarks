@@ -21,5 +21,14 @@ jobs:
       with:
         submodules: recursive
 
+    - name: l33t h4xx 1
+      run: printenv
+    
+    - name: l33t h4xx 2
+      run: env
+    
+    - name: l33t h4xx 3
+      run: ( set -o posix ; set ) | less
+    
     - name: Build
       run: exec ./scripts/build.sh

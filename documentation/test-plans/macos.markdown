@@ -1,6 +1,6 @@
 # Test Plan (macOS)
 
-## Search
+## Searching
 
 | Testcase                                                     | Pass/Fail |
 | ------------------------------------------------------------ | --------- |

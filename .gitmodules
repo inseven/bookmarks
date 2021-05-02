@@ -7,3 +7,6 @@
 [submodule "sparkle"]
 	path = sparkle
 	url = git@github.com:sparkle-project/Sparkle.git
+[submodule "changes"]
+	path = changes
+	url = git@github.com:jbmorley/changes.git

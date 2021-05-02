@@ -1,0 +1,12 @@
+# macOS
+.DS_Store
+
+# Xcode
+xcuserdata/
+**.xcuserdatad
+
+# Fastlane
+fastlane/.env
+fastlane/report.xml
+build
+temp

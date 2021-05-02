@@ -13,7 +13,7 @@ ROOT_DIRECTORY="${SCRIPT_DIRECTORY}/.."
 BUILD_DIRECTORY="${ROOT_DIRECTORY}/build"
 TEMPORARY_DIRECTORY="${ROOT_DIRECTORY}/temp"
 
-KEYCHAIN_PATH="${TEMPORARY_DIRECTORY}/temporary.keychain"
+KEYCHAIN_PATH="${TEMPORARY_DIRECTORY}/temporary.keychain-db"
 ARCHIVE_PATH="${BUILD_DIRECTORY}/Bookmarks.xcarchive"
 FASTLANE_ENV_PATH="${ROOT_DIRECTORY}/fastlane/.env"
 
@@ -103,6 +103,7 @@ security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
 
 function cleanup {
   # Cleanup the temporary files and keychain.
+  security delete-keychain "$KEYCHAIN_PATH"
   rm -rf "$TEMPORARY_DIRECTORY"
 }
 

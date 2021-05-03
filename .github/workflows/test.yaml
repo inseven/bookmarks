@@ -35,3 +35,10 @@ jobs:
         GITHUB_REF: ${{ github.ref }}
         TRY_RELEASE: ${{ github.ref == 'refs/heads/main' }}
       run: exec ./scripts/build.sh
+
+    - name: Archive the binary
+      uses: actions/upload-artifact@v2
+      if: always()
+      with:
+        name: Artifacts
+        path: build/Artifacts.zip

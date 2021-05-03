@@ -119,6 +119,18 @@ BUILD_NUMBER="${GIT_COMMIT}.${TIMESTAMP}"
 # Import the certificates into our dedicated keychain.
 fastlane import_certificates keychain:"$KEYCHAIN_PATH"
 
+# Install the provisioning profile.
+file="macos/Bookmarks_Developer_ID_Application.provisionprofile"
+uuid=`grep UUID -A1 -a "$file" | grep -io "[-A-F0-9]\{36\}"`
+extension="${file##*.}"
+PROFILE_DESTINATION=~/"Library/MobileDevice/Provisioning Profiles/$uuid.$extension"
+if [ ! -f "$PROFILE_DESTINATION" ] ; then
+  echo "Installing provisioning profile '$PROFILE_DESTINATION'..."
+  cp "$file" "$PROFILE_DESTINATION"
+else
+  echo "Provisioning profile installed; skipping"
+fi
+
 # Archive and export the build.
 xcodebuild -workspace Bookmarks.xcworkspace -scheme "Bookmarks macOS" -config Release -archivePath "$ARCHIVE_PATH" OTHER_CODE_SIGN_FLAGS="--keychain=\"${KEYCHAIN_PATH}\"" BUILD_NUMBER=$BUILD_NUMBER MARKETING_VERSION=$VERSION_NUMBER archive | xcpretty
 xcodebuild -archivePath "$ARCHIVE_PATH" -exportArchive -exportPath "$BUILD_DIRECTORY" -exportOptionsPlist "macos/ExportOptions.plist"

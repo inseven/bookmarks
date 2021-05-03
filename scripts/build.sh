@@ -102,10 +102,10 @@ mkdir -p "$TEMPORARY_DIRECTORY"
 echo "$TEMPORARY_KEYCHAIN_PASSWORD" | "$KEYCHAIN_SCRIPT" create-keychain "$KEYCHAIN_PATH" --password
 
 function cleanup {
-  # Cleanup the temporary files and keychain.
-  cd "$ROOT_DIRECTORY"
-  "$KEYCHAIN_SCRIPT" delete-keychain "$KEYCHAIN_PATH"
-  rm -rf "$TEMPORARY_DIRECTORY"
+    # Cleanup the temporary files and keychain.
+    cd "$ROOT_DIRECTORY"
+    "$KEYCHAIN_SCRIPT" delete-keychain "$KEYCHAIN_PATH"
+    rm -rf "$TEMPORARY_DIRECTORY"
 }
 
 trap cleanup EXIT
@@ -125,10 +125,11 @@ uuid=`grep UUID -A1 -a "$file" | grep -io "[-A-F0-9]\{36\}"`
 extension="${file##*.}"
 PROFILE_DESTINATION=~/"Library/MobileDevice/Provisioning Profiles/$uuid.$extension"
 if [ ! -f "$PROFILE_DESTINATION" ] ; then
-  echo "Installing provisioning profile '$PROFILE_DESTINATION'..."
-  cp "$file" "$PROFILE_DESTINATION"
+    echo "Installing provisioning profile '$PROFILE_DESTINATION'..."
+    mkdir -p ~/"Library/MobileDevice/Provisioning Profiles/"
+    cp "$file" "$PROFILE_DESTINATION"
 else
-  echo "Provisioning profile installed; skipping"
+    echo "Provisioning profile installed; skipping"
 fi
 
 # Archive and export the build.

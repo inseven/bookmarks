@@ -152,7 +152,7 @@ spctl -a -v "$APP_PATH" && echo "Bundle passed signing checks 🎉"
 
 # Archive the results.
 pushd "$BUILD_DIRECTORY"
-zip -r "Bookmarks-macOS-${VERSION_NUMBER}.zip" "$APP_BASENAME"
+zip -r --symlinks "Bookmarks-macOS-${VERSION_NUMBER}.zip" "$APP_BASENAME"
 rm -r "$APP_BASENAME"
 zip -r "Artifacts.zip" "."
 popd

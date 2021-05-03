@@ -2,12 +2,14 @@
 
 import argparse
 import functools
+import glob
 import json
 import logging
 import os
 import secrets
 import subprocess
 import sys
+import tempfile
 
 
 COMMANDS = {}
@@ -98,6 +100,22 @@ def command_delete_keychain(options):
     path = os.path.abspath(options.path)
     logging.info("Deleting keychain '%s'...", path)
     subprocess.check_call(["security", "delete-keychain", path])
+
+
+@command("verify-notarized-zip", help="unpack a compressed Mac app and verify the notarization", arguments=[
+    Argument("path", help="path to the zip file to verify")
+])
+def command_verify_notarized_zip(options):
+    path = os.path.abspath(options.path)
+    with tempfile.TemporaryDirectory() as directory:
+        subprocess.check_call(["unzip", "-d", directory, "-q", path])
+        app_path = glob.glob(directory + "/*.app")[0]
+        try:
+            result = subprocess.run(["spctl", "-a", "-v", app_path], capture_output=True)
+            result.check_returncode()
+        except subprocess.CalledProcessError as e:
+            logging.error(e.stderr.decode("utf-8").strip())
+            exit("Failed to verify bundle.")
 
 
 def main():

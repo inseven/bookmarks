@@ -43,7 +43,9 @@ struct ContentView: View {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
                     ForEach(items) { item in
                         BookmarkCell(item: item)
-                            .onTapGesture {
+                            .onClick {
+
+                            } doubleClick: {
                                 NSWorkspace.shared.open(item.url)
                             }
                             .contextMenu(ContextMenu(menuItems: {

@@ -167,9 +167,6 @@ if $NOTARIZE ; then
     fastlane notarize_release package:"$APP_PATH"
 fi
 
-# Belt-and-braces check that the bundle is actually correctly notarized.
-spctl -a -v "$APP_PATH" && echo "Bundle passed signing checks 🎉"
-
 # Archive the results.
 pushd "$BUILD_DIRECTORY"
 zip -r --symlinks "Bookmarks-macOS-${VERSION_NUMBER}.zip" "$APP_BASENAME"

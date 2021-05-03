@@ -37,7 +37,13 @@ jobs:
 
     - name: Archive the binary
       uses: actions/upload-artifact@v2
-      if: always()
       with:
         name: Artifacts
+        path: build/Artifacts.zip
+
+    - name: Archive the build directory
+      uses: actions/upload-artifact@v2
+      if: always()
+      with:
+        name: Build Directory
         path: build

@@ -37,7 +37,7 @@ KEYCHAIN_PATH="${TEMPORARY_DIRECTORY}/temporary.keychain-db"
 ARCHIVE_PATH="${BUILD_DIRECTORY}/Bookmarks.xcarchive"
 FASTLANE_ENV_PATH="${ROOT_DIRECTORY}/fastlane/.env"
 
-CHANGES_SCRIPT="${ROOT_DIRECTORY}/changes/changes"
+CHANGES_SCRIPT="${ROOT_DIRECTORY}/scripts/changes/changes"
 BUILD_TOOLS_SCRIPT="${ROOT_DIRECTORY}/scripts/build-tools"
 
 # Process the command line arguments.

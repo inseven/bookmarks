@@ -18,6 +18,7 @@ ARCHIVE_PATH="${BUILD_DIRECTORY}/Bookmarks.xcarchive"
 FASTLANE_ENV_PATH="${ROOT_DIRECTORY}/fastlane/.env"
 
 CHANGES_SCRIPT="${ROOT_DIRECTORY}/changes/changes"
+KEYCHAIN_SCRIPT="${ROOT_DIRECTORY}/scripts/temporary_keychain.py"
 
 # Process the command line arguments.
 POSITIONAL=()
@@ -46,9 +47,6 @@ done
 IPHONE_DESTINATION="platform=iOS Simulator,name=iPhone 12 Pro"
 # IPHONE_DESTINATION="platform=iOS Simulator,name=iPhone 12 Pro,OS=14.4"
 
-# Generate a random string to secure the local keychain.
-export TEMPORARY_KEYCHAIN_PASSWORD=`openssl rand -base64 14`
-
 # Source the Fastlane .env file if it exists to make local development easier.
 if [ -f "$FASTLANE_ENV_PATH" ] ; then
     echo "Sourcing .env..."
@@ -71,19 +69,19 @@ xcrun instruments -s devices
 
 # Smoke test builds.
 
-# BookmarksCore
-build_scheme "BookmarksCore iOS" clean build build-for-testing test \
-  -sdk iphonesimulator \
-  -destination "$IPHONE_DESTINATION"
-build_scheme "BookmarksCore macOS" clean build build-for-testing test
-
-# iOS
-build_scheme "Bookmarks iOS" clean build build-for-testing test \
-  -sdk iphonesimulator \
-  -destination "$IPHONE_DESTINATION"
-
-# macOS
-build_scheme "Bookmarks macOS" clean build build-for-testing
+# # BookmarksCore
+# build_scheme "BookmarksCore iOS" clean build build-for-testing test \
+#   -sdk iphonesimulator \
+#   -destination "$IPHONE_DESTINATION"
+# build_scheme "BookmarksCore macOS" clean build build-for-testing test
+#
+# # iOS
+# build_scheme "Bookmarks iOS" clean build build-for-testing test \
+#   -sdk iphonesimulator \
+#   -destination "$IPHONE_DESTINATION"
+#
+# # macOS
+# build_scheme "Bookmarks macOS" clean build build-for-testing
 
 # Build the macOS archive.
 
@@ -98,12 +96,12 @@ if [ -d "$TEMPORARY_DIRECTORY" ] ; then
     rm -rf "$TEMPORARY_DIRECTORY"
 fi
 mkdir -p "$TEMPORARY_DIRECTORY"
-security create-keychain -p "$TEMPORARY_KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
-security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+"$KEYCHAIN_SCRIPT" create-keychain "$KEYCHAIN_PATH"
 
 function cleanup {
   # Cleanup the temporary files and keychain.
-  security delete-keychain "$KEYCHAIN_PATH"
+  cd "$ROOT_DIRECTORY"
+  "$KEYCHAIN_SCRIPT" delete-keychain "$KEYCHAIN_PATH"
   rm -rf "$TEMPORARY_DIRECTORY"
 }
 
@@ -117,8 +115,6 @@ BUILD_NUMBER="${GIT_COMMIT}.${TIMESTAMP}"
 
 # Import the certificates into our dedicated keychain.
 fastlane import_certificates keychain:"$KEYCHAIN_PATH"
-security unlock-keychain -p "$TEMPORARY_KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
-security list-keychain -d user -s "$KEYCHAIN_PATH"
 
 # Archive and export the build.
 xcodebuild -workspace Bookmarks.xcworkspace -scheme "Bookmarks macOS" -config Release -archivePath "$ARCHIVE_PATH" OTHER_CODE_SIGN_FLAGS="--keychain=\"${KEYCHAIN_PATH}\"" BUILD_NUMBER=$BUILD_NUMBER MARKETING_VERSION=$VERSION_NUMBER archive | xcpretty

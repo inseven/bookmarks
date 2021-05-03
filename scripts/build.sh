@@ -64,8 +64,8 @@ do
 done
 
 # iPhone to be used for smoke test builds and tests.
+# This doesn't specify the OS version to allow the build script to recover from minor build changes.
 IPHONE_DESTINATION="platform=iOS Simulator,name=iPhone 12 Pro"
-# IPHONE_DESTINATION="platform=iOS Simulator,name=iPhone 12 Pro,OS=14.4"
 
 # Generate a random string to secure the local keychain.
 export TEMPORARY_KEYCHAIN_PASSWORD=`openssl rand -base64 14`

@@ -40,4 +40,4 @@ cat "$CHANGES_NOTES_FILE"
 # Disappointingly, there seems to be an issue where the release create step doesn't use the specified tag if a set of
 # files are also provided for upload. To work around this, we instead perform a secondary upload step.
 gh release create "$CHANGES_TAG" --prerelease --title "$CHANGES_TITLE" --notes-file "$CHANGES_NOTES_FILE"
-gh release upload "$CHANGES_TAG" build/Fileaway-macOS*.zip
+gh release upload "$CHANGES_TAG" build/Bookmarks-macOS*.zip

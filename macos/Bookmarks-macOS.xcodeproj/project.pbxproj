@@ -76,6 +76,9 @@
 		D8B6E2C42620990400B2C239 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		D8CF8C6D261E34A300E52E85 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8CF8CC1261E369D00E52E85 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8ECA5DE2640580E00947EEC /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		D8ECA5DF2640582200947EEC /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
+		D8ECA5E02640583900947EEC /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +111,9 @@
 		D891C447261E32F90024E1A6 = {
 			isa = PBXGroup;
 			children = (
+				D8ECA5E02640583900947EEC /* Debug.xcconfig */,
+				D8ECA5DE2640580E00947EEC /* Release.xcconfig */,
+				D8ECA5DF2640582200947EEC /* Common.xcconfig */,
 				D8A0D75A262015E700C9F190 /* interact */,
 				D891C452261E32F90024E1A6 /* Bookmarks */,
 				D891C465261E32FB0024E1A6 /* BookmarksTests */,
@@ -373,6 +379,7 @@
 /* Begin XCBuildConfiguration section */
 		D891C474261E32FB0024E1A6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D8ECA5E02640583900947EEC /* Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -434,6 +441,7 @@
 		};
 		D891C475261E32FB0024E1A6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D8ECA5DE2640580E00947EEC /* Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -495,7 +503,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = $BUILD_NUMBER;
 				DEVELOPMENT_ASSET_PATHS = "\"Bookmarks/Preview Content\"";
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -523,7 +531,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = $BUILD_NUMBER;
 				DEVELOPMENT_ASSET_PATHS = "\"Bookmarks/Preview Content\"";
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
 				ENABLE_HARDENED_RUNTIME = YES;

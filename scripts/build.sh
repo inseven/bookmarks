@@ -140,6 +140,8 @@ BUILD_NUMBER="${GIT_COMMIT}.${TIMESTAMP}"
 fastlane import_certificates keychain:"$KEYCHAIN_PATH"
 
 # Install the provisioning profile.
+# TODO: Convenience utility for installing a provisioning profile #105
+#       https://github.com/jbmorley/bookmarks/issues/105
 file="macos/Bookmarks_Developer_ID_Application.provisionprofile"
 uuid=`grep UUID -A1 -a "$file" | grep -io "[-A-F0-9]\{36\}"`
 extension="${file##*.}"

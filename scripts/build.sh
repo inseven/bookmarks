@@ -176,3 +176,11 @@ zip -r --symlinks "Bookmarks-macOS-${VERSION_NUMBER}.zip" "$APP_BASENAME"
 rm -r "$APP_BASENAME"
 zip -r "Artifacts.zip" "."
 popd
+
+# Attempt to create a version tag and publish a GitHub release.
+# This fails quietly if there's no release to be made.
+if $RELEASE || $TRY_RELEASE ; then
+    # List the current tags just to check GitHub has them.
+    git tag
+    "$CHANGES_SCRIPT" --scope macOS release --skip-if-empty --push --command 'scripts/release.sh'
+fi

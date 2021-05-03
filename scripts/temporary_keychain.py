@@ -12,6 +12,7 @@ import sys
 
 COMMANDS = {}
 
+
 class Command(object):
 
     def __init__(self, name, help, arguments, callback):

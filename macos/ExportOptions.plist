@@ -2,6 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>provisioningProfiles</key>
+	<dict>
+		<key>uk.co.inseven.bookmarks</key>
+		<string>Bookmarks Developer ID Application</string>
+	</dict>
 	<key>destination</key>
 	<string>export</string>
 	<key>method</key>

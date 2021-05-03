@@ -7,6 +7,7 @@ import logging
 import os
 import secrets
 import subprocess
+import sys
 
 
 COMMANDS = {}
@@ -75,12 +76,15 @@ def add_keychain(path):
 
 
 @command("create-keychain", help="Safely create a temporary keychain", arguments=[
-    Argument("path", help="path at which to create the keychain")
+    Argument("path", help="path at which to create the keychain"),
+    Argument("--password", "-p", action="store_true", default=False, help="read password from stdin")
 ])
 def command_create_keychain(options):
     path = os.path.abspath(options.path)
     logging.info("Creating keychain '%s'...", path)
     password = secrets.token_hex()
+    if options.password:
+        password = sys.stdin.read().strip()
     create_keychain(path, password)
     add_keychain(path)
     unlock_keychain(path, password)

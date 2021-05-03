@@ -47,6 +47,9 @@ done
 IPHONE_DESTINATION="platform=iOS Simulator,name=iPhone 12 Pro"
 # IPHONE_DESTINATION="platform=iOS Simulator,name=iPhone 12 Pro,OS=14.4"
 
+# Generate a random string to secure the local keychain.
+export TEMPORARY_KEYCHAIN_PASSWORD=`openssl rand -base64 14`
+
 # Source the Fastlane .env file if it exists to make local development easier.
 if [ -f "$FASTLANE_ENV_PATH" ] ; then
     echo "Sourcing .env..."
@@ -96,7 +99,7 @@ if [ -d "$TEMPORARY_DIRECTORY" ] ; then
     rm -rf "$TEMPORARY_DIRECTORY"
 fi
 mkdir -p "$TEMPORARY_DIRECTORY"
-"$KEYCHAIN_SCRIPT" create-keychain "$KEYCHAIN_PATH"
+echo "$TEMPORARY_KEYCHAIN_PASSWORD" | "$KEYCHAIN_SCRIPT" create-keychain "$KEYCHAIN_PATH" --password
 
 function cleanup {
   # Cleanup the temporary files and keychain.

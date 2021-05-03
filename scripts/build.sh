@@ -18,7 +18,7 @@ ARCHIVE_PATH="${BUILD_DIRECTORY}/Bookmarks.xcarchive"
 FASTLANE_ENV_PATH="${ROOT_DIRECTORY}/fastlane/.env"
 
 CHANGES_SCRIPT="${ROOT_DIRECTORY}/changes/changes"
-KEYCHAIN_SCRIPT="${ROOT_DIRECTORY}/scripts/temporary_keychain.py"
+BUILD_TOOLS_SCRIPT="${ROOT_DIRECTORY}/scripts/build-tools"
 
 # Process the command line arguments.
 POSITIONAL=()
@@ -99,12 +99,12 @@ if [ -d "$TEMPORARY_DIRECTORY" ] ; then
     rm -rf "$TEMPORARY_DIRECTORY"
 fi
 mkdir -p "$TEMPORARY_DIRECTORY"
-echo "$TEMPORARY_KEYCHAIN_PASSWORD" | "$KEYCHAIN_SCRIPT" create-keychain "$KEYCHAIN_PATH" --password
+echo "$TEMPORARY_KEYCHAIN_PASSWORD" | "$BUILD_TOOLS_SCRIPT" create-keychain "$KEYCHAIN_PATH" --password
 
 function cleanup {
     # Cleanup the temporary files and keychain.
     cd "$ROOT_DIRECTORY"
-    "$KEYCHAIN_SCRIPT" delete-keychain "$KEYCHAIN_PATH"
+    "$BUILD_TOOLS_SCRIPT" delete-keychain "$KEYCHAIN_PATH"
     rm -rf "$TEMPORARY_DIRECTORY"
 }
 
@@ -153,7 +153,7 @@ spctl -a -v "$APP_PATH" && echo "Bundle passed signing checks 🎉"
 # Archive the results.
 pushd "$BUILD_DIRECTORY"
 zip -r --symlinks "Bookmarks-macOS-${VERSION_NUMBER}.zip" "$APP_BASENAME"
-"$KEYCHAIN_SCRIPT" verify-notarized-zip "Bookmarks-macOS-${VERSION_NUMBER}.zip"
+"$BUILD_TOOLS_SCRIPT" verify-notarized-zip "Bookmarks-macOS-${VERSION_NUMBER}.zip"
 rm -r "$APP_BASENAME"
 zip -r "Artifacts.zip" "."
 popd

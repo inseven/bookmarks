@@ -130,6 +130,11 @@ function cleanup {
 
 trap cleanup EXIT
 
+# Build the Sparkle tools to ensure we can generate an appcast.
+pushd "sparkle"
+echo "n" | BUILDDIR=build make release
+popd
+
 # Determine the version and build number.
 VERSION_NUMBER=`"$CHANGES_SCRIPT" --scope macOS current-version`
 GIT_COMMIT=`git rev-parse --short HEAD`

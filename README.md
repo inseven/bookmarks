@@ -6,52 +6,60 @@
 
 ![Bookmarks screenshot](screenshot.png)
 
-## Download
-
-- [Version 0.1.2 for macOS](https://github.com/jbmorley/bookmarks/releases/download/macOS_0.1.2/Bookmarks-macOS-0.1.2.zip)
-
-## Release Notes
-
-- [iOS](documentation/release-notes/ios.markdown)
-
 ## Development
+
+### Builds
+
+In order to make continuous integration easy the `scripts/build.sh` script builds the full project, including submitting the macOS app for notarization. In order to run this script (noting that you probably don't want to use it for regular development cycles), you'll need to configure your environment accordingly, by setting the following environment variables:
+
+- `MATCH_PASSWORD` -- the password/passphrase to secure the [match](https://docs.fastlane.tools/actions/match/) certificate store
+- `CERTIFICATE_REPOSITORY` -- the repository used for the match certificate store (must be HTTPS)
+- `CERTIFICATE_REPOSITORY_AUTHORIZATION_KEY` -- a GitHub authorization key used to access the certificate repository (see the [match authorization docs](https://docs.fastlane.tools/actions/match/#git-storage-on-github))
+- `APPLE_DEVELOPER_ID` -- individual Apple Developer Account ID (used for notarization)
+- `FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD` -- [app-specific password](https://support.apple.com/en-us/HT204397) for the Developer Account
+- `TRY_RELEASE` -- boolean indicating whether to attempt a release (conditionally set based on the current branch using `${{ github.ref == 'refs/heads/main' }}`)
+- `GITHUB_TOKEN` -- [GitHub token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) used to create the release
+
+The script (like Fastlane) will look for and source an environment file in the Fastlane directory (`Fastlane/.env`) which you can add your local details to. This file is, of course, in `.gitignore`. For example,
+
+```bash
+# Certificate store
+export MATCH_PASSWORD=
+export CERTIFICATE_REPOSITORY=
+export CERTIFICATE_REPOSITORY_AUTHORIZATION_KEY=
+
+# Developer account
+export APPLE_DEVELOPER_ID=
+export FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=
+
+# GitHub (only required if publishing releases locally)
+export GITHUB_TOKEN=
+
+# Release
+export TRY_RELEASE=false
+```
+
+You can generate your GitHub authorization key (for `CERTIFICATE_REPOSITORY_AUTHORIZATION_KEY`) as follows:
+
+```bash
+echo -n your_github_username:your_personal_access_token | base64
+```
+
+Once you've added your environment variables to this, run the script from the root of the project directory as follows:
+
+```bash
+./scripts/build.sh
+```
+
+You can publish a build locally by specifying the `--release` parameter:
+
+```bash
+./scripts/build.sh --release
+```
 
 ### Test Plans
 
 - [macOS](documentation/test-plans/macos.markdown)
-
-### Pull Requests
-
-### Making a Release
-
-#### macOS
-
-1. Increment the version number and build number in Xcode.
-
-2. Update the release notes by adding a new heading for the release (copy the existing formatting), and move the `main` changes about to be released to this new section.
-
-3. Raise a [Pull Request](#pull-requests) for the project and release note changes.
-
-4. Once the Pull Request is approved and merged, check out `main`, and create an archive build with 'Product' > 'Archive'.
-
-5. Export the new build from the 'Organizer' by selecting the build, and clicking the 'Distribute App' button. Choose 'Developer ID', followed by 'Upload', and then accept the subsequent defaults. Once the uploaded binary has been signed by Apple, you will receive a notification through Xcode. Repeat the export steps to save the binary to disk.
-
-6. Compress the newly exported binary by right-click and selecting 'Compress' in Finder, and then rename it to include the platform and version, separated by dashes (e.g., `Bookmarks-macOS-0.1.2.zip`).
-
-7. Create a corresponding git tag of the format `<platform>_<version>` and push it to the server. For example,
-
-   ```bash
-   git tag macOS_0.1.2
-   git push origin macOS_0.1.2
-   ```
-
-8. On the [GitHub Tags page](https://github.com/jbmorley/bookmarks/tags), select '...' to the right of the tag, and choose the 'Create release' option.
-
-9. Update the title accordingly (e.g., 'Version 0.1.2'), copy and paste the release notes from step 3., and attach the compressed binary.
-
-10. Update the download link in the README and raise a Pull Request for the change.
-
-11. 🎉
 
 ## Licensing
 

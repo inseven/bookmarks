@@ -1,6 +1,6 @@
 # Bookmarks
 
-[![Build](https://github.com/jbmorley/bookmarks/actions/workflows/test.yaml/badge.svg?branch=main)](https://github.com/jbmorley/bookmarks/actions/workflows/test.yaml)
+[![Build](https://github.com/jbmorley/bookmarks/actions/workflows/build.yaml/badge.svg?branch=main)](https://github.com/jbmorley/bookmarks/actions/workflows/build.yaml)
 
 [Pinboard](https://pinboard.in) client for iOS and macOS.
 

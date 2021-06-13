@@ -38,6 +38,8 @@ FASTLANE_ENV_PATH="${ROOT_DIRECTORY}/fastlane/.env"
 CHANGES_DIRECTORY="${SCRIPTS_DIRECTORY}/changes"
 BUILD_TOOLS_DIRECTORY="${SCRIPTS_DIRECTORY}/build-tools"
 
+CHANGES_GITHUB_RELEASE_SCRIPT="${CHANGES_DIRECTORY}/examples/gh-release.sh"
+
 PATH=$PATH:$CHANGES_DIRECTORY
 PATH=$PATH:$BUILD_TOOLS_DIRECTORY
 
@@ -188,8 +190,9 @@ fi
 
 # Archive the results.
 pushd "$BUILD_DIRECTORY"
-zip -r --symlinks "Bookmarks-macOS-${VERSION_NUMBER}.zip" "$APP_BASENAME"
-build-tools verify-notarized-zip "Bookmarks-macOS-${VERSION_NUMBER}.zip"
+ZIP_BASENAME="Bookmarks-macOS-${VERSION_NUMBER}.zip"
+zip -r --symlinks "$ZIP_BASENAME" "$APP_BASENAME"
+build-tools verify-notarized-zip "$ZIP_BASENAME"
 rm -r "$APP_BASENAME"
 zip -r "Artifacts.zip" "."
 popd
@@ -201,5 +204,6 @@ if $RELEASE ; then
         release \
         --skip-if-empty \
         --push \
-        --command 'scripts/release.sh'
+        --command "\"${CHANGES_GITHUB_RELEASE_SCRIPT}\" \"\$@\"" \
+        "${BUILD_DIRECTORY}/${ZIP_BASENAME}"
 fi

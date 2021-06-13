@@ -31,12 +31,15 @@ ROOT_DIRECTORY="${SCRIPTS_DIRECTORY}/.."
 BUILD_DIRECTORY="${ROOT_DIRECTORY}/build"
 TEMPORARY_DIRECTORY="${ROOT_DIRECTORY}/temp"
 
-KEYCHAIN_PATH="${TEMPORARY_DIRECTORY}/temporary.keychain-db"
+KEYCHAIN_PATH="${TEMPORARY_DIRECTORY}/temporary.keychain"
 ARCHIVE_PATH="${BUILD_DIRECTORY}/Bookmarks.xcarchive"
 FASTLANE_ENV_PATH="${ROOT_DIRECTORY}/fastlane/.env"
 
-CHANGES_SCRIPT="${ROOT_DIRECTORY}/scripts/changes/changes"
-BUILD_TOOLS_SCRIPT="${ROOT_DIRECTORY}/scripts/build-tools/build-tools"
+CHANGES_DIRECTORY="${SCRIPTS_DIRECTORY}/changes"
+BUILD_TOOLS_DIRECTORY="${SCRIPTS_DIRECTORY}/build-tools"
+
+PATH=$PATH:$CHANGES_DIRECTORY
+PATH=$PATH:$BUILD_TOOLS_DIRECTORY
 
 # Process the command line arguments.
 POSITIONAL=()
@@ -97,14 +100,14 @@ xcode_project -list
 
 # BookmarksCore
 build_scheme "BookmarksCore iOS" clean build build-for-testing test \
-  -sdk iphonesimulator \
-  -destination "$IPHONE_DESTINATION"
+    -sdk iphonesimulator \
+    -destination "$IPHONE_DESTINATION"
 build_scheme "BookmarksCore macOS" clean build build-for-testing test
 
 # iOS
 build_scheme "Bookmarks iOS" clean build build-for-testing test \
-  -sdk iphonesimulator \
-  -destination "$IPHONE_DESTINATION"
+    -sdk iphonesimulator \
+    -destination "$IPHONE_DESTINATION"
 
 # macOS
 build_scheme "Bookmarks macOS" clean build build-for-testing
@@ -122,19 +125,19 @@ if [ -d "$TEMPORARY_DIRECTORY" ] ; then
     rm -rf "$TEMPORARY_DIRECTORY"
 fi
 mkdir -p "$TEMPORARY_DIRECTORY"
-echo "$TEMPORARY_KEYCHAIN_PASSWORD" | "$BUILD_TOOLS_SCRIPT" create-keychain "$KEYCHAIN_PATH" --password
+echo "$TEMPORARY_KEYCHAIN_PASSWORD" | build-tools create-keychain "$KEYCHAIN_PATH" --password
 
 function cleanup {
     # Cleanup the temporary files and keychain.
     cd "$ROOT_DIRECTORY"
-    "$BUILD_TOOLS_SCRIPT" delete-keychain "$KEYCHAIN_PATH"
+    build-tools delete-keychain "$KEYCHAIN_PATH"
     rm -rf "$TEMPORARY_DIRECTORY"
 }
 
 trap cleanup EXIT
 
 # Determine the version and build number.
-VERSION_NUMBER=`"$CHANGES_SCRIPT" --scope macOS current-version`
+VERSION_NUMBER=`changes --scope macOS current-version`
 GIT_COMMIT=`git rev-parse --short HEAD`
 TIMESTAMP=`date +%s`
 BUILD_NUMBER="${GIT_COMMIT}.${TIMESTAMP}"
@@ -186,15 +189,17 @@ fi
 # Archive the results.
 pushd "$BUILD_DIRECTORY"
 zip -r --symlinks "Bookmarks-macOS-${VERSION_NUMBER}.zip" "$APP_BASENAME"
-"$BUILD_TOOLS_SCRIPT" verify-notarized-zip "Bookmarks-macOS-${VERSION_NUMBER}.zip"
+build-tools verify-notarized-zip "Bookmarks-macOS-${VERSION_NUMBER}.zip"
 rm -r "$APP_BASENAME"
 zip -r "Artifacts.zip" "."
 popd
 
-# Attempt to create a version tag and publish a GitHub release.
-# This fails quietly if there's no release to be made.
+# Attempt to create a version tag and publish a GitHub release; fails quietly if there's no new release.
 if $RELEASE || $TRY_RELEASE ; then
-    # List the current tags just to check GitHub has them.
-    git tag
-    "$CHANGES_SCRIPT" --scope macOS release --skip-if-empty --push --command 'scripts/release.sh'
+    changes \
+        --scope macOS \
+        release \
+        --skip-if-empty \
+        --push \
+        --command 'scripts/release.sh'
 fi

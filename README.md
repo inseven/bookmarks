@@ -49,9 +49,6 @@ export FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=
 
 # GitHub (only required if publishing releases locally)
 export GITHUB_TOKEN=
-
-# Release
-export TRY_RELEASE=false
 ```
 
 You can generate your GitHub authorization key (for `CERTIFICATE_REPOSITORY_AUTHORIZATION_KEY`) as follows:

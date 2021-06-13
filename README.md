@@ -31,6 +31,7 @@ In order to make continuous integration easy the `scripts/build.sh` script build
 - `CERTIFICATE_REPOSITORY_AUTHORIZATION_KEY` -- a GitHub authorization key used to access the certificate repository (see the [match authorization docs](https://docs.fastlane.tools/actions/match/#git-storage-on-github))
 - `APPLE_DEVELOPER_ID` -- individual Apple Developer Account ID (used for notarization)
 - `FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD` -- [app-specific password](https://support.apple.com/en-us/HT204397) for the Developer Account
+- `NOTARIZE` -- boolean indicating whether to attempt notarize the build (conditionally set based on the current branch using `${{ github.ref == 'refs/heads/main' }}`)
 - `TRY_RELEASE` -- boolean indicating whether to attempt a release (conditionally set based on the current branch using `${{ github.ref == 'refs/heads/main' }}`)
 - `GITHUB_TOKEN` -- [GitHub token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) used to create the release
 
@@ -63,6 +64,12 @@ Once you've added your environment variables to this, run the script from the ro
 
 ```bash
 ./scripts/build.sh
+```
+
+You can notarize local builds by specifying the `--notarize` parameter:
+
+```bash
+./scripts/build.sh --notarize
 ```
 
 You can publish a build locally by specifying the `--release` parameter:

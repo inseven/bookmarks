@@ -25,9 +25,9 @@ set -o pipefail
 set -x
 set -u
 
-SCRIPT_DIRECTORYS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SCRIPTS_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
-ROOT_DIRECTORY="${SCRIPT_DIRECTORYS}/.."
+ROOT_DIRECTORY="${SCRIPTS_DIRECTORY}/.."
 BUILD_DIRECTORY="${ROOT_DIRECTORY}/build"
 TEMPORARY_DIRECTORY="${ROOT_DIRECTORY}/temp"
 
@@ -40,14 +40,14 @@ BUILD_TOOLS_SCRIPT="${ROOT_DIRECTORY}/scripts/build-tools/build-tools"
 
 # Process the command line arguments.
 POSITIONAL=()
-NOTARIZE=true
+NOTARIZE=${NOTARIZE:-false}
 RELEASE=false
 while [[ $# -gt 0 ]]
 do
     key="$1"
     case $key in
-        -N|--skip-notarize)
-        NOTARIZE=false
+        -n|--notarize)
+        NOTARIZE=true
         shift
         ;;
         -r|--release)

@@ -8,6 +8,20 @@
 
 ## Development
 
+### Managing Certificates
+
+The build script (details below) uses Fastlane's match task to manage a certificates and a local keychain. Unfortunately, match seems very buggy when using Developer ID certificates, meaning it can't safely be used to fetch the certificates from Apple (it will keep creating new developer certificates until you reach your quota).
+
+Instead, you can manually import a manually created certificate and private keychain into an existing match certificate store:
+
+```bash
+fastlane match import --skip_certificate_matching true --type developer_id
+```
+
+Match will ask for the path to your certificate (`.cer`) and private key file (`.p12`).
+
+N.B. When manually importing certificates, match will not generate file names with identifiers so it's a good idea to name the certificate and private key with a matching, and obvious name.
+
 ### Builds
 
 In order to make continuous integration easy the `scripts/build.sh` script builds the full project, including submitting the macOS app for notarization. In order to run this script (noting that you probably don't want to use it for regular development cycles), you'll need to configure your environment accordingly, by setting the following environment variables:
@@ -66,4 +80,3 @@ You can publish a build locally by specifying the `--release` parameter:
 Bookmarks is licensed under the MIT License (see [LICENSE](LICENSE)).
 
 During development, the plan is to make builds available for free through the [Releases](https://github.com/jbmorley/bookmarks/releases) section of the GitHub project. Once we reach something robust and ready for release, we'll make a paid version available through the [App Store](https://www.apple.com/app-store/) to fund on-going costs of development. The app will remain Open Source, and anyone is free to contribute or build their own copies, and we'll figure out a way to give free licenses to contributors.
-

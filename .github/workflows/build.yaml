@@ -23,6 +23,13 @@ jobs:
         submodules: recursive
         fetch-depth: 0
 
+    - name: Install Pipenv
+      run: |
+        sudo pip3 install pipenv
+
+    - name: Install dependencies
+      run: scripts/install-dependencies.sh
+
     - name: Build, test, and release
       env:
         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}

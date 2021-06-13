@@ -25,11 +25,9 @@ set -o pipefail
 set -x
 set -u
 
-# TODO: Re-enable test builds if possible using a locally generated signing key.
+SCRIPT_DIRECTORYS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
-SCRIPT_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-
-ROOT_DIRECTORY="${SCRIPT_DIRECTORY}/.."
+ROOT_DIRECTORY="${SCRIPT_DIRECTORYS}/.."
 BUILD_DIRECTORY="${ROOT_DIRECTORY}/build"
 TEMPORARY_DIRECTORY="${ROOT_DIRECTORY}/temp"
 

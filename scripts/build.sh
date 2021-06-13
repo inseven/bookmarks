@@ -74,9 +74,14 @@ if [ -f "$FASTLANE_ENV_PATH" ] ; then
     source "$FASTLANE_ENV_PATH"
 fi
 
-function build_scheme {
+function xcode_project {
     xcodebuild \
-        -workspace Bookmarks.xcworkspace \
+        -workspace Bookmarks.xcworkspace "$@"
+}
+
+function build_scheme {
+    # Disable code signing for the build server.
+    xcode_project \
         -scheme "$1" \
         CODE_SIGN_IDENTITY="" \
         CODE_SIGNING_REQUIRED=NO \
@@ -86,7 +91,7 @@ function build_scheme {
 cd "$ROOT_DIRECTORY"
 
 # List the available schemes.
-xcrun instruments -s devices
+xcode_project -list
 
 # Smoke test builds.
 
@@ -153,8 +158,19 @@ else
 fi
 
 # Archive and export the build.
-xcodebuild -workspace Bookmarks.xcworkspace -scheme "Bookmarks macOS" -config Release -archivePath "$ARCHIVE_PATH" OTHER_CODE_SIGN_FLAGS="--keychain=\"${KEYCHAIN_PATH}\"" BUILD_NUMBER=$BUILD_NUMBER MARKETING_VERSION=$VERSION_NUMBER archive | xcpretty
-xcodebuild -archivePath "$ARCHIVE_PATH" -exportArchive -exportPath "$BUILD_DIRECTORY" -exportOptionsPlist "macos/ExportOptions.plist"
+xcode_project \
+    -scheme "Bookmarks macOS" \
+    -config Release \
+    -archivePath "$ARCHIVE_PATH" \
+    OTHER_CODE_SIGN_FLAGS="--keychain=\"${KEYCHAIN_PATH}\"" \
+    BUILD_NUMBER=$BUILD_NUMBER \
+    MARKETING_VERSION=$VERSION_NUMBER \
+    clean archive | xcpretty
+xcodebuild \
+    -archivePath "$ARCHIVE_PATH" \
+    -exportArchive \
+    -exportPath "$BUILD_DIRECTORY" \
+    -exportOptionsPlist "macos/ExportOptions.plist"
 
 APP_BASENAME="Bookmarks.app"
 APP_PATH="$BUILD_DIRECTORY/$APP_BASENAME"

@@ -12,6 +12,8 @@
 		D84CE488261E2B7D00AF1901 /* Pinboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CE487261E2B7D00AF1901 /* Pinboard.swift */; };
 		D8569FCC261E2603006926BF /* BookmarksCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8569FC2261E2603006926BF /* BookmarksCore.framework */; };
 		D8569FD3261E2603006926BF /* BookmarksCore.h in Headers */ = {isa = PBXBuildFile; fileRef = D8569FC5261E2603006926BF /* BookmarksCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D8717C4E2679153F007617C5 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8717C4D2679153F007617C5 /* URL.swift */; };
+		D8717C4F2679153F007617C5 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8717C4D2679153F007617C5 /* URL.swift */; };
 		D8AA4055261E2E8D00D11421 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AA4054261E2E8D00D11421 /* String.swift */; };
 		D8AA4061261E305200D11421 /* NSCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AA4060261E305200D11421 /* NSCoder.swift */; };
 		D8B04B1E261EC65D00376ADD /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B04B1D261EC65C00376ADD /* Settings.swift */; };
@@ -100,6 +102,7 @@
 		D8569FC6261E2603006926BF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D8569FCB261E2603006926BF /* BookmarksCore iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BookmarksCore iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8569FD2261E2603006926BF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D8717C4D2679153F007617C5 /* URL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
 		D8AA4054261E2E8D00D11421 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		D8AA4060261E305200D11421 /* NSCoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCoder.swift; sourceTree = "<group>"; };
 		D8B04B1D261EC65C00376ADD /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -240,6 +243,7 @@
 				D8AA4060261E305200D11421 /* NSCoder.swift */,
 				D8AA4054261E2E8D00D11421 /* String.swift */,
 				D8D3F5B4261E5AF300B2D66F /* UIImage.swift */,
+				D8717C4D2679153F007617C5 /* URL.swift */,
 				D8D3F601261E5BF600B2D66F /* URLComponents.swift */,
 				D8D3F610261E5C0C00B2D66F /* View.swift */,
 			);
@@ -519,6 +523,7 @@
 				D8D3F59F261E5AAE00B2D66F /* WebViewDownloader.swift in Sources */,
 				D8B04B1F261EC65D00376ADD /* Settings.swift in Sources */,
 				D84CE484261E2AD000AF1901 /* Post.swift in Sources */,
+				D8717C4E2679153F007617C5 /* URL.swift in Sources */,
 				D8B04B31261EC7E700376ADD /* BookmarksManager.swift in Sources */,
 				D8D3F602261E5BF600B2D66F /* URLComponents.swift in Sources */,
 				D8AA4055261E2E8D00D11421 /* String.swift in Sources */,
@@ -560,6 +565,7 @@
 				D8D3F59E261E5AAE00B2D66F /* WebViewDownloader.swift in Sources */,
 				D8B04B1E261EC65D00376ADD /* Settings.swift in Sources */,
 				D8CF8CA1261E35B300E52E85 /* Pinboard.swift in Sources */,
+				D8717C4F2679153F007617C5 /* URL.swift in Sources */,
 				D8B04B32261EC7E700376ADD /* BookmarksManager.swift in Sources */,
 				D8D3F603261E5BF600B2D66F /* URLComponents.swift in Sources */,
 				D8CF8CB0261E35BB00E52E85 /* String.swift in Sources */,

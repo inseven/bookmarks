@@ -53,6 +53,10 @@ struct ContentView: View {
                                     NSWorkspace.shared.open(item.url)
                                 }
                                 Divider()
+                                Button("View on Internet Archive") {
+                                    NSWorkspace.shared.open(item.url.internetArchiveUrl)
+                                }
+                                Divider()
                                 Button("Share") {
                                     print("Share")
                                     print(item.identifier)

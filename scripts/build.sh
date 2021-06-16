@@ -204,6 +204,6 @@ if $RELEASE ; then
         release \
         --skip-if-empty \
         --push \
-        --command "${CHANGES_GITHUB_RELEASE_SCRIPT}"
+        --command "${CHANGES_GITHUB_RELEASE_SCRIPT}" \
         "${BUILD_DIRECTORY}/${ZIP_BASENAME}"
 fi

@@ -24,20 +24,12 @@ import SwiftUI
 import SQLite
 import Interact
 
-//public let identifier: String
-//public let title: String
-//public let url: URL
-//public let tags: [String]
-//public let date: Date
-//public let thumbnail: Image?
-
 // TODO: Can I make an extension to handle URLs?
 
 enum DatabaseError: Error {
     case invalidUrl
     case unknown
 }
-
 
 public protocol DatabaseObserver {
 
@@ -46,7 +38,6 @@ public protocol DatabaseObserver {
 }
 
 // TODO: Does much of this really need to be public?
-
 
 public class DatabaseStore: ObservableObject, DatabaseObserver {
 
@@ -101,77 +92,61 @@ public class DatabaseStore: ObservableObject, DatabaseObserver {
 
 }
 
-// TODO: Why is it creating the database twice?
 
 
 extension Item {
 
-//    var items = Table("items")
-//    let id = Expression<Int64>("id")
-//    let identifier = Expression<String>("identifier")  // TODO: Remote identifier
-//    let title = Expression<String>("title")
-//    let url = Expression<String>("url")
-//    let date = Expression<Date>("date")
-
     convenience init(row: Row) throws {
-        guard let url = URL(string: try row.get(Database.url)) else {
+        guard let url = URL(string: try row.get(Database.Schema.url)) else {
             throw DatabaseError.invalidUrl
         }
-        self.init(identifier: try row.get(Database.identifier),
-                  title: try row.get(Database.title),
+        self.init(identifier: try row.get(Database.Schema.identifier),
+                  title: try row.get(Database.Schema.title),
                   url: url,
                   tags: [],
-                  date: try row.get(Database.date))
-    }
-
-}
-
-extension DispatchQueue {
-
-    func asyncClosure<T>(_ closure:@escaping (T) -> Void) -> (T) -> Void {
-        return {i in self.async {closure(i)}}
+                  date: try row.get(Database.Schema.date))
     }
 
 }
 
 public class Database {
 
-    // TODO: What's the thread safety of this?
+    class Schema {
+
+        static let items = Table("items")
+
+        static let id = Expression<Int64>("id")
+        static let identifier = Expression<String>("identifier")
+        static let title = Expression<String>("title")
+        static let url = Expression<String>("url")
+        static let date = Expression<Date>("date")
+
+    }
 
     var path: URL
     var db: Connection
     var syncQueue = DispatchQueue(label: "Database.syncQueue")
     var observers: [DatabaseObserver] = []  // Synchronized on syncQueue
 
-    // TODO: Consider namespacing these to make it clearer what they are?
-    var items = Table("items")
-    let id = Expression<Int64>("id")
-    static let identifier = Expression<String>("identifier")  // TODO: Remote identifier
-    static let title = Expression<String>("title")
-    static let url = Expression<String>("url")
-    static let date = Expression<Date>("date")
-
-    class Schema {
-
-    }
-
+    // TODO: What's the thread safety of the database? Can we support multiple queues (e.g., for background processing)
     // TODO: Version bumper (see anytime code)  (https://github.com/stephencelis/SQLite.swift/blob/master/Documentation/Index.md#migrations-and-schema-versioning)
     // TODO: The ID should be self-updating and then we can know which objects we've processed? Or is it better to simply do a join?
     // TODO: Support quick deletion?
+    // TODO: Why is it creating the database twice?
 
     public init(path: URL) throws {
         self.path = path
         self.db = try Connection(path.path)
         try syncQueue.sync {
             print("creating table...")
-            try db.run(items.create(ifNotExists: true) { t in
-                t.column(id, primaryKey: true) // TODO: Autoincrement?
-                t.column(Self.identifier, unique: true) // TODO: This probably isn't unique across multiple services.
-                t.column(Self.title)
-                t.column(Self.url, unique: true)  // TODO: Multiple services could have this?
-                t.column(Self.date)
+            try db.run(Schema.items.create(ifNotExists: true) { t in
+                t.column(Schema.id, primaryKey: true)
+                t.column(Schema.identifier, unique: true)
+                t.column(Schema.title)
+                t.column(Schema.url, unique: true)
+                t.column(Schema.date)
             })
-            try db.run(items.createIndex(Self.identifier, ifNotExists: true))
+            try db.run(Schema.items.createIndex(Schema.identifier, ifNotExists: true))
         }
         // TODO: Separate create table affair?
     }
@@ -194,7 +169,7 @@ public class Database {
     }
 
     func syncQueue_item(identifier: String) throws -> Item {
-        let run = try db.prepare(items.filter(Self.identifier == identifier).limit(1)).map(Item.init)
+        let run = try db.prepare(Schema.items.filter(Schema.identifier == identifier).limit(1)).map(Item.init)
         guard let result = run.first else {
             throw DatabaseError.unknown  // Seems wrong?
         }
@@ -219,10 +194,10 @@ public class Database {
                     if let existingItem = try? self.syncQueue_item(identifier: item.identifier) {
                         if existingItem != item {
                             print("updating \(item)...")
-                            try self.db.run(self.items.filter(Self.identifier == item.identifier).update(
-                                Self.title <- item.title,
-                                Self.url <- item.url.absoluteString,
-                                Self.date <- item.date
+                            try self.db.run(Schema.items.filter(Schema.identifier == item.identifier).update(
+                                Schema.title <- item.title,
+                                Schema.url <- item.url.absoluteString,
+                                Schema.date <- item.date
                             ))
                             self.syncQueue_notifyObservers()
                         } else {
@@ -230,11 +205,11 @@ public class Database {
                         }
                     } else {
                         print("inserting \(item)...")
-                        _ = try self.db.run(self.items.insert(
-                            Self.identifier <- item.identifier,
-                            Self.title <- item.title,
-                            Self.url <- item.url.absoluteString,
-                            Self.date <- item.date
+                        _ = try self.db.run(Schema.items.insert(
+                            Schema.identifier <- item.identifier,
+                            Schema.title <- item.title,
+                            Schema.url <- item.url.absoluteString,
+                            Schema.date <- item.date
                         ))
                         self.syncQueue_notifyObservers()
                     }
@@ -249,7 +224,7 @@ public class Database {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             let result = Swift.Result {
-                try self.db.run(self.items.filter(Self.identifier == identifier).delete())
+                try self.db.run(Schema.items.filter(Schema.identifier == identifier).delete())
             }
             self.syncQueue_notifyObservers()
             completion(result)
@@ -259,27 +234,18 @@ public class Database {
     func itemQuery(filter: String? = nil) -> QueryType {
         guard let filter = filter,
               !filter.isEmpty else {
-            return self.items.order(Self.date.desc)
+            return Schema.items.order(Schema.date.desc)
         }
-        let filters = filter.tokens.map { Self.title.like("%\($0)%") || Self.url.like("%s\($0)%") }
-        let query = self.items.filter(filters.reduce(Expression<Bool>(value: true)) { $0 && $1 })
-        return query.order(Self.date.desc)
+        let filters = filter.tokens.map { Schema.title.like("%\($0)%") || Schema.url.like("%s\($0)%") }
+        let query = Schema.items.filter(filters.reduce(Expression<Bool>(value: true)) { $0 && $1 })
+        return query.order(Schema.date.desc)
     }
 
     public func items(filter: String? = nil, completion: @escaping (Swift.Result<[Item], Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             let result = Swift.Result {
-                return try self.db.prepare(self.itemQuery(filter: filter)).map { row -> Item in
-                    guard let url = URL(string: try row.get(Self.url)) else {
-                        throw DatabaseError.invalidUrl
-                    }
-                    return Item(identifier: try row.get(Self.identifier),
-                                title: try row.get(Self.title),
-                                url: url,
-                                tags: [],
-                                date: try row.get(Self.date))
-                }
+                try self.db.prepare(self.itemQuery(filter: filter)).map(Item.init)
             }
             completion(result)
         }
@@ -290,8 +256,8 @@ public class Database {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             let result = Swift.Result {
-                return try self.db.prepare(self.items.select(Self.identifier)).map { row -> String in
-                    return try row.get(Self.identifier)
+                return try self.db.prepare(Schema.items.select(Schema.identifier)).map { row -> String in
+                    return try row.get(Schema.identifier)
                 }
             }
             completion(result)

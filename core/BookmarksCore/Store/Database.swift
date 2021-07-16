@@ -28,16 +28,12 @@ import Interact
 
 enum DatabaseError: Error {
     case invalidUrl
-    case unknown
+    case unknown  // TODO: Remove this error
 }
 
 public protocol DatabaseObserver {
-
     func databaseDidUpdate(database: Database)
-
 }
-
-// TODO: Does much of this really need to be public?
 
 public class DatabaseStore: ObservableObject, DatabaseObserver {
 
@@ -46,7 +42,6 @@ public class DatabaseStore: ObservableObject, DatabaseObserver {
         didSet {
             dispatchPrecondition(condition: .onQueue(.main))
             print(filter)
-            self.objectWillChange.send() // TODO: Why doesn't this work?
             self.databaseDidUpdate(database: self.database)
         }
     }
@@ -58,11 +53,9 @@ public class DatabaseStore: ObservableObject, DatabaseObserver {
     }
 
     public func databaseDidUpdate(database: Database) {
-        // TODO: Consider whether it would be better to convert this to a publisher and debounce it?
-        // YES THIS SHOULD DEFINITELY DEBOUNCE UPDATES
-        // TODO: Add the tags to support filter by tag.
+        // TODO: Debounce updates
+        // TODO: Handle errors
         DispatchQueue.main.async {
-            // TODO: This method shouldn't fail.
             print("requery...")
             database.items(filter: self.filter) { result in
                 DispatchQueue.main.async {
@@ -78,17 +71,7 @@ public class DatabaseStore: ObservableObject, DatabaseObserver {
         }
     }
 
-    // TODO: This isn't going to perform well.
     public var items: [Item] = []
-
-//    // TODO: State?
-//    public var filter: String? {
-//        didSet {
-//            self.objectWillChange.send()
-//        }
-//    }
-
-    // TODO: Do the filtering in the database.
 
 }
 
@@ -133,6 +116,9 @@ public class Database {
     // TODO: The ID should be self-updating and then we can know which objects we've processed? Or is it better to simply do a join?
     // TODO: Support quick deletion?
     // TODO: Why is it creating the database twice?
+    // TODO: Add tags back.
+    // TODO: Migrations.
+    // TODO: Does much of this really need to be public?
 
     public init(path: URL) throws {
         self.path = path

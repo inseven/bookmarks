@@ -126,6 +126,14 @@ extension Item {
 
 }
 
+extension DispatchQueue {
+
+    func asyncClosure<T>(_ closure:@escaping (T) -> Void) -> (T) -> Void {
+        return {i in self.async {closure(i)}}
+    }
+
+}
+
 public class Database {
 
     // TODO: What's the thread safety of this?
@@ -142,6 +150,10 @@ public class Database {
     static let title = Expression<String>("title")
     static let url = Expression<String>("url")
     static let date = Expression<Date>("date")
+
+    class Schema {
+
+    }
 
     // TODO: Version bumper (see anytime code)  (https://github.com/stephencelis/SQLite.swift/blob/master/Documentation/Index.md#migrations-and-schema-versioning)
     // TODO: The ID should be self-updating and then we can know which objects we've processed? Or is it better to simply do a join?
@@ -187,6 +199,14 @@ public class Database {
             throw DatabaseError.unknown  // Seems wrong?
         }
         return result
+    }
+
+    public func item(identifier: String, completion: @escaping (Swift.Result<Item, Error>) -> Void) {
+        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
+        syncQueue.async {
+            let result = Swift.Result { try self.syncQueue_item(identifier: identifier) }
+            completion(result)
+        }
     }
 
     // TODO: Non-blocking and chain the completions?
@@ -240,19 +260,11 @@ public class Database {
     }
 
     public func items(filter: String? = nil, completion: @escaping (Swift.Result<[Item], Error>) -> Void) {
-        dispatchPrecondition(condition: .notOnQueue(syncQueue))
-
-        // TODO: Is there a trivial way to get a completion on a block?
         // TODO: Consider proxying the dispatch QoS
-        let completion: (Swift.Result<[Item], Error>) -> Void = { result in
-            DispatchQueue.global(qos: .userInitiated).async {
-                completion(result)
-            }
-        }
-
-        syncQueue.sync {
+        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
+        syncQueue.async {
             let result = Swift.Result {
-                return try db.prepare(itemQuery(filter: filter)).map { row -> Item in
+                return try self.db.prepare(self.itemQuery(filter: filter)).map { row -> Item in
                     guard let url = URL(string: try row.get(Self.url)) else {
                         throw DatabaseError.invalidUrl
                     }
@@ -261,6 +273,20 @@ public class Database {
                                 url: url,
                                 tags: [],
                                 date: try row.get(Self.date))
+                }
+            }
+            completion(result)
+        }
+    }
+
+    // TODO: async await? https://docs.swift.org/swift-book/LanguageGuide/Concurrency.html
+    public func allIdentifiers(completion: @escaping (Swift.Result<[String], Error>) -> Void) {
+        dispatchPrecondition(condition: .notOnQueue(syncQueue))
+        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
+        syncQueue.async {
+            let result = Swift.Result {
+                return try self.db.prepare(self.items.select(Self.identifier)).map { row -> String in
+                    return try row.get(Self.identifier)
                 }
             }
             completion(result)

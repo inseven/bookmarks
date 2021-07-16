@@ -20,6 +20,39 @@
 
 import Foundation
 
+// TODO: Switch to the new async await Swift concurrency model (when it becomes available)
+
+
+// TODO: Timeout error?
+
+// TODO: This feels icky icky icky
+// TODO: Make it a try??
+public class AsyncOperation<T> {
+
+    var semaphore = DispatchSemaphore(value: 0)
+    var result: Result<T, Error> = .failure(DatabaseError.unknown)
+
+    init(_ operation: @escaping (@escaping (Result<T, Error>) -> Void) -> Void) {
+        operation(self.completion)
+    }
+
+    func completion(_ result: Result<T, Error>) -> Void {
+        self.result = result
+        semaphore.signal()
+    }
+
+    func wait() throws -> T {
+        semaphore.wait()  // TODO: Timeout
+        switch self.result {
+        case .failure(let error):
+            throw error
+        case .success(let value):
+            return value
+        }
+    }
+
+}
+
 public class Updater {
 
     let syncQueue: DispatchQueue
@@ -35,6 +68,8 @@ public class Updater {
     }
 
     // TODO: Start is kind of misleading in terms of terminology since you might want this to be a periodic updater?
+    // TODO: The udpater should be able to store and clear its last error for reporting it to the user; or maybe there's an infrastructure piece and a wrapper that stores that? (BETTER?)
+    //       This could use classic callbacks which are then wrapped?
     public func start() {
         print("Updating bookmarks...")
         Pinboard(token: self.token).posts_all { [weak self] (result) in
@@ -45,26 +80,41 @@ public class Updater {
                 guard let self = self else {
                     return
                 }
-                // Pinboard seems to give us duplicate data so we maintain a set of hashes we've seen to ensure we
-                // only return one of each.
+
+                // Store the seen identifiers to determine what to delete.
                 var identifiers = Set<String>()
-                var items: [Item] = []
+
+                // Insert or update items.
                 for post in posts {
                     guard
                         let url = post.href,
-                        let date = post.time,
-                        !identifiers.contains(post.hash) else {
+                        let date = post.time else {
                             continue
                     }
-                    identifiers.insert(post.hash)
+                    // TODO: Perhaps this mapping could be extracted to make it clearer what's going on?
                     let item = Item(identifier: post.hash,
                                     title: post.description ?? "",
                                     url: url,
                                     tags: post.tags,
                                     date: date)
-                    items.append(item)
+                    identifiers.insert(item.identifier)
                     _ = try! self.database.insertOrUpdate(item) // TODO: Handle a failure here.
                 }
+
+                // Delete missing items.
+                do {
+                    let allIdentifiers = try AsyncOperation(self.database.allIdentifiers).wait()
+                    let deletedIdentifiers = Set(allIdentifiers).subtracting(identifiers)
+                    for identifier in deletedIdentifiers {
+                        print("deleting \(identifier)...")
+                        let item = try AsyncOperation({ self.database.item(identifier: identifier, completion: $0) }).wait()
+                        print(item)
+                    }
+
+                } catch {
+                    print("Failed to delete items with error \(error)")
+                }
+
             }
         }
     }

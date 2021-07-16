@@ -37,6 +37,6 @@ extension Item: CustomStringConvertible {
         return true
     }
 
-    public var description: String { self.url.absoluteString }
+    public var description: String { "\(self.url.absoluteString) (\(self.title))" }
 
 }

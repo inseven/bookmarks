@@ -67,20 +67,4 @@ public class ThumbnailManager {
             .eraseToAnyPublisher()
     }
 
-//    public func thumbnail(for item: Item, scale: CGFloat) -> AnyPublisher<Image, Error> {
-//        return cachedImage(for: item)
-//            .catch { _ in Utilities.meta(for: item.url).flatMap { $0.resize(height: 200 * scale) } }
-//            .catch { _ in self.downloadManager.thumbnail(for: item.url).flatMap { $0.resize(height: 200 * scale) } }
-//            .map({ (image) -> Image in
-//                // TODO: Don't save if it's already saved.
-//                self.imageCache.set(identifier: item.identifier, image: image) { (result) in
-//                    if case .failure(let error) = result {
-//                        print("Failed to cache image with error \(error)")
-//                    }
-//                }
-//                return image
-//            })
-//            .eraseToAnyPublisher()
-//    }
-
 }

@@ -249,6 +249,17 @@ public class Database {
         // TODO: What do I do about the row ID? Some binding thing? return some new stored object?
     }
 
+    public func delete(identifier: String, completion: @escaping (Swift.Result<Int, Error>) -> Void) {
+        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
+        syncQueue.async {
+            let result = Swift.Result {
+                try self.db.run(self.items.filter(Self.identifier == identifier).delete())
+            }
+            self.syncQueue_notifyObservers()
+            completion(result)
+        }
+    }
+
     public func itemQuery(filter: String? = nil) -> QueryType {
         guard let filter = filter,
               !filter.isEmpty else {

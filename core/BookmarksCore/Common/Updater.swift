@@ -20,25 +20,17 @@
 
 import Foundation
 
-// TODO: Switch to the new async await Swift concurrency model (when it becomes available)
-
-
-// TODO: Timeout error?
-
-// TODO: This feels icky icky icky
-// TODO: Make it a try??
+// TODO: Raise an issue to replace this with async await when it's no longer experimental
 public class AsyncOperation<T> {
 
     var semaphore = DispatchSemaphore(value: 0)
     var result: Result<T, Error> = .failure(DatabaseError.unknown)
 
     init(_ operation: @escaping (@escaping (Result<T, Error>) -> Void) -> Void) {
-        operation(self.completion)
-    }
-
-    func completion(_ result: Result<T, Error>) -> Void {
-        self.result = result
-        semaphore.signal()
+        operation { result in
+            self.result = result
+            self.semaphore.signal()
+        }
     }
 
     func wait() throws -> T {
@@ -55,16 +47,14 @@ public class AsyncOperation<T> {
 
 public class Updater {
 
-    let syncQueue: DispatchQueue
-    let targetQueue: DispatchQueue
+    let syncQueue = DispatchQueue(label: "Updater.syncQueue")
+    let targetQueue = DispatchQueue(label: "targetQueue", attributes: .concurrent)
     let database: Database
     let token: String
 
     public init(database: Database, token: String) {
         self.database = database
         self.token = token
-        self.syncQueue = DispatchQueue(label: "syncQueue")
-        self.targetQueue = DispatchQueue(label: "targetQueue", attributes: .concurrent)
     }
 
     // TODO: Start is kind of misleading in terms of terminology since you might want this to be a periodic updater?
@@ -109,6 +99,7 @@ public class Updater {
                         print("deleting \(identifier)...")
                         let item = try AsyncOperation({ self.database.item(identifier: identifier, completion: $0) }).wait()
                         print(item)
+                        _ = try AsyncOperation({ self.database.delete(identifier: identifier, completion: $0) }).wait()
                     }
 
                 } catch {

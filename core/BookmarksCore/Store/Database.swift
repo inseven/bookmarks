@@ -209,18 +209,16 @@ public class Database {
         }
     }
 
-    // TODO: Non-blocking and chain the completions?
     public func insertOrUpdate(_ item: Item, completion: @escaping (Swift.Result<Item, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             let result = Swift.Result<Item, Error> {
                 try self.db.transaction {
-                    print("insert or update \(item)...")
-                    // TODO: Try getting it and don't do anything if it's the same (or update the last updated date if we have one?)
+                    // N.B. While it would be possible to use an insert or replace strategy, we want to ensure we only
+                    // notify observers if the data has actually changed so we instead fetch the item and compare.
                     if let existingItem = try? self.syncQueue_item(identifier: item.identifier) {
                         if existingItem != item {
-                            print("existing item \(existingItem)")
-                            print("updating...")
+                            print("updating \(item)...")
                             try self.db.run(self.items.filter(Self.identifier == item.identifier).update(
                                 Self.title <- item.title,
                                 Self.url <- item.url.absoluteString,
@@ -228,12 +226,10 @@ public class Database {
                             ))
                             self.syncQueue_notifyObservers()
                         } else {
-                            print("skipping existing item...")
+                            print("skipping \(item)...")
                         }
-                        // TODO: Maybe this is better?
-                        //                    try db.run(users.insert(or: .replace, email <- "alice@mac.com", name <- "Alice B."))
                     } else {
-                        print("inserting...")
+                        print("inserting \(item)...")
                         _ = try self.db.run(self.items.insert(
                             Self.identifier <- item.identifier,
                             Self.title <- item.title,
@@ -243,7 +239,6 @@ public class Database {
                         self.syncQueue_notifyObservers()
                     }
                 }
-                // TODO: Don't do this all the time (check to see if the item has _actually_ changed)
                 return item
             }
             completion(result)

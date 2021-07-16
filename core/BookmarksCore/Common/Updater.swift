@@ -20,35 +20,8 @@
 
 import Foundation
 
-// TODO: Raise an issue to replace this with async await when it's no longer experimental
-public class AsyncOperation<T> {
-
-    var semaphore = DispatchSemaphore(value: 0)
-    var result: Result<T, Error> = .failure(DatabaseError.unknown)
-
-    init(_ operation: @escaping (@escaping (Result<T, Error>) -> Void) -> Void) {
-        operation { result in
-            self.result = result
-            self.semaphore.signal()
-        }
-    }
-
-    func wait() throws -> T {
-        semaphore.wait()  // TODO: Timeout
-        switch self.result {
-        case .failure(let error):
-            throw error
-        case .success(let value):
-            return value
-        }
-    }
-
-}
-
 public class Updater {
 
-    let syncQueue = DispatchQueue(label: "Updater.syncQueue")
-    let targetQueue = DispatchQueue(label: "targetQueue", attributes: .concurrent)
     let database: Database
     let token: String
 
@@ -60,6 +33,7 @@ public class Updater {
     // TODO: Start is kind of misleading in terms of terminology since you might want this to be a periodic updater?
     // TODO: The udpater should be able to store and clear its last error for reporting it to the user; or maybe there's an infrastructure piece and a wrapper that stores that? (BETTER?)
     //       This could use classic callbacks which are then wrapped?
+    // TODO: Switch over to the AsyncOperation for this to make it easy to serialise
     public func start() {
         print("Updating bookmarks...")
         Pinboard(token: self.token).posts_all { [weak self] (result) in
@@ -71,29 +45,30 @@ public class Updater {
                     return
                 }
 
-                // Store the seen identifiers to determine what to delete.
-                var identifiers = Set<String>()
-
-                // Insert or update items.
-                for post in posts {
-                    guard
-                        let url = post.href,
-                        let date = post.time else {
-                            continue
-                    }
-                    // TODO: Perhaps this mapping could be extracted to make it clearer what's going on?
-                    let item = Item(identifier: post.hash,
-                                    title: post.description ?? "",
-                                    url: url,
-                                    tags: post.tags,
-                                    date: date)
-                    identifiers.insert(item.identifier)
-                    _ = try! self.database.insertOrUpdate(item) // TODO: Handle a failure here.
-                }
-
-                // Delete missing items.
                 do {
-                    let allIdentifiers = try AsyncOperation(self.database.allIdentifiers).wait()
+
+                    // Store the seen identifiers to determine what to delete.
+                    var identifiers = Set<String>()
+
+                    // Insert or update items.
+                    for post in posts {
+                        guard
+                            let url = post.href,
+                            let date = post.time else {
+                                continue
+                        }
+                        // TODO: Perhaps this mapping could be extracted to make it clearer what's going on?
+                        let item = Item(identifier: post.hash,
+                                        title: post.description ?? "",
+                                        url: url,
+                                        tags: post.tags,
+                                        date: date)
+                        identifiers.insert(item.identifier)
+                        _ = try AsyncOperation({ self.database.insertOrUpdate(item, completion: $0) }).wait()
+                    }
+
+                    // Delete missing items.
+                    let allIdentifiers = try AsyncOperation(self.database.identifiers).wait()
                     let deletedIdentifiers = Set(allIdentifiers).subtracting(identifiers)
                     for identifier in deletedIdentifiers {
                         print("deleting \(identifier)...")
@@ -103,7 +78,7 @@ public class Updater {
                     }
 
                 } catch {
-                    print("Failed to delete items with error \(error)")
+                    print("Failed to update items with error \(error)")
                 }
 
             }

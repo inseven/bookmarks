@@ -210,47 +210,48 @@ public class Database {
     }
 
     // TODO: Non-blocking and chain the completions?
-    public func insertOrUpdate(_ item: Item) throws -> Item {
-        dispatchPrecondition(condition: .notOnQueue(syncQueue))
-        try syncQueue.sync {
-            try db.transaction {
-                print("insert or update \(item)...")
-                // TODO: Try getting it and don't do anything if it's the same (or update the last updated date if we have one?)
-                if let existingItem = try? syncQueue_item(identifier: item.identifier) {
-                    if existingItem != item {
-                        print("existing item \(existingItem)")
-                        print("updating...")
-                        try db.run(items.filter(Self.identifier == item.identifier).update(
+    public func insertOrUpdate(_ item: Item, completion: @escaping (Swift.Result<Item, Error>) -> Void) {
+        let completion = DispatchQueue.global().asyncClosure(completion)
+        syncQueue.async {
+            let result = Swift.Result<Item, Error> {
+                try self.db.transaction {
+                    print("insert or update \(item)...")
+                    // TODO: Try getting it and don't do anything if it's the same (or update the last updated date if we have one?)
+                    if let existingItem = try? self.syncQueue_item(identifier: item.identifier) {
+                        if existingItem != item {
+                            print("existing item \(existingItem)")
+                            print("updating...")
+                            try self.db.run(self.items.filter(Self.identifier == item.identifier).update(
+                                Self.title <- item.title,
+                                Self.url <- item.url.absoluteString,
+                                Self.date <- item.date
+                            ))
+                            self.syncQueue_notifyObservers()
+                        } else {
+                            print("skipping existing item...")
+                        }
+                        // TODO: Maybe this is better?
+                        //                    try db.run(users.insert(or: .replace, email <- "alice@mac.com", name <- "Alice B."))
+                    } else {
+                        print("inserting...")
+                        _ = try self.db.run(self.items.insert(
+                            Self.identifier <- item.identifier,
                             Self.title <- item.title,
                             Self.url <- item.url.absoluteString,
                             Self.date <- item.date
                         ))
-                        syncQueue_notifyObservers()
-                    } else {
-                        print("skipping existing item...")
+                        self.syncQueue_notifyObservers()
                     }
-                    // TODO: Maybe this is better?
-//                    try db.run(users.insert(or: .replace, email <- "alice@mac.com", name <- "Alice B."))
-                } else {
-                    print("inserting...")
-                    let rowId = try db.run(items.insert(
-                        Self.identifier <- item.identifier,
-                        Self.title <- item.title,
-                        Self.url <- item.url.absoluteString,
-                        Self.date <- item.date
-                    ))
-                    print("rowId = \(rowId)")
-                    syncQueue_notifyObservers()
                 }
+                // TODO: Don't do this all the time (check to see if the item has _actually_ changed)
+                return item
             }
-            // TODO: Don't do this all the time (check to see if the item has _actually_ changed)
+            completion(result)
         }
-        return item
-        // TODO: What do I do about the row ID? Some binding thing? return some new stored object?
     }
 
     public func delete(identifier: String, completion: @escaping (Swift.Result<Int, Error>) -> Void) {
-        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
+        let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             let result = Swift.Result {
                 try self.db.run(self.items.filter(Self.identifier == identifier).delete())
@@ -260,7 +261,7 @@ public class Database {
         }
     }
 
-    public func itemQuery(filter: String? = nil) -> QueryType {
+    func itemQuery(filter: String? = nil) -> QueryType {
         guard let filter = filter,
               !filter.isEmpty else {
             return self.items.order(Self.date.desc)
@@ -271,8 +272,7 @@ public class Database {
     }
 
     public func items(filter: String? = nil, completion: @escaping (Swift.Result<[Item], Error>) -> Void) {
-        // TODO: Consider proxying the dispatch QoS
-        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
+        let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             let result = Swift.Result {
                 return try self.db.prepare(self.itemQuery(filter: filter)).map { row -> Item in
@@ -290,10 +290,9 @@ public class Database {
         }
     }
 
-    // TODO: async await? https://docs.swift.org/swift-book/LanguageGuide/Concurrency.html
-    public func allIdentifiers(completion: @escaping (Swift.Result<[String], Error>) -> Void) {
-        dispatchPrecondition(condition: .notOnQueue(syncQueue))
-        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
+    public func identifiers(completion: @escaping (Swift.Result<[String], Error>) -> Void) {
+        dispatchPrecondition(condition: .notOnQueue(syncQueue))  // TODO: Not necessary??
+        let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             let result = Swift.Result {
                 return try self.db.prepare(self.items.select(Self.identifier)).map { row -> String in

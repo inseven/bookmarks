@@ -40,7 +40,7 @@ struct BookmarksApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView(databaseStore: DatabaseStore(database: appDelegate.manager.database))
+            ContentView(databaseView: DatabaseView(database: appDelegate.manager.database))  // TODO: Push this down into the content view
                 .environment(\.manager, appDelegate.manager)
         }
         SwiftUI.Settings {

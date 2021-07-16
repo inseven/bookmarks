@@ -23,6 +23,8 @@
 		D890D1BB26A219C900C47489 /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1B926A219C900C47489 /* AsyncOperation.swift */; };
 		D890D1BD26A2201700C47489 /* DispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1BC26A2201700C47489 /* DispatchQueue.swift */; };
 		D890D1BE26A2201700C47489 /* DispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1BC26A2201700C47489 /* DispatchQueue.swift */; };
+		D890D1C026A2219F00C47489 /* DatabaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1BF26A2219F00C47489 /* DatabaseView.swift */; };
+		D890D1C126A2219F00C47489 /* DatabaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1BF26A2219F00C47489 /* DatabaseView.swift */; };
 		D8AA4055261E2E8D00D11421 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AA4054261E2E8D00D11421 /* String.swift */; };
 		D8AA4061261E305200D11421 /* NSCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AA4060261E305200D11421 /* NSCoder.swift */; };
 		D8B04B1E261EC65D00376ADD /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B04B1D261EC65C00376ADD /* Settings.swift */; };
@@ -113,6 +115,7 @@
 		D890D1B426A0C48A00C47489 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		D890D1B926A219C900C47489 /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
 		D890D1BC26A2201700C47489 /* DispatchQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchQueue.swift; sourceTree = "<group>"; };
+		D890D1BF26A2219F00C47489 /* DatabaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseView.swift; sourceTree = "<group>"; };
 		D8AA4054261E2E8D00D11421 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		D8AA4060261E305200D11421 /* NSCoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCoder.swift; sourceTree = "<group>"; };
 		D8B04B1D261EC65C00376ADD /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -284,6 +287,7 @@
 			children = (
 				D8D3F4FB261E576000B2D66F /* Item.swift */,
 				D890D1B426A0C48A00C47489 /* Database.swift */,
+				D890D1BF26A2219F00C47489 /* DatabaseView.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -549,6 +553,7 @@
 				D8D3F59F261E5AAE00B2D66F /* WebViewDownloader.swift in Sources */,
 				D8B04B1F261EC65D00376ADD /* Settings.swift in Sources */,
 				D84CE484261E2AD000AF1901 /* Post.swift in Sources */,
+				D890D1C026A2219F00C47489 /* DatabaseView.swift in Sources */,
 				D8717C4E2679153F007617C5 /* URL.swift in Sources */,
 				D8B04B31261EC7E700376ADD /* BookmarksManager.swift in Sources */,
 				D8D3F602261E5BF600B2D66F /* URLComponents.swift in Sources */,
@@ -593,6 +598,7 @@
 				D8D3F59E261E5AAE00B2D66F /* WebViewDownloader.swift in Sources */,
 				D8B04B1E261EC65D00376ADD /* Settings.swift in Sources */,
 				D8CF8CA1261E35B300E52E85 /* Pinboard.swift in Sources */,
+				D890D1C126A2219F00C47489 /* DatabaseView.swift in Sources */,
 				D8717C4F2679153F007617C5 /* URL.swift in Sources */,
 				D8B04B32261EC7E700376ADD /* BookmarksManager.swift in Sources */,
 				D8D3F603261E5BF600B2D66F /* URLComponents.swift in Sources */,

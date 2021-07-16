@@ -29,53 +29,12 @@ import Interact
 enum DatabaseError: Error {
     case invalidUrl
     case unknown  // TODO: Remove this error
+    case unknownMigration(version: Int32)
 }
 
 public protocol DatabaseObserver {
     func databaseDidUpdate(database: Database)
 }
-
-public class DatabaseStore: ObservableObject, DatabaseObserver {
-
-    var database: Database
-    public var filter: String = "" {
-        didSet {
-            dispatchPrecondition(condition: .onQueue(.main))
-            print(filter)
-            self.databaseDidUpdate(database: self.database)
-        }
-    }
-
-    public init(database: Database) {
-        self.database = database
-        self.database.add(observer: self)
-        self.databaseDidUpdate(database: self.database)
-    }
-
-    public func databaseDidUpdate(database: Database) {
-        // TODO: Debounce updates
-        // TODO: Handle errors
-        DispatchQueue.main.async {
-            print("requery...")
-            database.items(filter: self.filter) { result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success(let items):
-                        self.items = items
-                        self.objectWillChange.send()
-                    case .failure(let error):
-                        print("Failed to load data with error \(error)")
-                    }
-                }
-            }
-        }
-    }
-
-    public var items: [Item] = []
-
-}
-
-
 
 extension Item {
 
@@ -92,11 +51,21 @@ extension Item {
 
 }
 
+extension Connection {
+
+    public var userVersion: Int32 {
+        get { return Int32(try! scalar("PRAGMA user_version") as! Int64)}
+        set { try! run("PRAGMA user_version = \(newValue)") }
+    }
+
+}
+
 public class Database {
 
     class Schema {
 
         static let items = Table("items")
+        static let tags = Table("tags")
 
         static let id = Expression<Int64>("id")
         static let identifier = Expression<String>("identifier")
@@ -104,27 +73,45 @@ public class Database {
         static let url = Expression<String>("url")
         static let date = Expression<Date>("date")
 
+        static let name = Expression<String>("name")
+
     }
 
-    var path: URL
-    var db: Connection
+    let path: URL
     var syncQueue = DispatchQueue(label: "Database.syncQueue")
+    var db: Connection  // Synchronized on syncQueue
     var observers: [DatabaseObserver] = []  // Synchronized on syncQueue
 
     // TODO: What's the thread safety of the database? Can we support multiple queues (e.g., for background processing)
-    // TODO: Version bumper (see anytime code)  (https://github.com/stephencelis/SQLite.swift/blob/master/Documentation/Index.md#migrations-and-schema-versioning)
-    // TODO: The ID should be self-updating and then we can know which objects we've processed? Or is it better to simply do a join?
-    // TODO: Support quick deletion?
+    // TODO: Use a join against a derived data table to determine if we've fetched the data (this can also include a derivation version?)
+    // TODO: Support right-click deletion of rows
     // TODO: Why is it creating the database twice?
     // TODO: Add tags back.
-    // TODO: Migrations.
     // TODO: Does much of this really need to be public?
+
+    static func itemQuery(filter: String? = nil) -> QueryType {
+        guard let filter = filter,
+              !filter.isEmpty else {
+            return Schema.items.order(Schema.date.desc)
+        }
+        let filters = filter.tokens.map { Schema.title.like("%\($0)%") || Schema.url.like("%s\($0)%") }
+        let query = Schema.items.filter(filters.reduce(Expression<Bool>(value: true)) { $0 && $1 })
+        return query.order(Schema.date.desc)
+    }
 
     public init(path: URL) throws {
         self.path = path
         self.db = try Connection(path.path)
         try syncQueue.sync {
-            print("creating table...")
+            try self.syncQueue_migrate()
+        }
+    }
+
+    static var migrations: [Int32:(Connection) throws -> Void] = [
+        1: { _ in },
+        2: { _ in },
+        3: { db in
+            print("creating items table...")
             try db.run(Schema.items.create(ifNotExists: true) { t in
                 t.column(Schema.id, primaryKey: true)
                 t.column(Schema.identifier, unique: true)
@@ -133,8 +120,36 @@ public class Database {
                 t.column(Schema.date)
             })
             try db.run(Schema.items.createIndex(Schema.identifier, ifNotExists: true))
+        },
+        4: { db in
+            print("creating tags table...")
+            try db.run(Schema.tags.create { t in
+                t.column(Schema.id, primaryKey: true)
+                t.column(Schema.name, unique: true)
+            })
         }
-        // TODO: Separate create table affair?
+    ]
+
+    static var schemaVersion: Int32 = Array(migrations.keys).max() ?? 0
+
+    func syncQueue_migrate() throws {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
+        try db.transaction {
+            let currentVersion = db.userVersion
+            print("version \(currentVersion)")
+            guard currentVersion < Self.schemaVersion else {
+                print("schema up to date")
+                return
+            }
+            for version in currentVersion + 1 ... Self.schemaVersion {
+                print("migrating to \(version)...")
+                guard let migration = Self.migrations[version] else {
+                    throw DatabaseError.unknownMigration(version: version)
+                }
+                try migration(self.db)
+                db.userVersion = version
+            }
+        }
     }
 
     public func add(observer: DatabaseObserver) {
@@ -217,21 +232,11 @@ public class Database {
         }
     }
 
-    func itemQuery(filter: String? = nil) -> QueryType {
-        guard let filter = filter,
-              !filter.isEmpty else {
-            return Schema.items.order(Schema.date.desc)
-        }
-        let filters = filter.tokens.map { Schema.title.like("%\($0)%") || Schema.url.like("%s\($0)%") }
-        let query = Schema.items.filter(filters.reduce(Expression<Bool>(value: true)) { $0 && $1 })
-        return query.order(Schema.date.desc)
-    }
-
     public func items(filter: String? = nil, completion: @escaping (Swift.Result<[Item], Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             let result = Swift.Result {
-                try self.db.prepare(self.itemQuery(filter: filter)).map(Item.init)
+                try self.db.prepare(Self.itemQuery(filter: filter)).map(Item.init)
             }
             completion(result)
         }

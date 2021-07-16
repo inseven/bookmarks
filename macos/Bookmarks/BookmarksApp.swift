@@ -36,11 +36,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 struct BookmarksApp: App {
 
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    @Environment(\.manager) var manager: BookmarksManager
+//    @Environment(\.manager) var manager: BookmarksManager
 
     var body: some Scene {
         WindowGroup {
-            ContentView(store: manager.store)
+            ContentView(databaseStore: DatabaseStore(database: appDelegate.manager.database))
                 .environment(\.manager, appDelegate.manager)
         }
         SwiftUI.Settings {

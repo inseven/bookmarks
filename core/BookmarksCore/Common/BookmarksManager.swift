@@ -34,21 +34,24 @@ public extension EnvironmentValues {
 public class BookmarksManager {
 
     var documentsUrl: URL
-    public var store: Store
     public var imageCache: ImageCache!
     public var thumbnailManager: ThumbnailManager
     var downloadManager: DownloadManager
     public var settings = Settings()
     public var updater: Updater
 
+    public var database: Database
+
+    // TODO: Maybe make the database store public instead?
+
     public init() {
         documentsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         try! FileManager.default.createDirectory(at: documentsUrl, withIntermediateDirectories: true, attributes: nil)
-        store = Store(path: documentsUrl.appendingPathComponent("store.plist"), targetQueue: .main)
+        database = try! Database(path: documentsUrl.appendingPathComponent("store.db"))  // TODO: Handle this error?
         imageCache = FileImageCache(path: documentsUrl.appendingPathComponent("thumbnails"))
         downloadManager = DownloadManager(limit: settings.maximumConcurrentThumbnailDownloads)
         thumbnailManager = ThumbnailManager(imageCache: imageCache, downloadManager: downloadManager)
-        updater = Updater(store: store, token: settings.pinboardApiKey)
+        updater = Updater(database: database, token: settings.pinboardApiKey)
 
         #if targetEnvironment(macCatalyst)
         let notificationCenter = NotificationCenter.default

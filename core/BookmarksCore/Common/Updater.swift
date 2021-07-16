@@ -24,16 +24,17 @@ public class Updater {
 
     let syncQueue: DispatchQueue
     let targetQueue: DispatchQueue
-    let store: Store
+    let database: Database
     let token: String
 
-    public init(store: Store, token: String) {
-        self.store = store
+    public init(database: Database, token: String) {
+        self.database = database
         self.token = token
         self.syncQueue = DispatchQueue(label: "syncQueue")
         self.targetQueue = DispatchQueue(label: "targetQueue", attributes: .concurrent)
     }
 
+    // TODO: Start is kind of misleading in terms of terminology since you might want this to be a periodic updater?
     public func start() {
         print("Updating bookmarks...")
         Pinboard(token: self.token).posts_all { [weak self] (result) in
@@ -56,14 +57,13 @@ public class Updater {
                             continue
                     }
                     identifiers.insert(post.hash)
-                    items.append(Item(identifier: post.hash,
-                                      title: post.description ?? "",
-                                      url: url,
-                                      tags: post.tags,
-                                      date: date))
-                }
-                self.store.save(items: items) { (success) in
-                    print("Saved items with success \(success)")
+                    let item = Item(identifier: post.hash,
+                                    title: post.description ?? "",
+                                    url: url,
+                                    tags: post.tags,
+                                    date: date)
+                    items.append(item)
+                    _ = try! self.database.insertOrUpdate(item) // TODO: Handle a failure here.
                 }
             }
         }

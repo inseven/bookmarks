@@ -24,7 +24,8 @@ import Foundation
 import UIKit
 #endif
 
-public class Item: NSObject, NSSecureCoding {
+// TODO: Remove the NSObject and NSSecureCoding bollocks.
+public class Item: Equatable {
 
     public let identifier: String
     public let title: String
@@ -68,6 +69,15 @@ public class Item: NSObject, NSSecureCoding {
             return nil
         }
         self.init(identifier: identifier, title: title, url: url, tags: tags, date: date)
+    }
+
+    // TODO: Note that this doesn't include the thumbnail??
+    public static func == (lhs: Item, rhs: Item) -> Bool {
+        return
+            lhs.identifier == rhs.identifier &&
+            lhs.title == rhs.title &&
+            lhs.url == rhs.url &&
+            lhs.date == rhs.date
     }
 
 }

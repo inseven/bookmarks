@@ -20,7 +20,7 @@
 
 import BookmarksCore
 
-extension Item {
+extension Item: CustomStringConvertible {
 
     public func localizedStandardContains(_ string: String) -> Bool {
         return (title.localizedSearchMatches(string: string) ||
@@ -36,5 +36,7 @@ extension Item {
         }
         return true
     }
+
+    public var description: String { self.url.absoluteString }
 
 }

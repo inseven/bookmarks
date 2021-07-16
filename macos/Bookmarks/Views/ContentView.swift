@@ -27,21 +27,15 @@ import Interact
 struct ContentView: View {
 
     @Environment(\.manager) var manager: BookmarksManager
-    @ObservedObject var store: Store
-    @State var search = ""
+    @ObservedObject var databaseStore: DatabaseStore
 
-    var items: [Item] {
-        store.rawItems.filter {
-            search.isEmpty ||
-                $0.localizedSearchMatches(string: search)
-        }
-    }
+    // TODO: Debounce the search
 
     var body: some View {
         VStack {
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
-                    ForEach(items) { item in
+                    ForEach(databaseStore.items) { item in
                         BookmarkCell(item: item)
                             .onClick {
 
@@ -76,7 +70,7 @@ struct ContentView: View {
                 }
             }
             ToolbarItem {
-                SearchField(search: $search)
+                SearchField(search: $databaseStore.filter)
                     .frame(minWidth: 100, idealWidth: 300, maxWidth: .infinity)
             }
         }

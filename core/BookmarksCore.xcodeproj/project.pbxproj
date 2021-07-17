@@ -18,7 +18,6 @@
 		D890D1B326A0C42400C47489 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = D890D1B226A0C42400C47489 /* SQLite */; };
 		D890D1B526A0C48A00C47489 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1B426A0C48A00C47489 /* Database.swift */; };
 		D890D1B626A0C48A00C47489 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1B426A0C48A00C47489 /* Database.swift */; };
-		D890D1B826A1F15600C47489 /* Interact in Frameworks */ = {isa = PBXBuildFile; productRef = D890D1B726A1F15600C47489 /* Interact */; };
 		D890D1BA26A219C900C47489 /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1B926A219C900C47489 /* AsyncOperation.swift */; };
 		D890D1BB26A219C900C47489 /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1B926A219C900C47489 /* AsyncOperation.swift */; };
 		D890D1BD26A2201700C47489 /* DispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1BC26A2201700C47489 /* DispatchQueue.swift */; };
@@ -29,7 +28,6 @@
 		D890D1C626A2569800C47489 /* DatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1C226A2569100C47489 /* DatabaseTests.swift */; };
 		D890D1C826A3584400C47489 /* DatabasePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1C726A3584400C47489 /* DatabasePublisher.swift */; };
 		D890D1C926A3584400C47489 /* DatabasePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1C726A3584400C47489 /* DatabasePublisher.swift */; };
-		D890D1CB26A35D6700C47489 /* Interact in Frameworks */ = {isa = PBXBuildFile; productRef = D890D1CA26A35D6700C47489 /* Interact */; };
 		D8AA4055261E2E8D00D11421 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AA4054261E2E8D00D11421 /* String.swift */; };
 		D8AA4061261E305200D11421 /* NSCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AA4060261E305200D11421 /* NSCoder.swift */; };
 		D8B04B1E261EC65D00376ADD /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B04B1D261EC65C00376ADD /* Settings.swift */; };
@@ -163,7 +161,6 @@
 			files = (
 				D890D1B326A0C42400C47489 /* SQLite in Frameworks */,
 				D8D3F528261E57D000B2D66F /* UIKit.framework in Frameworks */,
-				D890D1CB26A35D6700C47489 /* Interact in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,7 +176,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D890D1B826A1F15600C47489 /* Interact in Frameworks */,
 				D890D1B126A0C41900C47489 /* SQLite in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -404,7 +400,6 @@
 			name = "BookmarksCore iOS";
 			packageProductDependencies = (
 				D890D1B226A0C42400C47489 /* SQLite */,
-				D890D1CA26A35D6700C47489 /* Interact */,
 			);
 			productName = BookmarksCore;
 			productReference = D8569FC2261E2603006926BF /* BookmarksCore.framework */;
@@ -444,7 +439,6 @@
 			name = "BookmarksCore macOS";
 			packageProductDependencies = (
 				D890D1B026A0C41900C47489 /* SQLite */,
-				D890D1B726A1F15600C47489 /* Interact */,
 			);
 			productName = "BookmarksCore macOS";
 			productReference = D8CF8C78261E356A00E52E85 /* BookmarksCore.framework */;
@@ -1038,14 +1032,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D890D1AF26A0C41900C47489 /* XCRemoteSwiftPackageReference "SQLite.swift" */;
 			productName = SQLite;
-		};
-		D890D1B726A1F15600C47489 /* Interact */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Interact;
-		};
-		D890D1CA26A35D6700C47489 /* Interact */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Interact;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

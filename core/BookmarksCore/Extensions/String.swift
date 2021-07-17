@@ -38,4 +38,8 @@ extension String {
         return url
     }
 
+    public var tokens: [String] {
+        components(separatedBy: .whitespacesAndNewlines).filter { !$0.isEmpty }
+    }
+
 }

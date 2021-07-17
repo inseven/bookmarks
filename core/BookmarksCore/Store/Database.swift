@@ -266,21 +266,21 @@ public class Database {
         }
     }
 
-    // TODO: What's wrong with the indentation
     func syncQueue_insertOrReplace(item: Item) throws {
-        // TODO: Transaction? Probably
-        //       Can we assert that we're in a transaction?
+        // TODO: Transaction? Probably? Can we assert that we're in a transaction?
         let tags = try item.tags.map { try syncQueue_insertOrReplaceTag(name: $0) }
-        let itemId = try self.db.run(Schema.items.insert(or: .replace,
-            Schema.identifier <- item.identifier,
-            Schema.title <- item.title,
-            Schema.url <- item.url.absoluteString,
-            Schema.date <- item.date
-        ))
+        let itemId = try self.db.run(
+            Schema.items.insert(or: .replace,
+                                Schema.identifier <- item.identifier,
+                                Schema.title <- item.title,
+                                Schema.url <- item.url.absoluteString,
+                                Schema.date <- item.date
+            ))
         for tag in tags {
-            _ = try self.db.run(Schema.items_to_tags.insert(or: .replace,
-                Schema.item_id <- itemId,
-                Schema.tag_id <- tag.id))
+            _ = try self.db.run(
+                Schema.items_to_tags.insert(or: .replace,
+                                            Schema.item_id <- itemId,
+                                            Schema.tag_id <- tag.id))
         }
     }
 

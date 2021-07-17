@@ -20,8 +20,8 @@
 
 import Foundation
 
-// TODO: Check response codes and throw errors if we don't get a 200?
-
+// TODO: Handle HTTP error codes in the Pinboard API responses #135
+//       https://github.com/inseven/bookmarks/issues/135
 public class Pinboard {
 
     enum PinboardError: Error {

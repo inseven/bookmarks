@@ -29,7 +29,7 @@ public class Item: Equatable {
     public let identifier: String
     public let title: String
     public let url: URL
-    public let tags: Set<String>  // TODO: This should be a set!
+    public let tags: Set<String>
     public let date: Date
     public let thumbnail: Image?
 
@@ -69,5 +69,5 @@ extension Item: Identifiable {
 extension Item: CustomStringConvertible {
 
     public var description: String { "\(self.url.absoluteString) (\(self.title))" }
-    
+
 }

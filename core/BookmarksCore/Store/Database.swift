@@ -336,11 +336,70 @@ public class Database {
         }
     }
 
+    public func rawItems(filter: String? = nil) throws -> [Item] {
+
+        var query = """
+            SELECT
+                items.identifier,
+                url,
+                date
+            FROM
+                (
+                    SELECT
+                        item_id,
+                        GROUP_CONCAT(tags.name) AS tags
+                    FROM
+                        items_to_tags
+                    INNER JOIN
+                        tags
+                    ON
+                        tags.id == items_to_tags.tag_id
+                    GROUP BY
+                        item_id
+                )
+            INNER JOIN
+                items
+            ON
+                items.id == item_id
+        """
+
+        if let filter = filter {
+            let tags = Expression<String>("tags")
+            let filters = filter.tokens.map { Schema.title.like("%\($0)%") || Schema.url.like("%\($0)%") || tags.like("%\($0)%") }
+            let compoundFilter = filters.reduce(Expression<Bool>(value: true)) { $0 && $1 }
+            query = query + " WHERE " + compoundFilter.asSQL()
+        }
+
+        print(Schema.date.asc.asSQL())
+
+        query = query + " ORDER BY date DESC"
+
+        let stmt = try db.prepare(query)
+        var items: [Item] = []
+        for row in stmt {
+            guard let identifier = row[0] as? String,
+                  let urlString = row[1] as? String,
+                  let url = URL(string: urlString),
+                  let tags = row[2] as? String else {
+                throw DatabaseError.unknown  // TODO Invalid results?
+            }
+            let item = Item(identifier: identifier,
+                            title: "",
+                            url: url,
+                            tags: Set(tags.components(separatedBy: ",")),
+                            date: Date())  // TODO: Do the time interval?
+            items.append(item)
+        }
+
+        return items
+    }
+
     public func items(filter: String? = nil, completion: @escaping (Swift.Result<[Item], Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
-            let result = Swift.Result {
-                try self.db.prepare(Self.itemQuery(filter: filter)).map(Item.init)
+            let result = Swift.Result<[Item], Error> {
+                try self.rawItems(filter: filter)
+//                return try self.db.prepare(Self.itemQuery(filter: filter)).map(Item.init)
             }
             completion(result)
         }

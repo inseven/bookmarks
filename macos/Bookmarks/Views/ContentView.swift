@@ -24,10 +24,6 @@ import SwiftUI
 import BookmarksCore
 import Interact
 
-extension String: Identifiable {
-    public var id: String { self }
-}
-
 struct ContentView: View {
 
     @Environment(\.manager) var manager: BookmarksManager

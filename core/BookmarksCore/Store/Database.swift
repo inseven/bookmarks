@@ -245,7 +245,6 @@ public class Database {
                 .map(Tag.init))
     }
 
-    // TODO: Should the internal tag struct be public?
     public func tags(completion: @escaping (Swift.Result<Set<Tag>, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {

@@ -22,8 +22,18 @@ import Foundation
 
 extension URLComponents {
 
+    // TODO: I think there's actually an API for this?
     init?(unsafeString: String) {
         self.init(string: unsafeString.replacingOccurrences(of: " ", with: "%20"))
+    }
+
+    // TODO: Make this a computed property in Swift 5.5
+    //       https://stackoverflow.com/questions/32899346/how-do-i-declare-that-a-computed-property-throws-in-swift
+    func asUrl() throws -> URL {
+        guard let url = self.url else {
+            throw BookmarksError.invalidURL(components: self)
+        }
+        return url
     }
 
 }

@@ -29,4 +29,13 @@ extension String {
         return self.lowercased().contains(search.lowercased())
     }
 
+    // TODO: Make this a computed property in Swift 5.5
+    //       https://stackoverflow.com/questions/32899346/how-do-i-declare-that-a-computed-property-throws-in-swift
+    func asUrl() throws -> URL {
+        guard let url = URL(string: self) else {
+            throw BookmarksError.invalidURL(string: self)
+        }
+        return url
+    }
+
 }

@@ -22,4 +22,7 @@ import Foundation
 
 enum BookmarksError: Error {
     case resizeFailure
+    case invalidURL(string: String)
+    case invalidURL(url: URL)
+    case invalidURL(components: URLComponents)
 }

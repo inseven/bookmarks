@@ -26,4 +26,13 @@ public extension URL {
         URL(string: "https://web.archive.org/web/*/")!.appendingPathComponent(self.absoluteString)
     }
 
+    // TODO: Make this a computed property in Swift 5.5
+    //       https://stackoverflow.com/questions/32899346/how-do-i-declare-that-a-computed-property-throws-in-swift
+    func asComponents() throws -> URLComponents {
+        guard let components = URLComponents(string: absoluteString) else {
+            throw BookmarksError.invalidURL(url: self)
+        }
+        return components
+    }
+
 }

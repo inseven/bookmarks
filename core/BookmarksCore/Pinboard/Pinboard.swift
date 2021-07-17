@@ -20,48 +20,6 @@
 
 import Foundation
 
-// TODO: Rename!!
-enum UglyError: Swift.Error {
-    case invalidURL(message: String)
-    case inconsistentState(message: String)
-}
-
-extension String {
-
-    func asUrl() throws -> URL {
-        guard let url = URL(string: self) else {
-            throw UglyError.invalidURL(message: self)  // TODO: Shouldn't be message, should be the string.
-        }
-        return url
-    }
-
-}
-
-extension URL {
-
-    // TODO: Make this a computed property in Swift 5.5
-    //       https://stackoverflow.com/questions/32899346/how-do-i-declare-that-a-computed-property-throws-in-swift
-    func components() throws -> URLComponents {
-        guard let components = URLComponents(string: absoluteString) else {
-            throw UglyError.invalidURL(message: "Unable to parse URL components")
-        }
-        return components
-    }
-
-}
-
-extension URLComponents {
-
-    func asUrl() throws -> URL {
-        guard let url = self.url else {
-            throw UglyError.invalidURL(message: "Unable to construct URL from components")
-        }
-        return url
-    }
-
-}
-
-// TODO: Is there an off-the-shelf JSON task?
 // TODO: Check response codes and throw errors if we don't get a 200?
 
 public class Pinboard {
@@ -86,7 +44,7 @@ public class Pinboard {
     fileprivate func serviceUrl(_ path: Path, parameters: [String:String] = [:]) throws -> URL {
         let baseUrl = try baseUrl.asUrl()
         let url = baseUrl.appendingPathComponent(path.rawValue)
-        var components = try url.components()
+        var components = try url.asComponents()
         var queryItems: [URLQueryItem] = [
             URLQueryItem(name: "auth_token", value: token),
             URLQueryItem(name: "format", value: "json"),

@@ -20,8 +20,8 @@
 
 import Foundation
 
-// TODO: Raise an issue to replace this with async await when it's no longer experimental
-//       https://docs.swift.org/swift-book/LanguageGuide/Concurrency.html
+// TODO: Replace AsyncOperation with async await when adopting Swift 5.5 #130
+//       https://github.com/inseven/bookmarks/issues/130
 public class AsyncOperation<T> {
 
     var semaphore = DispatchSemaphore(value: 0)

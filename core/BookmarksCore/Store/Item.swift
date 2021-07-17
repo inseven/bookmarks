@@ -65,3 +65,9 @@ public class Item: Equatable {
 extension Item: Identifiable {
     public var id: String { identifier }
 }
+
+extension Item: CustomStringConvertible {
+
+    public var description: String { "\(self.url.absoluteString) (\(self.title))" }
+    
+}

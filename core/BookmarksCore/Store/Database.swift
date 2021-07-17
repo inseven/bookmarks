@@ -318,6 +318,8 @@ public class Database {
         }
     }
 
+    // TODO: Clean up database tags when the last item is removed #141
+    //       https://github.com/inseven/bookmarks/issues/141
     public func delete(identifier: String, completion: @escaping (Swift.Result<Int, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {

@@ -405,7 +405,6 @@ public class Database {
     }
 
     public func identifiers(completion: @escaping (Swift.Result<[String], Error>) -> Void) {
-        dispatchPrecondition(condition: .notOnQueue(syncQueue))  // TODO: Not necessary??
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             let result = Swift.Result {

@@ -376,7 +376,8 @@ public class Database {
                   let title = row[1] as? String,
                   let urlString = row[2] as? String,
                   let url = URL(string: urlString),
-                  let tags = row[3] as? String? else {
+                  let tags = row[3] as? String?,
+                  let date = row[4] as? String else {
                 throw DatabaseError.unknown  // TODO Invalid results?
             }
             let safeTags = tags?.components(separatedBy: ",") ?? []
@@ -384,7 +385,7 @@ public class Database {
                             title: title,
                             url: url,
                             tags: Set(safeTags),
-                            date: Date())  // TODO: Do the time interval?
+                            date: Date.fromDatatypeValue(date))
             items.append(item)
         }
 

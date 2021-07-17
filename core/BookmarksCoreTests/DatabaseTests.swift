@@ -82,6 +82,40 @@ class DatabaseTests: XCTestCase {
 
     }
 
+    func testMultipleQuery() {
+        guard let database = try? Database(path: temporaryDatabaseUrl) else {
+            XCTFail("Failed to create database")
+            return
+        }
+        XCTAssertNotNil(database)
+
+        let item1 = Item(identifier: UUID().uuidString,
+                         title: "Example",
+                         url: URL(string: "https://example.com")!,
+                         tags: ["example", "website"],
+                         date: Date(timeIntervalSince1970: 0))
+
+        let item2 = Item(identifier: UUID().uuidString,
+                         title: "Cheese",
+                         url: URL(string: "https://fromage.com")!,
+                         tags: ["cheese", "website"],
+                         date: Date(timeIntervalSince1970: 10))
+
+        do {
+            _ = try AsyncOperation({ database.insertOrUpdate(item1, completion: $0) }).wait()
+            _ = try AsyncOperation({ database.insertOrUpdate(item2, completion: $0) }).wait()
+
+            let tags = try AsyncOperation({ database.tags(completion: $0) }).wait()
+            XCTAssertEqual(Set(tags.map({ $0.name })), Set(["example", "website", "cheese"]))
+
+            let fetchedItems = try AsyncOperation({ database.items(completion: $0) }).wait()
+            XCTAssertEqual(fetchedItems, [item2, item1])
+        } catch {
+            XCTFail("Failed with error \(error)")
+        }
+
+    }
+
     // TODO: Test deletion and tags remaining
     // TODO: Test all rows
 

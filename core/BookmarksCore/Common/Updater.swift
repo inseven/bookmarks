@@ -76,7 +76,7 @@ public class Updater {
                         print(item)
                         _ = try AsyncOperation({ self.database.delete(identifier: identifier, completion: $0) }).wait()
                     }
-
+                    print("Complete.")
                 } catch {
                     print("Failed to update items with error \(error)")
                 }

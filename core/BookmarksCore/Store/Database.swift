@@ -277,6 +277,8 @@ public class Database {
         }
     }
 
+    // Things with no tags don't turn up.
+
     // TODO: What's wrong with the indentation
     func syncQueue_insertOrReplace(item: Item) throws {
         // TODO: Transaction? Probably
@@ -311,7 +313,7 @@ public class Database {
                             try self.syncQueue_insertOrReplace(item: item)
                             self.syncQueue_notifyObservers()
                         } else {
-                            print("skipping \(item)...")
+//                            print("skipping \(item)")
                         }
                     } else {
                         print("inserting \(item)...")
@@ -341,9 +343,13 @@ public class Database {
         var query = """
             SELECT
                 items.identifier,
+                title,
                 url,
+                tags,
                 date
             FROM
+                items
+            LEFT JOIN
                 (
                     SELECT
                         item_id,
@@ -356,12 +362,42 @@ public class Database {
                         tags.id == items_to_tags.tag_id
                     GROUP BY
                         item_id
-                )
-            INNER JOIN
-                items
+                ) a
             ON
                 items.id == item_id
         """
+
+        // TODO: Surface the errors from the query (maybe we just need to crash?)
+
+//        var query = """
+//            SELECT
+//                items.identifier,
+//                title,
+//                url,
+//                GROUP_CONCAT(tag_id) AS tags,
+//                date
+//            FROM
+//                items
+//            LEFT JOIN
+//                items_to_tags
+//            ON
+//                items.id == items_to_tags.item_id
+//        """
+
+//        var query = """
+//            SELECT
+//                items.identifier,
+//                title,
+//                url,
+//                GROUP_CONCAT(tag_id) AS tags,
+//                date
+//            FROM
+//                items
+//            LEFT JOIN
+//                items_to_tags
+//            ON
+//                items.id == items_to_tags.item_id
+//        """
 
         if let filter = filter {
             let tags = Expression<String>("tags")
@@ -370,23 +406,24 @@ public class Database {
             query = query + " WHERE " + compoundFilter.asSQL()
         }
 
-        print(Schema.date.asc.asSQL())
-
+//        query = query + " GROUP BY items.id"
         query = query + " ORDER BY date DESC"
 
         let stmt = try db.prepare(query)
         var items: [Item] = []
         for row in stmt {
             guard let identifier = row[0] as? String,
-                  let urlString = row[1] as? String,
+                  let title = row[1] as? String,
+                  let urlString = row[2] as? String,
                   let url = URL(string: urlString),
-                  let tags = row[2] as? String else {
+                  let tags = row[3] as? String? else {
                 throw DatabaseError.unknown  // TODO Invalid results?
             }
+            let safeTags = tags?.components(separatedBy: ",") ?? []
             let item = Item(identifier: identifier,
-                            title: "",
+                            title: title,
                             url: url,
-                            tags: Set(tags.components(separatedBy: ",")),
+                            tags: Set(safeTags),
                             date: Date())  // TODO: Do the time interval?
             items.append(item)
         }

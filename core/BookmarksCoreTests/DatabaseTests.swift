@@ -66,6 +66,10 @@ class DatabaseTests: XCTestCase {
             XCTFail("Failed with error \(error)")
         }
 
+        // TODO: Test all tags is the same?
+
+        // TODO: Test that rows are returned from the all query even if they have no tags.
+
     }
 
 

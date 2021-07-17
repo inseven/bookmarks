@@ -20,19 +20,62 @@
 
 import Foundation
 
+// TODO: Rename!!
+enum UglyError: Swift.Error {
+    case invalidURL(message: String)
+    case inconsistentState(message: String)
+}
+
+extension String {
+
+    func asUrl() throws -> URL {
+        guard let url = URL(string: self) else {
+            throw UglyError.invalidURL(message: self)  // TODO: Shouldn't be message, should be the string.
+        }
+        return url
+    }
+
+}
+
+extension URL {
+
+    // TODO: Make this a computed property in Swift 5.5
+    //       https://stackoverflow.com/questions/32899346/how-do-i-declare-that-a-computed-property-throws-in-swift
+    func components() throws -> URLComponents {
+        guard let components = URLComponents(string: absoluteString) else {
+            throw UglyError.invalidURL(message: "Unable to parse URL components")
+        }
+        return components
+    }
+
+}
+
+extension URLComponents {
+
+    func asUrl() throws -> URL {
+        guard let url = self.url else {
+            throw UglyError.invalidURL(message: "Unable to construct URL from components")
+        }
+        return url
+    }
+
+}
+
+// TODO: Is there an off-the-shelf JSON task?
+// TODO: Check response codes and throw errors if we don't get a 200?
+
 public class Pinboard {
 
-    enum Error: Swift.Error {
-        case invalidURL(message: String)
-        case invalidResponse(message: String)
+    enum PinboardError: Error {
         case inconsistentState(message: String)
     }
 
-    fileprivate let baseURL = "https://api.pinboard.in/v1/"
-
     fileprivate enum Path: String {
         case posts_all = "posts/all"
+        case posts_delete = "posts/delete"
     }
+
+    fileprivate let baseUrl = "https://api.pinboard.in/v1/"
 
     let token: String
 
@@ -40,47 +83,71 @@ public class Pinboard {
         self.token = token
     }
 
-    public func posts_all(completion: @escaping (Result<[Post], Swift.Error>) -> Void) {
-        guard let base = URL(string: baseURL) else {
-            DispatchQueue.global(qos: .default).async {
-                completion(.failure(Error.invalidURL(message: "Unable to construct parse base URL")))
-            }
-            return
-        }
-        let posts = base.appendingPathComponent(Path.posts_all.rawValue)
-        guard var components = URLComponents(string: posts.absoluteString) else {
-            DispatchQueue.global(qos: .default).async {
-                completion(.failure(Error.invalidURL(message: "Unable to parse URL components")))
-            }
-            return
-        }
-        components.queryItems = [
+    fileprivate func serviceUrl(_ path: Path, parameters: [String:String] = [:]) throws -> URL {
+        let baseUrl = try baseUrl.asUrl()
+        let url = baseUrl.appendingPathComponent(path.rawValue)
+        var components = try url.components()
+        var queryItems: [URLQueryItem] = [
             URLQueryItem(name: "auth_token", value: token),
-            URLQueryItem(name: "format", value: "json")
+            URLQueryItem(name: "format", value: "json"),
         ]
-        guard let url = components.url else {
-            DispatchQueue.global(qos: .default).async {
-                completion(.failure(Error.invalidURL(message: "Unable to construct URL from components")))
-            }
-            return
+        parameters.forEach { name, value in
+            queryItems.append(URLQueryItem(name: name, value: value))
         }
-        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            guard let data = data else {
-                guard let error = error else {
-                    completion(.failure(Error.inconsistentState(message: "Missing error when processing URL completion")))
+        components.queryItems = queryItems
+        return try components.asUrl()
+    }
+
+    public func posts_all(completion: @escaping (Result<[Post], Error>) -> Void) {
+        let completion = DispatchQueue.global().asyncClosure(completion)
+        do {
+            let url = try serviceUrl(.posts_all)
+            let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+                guard let data = data else {
+                    guard let error = error else {
+                        completion(.failure(PinboardError.inconsistentState(message: "Missing error when processing URL completion")))
+                        return
+                    }
+                    completion(.failure(error))
                     return
                 }
-                completion(.failure(error))
-                return
+                do {
+                    let posts = try JSONDecoder().decode([Post].self, from: data)
+                    completion(.success(posts))
+                } catch {
+                    completion(.failure(error))
+                }
             }
-            do {
-                let posts = try JSONDecoder().decode([Post].self, from: data)
-                completion(.success(posts))
-            } catch {
-                completion(.failure(error))
-            }
+            task.resume()
+        } catch {
+            completion(.failure(error))
+            return
         }
-        task.resume()
+    }
+
+    public func posts_delete(url: URL, completion: @escaping (Result<Bool, Swift.Error>) -> Void) {
+        let completion = DispatchQueue.global().asyncClosure(completion)
+        do {
+            let url = try serviceUrl(.posts_delete, parameters: [
+                "url": url.absoluteString,
+            ])
+            let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+                if let data = data {
+                    let str = String(decoding: data, as: UTF8.self)
+                    print(str)
+                }
+                print(data ?? "nil")
+                if let error = error {
+                    completion(.failure(error))
+                    return
+                }
+                completion(.success(true))
+            }
+            task.resume()
+        } catch {
+            completion(.failure(error))
+            return
+        }
     }
 
 }

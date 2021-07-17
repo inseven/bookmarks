@@ -24,6 +24,10 @@ import SwiftUI
 import BookmarksCore
 import Interact
 
+extension String: Identifiable {
+    public var id: String { self }
+}
+
 struct ContentView: View {
 
     @Environment(\.manager) var manager: BookmarksManager
@@ -47,6 +51,18 @@ struct ContentView: View {
                                     NSWorkspace.shared.open(item.url)
                                 }
                                 Divider()
+                                if item.tags.isEmpty {
+                                    Button("No Tags") {}.disabled(true)
+                                } else {
+                                    Menu("Tags") {
+                                        ForEach(Array(item.tags)) { tag in
+                                            Button(tag) {
+                                                print(item.tags)
+                                            }
+                                        }
+                                    }
+                                }
+                                Divider()
                                 Button("View on Internet Archive") {
                                     NSWorkspace.shared.open(item.url.internetArchiveUrl)
                                 }
@@ -54,6 +70,17 @@ struct ContentView: View {
                                 Button("Share") {
                                     print("Share")
                                     print(item.identifier)
+                                }
+                                Divider()
+                                Button("Delete") {
+                                    manager.pinboard.posts_delete(url: item.url) { result in
+                                        switch result {
+                                        case .success:
+                                            manager.updater.start()
+                                        case .failure(let error):
+                                            print("Failed to delete bookmark with error \(error)")
+                                        }
+                                    }
                                 }
                             }))
                     }

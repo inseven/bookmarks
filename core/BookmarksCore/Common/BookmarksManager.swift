@@ -39,6 +39,7 @@ public class BookmarksManager {
     var downloadManager: DownloadManager
     public var settings = Settings()
     public var updater: Updater
+    public var pinboard: Pinboard
 
     public var database: Database
 
@@ -52,6 +53,10 @@ public class BookmarksManager {
         downloadManager = DownloadManager(limit: settings.maximumConcurrentThumbnailDownloads)
         thumbnailManager = ThumbnailManager(imageCache: imageCache, downloadManager: downloadManager)
         updater = Updater(database: database, token: settings.pinboardApiKey)
+        pinboard = Pinboard(token: settings.pinboardApiKey)  // TODO: Deal with token updates (don't require relaunch
+        // TODO: Shared pinboard instance
+        // TODO: Pinboard == updater == ?
+        // TODO: Service == Pinboard + Updater? ServiceProtocol (talks Items)
 
         #if targetEnvironment(macCatalyst)
         let notificationCenter = NotificationCenter.default

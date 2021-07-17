@@ -60,51 +60,40 @@ extension Connection {
 
 }
 
+public struct Tag: Hashable {
+
+    let id: Int64
+    let name: String
+
+    init(id: Int64, name: String) {
+        self.id = id
+        self.name = name
+    }
+
+    init(row: Row) throws {
+        self.init(id: try row.get(Database.Schema.tags[Database.Schema.id]),
+                  name: try row.get(Database.Schema.name))
+    }
+
+}
+
 public class Database {
 
     class Schema {
 
         static let items = Table("items")
         static let tags = Table("tags")
+        static let items_to_tags = Table("items_to_tags")
 
         static let id = Expression<Int64>("id")
         static let identifier = Expression<String>("identifier")
         static let title = Expression<String>("title")
         static let url = Expression<String>("url")
         static let date = Expression<Date>("date")
-
         static let name = Expression<String>("name")
+        static let item_id = Expression<Int64>("item_id")
+        static let tag_id = Expression<Int64>("tag_id")
 
-    }
-
-    let path: URL
-    var syncQueue = DispatchQueue(label: "Database.syncQueue")
-    var db: Connection  // Synchronized on syncQueue
-    var observers: [DatabaseObserver] = []  // Synchronized on syncQueue
-
-    // TODO: What's the thread safety of the database? Can we support multiple queues (e.g., for background processing)
-    // TODO: Use a join against a derived data table to determine if we've fetched the data (this can also include a derivation version?)
-    // TODO: Support right-click deletion of rows
-    // TODO: Why is it creating the database twice?
-    // TODO: Add tags back.
-    // TODO: Does much of this really need to be public?
-
-    static func itemQuery(filter: String? = nil) -> QueryType {
-        guard let filter = filter,
-              !filter.isEmpty else {
-            return Schema.items.order(Schema.date.desc)
-        }
-        let filters = filter.tokens.map { Schema.title.like("%\($0)%") || Schema.url.like("%s\($0)%") }
-        let query = Schema.items.filter(filters.reduce(Expression<Bool>(value: true)) { $0 && $1 })
-        return query.order(Schema.date.desc)
-    }
-
-    public init(path: URL) throws {
-        self.path = path
-        self.db = try Connection(path.path)
-        try syncQueue.sync {
-            try self.syncQueue_migrate()
-        }
     }
 
     static var migrations: [Int32:(Connection) throws -> Void] = [
@@ -127,10 +116,68 @@ public class Database {
                 t.column(Schema.id, primaryKey: true)
                 t.column(Schema.name, unique: true)
             })
+        },
+        5: { db in
+            print("creating items_to_tags table...")
+            try db.run(Schema.items_to_tags.create { t in
+                t.column(Schema.id, primaryKey: true)
+                t.column(Schema.item_id)
+                t.column(Schema.tag_id)
+                t.unique(Schema.item_id, Schema.tag_id)
+            })
+        },
+        6: { db in
+            print("adding foreign key constraints to items_t_tags table...")
+            try db.run(Schema.items_to_tags.drop())
+            try db.run(Schema.items_to_tags.create { t in
+                t.column(Schema.id, primaryKey: true)
+                t.column(Schema.item_id)
+                t.column(Schema.tag_id)
+                t.unique(Schema.item_id, Schema.tag_id)
+                t.foreignKey(Schema.item_id, references: Schema.items, Schema.id, delete: .cascade)
+                t.foreignKey(Schema.tag_id, references: Schema.tags, Schema.id, delete: .cascade)
+            })
         }
     ]
 
     static var schemaVersion: Int32 = Array(migrations.keys).max() ?? 0
+
+    let path: URL
+    var syncQueue = DispatchQueue(label: "Database.syncQueue")
+    var db: Connection  // Synchronized on syncQueue
+    var observers: [DatabaseObserver] = []  // Synchronized on syncQueue
+
+    // TODO: What's the thread safety of the database? Can we support multiple queues (e.g., for background processing)
+    // TODO: Use a join against a derived data table to determine if we've fetched the data (this can also include a derivation version?)
+    // TODO: Support right-click deletion of rows
+    // TODO: Why is it creating the database twice?
+    // TODO: Add tags back.
+    // TODO: The initial load is going to be very costly (if we don't debounce the updates)
+
+    static func itemQuery(filter: String? = nil) -> QueryType {
+        guard let filter = filter,
+              !filter.isEmpty else {
+            return Schema.items.order(Schema.date.desc)
+        }
+        let filters = filter.tokens.map { Schema.title.like("%\($0)%") || Schema.url.like("%s\($0)%") }
+        let query = Schema.items.filter(filters.reduce(Expression<Bool>(value: true)) { $0 && $1 })
+        return query.order(Schema.date.desc)
+    }
+
+    public init(path: URL) throws {
+        self.path = path
+        self.db = try Connection(path.path)
+        try syncQueue.sync {
+            try self.syncQueue_migrate()
+        }
+    }
+
+    public func add(observer: DatabaseObserver) {
+        dispatchPrecondition(condition: .notOnQueue(syncQueue))
+        syncQueue.sync {
+            observers.append(observer)
+        }
+    }
 
     func syncQueue_migrate() throws {
         dispatchPrecondition(condition: .onQueue(syncQueue))
@@ -152,13 +199,6 @@ public class Database {
         }
     }
 
-    public func add(observer: DatabaseObserver) {
-        dispatchPrecondition(condition: .notOnQueue(syncQueue))
-        syncQueue.sync {
-            observers.append(observer)
-        }
-    }
-
     func syncQueue_notifyObservers() {
         dispatchPrecondition(condition: .onQueue(syncQueue))
         let observers = self.observers
@@ -170,11 +210,63 @@ public class Database {
     }
 
     func syncQueue_item(identifier: String) throws -> Item {
+        // TODO: TRANSACTION?
         let run = try db.prepare(Schema.items.filter(Schema.identifier == identifier).limit(1)).map(Item.init)
         guard let result = run.first else {
-            throw DatabaseError.unknown  // Seems wrong?
+            throw DatabaseError.unknown  // TODO: Seems wrong?
+        }
+        let tags = try syncQueue_tags(itemIdentifier: identifier)
+        return Item(identifier: result.identifier,
+                    title: result.title,
+                    url: result.url,
+                    tags: Set(tags.map { $0.name }),
+                    date: result.date)
+    }
+
+    // TODO: Make sure all this is actually correctly done in a transaction.
+
+    // TODO: Rename this to ensure existing or similar?
+    func syncQueue_insertOrReplaceTag(name: String) throws -> Tag {
+        if let tag = try? syncQueue_tag(name: name) {
+            return tag
+        }
+        let id = try db.run(Schema.tags.insert(
+            Schema.name <- name
+        ))
+        return Tag(id: id, name: name)
+    }
+
+    func syncQueue_tag(name: String) throws -> Tag {
+        let results = try db.prepare(Schema.tags.filter(Schema.name == name).limit(1)).map { row in
+            Tag(id: try row.get(Schema.id),
+                name: try row.get(Schema.name))
+        }
+        guard let result = results.first else {
+            throw DatabaseError.unknown  // TODO: Rename
         }
         return result
+    }
+
+    func syncQueue_tags(itemIdentifier: String) throws -> Set<Tag> {
+        Set(try self.db.prepare(Schema.items_to_tags
+                                    .join(Schema.items, on: Schema.items_to_tags[Schema.item_id] == Schema.items[Schema.id])
+                                    .join(Schema.tags, on: Schema.items_to_tags[Schema.tag_id] == Schema.tags[Schema.id])
+                                    .filter(Schema.identifier == itemIdentifier))
+                .map(Tag.init))
+    }
+
+    // TODO: Should the internal tag struct be public?
+    public func tags(completion: @escaping (Swift.Result<Set<Tag>, Error>) -> Void) {
+        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
+        syncQueue.async {
+            let result = Swift.Result {
+                Set(try self.db.prepare(Schema.tags).map { row in
+                    Tag(id: try row.get(Schema.id),
+                        name: try row.get(Schema.name))
+                })
+            }
+            completion(result)
+        }
     }
 
     public func item(identifier: String, completion: @escaping (Swift.Result<Item, Error>) -> Void) {
@@ -185,33 +277,45 @@ public class Database {
         }
     }
 
+    // TODO: What's wrong with the indentation
+    func syncQueue_insertOrReplace(item: Item) throws {
+        // TODO: Transaction? Probably
+        //       Can we assert that we're in a transaction?
+        let tags = try item.tags.map { try syncQueue_insertOrReplaceTag(name: $0) }
+        let itemId = try self.db.run(Schema.items.insert(or: .replace,
+            Schema.identifier <- item.identifier,
+            Schema.title <- item.title,
+            Schema.url <- item.url.absoluteString,
+            Schema.date <- item.date
+        ))
+        for tag in tags {
+            _ = try self.db.run(Schema.items_to_tags.insert(or: .replace,
+                Schema.item_id <- itemId,
+                Schema.tag_id <- tag.id))
+        }
+    }
+
     public func insertOrUpdate(_ item: Item, completion: @escaping (Swift.Result<Item, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             let result = Swift.Result<Item, Error> {
                 try self.db.transaction {
-                    // N.B. While it would be possible to use an insert or replace strategy, we want to ensure we only
-                    // notify observers if the data has actually changed so we instead fetch the item and compare.
+                    // N.B. While it would be possible to use an insert or replace strategy directly, we want to ensure
+                    // we only notify observers if the data has actually changed so we instead fetch the item and
+                    // compare.
                     if let existingItem = try? self.syncQueue_item(identifier: item.identifier) {
                         if existingItem != item {
                             print("updating \(item)...")
-                            try self.db.run(Schema.items.filter(Schema.identifier == item.identifier).update(
-                                Schema.title <- item.title,
-                                Schema.url <- item.url.absoluteString,
-                                Schema.date <- item.date
-                            ))
+                            print("existing tags \(existingItem.tags)")
+                            print("item tags \(item.tags)")
+                            try self.syncQueue_insertOrReplace(item: item)
                             self.syncQueue_notifyObservers()
                         } else {
                             print("skipping \(item)...")
                         }
                     } else {
                         print("inserting \(item)...")
-                        _ = try self.db.run(Schema.items.insert(
-                            Schema.identifier <- item.identifier,
-                            Schema.title <- item.title,
-                            Schema.url <- item.url.absoluteString,
-                            Schema.date <- item.date
-                        ))
+                        try self.syncQueue_insertOrReplace(item: item)
                         self.syncQueue_notifyObservers()
                     }
                 }
@@ -247,8 +351,8 @@ public class Database {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             let result = Swift.Result {
-                return try self.db.prepare(Schema.items.select(Schema.identifier)).map { row -> String in
-                    return try row.get(Schema.identifier)
+                try self.db.prepare(Schema.items.select(Schema.identifier)).map { row -> String in
+                    try row.get(Schema.identifier)
                 }
             }
             completion(result)

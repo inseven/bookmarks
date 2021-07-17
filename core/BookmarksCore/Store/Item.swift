@@ -30,11 +30,11 @@ public class Item: Equatable {
     public let identifier: String
     public let title: String
     public let url: URL
-    public let tags: [String]
+    public let tags: Set<String>  // TODO: This should be a set!
     public let date: Date
     public let thumbnail: Image?
 
-    init(identifier: String, title: String, url: URL, tags: [String], date: Date, thumbnail: Image? = nil) {
+    init(identifier: String, title: String, url: URL, tags: Set<String>, date: Date, thumbnail: Image? = nil) {
         self.identifier = identifier
         self.title = title
         self.url = url
@@ -51,32 +51,13 @@ public class Item: Equatable {
     static let tagsKey = "tags"
     static let dateKey = "date"
 
-    public func encode(with coder: NSCoder) {
-        coder.encode(identifier, forKey: Item.identifierKey)
-        coder.encode(title, forKey: Item.titleKey)
-        coder.encode(url, forKey: Item.urlKey)
-        coder.encode(tags, forKey: Item.tagsKey)
-        coder.encode(date, forKey: Item.dateKey)
-    }
-
-    public convenience required init?(coder: NSCoder) {
-
-        guard let identifier = coder.decodeString(forKey: Item.identifierKey),
-              let title = coder.decodeString(forKey: Item.titleKey),
-              let url = coder.decodeUrl(forKey: Item.urlKey),
-              let tags = coder.decodeObject(of: [NSArray.self, NSString.self], forKey: Item.tagsKey) as? [String],
-              let date = coder.decodeDate(forKey: Item.dateKey) else {
-            return nil
-        }
-        self.init(identifier: identifier, title: title, url: url, tags: tags, date: date)
-    }
-
     // TODO: Note that this doesn't include the thumbnail??
     public static func == (lhs: Item, rhs: Item) -> Bool {
         return
             lhs.identifier == rhs.identifier &&
             lhs.title == rhs.title &&
             lhs.url == rhs.url &&
+            lhs.tags == rhs.tags &&
             lhs.date == rhs.date
     }
 

@@ -18,39 +18,86 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import Combine
 import Foundation
 
-public class DatabaseView: ObservableObject, DatabaseObserver {
+
+class EventSubscription<Target: Subscriber>: Subscription, DatabaseObserver
+where Target.Input == Void {
+
+    func databaseDidUpdate(database: Database) {
+        _ = target?.receive()
+    }
+
+
+    var target: Target?
+
+    // This subscription doesn't respond to demand, since it'll
+    // simply emit events according to its underlying UIControl
+    // instance, but we still have to implement this method
+    // in order to conform to the Subscription protocol:
+    func request(_ demand: Subscribers.Demand) {}
+
+    func cancel() {
+        // When our subscription was cancelled, we'll release
+        // the reference to our target to prevent any
+        // additional events from being sent to it:
+        target = nil
+    }
+
+}
+
+
+struct EventPublisher: Publisher {
+    // Declaring that our publisher doesn't emit any values,
+    // and that it can never fail:
+    typealias Output = Void
+    typealias Failure = Never
+
+    fileprivate var database: Database
+
+    func receive<S: Subscriber>(subscriber: S) where S.Input == Output, S.Failure == Failure {
+        let subscription = EventSubscription<S>()
+        subscription.target = subscriber
+        subscriber.receive(subscription: subscription)
+        database.add(observer: subscription)
+    }
+}
+
+
+public class DatabaseView: ObservableObject {
 
     var database: Database
+    var publisher: EventPublisher
+    var cancellable: AnyCancellable?
+
+    // TODO: We should be debouncing the search field too.
     public var filter: String = "" {
         didSet {
             dispatchPrecondition(condition: .onQueue(.main))
             print(filter)
-            self.databaseDidUpdate(database: self.database)
+            self.update()
         }
     }
 
     public init(database: Database) {
         self.database = database
-        self.database.add(observer: self)
-        self.databaseDidUpdate(database: self.database)
+        self.publisher = EventPublisher(database: database)
+        self.cancellable = self.publisher.debounce(for: .seconds(1), scheduler: DispatchQueue.main).sink { _ in
+            self.update()
+        }
+        self.update()
     }
 
-    public func databaseDidUpdate(database: Database) {
-        // TODO: Debounce updates
-        // TODO: Handle errors
-        DispatchQueue.main.async {
-            print("requery...")
-            database.items(filter: self.filter) { result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success(let items):
-                        self.items = items
-                        self.objectWillChange.send()
-                    case .failure(let error):
-                        print("Failed to load data with error \(error)")
-                    }
+    func update() {
+        database.items(filter: self.filter) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let items):
+                    self.items = items
+                    self.objectWillChange.send()
+                case .failure(let error):
+                    print("Failed to load data with error \(error)")
                 }
             }
         }

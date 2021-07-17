@@ -61,7 +61,7 @@ public class Updater {
                         let item = Item(identifier: post.hash,
                                         title: post.description ?? "",
                                         url: url,
-                                        tags: post.tags,
+                                        tags: Set(post.tags),
                                         date: date)
                         identifiers.insert(item.identifier)
                         _ = try AsyncOperation({ self.database.insertOrUpdate(item, completion: $0) }).wait()

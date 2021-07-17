@@ -22,21 +22,17 @@ import Foundation
 
 public class Updater {
 
-    let syncQueue: DispatchQueue
-    let targetQueue: DispatchQueue
-    let store: Store
-    let token: String
+    let database: Database
+    let pinboard: Pinboard
 
-    public init(store: Store, token: String) {
-        self.store = store
-        self.token = token
-        self.syncQueue = DispatchQueue(label: "syncQueue")
-        self.targetQueue = DispatchQueue(label: "targetQueue", attributes: .concurrent)
+    public init(database: Database, pinboard: Pinboard) {
+        self.database = database
+        self.pinboard = pinboard
     }
 
     public func start() {
         print("Updating bookmarks...")
-        Pinboard(token: self.token).posts_all { [weak self] (result) in
+        pinboard.posts_all { [weak self] (result) in
             switch (result) {
             case .failure(let error):
                 print("Failed to fetch the posts with error \(error)")
@@ -44,27 +40,42 @@ public class Updater {
                 guard let self = self else {
                     return
                 }
-                // Pinboard seems to give us duplicate data so we maintain a set of hashes we've seen to ensure we
-                // only return one of each.
-                var identifiers = Set<String>()
-                var items: [Item] = []
-                for post in posts {
-                    guard
-                        let url = post.href,
-                        let date = post.time,
-                        !identifiers.contains(post.hash) else {
-                            continue
+
+                do {
+
+                    // Store the seen identifiers to determine what to delete.
+                    var identifiers = Set<String>()
+
+                    // Insert or update items.
+                    for post in posts {
+                        guard
+                            let url = post.href,
+                            let date = post.time else {
+                                continue
+                        }
+                        let item = Item(identifier: post.hash,
+                                        title: post.description ?? "",
+                                        url: url,
+                                        tags: Set(post.tags),
+                                        date: date)
+                        identifiers.insert(item.identifier)
+                        _ = try AsyncOperation({ self.database.insertOrUpdate(item, completion: $0) }).wait()
                     }
-                    identifiers.insert(post.hash)
-                    items.append(Item(identifier: post.hash,
-                                      title: post.description ?? "",
-                                      url: url,
-                                      tags: post.tags,
-                                      date: date))
+
+                    // Delete missing items.
+                    let allIdentifiers = try AsyncOperation(self.database.identifiers).wait()
+                    let deletedIdentifiers = Set(allIdentifiers).subtracting(identifiers)
+                    for identifier in deletedIdentifiers {
+                        let item = try AsyncOperation({ self.database.item(identifier: identifier, completion: $0) }).wait()
+                        print("deleting \(item)...")
+                        _ = try AsyncOperation({ self.database.delete(identifier: identifier, completion: $0) }).wait()
+                    }
+                    print("Complete.")
+
+                } catch {
+                    print("Failed to update items with error \(error)")
                 }
-                self.store.save(items: items) { (success) in
-                    print("Saved items with success \(success)")
-                }
+
             }
         }
     }

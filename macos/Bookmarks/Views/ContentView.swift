@@ -27,21 +27,14 @@ import Interact
 struct ContentView: View {
 
     @Environment(\.manager) var manager: BookmarksManager
-    @ObservedObject var store: Store
-    @State var search = ""
+    @ObservedObject var databaseView: DatabaseView
 
-    var items: [Item] {
-        store.rawItems.filter {
-            search.isEmpty ||
-                $0.localizedSearchMatches(string: search)
-        }
-    }
 
     var body: some View {
         VStack {
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
-                    ForEach(items) { item in
+                    ForEach(databaseView.items) { item in
                         BookmarkCell(item: item)
                             .onClick {
 
@@ -57,7 +50,7 @@ struct ContentView: View {
                                     Button("No Tags") {}.disabled(true)
                                 } else {
                                     Menu("Tags") {
-                                        ForEach(item.tags) { tag in
+                                        ForEach(Array(item.tags)) { tag in
                                             Button(tag) {
                                                 print(item.tags)
                                             }
@@ -72,6 +65,17 @@ struct ContentView: View {
                                 Button("Share") {
                                     print("Share")
                                     print(item.identifier)
+                                }
+                                Divider()
+                                Button("Delete") {
+                                    manager.pinboard.posts_delete(url: item.url) { result in
+                                        switch result {
+                                        case .success:
+                                            manager.updater.start()
+                                        case .failure(let error):
+                                            print("Failed to delete bookmark with error \(error)")
+                                        }
+                                    }
                                 }
                             }))
                     }
@@ -88,7 +92,7 @@ struct ContentView: View {
                 }
             }
             ToolbarItem {
-                SearchField(search: $search)
+                SearchField(search: $databaseView.search)
                     .frame(minWidth: 100, idealWidth: 300, maxWidth: .infinity)
             }
         }

@@ -18,21 +18,49 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import Combine
 import Foundation
 
-extension URLComponents {
+class DatabaseSubscription<Target: Subscriber>: Subscription, DatabaseObserver where Target.Input == Void {
 
-    init?(unsafeString: String) {
-        self.init(string: unsafeString.replacingOccurrences(of: " ", with: "%20"))
+    var id = UUID()
+
+    fileprivate var database: Database
+    fileprivate var target: Target?
+
+    init(database: Database) {
+        self.database = database
+        self.database.add(observer: self)
     }
 
-    // TODO: Update to throwing properties when adopting Swift 5.5 #142
-    //       https://github.com/inseven/bookmarks/issues/142
-    func asUrl() throws -> URL {
-        guard let url = self.url else {
-            throw BookmarksError.invalidURL(components: self)
-        }
-        return url
+    func request(_ demand: Subscribers.Demand) {}
+
+    func cancel() {
+        target = nil
+        self.database.remove(observer: self)
     }
 
+    func databaseDidUpdate(database: Database) {
+        _ = target?.receive()
+    }
+
+}
+
+struct DatabasePublisher: Publisher {
+
+    typealias Output = Void
+    typealias Failure = Never
+
+    fileprivate var database: Database
+
+    init(database: Database) {
+        self.database = database
+    }
+
+    func receive<S: Subscriber>(subscriber: S) where S.Input == Output, S.Failure == Failure {
+        let subscription = DatabaseSubscription<S>(database: database)
+        subscription.target = subscriber
+        subscriber.receive(subscription: subscription)
+    }
+    
 }

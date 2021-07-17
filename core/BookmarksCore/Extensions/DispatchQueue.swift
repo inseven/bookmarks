@@ -20,19 +20,10 @@
 
 import Foundation
 
-extension URLComponents {
+extension DispatchQueue {
 
-    init?(unsafeString: String) {
-        self.init(string: unsafeString.replacingOccurrences(of: " ", with: "%20"))
-    }
-
-    // TODO: Update to throwing properties when adopting Swift 5.5 #142
-    //       https://github.com/inseven/bookmarks/issues/142
-    func asUrl() throws -> URL {
-        guard let url = self.url else {
-            throw BookmarksError.invalidURL(components: self)
-        }
-        return url
+    func asyncClosure<T>(_ closure:@escaping (T) -> Void) -> (T) -> Void {
+        return {i in self.async {closure(i)}}
     }
 
 }

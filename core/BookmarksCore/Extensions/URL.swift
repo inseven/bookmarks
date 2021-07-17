@@ -26,4 +26,13 @@ public extension URL {
         URL(string: "https://web.archive.org/web/*/")!.appendingPathComponent(self.absoluteString)
     }
 
+    // TODO: Update to throwing properties when adopting Swift 5.5 #142
+    //       https://github.com/inseven/bookmarks/issues/142
+    func asComponents() throws -> URLComponents {
+        guard let components = URLComponents(string: absoluteString) else {
+            throw BookmarksError.invalidURL(url: self)
+        }
+        return components
+    }
+
 }

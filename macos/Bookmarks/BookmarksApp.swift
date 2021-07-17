@@ -30,7 +30,7 @@ struct BookmarksApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView(store: manager.store)
+            ContentView(databaseView: DatabaseView(database: manager.database))
         }
         SwiftUI.Settings {
             SettingsView()

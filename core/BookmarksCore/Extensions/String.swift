@@ -29,6 +29,19 @@ extension String {
         return self.lowercased().contains(search.lowercased())
     }
 
+    // TODO: Update to throwing properties when adopting Swift 5.5 #142
+    //       https://github.com/inseven/bookmarks/issues/142
+    func asUrl() throws -> URL {
+        guard let url = URL(string: self) else {
+            throw BookmarksError.invalidURL(string: self)
+        }
+        return url
+    }
+
+    public var tokens: [String] {
+        components(separatedBy: .whitespacesAndNewlines).filter { !$0.isEmpty }
+    }
+
 }
 
 extension String: Identifiable {

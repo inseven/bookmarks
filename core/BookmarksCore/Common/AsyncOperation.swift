@@ -20,19 +20,31 @@
 
 import Foundation
 
-extension URLComponents {
+// TODO: Replace AsyncOperation with async await when adopting Swift 5.5 #130
+//       https://github.com/inseven/bookmarks/issues/130
+public class AsyncOperation<T> {
 
-    init?(unsafeString: String) {
-        self.init(string: unsafeString.replacingOccurrences(of: " ", with: "%20"))
+    var semaphore = DispatchSemaphore(value: 0)
+    var result: Result<T, Error> = .failure(BookmarksError.timeout)
+
+    init(_ operation: @escaping (@escaping (Result<T, Error>) -> Void) -> Void) {
+        operation { result in
+            self.result = result
+            self.semaphore.signal()
+        }
     }
 
-    // TODO: Update to throwing properties when adopting Swift 5.5 #142
-    //       https://github.com/inseven/bookmarks/issues/142
-    func asUrl() throws -> URL {
-        guard let url = self.url else {
-            throw BookmarksError.invalidURL(components: self)
+    func wait() throws -> T {
+        let result = semaphore.wait(timeout: .now() + 30)
+        guard case .success = result else {
+            throw BookmarksError.timeout
         }
-        return url
+        switch self.result {
+        case .failure(let error):
+            throw error
+        case .success(let value):
+            return value
+        }
     }
 
 }

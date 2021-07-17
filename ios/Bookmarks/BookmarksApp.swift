@@ -30,7 +30,7 @@ struct BookmarksApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView(store: manager.store)
+            ContentView()
         }
         .onChange(of: phase) { phase in
             switch phase {

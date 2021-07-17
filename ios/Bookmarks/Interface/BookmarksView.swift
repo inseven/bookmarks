@@ -29,32 +29,20 @@ struct BookmarksView: View {
     }
 
     @Environment(\.manager) var manager: BookmarksManager
-    @ObservedObject var store: Store
-    var tag: String?
+    @ObservedObject var databaseView: DatabaseView
 
     @State var sheet: SheetType?
-    @State var search = ""
-
-    var items: [Item] {
-        store.rawItems.filter {
-            (tag == nil || $0.tags.contains(tag!)) &&
-            search.isEmpty ||
-                $0.title.localizedStandardContains(search) ||
-                $0.url.absoluteString.localizedStandardContains(search) ||
-                $0.tags.contains(where: { $0.localizedStandardContains(search) } )
-        }
-    }
 
     var body: some View {
         VStack {
             HStack {
-                TextField("Search", text: $search)
-                    .modifier(SearchBoxModifier(text: $search))
+                TextField("Search", text: $databaseView.search)
+                    .modifier(SearchBoxModifier(text: $databaseView.search))
                     .padding()
             }
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
-                    ForEach(items) { item in
+                    ForEach(databaseView.items) { item in
                         BookmarkCell(item: item)
                             .onTapGesture {
                                 UIApplication.shared.open(item.url)

@@ -26,7 +26,6 @@ import SQLite
 
 // TODO: Can I make an SQLite.swift extension to handle URLs?
 // TODO: Why is it creating the database twice?
-// TODO: Debounce queries
 
 enum DatabaseError: Error {
     case invalidUrl

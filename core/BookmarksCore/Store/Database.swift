@@ -23,14 +23,6 @@ import SwiftUI
 
 import SQLite
 
-enum DatabaseError: Error {
-    case unknownMigration(version: Int32)
-    case itemNotFound(identifier: String)
-    case tagNotFound(name: String)
-    case corrupt
-    case timeout
-}
-
 public protocol DatabaseObserver {
     func databaseDidUpdate(database: Database)
 }
@@ -182,7 +174,7 @@ public class Database {
             for version in currentVersion + 1 ... Self.schemaVersion {
                 print("migrating to \(version)...")
                 guard let migration = Self.migrations[version] else {
-                    throw DatabaseError.unknownMigration(version: version)
+                    throw BookmarksError.unknownMigration(version: version)
                 }
                 try migration(self.db)
                 db.userVersion = version
@@ -204,7 +196,7 @@ public class Database {
         // TODO: TRANSACTION?
         let run = try db.prepare(Schema.items.filter(Schema.identifier == identifier).limit(1)).map(Item.init)
         guard let result = run.first else {
-            throw DatabaseError.itemNotFound(identifier: identifier)
+            throw BookmarksError.itemNotFound(identifier: identifier)
         }
         let tags = try syncQueue_tags(itemIdentifier: identifier)
         return Item(identifier: result.identifier,
@@ -233,7 +225,7 @@ public class Database {
                 name: try row.get(Schema.name))
         }
         guard let result = results.first else {
-            throw DatabaseError.tagNotFound(name: name)
+            throw BookmarksError.tagNotFound(name: name)
         }
         return result
     }
@@ -375,7 +367,7 @@ public class Database {
                   let url = URL(string: urlString),
                   let tags = row[3] as? String?,
                   let date = row[4] as? String else {
-                throw DatabaseError.corrupt
+                throw BookmarksError.corrupt
             }
             let safeTags = tags?.components(separatedBy: ",") ?? []
             let item = Item(identifier: identifier,

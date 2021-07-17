@@ -21,8 +21,19 @@
 import Foundation
 
 enum BookmarksError: Error {
+
     case resizeFailure
+
     case invalidURL(string: String)
     case invalidURL(url: URL)
     case invalidURL(components: URLComponents)
+
+    case unknownMigration(version: Int32)
+
+    case itemNotFound(identifier: String)
+    case tagNotFound(name: String)
+
+    case corrupt
+    case timeout
+    
 }

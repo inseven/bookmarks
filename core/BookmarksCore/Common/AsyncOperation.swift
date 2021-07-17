@@ -25,7 +25,7 @@ import Foundation
 public class AsyncOperation<T> {
 
     var semaphore = DispatchSemaphore(value: 0)
-    var result: Result<T, Error> = .failure(DatabaseError.timeout)
+    var result: Result<T, Error> = .failure(BookmarksError.timeout)
 
     init(_ operation: @escaping (@escaping (Result<T, Error>) -> Void) -> Void) {
         operation { result in

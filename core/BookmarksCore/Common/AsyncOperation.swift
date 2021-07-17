@@ -35,7 +35,10 @@ public class AsyncOperation<T> {
     }
 
     func wait() throws -> T {
-        semaphore.wait()  // TODO: Timeout
+        let result = semaphore.wait(timeout: .now() + 30)
+        guard case .success = result else {
+            throw BookmarksError.timeout
+        }
         switch self.result {
         case .failure(let error):
             throw error

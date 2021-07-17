@@ -52,11 +52,8 @@ public class BookmarksManager {
         imageCache = FileImageCache(path: documentsUrl.appendingPathComponent("thumbnails"))
         downloadManager = DownloadManager(limit: settings.maximumConcurrentThumbnailDownloads)
         thumbnailManager = ThumbnailManager(imageCache: imageCache, downloadManager: downloadManager)
-        updater = Updater(database: database, token: settings.pinboardApiKey)
-        pinboard = Pinboard(token: settings.pinboardApiKey)  // TODO: Deal with token updates (don't require relaunch
-        // TODO: Shared pinboard instance
-        // TODO: Pinboard == updater == ?
-        // TODO: Service == Pinboard + Updater? ServiceProtocol (talks Items)
+        pinboard = Pinboard(token: settings.pinboardApiKey)
+        updater = Updater(database: database, pinboard: pinboard)
 
         #if targetEnvironment(macCatalyst)
         let notificationCenter = NotificationCenter.default

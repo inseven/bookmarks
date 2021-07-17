@@ -23,11 +23,11 @@ import Foundation
 public class Updater {
 
     let database: Database
-    let token: String
+    let pinboard: Pinboard
 
-    public init(database: Database, token: String) {
+    public init(database: Database, pinboard: Pinboard) {
         self.database = database
-        self.token = token
+        self.pinboard = pinboard
     }
 
     // TODO: Start is kind of misleading in terms of terminology since you might want this to be a periodic updater?
@@ -36,7 +36,7 @@ public class Updater {
     // TODO: Switch over to the AsyncOperation for this to make it easy to serialise
     public func start() {
         print("Updating bookmarks...")
-        Pinboard(token: self.token).posts_all { [weak self] (result) in
+        pinboard.posts_all { [weak self] (result) in
             switch (result) {
             case .failure(let error):
                 print("Failed to fetch the posts with error \(error)")

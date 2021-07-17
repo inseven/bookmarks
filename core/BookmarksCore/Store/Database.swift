@@ -216,8 +216,7 @@ public class Database {
 
     // TODO: Make sure all this is actually correctly done in a transaction.
 
-    // TODO: Rename this to ensure existing or similar?
-    func syncQueue_insertOrReplaceTag(name: String) throws -> Tag {
+    func syncQueue_fetchOrInsertTag(name: String) throws -> Tag {
         if let tag = try? syncQueue_tag(name: name) {
             return tag
         }
@@ -269,7 +268,7 @@ public class Database {
 
     func syncQueue_insertOrReplace(item: Item) throws {
         // TODO: Transaction? Probably? Can we assert that we're in a transaction?
-        let tags = try item.tags.map { try syncQueue_insertOrReplaceTag(name: $0) }
+        let tags = try item.tags.map { try syncQueue_fetchOrInsertTag(name: $0) }
         let itemId = try self.db.run(
             Schema.items.insert(or: .replace,
                                 Schema.identifier <- item.identifier,

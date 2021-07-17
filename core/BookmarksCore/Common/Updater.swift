@@ -53,7 +53,6 @@ public class Updater {
                             let date = post.time else {
                                 continue
                         }
-                        // TODO: Perhaps this mapping could be extracted to make it clearer what's going on?
                         let item = Item(identifier: post.hash,
                                         title: post.description ?? "",
                                         url: url,

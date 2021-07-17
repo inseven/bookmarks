@@ -23,8 +23,6 @@ import SwiftUI
 
 import SQLite
 
-// TODO: Why is it creating the database twice?
-
 enum DatabaseError: Error {
     case invalidUrl
     case unknown  // TODO: Remove this error

@@ -50,7 +50,6 @@ public class Item: Equatable {
     static let tagsKey = "tags"
     static let dateKey = "date"
 
-    // TODO: Note that this doesn't include the thumbnail??
     public static func == (lhs: Item, rhs: Item) -> Bool {
         return
             lhs.identifier == rhs.identifier &&

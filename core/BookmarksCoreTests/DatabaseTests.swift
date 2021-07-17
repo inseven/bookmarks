@@ -23,17 +23,30 @@ import Foundation
 import XCTest
 @testable import BookmarksCore
 
+// TODO: Use a unique temporary directory for the database tests #140
+//       https://github.com/inseven/bookmarks/issues/140
 class DatabaseTests: XCTestCase {
 
-    // TODO: Actually do something nice with these temporary files.
-
     var temporaryDatabaseUrl: URL {
-        // TODO: Create a temporary directory for this that is cleaned up at the end.
         FileManager.default.temporaryDirectory.appendingPathComponent("store.db")
     }
 
-    func testInsert() {
+    func removeDatabase() {
+        let fileManager = FileManager.default
+        if fileManager.fileExists(atPath: temporaryDatabaseUrl.path) {
+            try! fileManager.removeItem(at: temporaryDatabaseUrl)
+        }
+    }
 
+    override func setUp() {
+        removeDatabase()
+    }
+
+    override func tearDown() {
+        removeDatabase()
+    }
+
+    func testSingleQuery() {
         guard let database = try? Database(path: temporaryDatabaseUrl) else {
             XCTFail("Failed to create database")
             return
@@ -59,18 +72,18 @@ class DatabaseTests: XCTestCase {
             let tags = try AsyncOperation({ database.tags(completion: $0) }).wait()
             XCTAssertEqual(Set(tags.map({ $0.name })), Set(["example", "website", "cheese"]))
 
-            let fetchedItem = try AsyncOperation({ database.item(identifier: item1.identifier, completion: $0) }).wait()
-            XCTAssertNotNil(fetchedItem)
-            XCTAssertEqual(fetchedItem, item1)
+            let fetchedItem1 = try AsyncOperation({ database.item(identifier: item1.identifier, completion: $0) }).wait()
+            XCTAssertEqual(fetchedItem1, item1)
+            let fetchedItem2 = try AsyncOperation({ database.item(identifier: item2.identifier, completion: $0) }).wait()
+            XCTAssertEqual(fetchedItem2, item2)
         } catch {
             XCTFail("Failed with error \(error)")
         }
 
-        // TODO: Test all tags is the same?
-
-        // TODO: Test that rows are returned from the all query even if they have no tags.
-
     }
+
+    // TODO: Test deletion and tags remaining
+    // TODO: Test all rows
 
 
 

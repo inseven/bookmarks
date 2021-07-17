@@ -29,6 +29,7 @@ struct ContentView: View {
     @Environment(\.manager) var manager: BookmarksManager
     @ObservedObject var databaseView: DatabaseView
 
+
     var body: some View {
         VStack {
             ScrollView {

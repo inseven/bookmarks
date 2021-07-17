@@ -29,8 +29,8 @@ extension String {
         return self.lowercased().contains(search.lowercased())
     }
 
-    // TODO: Make this a computed property in Swift 5.5
-    //       https://stackoverflow.com/questions/32899346/how-do-i-declare-that-a-computed-property-throws-in-swift
+    // TODO: Update to throwing properties when adopting Swift 5.5 #142
+    //       https://github.com/inseven/bookmarks/issues/142
     func asUrl() throws -> URL {
         guard let url = URL(string: self) else {
             throw BookmarksError.invalidURL(string: self)

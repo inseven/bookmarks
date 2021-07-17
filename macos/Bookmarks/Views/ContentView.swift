@@ -33,8 +33,6 @@ struct ContentView: View {
     @Environment(\.manager) var manager: BookmarksManager
     @ObservedObject var databaseView: DatabaseView
 
-    // TODO: Debounce the search
-
     var body: some View {
         VStack {
             ScrollView {

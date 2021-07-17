@@ -43,8 +43,6 @@ public class BookmarksManager {
 
     public var database: Database
 
-    // TODO: Maybe make the database store public instead?
-
     public init() {
         documentsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         try! FileManager.default.createDirectory(at: documentsUrl, withIntermediateDirectories: true, attributes: nil)

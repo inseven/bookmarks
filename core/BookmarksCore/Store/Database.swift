@@ -201,7 +201,6 @@ public class Database {
     }
 
     func syncQueue_item(identifier: String) throws -> Item {
-        // TODO: TRANSACTION?
         let run = try db.prepare(Schema.items.filter(Schema.identifier == identifier).limit(1)).map(Item.init)
         guard let result = run.first else {
             throw BookmarksError.itemNotFound(identifier: identifier)
@@ -213,8 +212,6 @@ public class Database {
                     tags: Set(tags.map { $0.name }),
                     date: result.date)
     }
-
-    // TODO: Make sure all this is actually correctly done in a transaction.
 
     func syncQueue_fetchOrInsertTag(name: String) throws -> Tag {
         if let tag = try? syncQueue_tag(name: name) {
@@ -261,13 +258,18 @@ public class Database {
     public func item(identifier: String, completion: @escaping (Swift.Result<Item, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
-            let result = Swift.Result { try self.syncQueue_item(identifier: identifier) }
-            completion(result)
+            do {
+                try self.db.transaction {
+                    let result = Swift.Result { try self.syncQueue_item(identifier: identifier) }
+                    completion(result)
+                }
+            } catch {
+                completion(.failure(error))
+            }
         }
     }
 
     func syncQueue_insertOrReplace(item: Item) throws {
-        // TODO: Transaction? Probably? Can we assert that we're in a transaction?
         let tags = try item.tags.map { try syncQueue_fetchOrInsertTag(name: $0) }
         let itemId = try self.db.run(
             Schema.items.insert(or: .replace,

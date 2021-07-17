@@ -272,8 +272,6 @@ public class Database {
         }
     }
 
-    // Things with no tags don't turn up.
-
     // TODO: What's wrong with the indentation
     func syncQueue_insertOrReplace(item: Item) throws {
         // TODO: Transaction? Probably

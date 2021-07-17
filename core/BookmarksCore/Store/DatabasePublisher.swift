@@ -21,47 +21,44 @@
 import Combine
 import Foundation
 
-public class DatabaseView: ObservableObject {
+class DatabaseSubscription<Target: Subscriber>: Subscription, DatabaseObserver where Target.Input == Void {
 
-    var database: Database
-    var publisher: DatabasePublisher
-    var cancellable: AnyCancellable?
+    fileprivate var database: Database
+    fileprivate var target: Target?
 
-    @Published var search = ""
-
-    // TODO: We should be debouncing the search field too.
-    public var filter: String = "" {
-        didSet {
-            dispatchPrecondition(condition: .onQueue(.main))
-            print(filter)
-            self.update()
-        }
-    }
-
-    public init(database: Database) {
+    init(database: Database) {
         self.database = database
-        self.publisher = DatabasePublisher(database: database)
-        self.cancellable = self.publisher.debounce(for: .seconds(1), scheduler: DispatchQueue.main).sink { _ in
-            self.update()
-        }
-        self.update()
+        self.database.add(observer: self)  // TODO: Check that this is weak?
     }
 
-    func update() {
-        database.items(filter: self.filter) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let items):
-                    self.items = items
-                    self.objectWillChange.send()
-                case .failure(let error):
-                    print("Failed to load data with error \(error)")
-                }
-            }
-        }
+    func request(_ demand: Subscribers.Demand) {}
+
+    func cancel() {
+        // TODO: Remove the subscription.
+        target = nil
     }
 
-    public var items: [Item] = []
+    func databaseDidUpdate(database: Database) {
+        _ = target?.receive()
+    }
 
 }
 
+struct DatabasePublisher: Publisher {
+    // Declaring that our publisher doesn't emit any values,
+    // and that it can never fail:
+    typealias Output = Void
+    typealias Failure = Never
+
+    fileprivate var database: Database
+
+    init(database: Database) {
+        self.database = database
+    }
+
+    func receive<S: Subscriber>(subscriber: S) where S.Input == Output, S.Failure == Failure {
+        let subscription = DatabaseSubscription<S>(database: database)
+        subscription.target = subscriber
+        subscriber.receive(subscription: subscription)
+    }
+}

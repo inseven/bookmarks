@@ -46,7 +46,9 @@ public class BookmarksManager {
     public init() {
         documentsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         try! FileManager.default.createDirectory(at: documentsUrl, withIntermediateDirectories: true, attributes: nil)
-        database = try! Database(path: documentsUrl.appendingPathComponent("store.db"))  // TODO: Handle this error?
+        // TODO: Handle database initialisation errors #143
+        //       https://github.com/inseven/bookmarks/issues/143
+        database = try! Database(path: documentsUrl.appendingPathComponent("store.db"))
         imageCache = FileImageCache(path: documentsUrl.appendingPathComponent("thumbnails"))
         downloadManager = DownloadManager(limit: settings.maximumConcurrentThumbnailDownloads)
         thumbnailManager = ThumbnailManager(imageCache: imageCache, downloadManager: downloadManager)

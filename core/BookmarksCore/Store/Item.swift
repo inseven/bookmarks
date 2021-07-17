@@ -24,7 +24,6 @@ import Foundation
 import UIKit
 #endif
 
-// TODO: Remove the NSObject and NSSecureCoding bollocks.
 public class Item: Equatable {
 
     public let identifier: String

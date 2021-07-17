@@ -62,7 +62,7 @@ public class FileImageCache: ImageCache {
             do {
                 let data = try Data(contentsOf: path)
                 guard let image = Image.init(data: data) else {
-                    targetQueueCompletion(.failure(DatabaseError.unknown))
+                    targetQueueCompletion(.failure(DatabaseError.corrupt))
                     return
                 }
                 targetQueueCompletion(.success(image))

@@ -66,9 +66,8 @@ public class Updater {
                     let allIdentifiers = try AsyncOperation(self.database.identifiers).wait()
                     let deletedIdentifiers = Set(allIdentifiers).subtracting(identifiers)
                     for identifier in deletedIdentifiers {
-                        print("deleting \(identifier)...")
                         let item = try AsyncOperation({ self.database.item(identifier: identifier, completion: $0) }).wait()
-                        print(item)
+                        print("deleting \(item)...")
                         _ = try AsyncOperation({ self.database.delete(identifier: identifier, completion: $0) }).wait()
                     }
                     print("Complete.")

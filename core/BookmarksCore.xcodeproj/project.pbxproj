@@ -29,6 +29,7 @@
 		D890D1C626A2569800C47489 /* DatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1C226A2569100C47489 /* DatabaseTests.swift */; };
 		D890D1C826A3584400C47489 /* DatabasePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1C726A3584400C47489 /* DatabasePublisher.swift */; };
 		D890D1C926A3584400C47489 /* DatabasePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1C726A3584400C47489 /* DatabasePublisher.swift */; };
+		D890D1CB26A35D6700C47489 /* Interact in Frameworks */ = {isa = PBXBuildFile; productRef = D890D1CA26A35D6700C47489 /* Interact */; };
 		D8AA4055261E2E8D00D11421 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AA4054261E2E8D00D11421 /* String.swift */; };
 		D8AA4061261E305200D11421 /* NSCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AA4060261E305200D11421 /* NSCoder.swift */; };
 		D8B04B1E261EC65D00376ADD /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B04B1D261EC65C00376ADD /* Settings.swift */; };
@@ -162,6 +163,7 @@
 			files = (
 				D890D1B326A0C42400C47489 /* SQLite in Frameworks */,
 				D8D3F528261E57D000B2D66F /* UIKit.framework in Frameworks */,
+				D890D1CB26A35D6700C47489 /* Interact in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,6 +404,7 @@
 			name = "BookmarksCore iOS";
 			packageProductDependencies = (
 				D890D1B226A0C42400C47489 /* SQLite */,
+				D890D1CA26A35D6700C47489 /* Interact */,
 			);
 			productName = BookmarksCore;
 			productReference = D8569FC2261E2603006926BF /* BookmarksCore.framework */;
@@ -1037,6 +1040,10 @@
 			productName = SQLite;
 		};
 		D890D1B726A1F15600C47489 /* Interact */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Interact;
+		};
+		D890D1CA26A35D6700C47489 /* Interact */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Interact;
 		};

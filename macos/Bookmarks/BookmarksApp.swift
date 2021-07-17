@@ -23,28 +23,17 @@ import SwiftUI
 
 import BookmarksCore
 
-class AppDelegate: NSObject, NSApplicationDelegate {
-
-    var manager = BookmarksManager()
-
-    func applicationDidBecomeActive(_ notification: Notification) {
-        manager.updater.start()
-    }
-}
-
 @main
 struct BookmarksApp: App {
 
-    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @Environment(\.manager) var manager: BookmarksManager
 
     var body: some Scene {
         WindowGroup {
-            ContentView(databaseView: DatabaseView(database: appDelegate.manager.database))  // TODO: Push this down into the content view
-                .environment(\.manager, appDelegate.manager)
+            ContentView(databaseView: DatabaseView(database: manager.database))
         }
         SwiftUI.Settings {
             SettingsView()
-                .environment(\.manager, appDelegate.manager)
         }
     }
 }

@@ -24,9 +24,8 @@ import SwiftUI
 import SQLite
 
 enum DatabaseError: Error {
-    case invalidUrl
-    case unknown  // TODO: Remove this error
     case unknownMigration(version: Int32)
+    case unknown // TODO: Remvoe
 }
 
 public protocol DatabaseObserver {
@@ -36,9 +35,8 @@ public protocol DatabaseObserver {
 extension Item {
 
     convenience init(row: Row) throws {
-        guard let url = URL(string: try row.get(Database.Schema.url)) else {
-            throw DatabaseError.invalidUrl
-        }
+        let urlString = try row.get(Database.Schema.url)
+        let url = try urlString.asUrl()
         self.init(identifier: try row.get(Database.Schema.identifier),
                   title: try row.get(Database.Schema.title),
                   url: url,

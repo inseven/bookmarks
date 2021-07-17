@@ -26,17 +26,10 @@ public class DatabaseView: ObservableObject {
     var database: Database
     var publisher: DatabasePublisher
     var cancellable: AnyCancellable?
+    var searchCancellable: AnyCancellable?
 
-    @Published var search = ""
-
-    // TODO: We should be debouncing the search field too.
-    public var filter: String = "" {
-        didSet {
-            dispatchPrecondition(condition: .onQueue(.main))
-            print(filter)
-            self.update()
-        }
-    }
+    @Published public var search = ""
+    @Published public var items: [Item] = []
 
     public init(database: Database) {
         self.database = database
@@ -44,24 +37,25 @@ public class DatabaseView: ObservableObject {
         self.cancellable = self.publisher.debounce(for: .seconds(1), scheduler: DispatchQueue.main).sink { _ in
             self.update()
         }
+        self.searchCancellable = self.$search.debounce(for: .seconds(0.2), scheduler: DispatchQueue.main).sink { search in
+            print("searching for '\(search)'...")
+            self.update(filter: search)
+        }
         self.update()
     }
 
-    func update() {
-        database.items(filter: self.filter) { result in
+    func update(filter: String? = nil) {
+        database.items(filter: filter) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let items):
                     self.items = items
-                    self.objectWillChange.send()
                 case .failure(let error):
                     print("Failed to load data with error \(error)")
                 }
             }
         }
     }
-
-    public var items: [Item] = []
 
 }
 

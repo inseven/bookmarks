@@ -97,7 +97,7 @@ struct ContentView: View {
                 }
             }
             ToolbarItem {
-                SearchField(search: $databaseView.filter)
+                SearchField(search: $databaseView.search)
                     .frame(minWidth: 100, idealWidth: 300, maxWidth: .infinity)
             }
         }

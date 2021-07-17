@@ -23,21 +23,17 @@ import SwiftUI
 
 import BookmarksCore
 
-
 @main
 struct BookmarksApp: App {
-
 
     @Environment(\.manager) var manager: BookmarksManager
 
     var body: some Scene {
         WindowGroup {
             ContentView(databaseView: DatabaseView(database: manager.database))
-
         }
         SwiftUI.Settings {
             SettingsView()
-
         }
     }
 }

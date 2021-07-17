@@ -30,10 +30,6 @@ public class Updater {
         self.pinboard = pinboard
     }
 
-    // TODO: Start is kind of misleading in terms of terminology since you might want this to be a periodic updater?
-    // TODO: The udpater should be able to store and clear its last error for reporting it to the user; or maybe there's an infrastructure piece and a wrapper that stores that? (BETTER?)
-    //       This could use classic callbacks which are then wrapped?
-    // TODO: Switch over to the AsyncOperation for this to make it easy to serialise
     public func start() {
         print("Updating bookmarks...")
         pinboard.posts_all { [weak self] (result) in
@@ -77,6 +73,7 @@ public class Updater {
                         _ = try AsyncOperation({ self.database.delete(identifier: identifier, completion: $0) }).wait()
                     }
                     print("Complete.")
+
                 } catch {
                     print("Failed to update items with error \(error)")
                 }

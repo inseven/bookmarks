@@ -28,7 +28,7 @@ class DatabaseSubscription<Target: Subscriber>: Subscription, DatabaseObserver w
 
     init(database: Database) {
         self.database = database
-        self.database.add(observer: self)  // TODO: Check that this is weak?
+        self.database.add(observer: self)
     }
 
     func request(_ demand: Subscribers.Demand) {}

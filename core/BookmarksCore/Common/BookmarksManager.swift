@@ -50,13 +50,12 @@ public class BookmarksManager {
         thumbnailManager = ThumbnailManager(imageCache: imageCache, downloadManager: downloadManager)
         updater = Updater(store: store, token: settings.pinboardApiKey)
 
-        #if targetEnvironment(macCatalyst)
+        #if os(macOS)
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(nsApplicationDidBecomeActive),
                                        name: NSNotification.Name("NSApplicationDidBecomeActiveNotification"),
                                        object: nil)
         #endif
-
     }
 
     @objc

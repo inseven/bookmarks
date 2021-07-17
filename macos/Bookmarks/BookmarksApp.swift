@@ -36,7 +36,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 struct BookmarksApp: App {
 
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-//    @Environment(\.manager) var manager: BookmarksManager
 
     var body: some Scene {
         WindowGroup {

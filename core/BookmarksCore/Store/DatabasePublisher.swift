@@ -45,8 +45,7 @@ class DatabaseSubscription<Target: Subscriber>: Subscription, DatabaseObserver w
 }
 
 struct DatabasePublisher: Publisher {
-    // Declaring that our publisher doesn't emit any values,
-    // and that it can never fail:
+
     typealias Output = Void
     typealias Failure = Never
 
@@ -61,4 +60,5 @@ struct DatabasePublisher: Publisher {
         subscription.target = subscriber
         subscriber.receive(subscription: subscription)
     }
+    
 }

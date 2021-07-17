@@ -24,7 +24,9 @@ import SwiftUI
 import SQLite
 import Interact
 
-// TODO: Can I make an extension to handle URLs?
+// TODO: Can I make an SQLite.swift extension to handle URLs?
+// TODO: Why is it creating the database twice?
+// TODO: Debounce queries
 
 enum DatabaseError: Error {
     case invalidUrl
@@ -146,13 +148,6 @@ public class Database {
     var syncQueue = DispatchQueue(label: "Database.syncQueue")
     var db: Connection  // Synchronized on syncQueue
     var observers: [DatabaseObserver] = []  // Synchronized on syncQueue
-
-    // TODO: What's the thread safety of the database? Can we support multiple queues (e.g., for background processing)
-    // TODO: Use a join against a derived data table to determine if we've fetched the data (this can also include a derivation version?)
-    // TODO: Support right-click deletion of rows
-    // TODO: Why is it creating the database twice?
-    // TODO: Add tags back.
-    // TODO: The initial load is going to be very costly (if we don't debounce the updates)
 
     static func itemQuery(filter: String? = nil) -> QueryType {
         guard let filter = filter,
@@ -312,8 +307,6 @@ public class Database {
                             print("item tags \(item.tags)")
                             try self.syncQueue_insertOrReplace(item: item)
                             self.syncQueue_notifyObservers()
-                        } else {
-//                            print("skipping \(item)")
                         }
                     } else {
                         print("inserting \(item)...")
@@ -367,46 +360,15 @@ public class Database {
                 items.id == item_id
         """
 
-        // TODO: Surface the errors from the query (maybe we just need to crash?)
-
-//        var query = """
-//            SELECT
-//                items.identifier,
-//                title,
-//                url,
-//                GROUP_CONCAT(tag_id) AS tags,
-//                date
-//            FROM
-//                items
-//            LEFT JOIN
-//                items_to_tags
-//            ON
-//                items.id == items_to_tags.item_id
-//        """
-
-//        var query = """
-//            SELECT
-//                items.identifier,
-//                title,
-//                url,
-//                GROUP_CONCAT(tag_id) AS tags,
-//                date
-//            FROM
-//                items
-//            LEFT JOIN
-//                items_to_tags
-//            ON
-//                items.id == items_to_tags.item_id
-//        """
-
         if let filter = filter {
             let tags = Expression<String>("tags")
-            let filters = filter.tokens.map { Schema.title.like("%\($0)%") || Schema.url.like("%\($0)%") || tags.like("%\($0)%") }
+            let filters = filter.tokens.map {
+                Schema.title.like("%\($0)%") || Schema.url.like("%\($0)%") || tags.like("%\($0)%")
+            }
             let compoundFilter = filters.reduce(Expression<Bool>(value: true)) { $0 && $1 }
             query = query + " WHERE " + compoundFilter.asSQL()
         }
 
-//        query = query + " GROUP BY items.id"
         query = query + " ORDER BY date DESC"
 
         let stmt = try db.prepare(query)
@@ -436,7 +398,6 @@ public class Database {
         syncQueue.async {
             let result = Swift.Result<[Item], Error> {
                 try self.rawItems(filter: filter)
-//                return try self.db.prepare(Self.itemQuery(filter: filter)).map(Item.init)
             }
             completion(result)
         }

@@ -26,11 +26,10 @@ import BookmarksCore
 struct ContentView: View {
 
     @Environment(\.manager) var manager: BookmarksManager
-    @ObservedObject var store: Store
 
     var body: some View {
         NavigationView {
-            BookmarksView(store: store)
+            BookmarksView(databaseView: DatabaseView(database: manager.database))
                 .navigationBarTitle("Bookmarks", displayMode: .large)
         }
         .navigationViewStyle(StackNavigationViewStyle())

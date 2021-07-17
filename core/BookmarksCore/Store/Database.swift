@@ -24,6 +24,7 @@ import SwiftUI
 import SQLite
 
 public protocol DatabaseObserver {
+    var id: UUID { get }
     func databaseDidUpdate(database: Database)
 }
 
@@ -159,6 +160,13 @@ public class Database {
         dispatchPrecondition(condition: .notOnQueue(syncQueue))
         syncQueue.sync {
             observers.append(observer)
+        }
+    }
+
+    public func remove(observer: DatabaseObserver) {
+        dispatchPrecondition(condition: .notOnQueue(syncQueue))
+        syncQueue.sync {
+            observers.removeAll { observer.id == $0.id }
         }
     }
 

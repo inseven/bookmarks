@@ -23,6 +23,8 @@ import Foundation
 
 class DatabaseSubscription<Target: Subscriber>: Subscription, DatabaseObserver where Target.Input == Void {
 
+    var id = UUID()
+
     fileprivate var database: Database
     fileprivate var target: Target?
 
@@ -34,8 +36,8 @@ class DatabaseSubscription<Target: Subscriber>: Subscription, DatabaseObserver w
     func request(_ demand: Subscribers.Demand) {}
 
     func cancel() {
-        // TODO: Remove the subscription.
         target = nil
+        self.database.remove(observer: self)
     }
 
     func databaseDidUpdate(database: Database) {

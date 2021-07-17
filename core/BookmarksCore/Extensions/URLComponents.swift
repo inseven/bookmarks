@@ -22,7 +22,6 @@ import Foundation
 
 extension URLComponents {
 
-    // TODO: I think there's actually an API for this?
     init?(unsafeString: String) {
         self.init(string: unsafeString.replacingOccurrences(of: " ", with: "%20"))
     }

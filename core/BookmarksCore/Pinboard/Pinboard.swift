@@ -42,7 +42,7 @@ public class Pinboard {
     }
 
     fileprivate func serviceUrl(_ path: Path, parameters: [String:String] = [:]) throws -> URL {
-        let baseUrl = try baseUrl.asUrl()
+        let baseUrl = try self.baseUrl.asUrl()
         let url = baseUrl.appendingPathComponent(path.rawValue)
         var components = try url.asComponents()
         var queryItems: [URLQueryItem] = [

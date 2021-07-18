@@ -59,7 +59,19 @@ struct ContentView: View {
                                 }
                                 Divider()
                                 Button("View on Internet Archive") {
-                                    NSWorkspace.shared.open(item.url.internetArchiveUrl)
+                                    do {
+                                        NSWorkspace.shared.open(try item.internetArchiveUrl())
+                                    } catch {
+                                        print("Failed to open on the Internet Archive with error \(error)")
+                                    }
+                                }
+                                Divider()
+                                Button("Edit on Pinboard") {
+                                    do {
+                                        NSWorkspace.shared.open(try item.pinboardUrl())
+                                    } catch {
+                                        print("Failed to edit with error \(error)")
+                                    }
                                 }
                                 Divider()
                                 Button("Copy") {

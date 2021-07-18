@@ -22,10 +22,6 @@ import Foundation
 
 public extension URL {
 
-    var internetArchiveUrl: URL {
-        URL(string: "https://web.archive.org/web/*/")!.appendingPathComponent(self.absoluteString)
-    }
-
     // TODO: Update to throwing properties when adopting Swift 5.5 #142
     //       https://github.com/inseven/bookmarks/issues/142
     func asComponents() throws -> URLComponents {
@@ -33,6 +29,12 @@ public extension URL {
             throw BookmarksError.invalidURL(url: self)
         }
         return components
+    }
+
+    func addingQueryItems(_ queryItems: [URLQueryItem]) throws -> URL {
+        var components = try asComponents()
+        components.queryItems = queryItems
+        return try components.asUrl()
     }
 
 }

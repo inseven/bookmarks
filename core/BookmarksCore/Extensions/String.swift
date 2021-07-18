@@ -31,7 +31,7 @@ extension String {
 
     // TODO: Update to throwing properties when adopting Swift 5.5 #142
     //       https://github.com/inseven/bookmarks/issues/142
-    func asUrl() throws -> URL {
+    public func asUrl() throws -> URL {
         guard let url = URL(string: self) else {
             throw BookmarksError.invalidURL(string: self)
         }

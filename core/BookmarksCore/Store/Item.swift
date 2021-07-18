@@ -70,3 +70,17 @@ extension Item: CustomStringConvertible {
     public var description: String { "\(self.url.absoluteString) (\(self.title))" }
 
 }
+
+extension Item {
+
+    public func internetArchiveUrl() throws -> URL {
+        try "https://web.archive.org/web/*/".asUrl().appendingPathComponent(url.absoluteString)
+    }
+
+    public func pinboardUrl() throws -> URL {
+         try "https://pinboard.in/add".asUrl().addingQueryItems([
+            URLQueryItem(name: "url", value: url.absoluteString)
+        ])
+    }
+
+}

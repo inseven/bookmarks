@@ -67,6 +67,10 @@ struct ContentView: View {
                                     print(item.identifier)
                                 }
                                 Divider()
+                                Button("Copy") {
+                                    NSPasteboard.general.clearContents()
+                                    NSPasteboard.general.setString(item.url.absoluteString, forType: .string)
+                                }
                                 Button("Delete") {
                                     manager.pinboard.posts_delete(url: item.url) { result in
                                         switch result {

@@ -82,7 +82,7 @@ extension Item {
     // TODO: Update to throwing properties when adopting Swift 5.5 #142
      //       https://github.com/inseven/bookmarks/issues/142
     public func pinboardUrl() throws -> URL {
-         try "https://pinboard.in/add".asUrl().addingQueryItems([
+         try "https://pinboard.in/add".asUrl().settingQueryItems([
             URLQueryItem(name: "url", value: url.absoluteString)
         ])
     }

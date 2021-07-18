@@ -31,7 +31,7 @@ public extension URL {
         return components
     }
 
-    func addingQueryItems(_ queryItems: [URLQueryItem]) throws -> URL {
+    func settingQueryItems(_ queryItems: [URLQueryItem]) throws -> URL {
         var components = try asComponents()
         components.queryItems = queryItems
         return try components.asUrl()

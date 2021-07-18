@@ -77,6 +77,9 @@ struct ContentView: View {
                                     }
                                 }
                             }))
+                            .onDrag {
+                                NSItemProvider(object: item.url as NSURL)
+                            }
                     }
                 }
                 .padding()

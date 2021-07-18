@@ -62,11 +62,10 @@ struct ContentView: View {
                                     NSWorkspace.shared.open(item.url.internetArchiveUrl)
                                 }
                                 Divider()
-                                Button("Share") {
-                                    print("Share")
-                                    print(item.identifier)
+                                Button("Copy") {
+                                    NSPasteboard.general.clearContents()
+                                    NSPasteboard.general.setString(item.url.absoluteString, forType: .string)
                                 }
-                                Divider()
                                 Button("Delete") {
                                     manager.pinboard.posts_delete(url: item.url) { result in
                                         switch result {
@@ -78,6 +77,9 @@ struct ContentView: View {
                                     }
                                 }
                             }))
+                            .onDrag {
+                                NSItemProvider(object: item.url as NSURL)
+                            }
                     }
                 }
                 .padding()

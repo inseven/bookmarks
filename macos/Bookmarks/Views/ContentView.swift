@@ -62,11 +62,6 @@ struct ContentView: View {
                                     NSWorkspace.shared.open(item.url.internetArchiveUrl)
                                 }
                                 Divider()
-                                Button("Share") {
-                                    print("Share")
-                                    print(item.identifier)
-                                }
-                                Divider()
                                 Button("Copy") {
                                     NSPasteboard.general.clearContents()
                                     NSPasteboard.general.setString(item.url.absoluteString, forType: .string)

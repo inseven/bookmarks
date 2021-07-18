@@ -62,7 +62,7 @@ struct ContentView: View {
                                     do {
                                         NSWorkspace.shared.open(try item.internetArchiveUrl())
                                     } catch {
-                                        print("Failed to edit with error \(error)")
+                                        print("Failed to open on the Internet Archive with error \(error)")
                                     }
                                 }
                                 Divider()

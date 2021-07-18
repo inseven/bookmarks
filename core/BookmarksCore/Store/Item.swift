@@ -73,10 +73,14 @@ extension Item: CustomStringConvertible {
 
 extension Item {
 
+    // TODO: Update to throwing properties when adopting Swift 5.5 #142
+     //       https://github.com/inseven/bookmarks/issues/142
     public func internetArchiveUrl() throws -> URL {
         try "https://web.archive.org/web/*/".asUrl().appendingPathComponent(url.absoluteString)
     }
 
+    // TODO: Update to throwing properties when adopting Swift 5.5 #142
+     //       https://github.com/inseven/bookmarks/issues/142
     public func pinboardUrl() throws -> URL {
          try "https://pinboard.in/add".asUrl().addingQueryItems([
             URLQueryItem(name: "url", value: url.absoluteString)

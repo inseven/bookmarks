@@ -385,13 +385,6 @@ public class Database {
             .filter(filterExpression)
             .order(Schema.date.desc)
 
-//        query = query + " WHERE " + filterExpression.asSQL()
-//
-//        query = query + " GROUP BY identifier"
-//
-//        query = query + " ORDER BY date DESC"
-
-
         let items = try db.prepare(select).map { row in
 //            let tags = try? row.get(tagsColumn) ?? []
 //            let safeTags = try? components(separatedBy: ",") ?? []
@@ -402,30 +395,6 @@ public class Database {
                  date: try row.get(Schema.date))
         }
         return items
-
-        
-
-//        let stmt = try db.prepare(query)
-//        var items: [Item] = []
-//        for row in stmt {
-//            guard let identifier = row[0] as? String,
-//                  let title = row[1] as? String,
-//                  let urlString = row[2] as? String,
-//                  let url = URL(string: urlString),
-//                  let tags = row[3] as? String?,
-//                  let date = row[4] as? String else {
-//                throw BookmarksError.corrupt
-//            }
-//            let safeTags = tags?.components(separatedBy: ",") ?? []
-//            let item = Item(identifier: identifier,
-//                            title: title,
-//                            url: url,
-//                            tags: Set(safeTags),
-//                            date: Date.fromDatatypeValue(date))
-//            items.append(item)
-//        }
-//
-//        return items
     }
 
     public func items(filter: String? = nil, tags: [String]? = nil, completion: @escaping (Swift.Result<[Item], Error>) -> Void) {

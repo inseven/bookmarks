@@ -55,7 +55,7 @@ public class Item: Equatable {
             lhs.identifier == rhs.identifier &&
             lhs.title == rhs.title &&
             lhs.url == rhs.url &&
-            lhs.tags == rhs.tags &&
+            Set(lhs.tags.map({ $0.lowercased() })) == Set(rhs.tags.map({ $0.lowercased() })) &&
             lhs.date == rhs.date
     }
 

@@ -271,9 +271,10 @@ public class Database {
     public func tags(completion: @escaping (Swift.Result<Set<String>, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
+            let lowercaseName = Schema.name.lowercaseString
             let result = Swift.Result {
-                Set(try self.db.prepare(Schema.tags.select(Schema.name.lowercaseString)).map { row in
-                    try row.get(Schema.name.lowercaseString)
+                Set(try self.db.prepare(Schema.tags.select(lowercaseName)).map { row in
+                    try row.get(lowercaseName)
                 })
             }
             completion(result)
@@ -355,8 +356,6 @@ public class Database {
     public func syncQueue_items(filter: String? = nil, tags: [String]? = nil) throws -> [Item] {
         dispatchPrecondition(condition: .onQueue(syncQueue))
 
-        let tagsColumn = Schema.name.groupConcat
-
         var filterExpression: Expression = Expression<Bool?>(value: true)
         if let filter = filter {
             let filters = filter.tokens.map {
@@ -370,12 +369,12 @@ public class Database {
                 let optionalName = Expression<String?>("name")
                 filterExpression = filterExpression && optionalName == nil
             } else {
-                // TODO: Use equality when we have case insensitive tags.
                 let tagExpression = tags.map { Schema.name.lowercaseString == $0.lowercased() }.reduce(Expression(value: true)) { $0 && $1 }
                 filterExpression = filterExpression && tagExpression
             }
         }
 
+        let tagsColumn = Schema.name.groupConcat
         let select =
             Schema.items
             .join(.leftOuter,

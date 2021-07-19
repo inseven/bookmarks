@@ -21,30 +21,25 @@
 import Combine
 import Foundation
 
-// TODO: Rename this to 'ItemsView'
-public class DatabaseView: ObservableObject {
+public class TagsView: ObservableObject {
 
     var database: Database
     var updateCancellable: AnyCancellable? = nil
-    var searchCancellable: AnyCancellable? = nil
 
-    @Published public var search = ""
-    @Published public var items: [Item] = []
+    @Published public var tags: [String] = []
 
-    fileprivate var tags: [String]?
     fileprivate var filter = ""
 
-    public init(database: Database, tags: [String]? = nil) {
+    public init(database: Database) {
         self.database = database
-        self.tags = tags
     }
 
-    func update(filter: String? = nil) {
-        database.items(filter: filter, tags: tags) { result in
+    func update() {
+        database.tags { result in
             DispatchQueue.main.async {
                 switch result {
-                case .success(let items):
-                    self.items = items
+                case .success(let tags):
+                    self.tags = Array(tags.map { $0.name }.sorted())
                 case .failure(let error):
                     print("Failed to load data with error \(error)")
                 }
@@ -53,26 +48,21 @@ public class DatabaseView: ObservableObject {
     }
 
     public func start() {
-        print("start observing...")
+        print("start observing tags...")
         dispatchPrecondition(condition: .onQueue(.main))
-        self.updateCancellable = DatabasePublisher(database: database).debounce(for: .seconds(1), scheduler: DispatchQueue.main).sink { _ in
-            self.update(filter: self.filter)
-        }
-        self.searchCancellable = self.$search.debounce(for: .seconds(0.2), scheduler: DispatchQueue.main).sink { search in
-            print("searching for '\(search)'...")
-            self.filter = search
-            self.update(filter: self.filter)
-        }
+        self.updateCancellable = DatabasePublisher(database: database)
+            .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
+            .sink { _ in
+                self.update()
+            }
         self.update()
     }
 
     public func stop() {
-        print("stop observing...")
+        print("stop observing tags...")
         self.updateCancellable?.cancel()
         self.updateCancellable = nil
-        self.searchCancellable?.cancel()
-        self.searchCancellable = nil
-        self.items = []
+        self.tags = []
     }
 
 }

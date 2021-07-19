@@ -18,26 +18,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import AppKit
+import Combine
 import SwiftUI
 
 import BookmarksCore
+import Interact
 
-@main
-struct BookmarksApp: App {
+struct Sidebar: View {
 
     @Environment(\.manager) var manager: BookmarksManager
+    @ObservedObject var tagsView: TagsView
 
-    var body: some Scene {
-        WindowGroup {
-            NavigationView {
-                Sidebar(tagsView: TagsView(database: manager.database))
-                ContentView(databaseView: DatabaseView(database: manager.database))
+    var body: some View {
+        List {
+            Section(header: Text("Favourites")) {
+                NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database))) {
+                    Label("All Bookmarks", systemImage: "bookmark")
+                }
+                NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database, tags: []))) {
+                    Label("Untagged", systemImage: "tag")
+                }
             }
-            .frameAutosaveName("Main Window")
+            Section(header: Text("Tags")) {
+                ForEach(tagsView.tags) { tag in
+                    NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database, tags: [tag]))) {
+                        Label(tag, systemImage: "tag")
+                    }
+                }
+            }
         }
-        SwiftUI.Settings {
-            SettingsView()
+        .onAppear {
+            tagsView.start()
+        }
+        .onDisappear {
+            tagsView.stop()
         }
     }
 }

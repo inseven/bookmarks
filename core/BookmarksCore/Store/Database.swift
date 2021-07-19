@@ -28,6 +28,14 @@ public protocol DatabaseObserver {
     func databaseDidUpdate(database: Database)
 }
 
+extension String {
+
+    func wrap<T>(_ expression: Expressible) -> Expression<T> {
+        return Expression("\(self)(\(expression.expression.template))", expression.expression.bindings)
+    }
+
+}
+
 extension Item {
 
     convenience init(row: Row) throws {
@@ -64,6 +72,14 @@ public struct Tag: Hashable {
     init(row: Row) throws {
         self.init(id: try row.get(Database.Schema.tags[Database.Schema.id]),
                   name: try row.get(Database.Schema.name))
+    }
+
+}
+
+extension ExpressionType where UnderlyingType : Value, UnderlyingType.Datatype : Comparable {
+
+    public var groupConcat: Expression<UnderlyingType?> {
+        return "group_concat".wrap(self)
     }
 
 }
@@ -242,6 +258,7 @@ public class Database {
                 .map(Tag.init))
     }
 
+    // TODO: Return strings?
     public func tags(completion: @escaping (Swift.Result<Set<Tag>, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
@@ -327,74 +344,95 @@ public class Database {
         }
     }
 
-    public func rawItems(filter: String? = nil) throws -> [Item] {
+    public func syncQueue_items(filter: String? = nil, tags: [String]? = nil) throws -> [Item] {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
 
-        var query = """
-            SELECT
-                items.identifier,
-                title,
-                url,
-                tags,
-                date
-            FROM
-                items
-            LEFT JOIN
-                (
-                    SELECT
-                        item_id,
-                        GROUP_CONCAT(tags.name) AS tags
-                    FROM
-                        items_to_tags
-                    INNER JOIN
-                        tags
-                    ON
-                        tags.id == items_to_tags.tag_id
-                    GROUP BY
-                        item_id
-                ) a
-            ON
-                items.id == item_id
-        """
+        let tagsColumn = Schema.name.groupConcat
 
+        var filterExpression: Expression = Expression<Bool>(value: true)
         if let filter = filter {
-            let tags = Expression<String>("tags")
             let filters = filter.tokens.map {
-                Schema.title.like("%\($0)%") || Schema.url.like("%\($0)%") || tags.like("%\($0)%")
+                Schema.title.like("%\($0)%") || Schema.url.like("%\($0)%") || Schema.name.like("%\($0)%")
             }
-            let compoundFilter = filters.reduce(Expression<Bool>(value: true)) { $0 && $1 }
-            query = query + " WHERE " + compoundFilter.asSQL()
+            filterExpression = filters.reduce(Expression<Bool>(value: true)) { $0 && $1 }
         }
 
-        query = query + " ORDER BY date DESC"
-
-        let stmt = try db.prepare(query)
-        var items: [Item] = []
-        for row in stmt {
-            guard let identifier = row[0] as? String,
-                  let title = row[1] as? String,
-                  let urlString = row[2] as? String,
-                  let url = URL(string: urlString),
-                  let tags = row[3] as? String?,
-                  let date = row[4] as? String else {
-                throw BookmarksError.corrupt
+        if let tags = tags {
+            if tags.isEmpty {
+//                filterSQL = "((\(filterSQL)) AND name IS NULL)"
+            } else {
+                // TODO: Use equality when we have case insensitive tags.
+                let tagExpression = tags.map { Schema.name.like($0) }.reduce(Expression(value: true)) { $0 && $1 }
+                filterExpression = filterExpression && tagExpression
             }
-            let safeTags = tags?.components(separatedBy: ",") ?? []
-            let item = Item(identifier: identifier,
-                            title: title,
-                            url: url,
-                            tags: Set(safeTags),
-                            date: Date.fromDatatypeValue(date))
-            items.append(item)
         }
 
+        let select =
+            Schema.items
+            .join(.leftOuter,
+                  Schema.items_to_tags,
+                  on: Schema.items[Schema.id] == Schema.items_to_tags[Schema.item_id])
+            .join(.leftOuter,
+                  Schema.tags,
+                  on: Schema.items_to_tags[Schema.tag_id] == Schema.tags[Schema.id])
+            .group(Schema.identifier)
+            .select(
+                Schema.identifier,
+                Schema.title,
+                Schema.url,
+                tagsColumn,
+                Schema.date)
+            .filter(filterExpression)
+            .order(Schema.date.desc)
+
+//        query = query + " WHERE " + filterExpression.asSQL()
+//
+//        query = query + " GROUP BY identifier"
+//
+//        query = query + " ORDER BY date DESC"
+
+
+        let items = try db.prepare(select).map { row in
+//            let tags = try? row.get(tagsColumn) ?? []
+//            let safeTags = try? components(separatedBy: ",") ?? []
+            Item(identifier: try row.get(Schema.identifier),
+                 title: try row.get(Schema.title),
+                 url: try row.get(Schema.url).asUrl(),
+                 tags: Set(),
+                 date: try row.get(Schema.date))
+        }
         return items
+
+        
+
+//        let stmt = try db.prepare(query)
+//        var items: [Item] = []
+//        for row in stmt {
+//            guard let identifier = row[0] as? String,
+//                  let title = row[1] as? String,
+//                  let urlString = row[2] as? String,
+//                  let url = URL(string: urlString),
+//                  let tags = row[3] as? String?,
+//                  let date = row[4] as? String else {
+//                throw BookmarksError.corrupt
+//            }
+//            let safeTags = tags?.components(separatedBy: ",") ?? []
+//            let item = Item(identifier: identifier,
+//                            title: title,
+//                            url: url,
+//                            tags: Set(safeTags),
+//                            date: Date.fromDatatypeValue(date))
+//            items.append(item)
+//        }
+//
+//        return items
     }
 
-    public func items(filter: String? = nil, completion: @escaping (Swift.Result<[Item], Error>) -> Void) {
+    public func items(filter: String? = nil, tags: [String]? = nil, completion: @escaping (Swift.Result<[Item], Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             let result = Swift.Result<[Item], Error> {
-                try self.rawItems(filter: filter)
+                try self.syncQueue_items(filter: filter, tags: tags)
             }
             completion(result)
         }

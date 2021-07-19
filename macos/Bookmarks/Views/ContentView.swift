@@ -29,7 +29,6 @@ struct ContentView: View {
     @Environment(\.manager) var manager: BookmarksManager
     @ObservedObject var databaseView: DatabaseView
 
-
     var body: some View {
         VStack {
             ScrollView {
@@ -110,6 +109,11 @@ struct ContentView: View {
                     .frame(minWidth: 100, idealWidth: 300, maxWidth: .infinity)
             }
         }
-        .frameAutosaveName("Main Window")
+        .onAppear {
+            databaseView.start()
+        }
+        .onDisappear {
+            databaseView.stop()
+        }
     }
 }

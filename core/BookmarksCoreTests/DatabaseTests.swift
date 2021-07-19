@@ -151,4 +151,6 @@ class DatabaseTests: XCTestCase {
 
     }
 
+    // TODO: Lowercase tags
+
 }

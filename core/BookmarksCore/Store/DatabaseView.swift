@@ -39,7 +39,8 @@ public class DatabaseView: ObservableObject {
         self.tags = tags
     }
 
-    func update(filter: String? = nil) {
+    func update() {
+        dispatchPrecondition(condition: .onQueue(.main))
         database.items(filter: filter, tags: tags) { result in
             DispatchQueue.main.async {
                 switch result {
@@ -56,12 +57,12 @@ public class DatabaseView: ObservableObject {
         print("start observing...")
         dispatchPrecondition(condition: .onQueue(.main))
         self.updateCancellable = DatabasePublisher(database: database).debounce(for: .seconds(1), scheduler: DispatchQueue.main).sink { _ in
-            self.update(filter: self.filter)
+            self.update()
         }
         self.searchCancellable = self.$search.debounce(for: .seconds(0.2), scheduler: DispatchQueue.main).sink { search in
             print("searching for '\(search)'...")
             self.filter = search
-            self.update(filter: self.filter)
+            self.update()
         }
         self.update()
     }

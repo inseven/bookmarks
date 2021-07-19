@@ -39,7 +39,7 @@ public class TagsView: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let tags):
-                    self.tags = Array(tags.map { $0.name }.sorted())
+                    self.tags = Array(tags.sorted())
                 case .failure(let error):
                     print("Failed to load data with error \(error)")
                 }

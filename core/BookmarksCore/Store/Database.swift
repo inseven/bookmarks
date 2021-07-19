@@ -59,22 +59,22 @@ extension Connection {
 
 }
 
-public struct Tag: Hashable {
-
-    let id: Int64
-    let name: String
-
-    init(id: Int64, name: String) {
-        self.id = id
-        self.name = name
-    }
-
-    init(row: Row) throws {
-        self.init(id: try row.get(Database.Schema.tags[Database.Schema.id]),
-                  name: try row.get(Database.Schema.name))
-    }
-
-}
+//public struct Tag: Hashable {
+//
+//    let id: Int64
+//    let name: String
+//
+//    init(id: Int64, name: String) {
+//        self.id = id
+//        self.name = name
+//    }
+//
+//    init(row: Row) throws {
+//        self.init(id: try row.get(Database.Schema.tags[Database.Schema.id]),
+//                  name: try row.get(Database.Schema.name))
+//    }
+//
+//}
 
 extension ExpressionType where UnderlyingType : Value, UnderlyingType.Datatype : Comparable {
 
@@ -143,6 +143,15 @@ public class Database {
                 t.unique(Schema.item_id, Schema.tag_id)
                 t.foreignKey(Schema.item_id, references: Schema.items, Schema.id, delete: .cascade)
                 t.foreignKey(Schema.tag_id, references: Schema.tags, Schema.id, delete: .cascade)
+            })
+        },
+        7: { db in
+            print("recreate the tags table ignoring case")
+            try db.run(Schema.items_to_tags.delete())
+            try db.run(Schema.tags.drop())
+            try db.run(Schema.tags.create { t in
+                t.column(Schema.id, primaryKey: true)
+                t.column(Schema.name, unique: true, collate: .nocase)
             })
         }
     ]
@@ -225,24 +234,23 @@ public class Database {
         return Item(identifier: result.identifier,
                     title: result.title,
                     url: result.url,
-                    tags: Set(tags.map { $0.name }),
+                    tags: Set(tags),
                     date: result.date)
     }
 
-    func syncQueue_fetchOrInsertTag(name: String) throws -> Tag {
-        if let tag = try? syncQueue_tag(name: name) {
-            return tag
+    func syncQueue_fetchOrInsertTag(name: String) throws -> Int64 {
+        if let id = try? syncQueue_tag(name: name) {
+            return id
         }
         let id = try db.run(Schema.tags.insert(
             Schema.name <- name
         ))
-        return Tag(id: id, name: name)
+        return id
     }
 
-    func syncQueue_tag(name: String) throws -> Tag {
+    func syncQueue_tag(name: String) throws -> Int64 {
         let results = try db.prepare(Schema.tags.filter(Schema.name == name).limit(1)).map { row in
-            Tag(id: try row.get(Schema.id),
-                name: try row.get(Schema.name))
+            try row.get(Schema.id)
         }
         guard let result = results.first else {
             throw BookmarksError.tagNotFound(name: name)
@@ -250,22 +258,22 @@ public class Database {
         return result
     }
 
-    func syncQueue_tags(itemIdentifier: String) throws -> Set<Tag> {
+    func syncQueue_tags(itemIdentifier: String) throws -> Set<String> {
         Set(try self.db.prepare(Schema.items_to_tags
                                     .join(Schema.items, on: Schema.items_to_tags[Schema.item_id] == Schema.items[Schema.id])
                                     .join(Schema.tags, on: Schema.items_to_tags[Schema.tag_id] == Schema.tags[Schema.id])
                                     .filter(Schema.identifier == itemIdentifier))
-                .map(Tag.init))
+                .map { row -> String in
+                    try row.get(Schema.tags[Schema.name])
+                })
     }
 
-    // TODO: Return strings?
-    public func tags(completion: @escaping (Swift.Result<Set<Tag>, Error>) -> Void) {
+    public func tags(completion: @escaping (Swift.Result<Set<String>, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
             let result = Swift.Result {
-                Set(try self.db.prepare(Schema.tags).map { row in
-                    Tag(id: try row.get(Schema.id),
-                        name: try row.get(Schema.name))
+                Set(try self.db.prepare(Schema.tags.select(Schema.name.lowercaseString)).map { row in
+                    try row.get(Schema.name.lowercaseString)
                 })
             }
             completion(result)
@@ -295,11 +303,11 @@ public class Database {
                                 Schema.url <- item.url.absoluteString,
                                 Schema.date <- item.date
             ))
-        for tag in tags {
+        for tag_id in tags {
             _ = try self.db.run(
                 Schema.items_to_tags.insert(or: .replace,
                                             Schema.item_id <- itemId,
-                                            Schema.tag_id <- tag.id))
+                                            Schema.tag_id <- tag_id))
         }
     }
 
@@ -363,7 +371,7 @@ public class Database {
                 filterExpression = filterExpression && optionalName == nil
             } else {
                 // TODO: Use equality when we have case insensitive tags.
-                let tagExpression = tags.map { Schema.name.like($0) }.reduce(Expression(value: true)) { $0 && $1 }
+                let tagExpression = tags.map { Schema.name.lowercaseString == $0.lowercased() }.reduce(Expression(value: true)) { $0 && $1 }
                 filterExpression = filterExpression && tagExpression
             }
         }
@@ -381,7 +389,7 @@ public class Database {
                 Schema.identifier,
                 Schema.title,
                 Schema.url,
-                tagsColumn,
+                tagsColumn.lowercaseString,
                 Schema.date)
             .filter(filterExpression)
             .order(Schema.date.desc)

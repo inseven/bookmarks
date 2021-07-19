@@ -31,15 +31,18 @@ public class DatabaseView: ObservableObject {
     @Published public var search = ""
     @Published public var items: [Item] = []
 
+    fileprivate var filter = ""
+
     public init(database: Database) {
         self.database = database
         self.publisher = DatabasePublisher(database: database)
         self.cancellable = self.publisher.debounce(for: .seconds(1), scheduler: DispatchQueue.main).sink { _ in
-            self.update()
+            self.update(filter: self.filter)
         }
         self.searchCancellable = self.$search.debounce(for: .seconds(0.2), scheduler: DispatchQueue.main).sink { search in
             print("searching for '\(search)'...")
-            self.update(filter: search)
+            self.filter = search
+            self.update(filter: self.filter)
         }
         self.update()
     }

@@ -349,17 +349,18 @@ public class Database {
 
         let tagsColumn = Schema.name.groupConcat
 
-        var filterExpression: Expression = Expression<Bool>(value: true)
+        var filterExpression: Expression = Expression<Bool?>(value: true)
         if let filter = filter {
             let filters = filter.tokens.map {
                 Schema.title.like("%\($0)%") || Schema.url.like("%\($0)%") || Schema.name.like("%\($0)%")
             }
-            filterExpression = filters.reduce(Expression<Bool>(value: true)) { $0 && $1 }
+            filterExpression = filters.reduce(Expression(value: true)) { $0 && $1 }
         }
 
         if let tags = tags {
             if tags.isEmpty {
-//                filterSQL = "((\(filterSQL)) AND name IS NULL)"
+                let optionalName = Expression<String?>("name")
+                filterExpression = filterExpression && optionalName == nil
             } else {
                 // TODO: Use equality when we have case insensitive tags.
                 let tagExpression = tags.map { Schema.name.like($0) }.reduce(Expression(value: true)) { $0 && $1 }

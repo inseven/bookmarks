@@ -59,23 +59,6 @@ extension Connection {
 
 }
 
-//public struct Tag: Hashable {
-//
-//    let id: Int64
-//    let name: String
-//
-//    init(id: Int64, name: String) {
-//        self.id = id
-//        self.name = name
-//    }
-//
-//    init(row: Row) throws {
-//        self.init(id: try row.get(Database.Schema.tags[Database.Schema.id]),
-//                  name: try row.get(Database.Schema.name))
-//    }
-//
-//}
-
 extension ExpressionType where UnderlyingType : Value, UnderlyingType.Datatype : Comparable {
 
     public var groupConcat: Expression<UnderlyingType?> {

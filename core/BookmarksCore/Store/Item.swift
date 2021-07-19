@@ -37,7 +37,7 @@ public class Item: Equatable {
         self.identifier = identifier
         self.title = title
         self.url = url
-        self.tags = tags
+        self.tags = Set(tags.map { $0.lowercased() })
         self.date = date
         self.thumbnail = thumbnail
     }
@@ -55,7 +55,7 @@ public class Item: Equatable {
             lhs.identifier == rhs.identifier &&
             lhs.title == rhs.title &&
             lhs.url == rhs.url &&
-            Set(lhs.tags.map({ $0.lowercased() })) == Set(rhs.tags.map({ $0.lowercased() })) &&
+            lhs.tags == rhs.tags &&
             lhs.date == rhs.date
     }
 

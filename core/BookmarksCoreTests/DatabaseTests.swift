@@ -70,7 +70,7 @@ class DatabaseTests: XCTestCase {
             _ = try AsyncOperation({ database.insertOrUpdate(item2, completion: $0) }).wait()
 
             let tags = try AsyncOperation({ database.tags(completion: $0) }).wait()
-            XCTAssertEqual(Set(tags.map({ $0.name })), Set(["example", "website", "cheese"]))
+            XCTAssertEqual(tags, Set(["example", "website", "cheese"]))
 
             let fetchedItem1 = try AsyncOperation({ database.item(identifier: item1.identifier, completion: $0) }).wait()
             XCTAssertEqual(fetchedItem1, item1)
@@ -106,7 +106,7 @@ class DatabaseTests: XCTestCase {
             _ = try AsyncOperation({ database.insertOrUpdate(item2, completion: $0) }).wait()
 
             let tags = try AsyncOperation({ database.tags(completion: $0) }).wait()
-            XCTAssertEqual(Set(tags.map({ $0.name })), Set(["example", "website", "cheese"]))
+            XCTAssertEqual(tags, Set(["example", "website", "cheese"]))
 
             let fetchedItems = try AsyncOperation({ database.items(completion: $0) }).wait()
             XCTAssertEqual(fetchedItems, [item2, item1])
@@ -141,7 +141,7 @@ class DatabaseTests: XCTestCase {
             _ = try AsyncOperation({ database.delete(identifier: item1.identifier, completion: $0) }).wait()
 
             let tags = try AsyncOperation({ database.tags(completion: $0) }).wait()
-            XCTAssertEqual(Set(tags.map({ $0.name })), Set(["example", "website", "cheese"]))
+            XCTAssertEqual(tags, Set(["example", "website", "cheese"]))
 
             let fetchedItems = try AsyncOperation({ database.items(completion: $0) }).wait()
             XCTAssertEqual(fetchedItems, [item2])

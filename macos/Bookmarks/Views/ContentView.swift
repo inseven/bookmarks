@@ -27,7 +27,7 @@ import Interact
 struct ContentView: View {
 
     @Environment(\.manager) var manager: BookmarksManager
-    @ObservedObject var databaseView: DatabaseView
+    @StateObject var databaseView: DatabaseView
 
     var body: some View {
         VStack {
@@ -36,25 +36,28 @@ struct ContentView: View {
                     ForEach(databaseView.items) { item in
                         BookmarkCell(item: item)
                             .onClick {
-
+                                manager.database.item(identifier: item.identifier) { result in
+                                    switch result {
+                                    case .success(let item):
+                                        print(item)
+                                        print(item.tags)
+                                    case .failure(let error):
+                                        print("failed to get item with error \(error)")
+                                    }
+                                }
                             } doubleClick: {
                                 NSWorkspace.shared.open(item.url)
+                            }
+                            .onCommandDoubleClick {
+                                do {
+                                    NSWorkspace.shared.open(try item.pinboardUrl())
+                                } catch {
+                                    print("Failed to edit with error \(error)")
+                                }
                             }
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Open") {
                                     NSWorkspace.shared.open(item.url)
-                                }
-                                Divider()
-                                if item.tags.isEmpty {
-                                    Button("No Tags") {}.disabled(true)
-                                } else {
-                                    Menu("Tags") {
-                                        ForEach(Array(item.tags)) { tag in
-                                            Button(tag) {
-                                                print(item.tags)
-                                            }
-                                        }
-                                    }
                                 }
                                 Divider()
                                 Button("View on Internet Archive") {
@@ -96,6 +99,14 @@ struct ContentView: View {
                 .padding()
             }
         }
+        .onAppear {
+            print("content view appear")
+            databaseView.start()
+        }
+        .onDisappear {
+            print("content view disappear")
+            databaseView.stop()
+        }
         .toolbar {
             ToolbarItem {
                 Button {
@@ -108,12 +119,6 @@ struct ContentView: View {
                 SearchField(search: $databaseView.search)
                     .frame(minWidth: 100, idealWidth: 300, maxWidth: .infinity)
             }
-        }
-        .onAppear {
-            databaseView.start()
-        }
-        .onDisappear {
-            databaseView.stop()
         }
     }
 }

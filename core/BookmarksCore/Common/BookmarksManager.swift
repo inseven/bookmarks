@@ -63,6 +63,10 @@ public class BookmarksManager {
         #endif
     }
 
+    public var user: String? {
+        settings.pinboardApiKey.components(separatedBy: ":").first
+    }
+
     @objc
     func nsApplicationDidBecomeActive() {
         self.updater.start()

@@ -24,7 +24,7 @@ import Foundation
 // TODO: Rename this to 'ItemsView'
 public class DatabaseView: ObservableObject {
 
-    var database: Database
+    let database: Database
     var updateCancellable: AnyCancellable? = nil
     var searchCancellable: AnyCancellable? = nil
 
@@ -41,10 +41,12 @@ public class DatabaseView: ObservableObject {
 
     func update() {
         dispatchPrecondition(condition: .onQueue(.main))
+        print("fetching items...")
         database.items(filter: filter, tags: tags) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let items):
+                    print("received \(items.count) items")
                     self.items = items
                 case .failure(let error):
                     print("Failed to load data with error \(error)")
@@ -54,8 +56,8 @@ public class DatabaseView: ObservableObject {
     }
 
     public func start() {
-        print("start observing...")
         dispatchPrecondition(condition: .onQueue(.main))
+        print("start observing...")
         self.updateCancellable = DatabasePublisher(database: database).debounce(for: .seconds(1), scheduler: DispatchQueue.main).sink { _ in
             self.update()
         }
@@ -68,6 +70,7 @@ public class DatabaseView: ObservableObject {
     }
 
     public func stop() {
+        dispatchPrecondition(condition: .onQueue(.main))
         print("stop observing...")
         self.updateCancellable?.cancel()
         self.updateCancellable = nil

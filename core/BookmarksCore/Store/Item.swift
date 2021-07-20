@@ -88,3 +88,12 @@ extension Item {
     }
 
 }
+
+// TODO: Move this elsewhere.
+extension String {
+
+    public func pinboardUrl(for user: String) throws -> URL {
+        return try "https://pinboard.in/u:\(user)/t:\(self)/".asUrl()
+    }
+
+}

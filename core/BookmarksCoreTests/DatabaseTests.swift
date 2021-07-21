@@ -84,11 +84,7 @@ class DatabaseTests: XCTestCase {
     }
 
     func testSingleQuery() throws {
-        guard let database = try? Database(path: temporaryDatabaseUrl) else {
-            XCTFail("Failed to create database")
-            return
-        }
-        XCTAssertNotNil(database)
+        let database = try Database(path: temporaryDatabaseUrl)
 
         let item1 = Item(identifier: UUID().uuidString,
                          title: "Example",
@@ -114,11 +110,7 @@ class DatabaseTests: XCTestCase {
     }
 
     func testMultipleQuery() throws {
-        guard let database = try? Database(path: temporaryDatabaseUrl) else {
-            XCTFail("Failed to create database")
-            return
-        }
-        XCTAssertNotNil(database)
+        let database = try Database(path: temporaryDatabaseUrl)
 
         let item1 = Item(identifier: UUID().uuidString,
                          title: "Example",
@@ -142,11 +134,7 @@ class DatabaseTests: XCTestCase {
     }
 
     func testSingleDeletion() throws {
-        guard let database = try? Database(path: temporaryDatabaseUrl) else {
-            XCTFail("Failed to create database")
-            return
-        }
-        XCTAssertNotNil(database)
+        let database = try Database(path: temporaryDatabaseUrl)
 
         let item1 = Item(identifier: UUID().uuidString,
                          title: "Example",

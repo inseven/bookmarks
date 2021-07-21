@@ -43,6 +43,23 @@ extension Array where Element == Item {
 
 }
 
+
+extension Database {
+
+    func insert(_ items: [Item]) throws {
+        for item in items {
+            _ = try AsyncOperation({ self.insertOrUpdate(item, completion: $0) }).wait()
+        }
+    }
+
+    func delete(_ items: [Item]) throws {
+        for item in items {
+            _ = try AsyncOperation({ self.delete(identifier: item.identifier, completion: $0) }).wait()
+        }
+    }
+
+}
+
 // TODO: Use a unique temporary directory for the database tests #140
 //       https://github.com/inseven/bookmarks/issues/140
 class DatabaseTests: XCTestCase {
@@ -66,7 +83,7 @@ class DatabaseTests: XCTestCase {
         removeDatabase()
     }
 
-    func testSingleQuery() {
+    func testSingleQuery() throws {
         guard let database = try? Database(path: temporaryDatabaseUrl) else {
             XCTFail("Failed to create database")
             return
@@ -85,24 +102,18 @@ class DatabaseTests: XCTestCase {
                          tags: ["cheese", "website"],
                          date: Date(timeIntervalSince1970: 0))
 
-        do {
-            _ = try AsyncOperation({ database.insertOrUpdate(item1, completion: $0) }).wait()
-            _ = try AsyncOperation({ database.insertOrUpdate(item2, completion: $0) }).wait()
+        try database.insert([item1, item2])
 
-            let tags = try AsyncOperation({ database.tags(completion: $0) }).wait()
-            XCTAssertEqual(tags, Set(["example", "website", "cheese"]))
+        let tags = try AsyncOperation({ database.tags(completion: $0) }).wait()
+        XCTAssertEqual(tags, Set(["example", "website", "cheese"]))
 
-            let fetchedItem1 = try AsyncOperation({ database.item(identifier: item1.identifier, completion: $0) }).wait()
-            XCTAssertEqual(fetchedItem1, item1)
-            let fetchedItem2 = try AsyncOperation({ database.item(identifier: item2.identifier, completion: $0) }).wait()
-            XCTAssertEqual(fetchedItem2, item2)
-        } catch {
-            XCTFail("Failed with error \(error)")
-        }
-
+        let fetchedItem1 = try AsyncOperation({ database.item(identifier: item1.identifier, completion: $0) }).wait()
+        XCTAssertEqual(fetchedItem1, item1)
+        let fetchedItem2 = try AsyncOperation({ database.item(identifier: item2.identifier, completion: $0) }).wait()
+        XCTAssertEqual(fetchedItem2, item2)
     }
 
-    func testMultipleQuery() {
+    func testMultipleQuery() throws {
         guard let database = try? Database(path: temporaryDatabaseUrl) else {
             XCTFail("Failed to create database")
             return
@@ -121,22 +132,16 @@ class DatabaseTests: XCTestCase {
                          tags: ["cheese", "website"],
                          date: Date(timeIntervalSince1970: 10))
 
-        do {
-            _ = try AsyncOperation({ database.insertOrUpdate(item1, completion: $0) }).wait()
-            _ = try AsyncOperation({ database.insertOrUpdate(item2, completion: $0) }).wait()
+        try database.insert([item1, item2])
 
-            let tags = try AsyncOperation({ database.tags(completion: $0) }).wait()
-            XCTAssertEqual(tags, Set(["example", "website", "cheese"]))
+        let tags = try AsyncOperation({ database.tags(completion: $0) }).wait()
+        XCTAssertEqual(tags, Set(["example", "website", "cheese"]))
 
-            let fetchedItems = try AsyncOperation({ database.items(completion: $0) }).wait()
-            XCTAssertEqual(fetchedItems, [item2, item1].removingTags())
-        } catch {
-            XCTFail("Failed with error \(error)")
-        }
-
+        let fetchedItems = try AsyncOperation({ database.items(completion: $0) }).wait()
+        XCTAssertEqual(fetchedItems, [item2, item1].removingTags())
     }
 
-    func testSingleDeletion() {
+    func testSingleDeletion() throws {
         guard let database = try? Database(path: temporaryDatabaseUrl) else {
             XCTFail("Failed to create database")
             return
@@ -155,19 +160,17 @@ class DatabaseTests: XCTestCase {
                          tags: ["cheese", "website"],
                          date: Date(timeIntervalSince1970: 10))
 
-        do {
-            _ = try AsyncOperation({ database.insertOrUpdate(item1, completion: $0) }).wait()
-            _ = try AsyncOperation({ database.insertOrUpdate(item2, completion: $0) }).wait()
-            _ = try AsyncOperation({ database.delete(identifier: item1.identifier, completion: $0) }).wait()
+        try database.insert([item1, item2])
+        try database.delete([item1])
 
-            let tags = try AsyncOperation({ database.tags(completion: $0) }).wait()
-            XCTAssertEqual(tags, Set(["example", "website", "cheese"]))
+        let tags = try AsyncOperation({ database.tags(completion: $0) }).wait()
+        XCTAssertEqual(tags, Set(["example", "website", "cheese"]))
 
-            let fetchedItems = try AsyncOperation({ database.items(completion: $0) }).wait()
-            XCTAssertEqual(fetchedItems, [item2].removingTags())
-        } catch {
-            XCTFail("Failed with error \(error)")
-        }
+        let fetchedItems = try AsyncOperation({ database.items(completion: $0) }).wait()
+        XCTAssertEqual(fetchedItems, [item2].removingTags())
+    }
+
+    func testItemFilter() throws {
 
     }
 

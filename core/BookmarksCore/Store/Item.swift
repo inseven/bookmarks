@@ -67,7 +67,7 @@ extension Item: Identifiable {
 
 extension Item: CustomStringConvertible {
 
-    public var description: String { "\(self.url.absoluteString) (\(self.title))" }
+    public var description: String { "\(self.url.absoluteString) (title: \(self.title), tags: [\(self.tags.joined(separator: ", "))])" }
 
 }
 

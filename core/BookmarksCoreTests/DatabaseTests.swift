@@ -23,6 +23,26 @@ import Foundation
 import XCTest
 @testable import BookmarksCore
 
+extension Item {
+
+    func removingTags() -> Item {
+        Item(identifier: identifier,
+             title: title,
+             url: url,
+             tags: Set(),
+             date: date)
+    }
+
+}
+
+extension Array where Element == Item {
+
+    func removingTags() -> [Item] {
+        self.map { $0.removingTags() }
+    }
+
+}
+
 // TODO: Use a unique temporary directory for the database tests #140
 //       https://github.com/inseven/bookmarks/issues/140
 class DatabaseTests: XCTestCase {
@@ -109,7 +129,7 @@ class DatabaseTests: XCTestCase {
             XCTAssertEqual(tags, Set(["example", "website", "cheese"]))
 
             let fetchedItems = try AsyncOperation({ database.items(completion: $0) }).wait()
-            XCTAssertEqual(fetchedItems, [item2, item1])
+            XCTAssertEqual(fetchedItems, [item2, item1].removingTags())
         } catch {
             XCTFail("Failed with error \(error)")
         }
@@ -144,12 +164,14 @@ class DatabaseTests: XCTestCase {
             XCTAssertEqual(tags, Set(["example", "website", "cheese"]))
 
             let fetchedItems = try AsyncOperation({ database.items(completion: $0) }).wait()
-            XCTAssertEqual(fetchedItems, [item2])
+            XCTAssertEqual(fetchedItems, [item2].removingTags())
         } catch {
             XCTFail("Failed with error \(error)")
         }
 
     }
+
+    // TODO: Delete tags.
 
     // TODO: Lowercase tags
 

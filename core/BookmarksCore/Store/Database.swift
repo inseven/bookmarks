@@ -379,12 +379,10 @@ public class Database {
             .order(Schema.date.desc)
 
         let items = try db.prepare(select).map { row -> Item in
-            let tags = try? row.get(tagsColumn)
-            let safeTags = tags?.components(separatedBy: ",") ?? []
             return Item(identifier: try row.get(Schema.identifier),
                         title: try row.get(Schema.title),
                         url: try row.get(Schema.url).asUrl(),
-                        tags: Set(safeTags),
+                        tags: Set(),
                         date: try row.get(Schema.date))
         }
         return items

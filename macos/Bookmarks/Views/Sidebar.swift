@@ -51,7 +51,7 @@ struct Sidebar: View {
             }
             Section(header: Text("Favourites")) {
                 ForEach(settings.favoriteTags) { tag in
-                    NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database, tags: [tag]))) {
+                    NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database, tags: [tag])).navigationTitle(tag)) {
                         Label(tag, systemImage: "tag")
                     }
                     .contextMenu(ContextMenu(menuItems: {
@@ -75,8 +75,13 @@ struct Sidebar: View {
             }
             Section(header: Text("Tags")) {
                 ForEach(tagsView.tags) { tag in
-                    NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database, tags: [tag]))) {
-                        Label(tag, systemImage: "tag")
+                    NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database, tags: [tag])).navigationTitle(tag)) {
+                        HStack {
+                            Image(systemName: "tag")
+                                .renderingMode(.template)
+                                .foregroundColor(.secondary)
+                            Text(tag)
+                        }
                     }
                     .contextMenu(ContextMenu(menuItems: {
                         Button("Add to Favourites") {

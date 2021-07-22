@@ -24,34 +24,61 @@ import SwiftUI
 import BookmarksCore
 import Interact
 
+enum Tags {
+    case allBookmarks
+    case untagged
+    case favorites(tag: String)
+    case tag(tag: String)
+}
+
+extension Tags: CustomStringConvertible, Hashable {
+
+    var description: String {
+        switch self {
+        case .allBookmarks:
+            return "uk.co.inseven.bookmarks.all-bookmarks"
+        case .untagged:
+            return "uk.co.inseven.bookmarks.untagged"
+        case .favorites(let tag):
+            return "uk.co.inseven.bookmarks.favorites.\(tag)"
+        case .tag(let tag):
+            return "uk.co.inseven.bookmarks.tag.\(tag)"
+        }
+    }
+
+}
+
 struct Sidebar: View {
 
+    enum SheetType {
+        case rename(tag: String)
+    }
+
     @Environment(\.manager) var manager: BookmarksManager
-    @ObservedObject var tagsView: TagsView
+    @StateObject var tagsView: TagsView
     @ObservedObject var settings: BookmarksCore.Settings
 
-    static let allBookmarks = "uk.co.inseven.bookmarks.all-bookmarks"
-    static let untagged = "uk.co.inseven.bookmarks.untagged"
-    static let favorites = "uk.co.inseven.bookmarks.favorites"
-    static let tag = "uk.co.inseven.bookmarks.tag"
-
-    @State var selection: String? = allBookmarks
+    @State var selection: Tags? = .allBookmarks
+    @State var sheet: SheetType? = nil
 
     var body: some View {
         List(selection: $selection) {
             Section {
-                NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database)).navigationTitle("All Bookmarks")) {
+                NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database))
+                                .navigationTitle("All Bookmarks")) {
                     Label("All Bookmarks", systemImage: "bookmark")
                 }
-                .tag(Self.allBookmarks)
-                NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database, tags: [])).navigationTitle("Untagged")) {
+                .tag(Tags.allBookmarks)
+                NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database, tags: []))
+                                .navigationTitle("Untagged")) {
                     Label("Untagged", systemImage: "tag")
                 }
-                .tag(Self.untagged)
+                .tag(Tags.untagged)
             }
             Section(header: Text("Favourites")) {
                 ForEach(settings.favoriteTags) { tag in
-                    NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database, tags: [tag])).navigationTitle(tag)) {
+                    NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database, tags: [tag]))
+                                    .navigationTitle(tag)) {
                         Label(tag, systemImage: "tag")
                     }
                     .contextMenu(ContextMenu(menuItems: {
@@ -70,12 +97,13 @@ struct Sidebar: View {
                             }
                         }
                     }))
-                    .tag(Self.favorites + "." + tag)
+                    .tag(Tags.favorites(tag: tag))
                 }
             }
             Section(header: Text("Tags")) {
                 ForEach(tagsView.tags) { tag in
-                    NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database, tags: [tag])).navigationTitle(tag)) {
+                    NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database, tags: [tag]))
+                                    .navigationTitle(tag)) {
                         HStack {
                             Image(systemName: "tag")
                                 .renderingMode(.template)
@@ -90,6 +118,10 @@ struct Sidebar: View {
                             settings.favoriteTags = favoriteTags
                         }
                         Divider()
+                        Button("Rename tag") {
+                            self.sheet = .rename(tag: tag)
+                        }
+                        Divider()
                         Button("View on Pinboard") {
                             do {
                                 guard let user = manager.user else {
@@ -101,8 +133,15 @@ struct Sidebar: View {
                             }
                         }
                     }))
-                    .tag(Self.tag + "." + tag)
+                    .tag(Tags.tag(tag: tag))
                 }
+            }
+
+        }
+        .sheet(item: $sheet) { sheet in
+            switch sheet {
+            case .rename(let tag):
+                RenameTagView(tag: tag)
             }
         }
         .onAppear {
@@ -118,4 +157,15 @@ struct Sidebar: View {
             print(selection)
         })
     }
+}
+
+extension Sidebar.SheetType: Identifiable {
+
+    var id: String {
+        switch self {
+        case .rename(let tag):
+            return "rename:\(tag)"
+        }
+    }
+
 }

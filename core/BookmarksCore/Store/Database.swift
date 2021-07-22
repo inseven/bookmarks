@@ -138,7 +138,46 @@ public class Database {
                 t.column(Schema.id, primaryKey: true)
                 t.column(Schema.name, unique: true, collate: .nocase)
             })
-        }
+        },
+        8: { db in },
+        9: { db in
+
+            // Since there's no truly persistent information in the database up to this point, it's safe to entirely
+            // delete and recreate the database. It also has the happy side effect that it brings the base schema into
+            // one common place to make it easier to read.
+
+            // Clean up the existing tables.
+            try db.run(Schema.items.drop(ifExists: true))
+            try db.run(Schema.items_to_tags.drop(ifExists: true))
+            try db.run(Schema.tags.drop(ifExists: true))
+
+            print("create the items table...")
+            try db.run(Schema.items.create(ifNotExists: true) { t in
+                t.column(Schema.id, primaryKey: true)
+                t.column(Schema.identifier, unique: true)
+                t.column(Schema.title)
+                t.column(Schema.url, unique: true)
+                t.column(Schema.date)
+            })
+            try db.run(Schema.items.createIndex(Schema.identifier, ifNotExists: true))
+
+            print("create the tags table...")
+            try db.run(Schema.tags.create { t in
+                t.column(Schema.id, primaryKey: true)
+                t.column(Schema.name, unique: true, collate: .nocase)
+            })
+
+            print("create the items_to_tags table...")
+            try db.run(Schema.items_to_tags.create { t in
+                t.column(Schema.id, primaryKey: true)
+                t.column(Schema.item_id)
+                t.column(Schema.tag_id)
+                t.unique(Schema.item_id, Schema.tag_id)
+                t.foreignKey(Schema.item_id, references: Schema.items, Schema.id, delete: .cascade)
+                t.foreignKey(Schema.tag_id, references: Schema.tags, Schema.id, delete: .cascade)
+            })
+
+        },
     ]
 
     static var schemaVersion: Int32 = Array(migrations.keys).max() ?? 0
@@ -163,6 +202,7 @@ public class Database {
         self.db = try Connection(path.path)
         try syncQueue.sync {
             try self.syncQueue_migrate()
+            try self.syncQueue_enableForeignKeys()
         }
     }
 
@@ -180,7 +220,7 @@ public class Database {
         }
     }
 
-    func syncQueue_migrate() throws {
+    fileprivate func syncQueue_migrate() throws {
         dispatchPrecondition(condition: .onQueue(syncQueue))
         try db.transaction {
             let currentVersion = db.userVersion
@@ -200,7 +240,12 @@ public class Database {
         }
     }
 
-    func syncQueue_notifyObservers() {
+    fileprivate func syncQueue_enableForeignKeys() throws {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
+        try db.run("PRAGMA foreign_keys = ON")
+    }
+
+    fileprivate func syncQueue_notifyObservers() {
         dispatchPrecondition(condition: .onQueue(syncQueue))
         let observers = self.observers
         DispatchQueue.global(qos: .background).async {
@@ -210,7 +255,7 @@ public class Database {
         }
     }
 
-    func syncQueue_item(identifier: String) throws -> Item {
+    fileprivate func syncQueue_item(identifier: String) throws -> Item {
         let run = try db.prepare(Schema.items.filter(Schema.identifier == identifier).limit(1)).map(Item.init)
         guard let result = run.first else {
             throw BookmarksError.itemNotFound(identifier: identifier)
@@ -223,7 +268,7 @@ public class Database {
                     date: result.date)
     }
 
-    func syncQueue_fetchOrInsertTag(name: String) throws -> Int64 {
+    fileprivate func syncQueue_fetchOrInsertTag(name: String) throws -> Int64 {
         if let id = try? syncQueue_tag(name: name) {
             return id
         }
@@ -233,7 +278,7 @@ public class Database {
         return id
     }
 
-    func syncQueue_tag(name: String) throws -> Int64 {
+    fileprivate func syncQueue_tag(name: String) throws -> Int64 {
         let results = try db.prepare(Schema.tags.filter(Schema.name == name).limit(1)).map { row in
             try row.get(Schema.id)
         }
@@ -243,7 +288,7 @@ public class Database {
         return result
     }
 
-    func syncQueue_tags(itemIdentifier: String) throws -> Set<String> {
+    fileprivate func syncQueue_tags(itemIdentifier: String) throws -> Set<String> {
         Set(try self.db.prepare(Schema.items_to_tags
                                     .join(Schema.items, on: Schema.items_to_tags[Schema.item_id] == Schema.items[Schema.id])
                                     .join(Schema.tags, on: Schema.items_to_tags[Schema.tag_id] == Schema.tags[Schema.id])
@@ -280,7 +325,7 @@ public class Database {
         }
     }
 
-    func syncQueue_insertOrReplace(item: Item) throws {
+    fileprivate func syncQueue_insertOrReplace(item: Item) throws {
         let tags = try item.tags.map { try syncQueue_fetchOrInsertTag(name: $0) }
         let itemId = try self.db.run(
             Schema.items.insert(or: .replace,
@@ -295,6 +340,7 @@ public class Database {
                                             Schema.item_id <- itemId,
                                             Schema.tag_id <- tag_id))
         }
+        try syncQueue_pruneTags()
     }
 
     public func insertOrUpdate(_ item: Item, completion: @escaping (Swift.Result<Item, Error>) -> Void) {
@@ -325,16 +371,40 @@ public class Database {
         }
     }
 
+    fileprivate func syncQueue_pruneTags() throws {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
+        try self.db.run("""
+            DELETE
+            FROM
+                tags
+            WHERE
+                id NOT IN (
+                    SELECT
+                        tag_id
+                    FROM
+                        items_to_tags
+                )
+            """)
+    }
+
     // TODO: Clean up database tags when the last item is removed #141
     //       https://github.com/inseven/bookmarks/issues/141
     public func delete(identifier: String, completion: @escaping (Swift.Result<Int, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
-            let result = Swift.Result {
-                try self.db.run(Schema.items.filter(Schema.identifier == identifier).delete())
+            do {
+                try self.db.transaction {
+                    let result = Swift.Result { () -> Int in
+                        let count = try self.db.run(Schema.items.filter(Schema.identifier == identifier).delete())
+                        try self.syncQueue_pruneTags()
+                        return count
+                    }
+                    self.syncQueue_notifyObservers()
+                    completion(result)
+                }
+            } catch {
+                completion(.failure(error))
             }
-            self.syncQueue_notifyObservers()
-            completion(result)
         }
     }
 

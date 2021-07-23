@@ -33,11 +33,9 @@ public protocol DatabaseObserver {
 extension Item {
 
     convenience init(row: Row) throws {
-        let urlString = try row.get(Database.Schema.url)
-        let url = try urlString.asUrl()
         self.init(identifier: try row.get(Database.Schema.identifier),
                   title: try row.get(Database.Schema.title),
-                  url: url,
+                  url: try row.get(Database.Schema.url).asUrl(),
                   tags: [],
                   date: try row.get(Database.Schema.date))
     }

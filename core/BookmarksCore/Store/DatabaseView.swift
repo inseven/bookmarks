@@ -21,7 +21,6 @@
 import Combine
 import Foundation
 
-// TODO: Rename this to 'ItemsView'
 public class DatabaseView: ObservableObject {
 
     let database: Database

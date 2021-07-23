@@ -64,7 +64,7 @@ struct ContentView: View {
                                     Button("No Tags") {}.disabled(true)
                                 } else {
                                     Menu("Tags") {
-                                        ForEach(Array(item.tags)) { tag in
+                                        ForEach(Array(item.tags).sorted()) { tag in
                                             Button(tag) {
                                                 print(item.tags)
                                             }

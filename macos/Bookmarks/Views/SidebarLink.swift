@@ -20,46 +20,35 @@
 
 import SwiftUI
 
-enum BookmarksSection {
-    case all
-    case untagged
-    case favorite(tag: String)
-    case tag(tag: String)
-}
+import BookmarksCore
 
-extension BookmarksSection: CustomStringConvertible, Hashable, Identifiable {
+struct SidebarLink: View {
 
-    var id: String { String(describing: self) }
+    var selection: Binding<BookmarksSection?>
+    var tag: BookmarksSection
+    var title: String
+    var systemImage: String
+    var databaseView: DatabaseView
 
-    var description: String {
-        switch self {
-        case .all:
-            return "uk.co.inseven.bookmarks.all-bookmarks"
-        case .untagged:
-            return "uk.co.inseven.bookmarks.untagged"
-        case .favorite(let tag):
-            return "uk.co.inseven.bookmarks.favorites.\(tag)"
-        case .tag(let tag):
-            return "uk.co.inseven.bookmarks.tags.\(tag)"
+    func selectionActiveBinding(_ tag: BookmarksSection) -> Binding<Bool> {
+        return Binding {
+            selection.wrappedValue == tag
+        } set: { value in
+            guard value == true else {
+                return
+            }
+            selection.wrappedValue = tag
         }
     }
 
-}
-
-extension String {
-
-    var favoriteId: BookmarksSection { .favorite(tag: self) }
-    var tagId: BookmarksSection { .tag(tag: self) }
-
-}
-
-struct FocusedMessageKey : FocusedValueKey {
-        typealias Value = Binding<BookmarksSection?>
-}
-
-extension FocusedValues {
-    var sidebarSelection: FocusedMessageKey.Value? {
-        get { self[FocusedMessageKey.self] }
-        set { self[FocusedMessageKey.self] = newValue }
+    var body: some View {
+        NavigationLink(destination: ContentView(sidebarSelection: selection, databaseView: databaseView)
+                        .navigationTitle(title),
+                       isActive: selectionActiveBinding(tag)) {
+            Label(title, systemImage: systemImage)
+        }
+        .tag(tag)  // We set a tag so the list view knows what's selected...
+        .id(tag)   // ... and an id so we can scroll to the items 🤦🏻‍♂️
     }
+
 }

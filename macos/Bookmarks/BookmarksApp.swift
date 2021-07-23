@@ -36,6 +36,9 @@ struct BookmarksApp: App {
             }
             .frameAutosaveName("Main Window")
         }
+        .commands {
+            SidebarCommands()
+        }
         SwiftUI.Settings {
             SettingsView()
         }

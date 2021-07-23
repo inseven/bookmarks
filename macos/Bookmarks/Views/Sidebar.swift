@@ -31,7 +31,23 @@ enum Tags {
     case tag(tag: String)
 }
 
-extension Tags: CustomStringConvertible, Hashable {
+
+struct FocusedMessageKey : FocusedValueKey {
+        typealias Value = Binding<Tags?>
+}
+
+
+extension FocusedValues {
+    var sidebarSelection: FocusedMessageKey.Value? {
+        get { self[FocusedMessageKey.self] }
+        set { self[FocusedMessageKey.self] = newValue }
+    }
+}
+
+// TODO: Rename this.
+extension Tags: CustomStringConvertible, Hashable, Identifiable {
+
+    var id: String { String(describing: self) }
 
     var description: String {
         switch self {
@@ -48,7 +64,52 @@ extension Tags: CustomStringConvertible, Hashable {
 
 }
 
+
+extension String {
+
+    var favoriteId: Tags { Tags.favorites(tag: self) }
+    var tagId: Tags { Tags.tag(tag: self) }
+
+}
+
+// TODO: Wrap the navigation link in something more elegant?
+
+
+struct SidebarLink: View {
+
+    @Environment(\.manager) var manager: BookmarksManager
+
+    var selection: Binding<Tags?>
+    var tag: Tags
+    var title: String
+    var systemImage: String
+    var databaseView: DatabaseView
+
+    func selectionActiveBinding(_ tag: Tags) -> Binding<Bool> {
+        return Binding {
+            selection.wrappedValue == tag
+        } set: { value in
+            guard value == true else {
+                return
+            }
+            selection.wrappedValue = tag
+        }
+    }
+
+    var body: some View {
+        NavigationLink(destination: ContentView(sidebarSelection: selection, databaseView: databaseView)
+                        .navigationTitle(title),
+                       isActive: selectionActiveBinding(.allBookmarks)) {
+            Label(title, systemImage: systemImage)
+        }
+        .tag(tag)
+    }
+
+}
+
 struct Sidebar: View {
+
+    // TOOD: Maybe the sidebar selection is an app manager thing, given it's probably top-level app state?
 
     enum SheetType {
         case rename(tag: String)
@@ -61,24 +122,43 @@ struct Sidebar: View {
     @State var selection: Tags? = .allBookmarks
     @State var sheet: SheetType? = nil
 
+    func selectionActiveBinding(_ tag: Tags) -> Binding<Bool> {
+        return Binding {
+            self.selection == tag
+        } set: { value in
+            guard value == true else {
+                return
+            }
+            self.selection = tag
+        }
+    }
+
     var body: some View {
         List(selection: $selection) {
             Section {
-                NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database))
-                                .navigationTitle("All Bookmarks")) {
-                    Label("All Bookmarks", systemImage: "bookmark")
-                }
-                .tag(Tags.allBookmarks)
-                NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database, tags: []))
-                                .navigationTitle("Untagged")) {
+                SidebarLink(selection: $selection,
+                            tag: .allBookmarks,
+                            title: "All Bookmarks",
+                            systemImage: "bookmark",
+                            databaseView: DatabaseView(database: manager.database))
+//                NavigationLink(destination: ContentView(sidebarSelection: $selection, databaseView: DatabaseView(database: manager.database))
+//                                .navigationTitle("All Bookmarks"),
+//                               isActive: selectionActiveBinding(.allBookmarks)) {
+//                    Label("All Bookmarks", systemImage: "bookmark")
+//                }
+//                .tag(Tags.allBookmarks)
+                NavigationLink(destination: ContentView(sidebarSelection: $selection, databaseView: DatabaseView(database: manager.database, tags: []))
+                                .navigationTitle("Untagged"),
+                               isActive: selectionActiveBinding(.untagged)) {
                     Label("Untagged", systemImage: "tag")
                 }
                 .tag(Tags.untagged)
             }
             Section(header: Text("Favourites")) {
-                ForEach(settings.favoriteTags.sorted()) { tag in
-                    NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database, tags: [tag]))
-                                    .navigationTitle(tag)) {
+                ForEach(settings.favoriteTags.sorted(), id: \.favoriteId) { tag in
+                    NavigationLink(destination: ContentView(sidebarSelection: $selection, databaseView: DatabaseView(database: manager.database, tags: [tag]))
+                                    .navigationTitle(tag),
+                                   isActive: selectionActiveBinding(tag.favoriteId)) {
                         Label(tag, systemImage: "tag")
                     }
                     .contextMenu(ContextMenu(menuItems: {
@@ -97,13 +177,13 @@ struct Sidebar: View {
                             }
                         }
                     }))
-                    .tag(Tags.favorites(tag: tag))
                 }
             }
             Section(header: Text("Tags")) {
-                ForEach(tagsView.tags) { tag in
-                    NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database, tags: [tag]))
-                                    .navigationTitle(tag)) {
+                ForEach(tagsView.tags, id: \.tagId) { tag in
+                    NavigationLink(destination: ContentView(sidebarSelection: $selection, databaseView: DatabaseView(database: manager.database, tags: [tag]))
+                                    .navigationTitle(tag),
+                                   isActive: selectionActiveBinding(tag.tagId)) {
                         HStack {
                             Image(systemName: "tag")
                                 .renderingMode(.template)
@@ -138,7 +218,6 @@ struct Sidebar: View {
                             }
                         }
                     }))
-                    .tag(Tags.tag(tag: tag))
                 }
             }
 
@@ -159,7 +238,7 @@ struct Sidebar: View {
             guard let selection = selection else {
                 return
             }
-            print(selection)
+            print("selection = \(selection)")
         })
     }
 }

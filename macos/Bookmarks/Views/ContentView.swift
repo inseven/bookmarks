@@ -26,6 +26,8 @@ import Interact
 
 struct ContentView: View {
 
+    @Binding var sidebarSelection: Tags?
+
     @Environment(\.manager) var manager: BookmarksManager
     @StateObject var databaseView: DatabaseView
 
@@ -88,7 +90,7 @@ struct ContentView: View {
                                     Menu("Tags") {
                                         ForEach(Array(item.tags).sorted()) { tag in
                                             Button(tag) {
-                                                print(item.tags)
+                                                sidebarSelection = tag.tagId
                                             }
                                         }
                                     }

@@ -86,7 +86,7 @@ struct Sidebar: View {
                             settings.favoriteTags = settings.favoriteTags.filter { $0 != tag }
                         }
                         Divider()
-                        Button("View on Pinboard") {
+                        Button("Edit on Pinboard") {
                             do {
                                 guard let user = manager.user else {
                                     return
@@ -112,17 +112,22 @@ struct Sidebar: View {
                         }
                     }
                     .contextMenu(ContextMenu(menuItems: {
+                        Button("Rename") {
+                            self.sheet = .rename(tag: tag)
+                        }
+                        Button("Delete") {
+                            self.manager.pinboard.tags_delete(tag) { _ in
+                                self.manager.updater.start()
+                            }
+                        }
+                        Divider()
                         Button("Add to Favourites") {
                             var favoriteTags = settings.favoriteTags
                             favoriteTags.append(tag)
                             settings.favoriteTags = favoriteTags
                         }
                         Divider()
-                        Button("Rename tag") {
-                            self.sheet = .rename(tag: tag)
-                        }
-                        Divider()
-                        Button("View on Pinboard") {
+                        Button("Edit on Pinboard") {
                             do {
                                 guard let user = manager.user else {
                                     return

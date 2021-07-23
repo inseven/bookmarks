@@ -46,7 +46,6 @@ final public class Settings: ObservableObject {
                               forKey: SettingsKey.maximumConcurrentThumbnailDownloads.rawValue) }
     }
 
-    // TODO: Should this be a set??
     @Published public var favoriteTags: [String] {
         didSet { defaults.set(favoriteTags,
                               forKey: SettingsKey.favoriteTags.rawValue) }

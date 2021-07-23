@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-// TODO: Fail if the version is migrated too high!
+
 
 import Foundation
 import SwiftUI
@@ -28,32 +28,6 @@ import SQLite
 public protocol DatabaseObserver {
     var id: UUID { get }
     func databaseDidUpdate(database: Database)
-}
-
-extension String {
-
-    func wrap<T>(_ expression: Expressible) -> Expression<T> {
-        return Expression("\(self)(\(expression.expression.template))", expression.expression.bindings)
-    }
-
-//    func join(_ expressions: [Expressible]) -> Expressible {
-//        var (template, bindings) = ([String](), [Binding?]())
-//        for expressible in expressions {
-//            let expression = expressible.expression
-//            template.append(expression.template)
-//            bindings.append(contentsOf: expression.bindings)
-//        }
-//        return Expression<Void>(template.joined(separator: self), bindings)
-//    }
-//
-//    func infix<T>(_ lhs: Expressible, _ rhs: Expressible, wrap: Bool = true) -> Expression<T> {
-//        let expression = Expression<T>(" \(self) ".join([lhs, rhs]).expression)
-//        guard wrap else {
-//            return expression
-//        }
-//        return "".wrap(expression)
-//    }
-
 }
 
 extension Item {
@@ -79,20 +53,11 @@ extension Connection {
 
 }
 
-extension ExpressionType where UnderlyingType : Value, UnderlyingType.Datatype : Comparable {
-
-    // TODO: Perhaps this shouldn't be optional?
-    public var groupConcat: Expression<UnderlyingType?> {
-        return "group_concat".wrap(self)
-    }
-
-}
-
 extension Statement.Element {
 
     func string(_ index: Int) throws -> String {
         guard let value = self[index] as? String else {
-            throw BookmarksError.corrupt // TODO: Is this right?
+            throw BookmarksError.corrupt
         }
         return value
     }
@@ -151,54 +116,11 @@ public class Database {
     static var migrations: [Int32:(Connection) throws -> Void] = [
         1: { _ in },
         2: { _ in },
-        3: { db in
-            print("creating items table...")
-            try db.run(Schema.items.create(ifNotExists: true) { t in
-                t.column(Schema.id, primaryKey: true)
-                t.column(Schema.identifier, unique: true)
-                t.column(Schema.title)
-                t.column(Schema.url, unique: true)
-                t.column(Schema.date)
-            })
-            try db.run(Schema.items.createIndex(Schema.identifier, ifNotExists: true))
-        },
-        4: { db in
-            print("creating tags table...")
-            try db.run(Schema.tags.create { t in
-                t.column(Schema.id, primaryKey: true)
-                t.column(Schema.name, unique: true)
-            })
-        },
-        5: { db in
-            print("creating items_to_tags table...")
-            try db.run(Schema.items_to_tags.create { t in
-                t.column(Schema.id, primaryKey: true)
-                t.column(Schema.item_id)
-                t.column(Schema.tag_id)
-                t.unique(Schema.item_id, Schema.tag_id)
-            })
-        },
-        6: { db in
-            print("adding foreign key constraints to items_t_tags table...")
-            try db.run(Schema.items_to_tags.drop())
-            try db.run(Schema.items_to_tags.create { t in
-                t.column(Schema.id, primaryKey: true)
-                t.column(Schema.item_id)
-                t.column(Schema.tag_id)
-                t.unique(Schema.item_id, Schema.tag_id)
-                t.foreignKey(Schema.item_id, references: Schema.items, Schema.id, delete: .cascade)
-                t.foreignKey(Schema.tag_id, references: Schema.tags, Schema.id, delete: .cascade)
-            })
-        },
-        7: { db in
-            print("recreate the tags table ignoring case")
-            try db.run(Schema.items_to_tags.delete())
-            try db.run(Schema.tags.drop())
-            try db.run(Schema.tags.create { t in
-                t.column(Schema.id, primaryKey: true)
-                t.column(Schema.name, unique: true, collate: .nocase)
-            })
-        },
+        3: { db in },
+        4: { db in },
+        5: { db in },
+        6: { db in },
+        7: { db in },
         8: { db in },
         9: { db in
 
@@ -281,7 +203,6 @@ public class Database {
     }
 
     fileprivate func syncQueue_migrate() throws {
-        // TODO: Support empty migrations
         dispatchPrecondition(condition: .onQueue(syncQueue))
         try db.transaction {
             let currentVersion = db.userVersion
@@ -472,7 +393,6 @@ public class Database {
     public func syncQueue_items(filter: String? = nil, tags: [String]? = nil) throws -> [Item] {
         dispatchPrecondition(condition: .onQueue(syncQueue))
 
-
         var whereClause = "1"
 
         if let filter = filter {
@@ -533,9 +453,6 @@ public class Database {
             ORDER BY
                 date DESC
             """
-
-        // TODO: Is the group by necessary?
-
 
         let statement = try db.prepare(selectQuery)
         let items = try statement.map { row -> Item in

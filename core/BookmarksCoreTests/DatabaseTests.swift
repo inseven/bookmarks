@@ -25,7 +25,6 @@ import XCTest
 
 extension Item {
 
-    // TODO: Are the Pinboard item identifiers the URL, and if so should we have a convenience constructor for that?
     convenience init(title: String, url: URL, tags: Set<String>, date: Date, thumbnail: Image? = nil) {
         self.init(identifier: UUID().uuidString,
                   title: title,
@@ -104,7 +103,6 @@ class DatabaseTests: XCTestCase {
         let tags = try AsyncOperation({ database.tags(completion: $0) }).wait()
         XCTAssertEqual(tags, Set(["example", "website", "cheese"]))
 
-        // TODO: Make this a multi-item fetch?
         let fetchedItem1 = try AsyncOperation({ database.item(identifier: item1.identifier, completion: $0) }).wait()
         XCTAssertEqual(fetchedItem1, item1)
         let fetchedItem2 = try AsyncOperation({ database.item(identifier: item2.identifier, completion: $0) }).wait()
@@ -133,7 +131,6 @@ class DatabaseTests: XCTestCase {
     }
 
     func testItemDeletion() throws {
-        // TODO: This test is actually broken.
         let database = try Database(path: temporaryDatabaseUrl)
 
         let item1 = Item(identifier: UUID().uuidString,
@@ -154,8 +151,6 @@ class DatabaseTests: XCTestCase {
         XCTAssertEqual(try database.tags(), Set(["website", "cheese"]))
         XCTAssertEqual(try database.items(), [item2])
     }
-
-    // TODO: Test item update?
 
     func testItemUpdateCleansUpTags() throws {
         let database = try Database(path: temporaryDatabaseUrl)
@@ -210,8 +205,6 @@ class DatabaseTests: XCTestCase {
         XCTAssertEqual(try database.items(filter: "Fromage CHEESE"), [item3])
     }
 
-    // TODO: Test fetching with no tags.
-
     func testItemFilterWithTags() throws {
         let database = try Database(path: temporaryDatabaseUrl)
 
@@ -239,8 +232,32 @@ class DatabaseTests: XCTestCase {
         XCTAssertEqual(try database.items(filter: "strawberries", tags: ["cheese"]), [item3])
     }
 
-    // TODO: Delete tags.
+    func testItemFilterEmptyTags() throws {
+        let database = try Database(path: temporaryDatabaseUrl)
 
-    // TODO: Lowercase tags
+        let item1 = Item(title: "Example",
+                         url: URL(string: "https://example.com")!,
+                         tags: [],
+                         date: Date(timeIntervalSince1970: 0))
+
+        let item2 = Item(title: "Cheese",
+                         url: URL(string: "https://blue.com")!,
+                         tags: ["cheese", "website"],
+                         date: Date(timeIntervalSince1970: 10))
+
+        let item3 = Item(title: "Fromage and Cheese",
+                         url: URL(string: "https://fruit.co.uk")!,
+                         tags: [],
+                         date: Date(timeIntervalSince1970: 20))
+
+        try database.insertOrUpdate([item1, item2, item3])
+
+        XCTAssertEqual(try database.items(tags: []), [item3, item1])
+        XCTAssertEqual(try database.items(filter: "co", tags: []), [item3, item1])
+        XCTAssertEqual(try database.items(filter: "com", tags: []), [item1])
+    }
+
+    // TODO: Delete tags.
+    // TODO: Check case sensitivity when selecting tags.\
 
 }

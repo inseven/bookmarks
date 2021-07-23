@@ -472,11 +472,13 @@ public class Database {
     public func syncQueue_items(filter: String? = nil, tags: [String]? = nil) throws -> [Item] {
         dispatchPrecondition(condition: .onQueue(syncQueue))
 
+
         var whereClause = "1"
 
         if let filter = filter {
+            let tagsColumn = Expression<String>("tags")
             let filters = filter.tokens.map {
-                Schema.title.like("%\($0)%") || Schema.url.like("%\($0)%") || Schema.name.like("%\($0)%")
+                Schema.title.like("%\($0)%") || Schema.url.like("%\($0)%") || tagsColumn.like("%\($0)%")
             }
             whereClause = whereClause && filters.reduce(Expression(value: true)) { $0 && $1 }.asSQL()
         }
@@ -507,24 +509,33 @@ public class Database {
                 identifier,
                 title,
                 url,
-                GROUP_CONCAT(name),
+                tags,
                 date
             FROM
                 items
             LEFT JOIN
-                items_to_tags
+                (
+                    SELECT
+                        item_id,
+                        GROUP_CONCAT(tags.name) AS tags
+                    FROM
+                        items_to_tags
+                    INNER JOIN
+                        tags
+                    ON
+                        tags.id == items_to_tags.tag_id
+                    GROUP BY
+                        item_id
+                ) a
             ON
-                items.id = items_to_tags.item_id
-            LEFT JOIN
-                tags
-            ON
-                items_to_tags.tag_id = tags.id
+                items.id == item_id
             WHERE \(whereClause)
-            GROUP BY
-                identifier
             ORDER BY
                 date DESC
             """
+
+        // TODO: Is the group by necessary?
+
 
         let statement = try db.prepare(selectQuery)
         let items = try statement.map { row -> Item in

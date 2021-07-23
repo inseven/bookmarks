@@ -77,8 +77,6 @@ extension String {
 
 struct SidebarLink: View {
 
-    @Environment(\.manager) var manager: BookmarksManager
-
     var selection: Binding<Tags?>
     var tag: Tags
     var title: String
@@ -99,7 +97,7 @@ struct SidebarLink: View {
     var body: some View {
         NavigationLink(destination: ContentView(sidebarSelection: selection, databaseView: databaseView)
                         .navigationTitle(title),
-                       isActive: selectionActiveBinding(.allBookmarks)) {
+                       isActive: selectionActiveBinding(tag)) {
             Label(title, systemImage: systemImage)
         }
         .tag(tag)
@@ -136,88 +134,83 @@ struct Sidebar: View {
     var body: some View {
         List(selection: $selection) {
             Section {
+
                 SidebarLink(selection: $selection,
                             tag: .allBookmarks,
                             title: "All Bookmarks",
                             systemImage: "bookmark",
                             databaseView: DatabaseView(database: manager.database))
-//                NavigationLink(destination: ContentView(sidebarSelection: $selection, databaseView: DatabaseView(database: manager.database))
-//                                .navigationTitle("All Bookmarks"),
-//                               isActive: selectionActiveBinding(.allBookmarks)) {
-//                    Label("All Bookmarks", systemImage: "bookmark")
-//                }
-//                .tag(Tags.allBookmarks)
-                NavigationLink(destination: ContentView(sidebarSelection: $selection, databaseView: DatabaseView(database: manager.database, tags: []))
-                                .navigationTitle("Untagged"),
-                               isActive: selectionActiveBinding(.untagged)) {
-                    Label("Untagged", systemImage: "tag")
-                }
-                .tag(Tags.untagged)
+
+                SidebarLink(selection: $selection,
+                            tag: .untagged,
+                            title: "Untagged",
+                            systemImage: "tag",
+                            databaseView: DatabaseView(database: manager.database))
+
             }
             Section(header: Text("Favourites")) {
                 ForEach(settings.favoriteTags.sorted(), id: \.favoriteId) { tag in
-                    NavigationLink(destination: ContentView(sidebarSelection: $selection, databaseView: DatabaseView(database: manager.database, tags: [tag]))
-                                    .navigationTitle(tag),
-                                   isActive: selectionActiveBinding(tag.favoriteId)) {
-                        Label(tag, systemImage: "tag")
-                    }
-                    .contextMenu(ContextMenu(menuItems: {
-                        Button("Remove from Favourites") {
-                            settings.favoriteTags = settings.favoriteTags.filter { $0 != tag }
-                        }
-                        Divider()
-                        Button("Edit on Pinboard") {
-                            do {
-                                guard let user = manager.user else {
-                                    return
-                                }
-                                NSWorkspace.shared.open(try tag.pinboardUrl(for: user))
-                            } catch {
-                                print("Failed to open on Pinboard error \(error)")
+
+                    SidebarLink(selection: $selection,
+                                tag: tag.favoriteId,
+                                title: tag,
+                                systemImage: "tag",
+                                databaseView: DatabaseView(database: manager.database, tags: [tag]))
+                        .contextMenu(ContextMenu(menuItems: {
+                            Button("Remove from Favourites") {
+                                settings.favoriteTags = settings.favoriteTags.filter { $0 != tag }
                             }
-                        }
-                    }))
+                            Divider()
+                            Button("Edit on Pinboard") {
+                                do {
+                                    guard let user = manager.user else {
+                                        return
+                                    }
+                                    NSWorkspace.shared.open(try tag.pinboardUrl(for: user))
+                                } catch {
+                                    print("Failed to open on Pinboard error \(error)")
+                                }
+                            }
+                        }))
+
                 }
             }
             Section(header: Text("Tags")) {
                 ForEach(tagsView.tags, id: \.tagId) { tag in
-                    NavigationLink(destination: ContentView(sidebarSelection: $selection, databaseView: DatabaseView(database: manager.database, tags: [tag]))
-                                    .navigationTitle(tag),
-                                   isActive: selectionActiveBinding(tag.tagId)) {
-                        HStack {
-                            Image(systemName: "tag")
-                                .renderingMode(.template)
-                                .foregroundColor(.secondary)
-                            Text(tag)
-                        }
-                    }
-                    .contextMenu(ContextMenu(menuItems: {
-                        Button("Rename") {
-                            self.sheet = .rename(tag: tag)
-                        }
-                        Button("Delete") {
-                            self.manager.pinboard.tags_delete(tag) { _ in
-                                self.manager.updater.start()
+
+                    SidebarLink(selection: $selection,
+                                tag: tag.tagId,
+                                title: tag,
+                                systemImage: "tag",
+                                databaseView: DatabaseView(database: manager.database, tags: [tag]))
+                        .contextMenu(ContextMenu(menuItems: {
+                            Button("Rename") {
+                                self.sheet = .rename(tag: tag)
                             }
-                        }
-                        Divider()
-                        Button("Add to Favourites") {
-                            var favoriteTags = settings.favoriteTags
-                            favoriteTags.append(tag)
-                            settings.favoriteTags = favoriteTags
-                        }
-                        Divider()
-                        Button("Edit on Pinboard") {
-                            do {
-                                guard let user = manager.user else {
-                                    return
+                            Button("Delete") {
+                                self.manager.pinboard.tags_delete(tag) { _ in
+                                    self.manager.updater.start()
                                 }
-                                NSWorkspace.shared.open(try tag.pinboardUrl(for: user))
-                            } catch {
-                                print("Failed to open on Pinboard error \(error)")
                             }
-                        }
-                    }))
+                            Divider()
+                            Button("Add to Favourites") {
+                                var favoriteTags = settings.favoriteTags
+                                favoriteTags.append(tag)
+                                settings.favoriteTags = favoriteTags
+                            }
+                            Divider()
+                            Button("Edit on Pinboard") {
+                                do {
+                                    guard let user = manager.user else {
+                                        return
+                                    }
+                                    NSWorkspace.shared.open(try tag.pinboardUrl(for: user))
+                                } catch {
+                                    print("Failed to open on Pinboard error \(error)")
+                                }
+                            }
+                        }))
+
                 }
             }
 

@@ -31,6 +31,11 @@ struct BookmarkCell: View {
     @State var image: NSImage?
     @State var publisher: AnyCancellable?
 
+    init(item: Item) {
+        self.item = item
+        _image = State(wrappedValue: manager.cache.object(forKey: item.url.absoluteString as NSString))
+    }
+
     var title: String {
         if !item.title.isEmpty {
             return item.title
@@ -56,7 +61,7 @@ struct BookmarkCell: View {
                         .frame(maxWidth: image.size.width, maxHeight: image.size.height)
                         .background(Color.white)
                         .layoutPriority(-1)
-                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.3)))
+//                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.3)))
             }
         }
         .clipped()
@@ -80,6 +85,9 @@ struct BookmarkCell: View {
         .contentShape(Rectangle())
         .cornerRadius(10)
         .onAppear {
+            guard image == nil else {
+                return
+            }
             // TODO: Determine the appropriate default size for thumbnails.
             publisher = manager.thumbnailManager.thumbnail(for: item, scale: 2)
                 .receive(on: DispatchQueue.main)
@@ -89,6 +97,7 @@ struct BookmarkCell: View {
                     }
                 }, receiveValue: { image in
                     self.image = image
+                    self.manager.cache.setObject(image, forKey: item.url.absoluteString as NSString)
                 })
         }
         .onDisappear {

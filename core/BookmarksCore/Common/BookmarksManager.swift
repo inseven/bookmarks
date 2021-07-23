@@ -41,6 +41,8 @@ public class BookmarksManager {
     public var updater: Updater
     public var pinboard: Pinboard
 
+    public var cache: NSCache = NSCache<NSString, Image>()
+
     public var database: Database
 
     public init() {
@@ -61,6 +63,10 @@ public class BookmarksManager {
                                        name: NSNotification.Name("NSApplicationDidBecomeActiveNotification"),
                                        object: nil)
         #endif
+    }
+
+    public var user: String? {
+        settings.pinboardApiKey.components(separatedBy: ":").first
     }
 
     @objc

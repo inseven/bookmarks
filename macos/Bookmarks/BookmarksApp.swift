@@ -30,7 +30,11 @@ struct BookmarksApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView(databaseView: DatabaseView(database: manager.database))
+            NavigationView {
+                Sidebar(tagsView: TagsView(database: manager.database), settings: manager.settings)
+                EmptyView()
+            }
+            .frameAutosaveName("Main Window")
         }
         SwiftUI.Settings {
             SettingsView()

@@ -20,8 +20,6 @@
 
 import Foundation
 
-// TODO: Handle HTTP error codes in the Pinboard API responses #135
-//       https://github.com/inseven/bookmarks/issues/135
 public class Pinboard {
 
     enum PinboardError: Error {
@@ -31,6 +29,7 @@ public class Pinboard {
     fileprivate enum Path: String {
         case posts_all = "posts/all"
         case posts_delete = "posts/delete"
+        case tags_rename = "tags/rename"
     }
 
     fileprivate let baseUrl = "https://api.pinboard.in/v1/"
@@ -56,10 +55,14 @@ public class Pinboard {
         return try components.asUrl()
     }
 
-    public func posts_all(completion: @escaping (Result<[Post], Error>) -> Void) {
+    // TODO: Consider using a promise for this?
+    fileprivate func fetch<T>(path: Path,
+                              parameters: [String: String] = [:],
+                              completion: @escaping (Result<T, Error>) -> Void,
+                              transform: @escaping (Data) throws -> T) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         do {
-            let url = try serviceUrl(.posts_all)
+            let url = try serviceUrl(path, parameters: parameters)
             let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
                 guard let data = data else {
                     guard let error = error else {
@@ -69,9 +72,11 @@ public class Pinboard {
                     completion(.failure(error))
                     return
                 }
+                // TODO: Handle HTTP error codes in the Pinboard API responses #135
+                //       https://github.com/inseven/bookmarks/issues/135
                 do {
-                    let posts = try JSONDecoder().decode([Post].self, from: data)
-                    completion(.success(posts))
+                    let result = try transform(data)
+                    completion(.success(result))
                 } catch {
                     completion(.failure(error))
                 }
@@ -83,28 +88,28 @@ public class Pinboard {
         }
     }
 
+    public func posts_all(completion: @escaping (Result<[Post], Error>) -> Void) {
+        self.fetch(path: .posts_all, completion: completion) { data in
+            return try JSONDecoder().decode([Post].self, from: data)
+        }
+    }
+
     public func posts_delete(url: URL, completion: @escaping (Result<Bool, Swift.Error>) -> Void) {
-        let completion = DispatchQueue.global().asyncClosure(completion)
-        do {
-            let url = try serviceUrl(.posts_delete, parameters: [
-                "url": url.absoluteString,
-            ])
-            let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-                if let data = data {
-                    let str = String(decoding: data, as: UTF8.self)
-                    print(str)
-                }
-                print(data ?? "nil")
-                if let error = error {
-                    completion(.failure(error))
-                    return
-                }
-                completion(.success(true))
-            }
-            task.resume()
-        } catch {
-            completion(.failure(error))
-            return
+        let parameters = [
+            "url": url.absoluteString,
+        ]
+        self.fetch(path: .posts_delete, parameters: parameters, completion: completion) { _ in
+            return true
+        }
+    }
+
+    public func tags_rename(_ old: String, to new: String, completion: @escaping (Result<Bool, Swift.Error>) -> Void) {
+        let parameters = [
+            "old": old,
+            "new": new,
+        ]
+        self.fetch(path: .tags_rename, parameters: parameters, completion: completion) { _ in
+            return true
         }
     }
 

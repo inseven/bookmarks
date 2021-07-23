@@ -24,6 +24,7 @@ public enum SettingsKey: String {
     case pinboardApiKey = "pinboard-api-key"
     case useInAppBrowser = "use-in-app-browser"
     case maximumConcurrentThumbnailDownloads = "maximum-concurrent-thumbnail-downloads"
+    case favoriteTags = "favorite-tags"
 }
 
 final public class Settings: ObservableObject {
@@ -45,11 +46,17 @@ final public class Settings: ObservableObject {
                               forKey: SettingsKey.maximumConcurrentThumbnailDownloads.rawValue) }
     }
 
+    @Published public var favoriteTags: [String] {
+        didSet { defaults.set(favoriteTags,
+                              forKey: SettingsKey.favoriteTags.rawValue) }
+    }
+
     public init() {
         let defaults = UserDefaults.standard
         pinboardApiKey = defaults.string(forKey: SettingsKey.pinboardApiKey.rawValue) ?? ""
         useInAppBrowser = defaults.bool(forKey: SettingsKey.useInAppBrowser.rawValue)
         maximumConcurrentThumbnailDownloads = defaults.integer(forKey: SettingsKey.maximumConcurrentThumbnailDownloads.rawValue)
+        favoriteTags = defaults.object(forKey: SettingsKey.favoriteTags.rawValue) as? [String] ?? []
         if maximumConcurrentThumbnailDownloads == 0 {
             maximumConcurrentThumbnailDownloads = 3
         }

@@ -31,11 +31,9 @@ public protocol DatabaseObserver {
 extension Item {
 
     convenience init(row: Row) throws {
-        let urlString = try row.get(Database.Schema.url)
-        let url = try urlString.asUrl()
         self.init(identifier: try row.get(Database.Schema.identifier),
                   title: try row.get(Database.Schema.title),
-                  url: url,
+                  url: try row.get(Database.Schema.url).asUrl(),
                   tags: [],
                   date: try row.get(Database.Schema.date))
     }
@@ -51,19 +49,43 @@ extension Connection {
 
 }
 
-public struct Tag: Hashable {
+extension Statement.Element {
 
-    let id: Int64
-    let name: String
-
-    init(id: Int64, name: String) {
-        self.id = id
-        self.name = name
+    func string(_ index: Int) throws -> String {
+        guard let value = self[index] as? String else {
+            throw BookmarksError.corrupt
+        }
+        return value
     }
 
-    init(row: Row) throws {
-        self.init(id: try row.get(Database.Schema.tags[Database.Schema.id]),
-                  name: try row.get(Database.Schema.name))
+    func url(_ index: Int) throws -> URL {
+        try string(index).asUrl()
+    }
+
+    func set(_ index: Int) throws -> Set<String> {
+        guard let value = self[index] as? String? else {
+            throw BookmarksError.corrupt
+        }
+        guard let safeValue = value else {
+            return Set()
+        }
+        return Set(safeValue.components(separatedBy: ","))
+    }
+
+    func date(_ index: Int) throws -> Date {
+        Date.fromDatatypeValue(try string(index))
+    }
+
+}
+
+extension String {
+
+    func and(_ statement: String) -> String {
+        return "(\(self)) AND (\(statement))"
+    }
+
+    static func &&(lhs: String, rhs: String) -> String {
+        return lhs.and(rhs)
     }
 
 }
@@ -90,8 +112,24 @@ public class Database {
     static var migrations: [Int32:(Connection) throws -> Void] = [
         1: { _ in },
         2: { _ in },
-        3: { db in
-            print("creating items table...")
+        3: { db in },
+        4: { db in },
+        5: { db in },
+        6: { db in },
+        7: { db in },
+        8: { db in },
+        9: { db in
+
+            // Since there's no truly persistent information in the database up to this point, it's safe to entirely
+            // delete and recreate the database. It also has the happy side effect that it brings the base schema into
+            // one common place to make it easier to read.
+
+            // Clean up the existing tables.
+            try db.run(Schema.items.drop(ifExists: true))
+            try db.run(Schema.items_to_tags.drop(ifExists: true))
+            try db.run(Schema.tags.drop(ifExists: true))
+
+            print("create the items table...")
             try db.run(Schema.items.create(ifNotExists: true) { t in
                 t.column(Schema.id, primaryKey: true)
                 t.column(Schema.identifier, unique: true)
@@ -100,26 +138,14 @@ public class Database {
                 t.column(Schema.date)
             })
             try db.run(Schema.items.createIndex(Schema.identifier, ifNotExists: true))
-        },
-        4: { db in
-            print("creating tags table...")
+
+            print("create the tags table...")
             try db.run(Schema.tags.create { t in
                 t.column(Schema.id, primaryKey: true)
-                t.column(Schema.name, unique: true)
+                t.column(Schema.name, unique: true, collate: .nocase)
             })
-        },
-        5: { db in
-            print("creating items_to_tags table...")
-            try db.run(Schema.items_to_tags.create { t in
-                t.column(Schema.id, primaryKey: true)
-                t.column(Schema.item_id)
-                t.column(Schema.tag_id)
-                t.unique(Schema.item_id, Schema.tag_id)
-            })
-        },
-        6: { db in
-            print("adding foreign key constraints to items_t_tags table...")
-            try db.run(Schema.items_to_tags.drop())
+
+            print("create the items_to_tags table...")
             try db.run(Schema.items_to_tags.create { t in
                 t.column(Schema.id, primaryKey: true)
                 t.column(Schema.item_id)
@@ -128,7 +154,8 @@ public class Database {
                 t.foreignKey(Schema.item_id, references: Schema.items, Schema.id, delete: .cascade)
                 t.foreignKey(Schema.tag_id, references: Schema.tags, Schema.id, delete: .cascade)
             })
-        }
+
+        },
     ]
 
     static var schemaVersion: Int32 = Array(migrations.keys).max() ?? 0
@@ -153,6 +180,7 @@ public class Database {
         self.db = try Connection(path.path)
         try syncQueue.sync {
             try self.syncQueue_migrate()
+            try self.syncQueue_enableForeignKeys()
         }
     }
 
@@ -170,7 +198,7 @@ public class Database {
         }
     }
 
-    func syncQueue_migrate() throws {
+    fileprivate func syncQueue_migrate() throws {
         dispatchPrecondition(condition: .onQueue(syncQueue))
         try db.transaction {
             let currentVersion = db.userVersion
@@ -190,7 +218,12 @@ public class Database {
         }
     }
 
-    func syncQueue_notifyObservers() {
+    fileprivate func syncQueue_enableForeignKeys() throws {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
+        try db.run("PRAGMA foreign_keys = ON")
+    }
+
+    fileprivate func syncQueue_notifyObservers() {
         dispatchPrecondition(condition: .onQueue(syncQueue))
         let observers = self.observers
         DispatchQueue.global(qos: .background).async {
@@ -200,7 +233,7 @@ public class Database {
         }
     }
 
-    func syncQueue_item(identifier: String) throws -> Item {
+    fileprivate func syncQueue_item(identifier: String) throws -> Item {
         let run = try db.prepare(Schema.items.filter(Schema.identifier == identifier).limit(1)).map(Item.init)
         guard let result = run.first else {
             throw BookmarksError.itemNotFound(identifier: identifier)
@@ -209,24 +242,23 @@ public class Database {
         return Item(identifier: result.identifier,
                     title: result.title,
                     url: result.url,
-                    tags: Set(tags.map { $0.name }),
+                    tags: Set(tags),
                     date: result.date)
     }
 
-    func syncQueue_fetchOrInsertTag(name: String) throws -> Tag {
-        if let tag = try? syncQueue_tag(name: name) {
-            return tag
+    fileprivate func syncQueue_fetchOrInsertTag(name: String) throws -> Int64 {
+        if let id = try? syncQueue_tag(name: name) {
+            return id
         }
         let id = try db.run(Schema.tags.insert(
             Schema.name <- name
         ))
-        return Tag(id: id, name: name)
+        return id
     }
 
-    func syncQueue_tag(name: String) throws -> Tag {
+    fileprivate func syncQueue_tag(name: String) throws -> Int64 {
         let results = try db.prepare(Schema.tags.filter(Schema.name == name).limit(1)).map { row in
-            Tag(id: try row.get(Schema.id),
-                name: try row.get(Schema.name))
+            try row.get(Schema.id)
         }
         guard let result = results.first else {
             throw BookmarksError.tagNotFound(name: name)
@@ -234,21 +266,23 @@ public class Database {
         return result
     }
 
-    func syncQueue_tags(itemIdentifier: String) throws -> Set<Tag> {
+    fileprivate func syncQueue_tags(itemIdentifier: String) throws -> Set<String> {
         Set(try self.db.prepare(Schema.items_to_tags
                                     .join(Schema.items, on: Schema.items_to_tags[Schema.item_id] == Schema.items[Schema.id])
                                     .join(Schema.tags, on: Schema.items_to_tags[Schema.tag_id] == Schema.tags[Schema.id])
                                     .filter(Schema.identifier == itemIdentifier))
-                .map(Tag.init))
+                .map { row -> String in
+                    try row.get(Schema.tags[Schema.name])
+                })
     }
 
-    public func tags(completion: @escaping (Swift.Result<Set<Tag>, Error>) -> Void) {
+    public func tags(completion: @escaping (Swift.Result<Set<String>, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
+            let lowercaseName = Schema.name.lowercaseString
             let result = Swift.Result {
-                Set(try self.db.prepare(Schema.tags).map { row in
-                    Tag(id: try row.get(Schema.id),
-                        name: try row.get(Schema.name))
+                Set(try self.db.prepare(Schema.tags.select(lowercaseName)).map { row in
+                    try row.get(lowercaseName)
                 })
             }
             completion(result)
@@ -269,7 +303,7 @@ public class Database {
         }
     }
 
-    func syncQueue_insertOrReplace(item: Item) throws {
+    fileprivate func syncQueue_insertOrReplace(item: Item) throws {
         let tags = try item.tags.map { try syncQueue_fetchOrInsertTag(name: $0) }
         let itemId = try self.db.run(
             Schema.items.insert(or: .replace,
@@ -278,12 +312,13 @@ public class Database {
                                 Schema.url <- item.url.absoluteString,
                                 Schema.date <- item.date
             ))
-        for tag in tags {
+        for tag_id in tags {
             _ = try self.db.run(
                 Schema.items_to_tags.insert(or: .replace,
                                             Schema.item_id <- itemId,
-                                            Schema.tag_id <- tag.id))
+                                            Schema.tag_id <- tag_id))
         }
+        try syncQueue_pruneTags()
     }
 
     public func insertOrUpdate(_ item: Item, completion: @escaping (Swift.Result<Item, Error>) -> Void) {
@@ -314,24 +349,80 @@ public class Database {
         }
     }
 
+    fileprivate func syncQueue_pruneTags() throws {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
+        try self.db.run("""
+            DELETE
+            FROM
+                tags
+            WHERE
+                id NOT IN (
+                    SELECT
+                        tag_id
+                    FROM
+                        items_to_tags
+                )
+            """)
+    }
+
     // TODO: Clean up database tags when the last item is removed #141
     //       https://github.com/inseven/bookmarks/issues/141
     public func delete(identifier: String, completion: @escaping (Swift.Result<Int, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
-            let result = Swift.Result {
-                try self.db.run(Schema.items.filter(Schema.identifier == identifier).delete())
+            do {
+                try self.db.transaction {
+                    let result = Swift.Result { () -> Int in
+                        let count = try self.db.run(Schema.items.filter(Schema.identifier == identifier).delete())
+                        try self.syncQueue_pruneTags()
+                        return count
+                    }
+                    self.syncQueue_notifyObservers()
+                    completion(result)
+                }
+            } catch {
+                completion(.failure(error))
             }
-            self.syncQueue_notifyObservers()
-            completion(result)
         }
     }
 
-    public func rawItems(filter: String? = nil) throws -> [Item] {
+    public func syncQueue_items(filter: String? = nil, tags: [String]? = nil) throws -> [Item] {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
 
-        var query = """
+        var whereClause = "1"
+
+        if let filter = filter {
+            let tagsColumn = Expression<String>("tags")
+            let filters = filter.tokens.map {
+                Schema.title.like("%\($0)%") || Schema.url.like("%\($0)%") || tagsColumn.like("%\($0)%")
+            }
+            whereClause = whereClause && filters.reduce(Expression(value: true)) { $0 && $1 }.asSQL()
+        }
+
+        if let tags = tags {
+            if tags.isEmpty {
+                whereClause = whereClause && "items.id NOT IN (SELECT item_id FROM items_to_tags)"
+            } else {
+                let tagsFilter = tags.map { Schema.name.lowercaseString == $0.lowercased() }.reduce(Expression(value: true)) { $0 && $1 }
+                let tagSubselect = """
+                    SELECT
+                        item_id
+                    FROM
+                        items_to_tags
+                    JOIN
+                        tags
+                    ON
+                        items_to_tags.tag_id = tags.id
+                    WHERE
+                        \(tagsFilter.asSQL())
+                    """
+                whereClause = whereClause && "items.id IN (\(tagSubselect))"
+            }
+        }
+
+        let selectQuery = """
             SELECT
-                items.identifier,
+                identifier,
                 title,
                 url,
                 tags,
@@ -354,47 +445,28 @@ public class Database {
                 ) a
             ON
                 items.id == item_id
-        """
+            WHERE \(whereClause)
+            ORDER BY
+                date DESC
+            """
 
-        if let filter = filter {
-            let tags = Expression<String>("tags")
-            let filters = filter.tokens.map {
-                Schema.title.like("%\($0)%") || Schema.url.like("%\($0)%") || tags.like("%\($0)%")
-            }
-            let compoundFilter = filters.reduce(Expression<Bool>(value: true)) { $0 && $1 }
-            query = query + " WHERE " + compoundFilter.asSQL()
-        }
-
-        query = query + " ORDER BY date DESC"
-
-        let stmt = try db.prepare(query)
-        var items: [Item] = []
-        for row in stmt {
-            guard let identifier = row[0] as? String,
-                  let title = row[1] as? String,
-                  let urlString = row[2] as? String,
-                  let url = URL(string: urlString),
-                  let tags = row[3] as? String?,
-                  let date = row[4] as? String else {
-                throw BookmarksError.corrupt
-            }
-            let safeTags = tags?.components(separatedBy: ",") ?? []
-            let item = Item(identifier: identifier,
-                            title: title,
-                            url: url,
-                            tags: Set(safeTags),
-                            date: Date.fromDatatypeValue(date))
-            items.append(item)
+        let statement = try db.prepare(selectQuery)
+        let items = try statement.map { row -> Item in
+            return Item(identifier: try row.string(0),
+                        title: try row.string(1),
+                        url: try row.url(2),
+                        tags: try row.set(3),
+                        date: try row.date(4))
         }
 
         return items
     }
 
-    public func items(filter: String? = nil, completion: @escaping (Swift.Result<[Item], Error>) -> Void) {
+    public func items(filter: String? = nil, tags: [String]? = nil, completion: @escaping (Swift.Result<[Item], Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             let result = Swift.Result<[Item], Error> {
-                try self.rawItems(filter: filter)
+                try self.syncQueue_items(filter: filter, tags: tags)
             }
             completion(result)
         }

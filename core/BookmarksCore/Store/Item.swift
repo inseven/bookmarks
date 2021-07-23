@@ -37,7 +37,7 @@ public class Item: Equatable {
         self.identifier = identifier
         self.title = title
         self.url = url
-        self.tags = tags
+        self.tags = Set(tags.map { $0.lowercased() })
         self.date = date
         self.thumbnail = thumbnail
     }
@@ -67,7 +67,7 @@ extension Item: Identifiable {
 
 extension Item: CustomStringConvertible {
 
-    public var description: String { "\(self.url.absoluteString) (\(self.title))" }
+    public var description: String { "\(self.url.absoluteString) (title: \(self.title), tags: [\(self.tags.joined(separator: ", "))])" }
 
 }
 
@@ -85,6 +85,15 @@ extension Item {
          try "https://pinboard.in/add".asUrl().settingQueryItems([
             URLQueryItem(name: "url", value: url.absoluteString)
         ])
+    }
+
+}
+
+// TODO: Move this elsewhere.
+extension String {
+
+    public func pinboardUrl(for user: String) throws -> URL {
+        return try "https://pinboard.in/u:\(user)/t:\(self)/".asUrl()
     }
 
 }

@@ -76,7 +76,7 @@ struct Sidebar: View {
                 .tag(Tags.untagged)
             }
             Section(header: Text("Favourites")) {
-                ForEach(settings.favoriteTags) { tag in
+                ForEach(settings.favoriteTags.sorted()) { tag in
                     NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database, tags: [tag]))
                                     .navigationTitle(tag)) {
                         Label(tag, systemImage: "tag")

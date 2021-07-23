@@ -24,66 +24,22 @@ import SwiftUI
 import BookmarksCore
 import Interact
 
-enum Tags {
-    case allBookmarks
-    case untagged
-    case favorites(tag: String)
-    case tag(tag: String)
-}
-
-
-struct FocusedMessageKey : FocusedValueKey {
-        typealias Value = Binding<Tags?>
-}
-
-
-extension FocusedValues {
-    var sidebarSelection: FocusedMessageKey.Value? {
-        get { self[FocusedMessageKey.self] }
-        set { self[FocusedMessageKey.self] = newValue }
-    }
-}
-
-// TODO: Rename this.
-extension Tags: CustomStringConvertible, Hashable, Identifiable {
-
-    var id: String { String(describing: self) }
-
-    var description: String {
-        switch self {
-        case .allBookmarks:
-            return "uk.co.inseven.bookmarks.all-bookmarks"
-        case .untagged:
-            return "uk.co.inseven.bookmarks.untagged"
-        case .favorites(let tag):
-            return "uk.co.inseven.bookmarks.favorites.\(tag)"
-        case .tag(let tag):
-            return "uk.co.inseven.bookmarks.tag.\(tag)"
-        }
-    }
-
-}
-
-
 extension String {
 
-    var favoriteId: Tags { Tags.favorites(tag: self) }
-    var tagId: Tags { Tags.tag(tag: self) }
+    var favoriteId: BookmarksSection { .favorite(tag: self) }
+    var tagId: BookmarksSection { .tag(tag: self) }
 
 }
-
-// TODO: Wrap the navigation link in something more elegant?
-
 
 struct SidebarLink: View {
 
-    var selection: Binding<Tags?>
-    var tag: Tags
+    var selection: Binding<BookmarksSection?>
+    var tag: BookmarksSection
     var title: String
     var systemImage: String
     var databaseView: DatabaseView
 
-    func selectionActiveBinding(_ tag: Tags) -> Binding<Bool> {
+    func selectionActiveBinding(_ tag: BookmarksSection) -> Binding<Bool> {
         return Binding {
             selection.wrappedValue == tag
         } set: { value in
@@ -117,10 +73,10 @@ struct Sidebar: View {
     @StateObject var tagsView: TagsView
     @ObservedObject var settings: BookmarksCore.Settings
 
-    @State var selection: Tags? = .allBookmarks
+    @State var selection: BookmarksSection? = .all
     @State var sheet: SheetType? = nil
 
-    func selectionActiveBinding(_ tag: Tags) -> Binding<Bool> {
+    func selectionActiveBinding(_ tag: BookmarksSection) -> Binding<Bool> {
         return Binding {
             self.selection == tag
         } set: { value in
@@ -136,7 +92,7 @@ struct Sidebar: View {
             Section {
 
                 SidebarLink(selection: $selection,
-                            tag: .allBookmarks,
+                            tag: .all,
                             title: "All Bookmarks",
                             systemImage: "bookmark",
                             databaseView: DatabaseView(database: manager.database))
@@ -227,12 +183,6 @@ struct Sidebar: View {
         .onDisappear {
             tagsView.stop()
         }
-        .onChange(of: selection, perform: { selection in
-            guard let selection = selection else {
-                return
-            }
-            print("selection = \(selection)")
-        })
     }
 }
 

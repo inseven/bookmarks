@@ -26,7 +26,7 @@ import Interact
 
 struct ContentView: View {
 
-    @Binding var sidebarSelection: Tags?
+    @Binding var sidebarSelection: BookmarksSection?
 
     @Environment(\.manager) var manager: BookmarksManager
     @StateObject var databaseView: DatabaseView

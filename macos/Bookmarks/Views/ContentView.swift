@@ -60,6 +60,18 @@ struct ContentView: View {
                                     NSWorkspace.shared.open(item.url)
                                 }
                                 Divider()
+                                if item.tags.isEmpty {
+                                    Button("No Tags") {}.disabled(true)
+                                } else {
+                                    Menu("Tags") {
+                                        ForEach(Array(item.tags)) { tag in
+                                            Button(tag) {
+                                                print(item.tags)
+                                            }
+                                        }
+                                    }
+                                }
+                                Divider()
                                 Button("View on Internet Archive") {
                                     do {
                                         NSWorkspace.shared.open(try item.internetArchiveUrl())

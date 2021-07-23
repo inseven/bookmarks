@@ -36,6 +36,24 @@ extension String {
         return Expression("\(self)(\(expression.expression.template))", expression.expression.bindings)
     }
 
+//    func join(_ expressions: [Expressible]) -> Expressible {
+//        var (template, bindings) = ([String](), [Binding?]())
+//        for expressible in expressions {
+//            let expression = expressible.expression
+//            template.append(expression.template)
+//            bindings.append(contentsOf: expression.bindings)
+//        }
+//        return Expression<Void>(template.joined(separator: self), bindings)
+//    }
+//
+//    func infix<T>(_ lhs: Expressible, _ rhs: Expressible, wrap: Bool = true) -> Expression<T> {
+//        let expression = Expression<T>(" \(self) ".join([lhs, rhs]).expression)
+//        guard wrap else {
+//            return expression
+//        }
+//        return "".wrap(expression)
+//    }
+
 }
 
 extension Item {
@@ -63,8 +81,50 @@ extension Connection {
 
 extension ExpressionType where UnderlyingType : Value, UnderlyingType.Datatype : Comparable {
 
+    // TODO: Perhaps this shouldn't be optional?
     public var groupConcat: Expression<UnderlyingType?> {
         return "group_concat".wrap(self)
+    }
+
+}
+
+extension Statement.Element {
+
+    func string(_ index: Int) throws -> String {
+        guard let value = self[index] as? String else {
+            throw BookmarksError.corrupt // TODO: Is this right?
+        }
+        return value
+    }
+
+    func url(_ index: Int) throws -> URL {
+        try string(index).asUrl()
+    }
+
+    func set(_ index: Int) throws -> Set<String> {
+        guard let value = self[index] as? String? else {
+            throw BookmarksError.corrupt
+        }
+        guard let safeValue = value else {
+            return Set()
+        }
+        return Set(safeValue.components(separatedBy: ","))
+    }
+
+    func date(_ index: Int) throws -> Date {
+        Date.fromDatatypeValue(try string(index))
+    }
+
+}
+
+extension String {
+
+    func and(_ statement: String) -> String {
+        return "(\(self)) AND (\(statement))"
+    }
+
+    static func &&(lhs: String, rhs: String) -> String {
+        return lhs.and(rhs)
     }
 
 }
@@ -221,6 +281,7 @@ public class Database {
     }
 
     fileprivate func syncQueue_migrate() throws {
+        // TODO: Support empty migrations
         dispatchPrecondition(condition: .onQueue(syncQueue))
         try db.transaction {
             let currentVersion = db.userVersion
@@ -411,50 +472,69 @@ public class Database {
     public func syncQueue_items(filter: String? = nil, tags: [String]? = nil) throws -> [Item] {
         dispatchPrecondition(condition: .onQueue(syncQueue))
 
-        var filterExpression: Expression = Expression<Bool?>(value: true)
+        var whereClause = "1"
+
         if let filter = filter {
             let filters = filter.tokens.map {
                 Schema.title.like("%\($0)%") || Schema.url.like("%\($0)%") || Schema.name.like("%\($0)%")
             }
-            filterExpression = filters.reduce(Expression(value: true)) { $0 && $1 }
+            whereClause = whereClause && filters.reduce(Expression(value: true)) { $0 && $1 }.asSQL()
         }
 
         if let tags = tags {
             if tags.isEmpty {
-                let optionalName = Expression<String?>("name")
-                filterExpression = filterExpression && optionalName == nil
+                whereClause = whereClause && "items.id NOT IN (SELECT item_id FROM items_to_tags)"
             } else {
-                let tagExpression = tags.map { Schema.name.lowercaseString == $0.lowercased() }.reduce(Expression(value: true)) { $0 && $1 }
-                filterExpression = filterExpression && tagExpression
+                let tagsFilter = tags.map { Schema.name.lowercaseString == $0.lowercased() }.reduce(Expression(value: true)) { $0 && $1 }
+                let tagSubselect = """
+                    SELECT
+                        item_id
+                    FROM
+                        items_to_tags
+                    JOIN
+                        tags
+                    ON
+                        items_to_tags.tag_id = tags.id
+                    WHERE
+                        \(tagsFilter.asSQL())
+                    """
+                whereClause = whereClause && "items.id IN (\(tagSubselect))"
             }
         }
 
-        let tagsColumn = Schema.name.groupConcat
-        let select =
-            Schema.items
-            .join(.leftOuter,
-                  Schema.items_to_tags,
-                  on: Schema.items[Schema.id] == Schema.items_to_tags[Schema.item_id])
-            .join(.leftOuter,
-                  Schema.tags,
-                  on: Schema.items_to_tags[Schema.tag_id] == Schema.tags[Schema.id])
-            .group(Schema.identifier)
-            .select(
-                Schema.identifier,
-                Schema.title,
-                Schema.url,
-                tagsColumn.lowercaseString,
-                Schema.date)
-            .filter(filterExpression)
-            .order(Schema.date.desc)
+        let selectQuery = """
+            SELECT
+                identifier,
+                title,
+                url,
+                GROUP_CONCAT(name),
+                date
+            FROM
+                items
+            LEFT JOIN
+                items_to_tags
+            ON
+                items.id = items_to_tags.item_id
+            LEFT JOIN
+                tags
+            ON
+                items_to_tags.tag_id = tags.id
+            WHERE \(whereClause)
+            GROUP BY
+                identifier
+            ORDER BY
+                date DESC
+            """
 
-        let items = try db.prepare(select).map { row -> Item in
-            return Item(identifier: try row.get(Schema.identifier),
-                        title: try row.get(Schema.title),
-                        url: try row.get(Schema.url).asUrl(),
-                        tags: Set(),
-                        date: try row.get(Schema.date))
+        let statement = try db.prepare(selectQuery)
+        let items = try statement.map { row -> Item in
+            return Item(identifier: try row.string(0),
+                        title: try row.string(1),
+                        url: try row.url(2),
+                        tags: try row.set(3),
+                        date: try row.date(4))
         }
+
         return items
     }
 

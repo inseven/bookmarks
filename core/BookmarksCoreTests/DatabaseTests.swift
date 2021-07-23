@@ -23,33 +23,23 @@ import Foundation
 import XCTest
 @testable import BookmarksCore
 
-// TODO: Are the Pinboard item identifiers the URL, and if so should we have a convenience constructor for that?
-
 extension Item {
 
-    func removingTags() -> Item {
-        Item(identifier: identifier,
-             title: title,
-             url: url,
-             tags: Set(),
-             date: date)
+    // TODO: Are the Pinboard item identifiers the URL, and if so should we have a convenience constructor for that?
+    convenience init(title: String, url: URL, tags: Set<String>, date: Date, thumbnail: Image? = nil) {
+        self.init(identifier: UUID().uuidString,
+                  title: title,
+                  url: url,
+                  tags: tags,
+                  date: date,
+                  thumbnail: thumbnail)
     }
 
 }
-
-extension Array where Element == Item {
-
-    func removingTags() -> [Item] {
-        self.map { $0.removingTags() }
-    }
-
-}
-
 
 extension Database {
 
-    // TODO: Rename to insertOrUpdate
-    func insert(_ items: [Item]) throws {
+    func insertOrUpdate(_ items: [Item]) throws {
         for item in items {
             _ = try AsyncOperation({ self.insertOrUpdate(item, completion: $0) }).wait()
         }
@@ -61,8 +51,8 @@ extension Database {
         }
     }
 
-    func items() throws -> [Item] {
-        try AsyncOperation({ self.items(completion: $0) }).wait()
+    func items(filter: String? = nil, tags: [String]? = nil) throws -> [Item] {
+        try AsyncOperation({ self.items(filter: filter, tags: tags, completion: $0) }).wait()
     }
 
     func tags() throws -> Set<String> {
@@ -109,7 +99,7 @@ class DatabaseTests: XCTestCase {
                          tags: ["cheese", "website"],
                          date: Date(timeIntervalSince1970: 0))
 
-        try database.insert([item1, item2])
+        try database.insertOrUpdate([item1, item2])
 
         let tags = try AsyncOperation({ database.tags(completion: $0) }).wait()
         XCTAssertEqual(tags, Set(["example", "website", "cheese"]))
@@ -136,10 +126,10 @@ class DatabaseTests: XCTestCase {
                          tags: ["cheese", "website"],
                          date: Date(timeIntervalSince1970: 10))
 
-        try database.insert([item1, item2])
+        try database.insertOrUpdate([item1, item2])
 
         XCTAssertEqual(try database.tags(), Set(["example", "website", "cheese"]))
-        XCTAssertEqual(try database.items(), [item2, item1].removingTags())
+        XCTAssertEqual(try database.items(), [item2, item1])
     }
 
     func testItemDeletion() throws {
@@ -158,16 +148,14 @@ class DatabaseTests: XCTestCase {
                          tags: ["cheese", "website"],
                          date: Date(timeIntervalSince1970: 10))
 
-        try database.insert([item1, item2])
+        try database.insertOrUpdate([item1, item2])
         try database.delete([item1])
 
         XCTAssertEqual(try database.tags(), Set(["website", "cheese"]))
-        XCTAssertEqual(try database.items(), [item2].removingTags())
+        XCTAssertEqual(try database.items(), [item2])
     }
 
     // TODO: Test item update?
-
-    // TODO: Updating should also remove tags.
 
     func testItemUpdateCleansUpTags() throws {
         let database = try Database(path: temporaryDatabaseUrl)
@@ -177,7 +165,7 @@ class DatabaseTests: XCTestCase {
                         url: URL(string: "https://example.com")!,
                         tags: ["example", "website"],
                         date: Date(timeIntervalSince1970: 0))
-        try database.insert([item])
+        try database.insertOrUpdate([item])
         XCTAssertEqual(try database.tags(), Set(["example", "website"]))
 
         let updatedItem = Item(identifier: item.identifier,
@@ -185,30 +173,70 @@ class DatabaseTests: XCTestCase {
                                url: item.url,
                                tags: ["website", "cheese"],
                                date: item.date)
-        try database.insert([updatedItem])
+        try database.insertOrUpdate([updatedItem])
         XCTAssertEqual(try database.tags(), Set(["website", "cheese"]))
     }
 
     func testItemFilter() throws {
-        // TODO: Actually update this test to do the correct thing.
         let database = try Database(path: temporaryDatabaseUrl)
 
-        let item1 = Item(identifier: UUID().uuidString,
-                         title: "Example",
+        let item1 = Item(title: "Example",
                          url: URL(string: "https://example.com")!,
                          tags: ["example", "website"],
                          date: Date(timeIntervalSince1970: 0))
 
-        let item2 = Item(identifier: UUID().uuidString,
-                         title: "Cheese",
-                         url: URL(string: "https://fromage.com")!,
+        let item2 = Item(title: "Cheese",
+                         url: URL(string: "https://blue.com")!,
                          tags: ["cheese", "website"],
                          date: Date(timeIntervalSince1970: 10))
 
-        try database.insert([item1, item2])
+        let item3 = Item(title: "Fromage and Cheese",
+                         url: URL(string: "https://fruit.co.uk")!,
+                         tags: ["robert", "website", "strawberries"],
+                         date: Date(timeIntervalSince1970: 20))
 
-        XCTAssertEqual(try database.tags(), Set(["example", "website", "cheese"]))
-        XCTAssertEqual(try database.items(), [item2, item1].removingTags())
+        try database.insertOrUpdate([item1, item2, item3])
+
+        XCTAssertEqual(try database.items(filter: ".com"), [item2, item1])
+        XCTAssertEqual(try database.items(filter: ".COM"), [item2, item1])
+        XCTAssertEqual(try database.items(filter: "example.COM"), [item1])
+        XCTAssertEqual(try database.items(filter: "example.com"), [item1])
+        XCTAssertEqual(try database.items(filter: "Example"), [item1])
+        XCTAssertEqual(try database.items(filter: "EXaMPle"), [item1])
+        XCTAssertEqual(try database.items(filter: "amp"), [item1])
+        XCTAssertEqual(try database.items(filter: "Cheese"), [item3, item2])
+        XCTAssertEqual(try database.items(filter: "Cheese co"), [item3, item2])
+        XCTAssertEqual(try database.items(filter: "Cheese com"), [item2])
+        XCTAssertEqual(try database.items(filter: "Fromage CHEESE"), [item3])
+    }
+
+    // TODO: Test fetching with no tags.
+
+    func testItemFilterWithTags() throws {
+        let database = try Database(path: temporaryDatabaseUrl)
+
+        let item1 = Item(title: "Example",
+                         url: URL(string: "https://example.com")!,
+                         tags: ["example", "website"],
+                         date: Date(timeIntervalSince1970: 0))
+
+        let item2 = Item(title: "Cheese",
+                         url: URL(string: "https://blue.com")!,
+                         tags: ["cheese", "website"],
+                         date: Date(timeIntervalSince1970: 10))
+
+        let item3 = Item(title: "Fromage and Cheese",
+                         url: URL(string: "https://fruit.co.uk")!,
+                         tags: ["robert", "website", "strawberries", "cheese"],
+                         date: Date(timeIntervalSince1970: 20))
+
+        try database.insertOrUpdate([item1, item2, item3])
+
+        XCTAssertEqual(try database.items(filter: "Cheese", tags: ["cheese"]), [item3, item2])
+        XCTAssertEqual(try database.items(filter: "Cheese co", tags: ["cheese"]), [item3, item2])
+        XCTAssertEqual(try database.items(filter: "Cheese com", tags: ["cheese"]), [item2])
+        XCTAssertEqual(try database.items(filter: "Fromage CHEESE", tags: ["cheese"]), [item3])
+        XCTAssertEqual(try database.items(filter: "strawberries", tags: ["cheese"]), [item3])
     }
 
     // TODO: Delete tags.

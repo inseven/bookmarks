@@ -41,6 +41,8 @@ public class BookmarksManager {
     public var updater: Updater
     public var pinboard: Pinboard
 
+    public var cache: NSCache = NSCache<NSString, NSImage>()
+
     public var database: Database
 
     public init() {

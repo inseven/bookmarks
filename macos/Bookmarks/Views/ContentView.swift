@@ -59,32 +59,11 @@ struct ContentView: View {
                                 Button("Open") {
                                     NSWorkspace.shared.open(item.url)
                                 }
-                                Divider()
-                                if item.tags.isEmpty {
-                                    Button("No Tags") {}.disabled(true)
-                                } else {
-                                    Menu("Tags") {
-                                        ForEach(Array(item.tags).sorted()) { tag in
-                                            Button(tag) {
-                                                print(item.tags)
-                                            }
-                                        }
-                                    }
-                                }
-                                Divider()
-                                Button("View on Internet Archive") {
+                                Button("Open on Internet Archive") {
                                     do {
                                         NSWorkspace.shared.open(try item.internetArchiveUrl())
                                     } catch {
                                         print("Failed to open on the Internet Archive with error \(error)")
-                                    }
-                                }
-                                Divider()
-                                Button("Edit on Pinboard") {
-                                    do {
-                                        NSWorkspace.shared.open(try item.pinboardUrl())
-                                    } catch {
-                                        print("Failed to edit with error \(error)")
                                     }
                                 }
                                 Divider()
@@ -100,6 +79,26 @@ struct ContentView: View {
                                         case .failure(let error):
                                             print("Failed to delete bookmark with error \(error)")
                                         }
+                                    }
+                                }
+                                Divider()
+                                if item.tags.isEmpty {
+                                    Button("No Tags") {}.disabled(true)
+                                } else {
+                                    Menu("Tags") {
+                                        ForEach(Array(item.tags).sorted()) { tag in
+                                            Button(tag) {
+                                                print(item.tags)
+                                            }
+                                        }
+                                    }
+                                }
+                                Divider()
+                                Button("Edit on Pinboard") {
+                                    do {
+                                        NSWorkspace.shared.open(try item.pinboardUrl())
+                                    } catch {
+                                        print("Failed to edit with error \(error)")
                                     }
                                 }
                             }))

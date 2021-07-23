@@ -27,14 +27,17 @@ public class Pinboard {
     }
 
     fileprivate enum Path: String {
+
         case posts_all = "posts/all"
         case posts_delete = "posts/delete"
+
+        case tags_delete = "tags/delete"
         case tags_rename = "tags/rename"
+
     }
 
     fileprivate let baseUrl = "https://api.pinboard.in/v1/"
-
-    let token: String
+    fileprivate let token: String
 
     public init(token: String) {
         self.token = token
@@ -102,6 +105,16 @@ public class Pinboard {
             return true
         }
     }
+
+    public func tags_delete(_ tag: String, completion: @escaping (Result<Bool, Swift.Error>) -> Void) {
+        let parameters = [
+            "tag": tag,
+        ]
+        self.fetch(path: .tags_delete, parameters: parameters, completion: completion) { _ in
+            return true
+        }
+    }
+
 
     public func tags_rename(_ old: String, to new: String, completion: @escaping (Result<Bool, Swift.Error>) -> Void) {
         let parameters = [

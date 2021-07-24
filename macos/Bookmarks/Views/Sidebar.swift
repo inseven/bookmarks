@@ -108,7 +108,7 @@ struct Sidebar: View {
                                 Button("Delete") {
                                     self.manager.database.delete(tag: tag, completion: { _ in })
                                     self.manager.pinboard.tags_delete(tag) { _ in
-                                        self.manager.updater.update()
+                                        self.manager.refresh()
                                     }
                                 }
                                 Divider()

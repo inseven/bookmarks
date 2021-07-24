@@ -38,7 +38,7 @@ public class BookmarksManager {
     public var thumbnailManager: ThumbnailManager
     var downloadManager: DownloadManager
     public var settings = Settings()
-    public var updater: Updater
+    fileprivate var updater: Updater
     public var pinboard: Pinboard
 
     public var cache: NSCache = NSCache<NSString, Image>()
@@ -68,6 +68,10 @@ public class BookmarksManager {
 
     public var user: String? {
         settings.pinboardApiKey.components(separatedBy: ":").first
+    }
+
+    public func refresh() {
+        self.updater.update()
     }
 
     @objc

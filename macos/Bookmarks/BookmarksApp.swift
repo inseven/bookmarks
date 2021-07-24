@@ -38,6 +38,13 @@ struct BookmarksApp: App {
         }
         .commands {
             SidebarCommands()
+            CommandGroup(after: .newItem) {
+                Divider()
+                Button("Refresh") {
+                    manager.refresh()
+                }
+                .keyboardShortcut("r", modifiers: .command)
+            }
         }
         SwiftUI.Settings {
             SettingsView()

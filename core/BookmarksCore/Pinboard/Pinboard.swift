@@ -124,7 +124,6 @@ public class Pinboard {
         }
     }
 
-
     public func tags_rename(_ old: String, to new: String, completion: @escaping (Result<Bool, Swift.Error>) -> Void) {
         let parameters = [
             "old": old,

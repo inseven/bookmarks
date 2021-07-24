@@ -71,7 +71,7 @@ public class BookmarksManager {
 
     @objc
     func nsApplicationDidBecomeActive() {
-        self.updater.start()
+        self.updater.update()
     }
 
 }

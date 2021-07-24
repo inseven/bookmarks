@@ -20,62 +20,84 @@
 
 import Foundation
 
+extension Pinboard {
+
+    func posts_update() throws -> Pinboard.Update {
+        try AsyncOperation({ self.posts_update(completion: $0) }).wait()
+    }
+
+    func posts_all() throws -> [Post] {
+        try AsyncOperation({ self.posts_all(completion: $0) }).wait()
+    }
+
+}
+
 public class Updater {
+
+    let syncQueue = DispatchQueue(label: "Updater.syncQueue")
 
     let database: Database
     let pinboard: Pinboard
+
+    var lastUpdate: Date? = nil  // Synchronized on syncQueue
 
     public init(database: Database, pinboard: Pinboard) {
         self.database = database
         self.pinboard = pinboard
     }
 
-    public func start() {
-        print("Updating bookmarks...")
-        pinboard.posts_all { [weak self] (result) in
-            switch (result) {
-            case .failure(let error):
-                print("Failed to fetch the posts with error \(error)")
-            case .success(let posts):
-                guard let self = self else {
+    public func update() {
+        syncQueue.async {
+            print("updating...")
+
+            do {
+
+                // Check to see when the bookmarks were last updated and don't update if there are no new changes.
+                let update = try self.pinboard.posts_update()
+                if let lastUpdate = self.lastUpdate,
+                   lastUpdate >= update.updateTime {
+                    print("skipping empty update")
                     return
                 }
 
-                do {
+                // Get the posts.
+                let posts = try self.pinboard.posts_all()
 
-                    // Store the seen identifiers to determine what to delete.
-                    var identifiers = Set<String>()
+                var identifiers = Set<String>()
 
-                    // Insert or update items.
-                    for post in posts {
-                        guard
-                            let url = post.href,
-                            let date = post.time else {
-                                continue
-                        }
-                        let item = Item(identifier: post.hash,
-                                        title: post.description ?? "",
-                                        url: url,
-                                        tags: Set(post.tags),
-                                        date: date)
-                        identifiers.insert(item.identifier)
-                        _ = try AsyncOperation({ self.database.insertOrUpdate(item, completion: $0) }).wait()
+                // Insert or update items.
+                for post in posts {
+                    guard
+                        let url = post.href,
+                        let date = post.time else {
+                            continue
                     }
-
-                    // Delete missing items.
-                    let allIdentifiers = try AsyncOperation(self.database.identifiers).wait()
-                    let deletedIdentifiers = Set(allIdentifiers).subtracting(identifiers)
-                    for identifier in deletedIdentifiers {
-                        let item = try AsyncOperation({ self.database.item(identifier: identifier, completion: $0) }).wait()
-                        print("deleting \(item)...")
-                        _ = try AsyncOperation({ self.database.delete(identifier: identifier, completion: $0) }).wait()
-                    }
-                    print("Complete.")
-
-                } catch {
-                    print("Failed to update items with error \(error)")
+                    let item = Item(identifier: post.hash,
+                                    title: post.description ?? "",
+                                    url: url,
+                                    tags: Set(post.tags),
+                                    date: date)
+                    identifiers.insert(item.identifier)
+                    _ = try AsyncOperation({ self.database.insertOrUpdate(item, completion: $0) }).wait()
                 }
 
+                // Delete missing items.
+                // TODO: Move the blocking database APIs into BookmarksCore #170
+                //       https://github.com/inseven/bookmarks/issues/170
+                let allIdentifiers = try AsyncOperation(self.database.identifiers).wait()
+                let deletedIdentifiers = Set(allIdentifiers).subtracting(identifiers)
+                for identifier in deletedIdentifiers {
+                    let item = try AsyncOperation({ self.database.item(identifier: identifier, completion: $0) }).wait()
+                    print("deleting \(item)...")
+                    _ = try AsyncOperation({ self.database.delete(identifier: identifier, completion: $0) }).wait()
+                }
+                print("update complete")
+
+                // Update the last update date.
+                self.lastUpdate = update.updateTime
+
+            } catch {
+                print("failed to update items with error \(error)")
             }
         }
     }

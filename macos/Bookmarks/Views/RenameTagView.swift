@@ -57,7 +57,7 @@ struct RenameTagView: View {
                                 isBusy = false
                             case .success:
                                 print("Successfully renamed tag")
-                                manager.updater.start()
+                                manager.updater.update()
                                 presentationMode.wrappedValue.dismiss()
                             }
                         }

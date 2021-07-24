@@ -78,7 +78,7 @@ struct ContentView: View {
                                     manager.pinboard.posts_delete(url: item.url) { result in
                                         switch result {
                                         case .success:
-                                            manager.updater.start()
+                                            manager.updater.update()
                                         case .failure(let error):
                                             print("Failed to delete bookmark with error \(error)")
                                         }
@@ -124,7 +124,7 @@ struct ContentView: View {
         .toolbar {
             ToolbarItem {
                 Button {
-                    manager.updater.start()
+                    manager.updater.update()
                 } label: {
                     SwiftUI.Image(systemName: "arrow.clockwise")
                 }

@@ -35,7 +35,7 @@ struct BookmarksApp: App {
         .onChange(of: phase) { phase in
             switch phase {
             case .active:
-                manager.updater.update()
+                manager.refresh()
             case .background:
                 break
             case .inactive:

@@ -20,50 +20,54 @@
 
 import Foundation
 
-public struct Post: Codable {
+extension Pinboard {
 
-    public let description: String?
-    public let extended: String
-    public let hash: String
-    public let href: URL?
-    public let meta: String
-    public let shared: Bool
-    public let tags: [String]
-    public let time: Date?
-    public let toRead: Bool
+    public struct Post: Codable {
 
-    public enum CodingKeys: String, CodingKey {
-        case description = "description"
-        case extended = "extended"
-        case hash = "hash"
-        case href = "href"
-        case meta = "meta"
-        case shared = "shared"
-        case tags = "tags"
-        case time = "time"
-        case toRead = "toread"
-    }
+        public let description: String?
+        public let extended: String
+        public let hash: String
+        public let href: URL?
+        public let meta: String
+        public let shared: Bool
+        public let tags: [String]
+        public let time: Date?
+        public let toRead: Bool
 
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        // Unfortunately, the Pinboard API uses 0 as a placeholder for a missing description, so we need to do a little
-        // dance here to keep everything happy.
-        do {
-            description = try container.decode(String.self, forKey: .description)
-        } catch DecodingError.typeMismatch {
-            // We double check that we can parse the key as a boolean to ensure the structure is as we expect.
-            let _ = try container.decode(Bool.self, forKey: .description)
-            description = nil
+        public enum CodingKeys: String, CodingKey {
+            case description = "description"
+            case extended = "extended"
+            case hash = "hash"
+            case href = "href"
+            case meta = "meta"
+            case shared = "shared"
+            case tags = "tags"
+            case time = "time"
+            case toRead = "toread"
         }
 
-        extended = try container.decode(String.self, forKey: .extended)
-        href = URL(string: try container.decode(String.self, forKey: .href))
-        hash = try container.decode(String.self, forKey: .hash)
-        meta = try container.decode(String.self, forKey: .meta)
-        shared = try container.decode(Boolean.self, forKey: .shared) == .yes ? true : false
-        tags = try container.decode(String.self, forKey: .tags).split(separator: " ").map(String.init)
-        time = ISO8601DateFormatter.init().date(from: try container.decode(String.self, forKey: .time))
-        toRead = try container.decode(Boolean.self, forKey: .toRead) == .yes ? true : false
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+
+            // Unfortunately, the Pinboard API uses 0 as a placeholder for a missing description, so we need to do a little
+            // dance here to keep everything happy.
+            do {
+                description = try container.decode(String.self, forKey: .description)
+            } catch DecodingError.typeMismatch {
+                // We double check that we can parse the key as a boolean to ensure the structure is as we expect.
+                let _ = try container.decode(Bool.self, forKey: .description)
+                description = nil
+            }
+
+            extended = try container.decode(String.self, forKey: .extended)
+            href = URL(string: try container.decode(String.self, forKey: .href))
+            hash = try container.decode(String.self, forKey: .hash)
+            meta = try container.decode(String.self, forKey: .meta)
+            shared = try container.decode(Boolean.self, forKey: .shared) == .yes ? true : false
+            tags = try container.decode(String.self, forKey: .tags).split(separator: " ").map(String.init)
+            time = ISO8601DateFormatter.init().date(from: try container.decode(String.self, forKey: .time))
+            toRead = try container.decode(Boolean.self, forKey: .toRead) == .yes ? true : false
+        }
     }
+
 }

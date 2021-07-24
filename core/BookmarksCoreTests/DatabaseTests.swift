@@ -50,6 +50,10 @@ extension Database {
         }
     }
 
+    func delete(tag: String) throws {
+        _ = try AsyncOperation({ self.delete(tag: tag, completion: $0) }).wait()
+    }
+
     func items(filter: String? = nil, tags: [String]? = nil) throws -> [Item] {
         try AsyncOperation({ self.items(filter: filter, tags: tags, completion: $0) }).wait()
     }
@@ -255,6 +259,63 @@ class DatabaseTests: XCTestCase {
         XCTAssertEqual(try database.items(tags: []), [item3, item1])
         XCTAssertEqual(try database.items(filter: "co", tags: []), [item3, item1])
         XCTAssertEqual(try database.items(filter: "com", tags: []), [item1])
+    }
+
+    func testTags() throws {
+        let database = try Database(path: temporaryDatabaseUrl)
+
+        let item1 = Item(title: "Example",
+                         url: URL(string: "https://example.com")!,
+                         tags: ["example", "website"],
+                         date: Date(timeIntervalSince1970: 0))
+
+        let item2 = Item(title: "Cheese",
+                         url: URL(string: "https://blue.com")!,
+                         tags: ["cheese", "website"],
+                         date: Date(timeIntervalSince1970: 10))
+
+        let item3 = Item(title: "Fromage and Cheese",
+                         url: URL(string: "https://fruit.co.uk")!,
+                         tags: ["robert", "website", "strawberries"],
+                         date: Date(timeIntervalSince1970: 20))
+
+        try database.insertOrUpdate([item1, item2, item3])
+
+        XCTAssertEqual(try database.tags(), Set(["example", "website", "cheese", "robert", "strawberries"]))
+    }
+
+    func testDeleteTags() throws {
+        let database = try Database(path: temporaryDatabaseUrl)
+
+        let item1 = Item(title: "Example",
+                         url: URL(string: "https://example.com")!,
+                         tags: ["example", "website"],
+                         date: Date(timeIntervalSince1970: 0))
+
+        let item2 = Item(title: "Cheese",
+                         url: URL(string: "https://blue.com")!,
+                         tags: ["cheese", "website"],
+                         date: Date(timeIntervalSince1970: 10))
+
+        let item3 = Item(title: "Fromage and Cheese",
+                         url: URL(string: "https://fruit.co.uk")!,
+                         tags: ["robert", "website", "strawberries"],
+                         date: Date(timeIntervalSince1970: 20))
+
+        try database.insertOrUpdate([item1, item2, item3])
+        XCTAssertEqual(try database.tags(), Set(["example", "website", "cheese", "robert", "strawberries"]))
+
+        try database.delete(tag: "website")
+        XCTAssertEqual(try database.tags(), Set(["example", "cheese", "robert", "strawberries"]))
+        XCTAssertEqual(try database.items(), [item3, item2, item1].map { item in
+            var tags = item.tags
+            tags.remove("website")
+            return Item(identifier: item.identifier,
+                        title: item.title,
+                        url: item.url,
+                        tags: tags,
+                        date: item.date)
+        })
     }
 
     // TODO: Delete tags.

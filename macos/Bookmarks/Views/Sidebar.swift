@@ -24,30 +24,6 @@ import SwiftUI
 import BookmarksCore
 import Interact
 
-enum Tags {
-    case allBookmarks
-    case untagged
-    case favorites(tag: String)
-    case tag(tag: String)
-}
-
-extension Tags: CustomStringConvertible, Hashable {
-
-    var description: String {
-        switch self {
-        case .allBookmarks:
-            return "uk.co.inseven.bookmarks.all-bookmarks"
-        case .untagged:
-            return "uk.co.inseven.bookmarks.untagged"
-        case .favorites(let tag):
-            return "uk.co.inseven.bookmarks.favorites.\(tag)"
-        case .tag(let tag):
-            return "uk.co.inseven.bookmarks.tag.\(tag)"
-        }
-    }
-
-}
-
 struct Sidebar: View {
 
     enum SheetType {
@@ -58,90 +34,113 @@ struct Sidebar: View {
     @StateObject var tagsView: TagsView
     @ObservedObject var settings: BookmarksCore.Settings
 
-    @State var selection: Tags? = .allBookmarks
+    @State var selection: BookmarksSection? = .all
     @State var sheet: SheetType? = nil
 
-    var body: some View {
-        List(selection: $selection) {
-            Section {
-                NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database))
-                                .navigationTitle("All Bookmarks")) {
-                    Label("All Bookmarks", systemImage: "bookmark")
-                }
-                .tag(Tags.allBookmarks)
-                NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database, tags: []))
-                                .navigationTitle("Untagged")) {
-                    Label("Untagged", systemImage: "tag")
-                }
-                .tag(Tags.untagged)
+    func selectionActiveBinding(_ tag: BookmarksSection) -> Binding<Bool> {
+        return Binding {
+            self.selection == tag
+        } set: { value in
+            guard value == true else {
+                return
             }
-            Section(header: Text("Favourites")) {
-                ForEach(settings.favoriteTags.sorted()) { tag in
-                    NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database, tags: [tag]))
-                                    .navigationTitle(tag)) {
-                        Label(tag, systemImage: "tag")
-                    }
-                    .contextMenu(ContextMenu(menuItems: {
-                        Button("Remove from Favourites") {
-                            settings.favoriteTags = settings.favoriteTags.filter { $0 != tag }
-                        }
-                        Divider()
-                        Button("Edit on Pinboard") {
-                            do {
-                                guard let user = manager.user else {
-                                    return
-                                }
-                                NSWorkspace.shared.open(try tag.pinboardUrl(for: user))
-                            } catch {
-                                print("Failed to open on Pinboard error \(error)")
-                            }
-                        }
-                    }))
-                    .tag(Tags.favorites(tag: tag))
-                }
-            }
-            Section(header: Text("Tags")) {
-                ForEach(tagsView.tags) { tag in
-                    NavigationLink(destination: ContentView(databaseView: DatabaseView(database: manager.database, tags: [tag]))
-                                    .navigationTitle(tag)) {
-                        HStack {
-                            Image(systemName: "tag")
-                                .renderingMode(.template)
-                                .foregroundColor(.secondary)
-                            Text(tag)
-                        }
-                    }
-                    .contextMenu(ContextMenu(menuItems: {
-                        Button("Rename") {
-                            self.sheet = .rename(tag: tag)
-                        }
-                        Button("Delete") {
-                            self.manager.pinboard.tags_delete(tag) { _ in
-                                self.manager.updater.start()
-                            }
-                        }
-                        Divider()
-                        Button("Add to Favourites") {
-                            var favoriteTags = settings.favoriteTags
-                            favoriteTags.append(tag)
-                            settings.favoriteTags = favoriteTags
-                        }
-                        Divider()
-                        Button("Edit on Pinboard") {
-                            do {
-                                guard let user = manager.user else {
-                                    return
-                                }
-                                NSWorkspace.shared.open(try tag.pinboardUrl(for: user))
-                            } catch {
-                                print("Failed to open on Pinboard error \(error)")
-                            }
-                        }
-                    }))
-                    .tag(Tags.tag(tag: tag))
-                }
-            }
+            self.selection = tag
+        }
+    }
 
+    var body: some View {
+        ScrollViewReader { scrollView in
+            List(selection: $selection) {
+                Section {
+
+                    SidebarLink(selection: $selection,
+                                tag: .all,
+                                title: "All Bookmarks",
+                                systemImage: "bookmark",
+                                databaseView: DatabaseView(database: manager.database))
+
+                    SidebarLink(selection: $selection,
+                                tag: .untagged,
+                                title: "Untagged",
+                                systemImage: "tag",
+                                databaseView: DatabaseView(database: manager.database, tags: []))
+
+                }
+                Section(header: Text("Favourites")) {
+                    ForEach(settings.favoriteTags.sorted(), id: \.favoriteId) { tag in
+
+                        SidebarLink(selection: $selection,
+                                    tag: tag.favoriteId,
+                                    title: tag,
+                                    systemImage: "tag",
+                                    databaseView: DatabaseView(database: manager.database, tags: [tag]))
+                            .contextMenu(ContextMenu(menuItems: {
+                                Button("Remove from Favourites") {
+                                    settings.favoriteTags = settings.favoriteTags.filter { $0 != tag }
+                                }
+                                Divider()
+                                Button("Edit on Pinboard") {
+                                    do {
+                                        guard let user = manager.user else {
+                                            return
+                                        }
+                                        NSWorkspace.shared.open(try tag.pinboardUrl(for: user))
+                                    } catch {
+                                        print("Failed to open on Pinboard error \(error)")
+                                    }
+                                }
+                            }))
+
+                    }
+                }
+                Section(header: Text("Tags")) {
+                    ForEach(tagsView.tags, id: \.tagId) { tag in
+
+                        SidebarLink(selection: $selection,
+                                    tag: tag.tagId,
+                                    title: tag,
+                                    systemImage: "tag",
+                                    databaseView: DatabaseView(database: manager.database, tags: [tag]))
+                            .contextMenu(ContextMenu(menuItems: {
+                                Button("Rename") {
+                                    self.sheet = .rename(tag: tag)
+                                }
+                                Button("Delete") {
+                                    self.manager.database.delete(tag: tag, completion: { _ in })
+                                    self.manager.pinboard.tags_delete(tag) { _ in
+                                        self.manager.updater.start()
+                                    }
+                                }
+                                Divider()
+                                Button("Add to Favourites") {
+                                    var favoriteTags = settings.favoriteTags
+                                    favoriteTags.append(tag)
+                                    settings.favoriteTags = favoriteTags
+                                }
+                                Divider()
+                                Button("Edit on Pinboard") {
+                                    do {
+                                        guard let user = manager.user else {
+                                            return
+                                        }
+                                        NSWorkspace.shared.open(try tag.pinboardUrl(for: user))
+                                    } catch {
+                                        print("Failed to open on Pinboard error \(error)")
+                                    }
+                                }
+                            }))
+
+                    }
+                }
+
+            }
+            .onChange(of: selection) { selection in
+                guard let selection = selection else {
+                    return
+                }
+                print("scrolling to \(selection)")
+                scrollView.scrollTo(selection)
+            }
         }
         .sheet(item: $sheet) { sheet in
             switch sheet {
@@ -155,12 +154,6 @@ struct Sidebar: View {
         .onDisappear {
             tagsView.stop()
         }
-        .onChange(of: selection, perform: { selection in
-            guard let selection = selection else {
-                return
-            }
-            print(selection)
-        })
     }
 }
 

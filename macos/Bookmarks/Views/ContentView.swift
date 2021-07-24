@@ -26,6 +26,8 @@ import Interact
 
 struct ContentView: View {
 
+    @Binding var sidebarSelection: BookmarksSection?
+
     @Environment(\.manager) var manager: BookmarksManager
     @StateObject var databaseView: DatabaseView
 
@@ -72,6 +74,7 @@ struct ContentView: View {
                                     NSPasteboard.general.setString(item.url.absoluteString, forType: .string)
                                 }
                                 Button("Delete") {
+                                    manager.database.delete(identifier: item.identifier) { _ in }
                                     manager.pinboard.posts_delete(url: item.url) { result in
                                         switch result {
                                         case .success:
@@ -88,7 +91,7 @@ struct ContentView: View {
                                     Menu("Tags") {
                                         ForEach(Array(item.tags).sorted()) { tag in
                                             Button(tag) {
-                                                print(item.tags)
+                                                sidebarSelection = tag.tagId
                                             }
                                         }
                                     }

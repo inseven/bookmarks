@@ -43,6 +43,11 @@ CHANGES_GITHUB_RELEASE_SCRIPT="${CHANGES_DIRECTORY}/examples/gh-release.sh"
 PATH=$PATH:$CHANGES_DIRECTORY
 PATH=$PATH:$BUILD_TOOLS_DIRECTORY
 
+source "${SCRIPTS_DIRECTORY}/environment.sh"
+
+# Check that the GitHub command is available on the path.
+which gh || (echo "GitHub cli (gh) not available on the path." && exit 1)
+
 # Process the command line arguments.
 POSITIONAL=()
 NOTARIZE=${NOTARIZE:-false}
@@ -145,7 +150,7 @@ TIMESTAMP=`date +%s`
 BUILD_NUMBER="${GIT_COMMIT}.${TIMESTAMP}"
 
 # Import the certificates into our dedicated keychain.
-fastlane import_certificates keychain:"$KEYCHAIN_PATH"
+bundle exec fastlane import_certificates keychain:"$KEYCHAIN_PATH"
 
 # Install the provisioning profile.
 # TODO: Convenience utility for installing a provisioning profile #105

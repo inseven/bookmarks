@@ -24,15 +24,37 @@ public class Pinboard {
 
     enum PinboardError: Error {
         case inconsistentState(message: String)
+        case unexpectedResponse
     }
 
     fileprivate enum Path: String {
+
+        case posts_update = "posts/update"
 
         case posts_all = "posts/all"
         case posts_delete = "posts/delete"
 
         case tags_delete = "tags/delete"
         case tags_rename = "tags/rename"
+
+    }
+
+    public struct Update: Codable {
+
+        public let updateTime: Date
+
+        public enum CodingKeys: String, CodingKey {
+            case updateTime = "update_time"
+        }
+
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            let updateTimeString = try container.decode(String.self, forKey: .updateTime)
+            guard let updateTime = ISO8601DateFormatter.init().date(from: updateTimeString) else {
+                throw PinboardError.unexpectedResponse
+            }
+            self.updateTime = updateTime
+        }
 
     }
 
@@ -88,6 +110,12 @@ public class Pinboard {
         } catch {
             completion(.failure(error))
             return
+        }
+    }
+
+    public func posts_update(completion: @escaping (Result<Update, Error>) -> Void) {
+        self.fetch(path: .posts_update, completion: completion) { data in
+            try JSONDecoder().decode(Update.self, from: data)
         }
     }
 

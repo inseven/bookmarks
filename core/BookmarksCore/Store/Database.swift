@@ -93,7 +93,7 @@ extension String {
 public struct ItemFilter {
 
     var tags: Set<String>? = nil
-    var terms: [String] = []  // Maybe this should be a set too?
+    var terms: [String] = []
 
     init(tags: Set<String>?, terms: [String]) {
         self.tags = tags

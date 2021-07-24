@@ -120,8 +120,6 @@ public struct ItemFilter {
     }
 
     static func &&(lhs: Self, rhs: Self) -> Self {
-        // TODO: What happens when you and empty tags and non-empty tags. Technically it should always fail?
-        // There's almost certainly a more elegant reduce operation that could be performed here.
         var tags: Set<String>? = nil
         if let lhs_tags = lhs.tags,
            let rhs_tags = rhs.tags {

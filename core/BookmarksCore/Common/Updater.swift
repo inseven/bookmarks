@@ -22,7 +22,7 @@ import Foundation
 
 extension Pinboard {
 
-    func posts_update() throws -> Pinboard.Update {
+    func posts_update() throws -> Update {
         try AsyncOperation({ self.posts_update(completion: $0) }).wait()
     }
 

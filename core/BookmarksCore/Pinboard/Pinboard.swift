@@ -39,25 +39,6 @@ public class Pinboard {
 
     }
 
-    public struct Update: Codable {
-
-        public let updateTime: Date
-
-        public enum CodingKeys: String, CodingKey {
-            case updateTime = "update_time"
-        }
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.container(keyedBy: CodingKeys.self)
-            let updateTimeString = try container.decode(String.self, forKey: .updateTime)
-            guard let updateTime = ISO8601DateFormatter.init().date(from: updateTimeString) else {
-                throw PinboardError.unexpectedResponse
-            }
-            self.updateTime = updateTime
-        }
-
-    }
-
     fileprivate let baseUrl = "https://api.pinboard.in/v1/"
     fileprivate let token: String
 

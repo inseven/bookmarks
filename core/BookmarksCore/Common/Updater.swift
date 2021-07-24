@@ -82,7 +82,8 @@ public class Updater {
                 }
 
                 // Delete missing items.
-                // TODO: Use the blocking extensions that are currently used in the tests.
+                // TODO: Move the blocking database APIs into BookmarksCore #170
+                //       https://github.com/inseven/bookmarks/issues/170
                 let allIdentifiers = try AsyncOperation(self.database.identifiers).wait()
                 let deletedIdentifiers = Set(allIdentifiers).subtracting(identifiers)
                 for identifier in deletedIdentifiers {

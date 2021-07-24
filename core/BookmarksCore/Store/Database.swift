@@ -543,7 +543,6 @@ public class Database {
         return items(filter: filter.terms.joined(separator: " "), tags: queryTags, completion: completion)
     }
 
-    // TODO: Consider removing this API
     public func items(filter: String? = nil, tags: [String]? = nil, completion: @escaping (Swift.Result<[Item], Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {

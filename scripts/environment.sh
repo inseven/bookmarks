@@ -20,34 +20,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-set -e
-set -o pipefail
-set -x
-set -u
 
-scripts_directory="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-root_directory="${scripts_directory}/.."
-changes_directory="${scripts_directory}/changes"
+SCRIPTS_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+ROOT_DIRECTORY="${SCRIPTS_DIRECTORY}/.."
 
-environment_path="${scripts_directory}/environment.sh"
+export PYTHONUSERBASE="${ROOT_DIRECTORY}/.local/python"
+mkdir -p "$PYTHONUSERBASE"
+export PATH="${PYTHONUSERBASE}/bin":$PATH
 
-source "$environment_path"
+export GEM_HOME="${ROOT_DIRECTORY}/.local/ruby"
+mkdir -p "$GEM_HOME"
+export PATH="${GEM_HOME}/bin":$PATH
 
-# Install the Python dependencies
-pip3 install --user pipenv
-PIPENV_PIPFILE="$changes_directory/Pipfile" pipenv install
-
-# Install the Ruby dependencies
-cd "$root_directory"
-gem install bundler
-bundle install
-
-# Install the GitHub CLI
-github_cli_url="https://github.com"`curl -s -L https://github.com/cli/cli/releases/latest | grep -o -e "/.*macOS.*tar.gz"`
-if [ -d "$GITHUB_CLI_PATH" ] ; then
-    rm -r "$GITHUB_CLI_PATH"
-fi
+export GITHUB_CLI_PATH="${ROOT_DIRECTORY}/.local/gh"
 mkdir -p "$GITHUB_CLI_PATH"
-curl --location "$github_cli_url" --output "cli.tar.gz"
-tar --strip-components 1 -zxv -f "cli.tar.gz" -C "$GITHUB_CLI_PATH"
-unlink "cli.tar.gz"
+export PATH="${GITHUB_CLI_PATH}/bin":$PATH

@@ -28,7 +28,7 @@ struct SidebarLink: View {
     var tag: BookmarksSection
     var title: String
     var systemImage: String
-    var databaseView: DatabaseView
+    var databaseView: ItemsView
 
     func selectionActiveBinding(_ tag: BookmarksSection) -> Binding<Bool> {
         return Binding {

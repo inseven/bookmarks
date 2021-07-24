@@ -29,7 +29,7 @@ struct BookmarksView: View {
     }
 
     @Environment(\.manager) var manager: BookmarksManager
-    @ObservedObject var databaseView: DatabaseView
+    @ObservedObject var databaseView: ItemsView
 
     @State var sheet: SheetType?
 

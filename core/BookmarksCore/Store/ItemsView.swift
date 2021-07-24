@@ -21,7 +21,7 @@
 import Combine
 import Foundation
 
-public class DatabaseView: ObservableObject {
+public class ItemsView: ObservableObject {
 
     let database: Database
     var updateCancellable: AnyCancellable? = nil

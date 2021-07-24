@@ -90,6 +90,54 @@ extension String {
 
 }
 
+public struct ItemFilter {
+
+    var tags: Set<String>? = nil
+    var terms: [String] = []  // Maybe this should be a set too?
+
+    init(tags: Set<String>?, terms: [String]) {
+        self.tags = tags
+        self.terms = terms
+    }
+
+    init(tag: String) {
+        tags = [tag]
+    }
+
+    init(filter: String) {
+        let tagPrefix = "tag:"
+        var tags: Set<String> = Set()
+        var terms: [String] = []
+        for token in filter.tokens {
+            if token.hasPrefix(tagPrefix) {
+                tags.insert(String(token.dropFirst(tagPrefix.count)))
+            } else {
+                terms.append(token)
+            }
+        }
+        self.tags = tags.isEmpty ? nil : tags
+        self.terms = terms
+    }
+
+    static func &&(lhs: Self, rhs: Self) -> Self {
+        // TODO: What happens when you and empty tags and non-empty tags. Technically it should always fail?
+        // There's almost certainly a more elegant reduce operation that could be performed here.
+        var tags: Set<String>? = nil
+        if let lhs_tags = lhs.tags,
+           let rhs_tags = rhs.tags {
+            tags = lhs_tags.union(rhs_tags)
+        } else if let lhs_tags = lhs.tags {
+            tags = lhs_tags
+        } else if let rhs_tags = rhs.tags {
+            tags = rhs_tags
+        }
+
+        return Self(tags: tags, terms: lhs.terms + rhs.terms)
+    }
+
+}
+
+
 public class Database {
 
     class Schema {
@@ -386,6 +434,23 @@ public class Database {
         }
     }
 
+    public func delete(tag: String, completion: @escaping (Swift.Result<Int, Error>) -> Void) {
+        let completion = DispatchQueue.global().asyncClosure(completion)
+        syncQueue.async {
+            do {
+                try self.db.transaction {
+                    let result = Swift.Result { () -> Int in
+                        try self.db.run(Schema.tags.filter(Schema.name == tag).delete())
+                    }
+                    self.syncQueue_notifyObservers()
+                    completion(result)
+                }
+            } catch {
+                completion(.failure(error))
+            }
+        }
+    }
+
     public func syncQueue_items(filter: String? = nil, tags: [String]? = nil) throws -> [Item] {
         dispatchPrecondition(condition: .onQueue(syncQueue))
 
@@ -403,20 +468,28 @@ public class Database {
             if tags.isEmpty {
                 whereClause = whereClause && "items.id NOT IN (SELECT item_id FROM items_to_tags)"
             } else {
-                let tagsFilter = tags.map { Schema.name.lowercaseString == $0.lowercased() }.reduce(Expression(value: true)) { $0 && $1 }
-                let tagSubselect = """
-                    SELECT
-                        item_id
-                    FROM
-                        items_to_tags
-                    JOIN
-                        tags
-                    ON
-                        items_to_tags.tag_id = tags.id
-                    WHERE
-                        \(tagsFilter.asSQL())
-                    """
-                whereClause = whereClause && "items.id IN (\(tagSubselect))"
+                var tagIntersectSelect = ""
+                for tag in tags {
+                    let tagsFilter = Schema.name.lowercaseString == tag.lowercased()
+                    let tagSubselect = """
+                        SELECT
+                            item_id
+                        FROM
+                            items_to_tags
+                        JOIN
+                            tags
+                        ON
+                            items_to_tags.tag_id = tags.id
+                        WHERE
+                            \(tagsFilter.asSQL())
+                        """
+                    if tagIntersectSelect.isEmpty {
+                        tagIntersectSelect = tagSubselect
+                    } else {
+                        tagIntersectSelect = tagIntersectSelect + " INTERSECT " + tagSubselect
+                    }
+                }
+                whereClause = whereClause && "items.id IN (\(tagIntersectSelect))"
             }
         }
 
@@ -462,6 +535,15 @@ public class Database {
         return items
     }
 
+    public func items(_ filter: ItemFilter, completion: @escaping (Swift.Result<[Item], Error>) -> Void) {
+        var queryTags: [String]? = nil
+        if let tags = filter.tags {
+            queryTags = Array(tags)
+        }
+        return items(filter: filter.terms.joined(separator: " "), tags: queryTags, completion: completion)
+    }
+
+    // TODO: Consider removing this API
     public func items(filter: String? = nil, tags: [String]? = nil, completion: @escaping (Swift.Result<[Item], Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {

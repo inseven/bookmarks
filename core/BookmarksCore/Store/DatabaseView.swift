@@ -21,6 +21,7 @@
 import Combine
 import Foundation
 
+// TODO: Rename this to ItemView
 public class DatabaseView: ObservableObject {
 
     let database: Database
@@ -30,10 +31,10 @@ public class DatabaseView: ObservableObject {
     @Published public var search = ""
     @Published public var items: [Item] = []
 
-    fileprivate var tags: [String]?
+    fileprivate var tags: Set<String>?
     fileprivate var filter = ""
 
-    public init(database: Database, tags: [String]? = nil) {
+    public init(database: Database, tags: Set<String>? = nil) {
         self.database = database
         self.tags = tags
     }
@@ -41,7 +42,8 @@ public class DatabaseView: ObservableObject {
     func update() {
         dispatchPrecondition(condition: .onQueue(.main))
         print("fetching items...")
-        database.items(filter: filter, tags: tags) { result in
+
+        database.items(ItemFilter(tags: tags, terms: []) && ItemFilter(filter: filter)) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let items):

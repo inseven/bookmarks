@@ -56,6 +56,7 @@ public class BookmarksManager {
         thumbnailManager = ThumbnailManager(imageCache: imageCache, downloadManager: downloadManager)
         pinboard = Pinboard(token: settings.pinboardApiKey)
         updater = Updater(database: database, pinboard: pinboard)
+        updater.start()
 
         #if os(macOS)
         let notificationCenter = NotificationCenter.default

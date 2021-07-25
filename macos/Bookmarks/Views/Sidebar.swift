@@ -56,19 +56,19 @@ struct Sidebar: View {
                     SidebarLink(selection: $selection,
                                 tag: .all,
                                 title: "All Bookmarks",
-                                systemImage: "bookmark",
+                                systemImage: "bookmark.fill",
                                 databaseView: ItemsView(database: manager.database))
 
                     SidebarLink(selection: $selection,
                                 tag: .today,
                                 title: "Today",
-                                systemImage: "sun.max",
+                                systemImage: "sun.max.fill",
                                 databaseView: ItemsView(database: manager.database, query: Today()))
 
                     SidebarLink(selection: $selection,
                                 tag: .untagged,
                                 title: "Untagged",
-                                systemImage: "tag",
+                                systemImage: "tag.fill",
                                 databaseView: ItemsView(database: manager.database, query: Untagged()))
 
 

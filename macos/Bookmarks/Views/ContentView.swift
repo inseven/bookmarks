@@ -29,7 +29,7 @@ struct ContentView: View {
     @Binding var sidebarSelection: BookmarksSection?
 
     @Environment(\.manager) var manager: BookmarksManager
-    @StateObject var databaseView: DatabaseView
+    @StateObject var databaseView: ItemsView
 
     var body: some View {
         VStack {

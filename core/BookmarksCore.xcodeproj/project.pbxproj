@@ -24,8 +24,8 @@
 		D890D1BB26A219C900C47489 /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1B926A219C900C47489 /* AsyncOperation.swift */; };
 		D890D1BD26A2201700C47489 /* DispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1BC26A2201700C47489 /* DispatchQueue.swift */; };
 		D890D1BE26A2201700C47489 /* DispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1BC26A2201700C47489 /* DispatchQueue.swift */; };
-		D890D1C026A2219F00C47489 /* DatabaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1BF26A2219F00C47489 /* DatabaseView.swift */; };
-		D890D1C126A2219F00C47489 /* DatabaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1BF26A2219F00C47489 /* DatabaseView.swift */; };
+		D890D1C026A2219F00C47489 /* ItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1BF26A2219F00C47489 /* ItemsView.swift */; };
+		D890D1C126A2219F00C47489 /* ItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1BF26A2219F00C47489 /* ItemsView.swift */; };
 		D890D1C526A2569800C47489 /* DatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1C226A2569100C47489 /* DatabaseTests.swift */; };
 		D890D1C626A2569800C47489 /* DatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1C226A2569100C47489 /* DatabaseTests.swift */; };
 		D890D1C826A3584400C47489 /* DatabasePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890D1C726A3584400C47489 /* DatabasePublisher.swift */; };
@@ -123,7 +123,7 @@
 		D890D1B426A0C48A00C47489 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		D890D1B926A219C900C47489 /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
 		D890D1BC26A2201700C47489 /* DispatchQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchQueue.swift; sourceTree = "<group>"; };
-		D890D1BF26A2219F00C47489 /* DatabaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseView.swift; sourceTree = "<group>"; };
+		D890D1BF26A2219F00C47489 /* ItemsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsView.swift; sourceTree = "<group>"; };
 		D890D1C226A2569100C47489 /* DatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTests.swift; sourceTree = "<group>"; };
 		D890D1C726A3584400C47489 /* DatabasePublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabasePublisher.swift; sourceTree = "<group>"; };
 		D8AA4054261E2E8D00D11421 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -298,7 +298,7 @@
 			children = (
 				D8D3F4FB261E576000B2D66F /* Item.swift */,
 				D890D1B426A0C48A00C47489 /* Database.swift */,
-				D890D1BF26A2219F00C47489 /* DatabaseView.swift */,
+				D890D1BF26A2219F00C47489 /* ItemsView.swift */,
 				D890D1C726A3584400C47489 /* DatabasePublisher.swift */,
 				D861256F26A60CF300EB5FEF /* TagsView.swift */,
 			);
@@ -568,7 +568,7 @@
 				D8D3F59F261E5AAE00B2D66F /* WebViewDownloader.swift in Sources */,
 				D8B04B1F261EC65D00376ADD /* Settings.swift in Sources */,
 				D84CE484261E2AD000AF1901 /* Post.swift in Sources */,
-				D890D1C026A2219F00C47489 /* DatabaseView.swift in Sources */,
+				D890D1C026A2219F00C47489 /* ItemsView.swift in Sources */,
 				D8717C4E2679153F007617C5 /* URL.swift in Sources */,
 				D8B04B31261EC7E700376ADD /* BookmarksManager.swift in Sources */,
 				D8D3F602261E5BF600B2D66F /* URLComponents.swift in Sources */,
@@ -617,7 +617,7 @@
 				D8D3F59E261E5AAE00B2D66F /* WebViewDownloader.swift in Sources */,
 				D8B04B1E261EC65D00376ADD /* Settings.swift in Sources */,
 				D8CF8CA1261E35B300E52E85 /* Pinboard.swift in Sources */,
-				D890D1C126A2219F00C47489 /* DatabaseView.swift in Sources */,
+				D890D1C126A2219F00C47489 /* ItemsView.swift in Sources */,
 				D8717C4F2679153F007617C5 /* URL.swift in Sources */,
 				D8B04B32261EC7E700376ADD /* BookmarksManager.swift in Sources */,
 				D8D3F603261E5BF600B2D66F /* URLComponents.swift in Sources */,

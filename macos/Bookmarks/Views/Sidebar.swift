@@ -57,13 +57,13 @@ struct Sidebar: View {
                                 tag: .all,
                                 title: "All Bookmarks",
                                 systemImage: "bookmark",
-                                databaseView: DatabaseView(database: manager.database))
+                                databaseView: ItemsView(database: manager.database))
 
                     SidebarLink(selection: $selection,
                                 tag: .untagged,
                                 title: "Untagged",
                                 systemImage: "tag",
-                                databaseView: DatabaseView(database: manager.database, tags: []))
+                                databaseView: ItemsView(database: manager.database, tags: []))
 
                 }
                 Section(header: Text("Favourites")) {
@@ -73,7 +73,7 @@ struct Sidebar: View {
                                     tag: tag.favoriteId,
                                     title: tag,
                                     systemImage: "tag",
-                                    databaseView: DatabaseView(database: manager.database, tags: [tag]))
+                                    databaseView: ItemsView(database: manager.database, tags: [tag]))
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Remove from Favourites") {
                                     settings.favoriteTags = settings.favoriteTags.filter { $0 != tag }
@@ -100,7 +100,7 @@ struct Sidebar: View {
                                     tag: tag.tagId,
                                     title: tag,
                                     systemImage: "tag",
-                                    databaseView: DatabaseView(database: manager.database, tags: [tag]))
+                                    databaseView: ItemsView(database: manager.database, tags: [tag]))
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Rename") {
                                     self.sheet = .rename(tag: tag)

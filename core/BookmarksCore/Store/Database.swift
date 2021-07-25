@@ -161,6 +161,16 @@ public class Search: QueryDescription {
 
 }
 
+public class Today: QueryDescription {
+
+    public var sql: String {
+        "date >= datetime('now', '-1 day')"
+    }
+
+    public init() { }
+
+}
+
 extension Item {
 
     convenience init(row: Row) throws {
@@ -561,7 +571,7 @@ public class Database {
                         tags.id == items_to_tags.tag_id
                     GROUP BY
                         item_id
-                ) a
+                )
             ON
                 items.id == item_id
             WHERE \(whereClause)

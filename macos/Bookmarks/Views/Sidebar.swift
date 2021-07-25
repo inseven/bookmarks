@@ -60,10 +60,17 @@ struct Sidebar: View {
                                 databaseView: ItemsView(database: manager.database))
 
                     SidebarLink(selection: $selection,
+                                tag: .today,
+                                title: "Today",
+                                systemImage: "sun.max",
+                                databaseView: ItemsView(database: manager.database, query: Today()))
+
+                    SidebarLink(selection: $selection,
                                 tag: .untagged,
                                 title: "Untagged",
                                 systemImage: "tag",
                                 databaseView: ItemsView(database: manager.database, query: Untagged()))
+
 
                 }
                 Section(header: Text("Favourites")) {

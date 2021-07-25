@@ -28,6 +28,139 @@ public protocol DatabaseObserver {
     func databaseDidUpdate(database: Database)
 }
 
+
+// TODO: ItemQuery? Maybe just Query?
+public protocol QueryDescription {
+
+    var sql: String { get }
+
+}
+
+public class Untagged: QueryDescription {
+
+    public var sql: String { "items.id NOT IN (SELECT item_id FROM items_to_tags)" }
+
+    public init() { }
+
+}
+
+public class HasTag: QueryDescription {
+
+    let name: String
+
+    public var sql: String {
+        let tagsFilter = Database.Schema.name.lowercaseString == name.lowercased()
+        let tagSubselect = """
+            SELECT
+                item_id
+            FROM
+                items_to_tags
+            JOIN
+                tags
+            ON
+                items_to_tags.tag_id = tags.id
+            WHERE
+                \(tagsFilter.asSQL())
+            """
+        return "items.id IN (\(tagSubselect))"
+    }
+
+    public init(_ name: String) {
+        self.name = name
+    }
+
+}
+
+class Contains: QueryDescription {
+
+    let filter: String
+
+    var sql: String {
+        let tagsColumn = Expression<String>("tags")
+        let expression = Database.Schema.title.like("%\(filter)%") || Database.Schema.url.like("%\(filter)%") || tagsColumn.like("%\(filter)%")
+        return expression.asSQL()
+    }
+
+    init(_ filter: String) {
+        self.filter = filter
+    }
+
+}
+
+class MatchesFilter: QueryDescription {
+
+    let filter: String
+
+    var sql: String {
+        let tagsColumn = Expression<String>("tags")
+        let filters = filter.tokens.map {
+            Database.Schema.title.like("%\($0)%") || Database.Schema.url.like("%\($0)%") || tagsColumn.like("%\($0)%")
+        }
+        return filters.reduce(Expression(value: true)) { $0 && $1 }.asSQL()
+    }
+
+    init(_ filter: String) {
+        self.filter = filter
+    }
+
+}
+
+// TODO: Make these structs again?
+class And: QueryDescription {
+
+    let lhs: QueryDescription
+    let rhs: QueryDescription
+
+    var sql: String { "(\(lhs.sql)) AND (\(rhs.sql))" }
+
+    init(_ lhs: QueryDescription, _ rhs: QueryDescription) {
+        self.lhs = lhs
+        self.rhs = rhs
+    }
+
+}
+
+// TODO: Why doesn't this work?
+//extension QueryDescription {
+//
+//    static func &&(lhs: QueryDescription, rhs: QueryDescription) -> QueryDescription {
+//        return And(lhs, rhs)
+//    }
+//
+//}
+
+public class True: QueryDescription {
+
+    public var sql: String { "1" }
+
+    public init() { }
+
+}
+
+public class Search: QueryDescription {
+
+    var search: String
+
+    public var sql: String {
+        var query: QueryDescription = True()
+        let tagPrefix = "tag:"
+        for token in search.tokens {
+            if token.hasPrefix(tagPrefix) {
+                let tag = String(token.dropFirst(tagPrefix.count))
+                query = And(query, HasTag(tag))
+            } else {
+                query = And(query, Contains(token))
+            }
+        }
+        return query.sql
+    }
+
+    init(_ search: String) {
+        self.search = search
+    }
+
+}
+
 extension Item {
 
     convenience init(row: Row) throws {
@@ -89,52 +222,6 @@ extension String {
     }
 
 }
-
-public struct ItemFilter {
-
-    var tags: Set<String>? = nil
-    var terms: [String] = []
-
-    init(tags: Set<String>?, terms: [String]) {
-        self.tags = tags
-        self.terms = terms
-    }
-
-    init(tag: String) {
-        tags = [tag]
-    }
-
-    init(filter: String) {
-        let tagPrefix = "tag:"
-        var tags: Set<String> = Set()
-        var terms: [String] = []
-        for token in filter.tokens {
-            if token.hasPrefix(tagPrefix) {
-                tags.insert(String(token.dropFirst(tagPrefix.count)))
-            } else {
-                terms.append(token)
-            }
-        }
-        self.tags = tags.isEmpty ? nil : tags
-        self.terms = terms
-    }
-
-    static func &&(lhs: Self, rhs: Self) -> Self {
-        var tags: Set<String>? = nil
-        if let lhs_tags = lhs.tags,
-           let rhs_tags = rhs.tags {
-            tags = lhs_tags.union(rhs_tags)
-        } else if let lhs_tags = lhs.tags {
-            tags = lhs_tags
-        } else if let rhs_tags = rhs.tags {
-            tags = rhs_tags
-        }
-
-        return Self(tags: tags, terms: lhs.terms + rhs.terms)
-    }
-
-}
-
 
 public class Database {
 
@@ -449,47 +536,8 @@ public class Database {
         }
     }
 
-    public func syncQueue_items(filter: String? = nil, tags: [String]? = nil) throws -> [Item] {
+    public func syncQueue_items(where whereClause: String) throws -> [Item] {
         dispatchPrecondition(condition: .onQueue(syncQueue))
-
-        var whereClause = "1"
-
-        if let filter = filter {
-            let tagsColumn = Expression<String>("tags")
-            let filters = filter.tokens.map {
-                Schema.title.like("%\($0)%") || Schema.url.like("%\($0)%") || tagsColumn.like("%\($0)%")
-            }
-            whereClause = whereClause && filters.reduce(Expression(value: true)) { $0 && $1 }.asSQL()
-        }
-
-        if let tags = tags {
-            if tags.isEmpty {
-                whereClause = whereClause && "items.id NOT IN (SELECT item_id FROM items_to_tags)"
-            } else {
-                var tagIntersectSelect = ""
-                for tag in tags {
-                    let tagsFilter = Schema.name.lowercaseString == tag.lowercased()
-                    let tagSubselect = """
-                        SELECT
-                            item_id
-                        FROM
-                            items_to_tags
-                        JOIN
-                            tags
-                        ON
-                            items_to_tags.tag_id = tags.id
-                        WHERE
-                            \(tagsFilter.asSQL())
-                        """
-                    if tagIntersectSelect.isEmpty {
-                        tagIntersectSelect = tagSubselect
-                    } else {
-                        tagIntersectSelect = tagIntersectSelect + " INTERSECT " + tagSubselect
-                    }
-                }
-                whereClause = whereClause && "items.id IN (\(tagIntersectSelect))"
-            }
-        }
 
         let selectQuery = """
             SELECT
@@ -533,19 +581,42 @@ public class Database {
         return items
     }
 
-    public func items(_ filter: ItemFilter, completion: @escaping (Swift.Result<[Item], Error>) -> Void) {
-        var queryTags: [String]? = nil
-        if let tags = filter.tags {
-            queryTags = Array(tags)
-        }
-        return items(filter: filter.terms.joined(separator: " "), tags: queryTags, completion: completion)
+    public func syncQueue_items(query: QueryDescription) throws -> [Item] {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
+        return try syncQueue_items(where: query.sql)
     }
 
+    public func items(query: QueryDescription = True(), completion: @escaping (Swift.Result<[Item], Error>) -> Void) {
+        let completion = DispatchQueue.global().asyncClosure(completion)
+        syncQueue.async {
+            let result = Swift.Result<[Item], Error> {
+                try self.syncQueue_items(query: query)
+            }
+            completion(result)
+        }
+    }
+
+    // TODO: Remove this method.
     public func items(filter: String? = nil, tags: [String]? = nil, completion: @escaping (Swift.Result<[Item], Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             let result = Swift.Result<[Item], Error> {
-                try self.syncQueue_items(filter: filter, tags: tags)
+                var query: QueryDescription = True()
+                if let filter = filter {
+                    query = And(query, MatchesFilter(filter))
+                }
+                if let tags = tags {
+                    if tags.isEmpty {
+                        query = And(query, Untagged())
+                    } else {
+                        var tagsQueryDescription: QueryDescription = True()
+                        for queryDescription in tags.map({ HasTag($0) }) {  // TODO Reduce
+                            tagsQueryDescription = And(tagsQueryDescription, queryDescription)
+                        }
+                        query = And(query, tagsQueryDescription)
+                    }
+                }
+                return try self.syncQueue_items(query: query)
             }
             completion(result)
         }

@@ -63,7 +63,7 @@ struct Sidebar: View {
                                 tag: .untagged,
                                 title: "Untagged",
                                 systemImage: "tag",
-                                databaseView: ItemsView(database: manager.database, tags: []))
+                                databaseView: ItemsView(database: manager.database, query: Untagged()))
 
                 }
                 Section(header: Text("Favourites")) {
@@ -73,7 +73,7 @@ struct Sidebar: View {
                                     tag: tag.favoriteId,
                                     title: tag,
                                     systemImage: "tag",
-                                    databaseView: ItemsView(database: manager.database, tags: [tag]))
+                                    databaseView: ItemsView(database: manager.database, query: HasTag(tag)))
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Remove from Favourites") {
                                     settings.favoriteTags = settings.favoriteTags.filter { $0 != tag }
@@ -100,7 +100,7 @@ struct Sidebar: View {
                                     tag: tag.tagId,
                                     title: tag,
                                     systemImage: "tag",
-                                    databaseView: ItemsView(database: manager.database, tags: [tag]))
+                                    databaseView: ItemsView(database: manager.database, query: HasTag(tag)))
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Rename") {
                                     self.sheet = .rename(tag: tag)

@@ -38,6 +38,7 @@ struct BookmarksApp: App {
         }
         .commands {
             SidebarCommands()
+            ToolbarCommands()
             CommandGroup(after: .newItem) {
                 Divider()
                 Button("Refresh") {

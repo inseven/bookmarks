@@ -190,7 +190,11 @@ IPA_PATH="$BUILD_DIRECTORY/$IPA_BASENAME"
 # TODO: Don't do this every time.
 API_KEY="AuthKey.p8"
 echo -n "$APPLE_API_KEY" | base64 --decode --output "$API_KEY"
-bundle exec fastlane upload api_key:"$API_KEY" ipa:"$IPA_PATH"
+bundle exec fastlane upload \
+    api_key:"$API_KEY" \
+    api_key_id:"$APPLE_API_KEY_ID" \
+    api_key_issuer_id:"$APPLE_API_KEY_ISSUER_ID" \
+    ipa:"$IPA_PATH"
 unlink "$API_KEY"
 
 exit

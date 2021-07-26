@@ -46,8 +46,8 @@ end
 lane :upload do |options|
 
     api_key = app_store_connect_api_key(
-        key_id: "6K2QZ3979X",
-        issuer_id: "69a6de73-cdd9-47e3-e053-5b8c7c11a4d1",
+        key_id: options[:api_key_id],
+        issuer_id: options[:api_key_issuer_id],
         key_filepath: options[:api_key],
         duration: 1200, # optional (maximum 1200)
         in_house: false # optional but may be required if using match/sigh

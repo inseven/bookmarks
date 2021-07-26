@@ -186,8 +186,12 @@ xcodebuild \
 IPA_BASENAME="Bookmarks.ipa"
 IPA_PATH="$BUILD_DIRECTORY/$IPA_BASENAME"
 
+# Upload the build to TestFlight
 # TODO: Don't do this every time.
-bundle exec fastlane upload ipa:"$IPA_PATH"
+API_KEY="AuthKey.p8"
+echo -n "$APPLE_API_KEY" | base64 --decode --output "$API_KEY"
+bundle exec fastlane upload api_key:"$API_KEY" ipa:"$IPA_PATH"
+unlink "$API_KEY"
 
 exit
 

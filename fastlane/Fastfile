@@ -42,3 +42,21 @@ lane :notarize_release do |options|
         verbose: true,
     )
 end
+
+lane :upload do |options|
+
+    api_key = app_store_connect_api_key(
+        key_id: "6K2QZ3979X",
+        issuer_id: "69a6de73-cdd9-47e3-e053-5b8c7c11a4d1",
+        key_filepath: "./AuthKey_6K2QZ3979X.p8",
+        duration: 1200, # optional (maximum 1200)
+        in_house: false # optional but may be required if using match/sigh
+    )
+
+    upload_to_testflight(
+        api_key: api_key,
+        skip_submission: true,
+        ipa: options[:ipa]
+    )
+    # skip_submission?
+end

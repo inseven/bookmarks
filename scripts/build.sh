@@ -104,18 +104,18 @@ xcode_project -list
 # Smoke test builds.
 
 # BookmarksCore
-build_scheme "BookmarksCore iOS" clean build build-for-testing test \
-    -sdk iphonesimulator \
-    -destination "$IPHONE_DESTINATION"
-build_scheme "BookmarksCore macOS" clean build build-for-testing test
-
-# iOS
-build_scheme "Bookmarks iOS" clean build build-for-testing test \
-    -sdk iphonesimulator \
-    -destination "$IPHONE_DESTINATION"
-
-# macOS
-build_scheme "Bookmarks macOS" clean build build-for-testing
+# build_scheme "BookmarksCore iOS" clean build build-for-testing test \
+#     -sdk iphonesimulator \
+#     -destination "$IPHONE_DESTINATION"
+# build_scheme "BookmarksCore macOS" clean build build-for-testing test
+#
+# # iOS
+# build_scheme "Bookmarks iOS" clean build build-for-testing test \
+#     -sdk iphonesimulator \
+#     -destination "$IPHONE_DESTINATION"
+#
+# # macOS
+# build_scheme "Bookmarks macOS" clean build build-for-testing test
 
 # Build the macOS archive.
 
@@ -142,10 +142,13 @@ function cleanup {
 trap cleanup EXIT
 
 # Determine the version and build number.
+# This follows the format YYmmddHHMMGGGGGGGG where GGGGGGGG is the zero-padded decimal value for a 6-digit Git SHA.
+# TODO: Consider moving this into build-tools?
 VERSION_NUMBER=`changes --scope macOS version`
-GIT_COMMIT=`git rev-parse --short HEAD`
-TIMESTAMP=`date +%s`
-BUILD_NUMBER="${GIT_COMMIT}.${TIMESTAMP}"
+GIT_COMMIT=$((16#`git rev-parse --short=6 HEAD`))
+PADDED_GIT_COMMIT=`printf "%08d\n" $GIT_COMMIT`
+TIMESTAMP=`date -u '+%y%m%d%H%M'`
+BUILD_NUMBER="${TIMESTAMP}${PADDED_GIT_COMMIT}"
 
 # Import the certificates into our dedicated keychain.
 bundle exec fastlane import_certificates keychain:"$KEYCHAIN_PATH"
@@ -165,7 +168,32 @@ else
     echo "Provisioning profile installed; skipping"
 fi
 
+# Build and archive the iOS project.
+xcode_project \
+    -scheme "Bookmarks iOS" \
+    -config Release \
+    -archivePath "$ARCHIVE_PATH" \
+    OTHER_CODE_SIGN_FLAGS="--keychain=\"${KEYCHAIN_PATH}\"" \
+    BUILD_NUMBER=$BUILD_NUMBER \
+    MARKETING_VERSION=$VERSION_NUMBER \
+    clean archive | xcpretty
+xcodebuild \
+    -archivePath "$ARCHIVE_PATH" \
+    -exportArchive \
+    -exportPath "$BUILD_DIRECTORY" \
+    -exportOptionsPlist "ios/ExportOptions.plist"
+
+IPA_BASENAME="Bookmarks.ipa"
+IPA_PATH="$BUILD_DIRECTORY/$IPA_BASENAME"
+
+# TODO: Don't do this every time.
+bundle exec fastlane upload ipa:"$IPA_PATH"
+
+exit
+
+
 # Archive and export the build.
+# TODO: Maybe we can share the build number, keychain details between the builds, etc.
 xcode_project \
     -scheme "Bookmarks macOS" \
     -config Release \

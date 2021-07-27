@@ -214,7 +214,6 @@ if $TESTFLIGHT_UPLOAD ; then
 fi
 
 # Archive and export the build.
-# TODO: Maybe we can share the build number, keychain details between the builds, etc.
 xcode_project \
     -scheme "Bookmarks macOS" \
     -config Release \

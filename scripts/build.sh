@@ -103,28 +103,6 @@ function build_scheme {
 
 cd "$ROOT_DIRECTORY"
 
-# List the available schemes.
-xcode_project -list
-
-# Smoke test builds.
-
-# BookmarksCore
-build_scheme "BookmarksCore iOS" clean build build-for-testing test \
-    -sdk iphonesimulator \
-    -destination "$IPHONE_DESTINATION"
-build_scheme "BookmarksCore macOS" clean build build-for-testing test
-
-# iOS
-build_scheme "Bookmarks iOS" clean build build-for-testing test \
-    -sdk iphonesimulator \
-    -destination "$IPHONE_DESTINATION"
-
-# macOS
-# TODO: Enable macOS tests?
-build_scheme "Bookmarks macOS" clean build build-for-testing
-
-# Build the macOS archive.
-
 # Clean up the build directory.
 if [ -d "$BUILD_DIRECTORY" ] ; then
     rm -r "$BUILD_DIRECTORY"
@@ -138,6 +116,7 @@ fi
 mkdir -p "$TEMPORARY_DIRECTORY"
 echo "$TEMPORARY_KEYCHAIN_PASSWORD" | build-tools create-keychain "$KEYCHAIN_PATH" --password
 
+# TODO: Keychain cleanup doesn't seem to be working correctly
 function cleanup {
     # Cleanup the temporary files and keychain.
     cd "$ROOT_DIRECTORY"
@@ -156,11 +135,28 @@ bundle exec fastlane import_certificates keychain:"$KEYCHAIN_PATH"
 echo "$IOS_CERTIFICATE_PASSWORD" | build-tools import-base64-certificate --password "$KEYCHAIN_PATH" "$IOS_CERTIFICATE_BASE64"
 
 # Install the provisioning profiles.
-# TODO: Clean up the profile at the end?
 build-tools install-provisioning-profile "macos/Bookmarks_Developer_ID_Application.provisionprofile"
 build-tools install-provisioning-profile "ios/Bookmarks_App_Store_Profile.mobileprovision"
 
-# TODO: Keychain cleanup doesn't seem to be working right??
+# Smoke test builds.
+
+# List the available schemes.
+xcode_project -list
+
+# BookmarksCore
+build_scheme "BookmarksCore iOS" clean build build-for-testing test \
+    -sdk iphonesimulator \
+    -destination "$IPHONE_DESTINATION"
+build_scheme "BookmarksCore macOS" clean build build-for-testing test
+
+# iOS
+build_scheme "Bookmarks iOS" clean build build-for-testing test \
+    -sdk iphonesimulator \
+    -destination "$IPHONE_DESTINATION"
+
+# macOS
+# TODO: These builds don't work without a macOS certificate
+# build_scheme "Bookmarks macOS" clean build build-for-testing
 
 # Build and archive the iOS project.
 xcode_project \
@@ -192,7 +188,7 @@ if $TESTFLIGHT_UPLOAD ; then
     unlink "$API_KEY"
 fi
 
-# Archive and export the build.
+# Build and archive the macOS project.
 xcode_project \
     -scheme "Bookmarks macOS" \
     -config Release \

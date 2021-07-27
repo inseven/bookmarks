@@ -29,7 +29,7 @@ struct BookmarksView: View {
     }
 
     @Environment(\.manager) var manager: BookmarksManager
-    @ObservedObject var databaseView: ItemsView
+    @StateObject var databaseView: ItemsView
 
     @State var sheet: SheetType?
 
@@ -72,6 +72,12 @@ struct BookmarksView: View {
             Image(systemName: "gearshape")
                 .foregroundColor(.accentColor)
         })
+        .onAppear {
+            databaseView.start()
+        }
+        .onDisappear {
+            databaseView.stop()
+        }
     }
 
 }

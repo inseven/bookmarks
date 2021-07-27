@@ -44,19 +44,16 @@ lane :notarize_release do |options|
 end
 
 lane :upload do |options|
-
     api_key = app_store_connect_api_key(
         key_id: options[:api_key_id],
         issuer_id: options[:api_key_issuer_id],
         key_filepath: options[:api_key],
-        duration: 1200, # optional (maximum 1200)
-        in_house: false # optional but may be required if using match/sigh
+        duration: 1200,
+        in_house: false
     )
-
     upload_to_testflight(
         api_key: api_key,
         skip_submission: true,
         ipa: options[:ipa]
     )
-    # skip_submission?
 end

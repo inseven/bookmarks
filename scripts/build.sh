@@ -143,7 +143,7 @@ trap cleanup EXIT
 
 # Determine the version and build number.
 # This follows the format YYmmddHHMMGGGGGGGG where GGGGGGGG is the zero-padded decimal value for a 6-digit Git SHA.
-# TODO: Consider moving this into build-tools?
+# TODO: Move this to build-tools
 VERSION_NUMBER=`changes --scope macOS version`
 GIT_COMMIT=$((16#`git rev-parse --short=6 HEAD`))
 PADDED_GIT_COMMIT=`printf "%08d\n" $GIT_COMMIT`
@@ -152,6 +152,7 @@ BUILD_NUMBER="${TIMESTAMP}${PADDED_GIT_COMMIT}"
 
 # Import the certificates into our dedicated keychain.
 bundle exec fastlane import_certificates keychain:"$KEYCHAIN_PATH"
+echo "$IOS_CERTIFICATE_PASSWORD" | build-tools import-certificate "$KEYCHAIN_PATH" "$IOS_CERTIFICATE_BASE64"  # TODO: Rename to import-base64-certificate? Make it more explicit?
 
 # Install the provisioning profile.
 # TODO: Convenience utility for installing a provisioning profile #105

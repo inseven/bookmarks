@@ -28,17 +28,24 @@ jobs:
 
     - name: Build, test, and release
       env:
+
         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+
         CERTIFICATE_REPOSITORY: ${{ secrets.CERTIFICATE_REPOSITORY }}
         CERTIFICATE_REPOSITORY_AUTHORIZATION_KEY: ${{ secrets.CERTIFICATE_REPOSITORY_AUTHORIZATION_KEY }}
+        IOS_CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_BASE64 }}
+        IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+
         APPLE_DEVELOPER_ID: ${{ secrets.APPLE_DEVELOPER_ID }}
         APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
         APPLE_API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER }}
         APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
         FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NOTARIZE: ${{ github.ref == 'refs/heads/main' }}
         TRY_RELEASE: ${{ github.ref == 'refs/heads/main' }}
+
       run: |
         scripts/build.sh
 

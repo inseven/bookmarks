@@ -29,6 +29,8 @@ In order to make continuous integration easy the `scripts/build.sh` script build
 - `MATCH_PASSWORD` -- the password/passphrase to secure the [match](https://docs.fastlane.tools/actions/match/) certificate store
 - `CERTIFICATE_REPOSITORY` -- the repository used for the match certificate store (must be HTTPS)
 - `CERTIFICATE_REPOSITORY_AUTHORIZATION_KEY` -- a GitHub authorization key used to access the certificate repository (see the [match authorization docs](https://docs.fastlane.tools/actions/match/#git-storage-on-github))
+- `IOS_CERTIFICATE_BASE64` -- base64 encoded *.p12 (what's this called?) file containing the iOS signing certificate and private key
+- `IOS_CERTIFICATE_PASSWORD` -- password used to encrypt for the iOS certificate
 - `APPLE_DEVELOPER_ID` -- individual Apple Developer Account ID (used for notarization)
 - `APPLE_API_KEY` -- base64 encoded [App Store Connect API key](https://appstoreconnect.apple.com/access/api)
 - `APPLE_API_KEY_ID`
@@ -45,6 +47,8 @@ The script (like Fastlane) will look for and source an environment file in the F
 export MATCH_PASSWORD=
 export CERTIFICATE_REPOSITORY=
 export CERTIFICATE_REPOSITORY_AUTHORIZATION_KEY=
+export IOS_CERTIFICATE_BASE64=
+export IOS_CERTIFICATE_PASSWORD=
 
 # Developer account
 export APPLE_DEVELOPER_ID=

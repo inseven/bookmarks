@@ -16,3 +16,6 @@ temp
 
 # Libraries
 /.local
+
+# Authentication keys
+*.p8

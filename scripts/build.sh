@@ -52,6 +52,7 @@ which gh || (echo "GitHub cli (gh) not available on the path." && exit 1)
 POSITIONAL=()
 NOTARIZE=${NOTARIZE:-false}
 RELEASE=${TRY_RELEASE:-false}
+TESTFLIGHT_UPLOAD=${TESTFLIGHT_UPLOAD:-false}
 while [[ $# -gt 0 ]]
 do
     key="$1"
@@ -62,6 +63,10 @@ do
         ;;
         -r|--release)
         RELEASE=true
+        shift
+        ;;
+        -t|--testflight-upload)
+        TESTFLIGHT_UPLOAD=true
         shift
         ;;
         *)
@@ -198,18 +203,16 @@ IPA_BASENAME="Bookmarks.ipa"
 IPA_PATH="$BUILD_DIRECTORY/$IPA_BASENAME"
 
 # Upload the build to TestFlight
-# TODO: Don't do this every time.
-API_KEY="AuthKey.p8"
-echo -n "$APPLE_API_KEY" | base64 --decode --output "$API_KEY"
-bundle exec fastlane upload \
-    api_key:"$API_KEY" \
-    api_key_id:"$APPLE_API_KEY_ID" \
-    api_key_issuer_id:"$APPLE_API_KEY_ISSUER_ID" \
-    ipa:"$IPA_PATH"
-unlink "$API_KEY"
-
-exit
-
+if $TESTFLIGHT_UPLOAD ; then
+    API_KEY="AuthKey.p8"
+    echo -n "$APPLE_API_KEY" | base64 --decode --output "$API_KEY"
+    bundle exec fastlane upload \
+        api_key:"$API_KEY" \
+        api_key_id:"$APPLE_API_KEY_ID" \
+        api_key_issuer_id:"$APPLE_API_KEY_ISSUER_ID" \
+        ipa:"$IPA_PATH"
+    unlink "$API_KEY"
+fi
 
 # Archive and export the build.
 # TODO: Maybe we can share the build number, keychain details between the builds, etc.

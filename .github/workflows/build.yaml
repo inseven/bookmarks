@@ -46,6 +46,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NOTARIZE: ${{ github.ref == 'refs/heads/main' }}
         TRY_RELEASE: ${{ github.ref == 'refs/heads/main' }}
+        TESTFLIGHT_UPLOAD: True
 
       run: |
         scripts/build.sh

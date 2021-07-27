@@ -104,18 +104,18 @@ xcode_project -list
 # Smoke test builds.
 
 # BookmarksCore
-# build_scheme "BookmarksCore iOS" clean build build-for-testing test \
-#     -sdk iphonesimulator \
-#     -destination "$IPHONE_DESTINATION"
-# build_scheme "BookmarksCore macOS" clean build build-for-testing test
-#
-# # iOS
-# build_scheme "Bookmarks iOS" clean build build-for-testing test \
-#     -sdk iphonesimulator \
-#     -destination "$IPHONE_DESTINATION"
-#
-# # macOS
-# build_scheme "Bookmarks macOS" clean build build-for-testing test
+build_scheme "BookmarksCore iOS" clean build build-for-testing test \
+    -sdk iphonesimulator \
+    -destination "$IPHONE_DESTINATION"
+build_scheme "BookmarksCore macOS" clean build build-for-testing test
+
+# iOS
+build_scheme "Bookmarks iOS" clean build build-for-testing test \
+    -sdk iphonesimulator \
+    -destination "$IPHONE_DESTINATION"
+
+# macOS
+build_scheme "Bookmarks macOS" clean build build-for-testing test
 
 # Build the macOS archive.
 

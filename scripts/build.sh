@@ -98,7 +98,9 @@ function build_scheme {
     # Disable code signing for the build server.
     xcode_project \
         -scheme "$1" \
-        "${@:2}" | xcpretty
+        CODE_SIGN_IDENTITY="" \
+        CODE_SIGNING_REQUIRED=NO \
+        CODE_SIGNING_ALLOWED=NO "${@:2}" | xcpretty
 }
 
 cd "$ROOT_DIRECTORY"

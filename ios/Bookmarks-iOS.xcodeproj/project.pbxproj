@@ -15,6 +15,9 @@
 		D84CE47E261E2A1400AF1901 /* BookmarksCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D84CE47D261E2A1400AF1901 /* BookmarksCore.framework */; };
 		D84CE47F261E2A1400AF1901 /* BookmarksCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D84CE47D261E2A1400AF1901 /* BookmarksCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D864E47121C93FD200EAB9AD /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D864E47021C93FD200EAB9AD /* libxml2.2.tbd */; };
+		D89C65E626AF5A8E00D49D11 /* Common.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D89C65E326AF5A8E00D49D11 /* Common.xcconfig */; };
+		D89C65E726AF5A8E00D49D11 /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D89C65E426AF5A8E00D49D11 /* Release.xcconfig */; };
+		D89C65E826AF5A8E00D49D11 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D89C65E526AF5A8E00D49D11 /* Debug.xcconfig */; };
 		D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BDE1172551C56100C95945 /* BookmarksApp.swift */; };
 		D8BDE1472554782000C95945 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = D8BDE1462554782000C95945 /* Introspect */; };
 		D8D3BC0121C6AEBD00D6FB97 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */; };
@@ -64,6 +67,9 @@
 		D84CE47D261E2A1400AF1901 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D864E47021C93FD200EAB9AD /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 		D864E47221C9417F00EAB9AD /* Bookmarks-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bookmarks-Bridging-Header.h"; sourceTree = "<group>"; };
+		D89C65E326AF5A8E00D49D11 /* Common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
+		D89C65E426AF5A8E00D49D11 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		D89C65E526AF5A8E00D49D11 /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		D8BDE1172551C56100C95945 /* BookmarksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksApp.swift; sourceTree = "<group>"; };
 		D8D3BBF621C6AEBC00D6FB97 /* Bookmarks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bookmarks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -129,6 +135,9 @@
 		D8D3BBED21C6AEBC00D6FB97 = {
 			isa = PBXGroup;
 			children = (
+				D89C65E326AF5A8E00D49D11 /* Common.xcconfig */,
+				D89C65E526AF5A8E00D49D11 /* Debug.xcconfig */,
+				D89C65E426AF5A8E00D49D11 /* Release.xcconfig */,
 				D8D3BBF821C6AEBC00D6FB97 /* Bookmarks */,
 				D8D3BC0D21C6AEBD00D6FB97 /* BookmarksTests */,
 				D8D3BC1821C6AEBD00D6FB97 /* BookmarksUITests */,
@@ -292,8 +301,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D89C65E726AF5A8E00D49D11 /* Release.xcconfig in Resources */,
 				D8D3BC0421C6AEBD00D6FB97 /* LaunchScreen.storyboard in Resources */,
 				D8D3BC0121C6AEBD00D6FB97 /* Assets.xcassets in Resources */,
+				D89C65E826AF5A8E00D49D11 /* Debug.xcconfig in Resources */,
+				D89C65E626AF5A8E00D49D11 /* Common.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -372,6 +384,7 @@
 /* Begin XCBuildConfiguration section */
 		D8D3BC1C21C6AEBD00D6FB97 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D89C65E526AF5A8E00D49D11 /* Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -437,6 +450,7 @@
 		};
 		D8D3BC1D21C6AEBD00D6FB97 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D89C65E426AF5A8E00D49D11 /* Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -500,14 +514,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Bookmarks/Bookmarks.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = $BUILD_NUMBER;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
 				INFOPLIST_FILE = Bookmarks/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks;
 				PRODUCT_NAME = Bookmarks;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Bookmarks/Bookmarks-Bridging-Header.h";
@@ -521,17 +535,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Bookmarks/Bookmarks.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = $BUILD_NUMBER;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
 				INFOPLIST_FILE = Bookmarks/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks;
 				PRODUCT_NAME = Bookmarks;
+				PROVISIONING_PROFILE_SPECIFIER = "Bookmarks App Store Profile";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Bookmarks/Bookmarks-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

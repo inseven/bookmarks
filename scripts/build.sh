@@ -52,6 +52,7 @@ which gh || (echo "GitHub cli (gh) not available on the path." && exit 1)
 POSITIONAL=()
 NOTARIZE=${NOTARIZE:-false}
 RELEASE=${TRY_RELEASE:-false}
+TESTFLIGHT_UPLOAD=${TESTFLIGHT_UPLOAD:-false}
 while [[ $# -gt 0 ]]
 do
     key="$1"
@@ -62,6 +63,10 @@ do
         ;;
         -r|--release)
         RELEASE=true
+        shift
+        ;;
+        -t|--testflight-upload)
+        TESTFLIGHT_UPLOAD=true
         shift
         ;;
         *)
@@ -119,8 +124,6 @@ build_scheme "Bookmarks iOS" clean build build-for-testing test \
 # macOS
 build_scheme "Bookmarks macOS" clean build build-for-testing
 
-# Build the macOS archive.
-
 # Clean up the build directory.
 if [ -d "$BUILD_DIRECTORY" ] ; then
     rm -r "$BUILD_DIRECTORY"
@@ -145,29 +148,47 @@ trap cleanup EXIT
 
 # Determine the version and build number.
 VERSION_NUMBER=`changes --scope macOS version`
-GIT_COMMIT=`git rev-parse --short HEAD`
-TIMESTAMP=`date +%s`
-BUILD_NUMBER="${GIT_COMMIT}.${TIMESTAMP}"
+BUILD_NUMBER=`build-tools generate-build-number`
 
 # Import the certificates into our dedicated keychain.
 bundle exec fastlane import_certificates keychain:"$KEYCHAIN_PATH"
+echo "$IOS_CERTIFICATE_PASSWORD" | build-tools import-base64-certificate --password "$KEYCHAIN_PATH" "$IOS_CERTIFICATE_BASE64"
 
-# Install the provisioning profile.
-# TODO: Convenience utility for installing a provisioning profile #105
-#       https://github.com/inseven/bookmarks/issues/105
-file="macos/Bookmarks_Developer_ID_Application.provisionprofile"
-uuid=`grep UUID -A1 -a "$file" | grep -io "[-A-F0-9]\{36\}"`
-extension="${file##*.}"
-PROFILE_DESTINATION=~/"Library/MobileDevice/Provisioning Profiles/$uuid.$extension"
-if [ ! -f "$PROFILE_DESTINATION" ] ; then
-    echo "Installing provisioning profile '$PROFILE_DESTINATION'..."
-    mkdir -p ~/"Library/MobileDevice/Provisioning Profiles/"
-    cp "$file" "$PROFILE_DESTINATION"
-else
-    echo "Provisioning profile installed; skipping"
+# Install the provisioning profiles.
+build-tools install-provisioning-profile "macos/Bookmarks_Developer_ID_Application.provisionprofile"
+build-tools install-provisioning-profile "ios/Bookmarks_App_Store_Profile.mobileprovision"
+
+# Build and archive the iOS project.
+xcode_project \
+    -scheme "Bookmarks iOS" \
+    -config Release \
+    -archivePath "$ARCHIVE_PATH" \
+    OTHER_CODE_SIGN_FLAGS="--keychain=\"${KEYCHAIN_PATH}\"" \
+    BUILD_NUMBER=$BUILD_NUMBER \
+    MARKETING_VERSION=$VERSION_NUMBER \
+    clean archive | xcpretty
+xcodebuild \
+    -archivePath "$ARCHIVE_PATH" \
+    -exportArchive \
+    -exportPath "$BUILD_DIRECTORY" \
+    -exportOptionsPlist "ios/ExportOptions.plist"
+
+IPA_BASENAME="Bookmarks.ipa"
+IPA_PATH="$BUILD_DIRECTORY/$IPA_BASENAME"
+
+# Upload the build to TestFlight
+if $TESTFLIGHT_UPLOAD ; then
+    API_KEY_PATH="${TEMPORARY_DIRECTORY}/AuthKey.p8"
+    echo -n "$APPLE_API_KEY" | base64 --decode --output "$API_KEY_PATH"
+    bundle exec fastlane upload \
+        api_key:"$API_KEY_PATH" \
+        api_key_id:"$APPLE_API_KEY_ID" \
+        api_key_issuer_id:"$APPLE_API_KEY_ISSUER_ID" \
+        ipa:"$IPA_PATH"
+    unlink "$API_KEY_PATH"
 fi
 
-# Archive and export the build.
+# Build and archive the macOS project.
 xcode_project \
     -scheme "Bookmarks macOS" \
     -config Release \

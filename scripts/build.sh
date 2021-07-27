@@ -178,9 +178,8 @@ function install_profile {
 
 # Install the provisioning profiles.
 # TODO: Clean up the profile at the end?
-install_profile "macos/Bookmarks_Developer_ID_Application.provisionprofile"
-echo -n "$IOS_PROVISIONING_PROFILE_BASE64" | base64 --decode --output "Bookmarks_App_Store_Profile.mobileprovision"
-install_profile "Bookmarks_App_Store_Profile.mobileprovision"
+install_profile "macos/Bookmarks_Developer_ID_Application.provisionprofile"  # TODO: Consistent naming?
+install_profile "ios/Bookmarks_App_Store_Profile.mobileprovision"
 
 # TODO: Keychain cleanup doesn't seem to be working right??
 

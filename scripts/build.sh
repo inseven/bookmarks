@@ -105,6 +105,25 @@ function build_scheme {
 
 cd "$ROOT_DIRECTORY"
 
+# List the available schemes.
+xcode_project -list
+
+# Smoke test builds.
+
+# BookmarksCore
+build_scheme "BookmarksCore iOS" clean build build-for-testing test \
+    -sdk iphonesimulator \
+    -destination "$IPHONE_DESTINATION"
+build_scheme "BookmarksCore macOS" clean build build-for-testing test
+
+# iOS
+build_scheme "Bookmarks iOS" clean build build-for-testing test \
+    -sdk iphonesimulator \
+    -destination "$IPHONE_DESTINATION"
+
+# macOS
+build_scheme "Bookmarks macOS" clean build build-for-testing
+
 # Clean up the build directory.
 if [ -d "$BUILD_DIRECTORY" ] ; then
     rm -r "$BUILD_DIRECTORY"
@@ -139,26 +158,6 @@ echo "$IOS_CERTIFICATE_PASSWORD" | build-tools import-base64-certificate --passw
 # Install the provisioning profiles.
 build-tools install-provisioning-profile "macos/Bookmarks_Developer_ID_Application.provisionprofile"
 build-tools install-provisioning-profile "ios/Bookmarks_App_Store_Profile.mobileprovision"
-
-# Smoke test builds.
-
-# List the available schemes.
-xcode_project -list
-
-# BookmarksCore
-build_scheme "BookmarksCore iOS" clean build build-for-testing test \
-    -sdk iphonesimulator \
-    -destination "$IPHONE_DESTINATION"
-build_scheme "BookmarksCore macOS" clean build build-for-testing test
-
-# iOS
-build_scheme "Bookmarks iOS" clean build build-for-testing test \
-    -sdk iphonesimulator \
-    -destination "$IPHONE_DESTINATION"
-
-# macOS
-# TODO: These builds don't work without a macOS certificate
-# build_scheme "Bookmarks macOS" clean build build-for-testing
 
 # Build and archive the iOS project.
 xcode_project \

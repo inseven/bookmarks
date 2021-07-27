@@ -10,6 +10,8 @@
 
 ### Managing Certificates
 
+#### macOS
+
 The build script (details below) uses Fastlane's match task to manage a certificates and a local keychain. Unfortunately, match seems very buggy when using Developer ID certificates, meaning it can't safely be used to fetch the certificates from Apple (it will keep creating new developer certificates until you reach your quota).
 
 Instead, you can manually import a manually created certificate and private keychain into an existing match certificate store:
@@ -21,6 +23,18 @@ fastlane match import --skip_certificate_matching true --type developer_id
 Match will ask for the path to your certificate (`.cer`) and private key file (`.p12`).
 
 N.B. When manually importing certificates, match will not generate file names with identifiers so it's a good idea to name the certificate and private key with a matching, and obvious name.
+
+#### iOS
+
+With the introduction of signed iOS builds, the project now uses two certificate formats (to be simplified in the future). iOS builds use a base64 encoded [PKCS 12](https://en.wikipedia.org/wiki/PKCS_12) certificate and private key specified in the `IOS_CERTIFICATE_BASE64` environment variable (with the password given in the `IOS_CERTIFICATE_PASSWORD`). This setup loosely follows the GitHub approach to [managing certificates](https://docs.github.com/en/actions/guides/installing-an-apple-certificate-on-macos-runners-for-xcode-development).
+
+Keychain Access can be used to export your certificate and private key in the PKCS 12 format, and the base64 encoded version obtained as follows:
+
+```bash
+base64 build_certificate.p12 | pbcopy
+```
+
+This, along with the password used to protect the certificate, can then be added to the GitHub project secrets.
 
 ### Builds
 

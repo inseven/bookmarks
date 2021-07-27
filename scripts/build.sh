@@ -177,6 +177,8 @@ install_profile "macos/Bookmarks_Developer_ID_Application.provisionprofile"
 echo -n "$IOS_PROVISIONING_PROFILE_BASE64" | base64 --decode --output "Bookmarks_App_Store_Profile.mobileprovision"
 install_profile "Bookmarks_App_Store_Profile.mobileprovision"
 
+# TODO: Keychain cleanup doesn't seem to be working right??
+
 # Build and archive the iOS project.
 xcode_project \
     -scheme "Bookmarks iOS" \

@@ -147,13 +147,8 @@ function cleanup {
 trap cleanup EXIT
 
 # Determine the version and build number.
-# This follows the format YYmmddHHMMGGGGGGGG where GGGGGGGG is the zero-padded decimal value for a 6-digit Git SHA.
-# TODO: Move this to build-tools
 VERSION_NUMBER=`changes --scope macOS version`
-GIT_COMMIT=$((16#`git rev-parse --short=6 HEAD`))
-PADDED_GIT_COMMIT=`printf "%08d\n" $GIT_COMMIT`
-TIMESTAMP=`date -u '+%y%m%d%H%M'`
-BUILD_NUMBER="${TIMESTAMP}${PADDED_GIT_COMMIT}"
+BUILD_NUMBER=`build-tools synthesize-build-number`
 
 # Import the certificates into our dedicated keychain.
 bundle exec fastlane import_certificates keychain:"$KEYCHAIN_PATH"

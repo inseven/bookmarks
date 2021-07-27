@@ -148,7 +148,7 @@ trap cleanup EXIT
 
 # Determine the version and build number.
 VERSION_NUMBER=`changes --scope macOS version`
-BUILD_NUMBER=`build-tools synthesize-build-number`
+BUILD_NUMBER=`build-tools generate-build-number`
 
 # Import the certificates into our dedicated keychain.
 bundle exec fastlane import_certificates keychain:"$KEYCHAIN_PATH"

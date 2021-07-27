@@ -8,6 +8,29 @@
 
 ## Development
 
+### Build Numbers
+
+The iOS and macOS apps use auto-generated build numbers that attempt to encode the build timestamp, along with some details of the commit used. They follow the format:
+
+```
+YYmmddHHMMxxxxxxxx
+```
+
+- `YY` -- two-digit year
+- `mm` -- month
+- `dd` -- day
+- `HH` -- hours (24h)
+- `MM` -- minutes
+- `xxxxxxxx` -- zero-padded integer representation of a 6-character commit SHA
+
+These can be quickly decoded using the `build-tools` script:
+
+```
+% scripts/build-tools/build-tools parse-build-number 210727192100869578
+2021-07-27 19:21:00 (UTC)
+0d44ca
+```
+
 ### Managing Certificates
 
 #### macOS

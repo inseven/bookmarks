@@ -49,7 +49,6 @@ class ThumbnailTests: XCTestCase {
         XCTAssertNotNil(thumbnail(for: "https://www.raspberrypi.org/products/raspberry-pi-high-quality-camera/"))
         XCTAssertNotNil(thumbnail(for: "http://2064.io"))
         XCTAssertNotNil(thumbnail(for: "https://eu.vibram.com/en/shop/fivefingers/men/kso-mens/M14.html?dwvar_M14_color=Black%20%2F%20Black#start=1"))
-//        XCTAssertNotNil(thumbnail(for: "https://www.amazon.com/dp/B0838WTFD1/ref=cm_sw_r_cp_api_i_bnXZEb3138AZP"))
         XCTAssertNil(thumbnail(for: "http://lesscss.org"))
     }
 
@@ -69,7 +68,7 @@ class ThumbnailTests: XCTestCase {
             expectation.fulfill()
         }
         downloader.start()
-        self.wait(for: [expectation], timeout: 60)
+        self.wait(for: [expectation], timeout: 120)
     }
 
     // TODO: URL components resolving.

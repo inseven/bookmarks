@@ -153,6 +153,7 @@ BUILD_NUMBER="${TIMESTAMP}${PADDED_GIT_COMMIT}"
 # Import the certificates into our dedicated keychain.
 bundle exec fastlane import_certificates keychain:"$KEYCHAIN_PATH"
 echo "$IOS_CERTIFICATE_PASSWORD" | build-tools import-certificate "$KEYCHAIN_PATH" "$IOS_CERTIFICATE_BASE64"  # TODO: Rename to import-base64-certificate? Make it more explicit?
+security list-keychain -d user -s "$KEYCHAIN_PATH"
 
 # Install the provisioning profile.
 # TODO: Convenience utility for installing a provisioning profile #105

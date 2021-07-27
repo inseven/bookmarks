@@ -154,27 +154,10 @@ BUILD_NUMBER=`build-tools synthesize-build-number`
 bundle exec fastlane import_certificates keychain:"$KEYCHAIN_PATH"
 echo "$IOS_CERTIFICATE_PASSWORD" | build-tools import-base64-certificate --password "$KEYCHAIN_PATH" "$IOS_CERTIFICATE_BASE64"
 
-
-function install_profile {
-    # TODO: Convenience utility for installing a provisioning profile #105
-    #       https://github.com/inseven/bookmarks/issues/105
-    file="$1"
-    uuid=`grep UUID -A1 -a "$file" | grep -io "[-A-F0-9]\{36\}"`
-    extension="${file##*.}"
-    PROFILE_DESTINATION=~/"Library/MobileDevice/Provisioning Profiles/$uuid.$extension"
-    if [ ! -f "$PROFILE_DESTINATION" ] ; then
-        echo "Installing provisioning profile '$PROFILE_DESTINATION'..."
-        mkdir -p ~/"Library/MobileDevice/Provisioning Profiles/"
-        cp "$file" "$PROFILE_DESTINATION"
-    else
-        echo "Provisioning profile installed; skipping"
-    fi
-}
-
 # Install the provisioning profiles.
 # TODO: Clean up the profile at the end?
-install_profile "macos/Bookmarks_Developer_ID_Application.provisionprofile"  # TODO: Consistent naming?
-install_profile "ios/Bookmarks_App_Store_Profile.mobileprovision"
+build-tools install-provisioning-profile "macos/Bookmarks_Developer_ID_Application.provisionprofile"
+build-tools install-provisioning-profile "ios/Bookmarks_App_Store_Profile.mobileprovision"
 
 # TODO: Keychain cleanup doesn't seem to be working right??
 

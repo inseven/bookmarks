@@ -52,24 +52,24 @@ class ThumbnailTests: XCTestCase {
         XCTAssertNil(thumbnail(for: "http://lesscss.org"))
     }
 
-    func testAmazonThumbnail() {
-        let expectation = self.expectation(description: "Download thumbnail")
-        guard let url = URL(string: "https://www.amazon.com/dp/B0838WTFD1/ref=cm_sw_r_cp_api_i_bnXZEb3138AZP") else {
-            XCTFail()
-            return
-        }
-        let downloader = WebViewDownloader(url: url) { (result) in
-            switch result {
-            case .success(let url):
-                print("url => \(url)")
-            case .failure:
-                XCTFail("Failed to find image!")
-            }
-            expectation.fulfill()
-        }
-        downloader.start()
-        self.wait(for: [expectation], timeout: 120)
-    }
+//    func testAmazonThumbnail() {
+//        let expectation = self.expectation(description: "Download thumbnail")
+//        guard let url = URL(string: "https://www.amazon.com/dp/B0838WTFD1/ref=cm_sw_r_cp_api_i_bnXZEb3138AZP") else {
+//            XCTFail()
+//            return
+//        }
+//        let downloader = WebViewDownloader(url: url) { (result) in
+//            switch result {
+//            case .success(let url):
+//                print("url => \(url)")
+//            case .failure:
+//                XCTFail("Failed to find image!")
+//            }
+//            expectation.fulfill()
+//        }
+//        downloader.start()
+//        self.wait(for: [expectation], timeout: 120)
+//    }
 
     // TODO: URL components resolving.
 

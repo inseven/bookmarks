@@ -28,6 +28,7 @@ set -u
 scripts_directory="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 root_directory="${scripts_directory}/.."
 changes_directory="${scripts_directory}/changes"
+build_tools_directory="${scripts_directory}/build-tools"
 
 environment_path="${scripts_directory}/environment.sh"
 
@@ -36,6 +37,7 @@ source "$environment_path"
 # Install the Python dependencies
 pip3 install --user pipenv
 PIPENV_PIPFILE="$changes_directory/Pipfile" pipenv install
+PIPENV_PIPFILE="$build_tools_directory/Pipfile" pipenv install
 
 # Install the Ruby dependencies
 cd "$root_directory"

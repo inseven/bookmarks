@@ -120,7 +120,8 @@ build_scheme "Bookmarks iOS" clean build build-for-testing test \
     -destination "$IPHONE_DESTINATION"
 
 # macOS
-build_scheme "Bookmarks macOS" clean build build-for-testing test
+# TODO: Enable macOS tests?
+build_scheme "Bookmarks macOS" clean build build-for-testing
 
 # Build the macOS archive.
 

@@ -154,24 +154,28 @@ BUILD_NUMBER="${TIMESTAMP}${PADDED_GIT_COMMIT}"
 bundle exec fastlane import_certificates keychain:"$KEYCHAIN_PATH"
 echo "$IOS_CERTIFICATE_PASSWORD" | build-tools import-certificate "$KEYCHAIN_PATH" "$IOS_CERTIFICATE_BASE64"  # TODO: Rename to import-base64-certificate? Make it more explicit?
 
-# Install the provisioning profile.
-# TODO: Convenience utility for installing a provisioning profile #105
-#       https://github.com/inseven/bookmarks/issues/105
-file="macos/Bookmarks_Developer_ID_Application.provisionprofile"
-uuid=`grep UUID -A1 -a "$file" | grep -io "[-A-F0-9]\{36\}"`
-extension="${file##*.}"
-PROFILE_DESTINATION=~/"Library/MobileDevice/Provisioning Profiles/$uuid.$extension"
-if [ ! -f "$PROFILE_DESTINATION" ] ; then
-    echo "Installing provisioning profile '$PROFILE_DESTINATION'..."
-    mkdir -p ~/"Library/MobileDevice/Provisioning Profiles/"
-    cp "$file" "$PROFILE_DESTINATION"
-else
-    echo "Provisioning profile installed; skipping"
-fi
 
+function install_profile {
+    # TODO: Convenience utility for installing a provisioning profile #105
+    #       https://github.com/inseven/bookmarks/issues/105
+    file="$1"
+    uuid=`grep UUID -A1 -a "$file" | grep -io "[-A-F0-9]\{36\}"`
+    extension="${file##*.}"
+    PROFILE_DESTINATION=~/"Library/MobileDevice/Provisioning Profiles/$uuid.$extension"
+    if [ ! -f "$PROFILE_DESTINATION" ] ; then
+        echo "Installing provisioning profile '$PROFILE_DESTINATION'..."
+        mkdir -p ~/"Library/MobileDevice/Provisioning Profiles/"
+        cp "$file" "$PROFILE_DESTINATION"
+    else
+        echo "Provisioning profile installed; skipping"
+    fi
+}
+
+# Install the provisioning profiles.
 # TODO: Clean up the profile at the end?
+install_profile "macos/Bookmarks_Developer_ID_Application.provisionprofile"
 echo -n "$IOS_PROVISIOINING_PROFILE_BASE64" | base64 --decode --output "Bookmarks_App_Store_Profile.mobileprovision"
-fastlane run install_provisioning_profile path:"Bookmarks_App_Store_Profile.mobileprovision"
+install_profile "Bookmarks_App_Store_Profile.mobileprovision"
 
 # Build and archive the iOS project.
 xcode_project \

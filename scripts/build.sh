@@ -170,6 +170,10 @@ else
     echo "Provisioning profile installed; skipping"
 fi
 
+# TODO: Clean up the profile at the end?
+echo -n "$IOS_PROVISIOINING_PROFILE_BASE64" | base64 --decode --output "Bookmarks_App_Store_Profile.mobileprovision"
+fastlane run install_provisioning_profile path:"Bookmarks_App_Store_Profile.mobileprovision"
+
 # Build and archive the iOS project.
 xcode_project \
     -scheme "Bookmarks iOS" \

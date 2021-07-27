@@ -31,6 +31,7 @@ In order to make continuous integration easy the `scripts/build.sh` script build
 - `CERTIFICATE_REPOSITORY_AUTHORIZATION_KEY` -- a GitHub authorization key used to access the certificate repository (see the [match authorization docs](https://docs.fastlane.tools/actions/match/#git-storage-on-github))
 - `IOS_CERTIFICATE_BASE64` -- base64 encoded *.p12 (what's this called?) file containing the iOS signing certificate and private key
 - `IOS_CERTIFICATE_PASSWORD` -- password used to encrypt for the iOS certificate
+- `IOS_PROVISIONING_PROFILE_BASE64` --
 - `APPLE_DEVELOPER_ID` -- individual Apple Developer Account ID (used for notarization)
 - `APPLE_API_KEY` -- base64 encoded [App Store Connect API key](https://appstoreconnect.apple.com/access/api)
 - `APPLE_API_KEY_ID`
@@ -49,6 +50,7 @@ export CERTIFICATE_REPOSITORY=
 export CERTIFICATE_REPOSITORY_AUTHORIZATION_KEY=
 export IOS_CERTIFICATE_BASE64=
 export IOS_CERTIFICATE_PASSWORD=
+export IOS_PROVISIONING_PROFILE_BASE64=
 
 # Developer account
 export APPLE_DEVELOPER_ID=

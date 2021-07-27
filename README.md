@@ -43,12 +43,12 @@ In order to make continuous integration easy the `scripts/build.sh` script build
 - `MATCH_PASSWORD` -- the password/passphrase to secure the [match](https://docs.fastlane.tools/actions/match/) certificate store
 - `CERTIFICATE_REPOSITORY` -- the repository used for the match certificate store (must be HTTPS)
 - `CERTIFICATE_REPOSITORY_AUTHORIZATION_KEY` -- a GitHub authorization key used to access the certificate repository (see the [match authorization docs](https://docs.fastlane.tools/actions/match/#git-storage-on-github))
-- `IOS_CERTIFICATE_BASE64` -- base64 encoded *.p12 (what's this called?) file containing the iOS signing certificate and private key
-- `IOS_CERTIFICATE_PASSWORD` -- password used to encrypt for the iOS certificate
+- `IOS_CERTIFICATE_BASE64` -- base64 encoded PKCS 12 certificate (see above for details)
+- `IOS_CERTIFICATE_PASSWORD` -- password used to protect the iOS certificate
 - `APPLE_DEVELOPER_ID` -- individual Apple Developer Account ID (used for notarization)
-- `APPLE_API_KEY` -- base64 encoded [App Store Connect API key](https://appstoreconnect.apple.com/access/api)
-- `APPLE_API_KEY_ID`
-- `APPLE_API_KEY_ISSUER_ID`
+- `APPLE_API_KEY` -- base64 encoded App Store Connect API key (see https://appstoreconnect.apple.com/access/api)
+- `APPLE_API_KEY_ID` -- App Store Connect API key id (see https://appstoreconnect.apple.com/access/api)
+- `APPLE_API_KEY_ISSUER_ID` -- App Store connect API key issuer id (see https://appstoreconnect.apple.com/access/api)
 - `FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD` -- [app-specific password](https://support.apple.com/en-us/HT204397) for the Developer Account
 - `NOTARIZE` -- boolean indicating whether to attempt notarize the build (conditionally set based on the current branch using `${{ github.ref == 'refs/heads/main' }}`)
 - `TRY_RELEASE` -- boolean indicating whether to attempt a release (conditionally set based on the current branch using `${{ github.ref == 'refs/heads/main' }}`)
@@ -68,7 +68,7 @@ export IOS_CERTIFICATE_PASSWORD=
 export APPLE_DEVELOPER_ID=
 export APPLE_API_KEY=
 export APPLE_API_KEY_ID=
-export APPLE_API_KEY_ISSUER_ID
+export APPLE_API_KEY_ISSUER_ID=
 export FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=
 
 # GitHub (only required if publishing releases locally)

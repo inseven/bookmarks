@@ -93,9 +93,8 @@ public struct And: QueryDescription {
 
 }
 
-// TODO: Why doesn't this work?
-
-
+// TODO: Flatten AND queries into single arrays where possible #201
+//       https://github.com/inseven/bookmarks/issues/201
 func &&<T: QueryDescription, Q: QueryDescription>(lhs: T, rhs: Q) -> QueryDescription {
     return And(lhs, rhs)
 }

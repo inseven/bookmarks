@@ -66,11 +66,8 @@ struct BookmarksView: View {
                 }
             }
         }
-        .navigationBarItems(leading: Button(action: {
+        .navigationBarItems(leading: Button("Settings") {
             sheet = .settings
-        }) {
-            Image(systemName: "gearshape")
-                .foregroundColor(.accentColor)
         })
         .onAppear {
             databaseView.start()

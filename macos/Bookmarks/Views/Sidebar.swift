@@ -80,7 +80,7 @@ struct Sidebar: View {
                                     tag: tag.favoriteId,
                                     title: tag,
                                     systemImage: "tag",
-                                    databaseView: ItemsView(database: manager.database, query: HasTag(tag)))
+                                    databaseView: ItemsView(database: manager.database, query: Tag(tag)))
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Remove from Favourites") {
                                     settings.favoriteTags = settings.favoriteTags.filter { $0 != tag }
@@ -107,7 +107,7 @@ struct Sidebar: View {
                                     tag: tag.tagId,
                                     title: tag,
                                     systemImage: "tag",
-                                    databaseView: ItemsView(database: manager.database, query: HasTag(tag)))
+                                    databaseView: ItemsView(database: manager.database, query: Tag(tag)))
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Rename") {
                                     self.sheet = .rename(tag: tag)

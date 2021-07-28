@@ -29,14 +29,13 @@ public protocol DatabaseObserver {
 }
 
 
-// TODO: ItemQuery? Maybe just Query?
 public protocol QueryDescription {
 
     var sql: String { get }
 
 }
 
-public class Untagged: QueryDescription {
+public struct Untagged: QueryDescription {
 
     public var sql: String { "items.id NOT IN (SELECT item_id FROM items_to_tags)" }
 
@@ -44,7 +43,7 @@ public class Untagged: QueryDescription {
 
 }
 
-public class HasTag: QueryDescription {
+public struct HasTag: QueryDescription {
 
     let name: String
 
@@ -71,11 +70,11 @@ public class HasTag: QueryDescription {
 
 }
 
-class Contains: QueryDescription {
+public struct Contains: QueryDescription {
 
     let filter: String
 
-    var sql: String {
+    public var sql: String {
         let tagsColumn = Expression<String>("tags")
         let expression = Database.Schema.title.like("%\(filter)%") || Database.Schema.url.like("%\(filter)%") || tagsColumn.like("%\(filter)%")
         return expression.asSQL()
@@ -87,11 +86,11 @@ class Contains: QueryDescription {
 
 }
 
-class MatchesFilter: QueryDescription {
+public struct MatchesFilter: QueryDescription {
 
     let filter: String
 
-    var sql: String {
+    public var sql: String {
         let tagsColumn = Expression<String>("tags")
         let filters = filter.tokens.map {
             Database.Schema.title.like("%\($0)%") || Database.Schema.url.like("%\($0)%") || tagsColumn.like("%\($0)%")
@@ -105,13 +104,12 @@ class MatchesFilter: QueryDescription {
 
 }
 
-// TODO: Make these structs again?
-class And: QueryDescription {
+public struct And: QueryDescription {
 
     let lhs: QueryDescription
     let rhs: QueryDescription
 
-    var sql: String { "(\(lhs.sql)) AND (\(rhs.sql))" }
+    public var sql: String { "(\(lhs.sql)) AND (\(rhs.sql))" }
 
     init(_ lhs: QueryDescription, _ rhs: QueryDescription) {
         self.lhs = lhs
@@ -129,7 +127,7 @@ class And: QueryDescription {
 //
 //}
 
-public class True: QueryDescription {
+public struct True: QueryDescription {
 
     public var sql: String { "1" }
 

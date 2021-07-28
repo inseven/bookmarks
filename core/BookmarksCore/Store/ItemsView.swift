@@ -30,19 +30,19 @@ public class ItemsView: ObservableObject {
     @Published public var search = ""
     @Published public var items: [Item] = []
 
-    fileprivate var tags: Set<String>?
+    fileprivate var query: QueryDescription
     fileprivate var filter = ""
 
-    public init(database: Database, tags: Set<String>? = nil) {
+    public init(database: Database, query: QueryDescription = True()) {
         self.database = database
-        self.tags = tags
+        self.query = query
     }
 
     func update() {
         dispatchPrecondition(condition: .onQueue(.main))
         print("fetching items...")
 
-        database.items(ItemFilter(tags: tags, terms: []) && ItemFilter(filter: filter)) { result in
+        database.items(query: And(query, Filter(filter))) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let items):

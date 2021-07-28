@@ -23,6 +23,7 @@ import SwiftUI
 enum BookmarksSection {
     case all
     case untagged
+    case today
     case favorite(tag: String)
     case tag(tag: String)
 }
@@ -37,6 +38,8 @@ extension BookmarksSection: CustomStringConvertible, Hashable, Identifiable {
             return "uk.co.inseven.bookmarks.all-bookmarks"
         case .untagged:
             return "uk.co.inseven.bookmarks.untagged"
+        case .today:
+            return "uk.co.inseven.bookmarks.today"
         case .favorite(let tag):
             return "uk.co.inseven.bookmarks.favorites.\(tag)"
         case .tag(let tag):

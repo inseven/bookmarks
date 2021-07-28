@@ -90,52 +90,6 @@ extension String {
 
 }
 
-public struct ItemFilter {
-
-    var tags: Set<String>? = nil
-    var terms: [String] = []
-
-    init(tags: Set<String>?, terms: [String]) {
-        self.tags = tags
-        self.terms = terms
-    }
-
-    init(tag: String) {
-        tags = [tag]
-    }
-
-    init(filter: String) {
-        let tagPrefix = "tag:"
-        var tags: Set<String> = Set()
-        var terms: [String] = []
-        for token in filter.tokens {
-            if token.hasPrefix(tagPrefix) {
-                tags.insert(String(token.dropFirst(tagPrefix.count)))
-            } else {
-                terms.append(token)
-            }
-        }
-        self.tags = tags.isEmpty ? nil : tags
-        self.terms = terms
-    }
-
-    static func &&(lhs: Self, rhs: Self) -> Self {
-        var tags: Set<String>? = nil
-        if let lhs_tags = lhs.tags,
-           let rhs_tags = rhs.tags {
-            tags = lhs_tags.union(rhs_tags)
-        } else if let lhs_tags = lhs.tags {
-            tags = lhs_tags
-        } else if let rhs_tags = rhs.tags {
-            tags = rhs_tags
-        }
-
-        return Self(tags: tags, terms: lhs.terms + rhs.terms)
-    }
-
-}
-
-
 public class Database {
 
     class Schema {
@@ -449,47 +403,8 @@ public class Database {
         }
     }
 
-    public func syncQueue_items(filter: String? = nil, tags: [String]? = nil) throws -> [Item] {
+    public func syncQueue_items(where whereClause: String) throws -> [Item] {
         dispatchPrecondition(condition: .onQueue(syncQueue))
-
-        var whereClause = "1"
-
-        if let filter = filter {
-            let tagsColumn = Expression<String>("tags")
-            let filters = filter.tokens.map {
-                Schema.title.like("%\($0)%") || Schema.url.like("%\($0)%") || tagsColumn.like("%\($0)%")
-            }
-            whereClause = whereClause && filters.reduce(Expression(value: true)) { $0 && $1 }.asSQL()
-        }
-
-        if let tags = tags {
-            if tags.isEmpty {
-                whereClause = whereClause && "items.id NOT IN (SELECT item_id FROM items_to_tags)"
-            } else {
-                var tagIntersectSelect = ""
-                for tag in tags {
-                    let tagsFilter = Schema.name.lowercaseString == tag.lowercased()
-                    let tagSubselect = """
-                        SELECT
-                            item_id
-                        FROM
-                            items_to_tags
-                        JOIN
-                            tags
-                        ON
-                            items_to_tags.tag_id = tags.id
-                        WHERE
-                            \(tagsFilter.asSQL())
-                        """
-                    if tagIntersectSelect.isEmpty {
-                        tagIntersectSelect = tagSubselect
-                    } else {
-                        tagIntersectSelect = tagIntersectSelect + " INTERSECT " + tagSubselect
-                    }
-                }
-                whereClause = whereClause && "items.id IN (\(tagIntersectSelect))"
-            }
-        }
 
         let selectQuery = """
             SELECT
@@ -513,7 +428,7 @@ public class Database {
                         tags.id == items_to_tags.tag_id
                     GROUP BY
                         item_id
-                ) a
+                )
             ON
                 items.id == item_id
             WHERE \(whereClause)
@@ -533,19 +448,11 @@ public class Database {
         return items
     }
 
-    public func items(_ filter: ItemFilter, completion: @escaping (Swift.Result<[Item], Error>) -> Void) {
-        var queryTags: [String]? = nil
-        if let tags = filter.tags {
-            queryTags = Array(tags)
-        }
-        return items(filter: filter.terms.joined(separator: " "), tags: queryTags, completion: completion)
-    }
-
-    public func items(filter: String? = nil, tags: [String]? = nil, completion: @escaping (Swift.Result<[Item], Error>) -> Void) {
+    public func items(query: QueryDescription = True(), completion: @escaping (Swift.Result<[Item], Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             let result = Swift.Result<[Item], Error> {
-                try self.syncQueue_items(filter: filter, tags: tags)
+                try self.syncQueue_items(where: query.sql)
             }
             completion(result)
         }

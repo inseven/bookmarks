@@ -54,6 +54,7 @@ lane :upload do |options|
     upload_to_testflight(
         api_key: api_key,
         skip_submission: true,
-        ipa: options[:ipa]
+        ipa: options[:ipa],
+        notify_external_testers: false
     )
 end

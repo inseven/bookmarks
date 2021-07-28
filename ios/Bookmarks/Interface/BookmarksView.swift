@@ -37,6 +37,7 @@ struct BookmarksView: View {
         VStack {
             HStack {
                 TextField("Search", text: $databaseView.search)
+                    .autocapitalization(.none)
                     .modifier(SearchBoxModifier(text: $databaseView.search))
                     .padding()
             }

@@ -464,30 +464,30 @@ public class Database {
     }
 
     // TODO: Remove this method.
-    public func items(filter: String? = nil, tags: [String]? = nil, completion: @escaping (Swift.Result<[Item], Error>) -> Void) {
-        let completion = DispatchQueue.global().asyncClosure(completion)
-        syncQueue.async {
-            let result = Swift.Result<[Item], Error> {
-                var query: QueryDescription = True()
-                if let filter = filter {
-                    query = And(query, MatchesFilter(filter))
-                }
-                if let tags = tags {
-                    if tags.isEmpty {
-                        query = And(query, Untagged())
-                    } else {
-                        var tagsQueryDescription: QueryDescription = True()
-                        for queryDescription in tags.map({ HasTag($0) }) {  // TODO Reduce
-                            tagsQueryDescription = And(tagsQueryDescription, queryDescription)
-                        }
-                        query = And(query, tagsQueryDescription)
-                    }
-                }
-                return try self.syncQueue_items(query: query)
-            }
-            completion(result)
-        }
-    }
+//    public func items(filter: String? = nil, tags: [String]? = nil, completion: @escaping (Swift.Result<[Item], Error>) -> Void) {
+//        let completion = DispatchQueue.global().asyncClosure(completion)
+//        syncQueue.async {
+//            let result = Swift.Result<[Item], Error> {
+//                var query: QueryDescription = True()
+//                if let filter = filter {
+//                    query = And(query, MatchesFilter(filter))
+//                }
+//                if let tags = tags {
+//                    if tags.isEmpty {
+//                        query = And(query, Untagged())
+//                    } else {
+//                        var tagsQueryDescription: QueryDescription = True()
+//                        for queryDescription in tags.map({ HasTag($0) }) {  // TODO Reduce
+//                            tagsQueryDescription = And(tagsQueryDescription, queryDescription)
+//                        }
+//                        query = And(query, tagsQueryDescription)
+//                    }
+//                }
+//                return try self.syncQueue_items(query: query)
+//            }
+//            completion(result)
+//        }
+//    }
 
     public func identifiers(completion: @escaping (Swift.Result<[String], Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)

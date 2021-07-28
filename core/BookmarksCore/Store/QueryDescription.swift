@@ -79,24 +79,6 @@ public struct Contains: QueryDescription {
 
 }
 
-public struct MatchesFilter: QueryDescription {
-
-    let filter: String
-
-    public var sql: String {
-        let tagsColumn = Expression<String>("tags")
-        let filters = filter.tokens.map {
-            Database.Schema.title.like("%\($0)%") || Database.Schema.url.like("%\($0)%") || tagsColumn.like("%\($0)%")
-        }
-        return filters.reduce(Expression(value: true)) { $0 && $1 }.asSQL()
-    }
-
-    init(_ filter: String) {
-        self.filter = filter
-    }
-
-}
-
 public struct And: QueryDescription {
 
     let lhs: QueryDescription
@@ -112,13 +94,11 @@ public struct And: QueryDescription {
 }
 
 // TODO: Why doesn't this work?
-//extension QueryDescription {
-//
-//    static func &&(lhs: QueryDescription, rhs: QueryDescription) -> QueryDescription {
-//        return And(lhs, rhs)
-//    }
-//
-//}
+
+
+func &&<T: QueryDescription, Q: QueryDescription>(lhs: T, rhs: Q) -> QueryDescription {
+    return And(lhs, rhs)
+}
 
 public struct True: QueryDescription {
 

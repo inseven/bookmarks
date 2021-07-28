@@ -36,7 +36,7 @@ public struct Untagged: QueryDescription {
 
 }
 
-public struct HasTag: QueryDescription {
+public struct Tag: QueryDescription {
 
     let name: String
 
@@ -63,7 +63,7 @@ public struct HasTag: QueryDescription {
 
 }
 
-public struct Contains: QueryDescription {
+public struct Like: QueryDescription {
 
     let filter: String
 
@@ -75,6 +75,20 @@ public struct Contains: QueryDescription {
 
     init(_ filter: String) {
         self.filter = filter
+    }
+
+}
+
+public struct Search: QueryDescription {
+
+    let search: String
+
+    public var sql: String {
+        search.tokens.map { Like($0) }.reduce(True() as QueryDescription) { And($0, $1) }.sql
+    }
+
+    init(_ search: String) {
+        self.search = search
     }
 
 }
@@ -95,7 +109,7 @@ public struct And: QueryDescription {
 
 // TODO: Flatten AND queries into single arrays where possible #201
 //       https://github.com/inseven/bookmarks/issues/201
-func &&<T: QueryDescription, Q: QueryDescription>(lhs: T, rhs: Q) -> QueryDescription {
+func &&<T: QueryDescription, Q: QueryDescription>(lhs: T, rhs: Q) -> And {
     return And(lhs, rhs)
 }
 
@@ -107,7 +121,7 @@ public struct True: QueryDescription {
 
 }
 
-public class Search: QueryDescription {
+public class Filter: QueryDescription {
 
     var search: String
 
@@ -117,9 +131,9 @@ public class Search: QueryDescription {
         for token in search.tokens {
             if token.hasPrefix(tagPrefix) {
                 let tag = String(token.dropFirst(tagPrefix.count))
-                query = And(query, HasTag(tag))
+                query = And(query, Tag(tag))
             } else {
-                query = And(query, Contains(token))
+                query = And(query, Like(token))
             }
         }
         return query.sql

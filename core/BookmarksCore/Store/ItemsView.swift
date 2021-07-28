@@ -30,7 +30,6 @@ public class ItemsView: ObservableObject {
     @Published public var search = ""
     @Published public var items: [Item] = []
 
-//    fileprivate var tags: Set<String>?
     fileprivate var query: QueryDescription
     fileprivate var filter = ""
 
@@ -43,7 +42,7 @@ public class ItemsView: ObservableObject {
         dispatchPrecondition(condition: .onQueue(.main))
         print("fetching items...")
 
-        database.items(query: And(query, Search(filter))) { result in
+        database.items(query: And(query, Filter(filter))) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let items):

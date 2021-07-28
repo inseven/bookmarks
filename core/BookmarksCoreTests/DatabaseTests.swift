@@ -196,17 +196,17 @@ class DatabaseTests: XCTestCase {
 
         try database.insertOrUpdate([item1, item2, item3])
 
-//        XCTAssertEqual(try database.items(filter: ".com"), [item2, item1])
-//        XCTAssertEqual(try database.items(filter: ".COM"), [item2, item1])
-//        XCTAssertEqual(try database.items(filter: "example.COM"), [item1])
-//        XCTAssertEqual(try database.items(filter: "example.com"), [item1])
-//        XCTAssertEqual(try database.items(filter: "Example"), [item1])
-//        XCTAssertEqual(try database.items(filter: "EXaMPle"), [item1])
-//        XCTAssertEqual(try database.items(filter: "amp"), [item1])
-//        XCTAssertEqual(try database.items(filter: "Cheese"), [item3, item2])
-//        XCTAssertEqual(try database.items(filter: "Cheese co"), [item3, item2])
-//        XCTAssertEqual(try database.items(filter: "Cheese com"), [item2])
-//        XCTAssertEqual(try database.items(filter: "Fromage CHEESE"), [item3])
+        XCTAssertEqual(try database.items(query: Search(".com")), [item2, item1])
+        XCTAssertEqual(try database.items(query: Search(".COM")), [item2, item1])
+        XCTAssertEqual(try database.items(query: Search("example.COM")), [item1])
+        XCTAssertEqual(try database.items(query: Search("example.com")), [item1])
+        XCTAssertEqual(try database.items(query: Search("Example")), [item1])
+        XCTAssertEqual(try database.items(query: Search("EXaMPle")), [item1])
+        XCTAssertEqual(try database.items(query: Search("amp")), [item1])
+        XCTAssertEqual(try database.items(query: Search("Cheese")), [item3, item2])
+        XCTAssertEqual(try database.items(query: Search("Cheese co")), [item3, item2])
+        XCTAssertEqual(try database.items(query: Search("Cheese com")), [item2])
+        XCTAssertEqual(try database.items(query: Search("Fromage CHEESE")), [item3])
     }
 
     func testItemFilterWithTags() throws {
@@ -229,11 +229,11 @@ class DatabaseTests: XCTestCase {
 
         try database.insertOrUpdate([item1, item2, item3])
 
-//        XCTAssertEqual(try database.items(filter: "Cheese", tags: ["cheese"]), [item3, item2])
-//        XCTAssertEqual(try database.items(filter: "Cheese co", tags: ["cheese"]), [item3, item2])
-//        XCTAssertEqual(try database.items(filter: "Cheese com", tags: ["cheese"]), [item2])
-//        XCTAssertEqual(try database.items(filter: "Fromage CHEESE", tags: ["cheese"]), [item3])
-//        XCTAssertEqual(try database.items(filter: "strawberries", tags: ["cheese"]), [item3])
+        XCTAssertEqual(try database.items(query: Search("Cheese") && Tag("cheese")), [item3, item2])
+        XCTAssertEqual(try database.items(query: Search("Cheese co") && Tag("cheese")), [item3, item2])
+        XCTAssertEqual(try database.items(query: Search("Cheese com") && Tag("cheese")), [item2])
+        XCTAssertEqual(try database.items(query: Search("Fromage CHEESE") && Tag("cheese")), [item3])
+        XCTAssertEqual(try database.items(query: Search("strawberries") && Tag("cheese")), [item3])
     }
 
     func testItemFilterEmptyTags() throws {

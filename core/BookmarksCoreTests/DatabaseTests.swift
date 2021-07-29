@@ -303,10 +303,12 @@ class DatabaseTests: XCTestCase {
         XCTAssertEqual(try database.items(), [item3, item2, item1].map { item in
             var tags = item.tags
             tags.remove("website")
-            return Item(title: item.title,
+            return Item(identifier: item.identifier,
+                        title: item.title,
                         url: item.url,
                         tags: tags,
-                        date: item.date)
+                        date: item.date,
+                        toRead: item.toRead)
         })
     }
 

@@ -25,12 +25,13 @@ import XCTest
 
 extension Item {
 
-    convenience init(title: String, url: URL, tags: Set<String>, date: Date, thumbnail: Image? = nil) {
+    convenience init(title: String, url: URL, tags: Set<String>, date: Date, toRead: Bool = false, thumbnail: Image? = nil) {
         self.init(identifier: UUID().uuidString,
                   title: title,
                   url: url,
                   tags: tags,
                   date: date,
+                  toRead: toRead,
                   thumbnail: thumbnail)
     }
 
@@ -90,14 +91,12 @@ class DatabaseTests: XCTestCase {
     func testSingleQuery() throws {
         let database = try Database(path: temporaryDatabaseUrl)
 
-        let item1 = Item(identifier: UUID().uuidString,
-                         title: "Example",
+        let item1 = Item(title: "Example",
                          url: URL(string: "https://example.com")!,
                          tags: ["example", "website"],
                          date: Date(timeIntervalSince1970: 0))
 
-        let item2 = Item(identifier: UUID().uuidString,
-                         title: "Cheese",
+        let item2 = Item(title: "Cheese",
                          url: URL(string: "https://fromage.com")!,
                          tags: ["cheese", "website"],
                          date: Date(timeIntervalSince1970: 0))
@@ -116,14 +115,12 @@ class DatabaseTests: XCTestCase {
     func testMultipleQuery() throws {
         let database = try Database(path: temporaryDatabaseUrl)
 
-        let item1 = Item(identifier: UUID().uuidString,
-                         title: "Example",
+        let item1 = Item(title: "Example",
                          url: URL(string: "https://example.com")!,
                          tags: ["example", "website"],
                          date: Date(timeIntervalSince1970: 0))
 
-        let item2 = Item(identifier: UUID().uuidString,
-                         title: "Cheese",
+        let item2 = Item(title: "Cheese",
                          url: URL(string: "https://fromage.com")!,
                          tags: ["cheese", "website"],
                          date: Date(timeIntervalSince1970: 10))
@@ -137,14 +134,12 @@ class DatabaseTests: XCTestCase {
     func testItemDeletion() throws {
         let database = try Database(path: temporaryDatabaseUrl)
 
-        let item1 = Item(identifier: UUID().uuidString,
-                         title: "Example",
+        let item1 = Item(title: "Example",
                          url: URL(string: "https://example.com")!,
                          tags: ["example", "website"],
                          date: Date(timeIntervalSince1970: 0))
 
-        let item2 = Item(identifier: UUID().uuidString,
-                         title: "Cheese",
+        let item2 = Item(title: "Cheese",
                          url: URL(string: "https://fromage.com")!,
                          tags: ["cheese", "website"],
                          date: Date(timeIntervalSince1970: 10))
@@ -159,16 +154,14 @@ class DatabaseTests: XCTestCase {
     func testItemUpdateCleansUpTags() throws {
         let database = try Database(path: temporaryDatabaseUrl)
 
-        let item = Item(identifier: UUID().uuidString,
-                        title: "Example",
+        let item = Item(title: "Example",
                         url: URL(string: "https://example.com")!,
                         tags: ["example", "website"],
                         date: Date(timeIntervalSince1970: 0))
         try database.insertOrUpdate([item])
         XCTAssertEqual(try database.tags(), Set(["example", "website"]))
 
-        let updatedItem = Item(identifier: item.identifier,
-                               title: "Example",
+        let updatedItem = Item(title: "Example",
                                url: item.url,
                                tags: ["website", "cheese"],
                                date: item.date)
@@ -314,7 +307,8 @@ class DatabaseTests: XCTestCase {
                         title: item.title,
                         url: item.url,
                         tags: tags,
-                        date: item.date)
+                        date: item.date,
+                        toRead: item.toRead)
         })
     }
 

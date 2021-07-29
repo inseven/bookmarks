@@ -36,6 +36,14 @@ public struct Untagged: QueryDescription {
 
 }
 
+public struct Unread: QueryDescription {
+
+    public var sql: String { "items.to_read = 1" }
+
+    public init() { }
+    
+}
+
 public struct Tag: QueryDescription {
 
     let name: String

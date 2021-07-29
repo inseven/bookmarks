@@ -56,6 +56,13 @@ struct Sidebar: View {
                                 databaseView: ItemsView(database: manager.database, query: Today()))
 
                     SidebarLink(selection: $selection,
+                                tag: .shared,
+                                title: "Public",
+                                systemImage: "globe",
+                                databaseView: ItemsView(database: manager.database, query: Shared()))
+
+
+                    SidebarLink(selection: $selection,
                                 tag: .unread,
                                 title: "Unread",
                                 systemImage: "circlebadge.fill",

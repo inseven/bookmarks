@@ -32,15 +32,24 @@ public class Item: Equatable {
     public let tags: Set<String>
     public let date: Date
     public let toRead: Bool
+    public let shared: Bool
     public let thumbnail: SafeImage?
 
-    init(identifier: String, title: String, url: URL, tags: Set<String>, date: Date, toRead: Bool, thumbnail: SafeImage? = nil) {
+    init(identifier: String,
+         title: String,
+         url: URL,
+         tags: Set<String>,
+         date: Date,
+         toRead: Bool,
+         shared: Bool,
+         thumbnail: SafeImage? = nil) {
         self.identifier = identifier
         self.title = title
         self.url = url
         self.tags = Set(tags.map { $0.lowercased() })
         self.date = date
         self.toRead = toRead
+        self.shared = shared
         self.thumbnail = thumbnail
     }
 
@@ -61,6 +70,9 @@ public class Item: Equatable {
             return false
         }
         guard lhs.toRead == rhs.toRead else {
+            return false
+        }
+        guard lhs.shared == rhs.shared else {
             return false
         }
         return true

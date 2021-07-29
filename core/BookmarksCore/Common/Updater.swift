@@ -82,7 +82,8 @@ public class Updater {
                                 url: url,
                                 tags: Set(post.tags),
                                 date: date,
-                                toRead: post.toRead)
+                                toRead: post.toRead,
+                                shared: post.shared)
                 identifiers.insert(item.identifier)
                 _ = try AsyncOperation({ self.database.insertOrUpdate(item, completion: $0) }).wait()
             }

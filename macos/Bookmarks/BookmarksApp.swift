@@ -27,11 +27,12 @@ import BookmarksCore
 struct BookmarksApp: App {
 
     @Environment(\.manager) var manager: BookmarksManager
+    @State var selection: BookmarksSection? = .all
 
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                Sidebar(tagsView: TagsView(database: manager.database), settings: manager.settings)
+                Sidebar(tagsView: TagsView(database: manager.database), settings: manager.settings, selection: $selection)
                 EmptyView()
             }
             .frameAutosaveName("Main Window")
@@ -45,6 +46,24 @@ struct BookmarksApp: App {
                     manager.refresh()
                 }
                 .keyboardShortcut("r", modifiers: .command)
+            }
+            CommandMenu("Go") {
+                Button("All Bookmarks") {
+                    selection = .all
+                }
+                .keyboardShortcut("1", modifiers: .command)
+                Button("Today") {
+                    selection = .today
+                }
+                .keyboardShortcut("2", modifiers: .command)
+                Button("Unread") {
+                    selection = .unread
+                }
+                .keyboardShortcut("3", modifiers: .command)
+                Button("Untagged") {
+                    selection = .untagged
+                }
+                .keyboardShortcut("4", modifiers: .command)
             }
         }
         SwiftUI.Settings {

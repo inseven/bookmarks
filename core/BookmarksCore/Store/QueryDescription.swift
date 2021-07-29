@@ -44,6 +44,15 @@ public struct Unread: QueryDescription {
     
 }
 
+public struct Shared: QueryDescription {
+
+    public var sql: String { "items.shared = 1" }
+
+    public init() { }
+
+}
+
+
 public struct Tag: QueryDescription {
 
     let name: String

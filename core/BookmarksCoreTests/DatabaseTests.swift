@@ -25,13 +25,20 @@ import XCTest
 
 extension Item {
 
-    convenience init(title: String, url: URL, tags: Set<String>, date: Date, toRead: Bool = false, thumbnail: SafeImage? = nil) {
+    convenience init(title: String,
+                     url: URL,
+                     tags: Set<String>,
+                     date: Date,
+                     toRead: Bool = false,
+                     shared: Bool = false,
+                     thumbnail: SafeImage? = nil) {
         self.init(identifier: UUID().uuidString,
                   title: title,
                   url: url,
                   tags: tags,
                   date: date,
                   toRead: toRead,
+                  shared: shared,
                   thumbnail: thumbnail)
     }
 
@@ -308,7 +315,8 @@ class DatabaseTests: XCTestCase {
                         url: item.url,
                         tags: tags,
                         date: item.date,
-                        toRead: item.toRead)
+                        toRead: item.toRead,
+                        shared: item.shared)
         })
     }
 

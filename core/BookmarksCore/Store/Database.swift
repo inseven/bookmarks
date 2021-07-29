@@ -36,7 +36,8 @@ extension Item {
                   url: try row.get(Database.Schema.url).asUrl(),
                   tags: [],
                   date: try row.get(Database.Schema.date),
-                  toRead: try row.get(Database.Schema.toRead))
+                  toRead: try row.get(Database.Schema.toRead),
+                  shared: try row.get(Database.Schema.shared))
     }
 
 }
@@ -112,6 +113,7 @@ public class Database {
         static let url = Expression<String>("url")
         static let date = Expression<Date>("date")
         static let toRead = Expression<Bool>("to_read")
+        static let shared = Expression<Bool>("shared")
         static let name = Expression<String>("name")
         static let itemId = Expression<Int64>("item_id")
         static let tagId = Expression<Int64>("tag_id")
@@ -168,6 +170,10 @@ public class Database {
         10: { db in
             print("add the to_read column...")
             try db.run(Schema.items.addColumn(Schema.toRead, defaultValue: false))
+        },
+        11: { db in
+            print("add the shared column...")
+            try db.run(Schema.items.addColumn(Schema.shared, defaultValue: false))
         },
     ]
 
@@ -257,7 +263,8 @@ public class Database {
                     url: result.url,
                     tags: Set(tags),
                     date: result.date,
-                    toRead: result.toRead)
+                    toRead: result.toRead,
+                    shared: result.shared)
     }
 
     fileprivate func syncQueue_fetchOrInsertTag(name: String) throws -> Int64 {
@@ -325,7 +332,8 @@ public class Database {
                                 Schema.title <- item.title,
                                 Schema.url <- item.url.absoluteString,
                                 Schema.date <- item.date,
-                                Schema.toRead <- item.toRead
+                                Schema.toRead <- item.toRead,
+                                Schema.shared <- item.shared
             ))
         for tagId in tags {
             _ = try self.db.run(
@@ -428,7 +436,8 @@ public class Database {
                 url,
                 tags,
                 date,
-                to_read
+                to_read,
+                shared
             FROM
                 items
             LEFT JOIN
@@ -459,7 +468,8 @@ public class Database {
                         url: try row.url(2),
                         tags: try row.set(3),
                         date: try row.date(4),
-                        toRead: try row.bool(5))
+                        toRead: try row.bool(5),
+                        shared: try row.bool(6))
         }
 
         return items

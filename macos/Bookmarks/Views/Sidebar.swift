@@ -38,17 +38,6 @@ struct Sidebar: View {
 
     @State var sheet: SheetType? = nil
 
-    func selectionActiveBinding(_ tag: BookmarksSection) -> Binding<Bool> {
-        return Binding {
-            self.selection == tag
-        } set: { value in
-            guard value == true else {
-                return
-            }
-            self.selection = tag
-        }
-    }
-
     var body: some View {
         ScrollViewReader { scrollView in
             List(selection: $selection) {

@@ -32,9 +32,9 @@ public class Item: Equatable {
     public let tags: Set<String>
     public let date: Date
     public let toRead: Bool
-    public let thumbnail: Image?
+    public let thumbnail: SafeImage?
 
-    init(identifier: String, title: String, url: URL, tags: Set<String>, date: Date, toRead: Bool, thumbnail: Image? = nil) {
+    init(identifier: String, title: String, url: URL, tags: Set<String>, date: Date, toRead: Bool, thumbnail: SafeImage? = nil) {
         self.identifier = identifier
         self.title = title
         self.url = url

@@ -21,17 +21,15 @@
 import Combine
 import SwiftUI
 
-import BookmarksCore
-
-struct BookmarkCell: View {
+public struct BookmarkCell: View {
 
     var item: Item
 
     @Environment(\.manager) var manager: BookmarksManager
-    @State var image: NSImage?
+    @State var image: SafeImage?
     @State var publisher: AnyCancellable?
 
-    init(item: Item) {
+    public init(item: Item) {
         self.item = item
         _image = State(wrappedValue: manager.cache.object(forKey: item.url.absoluteString as NSString))
     }
@@ -52,22 +50,22 @@ struct BookmarkCell: View {
         ZStack {
             SwiftUI.Image(systemName: "safari.fill")
                 .font(.system(size: 48))
-                .foregroundColor(Color(NSColor.tertiaryLabelColor))
+                .foregroundColor(Color.tertiaryLabel)
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
             if let image = image {
-                    Image(nsImage: image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(maxWidth: image.size.width, maxHeight: image.size.height)
-                        .background(Color.white)
-                        .layoutPriority(-1)
+                SwiftUI.Image(safeImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(maxWidth: image.size.width, maxHeight: image.size.height)
+                    .background(Color.white)
+                    .layoutPriority(-1)
             }
         }
         .clipped()
         .aspectRatio(4/3, contentMode: .fit)
     }
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             thumbnail
             VStack(alignment: .leading) {
@@ -79,10 +77,11 @@ struct BookmarkCell: View {
             }
             .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, maxWidth: .infinity, alignment: .leading)
             .padding()
+            .background(Color.controlSecondaryBackground)
         }
-        .background(Color(NSColor.controlBackgroundColor))
-        .contentShape(Rectangle())
+        .background(Color.controlBackground)
         .cornerRadius(10)
+        .contentShape(RoundedRectangle(cornerRadius: 10))
         .onAppear {
             guard image == nil else {
                 return

@@ -31,7 +31,7 @@ enum OpenGraphError: Error {
 
 class Utilities {
 
-    static func simpleThumbnail(for url: URL, completion: @escaping (Result<Image, Error>) -> Void) {
+    static func simpleThumbnail(for url: URL, completion: @escaping (Result<SafeImage, Error>) -> Void) {
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let data = data else {
                 completion(.failure(OpenGraphError.invalidArgument(message: "Unable to get contents of URL for cell")))
@@ -60,7 +60,7 @@ class Utilities {
         }
     }
 
-    static func meta(for url: URL) -> Future<Image, Error> {
+    static func meta(for url: URL) -> Future<SafeImage, Error> {
         return Future { (promise) in
             simpleThumbnail(for: url) { (result) in
                 promise(result)

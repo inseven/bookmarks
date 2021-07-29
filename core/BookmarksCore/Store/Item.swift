@@ -31,24 +31,18 @@ public class Item: Equatable {
     public let url: URL
     public let tags: Set<String>
     public let date: Date
+    public let toRead: Bool
     public let thumbnail: Image?
 
-    init(identifier: String, title: String, url: URL, tags: Set<String>, date: Date, thumbnail: Image? = nil) {
+    init(identifier: String, title: String, url: URL, tags: Set<String>, date: Date, toRead: Bool, thumbnail: Image? = nil) {
         self.identifier = identifier
         self.title = title
         self.url = url
         self.tags = Set(tags.map { $0.lowercased() })
         self.date = date
+        self.toRead = toRead
         self.thumbnail = thumbnail
     }
-
-    public static var supportsSecureCoding: Bool { true }
-
-    static let identifierKey = "identifier"
-    static let titleKey = "title"
-    static let urlKey = "url"
-    static let tagsKey = "tags"
-    static let dateKey = "date"
 
     public static func == (lhs: Item, rhs: Item) -> Bool {
         return
@@ -56,7 +50,8 @@ public class Item: Equatable {
             lhs.title == rhs.title &&
             lhs.url == rhs.url &&
             lhs.tags == rhs.tags &&
-            lhs.date == rhs.date
+            lhs.date == rhs.date &&
+            lhs.toRead == rhs.toRead
     }
 
 }

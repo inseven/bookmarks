@@ -35,7 +35,8 @@ extension Item {
                   title: try row.get(Database.Schema.title),
                   url: try row.get(Database.Schema.url).asUrl(),
                   tags: [],
-                  date: try row.get(Database.Schema.date))
+                  date: try row.get(Database.Schema.date),
+                  toRead: try row.get(Database.Schema.toRead))
     }
 
 }
@@ -76,6 +77,13 @@ extension Statement.Element {
         Date.fromDatatypeValue(try string(index))
     }
 
+    func bool(_ index: Int) throws -> Bool {
+        guard let value = self[index] as? Int64 else {
+            throw BookmarksError.corrupt
+        }
+        return value > 0
+    }
+
 }
 
 extension String {
@@ -103,9 +111,10 @@ public class Database {
         static let title = Expression<String>("title")
         static let url = Expression<String>("url")
         static let date = Expression<Date>("date")
+        static let toRead = Expression<Bool>("to_read")
         static let name = Expression<String>("name")
-        static let item_id = Expression<Int64>("item_id")
-        static let tag_id = Expression<Int64>("tag_id")
+        static let itemId = Expression<Int64>("item_id")
+        static let tagId = Expression<Int64>("tag_id")
 
     }
 
@@ -148,13 +157,17 @@ public class Database {
             print("create the items_to_tags table...")
             try db.run(Schema.items_to_tags.create { t in
                 t.column(Schema.id, primaryKey: true)
-                t.column(Schema.item_id)
-                t.column(Schema.tag_id)
-                t.unique(Schema.item_id, Schema.tag_id)
-                t.foreignKey(Schema.item_id, references: Schema.items, Schema.id, delete: .cascade)
-                t.foreignKey(Schema.tag_id, references: Schema.tags, Schema.id, delete: .cascade)
+                t.column(Schema.itemId)
+                t.column(Schema.tagId)
+                t.unique(Schema.itemId, Schema.tagId)
+                t.foreignKey(Schema.itemId, references: Schema.items, Schema.id, delete: .cascade)
+                t.foreignKey(Schema.tagId, references: Schema.tags, Schema.id, delete: .cascade)
             })
 
+        },
+        10: { db in
+            print("add the to_read column...")
+            try db.run(Schema.items.addColumn(Schema.toRead, defaultValue: false))
         },
     ]
 
@@ -243,7 +256,8 @@ public class Database {
                     title: result.title,
                     url: result.url,
                     tags: Set(tags),
-                    date: result.date)
+                    date: result.date,
+                    toRead: result.toRead)
     }
 
     fileprivate func syncQueue_fetchOrInsertTag(name: String) throws -> Int64 {
@@ -268,8 +282,8 @@ public class Database {
 
     fileprivate func syncQueue_tags(itemIdentifier: String) throws -> Set<String> {
         Set(try self.db.prepare(Schema.items_to_tags
-                                    .join(Schema.items, on: Schema.items_to_tags[Schema.item_id] == Schema.items[Schema.id])
-                                    .join(Schema.tags, on: Schema.items_to_tags[Schema.tag_id] == Schema.tags[Schema.id])
+                                    .join(Schema.items, on: Schema.items_to_tags[Schema.itemId] == Schema.items[Schema.id])
+                                    .join(Schema.tags, on: Schema.items_to_tags[Schema.tagId] == Schema.tags[Schema.id])
                                     .filter(Schema.identifier == itemIdentifier))
                 .map { row -> String in
                     try row.get(Schema.tags[Schema.name])
@@ -310,13 +324,14 @@ public class Database {
                                 Schema.identifier <- item.identifier,
                                 Schema.title <- item.title,
                                 Schema.url <- item.url.absoluteString,
-                                Schema.date <- item.date
+                                Schema.date <- item.date,
+                                Schema.toRead <- item.toRead
             ))
-        for tag_id in tags {
+        for tagId in tags {
             _ = try self.db.run(
                 Schema.items_to_tags.insert(or: .replace,
-                                            Schema.item_id <- itemId,
-                                            Schema.tag_id <- tag_id))
+                                            Schema.itemId <- itemId,
+                                            Schema.tagId <- tagId))
         }
         try syncQueue_pruneTags()
     }
@@ -412,7 +427,8 @@ public class Database {
                 title,
                 url,
                 tags,
-                date
+                date,
+                to_read
             FROM
                 items
             LEFT JOIN
@@ -442,7 +458,8 @@ public class Database {
                         title: try row.string(1),
                         url: try row.url(2),
                         tags: try row.set(3),
-                        date: try row.date(4))
+                        date: try row.date(4),
+                        toRead: try row.bool(5))
         }
 
         return items

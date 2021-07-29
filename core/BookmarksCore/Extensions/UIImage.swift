@@ -26,7 +26,7 @@ import UIKit
 import AppKit
 #endif
 
-extension Image {
+extension SafeImage {
 
     convenience init?(contentsOf url: URL) {
         guard let data = try? Data.init(contentsOf: url) else {
@@ -35,7 +35,7 @@ extension Image {
         self.init(data: data)
     }
 
-    func resize(height: CGFloat) -> Future<Image, Error> {
+    func resize(height: CGFloat) -> Future<SafeImage, Error> {
         return Future { promise in
             DispatchQueue.global(qos: .background).async {
 

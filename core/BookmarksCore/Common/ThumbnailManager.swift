@@ -37,7 +37,7 @@ public class ThumbnailManager {
         self.downloadManager = downloadManager
     }
 
-    func cachedImage(for item: Item) -> Future<Image, Error> {
+    func cachedImage(for item: Item) -> Future<SafeImage, Error> {
         return Future { (promise) in
             self.imageCache.get(identifier: item.identifier) { (result) in
                 promise(result)
@@ -45,17 +45,17 @@ public class ThumbnailManager {
         }
     }
 
-    func fetchImage(for item: Item, scale: CGFloat) -> AnyPublisher<Image, Error> {
+    func fetchImage(for item: Item, scale: CGFloat) -> AnyPublisher<SafeImage, Error> {
         return Utilities.meta(for: item.url)
             .catch { _ in self.downloadManager.thumbnail(for: item.url) }
             .flatMap { $0.resize(height: 200 * scale) }
             .eraseToAnyPublisher()
     }
 
-    public func thumbnail(for item: Item, scale: CGFloat) -> AnyPublisher<Image, Error> {
+    public func thumbnail(for item: Item, scale: CGFloat) -> AnyPublisher<SafeImage, Error> {
         return cachedImage(for: item)
             .catch { _ in self.fetchImage(for: item, scale: scale)
-                .map { (image) -> Image in
+                .map { (image) -> SafeImage in
                     self.imageCache.set(identifier: item.identifier, image: image) { (result) in
                         if case .failure(let error) = result {
                             print("Failed to cache image with error \(error)")

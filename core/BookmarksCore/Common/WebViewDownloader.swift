@@ -32,7 +32,7 @@ protocol Downloader {
     func cancel()
 }
 
-final class WebViewThumbnailSubscription<SubscriberType: Subscriber>: Subscription where SubscriberType.Input == Image, SubscriberType.Failure == Error {
+final class WebViewThumbnailSubscription<SubscriberType: Subscriber>: Subscription where SubscriberType.Input == SafeImage, SubscriberType.Failure == Error {
     private var subscriber: SubscriberType?
     private var downloader: Downloader
 
@@ -60,7 +60,7 @@ final class WebViewThumbnailSubscription<SubscriberType: Subscriber>: Subscripti
 
 class WebViewThumbnailPublisher: Publisher {
 
-    typealias Output = Image
+    typealias Output = SafeImage
     typealias Failure = Error
 
     let manager: DownloadManager

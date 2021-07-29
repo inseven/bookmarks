@@ -81,7 +81,7 @@ public class DownloadManager {
         next.start()
     }
 
-    func downloader(for url: URL, completion: @escaping (Result<Image, Error>) -> Void) -> Downloader {
+    func downloader(for url: URL, completion: @escaping (Result<SafeImage, Error>) -> Void) -> Downloader {
         let userInteractiveCompletion = Utilities.completion(on: .global(qos: .userInteractive), completion: completion)
         var downloader: WebViewDownloader?
         downloader = WebViewDownloader(url: url) { (result) in
@@ -89,7 +89,7 @@ public class DownloadManager {
             switch result {
             case .success(let imageUrl):
                 DispatchQueue.global(qos: .background).async {
-                    guard let image = Image.init(contentsOf: imageUrl) else {
+                    guard let image = SafeImage.init(contentsOf: imageUrl) else {
                         userInteractiveCompletion(.failure(OpenGraphError.invalidArgument(message: "Unable to fetch image")))
                         return
                     }

@@ -21,15 +21,18 @@
 import Combine
 import SwiftUI
 
-import BookmarksCore
-
-struct BookmarkCell: View {
+public struct BookmarkCell: View {
 
     var item: Item
 
     @Environment(\.manager) var manager: BookmarksManager
-    @State var image: UIImage?
+    @State var image: SafeImage?
     @State var publisher: AnyCancellable?
+
+    public init(item: Item) {
+        self.item = item
+        _image = State(wrappedValue: manager.cache.object(forKey: item.url.absoluteString as NSString))
+    }
 
     var title: String {
         if !item.title.isEmpty {
@@ -45,28 +48,26 @@ struct BookmarkCell: View {
 
     var thumbnail: some View {
         ZStack {
-            Text(title)
-                .lineLimit(3)
-                .multilineTextAlignment(.center)
+            SwiftUI.Image(systemName: "safari.fill")
+                .font(.system(size: 48))
+                .foregroundColor(Color.tertiaryLabel)
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
-                .padding()
-                .background(Color(UIColor.tertiarySystemBackground))
             if let image = image {
-                Image(uiImage: image)
+                SwiftUI.Image(safeImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                    .clipped()
+                    .frame(maxWidth: image.size.width, maxHeight: image.size.height)
                     .background(Color.white)
+                    .layoutPriority(-1)
             }
         }
+        .clipped()
+        .aspectRatio(4/3, contentMode: .fit)
     }
 
-    var body: some View {
-        VStack(alignment: .leading) {
+    public var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
             thumbnail
-                .frame(height: 100)
-                .clipped()
             VStack(alignment: .leading) {
                 Text(title)
                     .lineLimit(1)
@@ -76,11 +77,17 @@ struct BookmarkCell: View {
             }
             .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, maxWidth: .infinity, alignment: .leading)
             .padding()
+            .background(Color.controlSecondaryBackground)
         }
-        .background(Color(UIColor.secondarySystemBackground))
+        .background(Color.controlBackground)
         .cornerRadius(10)
+        .contentShape(RoundedRectangle(cornerRadius: 10))
         .onAppear {
-            publisher = manager.thumbnailManager.thumbnail(for: item, scale: UIScreen.main.scale)
+            guard image == nil else {
+                return
+            }
+            // TODO: Determine the appropriate default size for thumbnails.
+            publisher = manager.thumbnailManager.thumbnail(for: item, scale: 2)
                 .receive(on: DispatchQueue.main)
                 .sink(receiveCompletion: { (completion) in
                     if case .failure(let error) = completion {
@@ -88,6 +95,7 @@ struct BookmarkCell: View {
                     }
                 }, receiveValue: { image in
                     self.image = image
+                    self.manager.cache.setObject(image, forKey: item.url.absoluteString as NSString)
                 })
         }
         .onDisappear {

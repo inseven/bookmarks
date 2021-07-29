@@ -21,17 +21,15 @@
 import Foundation
 
 #if os(iOS)
+
 import UIKit
+
+public typealias SafeImage = UIImage
+
+#else
+
+import AppKit
+
+public typealias SafeImage = NSImage
+
 #endif
-
-enum ImageCacheError : Error {
-    case notFound
-}
-
-public protocol ImageCache {
-
-    func set(identifier: String, image: SafeImage, completion: @escaping (Result<Bool, Error>) -> Void)
-    func get(identifier: String, completion: @escaping (Result<SafeImage, Error>) -> Void)
-    func clear(completion: @escaping (Result<Bool, Error>) -> Void)
-
-}

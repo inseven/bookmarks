@@ -18,20 +18,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
+import SwiftUI
 
-#if os(iOS)
-import UIKit
-#endif
+extension Color {
 
-enum ImageCacheError : Error {
-    case notFound
-}
+    static var tertiaryLabel: Color {
+        #if os(iOS)
+        Color(UIColor.tertiaryLabel)
+        #else
+        Color(NSColor.tertiaryLabelColor)
+        #endif
+    }
 
-public protocol ImageCache {
+    static var controlBackground: Color {
+        #if os(iOS)
+        Color(UIColor.systemBackground)
+        #else
+        Color(NSColor.controlBackgroundColor)
+        #endif
+    }
 
-    func set(identifier: String, image: SafeImage, completion: @escaping (Result<Bool, Error>) -> Void)
-    func get(identifier: String, completion: @escaping (Result<SafeImage, Error>) -> Void)
-    func clear(completion: @escaping (Result<Bool, Error>) -> Void)
+    static var controlSecondaryBackground: Color {
+        #if os(iOS)
+        Color(UIColor.secondarySystemBackground)
+        #else
+        Color(NSColor.controlBackgroundColor)
+        #endif
+    }
 
 }

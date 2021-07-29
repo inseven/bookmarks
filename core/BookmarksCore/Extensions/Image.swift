@@ -18,20 +18,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
+import SwiftUI
 
-#if os(iOS)
-import UIKit
-#endif
+extension Image {
 
-enum ImageCacheError : Error {
-    case notFound
-}
-
-public protocol ImageCache {
-
-    func set(identifier: String, image: SafeImage, completion: @escaping (Result<Bool, Error>) -> Void)
-    func get(identifier: String, completion: @escaping (Result<SafeImage, Error>) -> Void)
-    func clear(completion: @escaping (Result<Bool, Error>) -> Void)
+    init(safeImage: SafeImage) {
+        #if os(iOS)
+        self.init(uiImage: safeImage)
+        #else
+        self.init(nsImage: safeImage)
+        #endif
+    }
 
 }

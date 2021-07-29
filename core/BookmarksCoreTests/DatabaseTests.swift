@@ -25,7 +25,7 @@ import XCTest
 
 extension Item {
 
-    convenience init(title: String, url: URL, tags: Set<String>, date: Date, toRead: Bool = false, thumbnail: Image? = nil) {
+    convenience init(title: String, url: URL, tags: Set<String>, date: Date, toRead: Bool = false, thumbnail: SafeImage? = nil) {
         self.init(identifier: UUID().uuidString,
                   title: title,
                   url: url,

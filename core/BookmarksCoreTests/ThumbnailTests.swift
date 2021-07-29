@@ -24,7 +24,7 @@ import XCTest
 class ThumbnailTests: XCTestCase {
 
     // TODO: Reinstate this code.
-    func thumbnail(for url: String) -> Image? {
+    func thumbnail(for url: String) -> SafeImage? {
 
         let expectation = self.expectation(description: "Download thumbnail")
         guard let url = URL(string: url) else {
@@ -32,7 +32,7 @@ class ThumbnailTests: XCTestCase {
             return nil
         }
 
-        var image: Image?
+        var image: SafeImage?
         Utilities.simpleThumbnail(for: url) { (result) in
             defer { expectation.fulfill() }
             guard case .success(let blockImage) = result else {

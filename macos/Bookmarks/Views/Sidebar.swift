@@ -34,7 +34,8 @@ struct Sidebar: View {
     @StateObject var tagsView: TagsView
     @ObservedObject var settings: BookmarksCore.Settings
 
-    @State var selection: BookmarksSection? = .all
+    @Binding var selection: BookmarksSection?
+
     @State var sheet: SheetType? = nil
 
     func selectionActiveBinding(_ tag: BookmarksSection) -> Binding<Bool> {

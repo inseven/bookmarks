@@ -45,13 +45,25 @@ public class Item: Equatable {
     }
 
     public static func == (lhs: Item, rhs: Item) -> Bool {
-        return
-            lhs.identifier == rhs.identifier &&
-            lhs.title == rhs.title &&
-            lhs.url == rhs.url &&
-            lhs.tags == rhs.tags &&
-            lhs.date == rhs.date &&
-            lhs.toRead == rhs.toRead
+        guard lhs.identifier == rhs.identifier else {
+            return false
+        }
+        guard lhs.title == rhs.title else {
+            return false
+        }
+        guard lhs.url == rhs.url else {
+            return false
+        }
+        guard lhs.tags == rhs.tags else {
+            return false
+        }
+        guard lhs.date == rhs.date else {
+            return false
+        }
+        guard lhs.toRead == rhs.toRead else {
+            return false
+        }
+        return true
     }
 
 }
@@ -62,7 +74,7 @@ extension Item: Identifiable {
 
 extension Item: CustomStringConvertible {
 
-    public var description: String { "\(self.url.absoluteString) (title: \(self.title), tags: [\(self.tags.joined(separator: ", "))])" }
+    public var description: String { "\(self.url.absoluteString) (title: \(self.title), tags: [\(self.tags.joined(separator: ", "))], date: \(self.date), toRead: \(self.toRead)" }
 
 }
 

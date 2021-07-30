@@ -388,17 +388,17 @@ public class Database {
             """)
     }
 
-    // TODO: Clean up database tags when the last item is removed #141
-    //       https://github.com/inseven/bookmarks/issues/141
-    public func delete(identifier: String, completion: @escaping (Swift.Result<Int, Error>) -> Void) {
+    public func deleteItem(identifier: String, completion: @escaping (Swift.Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             do {
                 try self.db.transaction {
-                    let result = Swift.Result { () -> Int in
+                    let result = Swift.Result { () -> Void in
                         let count = try self.db.run(Schema.items.filter(Schema.identifier == identifier).delete())
+                        if count == 0 {
+                            throw BookmarksError.itemNotFound(identifier: identifier)
+                        }
                         try self.syncQueue_pruneTags()
-                        return count
                     }
                     self.syncQueue_notifyObservers()
                     completion(result)
@@ -409,7 +409,7 @@ public class Database {
         }
     }
 
-    public func delete(tag: String, completion: @escaping (Swift.Result<Int, Error>) -> Void) {
+    public func deleteTag(tag: String, completion: @escaping (Swift.Result<Int, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             do {
@@ -495,6 +495,51 @@ public class Database {
             }
             completion(result)
         }
+    }
+
+}
+
+
+public extension Database {
+
+    func insertOrUpdate(item: Item) throws -> Item {
+        try AsyncOperation { self.insertOrUpdate(item, completion: $0) }.wait()
+    }
+
+    func insertOrUpdate(items: [Item]) throws {
+        for item in items {
+            _ = try self.insertOrUpdate(item: item)
+        }
+    }
+
+    func deleteItems(_ items: [Item]) throws {
+        for item in items {
+            try deleteItem(identifier: item.identifier)
+        }
+    }
+
+    func deleteTag(tag: String) throws {
+        _ = try AsyncOperation({ self.deleteTag(tag: tag, completion: $0) }).wait()
+    }
+
+    func deleteItem(identifier: String) throws {
+        try AsyncOperation { self.deleteItem(identifier: identifier, completion: $0) }.wait()
+    }
+
+    func items(query: QueryDescription = True()) throws -> [Item] {
+        try AsyncOperation({ self.items(query: query, completion: $0) }).wait()
+    }
+
+    func tags() throws -> Set<String> {
+        try AsyncOperation { self.tags(completion: $0) }.wait()
+    }
+
+    func identifiers() throws -> [String] {
+        try AsyncOperation { self.identifiers(completion: $0) }.wait()
+    }
+
+    func item(identifier: String) throws -> Item {
+        try AsyncOperation { self.item(identifier: identifier, completion: $0) }.wait()
     }
 
 }

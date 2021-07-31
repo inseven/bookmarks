@@ -584,7 +584,6 @@ public extension Database {
         try AsyncOperation { self.identifiers(completion: $0) }.wait()
     }
 
-    // TODO: Remove this?
     func item(identifier: String) throws -> Item {
         try AsyncOperation { self.item(identifier: identifier, completion: $0) }.wait()
     }

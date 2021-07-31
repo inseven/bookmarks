@@ -104,10 +104,11 @@ public class BookmarksManager {
     public func renameTag(_ old: String, to new: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         DispatchQueue.global(qos: .userInitiated).async {
-            self.pinboard.tagsRename(old, to: new) { result in
-                completion(result)
+            let result = Result {
+                try self.pinboard.tagsRename(old, to: new)
                 self.refresh()
             }
+            completion(result)
         }
     }
 

@@ -175,4 +175,8 @@ extension Pinboard {
         try AsyncOperation({ self.tagsDelete(tag, completion: $0) }).wait()
     }
 
+    func tagsRename(_ old: String, to new: String) throws {
+        try AsyncOperation({ self.tagsRename(old, to: new, completion: $0) }).wait()
+    }
+
 }

@@ -31,18 +31,6 @@ public extension EnvironmentValues {
     }
 }
 
-// TODO: Move this somewhere more sensible.
-public func loggingCompletion<T>(name: String) -> (Result<T, Error>) -> () {
-    { result in
-        switch result {
-        case .success:
-            print("'\(name)' succeeded")
-        case .failure(let error):
-            print("'\(name)' failed with error '\(error)'")
-        }
-    }
-}
-
 public class BookmarksManager {
 
     var documentsUrl: URL

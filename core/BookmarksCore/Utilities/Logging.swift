@@ -18,29 +18,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import SwiftUI
+import Foundation
 
-import BookmarksCore
-
-struct BookmarkEditCommands: View {
-
-    @Environment(\.manager) var manager: BookmarksManager
-
-    var item: Item
-
-    var body: some View {
-        Button(item.toRead ? "Mark as Read" : "Mark as Unread") {
-            manager.updateItem(item: item.setting(toRead: !item.toRead), completion: log("read/unread"))
-        }
-        Button(item.shared ? "Make Private" : "Make Public") {
-            manager.updateItem(item: item.setting(shared: !item.shared), completion: log("private/public"))
-        }
-        Button("Edit on Pinboard") {
-            do {
-                NSWorkspace.shared.open(try item.pinboardUrl())
-            } catch {
-                print("Failed to edit with error \(error)")
-            }
+public func log<T>(_ name: String) -> (Result<T, Error>) -> () {
+    { result in
+        switch result {
+        case .success:
+            print("\(name) succeeded")
+        case .failure(let error):
+            print("\(name) failed with error \(error)")
         }
     }
 }

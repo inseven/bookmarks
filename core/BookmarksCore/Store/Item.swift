@@ -33,6 +33,7 @@ public class Item: Equatable {
     public let date: Date
     public let toRead: Bool
     public let shared: Bool
+    public let notes: String
     public let thumbnail: SafeImage?
 
     init(identifier: String,
@@ -42,6 +43,7 @@ public class Item: Equatable {
          date: Date,
          toRead: Bool,
          shared: Bool,
+         notes: String,
          thumbnail: SafeImage? = nil) {
         self.identifier = identifier
         self.title = title
@@ -50,6 +52,7 @@ public class Item: Equatable {
         self.date = date
         self.toRead = toRead
         self.shared = shared
+        self.notes = notes
         self.thumbnail = thumbnail
     }
 
@@ -75,7 +78,21 @@ public class Item: Equatable {
         guard lhs.shared == rhs.shared else {
             return false
         }
+        guard lhs.notes == rhs.notes else {
+            return false
+        }
         return true
+    }
+
+    public func setting(notes: String) -> Item {
+        Item(identifier: identifier,
+             title: title,
+             url: url,
+             tags: tags,
+             date: date,
+             toRead: toRead,
+             shared: shared,
+             notes: notes)
     }
 
 }
@@ -86,7 +103,7 @@ extension Item: Identifiable {
 
 extension Item: CustomStringConvertible {
 
-    public var description: String { "\(self.url.absoluteString) (title: \(self.title), tags: [\(self.tags.joined(separator: ", "))], date: \(self.date), toRead: \(self.toRead)" }
+    public var description: String { "\(url.absoluteString) (title: \(title), tags: [\(tags.joined(separator: ", "))], date: \(date), toRead: \(toRead), notes: '\(self.notes)')" }
 
 }
 

@@ -86,7 +86,11 @@ public struct Like: QueryDescription {
 
     public var sql: String {
         let tagsColumn = Expression<String>("tags")
-        let expression = Database.Schema.title.like("%\(filter)%") || Database.Schema.url.like("%\(filter)%") || tagsColumn.like("%\(filter)%")
+        let expression =
+            Database.Schema.title.like("%\(filter)%") ||
+            Database.Schema.url.like("%\(filter)%") ||
+            tagsColumn.like("%\(filter)%") ||
+            Database.Schema.notes.like("%\(filter)%")
         return expression.asSQL()
     }
 

@@ -37,7 +37,8 @@ extension Item {
                   tags: [],
                   date: try row.get(Database.Schema.date),
                   toRead: try row.get(Database.Schema.toRead),
-                  shared: try row.get(Database.Schema.shared))
+                  shared: try row.get(Database.Schema.shared),
+                  notes: try row.get(Database.Schema.notes))
     }
 
 }
@@ -114,6 +115,7 @@ public class Database {
         static let date = Expression<Date>("date")
         static let toRead = Expression<Bool>("to_read")
         static let shared = Expression<Bool>("shared")
+        static let notes = Expression<String>("notes")
         static let name = Expression<String>("name")
         static let itemId = Expression<Int64>("item_id")
         static let tagId = Expression<Int64>("tag_id")
@@ -174,6 +176,10 @@ public class Database {
         11: { db in
             print("add the shared column...")
             try db.run(Schema.items.addColumn(Schema.shared, defaultValue: false))
+        },
+        12: { db in
+            print("add the notes column...")
+            try db.run(Schema.items.addColumn(Schema.notes, defaultValue: ""))
         },
     ]
 
@@ -264,7 +270,8 @@ public class Database {
                     tags: Set(tags),
                     date: result.date,
                     toRead: result.toRead,
-                    shared: result.shared)
+                    shared: result.shared,
+                    notes: result.notes)
     }
 
     fileprivate func syncQueue_fetchOrInsertTag(name: String) throws -> Int64 {
@@ -333,7 +340,8 @@ public class Database {
                                 Schema.url <- item.url.absoluteString,
                                 Schema.date <- item.date,
                                 Schema.toRead <- item.toRead,
-                                Schema.shared <- item.shared
+                                Schema.shared <- item.shared,
+                                Schema.notes <- item.notes
             ))
         for tagId in tags {
             _ = try self.db.run(
@@ -437,7 +445,8 @@ public class Database {
                 tags,
                 date,
                 to_read,
-                shared
+                shared,
+                notes
             FROM
                 items
             LEFT JOIN
@@ -469,7 +478,8 @@ public class Database {
                         tags: try row.set(3),
                         date: try row.date(4),
                         toRead: try row.bool(5),
-                        shared: try row.bool(6))
+                        shared: try row.bool(6),
+                        notes: try row.string(7))
         }
 
         return items

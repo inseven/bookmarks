@@ -89,10 +89,10 @@ public class BookmarksManager {
         }
     }
 
+    // TODO: Callback
     public func updateItem(item: Item) {
-        // TODO: Perhaps this shouldn't always be user-interactive?
         DispatchQueue.global(qos: .userInitiated).async {
-            _ = try! self.database.insertOrUpdate(item: item) // TODO: Of course this shoudln't fail this way
+            _ = try! self.database.insertOrUpdate(item: item)
             let post = Pinboard.Post(item: item)
             self.pinboard.postsAdd(post: post, replace: true) { result in
                 print(result)

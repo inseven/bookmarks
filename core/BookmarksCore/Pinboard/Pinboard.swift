@@ -114,7 +114,6 @@ public class Pinboard {
         let dateFormatter = ISO8601DateFormatter()
         let dt = dateFormatter.string(from: date)
 
-        // TODO: Perhaps href should be required?
         let parameters: [String: String] = [
             "url": url,
             "description": description,

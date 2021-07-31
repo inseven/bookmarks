@@ -24,44 +24,6 @@ import SwiftUI
 import BookmarksCore
 import Interact
 
-struct AcceptsURL: ViewModifier {
-
-    @Environment(\.manager) var manager: BookmarksManager
-    var tag: String
-
-    @State var isTargeted = false
-
-    func body(content: Content) -> some View {
-        HStack {
-            if isTargeted {
-                content
-                    .background(Color.selectedContentBackgroundColor)
-                    .foregroundColor(.selectedControlColor)
-            } else {
-                content
-            }
-        }
-        .onDrop(of: [.url], isTargeted: $isTargeted) { itemProviders in
-            for itemProvider in itemProviders {
-                _ = itemProvider.loadObject(ofClass: URL.self) { url, _ in
-                    guard let url = url else {
-                        return
-                    }
-                    print(url)
-                    if let item = try? manager.database.item(url: url) {
-                        // TODO: Show errors in the UI #218
-                        //       https://github.com/inseven/bookmarks/issues/218
-                        manager.updateItem(item: item.adding(tag: tag), completion: log("add tag"))
-                    } else {
-                        // TODO: Add a new URL?
-                    }
-                }
-            }
-            return true
-        }
-    }
-}
-
 struct Sidebar: View {
 
     enum SheetType {
@@ -121,7 +83,6 @@ struct Sidebar: View {
                                     title: tag,
                                     systemImage: "tag",
                                     databaseView: ItemsView(database: manager.database, query: Tag(tag)))
-                            .modifier(AcceptsURL(tag: tag))
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Remove from Favourites") {
                                     settings.favoriteTags = settings.favoriteTags.filter { $0 != tag }
@@ -149,7 +110,6 @@ struct Sidebar: View {
                                     title: tag,
                                     systemImage: "tag",
                                     databaseView: ItemsView(database: manager.database, query: Tag(tag)))
-                            .modifier(AcceptsURL(tag: tag))
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Rename") {
                                     self.sheet = .rename(tag: tag)

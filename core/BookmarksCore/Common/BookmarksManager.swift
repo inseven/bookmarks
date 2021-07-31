@@ -74,6 +74,21 @@ public class BookmarksManager {
         self.updater.update()
     }
 
+    // TODO: Move this elsewhere.
+    public func updateItem(item: Item) {
+        // TODO: Perhaps this shouldn't always be user-interactive?
+        DispatchQueue.global(qos: .userInitiated).async {
+            _ = try! self.database.insertOrUpdate(item: item) // TODO: Of course this shoudln't fail this way
+            let post = Pinboard.Post(item: item)
+            // TODO: Go through the updater.
+            self.pinboard.postsAdd(post: post, replace: true) { result in
+                print(result)
+                self.updater.update()
+            }
+
+        }
+    }
+
     @objc
     func nsApplicationDidBecomeActive() {
         self.updater.update()

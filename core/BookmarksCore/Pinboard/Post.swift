@@ -28,9 +28,9 @@ extension Pinboard {
         public let extended: String
         public let hash: String
         public let href: URL?
-        public let meta: String
+        public let meta: String // TODO: Change detection hash (unused)
         public let shared: Bool
-        public let tags: [String]
+        public let tags: [String] // TODO: Set?
         public let time: Date?
         public let toRead: Bool
 
@@ -44,6 +44,27 @@ extension Pinboard {
             case tags = "tags"
             case time = "time"
             case toRead = "toread"
+        }
+
+        init(href: URL,
+             description: String,
+             extended: String,
+             hash: String, // TODO
+             meta: String, // TODO
+             shared: Bool,
+             tags: [String],
+             time: Date, // TODO: Nullable?
+             toRead: Bool
+             ) {
+            self.href = href
+            self.description = description
+            self.extended = extended
+            self.hash = hash
+            self.meta = meta
+            self.shared = shared
+            self.tags = tags
+            self.time = time
+            self.toRead = toRead
         }
 
         public init(from decoder: Decoder) throws {

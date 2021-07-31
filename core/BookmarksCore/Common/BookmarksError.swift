@@ -31,6 +31,7 @@ enum BookmarksError: Error, Equatable {
     case unknownMigration(version: Int32)
 
     case itemNotFound(identifier: String)
+    case itemNotFound(url: URL)
     case tagNotFound(name: String)
 
     case corrupt

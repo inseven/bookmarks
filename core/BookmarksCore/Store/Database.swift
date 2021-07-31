@@ -181,6 +181,11 @@ public class Database {
             print("add the notes column...")
             try db.run(Schema.items.addColumn(Schema.notes, defaultValue: ""))
         },
+        13: { db in
+            print("add index on items.url...")
+            try db.run(Schema.items.createIndex(Schema.url))
+        }
+        // TODO: Create index on the URL?
     ]
 
     static var schemaVersion: Int32 = Array(migrations.keys).max() ?? 0
@@ -263,7 +268,23 @@ public class Database {
         guard let result = run.first else {
             throw BookmarksError.itemNotFound(identifier: identifier)
         }
-        let tags = try syncQueue_tags(itemIdentifier: identifier)
+        let tags = try syncQueue_tags(itemIdentifier: result.identifier)
+        return Item(identifier: result.identifier,
+                    title: result.title,
+                    url: result.url,
+                    tags: Set(tags),
+                    date: result.date,
+                    toRead: result.toRead,
+                    shared: result.shared,
+                    notes: result.notes)
+    }
+
+    fileprivate func syncQueue_item(url: URL) throws -> Item {
+        let run = try db.prepare(Schema.items.filter(Schema.url == url.absoluteString).limit(1)).map(Item.init)
+        guard let result = run.first else {
+            throw BookmarksError.itemNotFound(url: url)
+        }
+        let tags = try syncQueue_tags(itemIdentifier: result.identifier)
         return Item(identifier: result.identifier,
                     title: result.title,
                     url: result.url,
@@ -330,6 +351,21 @@ public class Database {
             }
         }
     }
+
+    public func item(url: URL, completion: @escaping (Swift.Result<Item, Error>) -> Void) {
+        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
+        syncQueue.async {
+            do {
+                try self.db.transaction {
+                    let result = Swift.Result { try self.syncQueue_item(url: url) }
+                    completion(result)
+                }
+            } catch {
+                completion(.failure(error))
+            }
+        }
+    }
+
 
     fileprivate func syncQueue_insertOrReplace(item: Item) throws {
         let tags = try item.tags.map { try syncQueue_fetchOrInsertTag(name: $0) }
@@ -548,8 +584,14 @@ public extension Database {
         try AsyncOperation { self.identifiers(completion: $0) }.wait()
     }
 
+    // TODO: Remove this?
     func item(identifier: String) throws -> Item {
         try AsyncOperation { self.item(identifier: identifier, completion: $0) }.wait()
+    }
+
+    // TODO: Test this.
+    func item(url: URL) throws -> Item {
+        try AsyncOperation { self.item(url: url, completion: $0) }.wait()
     }
 
 }

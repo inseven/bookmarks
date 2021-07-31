@@ -95,6 +95,50 @@ public class Item: Equatable {
              notes: notes)
     }
 
+    public func setting(tags: Set<String>) -> Item {
+        Item(identifier: identifier,
+             title: title,
+             url: url,
+             tags: tags,
+             date: date,
+             toRead: toRead,
+             shared: shared,
+             notes: notes)
+    }
+
+    public func setting(toRead: Bool) -> Item {
+        Item(identifier: identifier,
+             title: title,
+             url: url,
+             tags: tags,
+             date: date,
+             toRead: toRead,
+             shared: shared,
+             notes: notes)
+    }
+
+    public func setting(shared: Bool) -> Item {
+        Item(identifier: identifier,
+             title: title,
+             url: url,
+             tags: tags,
+             date: date,
+             toRead: toRead,
+             shared: shared,
+             notes: notes)
+    }
+
+    public func adding(tag: String) -> Item {
+        Item(identifier: identifier,
+             title: title,
+             url: url,
+             tags: Set(tags + [tag]),
+             date: date,
+             toRead: toRead,
+             shared: shared,
+             notes: notes)
+    }
+
 }
 
 extension Item: Identifiable {
@@ -130,6 +174,22 @@ extension String {
 
     public func pinboardUrl(for user: String) throws -> URL {
         return try "https://pinboard.in/u:\(user)/t:\(self)/".asUrl()
+    }
+
+}
+
+extension Pinboard.Post {
+
+    init(item: Item) {
+        self.init(href: item.url,
+                  description: item.title,
+                  extended: item.notes,
+                  hash: "", // TODO
+                  meta: "", // TODO
+                  shared: item.shared,
+                  tags: Array(item.tags),
+                  time: item.date, // TODO
+                  toRead: item.toRead)
     }
 
 }

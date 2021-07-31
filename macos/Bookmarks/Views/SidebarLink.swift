@@ -45,7 +45,10 @@ struct SidebarLink: View {
         NavigationLink(destination: ContentView(sidebarSelection: selection, databaseView: databaseView)
                         .navigationTitle(title),
                        isActive: selectionActiveBinding(tag)) {
-            Label(title, systemImage: systemImage)
+            HStack {
+                Label(title, systemImage: systemImage)
+                Spacer()
+            }
         }
         .tag(tag)  // We set a tag so the list view knows what's selected...
         .id(tag)   // ... and an id so we can scroll to the items 🤦🏻‍♂️

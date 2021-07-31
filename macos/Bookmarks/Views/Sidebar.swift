@@ -110,6 +110,22 @@ struct Sidebar: View {
                                     title: tag,
                                     systemImage: "tag",
                                     databaseView: ItemsView(database: manager.database, query: Tag(tag)))
+                            .onDrop(of: [.url], isTargeted: nil) { itemProviders in
+                                for itemProvider in itemProviders {
+                                    _ = itemProvider.loadObject(ofClass: URL.self) { url, _ in
+                                        guard let url = url else {
+                                            return
+                                        }
+                                        print(url)
+                                        if let item = try? manager.database.item(url: url) {
+                                            manager.updateItem(item: item.adding(tag: tag))
+                                        } else {
+                                            // TODO: Add a new URL?
+                                        }
+                                    }
+                                }
+                                return true
+                            }
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Rename") {
                                     self.sheet = .rename(tag: tag)

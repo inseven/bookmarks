@@ -31,6 +31,7 @@ public class Pinboard {
 
         case postsUpdate = "posts/update"
 
+        case postsAdd = "posts/add"
         case postsAll = "posts/all"
         case postsDelete = "posts/delete"
 
@@ -80,6 +81,7 @@ public class Pinboard {
                 }
                 // TODO: Handle HTTP error codes in the Pinboard API responses #135
                 //       https://github.com/inseven/bookmarks/issues/135
+                print("response = \(String(describing: response))")
                 do {
                     let result = try transform(data)
                     completion(.success(result))
@@ -98,6 +100,33 @@ public class Pinboard {
         self.fetch(path: .postsUpdate, completion: completion) { data in
             try JSONDecoder().decode(Update.self, from: data)
         }
+    }
+
+    public func postsAdd(post: Post, replace: Bool = false, completion: @escaping (Result<Void, Error>) -> Void) {
+        let completion = DispatchQueue.global().asyncClosure(completion)
+        guard let url = post.href?.absoluteString,
+              let description = post.description,
+              let date = post.time else {
+            completion(.failure(BookmarksError.corrupt))  // TODO: Something sensible.
+            return
+        }
+
+        let dateFormatter = ISO8601DateFormatter()
+        let dt = dateFormatter.string(from: date)
+
+        // TODO: Perhaps href should be required?
+        let parameters: [String: String] = [
+            "url": url,
+            "description": description,
+            "extended": post.extended,
+            "tags": post.tags.joined(separator: " "),
+            "dt": dt,
+            "replace": replace ? "yes" : "no",
+            "shared": post.shared ? "yes" : "no",
+            "toread": post.toRead ? "yes" : "no"
+        ]
+        print(parameters)
+        self.fetch(path: .postsAdd, parameters: parameters, completion: completion) { _ in }
     }
 
     public func postsAll(completion: @escaping (Result<[Post], Error>) -> Void) {

@@ -49,7 +49,7 @@ struct AcceptsURL: ViewModifier {
                     }
                     print(url)
                     if let item = try? manager.database.item(url: url) {
-                        manager.updateItem(item: item.adding(tag: tag))
+                        manager.updateItem(item: item.adding(tag: tag), completion: loggingCompletion(name: "add tag"))
                     } else {
                         // TODO: Add a new URL?
                     }

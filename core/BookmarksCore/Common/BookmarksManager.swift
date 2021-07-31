@@ -31,6 +31,18 @@ public extension EnvironmentValues {
     }
 }
 
+// TODO: Move this somewhere more sensible.
+public func loggingCompletion<T>(name: String) -> (Result<T, Error>) -> () {
+    { result in
+        switch result {
+        case .success:
+            print("'\(name)' succeeded")
+        case .failure(let error):
+            print("'\(name)' failed with error '\(error)'")
+        }
+    }
+}
+
 public class BookmarksManager {
 
     var documentsUrl: URL
@@ -89,15 +101,17 @@ public class BookmarksManager {
         }
     }
 
-    // TODO: Callback
-    public func updateItem(item: Item) {
+    public func updateItem(item: Item, completion: @escaping (Result<Item, Error>) -> Void) {
+        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         DispatchQueue.global(qos: .userInitiated).async {
-            _ = try! self.database.insertOrUpdate(item: item)
-            let post = Pinboard.Post(item: item)
-            self.pinboard.postsAdd(post: post, replace: true) { result in
-                print(result)
+            let result = Result { () -> Item in
+                let item = try self.database.insertOrUpdate(item: item)
+                let post = Pinboard.Post(item: item)
+                try self.pinboard.postsAdd(post: post, replace: true)
                 self.updater.update()
+                return item
             }
+            completion(result)
         }
     }
 

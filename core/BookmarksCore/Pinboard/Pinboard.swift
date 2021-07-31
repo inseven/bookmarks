@@ -102,7 +102,7 @@ public class Pinboard {
         }
     }
 
-    public func postsAdd(post: Post, replace: Bool = false, completion: @escaping (Result<Void, Error>) -> Void) {
+    public func postsAdd(post: Post, replace: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         guard let url = post.href?.absoluteString,
               let description = post.description,
@@ -165,6 +165,10 @@ extension Pinboard {
 
     func postsUpdate() throws -> Update {
         try AsyncOperation({ self.postsUpdate(completion: $0) }).wait()
+    }
+
+    func postsAdd(post: Post, replace: Bool) throws {
+        try AsyncOperation({ self.postsAdd(post: post, replace: replace, completion: $0) }).wait()
     }
 
     func postsAll() throws -> [Post] {

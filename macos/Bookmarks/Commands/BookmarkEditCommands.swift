@@ -30,10 +30,10 @@ struct BookmarkEditCommands: View {
 
     var body: some View {
         Button(item.toRead ? "Mark as Read" : "Mark as Unread") {
-            manager.updateItem(item: item.setting(toRead: !item.toRead))
+            manager.updateItem(item: item.setting(toRead: !item.toRead), completion: loggingCompletion(name: "read/unread"))
         }
         Button(item.shared ? "Make Private" : "Make Public") {
-            manager.updateItem(item: item.setting(shared: !item.shared))
+            manager.updateItem(item: item.setting(shared: !item.shared), completion: loggingCompletion(name: "private/public"))
         }
         Button("Edit on Pinboard") {
             do {

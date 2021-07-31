@@ -71,7 +71,8 @@ public class Updater {
                                 tags: Set(post.tags),
                                 date: date,
                                 toRead: post.toRead,
-                                shared: post.shared)
+                                shared: post.shared,
+                                notes: post.extended)
                 identifiers.insert(item.identifier)
                 _ = try self.database.insertOrUpdate(item: item)
             }

@@ -31,6 +31,7 @@ extension Item {
                      date: Date,
                      toRead: Bool = false,
                      shared: Bool = false,
+                     notes: String = "",
                      thumbnail: SafeImage? = nil) {
         self.init(identifier: UUID().uuidString,
                   title: title,
@@ -39,6 +40,7 @@ extension Item {
                   date: date,
                   toRead: toRead,
                   shared: shared,
+                  notes: notes,
                   thumbnail: thumbnail)
     }
 
@@ -130,6 +132,26 @@ class DatabaseTests: XCTestCase {
 
         XCTAssertEqual(try database.tags(), Set(["website", "cheese"]))
         XCTAssertEqual(try database.items(), [item2])
+    }
+
+    func testItemNotes() throws {
+        let notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus blandit nec mauris quis feugiat."
+        let item = Item(title: "Example",
+                         url: URL(string: "https://example.com")!,
+                         tags: ["example", "website"],
+                         date: Date(timeIntervalSince1970: 0),
+                         notes: notes)
+        _ = try database.insertOrUpdate(item: item)
+        let fetchedItem = try database.item(identifier: item.identifier)
+        XCTAssertEqual(item, fetchedItem)
+        XCTAssertEqual(fetchedItem.notes, notes)
+
+        let update = item.setting(notes: "Cheese")
+        _ = try database.insertOrUpdate(item: update)
+        let fetchedUpdate = try database.item(identifier: item.identifier)
+        XCTAssertNotEqual(item, update)
+        XCTAssertEqual(update, fetchedUpdate)
+        XCTAssertEqual(fetchedUpdate.notes, "Cheese")
     }
 
     func testDeleteItemFailsOnMissingItem() throws {
@@ -292,7 +314,8 @@ class DatabaseTests: XCTestCase {
                         tags: tags,
                         date: item.date,
                         toRead: item.toRead,
-                        shared: item.shared)
+                        shared: item.shared,
+                        notes: item.notes)
         })
     }
 

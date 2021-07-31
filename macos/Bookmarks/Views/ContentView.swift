@@ -41,8 +41,7 @@ struct ContentView: View {
                                 manager.database.item(identifier: item.identifier) { result in
                                     switch result {
                                     case .success(let item):
-                                        print(item)
-                                        print(item.tags)
+                                        print(String(describing: item))
                                     case .failure(let error):
                                         print("failed to get item with error \(error)")
                                     }

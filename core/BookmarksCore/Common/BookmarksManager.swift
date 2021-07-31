@@ -74,7 +74,8 @@ public class BookmarksManager {
         self.updater.update()
     }
 
-    // TODO: Move these to the updater for the time being
+    // TODO: Move the Bookmark update APIs into the updater #237
+    //       https://github.com/inseven/bookmarks/issues/237
 
     public func deleteItem(item: Item, completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)

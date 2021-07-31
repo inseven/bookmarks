@@ -29,13 +29,13 @@ public class Pinboard {
 
     fileprivate enum Path: String {
 
-        case posts_update = "posts/update"
+        case postsUpdate = "posts/update"
 
-        case posts_all = "posts/all"
-        case posts_delete = "posts/delete"
+        case postsAll = "posts/all"
+        case postsDelete = "posts/delete"
 
-        case tags_delete = "tags/delete"
-        case tags_rename = "tags/rename"
+        case tagsDelete = "tags/delete"
+        case tagsRename = "tags/rename"
 
     }
 
@@ -94,44 +94,56 @@ public class Pinboard {
         }
     }
 
-    public func posts_update(completion: @escaping (Result<Update, Error>) -> Void) {
-        self.fetch(path: .posts_update, completion: completion) { data in
+    public func postsUpdate(completion: @escaping (Result<Update, Error>) -> Void) {
+        self.fetch(path: .postsUpdate, completion: completion) { data in
             try JSONDecoder().decode(Update.self, from: data)
         }
     }
 
-    public func posts_all(completion: @escaping (Result<[Post], Error>) -> Void) {
-        self.fetch(path: .posts_all, completion: completion) { data in
+    public func postsAll(completion: @escaping (Result<[Post], Error>) -> Void) {
+        self.fetch(path: .postsAll, completion: completion) { data in
             return try JSONDecoder().decode([Post].self, from: data)
         }
     }
 
-    public func posts_delete(url: URL, completion: @escaping (Result<Bool, Swift.Error>) -> Void) {
+    public func postsDelete(url: URL, completion: @escaping (Result<Bool, Swift.Error>) -> Void) {
         let parameters = [
             "url": url.absoluteString,
         ]
-        self.fetch(path: .posts_delete, parameters: parameters, completion: completion) { _ in
+        self.fetch(path: .postsDelete, parameters: parameters, completion: completion) { _ in
             return true
         }
     }
 
-    public func tags_delete(_ tag: String, completion: @escaping (Result<Bool, Swift.Error>) -> Void) {
+    public func tagsDelete(_ tag: String, completion: @escaping (Result<Bool, Swift.Error>) -> Void) {
         let parameters = [
             "tag": tag,
         ]
-        self.fetch(path: .tags_delete, parameters: parameters, completion: completion) { _ in
+        self.fetch(path: .tagsDelete, parameters: parameters, completion: completion) { _ in
             return true
         }
     }
 
-    public func tags_rename(_ old: String, to new: String, completion: @escaping (Result<Bool, Swift.Error>) -> Void) {
+    public func tagsRename(_ old: String, to new: String, completion: @escaping (Result<Bool, Swift.Error>) -> Void) {
         let parameters = [
             "old": old,
             "new": new,
         ]
-        self.fetch(path: .tags_rename, parameters: parameters, completion: completion) { _ in
+        self.fetch(path: .tagsRename, parameters: parameters, completion: completion) { _ in
             return true
         }
+    }
+
+}
+
+extension Pinboard {
+
+    func postsUpdate() throws -> Update {
+        try AsyncOperation({ self.postsUpdate(completion: $0) }).wait()
+    }
+
+    func postsAll() throws -> [Post] {
+        try AsyncOperation({ self.postsAll(completion: $0) }).wait()
     }
 
 }

@@ -20,18 +20,6 @@
 
 import Foundation
 
-extension Pinboard {
-
-    func posts_update() throws -> Update {
-        try AsyncOperation({ self.posts_update(completion: $0) }).wait()
-    }
-
-    func posts_all() throws -> [Post] {
-        try AsyncOperation({ self.posts_all(completion: $0) }).wait()
-    }
-
-}
-
 public class Updater {
 
     static var updateTimeoutSeconds = 5 * 60.0
@@ -58,7 +46,7 @@ public class Updater {
         do {
 
             // Check to see when the bookmarks were last updated and don't update if there are no new changes.
-            let update = try self.pinboard.posts_update()
+            let update = try self.pinboard.postsUpdate()
             if let lastUpdate = self.lastUpdate,
                lastUpdate >= update.updateTime {
                 print("skipping empty update")
@@ -66,7 +54,7 @@ public class Updater {
             }
 
             // Get the posts.
-            let posts = try self.pinboard.posts_all()
+            let posts = try self.pinboard.postsAll()
 
             var identifiers = Set<String>()
 
@@ -85,18 +73,16 @@ public class Updater {
                                 toRead: post.toRead,
                                 shared: post.shared)
                 identifiers.insert(item.identifier)
-                _ = try AsyncOperation({ self.database.insertOrUpdate(item, completion: $0) }).wait()
+                _ = try self.database.insertOrUpdate(item: item)
             }
 
             // Delete missing items.
-            // TODO: Move the blocking database APIs into BookmarksCore #170
-            //       https://github.com/inseven/bookmarks/issues/170
-            let allIdentifiers = try AsyncOperation(self.database.identifiers).wait()
+            let allIdentifiers = try self.database.identifiers()
             let deletedIdentifiers = Set(allIdentifiers).subtracting(identifiers)
             for identifier in deletedIdentifiers {
-                let item = try AsyncOperation({ self.database.item(identifier: identifier, completion: $0) }).wait()
+                let item = try self.database.item(identifier: identifier)
                 print("deleting \(item)...")
-                _ = try AsyncOperation({ self.database.delete(identifier: identifier, completion: $0) }).wait()
+                _ = try self.database.deleteItem(identifier: identifier)
             }
             print("update complete")
 

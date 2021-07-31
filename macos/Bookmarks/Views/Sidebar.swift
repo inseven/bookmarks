@@ -115,8 +115,8 @@ struct Sidebar: View {
                                     self.sheet = .rename(tag: tag)
                                 }
                                 Button("Delete") {
-                                    self.manager.database.delete(tag: tag, completion: { _ in })
-                                    self.manager.pinboard.tags_delete(tag) { _ in
+                                    self.manager.database.deleteTag(tag: tag, completion: { _ in })
+                                    self.manager.pinboard.tagsDelete(tag) { _ in
                                         self.manager.refresh()
                                     }
                                 }

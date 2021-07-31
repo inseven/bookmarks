@@ -20,7 +20,7 @@
 
 import Foundation
 
-enum BookmarksError: Error {
+enum BookmarksError: Error, Equatable {
 
     case resizeFailure
 

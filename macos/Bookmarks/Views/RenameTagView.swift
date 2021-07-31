@@ -49,7 +49,7 @@ struct RenameTagView: View {
                     .keyboardShortcut(.cancelAction)
                     Button("OK") {
                         isBusy = true
-                        manager.pinboard.tags_rename(tag, to: newTag) { result in
+                        manager.pinboard.tagsRename(tag, to: newTag) { result in
                             switch result {
                             case .failure(let error):
                                 // TODO: Report the error

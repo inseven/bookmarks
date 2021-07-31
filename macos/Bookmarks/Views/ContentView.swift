@@ -74,8 +74,8 @@ struct ContentView: View {
                                     NSPasteboard.general.setString(item.url.absoluteString, forType: .string)
                                 }
                                 Button("Delete") {
-                                    manager.database.delete(identifier: item.identifier) { _ in }
-                                    manager.pinboard.posts_delete(url: item.url) { result in
+                                    manager.database.deleteItem(identifier: item.identifier) { _ in }
+                                    manager.pinboard.postsDelete(url: item.url) { result in
                                         switch result {
                                         case .success:
                                             manager.refresh()

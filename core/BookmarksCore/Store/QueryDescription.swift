@@ -46,9 +46,13 @@ public struct Unread: QueryDescription {
 
 public struct Shared: QueryDescription {
 
-    public var sql: String { "items.shared = 1" }
+    var shared: Bool
 
-    public init() { }
+    public var sql: String { "items.shared = \(shared ? "1" : "0")" }
+
+    public init(_ shared: Bool) {
+        self.shared = shared
+    }
 
 }
 

@@ -50,17 +50,22 @@ struct Sidebar: View {
                                 databaseView: ItemsView(database: manager.database))
 
                     SidebarLink(selection: $selection,
+                                tag: .shared(false),
+                                title: "Private",
+                                systemImage: "lock.fill",
+                                databaseView: ItemsView(database: manager.database, query: Shared(false)))
+
+                    SidebarLink(selection: $selection,
+                                tag: .shared(true),
+                                title: "Public",
+                                systemImage: "globe",
+                                databaseView: ItemsView(database: manager.database, query: Shared(true)))
+
+                    SidebarLink(selection: $selection,
                                 tag: .today,
                                 title: "Today",
                                 systemImage: "sun.max.fill",
                                 databaseView: ItemsView(database: manager.database, query: Today()))
-
-                    SidebarLink(selection: $selection,
-                                tag: .shared,
-                                title: "Public",
-                                systemImage: "globe",
-                                databaseView: ItemsView(database: manager.database, query: Shared()))
-
 
                     SidebarLink(selection: $selection,
                                 tag: .unread,

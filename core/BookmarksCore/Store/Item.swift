@@ -169,26 +169,19 @@ extension Item {
 
 }
 
-// TODO: Move this elsewhere.
-extension String {
-
-    public func pinboardUrl(for user: String) throws -> URL {
-        return try "https://pinboard.in/u:\(user)/t:\(self)/".asUrl()
-    }
-
-}
-
 extension Pinboard.Post {
 
+    // TODO: Review the nullability of the properties on the Pinboard.Post struct #216
+    //       https://github.com/inseven/bookmarks/issues/216
     init(item: Item) {
         self.init(href: item.url,
                   description: item.title,
                   extended: item.notes,
-                  hash: "", // TODO
-                  meta: "", // TODO
+                  hash: "",
+                  meta: "",
                   shared: item.shared,
                   tags: Array(item.tags),
-                  time: item.date, // TODO
+                  time: item.date,
                   toRead: item.toRead)
     }
 

@@ -20,7 +20,9 @@
 
 import Foundation
 
-extension String {
+extension String: Identifiable {
+
+    public var id: String { self }
 
     public func like(_ search: String) -> Bool {
         guard !search.isEmpty else {
@@ -42,10 +44,8 @@ extension String {
         components(separatedBy: .whitespacesAndNewlines).filter { !$0.isEmpty }
     }
 
-}
-
-extension String: Identifiable {
-
-    public var id: String { self }
+    public func pinboardTagUrl(for user: String) throws -> URL {
+        return try "https://pinboard.in/u:\(user)/t:\(self)/".asUrl()
+    }
 
 }

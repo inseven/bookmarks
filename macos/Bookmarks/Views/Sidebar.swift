@@ -130,7 +130,7 @@ struct Sidebar: View {
                                         guard let user = manager.user else {
                                             return
                                         }
-                                        NSWorkspace.shared.open(try tag.pinboardUrl(for: user))
+                                        NSWorkspace.shared.open(try tag.pinboardTagUrl(for: user))
                                     } catch {
                                         print("Failed to open on Pinboard error \(error)")
                                     }
@@ -167,7 +167,7 @@ struct Sidebar: View {
                                         guard let user = manager.user else {
                                             return
                                         }
-                                        NSWorkspace.shared.open(try tag.pinboardUrl(for: user))
+                                        NSWorkspace.shared.open(try tag.pinboardTagUrl(for: user))
                                     } catch {
                                         print("Failed to open on Pinboard error \(error)")
                                     }

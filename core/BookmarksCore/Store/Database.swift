@@ -587,7 +587,8 @@ public extension Database {
         try AsyncOperation { self.item(identifier: identifier, completion: $0) }.wait()
     }
 
-    // TODO: Test this.
+    // TODO: Test the Database APIs for fetching items by URL #217
+    //       https://github.com/inseven/bookmarks/issues/217
     func item(url: URL) throws -> Item {
         try AsyncOperation { self.item(url: url, completion: $0) }.wait()
     }

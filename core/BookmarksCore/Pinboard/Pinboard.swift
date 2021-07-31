@@ -107,7 +107,7 @@ public class Pinboard {
         guard let url = post.href?.absoluteString,
               let description = post.description,
               let date = post.time else {
-            completion(.failure(BookmarksError.corrupt))  // TODO: Something sensible.
+            completion(.failure(BookmarksError.malformedBookmark))
             return
         }
 

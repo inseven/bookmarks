@@ -36,5 +36,6 @@ enum BookmarksError: Error, Equatable {
 
     case corrupt
     case timeout
+    case malformedBookmark
     
 }

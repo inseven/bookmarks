@@ -25,7 +25,7 @@ import BookmarksCore
 struct BookmarkTagCommands: View {
 
     @Environment(\.manager) var manager: BookmarksManager
-    @Binding var sidebarSelection: BookmarksSection?  // TODO: This should definitely be environment
+    @Binding var sidebarSelection: BookmarksSection?
 
     var item: Item
 

@@ -52,22 +52,27 @@ struct BookmarksApp: App {
                     selection = .all
                 }
                 .keyboardShortcut("1", modifiers: .command)
-                Button("Today") {
-                    selection = .today
+                Button("Private") {
+                    selection = .shared(false)
                 }
                 .keyboardShortcut("2", modifiers: .command)
                 Button("Public") {
-                    selection = .shared
+                    selection = .shared(true)
                 }
                 .keyboardShortcut("3", modifiers: .command)
+                Button("Today") {
+                    selection = .today
+                }
+                .keyboardShortcut("4", modifiers: .command)
+
                 Button("Unread") {
                     selection = .unread
                 }
-                .keyboardShortcut("4", modifiers: .command)
+                .keyboardShortcut("5", modifiers: .command)
                 Button("Untagged") {
                     selection = .untagged
                 }
-                .keyboardShortcut("5", modifiers: .command)
+                .keyboardShortcut("6", modifiers: .command)
             }
         }
         SwiftUI.Settings {

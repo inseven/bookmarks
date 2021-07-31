@@ -30,6 +30,8 @@ struct BookmarkDesctructiveCommands: View {
 
     var body: some View {
         Button("Delete") {
+            // TODO: Show errors in the UI #218
+            //       https://github.com/inseven/bookmarks/issues/218
             manager.deleteItem(item: item, completion: log("delete \(item.url)"))
         }
     }

@@ -49,6 +49,8 @@ struct AcceptsURL: ViewModifier {
                     }
                     print(url)
                     if let item = try? manager.database.item(url: url) {
+                        // TODO: Show errors in the UI #218
+                        //       https://github.com/inseven/bookmarks/issues/218
                         manager.updateItem(item: item.adding(tag: tag), completion: log("add tag"))
                     } else {
                         // TODO: Add a new URL?

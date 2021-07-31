@@ -131,10 +131,7 @@ struct Sidebar: View {
                                     self.sheet = .rename(tag: tag)
                                 }
                                 Button("Delete") {
-                                    self.manager.database.deleteTag(tag: tag, completion: { _ in })
-                                    self.manager.pinboard.tagsDelete(tag) { _ in
-                                        self.manager.refresh()
-                                    }
+                                    self.manager.deleteTag(tag: tag) { _ in }
                                 }
                                 Divider()
                                 Button("Add to Favourites") {

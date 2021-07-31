@@ -30,15 +30,7 @@ struct BookmarkDesctructiveCommands: View {
 
     var body: some View {
         Button("Delete") {
-            manager.database.deleteItem(identifier: item.identifier) { _ in }
-            manager.pinboard.postsDelete(url: item.url) { result in
-                switch result {
-                case .success:
-                    manager.refresh()
-                case .failure(let error):
-                    print("Failed to delete bookmark with error \(error)")
-                }
-            }
+            manager.deleteItem(item: item)
         }
     }
 

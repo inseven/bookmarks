@@ -39,7 +39,7 @@ public class BookmarksManager {
     var downloadManager: DownloadManager
     public var settings = Settings()
     fileprivate var updater: Updater
-    public var pinboard: Pinboard
+    fileprivate var pinboard: Pinboard
 
     public var cache: NSCache = NSCache<NSString, SafeImage>()
 
@@ -74,18 +74,52 @@ public class BookmarksManager {
         self.updater.update()
     }
 
-    // TODO: Move this elsewhere.
+    // TODO: Determine a better place for the store APIs
+
+    // TODO: Some form of callback?
+    public func deleteItem(item: Item) {
+        database.deleteItem(identifier: item.identifier) { _ in }
+        pinboard.postsDelete(url: item.url) { result in
+            switch result {
+            case .success:
+                self.refresh()
+            case .failure(let error):
+                print("Failed to delete bookmark with error \(error)")
+            }
+        }
+    }
+
     public func updateItem(item: Item) {
         // TODO: Perhaps this shouldn't always be user-interactive?
         DispatchQueue.global(qos: .userInitiated).async {
             _ = try! self.database.insertOrUpdate(item: item) // TODO: Of course this shoudln't fail this way
             let post = Pinboard.Post(item: item)
-            // TODO: Go through the updater.
             self.pinboard.postsAdd(post: post, replace: true) { result in
                 print(result)
                 self.updater.update()
             }
+        }
+    }
 
+    public func renameTag(_ old: String, to new: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.pinboard.tagsRename(old, to: new) { result in
+                completion(result)
+                self.refresh()
+            }
+        }
+    }
+
+    public func deleteTag(tag: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
+        DispatchQueue.global(qos: .userInitiated).async {
+            let result = Result {
+                try self.database.deleteTag(tag: tag)
+                try self.pinboard.tagsDelete(tag)
+                self.refresh()
+            }
+            completion(result)
         }
     }
 

@@ -144,23 +144,19 @@ public class Pinboard {
         }
     }
 
-    public func tagsDelete(_ tag: String, completion: @escaping (Result<Bool, Swift.Error>) -> Void) {
+    public func tagsDelete(_ tag: String, completion: @escaping (Result<Void, Swift.Error>) -> Void) {
         let parameters = [
             "tag": tag,
         ]
-        self.fetch(path: .tagsDelete, parameters: parameters, completion: completion) { _ in
-            return true
-        }
+        self.fetch(path: .tagsDelete, parameters: parameters, completion: completion) { _ in }
     }
 
-    public func tagsRename(_ old: String, to new: String, completion: @escaping (Result<Bool, Swift.Error>) -> Void) {
+    public func tagsRename(_ old: String, to new: String, completion: @escaping (Result<Void, Swift.Error>) -> Void) {
         let parameters = [
             "old": old,
             "new": new,
         ]
-        self.fetch(path: .tagsRename, parameters: parameters, completion: completion) { _ in
-            return true
-        }
+        self.fetch(path: .tagsRename, parameters: parameters, completion: completion) { _ in }
     }
 
 }
@@ -173,6 +169,10 @@ extension Pinboard {
 
     func postsAll() throws -> [Post] {
         try AsyncOperation({ self.postsAll(completion: $0) }).wait()
+    }
+
+    func tagsDelete(_ tag: String) throws {
+        try AsyncOperation({ self.tagsDelete(tag, completion: $0) }).wait()
     }
 
 }

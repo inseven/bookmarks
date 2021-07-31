@@ -24,109 +24,6 @@ import SwiftUI
 import BookmarksCore
 import Interact
 
-struct BookmarkOpenCommands: View {
-
-    @Environment(\.manager) var manager: BookmarksManager
-
-    var item: Item
-
-    var body: some View {
-        Button("Open") {
-            NSWorkspace.shared.open(item.url)
-        }
-        Button("Open on Internet Archive") {
-            do {
-                NSWorkspace.shared.open(try item.internetArchiveUrl())
-            } catch {
-                print("Failed to open on the Internet Archive with error \(error)")
-            }
-        }
-    }
-}
-
-
-struct BookmarkEditCommands: View {
-
-    @Environment(\.manager) var manager: BookmarksManager
-
-    var item: Item
-
-    var body: some View {
-        Button(item.toRead ? "Mark as Read" : "Mark as Unread") {
-            manager.updateItem(item: item.setting(toRead: !item.toRead))
-        }
-        Button(item.shared ? "Make Private" : "Make Public") {
-            manager.updateItem(item: item.setting(shared: !item.shared))
-        }
-        Button("Edit on Pinboard") {
-            do {
-                NSWorkspace.shared.open(try item.pinboardUrl())
-            } catch {
-                print("Failed to edit with error \(error)")
-            }
-        }
-    }
-}
-
-struct BookmarkDesctructiveCommands: View {
-
-    @Environment(\.manager) var manager: BookmarksManager
-
-    var item: Item
-
-    var body: some View {
-        Button("Delete") {
-            manager.database.deleteItem(identifier: item.identifier) { _ in }
-            manager.pinboard.postsDelete(url: item.url) { result in
-                switch result {
-                case .success:
-                    manager.refresh()
-                case .failure(let error):
-                    print("Failed to delete bookmark with error \(error)")
-                }
-            }
-        }
-    }
-
-}
-
-struct BookmarkShareCommands: View {
-
-    @Environment(\.manager) var manager: BookmarksManager
-
-    var item: Item
-
-    var body: some View {
-        Button("Copy") {
-            NSPasteboard.general.clearContents()
-            NSPasteboard.general.setString(item.url.absoluteString, forType: .string)
-        }
-    }
-
-}
-
-struct BookmarkTagCommands: View {
-
-    @Environment(\.manager) var manager: BookmarksManager
-    @Binding var sidebarSelection: BookmarksSection?  // TODO: This should definitely be environment
-
-    var item: Item
-
-    var body: some View {
-        if item.tags.isEmpty {
-            Button("No Tags") {}.disabled(true)
-        } else {
-            Menu("Tags") {
-                ForEach(Array(item.tags).sorted()) { tag in
-                    Button(tag) {
-                        sidebarSelection = tag.tagId
-                    }
-                }
-            }
-        }
-    }
-}
-
 struct ContentView: View {
 
     @Binding var sidebarSelection: BookmarksSection?
@@ -179,11 +76,9 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            print("content view appear")
             databaseView.start()
         }
         .onDisappear {
-            print("content view disappear")
             databaseView.stop()
         }
         .toolbar {

@@ -86,18 +86,16 @@ public class BookmarksManager {
         self.updater.update()
     }
 
-    // TODO: Determine a better place for the store APIs
+    // TODO: Move these to the updater for the time being
 
-    // TODO: Some form of callback?
-    public func deleteItem(item: Item) {
-        database.deleteItem(identifier: item.identifier) { _ in }
-        pinboard.postsDelete(url: item.url) { result in
-            switch result {
-            case .success:
-                self.refresh()
-            case .failure(let error):
-                print("Failed to delete bookmark with error \(error)")
+    public func deleteItem(item: Item, completion: @escaping (Result<Void, Error>) -> Void) {
+        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
+        DispatchQueue.global(qos: .userInitiated).async {
+            let result = Result {
+                try self.database.deleteItem(identifier: item.identifier)
+                try self.pinboard.postsDelete(url: item.url)
             }
+            completion(result)
         }
     }
 

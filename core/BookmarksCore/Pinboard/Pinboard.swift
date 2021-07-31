@@ -135,13 +135,11 @@ public class Pinboard {
         }
     }
 
-    public func postsDelete(url: URL, completion: @escaping (Result<Bool, Swift.Error>) -> Void) {
+    public func postsDelete(url: URL, completion: @escaping (Result<Void, Swift.Error>) -> Void) {
         let parameters = [
             "url": url.absoluteString,
         ]
-        self.fetch(path: .postsDelete, parameters: parameters, completion: completion) { _ in
-            return true
-        }
+        self.fetch(path: .postsDelete, parameters: parameters, completion: completion) { _ in }
     }
 
     public func tagsDelete(_ tag: String, completion: @escaping (Result<Void, Swift.Error>) -> Void) {
@@ -173,6 +171,10 @@ extension Pinboard {
 
     func postsAll() throws -> [Post] {
         try AsyncOperation({ self.postsAll(completion: $0) }).wait()
+    }
+
+    func postsDelete(url: URL) throws {
+        try AsyncOperation({ self.postsDelete(url: url, completion: $0) }).wait()
     }
 
     func tagsDelete(_ tag: String) throws {

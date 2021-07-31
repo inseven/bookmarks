@@ -30,7 +30,7 @@ struct BookmarkDesctructiveCommands: View {
 
     var body: some View {
         Button("Delete") {
-            manager.deleteItem(item: item)
+            manager.deleteItem(item: item, completion: loggingCompletion(name: "delete \(item.url)"))
         }
     }
 

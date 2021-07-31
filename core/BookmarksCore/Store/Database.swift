@@ -184,8 +184,7 @@ public class Database {
         13: { db in
             print("add index on items.url...")
             try db.run(Schema.items.createIndex(Schema.url))
-        }
-        // TODO: Create index on the URL?
+        },
     ]
 
     static var schemaVersion: Int32 = Array(migrations.keys).max() ?? 0

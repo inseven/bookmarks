@@ -56,54 +56,17 @@ struct ContentView: View {
                                     print("Failed to edit with error \(error)")
                                 }
                             }
-                            .contextMenu(ContextMenu(menuItems: {
-                                Button("Open") {
-                                    NSWorkspace.shared.open(item.url)
-                                }
-                                Button("Open on Internet Archive") {
-                                    do {
-                                        NSWorkspace.shared.open(try item.internetArchiveUrl())
-                                    } catch {
-                                        print("Failed to open on the Internet Archive with error \(error)")
-                                    }
-                                }
+                            .contextMenu {
+                                BookmarkOpenCommands(item: item)
                                 Divider()
-                                Button("Copy") {
-                                    NSPasteboard.general.clearContents()
-                                    NSPasteboard.general.setString(item.url.absoluteString, forType: .string)
-                                }
-                                Button("Delete") {
-                                    manager.database.deleteItem(identifier: item.identifier) { _ in }
-                                    manager.pinboard.postsDelete(url: item.url) { result in
-                                        switch result {
-                                        case .success:
-                                            manager.refresh()
-                                        case .failure(let error):
-                                            print("Failed to delete bookmark with error \(error)")
-                                        }
-                                    }
-                                }
+                                BookmarkDesctructiveCommands(item: item)
                                 Divider()
-                                if item.tags.isEmpty {
-                                    Button("No Tags") {}.disabled(true)
-                                } else {
-                                    Menu("Tags") {
-                                        ForEach(Array(item.tags).sorted()) { tag in
-                                            Button(tag) {
-                                                sidebarSelection = tag.tagId
-                                            }
-                                        }
-                                    }
-                                }
+                                BookmarkEditCommands(item: item)
                                 Divider()
-                                Button("Edit on Pinboard") {
-                                    do {
-                                        NSWorkspace.shared.open(try item.pinboardUrl())
-                                    } catch {
-                                        print("Failed to edit with error \(error)")
-                                    }
-                                }
-                            }))
+                                BookmarkShareCommands(item: item)
+                                Divider()
+                                BookmarkTagCommands(sidebarSelection: $sidebarSelection, item: item)
+                            }
                             .onDrag {
                                 NSItemProvider(object: item.url as NSURL)
                             }
@@ -113,11 +76,9 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            print("content view appear")
             databaseView.start()
         }
         .onDisappear {
-            print("content view disappear")
             databaseView.stop()
         }
         .toolbar {

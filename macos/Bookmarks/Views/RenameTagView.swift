@@ -49,15 +49,15 @@ struct RenameTagView: View {
                     .keyboardShortcut(.cancelAction)
                     Button("OK") {
                         isBusy = true
-                        manager.pinboard.tagsRename(tag, to: newTag) { result in
+                        manager.renameTag(tag, to: newTag) { result in
                             switch result {
                             case .failure(let error):
-                                // TODO: Report the error
+                                // TODO: Show errors in the UI #218
+                                //       https://github.com/inseven/bookmarks/issues/218
                                 print("Failed to rename tag with error \(error)")
                                 isBusy = false
                             case .success:
                                 print("Successfully renamed tag")
-                                manager.refresh()
                                 presentationMode.wrappedValue.dismiss()
                             }
                         }

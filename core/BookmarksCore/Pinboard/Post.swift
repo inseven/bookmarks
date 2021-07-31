@@ -22,6 +22,8 @@ import Foundation
 
 extension Pinboard {
 
+    // TODO: Review the nullability of the properties on the Pinboard.Post struct #216
+    //       https://github.com/inseven/bookmarks/issues/216
     public struct Post: Codable {
 
         public let description: String?
@@ -46,11 +48,31 @@ extension Pinboard {
             case toRead = "toread"
         }
 
+        init(href: URL,
+             description: String,
+             extended: String,
+             hash: String,
+             meta: String,
+             shared: Bool,
+             tags: [String],
+             time: Date,
+             toRead: Bool) {
+            self.href = href
+            self.description = description
+            self.extended = extended
+            self.hash = hash
+            self.meta = meta
+            self.shared = shared
+            self.tags = tags
+            self.time = time
+            self.toRead = toRead
+        }
+
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
 
-            // Unfortunately, the Pinboard API uses 0 as a placeholder for a missing description, so we need to do a little
-            // dance here to keep everything happy.
+            // Unfortunately, the Pinboard API uses 0 as a placeholder for a missing description, so we need to do a
+            // little dance here to keep everything happy.
             do {
                 description = try container.decode(String.self, forKey: .description)
             } catch DecodingError.typeMismatch {

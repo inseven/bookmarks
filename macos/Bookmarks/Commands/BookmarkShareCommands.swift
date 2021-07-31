@@ -18,24 +18,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
+import SwiftUI
 
-enum BookmarksError: Error, Equatable {
+import BookmarksCore
 
-    case resizeFailure
+struct BookmarkShareCommands: View {
 
-    case invalidURL(string: String)
-    case invalidURL(url: URL)
-    case invalidURL(components: URLComponents)
+    @Environment(\.manager) var manager: BookmarksManager
 
-    case unknownMigration(version: Int32)
+    var item: Item
 
-    case itemNotFound(identifier: String)
-    case itemNotFound(url: URL)
-    case tagNotFound(name: String)
+    var body: some View {
+        Button("Copy") {
+            NSPasteboard.general.clearContents()
+            NSPasteboard.general.setString(item.url.absoluteString, forType: .string)
+        }
+    }
 
-    case corrupt
-    case timeout
-    case malformedBookmark
-    
 }

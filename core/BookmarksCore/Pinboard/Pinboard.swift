@@ -31,6 +31,7 @@ public class Pinboard {
 
         case postsUpdate = "posts/update"
 
+        case postsAdd = "posts/add"
         case postsAll = "posts/all"
         case postsDelete = "posts/delete"
 
@@ -80,6 +81,7 @@ public class Pinboard {
                 }
                 // TODO: Handle HTTP error codes in the Pinboard API responses #135
                 //       https://github.com/inseven/bookmarks/issues/135
+                print("response = \(String(describing: response))")
                 do {
                     let result = try transform(data)
                     completion(.success(result))
@@ -100,38 +102,58 @@ public class Pinboard {
         }
     }
 
+    public func postsAdd(post: Post, replace: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
+        let completion = DispatchQueue.global().asyncClosure(completion)
+        guard let url = post.href?.absoluteString,
+              let description = post.description,
+              let date = post.time else {
+            completion(.failure(BookmarksError.malformedBookmark))
+            return
+        }
+
+        let dateFormatter = ISO8601DateFormatter()
+        let dt = dateFormatter.string(from: date)
+
+        let parameters: [String: String] = [
+            "url": url,
+            "description": description,
+            "extended": post.extended,
+            "tags": post.tags.joined(separator: " "),
+            "dt": dt,
+            "replace": replace ? "yes" : "no",
+            "shared": post.shared ? "yes" : "no",
+            "toread": post.toRead ? "yes" : "no"
+        ]
+        print(parameters)
+        self.fetch(path: .postsAdd, parameters: parameters, completion: completion) { _ in }
+    }
+
     public func postsAll(completion: @escaping (Result<[Post], Error>) -> Void) {
         self.fetch(path: .postsAll, completion: completion) { data in
             return try JSONDecoder().decode([Post].self, from: data)
         }
     }
 
-    public func postsDelete(url: URL, completion: @escaping (Result<Bool, Swift.Error>) -> Void) {
+    public func postsDelete(url: URL, completion: @escaping (Result<Void, Swift.Error>) -> Void) {
         let parameters = [
             "url": url.absoluteString,
         ]
-        self.fetch(path: .postsDelete, parameters: parameters, completion: completion) { _ in
-            return true
-        }
+        self.fetch(path: .postsDelete, parameters: parameters, completion: completion) { _ in }
     }
 
-    public func tagsDelete(_ tag: String, completion: @escaping (Result<Bool, Swift.Error>) -> Void) {
+    public func tagsDelete(_ tag: String, completion: @escaping (Result<Void, Swift.Error>) -> Void) {
         let parameters = [
             "tag": tag,
         ]
-        self.fetch(path: .tagsDelete, parameters: parameters, completion: completion) { _ in
-            return true
-        }
+        self.fetch(path: .tagsDelete, parameters: parameters, completion: completion) { _ in }
     }
 
-    public func tagsRename(_ old: String, to new: String, completion: @escaping (Result<Bool, Swift.Error>) -> Void) {
+    public func tagsRename(_ old: String, to new: String, completion: @escaping (Result<Void, Swift.Error>) -> Void) {
         let parameters = [
             "old": old,
             "new": new,
         ]
-        self.fetch(path: .tagsRename, parameters: parameters, completion: completion) { _ in
-            return true
-        }
+        self.fetch(path: .tagsRename, parameters: parameters, completion: completion) { _ in }
     }
 
 }
@@ -142,8 +164,24 @@ extension Pinboard {
         try AsyncOperation({ self.postsUpdate(completion: $0) }).wait()
     }
 
+    func postsAdd(post: Post, replace: Bool) throws {
+        try AsyncOperation({ self.postsAdd(post: post, replace: replace, completion: $0) }).wait()
+    }
+
     func postsAll() throws -> [Post] {
         try AsyncOperation({ self.postsAll(completion: $0) }).wait()
+    }
+
+    func postsDelete(url: URL) throws {
+        try AsyncOperation({ self.postsDelete(url: url, completion: $0) }).wait()
+    }
+
+    func tagsDelete(_ tag: String) throws {
+        try AsyncOperation({ self.tagsDelete(tag, completion: $0) }).wait()
+    }
+
+    func tagsRename(_ old: String, to new: String) throws {
+        try AsyncOperation({ self.tagsRename(old, to: new, completion: $0) }).wait()
     }
 
 }

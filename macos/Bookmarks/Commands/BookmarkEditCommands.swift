@@ -18,24 +18,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
+import SwiftUI
 
-enum BookmarksError: Error, Equatable {
+import BookmarksCore
 
-    case resizeFailure
+struct BookmarkEditCommands: View {
 
-    case invalidURL(string: String)
-    case invalidURL(url: URL)
-    case invalidURL(components: URLComponents)
+    @Environment(\.manager) var manager: BookmarksManager
 
-    case unknownMigration(version: Int32)
+    var item: Item
 
-    case itemNotFound(identifier: String)
-    case itemNotFound(url: URL)
-    case tagNotFound(name: String)
-
-    case corrupt
-    case timeout
-    case malformedBookmark
-    
+    var body: some View {
+        Button(item.toRead ? "Mark as Read" : "Mark as Unread") {
+            // TODO: Show errors in the UI #218
+            //       https://github.com/inseven/bookmarks/issues/218
+            manager.updateItem(item: item.setting(toRead: !item.toRead), completion: log("read/unread"))
+        }
+        Button(item.shared ? "Make Private" : "Make Public") {
+            // TODO: Show errors in the UI #218
+            //       https://github.com/inseven/bookmarks/issues/218
+            manager.updateItem(item: item.setting(shared: !item.shared), completion: log("private/public"))
+        }
+        Button("Edit on Pinboard") {
+            do {
+                NSWorkspace.shared.open(try item.pinboardUrl())
+            } catch {
+                print("Failed to edit with error \(error)")
+            }
+        }
+    }
 }

@@ -18,24 +18,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
+import SwiftUI
 
-enum BookmarksError: Error, Equatable {
+import BookmarksCore
 
-    case resizeFailure
+struct BookmarkTagCommands: View {
 
-    case invalidURL(string: String)
-    case invalidURL(url: URL)
-    case invalidURL(components: URLComponents)
+    @Environment(\.manager) var manager: BookmarksManager
+    @Binding var sidebarSelection: BookmarksSection?
 
-    case unknownMigration(version: Int32)
+    var item: Item
 
-    case itemNotFound(identifier: String)
-    case itemNotFound(url: URL)
-    case tagNotFound(name: String)
-
-    case corrupt
-    case timeout
-    case malformedBookmark
-    
+    var body: some View {
+        if item.tags.isEmpty {
+            Button("No Tags") {}.disabled(true)
+        } else {
+            Menu("Tags") {
+                ForEach(Array(item.tags).sorted()) { tag in
+                    Button(tag) {
+                        sidebarSelection = tag.tagId
+                    }
+                }
+            }
+        }
+    }
 }

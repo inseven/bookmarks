@@ -93,7 +93,7 @@ struct Sidebar: View {
                                         guard let user = manager.user else {
                                             return
                                         }
-                                        NSWorkspace.shared.open(try tag.pinboardUrl(for: user))
+                                        NSWorkspace.shared.open(try tag.pinboardTagUrl(for: user))
                                     } catch {
                                         print("Failed to open on Pinboard error \(error)")
                                     }
@@ -115,10 +115,7 @@ struct Sidebar: View {
                                     self.sheet = .rename(tag: tag)
                                 }
                                 Button("Delete") {
-                                    self.manager.database.deleteTag(tag: tag, completion: { _ in })
-                                    self.manager.pinboard.tagsDelete(tag) { _ in
-                                        self.manager.refresh()
-                                    }
+                                    self.manager.deleteTag(tag: tag) { _ in }
                                 }
                                 Divider()
                                 Button("Add to Favourites") {
@@ -132,7 +129,7 @@ struct Sidebar: View {
                                         guard let user = manager.user else {
                                             return
                                         }
-                                        NSWorkspace.shared.open(try tag.pinboardUrl(for: user))
+                                        NSWorkspace.shared.open(try tag.pinboardTagUrl(for: user))
                                     } catch {
                                         print("Failed to open on Pinboard error \(error)")
                                     }

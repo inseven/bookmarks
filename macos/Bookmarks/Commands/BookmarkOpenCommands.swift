@@ -18,24 +18,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
+import SwiftUI
 
-enum BookmarksError: Error, Equatable {
+import BookmarksCore
 
-    case resizeFailure
+struct BookmarkOpenCommands: View {
 
-    case invalidURL(string: String)
-    case invalidURL(url: URL)
-    case invalidURL(components: URLComponents)
+    @Environment(\.manager) var manager: BookmarksManager
 
-    case unknownMigration(version: Int32)
+    var item: Item
 
-    case itemNotFound(identifier: String)
-    case itemNotFound(url: URL)
-    case tagNotFound(name: String)
-
-    case corrupt
-    case timeout
-    case malformedBookmark
-    
+    var body: some View {
+        Button("Open") {
+            NSWorkspace.shared.open(item.url)
+        }
+        Button("Open on Internet Archive") {
+            do {
+                NSWorkspace.shared.open(try item.internetArchiveUrl())
+            } catch {
+                print("Failed to open on the Internet Archive with error \(error)")
+            }
+        }
+    }
 }

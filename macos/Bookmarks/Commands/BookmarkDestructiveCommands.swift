@@ -18,24 +18,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
+import SwiftUI
 
-enum BookmarksError: Error, Equatable {
+import BookmarksCore
 
-    case resizeFailure
+struct BookmarkDesctructiveCommands: View {
 
-    case invalidURL(string: String)
-    case invalidURL(url: URL)
-    case invalidURL(components: URLComponents)
+    @Environment(\.manager) var manager: BookmarksManager
 
-    case unknownMigration(version: Int32)
+    var item: Item
 
-    case itemNotFound(identifier: String)
-    case itemNotFound(url: URL)
-    case tagNotFound(name: String)
+    var body: some View {
+        Button("Delete") {
+            // TODO: Show errors in the UI #218
+            //       https://github.com/inseven/bookmarks/issues/218
+            manager.deleteItem(item: item, completion: log("delete \(item.url)"))
+        }
+    }
 
-    case corrupt
-    case timeout
-    case malformedBookmark
-    
 }

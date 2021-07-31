@@ -20,22 +20,13 @@
 
 import Foundation
 
-enum BookmarksError: Error, Equatable {
-
-    case resizeFailure
-
-    case invalidURL(string: String)
-    case invalidURL(url: URL)
-    case invalidURL(components: URLComponents)
-
-    case unknownMigration(version: Int32)
-
-    case itemNotFound(identifier: String)
-    case itemNotFound(url: URL)
-    case tagNotFound(name: String)
-
-    case corrupt
-    case timeout
-    case malformedBookmark
-    
+public func log<T>(_ name: String) -> (Result<T, Error>) -> () {
+    { result in
+        switch result {
+        case .success:
+            print("\(name) succeeded")
+        case .failure(let error):
+            print("\(name) failed with error \(error)")
+        }
+    }
 }

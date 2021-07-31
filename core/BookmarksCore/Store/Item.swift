@@ -95,6 +95,50 @@ public class Item: Equatable {
              notes: notes)
     }
 
+    public func setting(tags: Set<String>) -> Item {
+        Item(identifier: identifier,
+             title: title,
+             url: url,
+             tags: tags,
+             date: date,
+             toRead: toRead,
+             shared: shared,
+             notes: notes)
+    }
+
+    public func setting(toRead: Bool) -> Item {
+        Item(identifier: identifier,
+             title: title,
+             url: url,
+             tags: tags,
+             date: date,
+             toRead: toRead,
+             shared: shared,
+             notes: notes)
+    }
+
+    public func setting(shared: Bool) -> Item {
+        Item(identifier: identifier,
+             title: title,
+             url: url,
+             tags: tags,
+             date: date,
+             toRead: toRead,
+             shared: shared,
+             notes: notes)
+    }
+
+    public func adding(tag: String) -> Item {
+        Item(identifier: identifier,
+             title: title,
+             url: url,
+             tags: Set(tags + [tag]),
+             date: date,
+             toRead: toRead,
+             shared: shared,
+             notes: notes)
+    }
+
 }
 
 extension Item: Identifiable {
@@ -125,11 +169,20 @@ extension Item {
 
 }
 
-// TODO: Move this elsewhere.
-extension String {
+extension Pinboard.Post {
 
-    public func pinboardUrl(for user: String) throws -> URL {
-        return try "https://pinboard.in/u:\(user)/t:\(self)/".asUrl()
+    // TODO: Review the nullability of the properties on the Pinboard.Post struct #216
+    //       https://github.com/inseven/bookmarks/issues/216
+    init(item: Item) {
+        self.init(href: item.url,
+                  description: item.title,
+                  extended: item.notes,
+                  hash: "",
+                  meta: "",
+                  shared: item.shared,
+                  tags: Array(item.tags),
+                  time: item.date,
+                  toRead: item.toRead)
     }
 
 }

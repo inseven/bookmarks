@@ -68,6 +68,29 @@ extension BookmarksSection {
         }
     }
 
+    var systemImage: String {
+        switch self {
+        case .all:
+            return "bookmark.fill"
+        case .untagged:
+            return "tag.fill"
+        case .today:
+            return "sun.max.fill"
+        case .unread:
+            return "circlebadge.fill"
+        case .shared(let shared):
+            if shared {
+                return "globe"
+            } else {
+                return "lock.fill"
+            }
+        case .favorite:
+            return "tag"
+        case .tag:
+            return "tag"
+        }
+    }
+
 }
 
 struct Sidebar: View {
@@ -92,32 +115,26 @@ struct Sidebar: View {
 
                     SidebarLink(selection: $selection,
                                 tag: .all,
-                                systemImage: "bookmark.fill",
                                 query: True().eraseToAnyQuery())
 
                     SidebarLink(selection: $selection,
                                 tag: .shared(false),
-                                systemImage: "lock.fill",
                                 query: Shared(false).eraseToAnyQuery())
 
                     SidebarLink(selection: $selection,
                                 tag: .shared(true),
-                                systemImage: "globe",
                                 query: Shared(true).eraseToAnyQuery())
 
                     SidebarLink(selection: $selection,
                                 tag: .today,
-                                systemImage: "sun.max.fill",
                                 query: Today().eraseToAnyQuery())
 
                     SidebarLink(selection: $selection,
                                 tag: .unread,
-                                systemImage: "circlebadge.fill",
                                 query: Unread().eraseToAnyQuery())
 
                     SidebarLink(selection: $selection,
                                 tag: .untagged,
-                                systemImage: "tag.fill",
                                 query: Untagged().eraseToAnyQuery())
 
                 }
@@ -126,7 +143,6 @@ struct Sidebar: View {
 
                         SidebarLink(selection: $selection,
                                     tag: tag.favoriteId,
-                                    systemImage: "tag",
                                     query: Tag(tag).eraseToAnyQuery())
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Remove from Favourites") {
@@ -152,7 +168,6 @@ struct Sidebar: View {
 
                         SidebarLink(selection: $selection,
                                     tag: tag.tagId,
-                                    systemImage: "tag",
                                     query: Tag(tag).eraseToAnyQuery())
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Rename") {

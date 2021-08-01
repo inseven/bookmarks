@@ -28,7 +28,6 @@ struct SidebarLink: View {
 
     var selection: Binding<BookmarksSection?>
     var tag: BookmarksSection
-    var systemImage: String
     var query: AnyQuery
 
     // TODO: Maybe this isn't necessary anymore?
@@ -45,7 +44,7 @@ struct SidebarLink: View {
 
     var body: some View {
         HStack {
-            Label(tag.navigationTitle, systemImage: systemImage)
+            Label(tag.navigationTitle, systemImage: tag.systemImage)
             Spacer()
         }
         .tag(tag)  // We set a tag so the list view knows what's selected...

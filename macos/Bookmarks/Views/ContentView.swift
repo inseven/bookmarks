@@ -25,18 +25,19 @@ import BookmarksCore
 import Interact
 
 // TODO: Initial value? + Updateable
-class TextFieldObserver : ObservableObject {
-    @Published var debouncedText = ""
-    @Published var searchText = ""
+class Debouncer<T> : ObservableObject {
+    @Published var debouncedValue: T
+    @Published var value: T
 
     private var subscriptions = Set<AnyCancellable>()
 
-    init() {
-        $searchText
-            // TODO: Way too long!
-            .debounce(for: .seconds(0.2), scheduler: DispatchQueue.main)
-            .sink(receiveValue: { t in
-                self.debouncedText = t
+    init(initialValue: T, delay: DispatchQueue.SchedulerTimeType.Stride) {
+        self.debouncedValue = initialValue
+        self.value = initialValue
+        $value
+            .debounce(for: delay, scheduler: DispatchQueue.main)
+            .sink(receiveValue: { value in
+                self.debouncedValue = value
             } )
             .store(in: &subscriptions)
     }
@@ -51,7 +52,7 @@ struct ContentView: View {
     @StateObject var databaseView: ItemsView
     var query: AnyQuery = True().eraseToAnyQuery()
 
-    @StateObject var textObserver = TextFieldObserver()
+    @StateObject var searchDebouncer = Debouncer<String>(initialValue: "", delay: .seconds(0.2))
 
     private var subscription: AnyCancellable?
 
@@ -120,11 +121,11 @@ struct ContentView: View {
                 }
             }
             ToolbarItem {
-                SearchField(search: $textObserver.searchText)
+                SearchField(search: $searchDebouncer.value)
                     .frame(minWidth: 100, idealWidth: 300, maxWidth: .infinity)
             }
         }
-        .onReceive(textObserver.$debouncedText) { search in
+        .onReceive(searchDebouncer.$debouncedValue) { search in
 
             guard let selection = sidebarSelection else {
                 print("BROKEN: Ignoring nil sidebar")
@@ -157,7 +158,7 @@ struct ContentView: View {
 
             print("new section = \(section)")
             let query = section.query
-            textObserver.searchText = query.filter
+            searchDebouncer.value = query.filter
             databaseView.search = query.eraseToAnyQuery()
         }
         .navigationTitle(sidebarSelection?.navigationTitle ?? "Unknown")

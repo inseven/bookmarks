@@ -34,8 +34,6 @@ struct BookmarksApp: App {
             NavigationView {
                 Sidebar(tagsView: TagsView(database: manager.database), settings: manager.settings, selection: $selection)
                 ContentView(sidebarSelection: $selection, database: manager.database)
-                //                        .navigationTitle(title),
-                //                       isActive: selectionActiveBinding(tag)
             }
             .frameAutosaveName("Main Window")
         }

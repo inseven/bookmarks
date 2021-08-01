@@ -39,14 +39,14 @@ public class DownloadManager {
     }
 
     private func debug() {
-//        dispatchPrecondition(condition: .onQueue(syncQueue))
-//
-//        let urls = self.active.map { (item) -> String in
-//            let downloader = item as! WebViewDownloader
-//            return downloader.description
-//        }
-//
-//        print("DownloadManager (limit=\(self.limit): \(self.pending.count) pending, \(self.active.count) active \(urls)")
+        dispatchPrecondition(condition: .onQueue(syncQueue))
+
+        let urls = self.active.map { (item) -> String in
+            let downloader = item as! WebViewDownloader
+            return downloader.description
+        }
+
+        print("DownloadManager (limit=\(self.limit): \(self.pending.count) pending, \(self.active.count) active \(urls)")
     }
 
     private func add<T>(_ downloader: T) where T: Hashable {

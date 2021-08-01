@@ -81,7 +81,7 @@ public class Pinboard {
                 }
                 // TODO: Handle HTTP error codes in the Pinboard API responses #135
                 //       https://github.com/inseven/bookmarks/issues/135
-//                print("response = \(String(describing: response))")
+                print("response = \(String(describing: response))")
                 do {
                     let result = try transform(data)
                     completion(.success(result))

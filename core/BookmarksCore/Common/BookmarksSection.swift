@@ -20,7 +20,7 @@
 
 import SwiftUI
 
-enum BookmarksSection {
+public enum BookmarksSection {
     case all
     case untagged
     case today
@@ -32,9 +32,9 @@ enum BookmarksSection {
 
 extension BookmarksSection: CustomStringConvertible, Hashable, Identifiable {
 
-    var id: String { String(describing: self) }
+    public var id: String { String(describing: self) }
 
-    var description: String {
+    public var description: String {
         switch self {
         case .all:
             return "uk.co.inseven.bookmarks.all-bookmarks"
@@ -57,7 +57,7 @@ extension BookmarksSection: CustomStringConvertible, Hashable, Identifiable {
 
 }
 
-extension String {
+public extension String {
 
     var favoriteId: BookmarksSection { .favorite(tag: self) }
     var tagId: BookmarksSection { .tag(tag: self) }

@@ -125,13 +125,6 @@ struct ContentView: View {
             }
         }
         .onReceive(textObserver.$debouncedText) { search in
-//            let filter = parseFilter(search)
-//            print("section = \(filter.section)")
-            // TODO: Save the structured thing in the search?
-//            databaseView.search = filter.eraseToAnyQuery()
-//            if sidebarSelection != filter.section {
-//                sidebarSelection = filter.section
-//            }
 
             guard let selection = sidebarSelection else {
                 print("BROKEN: Ignoring nil sidebar")
@@ -199,28 +192,3 @@ extension Array where Element == AnyQuery {
     }
 
 }
-
-extension And {
-
-    // TODO: Var?
-    // TODO: Walk the tree?
-    func subQueries() -> [AnyQuery] {
-        return [lhs.eraseToAnyQuery(), rhs.eraseToAnyQuery()]
-    }
-
-}
-
-//extension QueryDescription {
-//
-//    func subset(of section: BookmarksSection) -> Bool {
-//        let querySection = self.section
-//        if querySection == section {
-//            return true
-//        }
-//        guard let andQuery = self.query as? And else {
-//            return false
-//        }
-//        return false
-//    }
-//
-//}

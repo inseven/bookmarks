@@ -61,7 +61,7 @@ extension BookmarksSection {
             } else {
                 return "Private"
             }
-        case .favorite(tag: let tag): // TODO: Rename favorite to 'favoriteTag'
+        case .favorite(tag: let tag):
             return tag
         case .tag(tag: let tag):
             return tag
@@ -111,7 +111,7 @@ struct Sidebar: View {
         ScrollViewReader { scrollView in
             List(selection: $selection) {
 
-                Section(header: Text("Locations")) {
+                Section(header: Text("Smart Filters")) {
 
                     SidebarLink(selection: $selection,
                                 tag: .all,

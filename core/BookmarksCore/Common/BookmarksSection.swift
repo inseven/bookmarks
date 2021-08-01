@@ -63,14 +63,3 @@ extension String {
     var tagId: BookmarksSection { .tag(tag: self) }
 
 }
-
-struct FocusedMessageKey : FocusedValueKey {
-        typealias Value = Binding<BookmarksSection?>
-}
-
-extension FocusedValues {
-    var sidebarSelection: FocusedMessageKey.Value? {
-        get { self[FocusedMessageKey.self] }
-        set { self[FocusedMessageKey.self] = newValue }
-    }
-}

@@ -20,7 +20,7 @@
 
 import SwiftUI
 
-enum BookmarksSection {
+public enum BookmarksSection {
     case all
     case untagged
     case today
@@ -28,13 +28,14 @@ enum BookmarksSection {
     case shared(_ shared: Bool)
     case favorite(tag: String)
     case tag(tag: String)
+    case search(_ search: String)
 }
 
 extension BookmarksSection: CustomStringConvertible, Hashable, Identifiable {
 
-    var id: String { String(describing: self) }
+    public var id: String { String(describing: self) }
 
-    var description: String {
+    public var description: String {
         switch self {
         case .all:
             return "uk.co.inseven.bookmarks.all-bookmarks"
@@ -52,25 +53,16 @@ extension BookmarksSection: CustomStringConvertible, Hashable, Identifiable {
             return "uk.co.inseven.bookmarks.favorites.\(tag)"
         case .tag(let tag):
             return "uk.co.inseven.bookmarks.tags.\(tag)"
+        case .search:
+            return "uk.co.inseven.bookmarks.search"
         }
     }
 
 }
 
-extension String {
+public extension String {
 
     var favoriteId: BookmarksSection { .favorite(tag: self) }
     var tagId: BookmarksSection { .tag(tag: self) }
 
-}
-
-struct FocusedMessageKey : FocusedValueKey {
-        typealias Value = Binding<BookmarksSection?>
-}
-
-extension FocusedValues {
-    var sidebarSelection: FocusedMessageKey.Value? {
-        get { self[FocusedMessageKey.self] }
-        set { self[FocusedMessageKey.self] = newValue }
-    }
 }

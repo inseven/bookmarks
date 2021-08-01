@@ -102,6 +102,10 @@
 		D8D3F6D0261E685200B2D66F /* SafeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3F6CE261E685200B2D66F /* SafeImage.swift */; };
 		D8EBC54A26ACBFC400604D84 /* Update.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EBC54926ACBFC400604D84 /* Update.swift */; };
 		D8EBC54B26ACBFC400604D84 /* Update.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EBC54926ACBFC400604D84 /* Update.swift */; };
+		D8F6AD4026B6338300BEC5C6 /* QueryDescriptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F6AD3F26B6338300BEC5C6 /* QueryDescriptionTests.swift */; };
+		D8F6AD4126B6338300BEC5C6 /* QueryDescriptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F6AD3F26B6338300BEC5C6 /* QueryDescriptionTests.swift */; };
+		D8F6AD5126B6355800BEC5C6 /* BookmarksSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F6AD4E26B6353600BEC5C6 /* BookmarksSection.swift */; };
+		D8F6AD5226B6355800BEC5C6 /* BookmarksSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F6AD4E26B6353600BEC5C6 /* BookmarksSection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -176,6 +180,8 @@
 		D8D3F6A9261E650100B2D66F /* ThumbnailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailTests.swift; sourceTree = "<group>"; };
 		D8D3F6CE261E685200B2D66F /* SafeImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafeImage.swift; sourceTree = "<group>"; };
 		D8EBC54926ACBFC400604D84 /* Update.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Update.swift; sourceTree = "<group>"; };
+		D8F6AD3F26B6338300BEC5C6 /* QueryDescriptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryDescriptionTests.swift; sourceTree = "<group>"; };
+		D8F6AD4E26B6353600BEC5C6 /* BookmarksSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksSection.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -369,6 +375,7 @@
 				D890D1B926A219C900C47489 /* AsyncOperation.swift */,
 				D8D3F5CB261E5B5B00B2D66F /* BookmarksError.swift */,
 				D8B04B30261EC7E700376ADD /* BookmarksManager.swift */,
+				D8F6AD4E26B6353600BEC5C6 /* BookmarksSection.swift */,
 				D8D3F5EA261E5BBE00B2D66F /* Document.swift */,
 				D8D3F571261E597700B2D66F /* DownloadManager.swift */,
 				D8D3F6CE261E685200B2D66F /* SafeImage.swift */,
@@ -400,6 +407,7 @@
 			children = (
 				D8D3F6A9261E650100B2D66F /* ThumbnailTests.swift */,
 				D890D1C226A2569100C47489 /* DatabaseTests.swift */,
+				D8F6AD3F26B6338300BEC5C6 /* QueryDescriptionTests.swift */,
 			);
 			path = BookmarksCoreTests;
 			sourceTree = "<group>";
@@ -608,6 +616,7 @@
 				D84CE46D261E29A900AF1901 /* Boolean.swift in Sources */,
 				D890D1C826A3584400C47489 /* DatabasePublisher.swift in Sources */,
 				D8D3F59F261E5AAE00B2D66F /* WebViewDownloader.swift in Sources */,
+				D8F6AD5126B6355800BEC5C6 /* BookmarksSection.swift in Sources */,
 				D8B04B1F261EC65D00376ADD /* Settings.swift in Sources */,
 				D84CE484261E2AD000AF1901 /* Post.swift in Sources */,
 				D890D1C026A2219F00C47489 /* ItemsView.swift in Sources */,
@@ -641,6 +650,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D890D1C526A2569800C47489 /* DatabaseTests.swift in Sources */,
+				D8F6AD4026B6338300BEC5C6 /* QueryDescriptionTests.swift in Sources */,
 				D8D3F6C0261E657100B2D66F /* ThumbnailTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -662,6 +672,7 @@
 				D8CF8CA6261E35B600E52E85 /* Post.swift in Sources */,
 				D890D1C926A3584400C47489 /* DatabasePublisher.swift in Sources */,
 				D8D3F59E261E5AAE00B2D66F /* WebViewDownloader.swift in Sources */,
+				D8F6AD5226B6355800BEC5C6 /* BookmarksSection.swift in Sources */,
 				D8B04B1E261EC65D00376ADD /* Settings.swift in Sources */,
 				D8CF8CA1261E35B300E52E85 /* Pinboard.swift in Sources */,
 				D890D1C126A2219F00C47489 /* ItemsView.swift in Sources */,
@@ -695,6 +706,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D890D1C626A2569800C47489 /* DatabaseTests.swift in Sources */,
+				D8F6AD4126B6338300BEC5C6 /* QueryDescriptionTests.swift in Sources */,
 				D8D3F6C5261E657200B2D66F /* ThumbnailTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

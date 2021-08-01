@@ -170,7 +170,7 @@ class WebViewDownloader: NSObject, WKNavigationDelegate, Downloader {
                 backgroundCompletion(.failure(WebViewDownloaderError.notFound))
                 return
             }
-            print("DownloadManager: \(self.url.absoluteString) => \(images))")
+//            print("DownloadManager: \(self.url.absoluteString) => \(images))")
             guard
                 let selection = images.first,
                 let url = URL(string: selection) else {

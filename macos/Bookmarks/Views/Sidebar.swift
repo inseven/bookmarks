@@ -24,6 +24,56 @@ import SwiftUI
 import BookmarksCore
 import Interact
 
+extension BookmarksSection {
+
+    var query: AnyQuery {
+        switch self {
+        case .all:
+            return True().eraseToAnyQuery()
+        case .untagged:
+            return Untagged().eraseToAnyQuery()
+        case .today:
+            return Today().eraseToAnyQuery()
+        case .unread:
+            return Unread().eraseToAnyQuery()
+        case .shared(let shared):
+            return Shared(shared).eraseToAnyQuery()
+        case .favorite(tag: let tag):
+            return Tag(tag).eraseToAnyQuery()
+        case .tag(tag: let tag):
+            return Tag(tag).eraseToAnyQuery()
+        case .search:
+            return True().eraseToAnyQuery()
+        }
+    }
+
+    var navigationTitle: String {
+        switch self {
+        case .all:
+            return "All Bookmarks"
+        case .untagged:
+            return "Untagged"
+        case .today:
+            return "Today"
+        case .unread:
+            return "Unread"
+        case .shared(let shared):
+            if shared {
+                return "Public"
+            } else {
+                return "Private"
+            }
+        case .favorite(tag: let tag): // TODO: Rename favorite to 'favoriteTag'
+            return tag
+        case .tag(tag: let tag):
+            return tag
+        case .search(_):
+            return "Search"
+        }
+    }
+
+}
+
 struct Sidebar: View {
 
     enum SheetType {
@@ -41,43 +91,50 @@ struct Sidebar: View {
     var body: some View {
         ScrollViewReader { scrollView in
             List(selection: $selection) {
-                Section {
+
+                if let selection = selection,
+                   case .search = selection  {
+
+                    Section(header: Text("Search")) {
+                        SidebarLink(selection: $selection,
+                                    tag: selection,
+                                    systemImage: "bookmark.fill",
+                                    query: True().eraseToAnyQuery())
+                    }
+
+                }
+
+                Section(header: Text("Locations")) {
 
                     SidebarLink(selection: $selection,
                                 tag: .all,
-                                title: "All Bookmarks",
                                 systemImage: "bookmark.fill",
-                                databaseView: ItemsView(database: manager.database))
+                                query: True().eraseToAnyQuery())
 
                     SidebarLink(selection: $selection,
                                 tag: .shared(false),
-                                title: "Private",
                                 systemImage: "lock.fill",
-                                databaseView: ItemsView(database: manager.database, query: Shared(false)))
+                                query: Shared(false).eraseToAnyQuery())
 
                     SidebarLink(selection: $selection,
                                 tag: .shared(true),
-                                title: "Public",
                                 systemImage: "globe",
-                                databaseView: ItemsView(database: manager.database, query: Shared(true)))
+                                query: Shared(true).eraseToAnyQuery())
 
                     SidebarLink(selection: $selection,
                                 tag: .today,
-                                title: "Today",
                                 systemImage: "sun.max.fill",
-                                databaseView: ItemsView(database: manager.database, query: Today()))
+                                query: Today().eraseToAnyQuery())
 
                     SidebarLink(selection: $selection,
                                 tag: .unread,
-                                title: "Unread",
                                 systemImage: "circlebadge.fill",
-                                databaseView: ItemsView(database: manager.database, query: Unread()))
+                                query: Unread().eraseToAnyQuery())
 
                     SidebarLink(selection: $selection,
                                 tag: .untagged,
-                                title: "Untagged",
                                 systemImage: "tag.fill",
-                                databaseView: ItemsView(database: manager.database, query: Untagged()))
+                                query: Untagged().eraseToAnyQuery())
 
                 }
                 Section(header: Text("Favourites")) {
@@ -85,9 +142,8 @@ struct Sidebar: View {
 
                         SidebarLink(selection: $selection,
                                     tag: tag.favoriteId,
-                                    title: tag,
                                     systemImage: "tag",
-                                    databaseView: ItemsView(database: manager.database, query: Tag(tag)))
+                                    query: Tag(tag).eraseToAnyQuery())
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Remove from Favourites") {
                                     settings.favoriteTags = settings.favoriteTags.filter { $0 != tag }
@@ -112,9 +168,8 @@ struct Sidebar: View {
 
                         SidebarLink(selection: $selection,
                                     tag: tag.tagId,
-                                    title: tag,
                                     systemImage: "tag",
-                                    databaseView: ItemsView(database: manager.database, query: Tag(tag)))
+                                    query: Tag(tag).eraseToAnyQuery())
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Rename") {
                                     self.sheet = .rename(tag: tag)

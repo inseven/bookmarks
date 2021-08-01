@@ -24,12 +24,42 @@ import SwiftUI
 import BookmarksCore
 import Interact
 
+// TODO: Initial value? + Updateable
+class TextFieldObserver : ObservableObject {
+    @Published var debouncedText = ""
+    @Published var searchText = ""
+
+    private var subscriptions = Set<AnyCancellable>()
+
+    init() {
+        $searchText
+            // TODO: Way too long!
+            .debounce(for: .seconds(0.2), scheduler: DispatchQueue.main)
+            .sink(receiveValue: { t in
+                self.debouncedText = t
+            } )
+            .store(in: &subscriptions)
+    }
+}
+
 struct ContentView: View {
 
     @Binding var sidebarSelection: BookmarksSection?
+    @State var underlyingSection: BookmarksSection?  // The section currently being displayed (used to ignore incoming changes)
 
     @Environment(\.manager) var manager: BookmarksManager
     @StateObject var databaseView: ItemsView
+    var query: AnyQuery = True().eraseToAnyQuery()
+
+    @StateObject var textObserver = TextFieldObserver()
+
+    private var subscription: AnyCancellable?
+
+    init(sidebarSelection: Binding<BookmarksSection?>, database: Database) {
+        _sidebarSelection = sidebarSelection
+        // TODO: Initializaiton is broken here
+        _databaseView = StateObject(wrappedValue: ItemsView(database: database, query: True().eraseToAnyQuery()))
+    }
 
     var body: some View {
         VStack {
@@ -90,9 +120,114 @@ struct ContentView: View {
                 }
             }
             ToolbarItem {
-                SearchField(search: $databaseView.search)
+                SearchField(search: $textObserver.searchText)
                     .frame(minWidth: 100, idealWidth: 300, maxWidth: .infinity)
             }
         }
+        .onReceive(textObserver.$debouncedText) { search in
+//            let filter = parseFilter(search)
+//            print("section = \(filter.section)")
+            // TODO: Save the structured thing in the search?
+//            databaseView.search = filter.eraseToAnyQuery()
+//            if sidebarSelection != filter.section {
+//                sidebarSelection = filter.section
+//            }
+
+            guard let selection = sidebarSelection else {
+                print("BROKEN: Ignoring nil sidebar")
+                return
+            }
+
+            // Don't set the query unless the top level token has been removed.
+            // TODO: Utility to determine if the array describes the current section uniquely
+            let queries = filterQueries(search)
+            if !queries.subset(of: selection) {
+                let nextSection = queries.section
+                underlyingSection = nextSection
+                // TODO: Maybe do this as a side effect of changing the underlyingSection?
+                if sidebarSelection != nextSection {
+                    sidebarSelection = nextSection
+                }
+            }
+            databaseView.search = safeAnd(queries: queries).eraseToAnyQuery()
+        }
+        .onChange(of: sidebarSelection) { section in
+
+            guard underlyingSection != section,
+                  let section = section else {
+                return
+            }
+
+            underlyingSection = section
+            databaseView.clear() // TODO: Replace with a new view??
+            // TODO: Switch the section if the first query is different? Would probably look more elegant / predictible?
+
+            print("new section = \(section)")
+            switch section {
+            case .search(let filter):
+                // TODO: Simple subset check that means we don't change the top-level navigation.
+                textObserver.searchText = filter
+                databaseView.search = parseFilter(filter).eraseToAnyQuery()
+            default:
+                let query = section.query
+                textObserver.searchText = query.filter
+                databaseView.search = query.eraseToAnyQuery()
+            }
+        }
+        .navigationTitle(sidebarSelection?.navigationTitle ?? "Unknown")
     }
 }
+
+extension Array where Element == AnyQuery {
+
+    var sections: Set<BookmarksSection> {
+        Set(map { $0.section })
+    }
+
+    func subset(of section: BookmarksSection) -> Bool {
+        sections.contains(section)
+    }
+
+    func exactlyMatches(section: BookmarksSection) -> Bool {
+        let sections = sections
+        guard sections.count == 1,
+              let testSection = sections.first else {
+            return false
+        }
+        return section == testSection
+    }
+
+    var section: BookmarksSection {
+        guard sections.count == 1,
+              let section = sections.first else {
+            return .all
+        }
+        return section
+    }
+
+}
+
+extension And {
+
+    // TODO: Var?
+    // TODO: Walk the tree?
+    func subQueries() -> [AnyQuery] {
+        return [lhs.eraseToAnyQuery(), rhs.eraseToAnyQuery()]
+    }
+
+}
+
+//extension QueryDescription {
+//
+//    func subset(of section: BookmarksSection) -> Bool {
+//        let querySection = self.section
+//        if querySection == section {
+//            return true
+//        }
+//        guard let andQuery = self.query as? And else {
+//            return false
+//        }
+//        return false
+//    }
+//
+//}

@@ -18,38 +18,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import SwiftUI
+// TODO: Rename this to query tests
+import Foundation
 
-import BookmarksCore
+import XCTest
+@testable import BookmarksCore
 
-struct SidebarLink: View {
+class QueryDescriptionTests: XCTestCase {
 
-    @Environment(\.manager) var manager: BookmarksManager
-
-    var selection: Binding<BookmarksSection?>
-    var tag: BookmarksSection
-    var systemImage: String
-    var query: AnyQuery
-
-    // TODO: Maybe this isn't necessary anymore?
-    func selectionActiveBinding(_ tag: BookmarksSection) -> Binding<Bool> {
-        return Binding {
-            selection.wrappedValue == tag
-        } set: { value in
-            guard value == true else {
-                return
-            }
-            selection.wrappedValue = tag
-        }
+    func testTagQueryDescriptionSection() {
+        let query = Tag("cheese")
+        XCTAssertEqual(query.section, BookmarksSection.tag(tag: "cheese"))
+        XCTAssertNotEqual(query.section, BookmarksSection.tag(tag: "fromage"))
     }
 
-    var body: some View {
-        HStack {
-            Label(tag.navigationTitle, systemImage: systemImage)
-            Spacer()
-        }
-        .tag(tag)  // We set a tag so the list view knows what's selected...
-        .id(tag)   // ... and an id so we can scroll to the items 🤦🏻‍♂️
+    func testAnyQueryEquality() {
+        XCTAssertEqual(Tag("cheese").eraseToAnyQuery(), Tag("cheese").eraseToAnyQuery())
+        XCTAssertNotEqual(Tag("fromage").eraseToAnyQuery(), Tag("cheese").eraseToAnyQuery())
+        XCTAssertNotEqual(Today().eraseToAnyQuery(), Tag("cheese").eraseToAnyQuery())
+    }
+
+    // TODO: Wrapped AnyQuery should flatten down safely?
+
+    func testFilterParser() {
+        XCTAssertEqual(parseFilter("tag:cheese").eraseToAnyQuery(), Tag("cheese").eraseToAnyQuery())
     }
 
 }

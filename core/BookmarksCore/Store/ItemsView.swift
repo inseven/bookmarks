@@ -27,22 +27,22 @@ public class ItemsView: ObservableObject {
     var updateCancellable: AnyCancellable? = nil
     var searchCancellable: AnyCancellable? = nil
 
-    @Published public var search = ""
+    @Published public var search: AnyQuery
     @Published public var items: [Item] = []
 
-    fileprivate var query: QueryDescription
-    fileprivate var filter = ""
+    fileprivate var query: AnyQuery
 
-    public init(database: Database, query: QueryDescription = True()) {
+    public init(database: Database, query: AnyQuery) {
         self.database = database
-        self.query = query
+        self.search = query
+        self.query = query // TODO: Initial value for search too? One variable?
     }
 
     func update() {
         dispatchPrecondition(condition: .onQueue(.main))
         print("fetching items...")
 
-        database.items(query: And(query, Filter(filter))) { result in
+        database.items(query: query) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let items):
@@ -61,12 +61,17 @@ public class ItemsView: ObservableObject {
         self.updateCancellable = DatabasePublisher(database: database).debounce(for: .seconds(1), scheduler: DispatchQueue.main).sink { _ in
             self.update()
         }
-        self.searchCancellable = self.$search.debounce(for: .seconds(0.2), scheduler: DispatchQueue.main).sink { search in
-            print("searching for '\(search)'...")
-            self.filter = search
+        self.searchCancellable = self.$search.receive(on: DispatchQueue.main).sink { search in
+            print("searching for '\(search.filter)'...")
+            self.query = search
             self.update()
         }
         self.update()
+    }
+
+    public func clear() {
+        dispatchPrecondition(condition: .onQueue(.main))
+        self.items = []
     }
 
     public func stop() {

@@ -28,7 +28,6 @@ public enum BookmarksSection {
     case shared(_ shared: Bool)
     case favorite(tag: String)
     case tag(tag: String)
-    case search(_ search: String)
 }
 
 extension BookmarksSection: CustomStringConvertible, Hashable, Identifiable {
@@ -53,8 +52,6 @@ extension BookmarksSection: CustomStringConvertible, Hashable, Identifiable {
             return "uk.co.inseven.bookmarks.favorites.\(tag)"
         case .tag(let tag):
             return "uk.co.inseven.bookmarks.tags.\(tag)"
-        case .search:
-            return "uk.co.inseven.bookmarks.search"
         }
     }
 

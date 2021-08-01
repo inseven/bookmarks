@@ -163,16 +163,9 @@ struct ContentView: View {
             // TODO: Switch the section if the first query is different? Would probably look more elegant / predictible?
 
             print("new section = \(section)")
-            switch section {
-            case .search(let filter):
-                // TODO: Simple subset check that means we don't change the top-level navigation.
-                textObserver.searchText = filter
-                databaseView.search = parseFilter(filter).eraseToAnyQuery()
-            default:
-                let query = section.query
-                textObserver.searchText = query.filter
-                databaseView.search = query.eraseToAnyQuery()
-            }
+            let query = section.query
+            textObserver.searchText = query.filter
+            databaseView.search = query.eraseToAnyQuery()
         }
         .navigationTitle(sidebarSelection?.navigationTitle ?? "Unknown")
     }

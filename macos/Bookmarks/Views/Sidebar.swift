@@ -42,8 +42,6 @@ extension BookmarksSection {
             return Tag(tag).eraseToAnyQuery()
         case .tag(tag: let tag):
             return Tag(tag).eraseToAnyQuery()
-        case .search:
-            return True().eraseToAnyQuery()
         }
     }
 
@@ -67,8 +65,6 @@ extension BookmarksSection {
             return tag
         case .tag(tag: let tag):
             return tag
-        case .search(_):
-            return "Search"
         }
     }
 
@@ -91,18 +87,6 @@ struct Sidebar: View {
     var body: some View {
         ScrollViewReader { scrollView in
             List(selection: $selection) {
-
-                if let selection = selection,
-                   case .search = selection  {
-
-                    Section(header: Text("Search")) {
-                        SidebarLink(selection: $selection,
-                                    tag: selection,
-                                    systemImage: "bookmark.fill",
-                                    query: True().eraseToAnyQuery())
-                    }
-
-                }
 
                 Section(header: Text("Locations")) {
 

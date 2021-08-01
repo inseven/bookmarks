@@ -24,6 +24,56 @@ import SwiftUI
 import BookmarksCore
 import Interact
 
+extension BookmarksSection {
+
+    var navigationTitle: String {
+        switch self {
+        case .all:
+            return "All Bookmarks"
+        case .untagged:
+            return "Untagged"
+        case .today:
+            return "Today"
+        case .unread:
+            return "Unread"
+        case .shared(let shared):
+            if shared {
+                return "Public"
+            } else {
+                return "Private"
+            }
+        case .favorite(tag: let tag): // TODO: Rename favorite to 'favoriteTag'
+            return tag
+        case .tag(tag: let tag):
+            return tag
+        }
+    }
+
+    var systemImage: String {
+        switch self {
+        case .all:
+            return "bookmark.fill"
+        case .untagged:
+            return "tag.fill"
+        case .today:
+            return "sun.max.fill"
+        case .unread:
+            return "circlebadge.fill"
+        case .shared(let shared):
+            if shared {
+                return "globe"
+            } else {
+                return "lock.fill"
+            }
+        case .favorite:
+            return "tag"
+        case .tag:
+            return "tag"
+        }
+    }
+
+}
+
 struct Sidebar: View {
 
     enum SheetType {
@@ -41,42 +91,31 @@ struct Sidebar: View {
     var body: some View {
         ScrollViewReader { scrollView in
             List(selection: $selection) {
-                Section {
+
+                Section(header: Text("Smart Filters")) {
 
                     SidebarLink(selection: $selection,
                                 tag: .all,
-                                title: "All Bookmarks",
-                                systemImage: "bookmark.fill",
                                 databaseView: ItemsView(database: manager.database))
 
                     SidebarLink(selection: $selection,
                                 tag: .shared(false),
-                                title: "Private",
-                                systemImage: "lock.fill",
                                 databaseView: ItemsView(database: manager.database, query: Shared(false)))
 
                     SidebarLink(selection: $selection,
                                 tag: .shared(true),
-                                title: "Public",
-                                systemImage: "globe",
                                 databaseView: ItemsView(database: manager.database, query: Shared(true)))
 
                     SidebarLink(selection: $selection,
                                 tag: .today,
-                                title: "Today",
-                                systemImage: "sun.max.fill",
                                 databaseView: ItemsView(database: manager.database, query: Today()))
 
                     SidebarLink(selection: $selection,
                                 tag: .unread,
-                                title: "Unread",
-                                systemImage: "circlebadge.fill",
                                 databaseView: ItemsView(database: manager.database, query: Unread()))
 
                     SidebarLink(selection: $selection,
                                 tag: .untagged,
-                                title: "Untagged",
-                                systemImage: "tag.fill",
                                 databaseView: ItemsView(database: manager.database, query: Untagged()))
 
                 }
@@ -85,8 +124,6 @@ struct Sidebar: View {
 
                         SidebarLink(selection: $selection,
                                     tag: tag.favoriteId,
-                                    title: tag,
-                                    systemImage: "tag",
                                     databaseView: ItemsView(database: manager.database, query: Tag(tag)))
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Remove from Favourites") {
@@ -112,8 +149,6 @@ struct Sidebar: View {
 
                         SidebarLink(selection: $selection,
                                     tag: tag.tagId,
-                                    title: tag,
-                                    systemImage: "tag",
                                     databaseView: ItemsView(database: manager.database, query: Tag(tag)))
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Rename") {

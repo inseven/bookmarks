@@ -26,8 +26,6 @@ struct SidebarLink: View {
 
     var selection: Binding<BookmarksSection?>
     var tag: BookmarksSection
-    var title: String
-    var systemImage: String
     var databaseView: ItemsView
 
     func selectionActiveBinding(_ tag: BookmarksSection) -> Binding<Bool> {
@@ -43,11 +41,11 @@ struct SidebarLink: View {
 
     var body: some View {
         NavigationLink(destination: ContentView(sidebarSelection: selection, databaseView: databaseView)
-                        .navigationTitle(title),
+                        .navigationTitle(tag.navigationTitle),
                        isActive: selectionActiveBinding(tag)) {
             HStack {
-                Label(title, systemImage: systemImage)
-                Spacer()
+            Label(tag.navigationTitle, systemImage: tag.systemImage)
+            Spacer()
             }
         }
         .tag(tag)  // We set a tag so the list view knows what's selected...

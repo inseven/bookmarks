@@ -42,7 +42,7 @@ extension BookmarksSection {
             } else {
                 return "Private"
             }
-        case .favorite(tag: let tag): // TODO: Rename favorite to 'favoriteTag'
+        case .favorite(tag: let tag):
             return tag
         case .tag(tag: let tag):
             return tag

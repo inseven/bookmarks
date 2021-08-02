@@ -21,17 +21,22 @@
 import Combine
 import SwiftUI
 
-import BookmarksCore
+public class Debouncer<T> : ObservableObject {
 
-struct ContentView: View {
+    @Published public var debouncedValue: T
+    @Published public var value: T
 
-    @Environment(\.manager) var manager: BookmarksManager
+    fileprivate var subscriptions = Set<AnyCancellable>()
 
-    var body: some View {
-        NavigationView {
-            BookmarksView(databaseView: ItemsView(database: manager.database, query: True().eraseToAnyQuery()))
-                .navigationBarTitle("Bookmarks", displayMode: .large)
-        }
-        .navigationViewStyle(StackNavigationViewStyle())
+    public init(initialValue: T, delay: DispatchQueue.SchedulerTimeType.Stride) {
+        self.debouncedValue = initialValue
+        self.value = initialValue
+        $value
+            .debounce(for: delay, scheduler: DispatchQueue.main)
+            .sink(receiveValue: { value in
+                self.debouncedValue = value
+            } )
+            .store(in: &subscriptions)
     }
+    
 }

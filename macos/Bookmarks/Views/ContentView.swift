@@ -24,25 +24,6 @@ import SwiftUI
 import BookmarksCore
 import Interact
 
-// TODO: Initial value? + Updateable
-class Debouncer<T> : ObservableObject {
-    @Published var debouncedValue: T
-    @Published var value: T
-
-    private var subscriptions = Set<AnyCancellable>()
-
-    init(initialValue: T, delay: DispatchQueue.SchedulerTimeType.Stride) {
-        self.debouncedValue = initialValue
-        self.value = initialValue
-        $value
-            .debounce(for: delay, scheduler: DispatchQueue.main)
-            .sink(receiveValue: { value in
-                self.debouncedValue = value
-            } )
-            .store(in: &subscriptions)
-    }
-}
-
 struct ContentView: View {
 
     @Binding var sidebarSelection: BookmarksSection?

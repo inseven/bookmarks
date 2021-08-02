@@ -20,21 +20,6 @@
 
 skip_docs
 
-lane :import_certificates do |options|
-    # Import the Developer ID certificate (see https://developer.apple.com/developer-id/) to the named keychain.
-    sync_code_signing(
-        storage_mode: "git",
-        git_url: ENV['CERTIFICATE_REPOSITORY'],
-        git_basic_authorization: ENV['CERTIFICATE_REPOSITORY_AUTHORIZATION_KEY'],
-        type: "developer_id",
-        app_identifier: "uk.co.inseven.bookmarks",
-        readonly: true,
-        skip_provisioning_profiles: true,
-        keychain_name: options[:keychain],
-        keychain_password: ENV['TEMPORARY_KEYCHAIN_PASSWORD'],
-    )
-end
-
 lane :notarize_release do |options|
     notarize(
         package: options[:package],

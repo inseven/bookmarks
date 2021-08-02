@@ -151,8 +151,8 @@ VERSION_NUMBER=`changes --scope macOS version`
 BUILD_NUMBER=`build-tools generate-build-number`
 
 # Import the certificates into our dedicated keychain.
-bundle exec fastlane import_certificates keychain:"$KEYCHAIN_PATH"
 echo "$IOS_CERTIFICATE_PASSWORD" | build-tools import-base64-certificate --password "$KEYCHAIN_PATH" "$IOS_CERTIFICATE_BASE64"
+echo "$MACOS_CERTIFICATE_PASSWORD" | build-tools import-base64-certificate --password "$KEYCHAIN_PATH" "$MACOS_CERTIFICATE_BASE64"
 
 # Install the provisioning profiles.
 build-tools install-provisioning-profile "macos/Bookmarks_Developer_ID_Application.provisionprofile"

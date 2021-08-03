@@ -100,7 +100,9 @@ function build_scheme {
         -scheme "$1" \
         CODE_SIGN_IDENTITY="" \
         CODE_SIGNING_REQUIRED=NO \
-        CODE_SIGNING_ALLOWED=NO "${@:2}" | xcpretty
+        CODE_SIGNING_ALLOWED=NO \
+        -jobs 8 \
+        "${@:2}" | xcpretty
 }
 
 cd "$ROOT_DIRECTORY"

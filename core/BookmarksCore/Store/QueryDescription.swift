@@ -30,6 +30,15 @@ public protocol QueryDescription: Sectionable {
 
 }
 
+extension QueryDescription where Self: Equatable {
+
+    public func isEqualTo(_ other: QueryDescription) -> Bool {
+        guard let otherQuery = other as? Self else { return false }
+        return self == otherQuery
+    }
+
+}
+
 public struct Untagged: QueryDescription, Equatable {
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
@@ -63,11 +72,11 @@ public struct Unread: QueryDescription, Equatable {
 
 public struct Shared: QueryDescription, Equatable {
 
-    var shared: Bool
-
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.shared == rhs.shared
     }
+
+    var shared: Bool
 
     public var sql: String { "items.shared = \(shared ? "1" : "0")" }
     public var filter: String { "shared:\(shared ? "true" : "false")" }
@@ -79,14 +88,13 @@ public struct Shared: QueryDescription, Equatable {
 
 }
 
-
 public struct Tag: QueryDescription, Equatable {
-
-    let name: String
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.name == rhs.name
     }
+
+    let name: String
 
     public var sql: String {
         let tagsFilter = Database.Schema.name.lowercaseString == name.lowercased()
@@ -116,11 +124,11 @@ public struct Tag: QueryDescription, Equatable {
 
 public struct Like: QueryDescription, Equatable {
 
-    let value: String
-
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.value == rhs.value
     }
+
+    let value: String
 
     public var sql: String {
         let tagsColumn = Expression<String>("tags")
@@ -141,28 +149,6 @@ public struct Like: QueryDescription, Equatable {
 
 }
 
-public struct AnyQuery: QueryDescription {
-
-    public let query: QueryDescription
-
-    public var sql: String { query.sql }
-    public var filter: String { query.filter }
-    public var section: BookmarksSection { query.section }
-
-    init<T: QueryDescription>(_ query: T) {
-        self.query = query
-    }
-
-}
-
-extension AnyQuery: Equatable {
-
-    public static func == (lhs: AnyQuery, rhs: AnyQuery) -> Bool {
-        return lhs.query.isEqualTo(rhs.query)
-    }
-
-}
-
 public extension QueryDescription where Self: Equatable {
 
     func eraseToAnyQuery() -> AnyQuery {
@@ -176,11 +162,11 @@ public extension QueryDescription where Self: Equatable {
 
 public struct Search: QueryDescription, Equatable {
 
-    let search: String
-
     public static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.search == rhs.search
     }
+
+    let search: String
 
     public var sql: String {
         search.tokens.map { Like($0) }.reduce(AnyQuery(True())) { AnyQuery(And($0, $1)) }.sql
@@ -221,15 +207,6 @@ public struct And<A, B>: QueryDescription, Equatable where A: QueryDescription &
 
 }
 
-extension QueryDescription where Self: Equatable {
-
-    public func isEqualTo(_ other: QueryDescription) -> Bool {
-        guard let otherQuery = other as? Self else { return false }
-        return self == otherQuery
-    }
-
-}
-
 // TODO: Flatten AND queries into single arrays where possible #201
 //       https://github.com/inseven/bookmarks/issues/201
 func &&<T: QueryDescription, Q: QueryDescription>(lhs: T, rhs: Q) -> And<T, Q> {
@@ -250,29 +227,36 @@ public struct True: QueryDescription, Equatable {
 
 }
 
+public class Today: QueryDescription, Equatable {
 
-func parseToken(_ token: String) -> AnyQuery {
-    let tagPrefix = "tag:"
-    if token.hasPrefix(tagPrefix) {
-        let tag = String(token.dropFirst(tagPrefix.count))
-        return Tag(tag).eraseToAnyQuery()
-    } else if token == "shared:false" {
-        return Shared(false).eraseToAnyQuery()
-    } else if token == "shared:true" {
-        return Shared(true).eraseToAnyQuery()
-    } else if token == "no:tag" {
-        return Untagged().eraseToAnyQuery()
-    } else if token == "status:unread" {
-        return Unread().eraseToAnyQuery()
-    } else if token == "date:today" {
-        return Today().eraseToAnyQuery()
-    } else {
-        return Like(token).eraseToAnyQuery()
+    public static func == (lhs: Today, rhs: Today) -> Bool {
+        return true
     }
+
+    public var sql: String { "date >= datetime('now', '-1 day')" }
+    public var filter: String { "date:today" }
+    public var section: BookmarksSection { .today }
+
+    public init() { }
+
 }
 
-public func filterQueries(_ filter: String) -> [AnyQuery] {
-    filter.tokens.map { parseToken($0) }
+public struct AnyQuery: QueryDescription, Equatable {
+
+    public static func == (lhs: AnyQuery, rhs: AnyQuery) -> Bool {
+        return lhs.query.isEqualTo(rhs.query)
+    }
+
+    public let query: QueryDescription
+
+    public var sql: String { query.sql }
+    public var filter: String { query.filter }
+    public var section: BookmarksSection { query.section }
+
+    init<T: QueryDescription>(_ query: T) {
+        self.query = query
+    }
+
 }
 
 extension AnyQuery {
@@ -292,32 +276,32 @@ extension AnyQuery {
         return safeResult
     }
 
+    public static func parse(token: String) -> AnyQuery {
+        let tagPrefix = "tag:"
+        if token.hasPrefix(tagPrefix) {
+            let tag = String(token.dropFirst(tagPrefix.count))
+            return Tag(tag).eraseToAnyQuery()
+        } else if token == "shared:false" {
+            return Shared(false).eraseToAnyQuery()
+        } else if token == "shared:true" {
+            return Shared(true).eraseToAnyQuery()
+        } else if token == "no:tag" {
+            return Untagged().eraseToAnyQuery()
+        } else if token == "status:unread" {
+            return Unread().eraseToAnyQuery()
+        } else if token == "date:today" {
+            return Today().eraseToAnyQuery()
+        } else {
+            return Like(token).eraseToAnyQuery()
+        }
+    }
+
+    public static func queries(for filter: String) -> [AnyQuery] {
+        filter.tokens.map { AnyQuery.parse(token: $0) }
+    }
+
     public static func parse(filter: String) -> AnyQuery {
-        return and(filterQueries(filter))
+        return and(queries(for: filter))
     }
-
-}
-
-// TODO: Put this somewhere better?
-
-public class Today: QueryDescription, Equatable {
-
-    public static func == (lhs: Today, rhs: Today) -> Bool {
-        return true
-    }
-
-    public var sql: String {
-        "date >= datetime('now', '-1 day')"
-    }
-
-    public var filter: String {
-        "date:today"
-    }
-
-    public var section: BookmarksSection {
-        .today
-    }
-
-    public init() { }
 
 }

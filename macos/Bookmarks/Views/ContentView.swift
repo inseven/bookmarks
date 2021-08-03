@@ -115,7 +115,7 @@ struct ContentView: View {
 
             // Don't set the query unless the top level token has been removed.
             // TODO: Utility to determine if the array describes the current section uniquely
-            let queries = filterQueries(search)
+            let queries = AnyQuery.queries(for: search)
             if !queries.subset(of: selection) {
                 let nextSection = queries.section
                 underlyingSection = nextSection

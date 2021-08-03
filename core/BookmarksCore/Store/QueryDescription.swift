@@ -275,25 +275,30 @@ public func filterQueries(_ filter: String) -> [AnyQuery] {
     filter.tokens.map { parseToken($0) }
 }
 
-public func safeAnd(queries: [AnyQuery]) -> AnyQuery {
-    var result: AnyQuery? = nil
-    for query in queries {
-        if let safeResult = result {
-            result = And(safeResult, query).eraseToAnyQuery()
-        } else {
-            result = query
+extension AnyQuery {
+
+    public static func and(_ queries: [AnyQuery]) -> AnyQuery {
+        var result: AnyQuery? = nil
+        for query in queries {
+            if let safeResult = result {
+                result = And(safeResult, query).eraseToAnyQuery()
+            } else {
+                result = query
+            }
         }
+        guard let safeResult = result else {
+            return True().eraseToAnyQuery()
+        }
+        return safeResult
     }
-    guard let safeResult = result else {
-        return True().eraseToAnyQuery()
+
+    public static func parse(filter: String) -> AnyQuery {
+        return and(filterQueries(filter))
     }
-    return safeResult
+
 }
 
 // TODO: Put this somewhere better?
-public func parseFilter(_ filter: String) -> AnyQuery {
-    return safeAnd(queries: filterQueries(filter))
-}
 
 public class Today: QueryDescription, Equatable {
 

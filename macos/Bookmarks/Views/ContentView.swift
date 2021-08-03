@@ -124,7 +124,7 @@ struct ContentView: View {
                     sidebarSelection = nextSection
                 }
             }
-            databaseView.query = safeAnd(queries: queries).eraseToAnyQuery()
+            databaseView.query = AnyQuery.and(queries)
         }
         .onChange(of: sidebarSelection) { section in
 

@@ -28,8 +28,8 @@ class QueryDescriptionTests: XCTestCase {
 
     func testTagQueryDescriptionSection() {
         let query = Tag("cheese")
-        XCTAssertEqual(query.section, BookmarksSection.tag(tag: "cheese"))
-        XCTAssertNotEqual(query.section, BookmarksSection.tag(tag: "fromage"))
+        XCTAssertEqual(query.section, BookmarksSection.tag("cheese"))
+        XCTAssertNotEqual(query.section, BookmarksSection.tag("fromage"))
     }
 
     func testAnyQueryEquality() {
@@ -41,7 +41,7 @@ class QueryDescriptionTests: XCTestCase {
     // TODO: Wrapped AnyQuery should flatten down safely?
 
     func testFilterParser() {
-        XCTAssertEqual(parseFilter("tag:cheese").eraseToAnyQuery(), Tag("cheese").eraseToAnyQuery())
+        XCTAssertEqual(AnyQuery.parse(filter: "tag:cheese"), Tag("cheese").eraseToAnyQuery())
     }
 
 }

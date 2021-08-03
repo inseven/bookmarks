@@ -78,7 +78,7 @@ struct BookmarksView: View {
             databaseView.stop()
         }
         .onReceive(searchDebouncer.$debouncedValue) { value in
-            databaseView.search = parseFilter(value)
+            databaseView.query = AnyQuery.parse(filter: value)
         }
     }
 

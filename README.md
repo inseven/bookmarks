@@ -122,10 +122,6 @@ You can publish a build locally by specifying the `--release` parameter:
 ./scripts/build.sh --release
 ```
 
-### Test Plans
-
-- [macOS](documentation/test-plans/macos.markdown)
-
 ## Licensing
 
 Bookmarks is licensed under the MIT License (see [LICENSE](LICENSE)).

@@ -33,9 +33,9 @@ public class Debouncer<T> : ObservableObject {
         self.value = initialValue
         $value
             .debounce(for: delay, scheduler: DispatchQueue.main)
-            .sink(receiveValue: { value in
+            .sink { value in
                 self.debouncedValue = value
-            } )
+            }
             .store(in: &subscriptions)
     }
     

@@ -101,7 +101,7 @@ function build_scheme {
         -scheme "$1" \
         CODE_SIGN_IDENTITY="" \
         CODE_SIGNING_REQUIRED=NO \
-        CODE_SIGNING_ALLOWED=NO "${@:2}" | xcpretty
+        CODE_SIGNING_ALLOWED=NO "${@:2}"
 }
 
 cd "$ROOT_DIRECTORY"
@@ -167,7 +167,7 @@ xcode_project \
     OTHER_CODE_SIGN_FLAGS="--keychain=\"${KEYCHAIN_PATH}\"" \
     BUILD_NUMBER=$BUILD_NUMBER \
     MARKETING_VERSION=$VERSION_NUMBER \
-    clean archive | xcpretty
+    clean archive
 xcodebuild \
     -archivePath "$ARCHIVE_PATH" \
     -exportArchive \
@@ -197,7 +197,7 @@ xcode_project \
     OTHER_CODE_SIGN_FLAGS="--keychain=\"${KEYCHAIN_PATH}\"" \
     BUILD_NUMBER=$BUILD_NUMBER \
     MARKETING_VERSION=$VERSION_NUMBER \
-    clean archive | xcpretty
+    clean archive
 xcodebuild \
     -archivePath "$ARCHIVE_PATH" \
     -exportArchive \

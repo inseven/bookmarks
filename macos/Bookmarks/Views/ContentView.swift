@@ -41,6 +41,17 @@ struct ContentView: View {
         _databaseView = StateObject(wrappedValue: ItemsView(database: database, query: True().eraseToAnyQuery()))
     }
 
+    var navigationTitle: String {
+        let queries = searchDebouncer.debouncedValue.queries
+        if (queries.section == .all && queries.count > 1) || queries.count > 1 {
+            return "Search: \(searchDebouncer.debouncedValue)"
+        }
+        guard let title = sidebarSelection?.navigationTitle else {
+            return "Unknown"
+        }
+        return title
+    }
+
     var body: some View {
         VStack {
             ScrollView {
@@ -110,8 +121,8 @@ struct ContentView: View {
             let queries = AnyQuery.queries(for: search)
 
             // Update the selected section if necessary.
-            if let section = queries.first?.section,
-               section != sidebarSelection {
+            let section = queries.section
+            if section != sidebarSelection {
                 underlyingSection = section
             }
 
@@ -128,7 +139,6 @@ struct ContentView: View {
 
             underlyingSection = section
 
-            // TODO: Consider replacing the view to simplify the initialization state.
             databaseView.clear()
             let query = section.query
             searchDebouncer.value = query.filter
@@ -145,6 +155,6 @@ struct ContentView: View {
             sidebarSelection = underlyingSection
 
         })
-        .navigationTitle(sidebarSelection?.navigationTitle ?? "Unknown")
+        .navigationTitle(navigationTitle)
     }
 }

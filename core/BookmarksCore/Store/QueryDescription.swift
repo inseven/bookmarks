@@ -305,3 +305,20 @@ extension AnyQuery {
     }
 
 }
+
+public extension String {
+
+    var queries: [AnyQuery] { AnyQuery.queries(for: self) }
+
+}
+
+extension Array: Sectionable where Element == AnyQuery {
+
+    public var section: BookmarksSection {
+        if let section = first?.section {
+            return section
+        }
+        return .all
+    }
+
+}

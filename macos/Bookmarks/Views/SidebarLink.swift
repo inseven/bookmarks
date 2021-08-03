@@ -30,7 +30,6 @@ struct SidebarLink: View {
     var tag: BookmarksSection
     var query: AnyQuery
 
-    // TODO: Maybe this isn't necessary anymore?
     func selectionActiveBinding(_ tag: BookmarksSection) -> Binding<Bool> {
         return Binding {
             selection.wrappedValue == tag

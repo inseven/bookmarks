@@ -37,8 +37,6 @@ class QueryDescriptionTests: XCTestCase {
         XCTAssertNotEqual(Today().eraseToAnyQuery(), Tag("cheese").eraseToAnyQuery())
     }
 
-    // TODO: Wrapped AnyQuery should flatten down safely?
-
     func testFilterParser() {
         XCTAssertEqual(AnyQuery.parse(filter: "tag:cheese"), Tag("cheese").eraseToAnyQuery())
     }

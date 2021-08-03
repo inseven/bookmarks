@@ -27,11 +27,10 @@ import Interact
 struct ContentView: View {
 
     @Binding var sidebarSelection: BookmarksSection?
-    @State var underlyingSection: BookmarksSection?  // The section currently being displayed (used to ignore incoming changes)
+    @State var underlyingSection: BookmarksSection?
 
     @Environment(\.manager) var manager: BookmarksManager
     @StateObject var databaseView: ItemsView
-    var query: AnyQuery = True().eraseToAnyQuery()
 
     @StateObject var searchDebouncer = Debouncer<String>(initialValue: "", delay: .seconds(0.2))
 
@@ -39,7 +38,6 @@ struct ContentView: View {
 
     init(sidebarSelection: Binding<BookmarksSection?>, database: Database) {
         _sidebarSelection = sidebarSelection
-        // TODO: Initializaiton is broken here
         _databaseView = StateObject(wrappedValue: ItemsView(database: database, query: True().eraseToAnyQuery()))
     }
 
@@ -108,23 +106,18 @@ struct ContentView: View {
         }
         .onReceive(searchDebouncer.$debouncedValue) { search in
 
-            guard let selection = sidebarSelection else {
-                print("BROKEN: Ignoring nil sidebar")
-                return
+            // Get the query corresponding to the current search text.
+            let queries = AnyQuery.queries(for: search)
+
+            // Update the selected section if necessary.
+            if let section = queries.first?.section,
+               section != sidebarSelection {
+                underlyingSection = section
             }
 
-            // Don't set the query unless the top level token has been removed.
-            // TODO: Utility to determine if the array describes the current section uniquely
-            let queries = AnyQuery.queries(for: search)
-            if !queries.subset(of: selection) {
-                let nextSection = queries.section
-                underlyingSection = nextSection
-                // TODO: Maybe do this as a side effect of changing the underlyingSection?
-                if sidebarSelection != nextSection {
-                    sidebarSelection = nextSection
-                }
-            }
+            // Update the database query.
             databaseView.query = AnyQuery.and(queries)
+
         }
         .onChange(of: sidebarSelection) { section in
 
@@ -134,43 +127,24 @@ struct ContentView: View {
             }
 
             underlyingSection = section
-            databaseView.clear() // TODO: Replace with a new view??
-            // TODO: Switch the section if the first query is different? Would probably look more elegant / predictible?
 
-            print("new section = \(section)")
+            // TODO: Consider replacing the view to simplify the initialization state.
+            databaseView.clear()
             let query = section.query
             searchDebouncer.value = query.filter
             databaseView.query = query.eraseToAnyQuery()
+
         }
+        .onChange(of: underlyingSection, perform: { underlyingSection in
+
+            guard sidebarSelection != underlyingSection else {
+                return
+            }
+
+            // Bring the sidebar section in-line with the underlying section.
+            sidebarSelection = underlyingSection
+
+        })
         .navigationTitle(sidebarSelection?.navigationTitle ?? "Unknown")
     }
-}
-
-extension Array where Element == AnyQuery {
-
-    var sections: Set<BookmarksSection> {
-        Set(map { $0.section })
-    }
-
-    func subset(of section: BookmarksSection) -> Bool {
-        sections.contains(section)
-    }
-
-    func exactlyMatches(section: BookmarksSection) -> Bool {
-        let sections = sections
-        guard sections.count == 1,
-              let testSection = sections.first else {
-            return false
-        }
-        return section == testSection
-    }
-
-    var section: BookmarksSection {
-        guard sections.count == 1,
-              let section = sections.first else {
-            return .all
-        }
-        return section
-    }
-
 }

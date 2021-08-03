@@ -24,6 +24,10 @@ import BookmarksCore
 
 struct SettingsView: View {
 
+    enum SheetType {
+        case about
+    }
+
     enum AlertType {
         case error(error: Error)
         case success(message: String)
@@ -33,6 +37,7 @@ struct SettingsView: View {
     @Environment(\.presentationMode) var presentationMode
 
     @ObservedObject var settings: Settings
+    @State var sheet: SheetType?
     @State var alert: AlertType?
 
     var body: some View {
@@ -74,6 +79,11 @@ struct SettingsView: View {
                         Text("Clear Cache").foregroundColor(.red)
                     }
                 }
+                Section {
+                    Button(action: { sheet = .about }) {
+                        Text("About Bookmarks")
+                    }
+                }
             }
         }
         .navigationBarTitle("Settings", displayMode: .inline)
@@ -83,6 +93,12 @@ struct SettingsView: View {
             Text("Done")
                 .fontWeight(.regular)
         })
+        .sheet(item: $sheet) { sheet in
+            switch sheet {
+            case .about:
+                AboutView()
+            }
+        }
         .alert(item: $alert) { alert in
             switch alert {
             case .error(let error):
@@ -90,6 +106,15 @@ struct SettingsView: View {
             case .success(let message):
                 return Alert(title: Text("Success"), message: Text(message))
             }
+        }
+    }
+}
+
+extension SettingsView.SheetType: Identifiable {
+    public var id: String {
+        switch self {
+        case .about:
+            return "about"
         }
     }
 }

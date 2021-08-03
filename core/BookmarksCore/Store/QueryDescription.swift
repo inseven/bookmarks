@@ -22,12 +22,6 @@ import Foundation
 
 import SQLite
 
-public protocol Sectionable {
-
-    var section: BookmarksSection { get }
-
-}
-
 public protocol QueryDescription: Sectionable {
 
     var sql: String { get }
@@ -46,13 +40,8 @@ public struct Untagged: QueryDescription, Equatable {
         "items.id NOT IN (SELECT item_id FROM items_to_tags)"
     }
 
-    public var filter: String {
-        "no:tag"
-    }
-
-    public var section: BookmarksSection {
-        .untagged
-    }
+    public var filter: String { "no:tag" }
+    public var section: BookmarksSection { .untagged }
 
     public init() { }
 
@@ -64,17 +53,9 @@ public struct Unread: QueryDescription, Equatable {
         true
     }
 
-    public var sql: String {
-        "items.to_read = 1"
-    }
-
-    public var filter: String {
-        "status:unread"
-    }
-
-    public var section: BookmarksSection {
-        .unread
-    }
+    public var sql: String { "items.to_read = 1" }
+    public var filter: String { "status:unread" }
+    public var section: BookmarksSection { .unread }
 
     public init() { }
     
@@ -88,17 +69,9 @@ public struct Shared: QueryDescription, Equatable {
         lhs.shared == rhs.shared
     }
 
-    public var sql: String {
-        "items.shared = \(shared ? "1" : "0")"
-    }
-
-    public var filter: String {
-        "shared:\(shared ? "true" : "false")"
-    }
-
-    public var section: BookmarksSection {
-        .shared(shared)
-    }
+    public var sql: String { "items.shared = \(shared ? "1" : "0")" }
+    public var filter: String { "shared:\(shared ? "true" : "false")" }
+    public var section: BookmarksSection { .shared(shared) }
 
     public init(_ shared: Bool) {
         self.shared = shared
@@ -132,13 +105,8 @@ public struct Tag: QueryDescription, Equatable {
         return "items.id IN (\(tagSubselect))"
     }
 
-    public var filter: String {
-        "tag:\(name)"
-    }
-
-    public var section: BookmarksSection {
-        .tag(name)
-    }
+    public var filter: String { "tag:\(name)" }
+    public var section: BookmarksSection { .tag(name) }
 
     public init(_ name: String) {
         self.name = name
@@ -164,13 +132,8 @@ public struct Like: QueryDescription, Equatable {
         return expression.asSQL()
     }
 
-    public var filter: String {
-        value
-    }
-
-    public var section: BookmarksSection {
-        .all
-    }
+    public var filter: String { value }
+    public var section: BookmarksSection { .all }
 
     init(_ filter: String) {
         self.value = filter
@@ -223,13 +186,8 @@ public struct Search: QueryDescription, Equatable {
         search.tokens.map { Like($0) }.reduce(AnyQuery(True())) { AnyQuery(And($0, $1)) }.sql
     }
 
-    public var filter: String {
-        search
-    }
-
-    public var section: BookmarksSection {
-        .all
-    }
+    public var filter: String { search }
+    public var section: BookmarksSection { .all }
 
     init(_ search: String) {
         self.search = search
@@ -249,19 +207,12 @@ public struct And<A, B>: QueryDescription, Equatable where A: QueryDescription &
         return true
     }
 
-    // TODO: Shouldn't be public
-    public let lhs: A
-    public let rhs: B
+    fileprivate let lhs: A
+    fileprivate let rhs: B
 
     public var sql: String { "(\(lhs.sql)) AND (\(rhs.sql))" }
-
-    public var filter: String {
-        "\(lhs.filter) \(rhs.filter)"
-    }
-
-    public var section: BookmarksSection {
-        .all
-    }
+    public var filter: String { "\(lhs.filter) \(rhs.filter)" }
+    public var section: BookmarksSection { .all }
 
     init(_ lhs: A, _ rhs: B) {
         self.lhs = lhs
@@ -292,14 +243,8 @@ public struct True: QueryDescription, Equatable {
     }
 
     public var sql: String { "1" }
-
-    public var filter: String {
-        ""
-    }
-
-    public var section: BookmarksSection {
-        .all
-    }
+    public var filter: String { "" }
+    public var section: BookmarksSection { .all }
 
     public init() { }
 

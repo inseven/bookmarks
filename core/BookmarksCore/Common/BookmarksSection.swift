@@ -26,8 +26,7 @@ public enum BookmarksSection {
     case today
     case unread
     case shared(_ shared: Bool)
-    case favorite(tag: String)
-    case tag(tag: String)
+    case tag(_ tag: String)
 }
 
 extension BookmarksSection: CustomStringConvertible, Hashable, Identifiable {
@@ -48,8 +47,6 @@ extension BookmarksSection: CustomStringConvertible, Hashable, Identifiable {
             return "uk.co.inseven.bookmarks.shared"
         case .shared(false):
             return "uk.co.inseven.bookmarks.shared.false"
-        case .favorite(let tag):
-            return "uk.co.inseven.bookmarks.favorites.\(tag)"
         case .tag(let tag):
             return "uk.co.inseven.bookmarks.tags.\(tag)"
         }
@@ -59,7 +56,6 @@ extension BookmarksSection: CustomStringConvertible, Hashable, Identifiable {
 
 public extension String {
 
-    var favoriteId: BookmarksSection { .favorite(tag: self) }
-    var tagId: BookmarksSection { .tag(tag: self) }
+    var section: BookmarksSection { .tag(self) }
 
 }

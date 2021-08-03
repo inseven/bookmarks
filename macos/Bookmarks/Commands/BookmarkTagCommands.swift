@@ -36,7 +36,7 @@ struct BookmarkTagCommands: View {
             Menu("Tags") {
                 ForEach(Array(item.tags).sorted()) { tag in
                     Button(tag) {
-                        sidebarSelection = tag.tagId
+                        sidebarSelection = tag.section
                     }
                 }
             }

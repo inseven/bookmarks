@@ -137,7 +137,7 @@ public struct Tag: QueryDescription, Equatable {
     }
 
     public var section: BookmarksSection {
-        .tag(tag: name)
+        .tag(name)
     }
 
     public init(_ name: String) {

@@ -202,7 +202,6 @@ extension AnyQuery: Equatable {
 
 public extension QueryDescription where Self: Equatable {
 
-    // TODO: Rename to anyQuery
     func eraseToAnyQuery() -> AnyQuery {
         if Self.self == AnyQuery.self {
             return self as! AnyQuery

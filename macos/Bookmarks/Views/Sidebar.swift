@@ -42,8 +42,6 @@ extension BookmarksSection {
             } else {
                 return "Private"
             }
-        case .favorite(tag: let tag):
-            return tag
         case .tag(tag: let tag):
             return tag
         }
@@ -65,8 +63,6 @@ extension BookmarksSection {
             } else {
                 return "lock.fill"
             }
-        case .favorite:
-            return "tag"
         case .tag:
             return "tag"
         }
@@ -87,6 +83,10 @@ struct Sidebar: View {
     @Binding var selection: BookmarksSection?
 
     @State var sheet: SheetType? = nil
+
+    var tags: [String] {
+        tagsView.tags.filter { !settings.favoriteTags.contains($0) }
+    }
 
     var body: some View {
         ScrollViewReader { scrollView in
@@ -120,10 +120,10 @@ struct Sidebar: View {
 
                 }
                 Section(header: Text("Favourites")) {
-                    ForEach(settings.favoriteTags.sorted(), id: \.favoriteId) { tag in
+                    ForEach(settings.favoriteTags.sorted(), id: \.section) { tag in
 
                         SidebarLink(selection: $selection,
-                                    tag: tag.favoriteId,
+                                    tag: tag.section,
                                     databaseView: ItemsView(database: manager.database, query: Tag(tag)))
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Remove from Favourites") {
@@ -145,10 +145,10 @@ struct Sidebar: View {
                     }
                 }
                 Section(header: Text("Tags")) {
-                    ForEach(tagsView.tags, id: \.tagId) { tag in
+                    ForEach(tags, id: \.section) { tag in
 
                         SidebarLink(selection: $selection,
-                                    tag: tag.tagId,
+                                    tag: tag.section,
                                     databaseView: ItemsView(database: manager.database, query: Tag(tag)))
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Rename") {

@@ -27,23 +27,25 @@ public class ItemsView: ObservableObject {
     var updateCancellable: AnyCancellable? = nil
     var searchCancellable: AnyCancellable? = nil
 
-    @Published public var search: AnyQuery
+    @Published public var query: AnyQuery
     @Published public var items: [Item] = []
-
-    fileprivate var query: AnyQuery
 
     public init(database: Database, query: AnyQuery) {
         self.database = database
-        self.search = query
-        self.query = query // TODO: Initial value for search too? One variable?
+        self.query = query
     }
 
     func update() {
         dispatchPrecondition(condition: .onQueue(.main))
         print("fetching items...")
 
-        database.items(query: query) { result in
+        let activeQuery = self.query
+        database.items(query: activeQuery) { result in
             DispatchQueue.main.async {
+                guard self.query == activeQuery else {
+                    print("ignoring out-of-date results...")
+                    return
+                }
                 switch result {
                 case .success(let items):
                     print("received \(items.count) items")
@@ -61,9 +63,8 @@ public class ItemsView: ObservableObject {
         self.updateCancellable = DatabasePublisher(database: database).debounce(for: .seconds(1), scheduler: DispatchQueue.main).sink { _ in
             self.update()
         }
-        self.searchCancellable = self.$search.receive(on: DispatchQueue.main).sink { search in
-            print("searching for '\(search.filter)'...")
-            self.query = search
+        self.searchCancellable = $query.receive(on: DispatchQueue.main).sink { query in
+            print("searching for '\(query.filter)'...")
             self.update()
         }
         self.update()

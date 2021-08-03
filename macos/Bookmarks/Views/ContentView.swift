@@ -124,7 +124,7 @@ struct ContentView: View {
                     sidebarSelection = nextSection
                 }
             }
-            databaseView.search = safeAnd(queries: queries).eraseToAnyQuery()
+            databaseView.query = safeAnd(queries: queries).eraseToAnyQuery()
         }
         .onChange(of: sidebarSelection) { section in
 
@@ -140,7 +140,7 @@ struct ContentView: View {
             print("new section = \(section)")
             let query = section.query
             searchDebouncer.value = query.filter
-            databaseView.search = query.eraseToAnyQuery()
+            databaseView.query = query.eraseToAnyQuery()
         }
         .navigationTitle(sidebarSelection?.navigationTitle ?? "Unknown")
     }

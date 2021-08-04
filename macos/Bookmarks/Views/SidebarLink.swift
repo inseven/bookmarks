@@ -27,7 +27,6 @@ struct SidebarLink: View {
     @Environment(\.manager) var manager: BookmarksManager
 
     var tag: BookmarksSection
-    var query: AnyQuery
 
     var body: some View {
         HStack {

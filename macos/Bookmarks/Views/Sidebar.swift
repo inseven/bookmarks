@@ -112,55 +112,46 @@ struct Sidebar: View {
             List(selection: $selection) {
 
                 Section(header: Text("Smart Filters")) {
-
-                    SidebarLink(tag: .all,
-                                query: True().eraseToAnyQuery())
-
-                    SidebarLink(tag: .shared(false),
-                                query: Shared(false).eraseToAnyQuery())
-
-                    SidebarLink(tag: .shared(true),
-                                query: Shared(true).eraseToAnyQuery())
-
-                    SidebarLink(tag: .today,
-                                query: Today().eraseToAnyQuery())
-
-                    SidebarLink(tag: .unread,
-                                query: Unread().eraseToAnyQuery())
-
-                    SidebarLink(tag: .untagged,
-                                query: Untagged().eraseToAnyQuery())
-
+                    SidebarLink(tag: .all)
+                    SidebarLink(tag: .shared(false))
+                    SidebarLink(tag: .shared(true))
+                    SidebarLink(tag: .today)
+                    SidebarLink(tag: .unread)
+                    SidebarLink(tag: .untagged)
                 }
-                Section(header: Text("Favourites")) {
-                    ForEach(settings.favoriteTags.sorted(), id: \.section) { tag in
 
-                        SidebarLink(tag: tag.section,
-                                    query: Tag(tag).eraseToAnyQuery())
-                            .contextMenu(ContextMenu(menuItems: {
-                                Button("Remove from Favourites") {
-                                    settings.favoriteTags = settings.favoriteTags.filter { $0 != tag }
-                                }
-                                Divider()
-                                Button("Edit on Pinboard") {
-                                    do {
-                                        guard let user = manager.user else {
-                                            return
-                                        }
-                                        NSWorkspace.shared.open(try tag.pinboardTagUrl(for: user))
-                                    } catch {
-                                        print("Failed to open on Pinboard error \(error)")
+                if settings.favoriteTags.count > 0 {
+
+                    Section(header: Text("Favourites")) {
+                        ForEach(settings.favoriteTags.sorted(), id: \.section) { tag in
+                            
+                            SidebarLink(tag: tag.section)
+                                .contextMenu(ContextMenu(menuItems: {
+                                    Button("Remove from Favourites") {
+                                        settings.favoriteTags = settings.favoriteTags.filter { $0 != tag }
                                     }
-                                }
-                            }))
-
+                                    Divider()
+                                    Button("Edit on Pinboard") {
+                                        do {
+                                            guard let user = manager.user else {
+                                                return
+                                            }
+                                            NSWorkspace.shared.open(try tag.pinboardTagUrl(for: user))
+                                        } catch {
+                                            print("Failed to open on Pinboard error \(error)")
+                                        }
+                                    }
+                                }))
+                            
+                        }
                     }
+
                 }
+
                 Section(header: Text("Tags")) {
                     ForEach(tags, id: \.section) { tag in
 
-                        SidebarLink(tag: tag.section,
-                                    query: Tag(tag).eraseToAnyQuery())
+                        SidebarLink(tag: tag.section)
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Rename") {
                                     self.sheet = .rename(tag: tag)

@@ -113,36 +113,29 @@ struct Sidebar: View {
 
                 Section(header: Text("Smart Filters")) {
 
-                    SidebarLink(selection: $selection,
-                                tag: .all,
+                    SidebarLink(tag: .all,
                                 query: True().eraseToAnyQuery())
 
-                    SidebarLink(selection: $selection,
-                                tag: .shared(false),
+                    SidebarLink(tag: .shared(false),
                                 query: Shared(false).eraseToAnyQuery())
 
-                    SidebarLink(selection: $selection,
-                                tag: .shared(true),
+                    SidebarLink(tag: .shared(true),
                                 query: Shared(true).eraseToAnyQuery())
 
-                    SidebarLink(selection: $selection,
-                                tag: .today,
+                    SidebarLink(tag: .today,
                                 query: Today().eraseToAnyQuery())
 
-                    SidebarLink(selection: $selection,
-                                tag: .unread,
+                    SidebarLink(tag: .unread,
                                 query: Unread().eraseToAnyQuery())
 
-                    SidebarLink(selection: $selection,
-                                tag: .untagged,
+                    SidebarLink(tag: .untagged,
                                 query: Untagged().eraseToAnyQuery())
 
                 }
                 Section(header: Text("Favourites")) {
                     ForEach(settings.favoriteTags.sorted(), id: \.section) { tag in
 
-                        SidebarLink(selection: $selection,
-                                    tag: tag.section,
+                        SidebarLink(tag: tag.section,
                                     query: Tag(tag).eraseToAnyQuery())
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Remove from Favourites") {
@@ -166,8 +159,7 @@ struct Sidebar: View {
                 Section(header: Text("Tags")) {
                     ForEach(tags, id: \.section) { tag in
 
-                        SidebarLink(selection: $selection,
-                                    tag: tag.section,
+                        SidebarLink(tag: tag.section,
                                     query: Tag(tag).eraseToAnyQuery())
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Rename") {

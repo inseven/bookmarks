@@ -26,20 +26,7 @@ struct SidebarLink: View {
 
     @Environment(\.manager) var manager: BookmarksManager
 
-    var selection: Binding<BookmarksSection?>
     var tag: BookmarksSection
-    var query: AnyQuery
-
-    func selectionActiveBinding(_ tag: BookmarksSection) -> Binding<Bool> {
-        return Binding {
-            selection.wrappedValue == tag
-        } set: { value in
-            guard value == true else {
-                return
-            }
-            selection.wrappedValue = tag
-        }
-    }
 
     var body: some View {
         HStack {

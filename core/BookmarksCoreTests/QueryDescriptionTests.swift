@@ -18,20 +18,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Combine
-import SwiftUI
+import Foundation
 
-import BookmarksCore
+import XCTest
+@testable import BookmarksCore
 
-struct ContentView: View {
+class QueryDescriptionTests: XCTestCase {
 
-    @Environment(\.manager) var manager: BookmarksManager
-
-    var body: some View {
-        NavigationView {
-            BookmarksView(databaseView: ItemsView(database: manager.database, query: True().eraseToAnyQuery()))
-                .navigationBarTitle("Bookmarks", displayMode: .large)
-        }
-        .navigationViewStyle(StackNavigationViewStyle())
+    func testTagQueryDescriptionSection() {
+        let query = Tag("cheese")
+        XCTAssertEqual(query.section, BookmarksSection.tag("cheese"))
+        XCTAssertNotEqual(query.section, BookmarksSection.tag("fromage"))
     }
+
+    func testAnyQueryEquality() {
+        XCTAssertEqual(Tag("cheese").eraseToAnyQuery(), Tag("cheese").eraseToAnyQuery())
+        XCTAssertNotEqual(Tag("fromage").eraseToAnyQuery(), Tag("cheese").eraseToAnyQuery())
+        XCTAssertNotEqual(Today().eraseToAnyQuery(), Tag("cheese").eraseToAnyQuery())
+    }
+
+    func testFilterParser() {
+        XCTAssertEqual(AnyQuery.parse(filter: "tag:cheese"), Tag("cheese").eraseToAnyQuery())
+    }
+
 }

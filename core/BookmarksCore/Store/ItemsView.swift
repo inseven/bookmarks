@@ -27,13 +27,10 @@ public class ItemsView: ObservableObject {
     var updateCancellable: AnyCancellable? = nil
     var searchCancellable: AnyCancellable? = nil
 
-    @Published public var search = ""
+    @Published public var query: AnyQuery
     @Published public var items: [Item] = []
 
-    fileprivate var query: QueryDescription
-    fileprivate var filter = ""
-
-    public init(database: Database, query: QueryDescription = True()) {
+    public init(database: Database, query: AnyQuery) {
         self.database = database
         self.query = query
     }
@@ -42,8 +39,13 @@ public class ItemsView: ObservableObject {
         dispatchPrecondition(condition: .onQueue(.main))
         print("fetching items...")
 
-        database.items(query: And(query, Filter(filter))) { result in
+        let activeQuery = self.query
+        database.items(query: activeQuery) { result in
             DispatchQueue.main.async {
+                guard self.query == activeQuery else {
+                    print("ignoring out-of-date results...")
+                    return
+                }
                 switch result {
                 case .success(let items):
                     print("received \(items.count) items")
@@ -61,12 +63,16 @@ public class ItemsView: ObservableObject {
         self.updateCancellable = DatabasePublisher(database: database).debounce(for: .seconds(1), scheduler: DispatchQueue.main).sink { _ in
             self.update()
         }
-        self.searchCancellable = self.$search.debounce(for: .seconds(0.2), scheduler: DispatchQueue.main).sink { search in
-            print("searching for '\(search)'...")
-            self.filter = search
+        self.searchCancellable = $query.receive(on: DispatchQueue.main).sink { query in
+            print("searching for '\(query.filter)'...")
             self.update()
         }
         self.update()
+    }
+
+    public func clear() {
+        dispatchPrecondition(condition: .onQueue(.main))
+        self.items = []
     }
 
     public func stop() {
@@ -80,4 +86,3 @@ public class ItemsView: ObservableObject {
     }
 
 }
-

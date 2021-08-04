@@ -520,7 +520,7 @@ public class Database {
         return items
     }
 
-    public func items(query: QueryDescription = True(), completion: @escaping (Swift.Result<[Item], Error>) -> Void) {
+    public func items<T: QueryDescription>(query: T, completion: @escaping (Swift.Result<[Item], Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             let result = Swift.Result<[Item], Error> {
@@ -571,7 +571,7 @@ public extension Database {
         try AsyncOperation { self.deleteItem(identifier: identifier, completion: $0) }.wait()
     }
 
-    func items(query: QueryDescription = True()) throws -> [Item] {
+    func items<T: QueryDescription>(query: T) throws -> [Item] {
         try AsyncOperation({ self.items(query: query, completion: $0) }).wait()
     }
 

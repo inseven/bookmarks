@@ -31,14 +31,15 @@ struct BookmarksView: View {
     @Environment(\.manager) var manager: BookmarksManager
     @StateObject var databaseView: ItemsView
 
+    @StateObject var searchDebouncer = Debouncer<String>(initialValue: "", delay: .seconds(0.2))
     @State var sheet: SheetType?
 
     var body: some View {
         VStack {
             HStack {
-                TextField("Search", text: $databaseView.search)
+                TextField("Search", text: $searchDebouncer.value)
                     .autocapitalization(.none)
-                    .modifier(SearchBoxModifier(text: $databaseView.search))
+                    .modifier(SearchBoxModifier(text: $searchDebouncer.value))
                     .padding()
             }
             ScrollView {
@@ -75,6 +76,9 @@ struct BookmarksView: View {
         }
         .onDisappear {
             databaseView.stop()
+        }
+        .onReceive(searchDebouncer.$debouncedValue) { value in
+            databaseView.query = AnyQuery.parse(filter: value)
         }
     }
 

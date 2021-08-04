@@ -26,6 +26,23 @@ import Interact
 
 extension BookmarksSection {
 
+    var query: AnyQuery {
+        switch self {
+        case .all:
+            return True().eraseToAnyQuery()
+        case .untagged:
+            return Untagged().eraseToAnyQuery()
+        case .today:
+            return Today().eraseToAnyQuery()
+        case .unread:
+            return Unread().eraseToAnyQuery()
+        case .shared(let shared):
+            return Shared(shared).eraseToAnyQuery()
+        case .tag(tag: let tag):
+            return Tag(tag).eraseToAnyQuery()
+        }
+    }
+
     var navigationTitle: String {
         switch self {
         case .all:
@@ -42,6 +59,7 @@ extension BookmarksSection {
             } else {
                 return "Private"
             }
+
         case .tag(tag: let tag):
             return tag
         }
@@ -63,6 +81,7 @@ extension BookmarksSection {
             } else {
                 return "lock.fill"
             }
+
         case .tag:
             return "tag"
         }
@@ -96,27 +115,27 @@ struct Sidebar: View {
 
                     SidebarLink(selection: $selection,
                                 tag: .all,
-                                databaseView: ItemsView(database: manager.database))
+                                query: True().eraseToAnyQuery())
 
                     SidebarLink(selection: $selection,
                                 tag: .shared(false),
-                                databaseView: ItemsView(database: manager.database, query: Shared(false)))
+                                query: Shared(false).eraseToAnyQuery())
 
                     SidebarLink(selection: $selection,
                                 tag: .shared(true),
-                                databaseView: ItemsView(database: manager.database, query: Shared(true)))
+                                query: Shared(true).eraseToAnyQuery())
 
                     SidebarLink(selection: $selection,
                                 tag: .today,
-                                databaseView: ItemsView(database: manager.database, query: Today()))
+                                query: Today().eraseToAnyQuery())
 
                     SidebarLink(selection: $selection,
                                 tag: .unread,
-                                databaseView: ItemsView(database: manager.database, query: Unread()))
+                                query: Unread().eraseToAnyQuery())
 
                     SidebarLink(selection: $selection,
                                 tag: .untagged,
-                                databaseView: ItemsView(database: manager.database, query: Untagged()))
+                                query: Untagged().eraseToAnyQuery())
 
                 }
                 Section(header: Text("Favourites")) {
@@ -124,7 +143,7 @@ struct Sidebar: View {
 
                         SidebarLink(selection: $selection,
                                     tag: tag.section,
-                                    databaseView: ItemsView(database: manager.database, query: Tag(tag)))
+                                    query: Tag(tag).eraseToAnyQuery())
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Remove from Favourites") {
                                     settings.favoriteTags = settings.favoriteTags.filter { $0 != tag }
@@ -149,7 +168,7 @@ struct Sidebar: View {
 
                         SidebarLink(selection: $selection,
                                     tag: tag.section,
-                                    databaseView: ItemsView(database: manager.database, query: Tag(tag)))
+                                    query: Tag(tag).eraseToAnyQuery())
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Rename") {
                                     self.sheet = .rename(tag: tag)

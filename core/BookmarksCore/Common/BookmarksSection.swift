@@ -20,6 +20,10 @@
 
 import SwiftUI
 
+public protocol Sectionable {
+    var section: BookmarksSection { get }
+}
+
 public enum BookmarksSection {
     case all
     case untagged
@@ -54,8 +58,6 @@ extension BookmarksSection: CustomStringConvertible, Hashable, Identifiable {
 
 }
 
-public extension String {
-
-    var section: BookmarksSection { .tag(self) }
-
+extension String: Sectionable {
+    public var section: BookmarksSection { .tag(self) }
 }

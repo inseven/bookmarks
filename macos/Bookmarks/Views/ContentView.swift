@@ -27,9 +27,30 @@ import Interact
 struct ContentView: View {
 
     @Binding var sidebarSelection: BookmarksSection?
+    @State var underlyingSection: BookmarksSection?
 
     @Environment(\.manager) var manager: BookmarksManager
     @StateObject var databaseView: ItemsView
+
+    @StateObject var searchDebouncer = Debouncer<String>(initialValue: "", delay: .seconds(0.2))
+
+    private var subscription: AnyCancellable?
+
+    init(sidebarSelection: Binding<BookmarksSection?>, database: Database) {
+        _sidebarSelection = sidebarSelection
+        _databaseView = StateObject(wrappedValue: ItemsView(database: database, query: True().eraseToAnyQuery()))
+    }
+
+    var navigationTitle: String {
+        let queries = searchDebouncer.debouncedValue.queries
+        if (queries.section == .all && queries.count > 1) || queries.count > 1 {
+            return "Search: \(searchDebouncer.debouncedValue)"
+        }
+        guard let title = sidebarSelection?.navigationTitle else {
+            return "Unknown"
+        }
+        return title
+    }
 
     var body: some View {
         VStack {
@@ -90,9 +111,50 @@ struct ContentView: View {
                 }
             }
             ToolbarItem {
-                SearchField(search: $databaseView.search)
+                SearchField(search: $searchDebouncer.value)
                     .frame(minWidth: 100, idealWidth: 300, maxWidth: .infinity)
             }
         }
+        .onReceive(searchDebouncer.$debouncedValue) { search in
+
+            // Get the query corresponding to the current search text.
+            let queries = AnyQuery.queries(for: search)
+
+            // Update the selected section if necessary.
+            let section = queries.section
+            if section != sidebarSelection {
+                underlyingSection = section
+            }
+
+            // Update the database query.
+            databaseView.query = AnyQuery.and(queries)
+
+        }
+        .onChange(of: sidebarSelection) { section in
+
+            guard underlyingSection != section,
+                  let section = section else {
+                return
+            }
+
+            underlyingSection = section
+
+            databaseView.clear()
+            let query = section.query
+            searchDebouncer.value = query.filter
+            databaseView.query = query.eraseToAnyQuery()
+
+        }
+        .onChange(of: underlyingSection, perform: { underlyingSection in
+
+            guard sidebarSelection != underlyingSection else {
+                return
+            }
+
+            // Bring the sidebar section in-line with the underlying section.
+            sidebarSelection = underlyingSection
+
+        })
+        .navigationTitle(navigationTitle)
     }
 }

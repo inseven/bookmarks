@@ -24,9 +24,11 @@ import BookmarksCore
 
 struct SidebarLink: View {
 
+    @Environment(\.manager) var manager: BookmarksManager
+
     var selection: Binding<BookmarksSection?>
     var tag: BookmarksSection
-    var databaseView: ItemsView
+    var query: AnyQuery
 
     func selectionActiveBinding(_ tag: BookmarksSection) -> Binding<Bool> {
         return Binding {
@@ -40,13 +42,9 @@ struct SidebarLink: View {
     }
 
     var body: some View {
-        NavigationLink(destination: ContentView(sidebarSelection: selection, databaseView: databaseView)
-                        .navigationTitle(tag.navigationTitle),
-                       isActive: selectionActiveBinding(tag)) {
-            HStack {
+        HStack {
             Label(tag.navigationTitle, systemImage: tag.systemImage)
             Spacer()
-            }
         }
         .tag(tag)  // We set a tag so the list view knows what's selected...
         .id(tag)   // ... and an id so we can scroll to the items 🤦🏻‍♂️

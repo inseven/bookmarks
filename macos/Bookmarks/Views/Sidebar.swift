@@ -122,12 +122,12 @@ struct Sidebar: View {
 
                 if settings.favoriteTags.count > 0 {
 
-                    Section(header: Text("Favourites")) {
+                    Section(header: Text("Favorites")) {
                         ForEach(settings.favoriteTags.sorted(), id: \.section) { tag in
-                            
+
                             SidebarLink(tag: tag.section)
                                 .contextMenu(ContextMenu(menuItems: {
-                                    Button("Remove from Favourites") {
+                                    Button("Remove from Favorites") {
                                         settings.favoriteTags = settings.favoriteTags.filter { $0 != tag }
                                     }
                                     Divider()
@@ -142,7 +142,7 @@ struct Sidebar: View {
                                         }
                                     }
                                 }))
-                            
+
                         }
                     }
 
@@ -160,7 +160,7 @@ struct Sidebar: View {
                                     self.manager.deleteTag(tag: tag) { _ in }
                                 }
                                 Divider()
-                                Button("Add to Favourites") {
+                                Button("Add to Favorites") {
                                     var favoriteTags = settings.favoriteTags
                                     favoriteTags.append(tag)
                                     settings.favoriteTags = favoriteTags

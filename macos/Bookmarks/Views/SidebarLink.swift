@@ -26,7 +26,6 @@ struct SidebarLink: View {
 
     @Environment(\.manager) var manager: BookmarksManager
 
-//    var selection: Binding<BookmarksSection?>
     var tag: BookmarksSection
     var query: AnyQuery
 

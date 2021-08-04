@@ -24,6 +24,17 @@ import SwiftUI
 import BookmarksCore
 import Interact
 
+extension Item {
+
+    var localDate: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = .medium
+        dateFormatter.dateStyle = .long
+        return "Added \(dateFormatter.string(from: date))"
+    }
+
+}
+
 struct ContentView: View {
 
     @Binding var sidebarSelection: BookmarksSection?
@@ -58,6 +69,7 @@ struct ContentView: View {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
                     ForEach(databaseView.items) { item in
                         BookmarkCell(item: item)
+                            .help(item.localDate)
                             .onClick {
                                 manager.database.item(identifier: item.identifier) { result in
                                     switch result {

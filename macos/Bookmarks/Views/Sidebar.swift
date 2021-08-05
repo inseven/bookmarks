@@ -200,6 +200,7 @@ struct Sidebar: View {
             tagsView.start()
         }
         .onDisappear {
+            // TODO: Is this somehow causing it to fail to update?
             tagsView.stop()
         }
     }

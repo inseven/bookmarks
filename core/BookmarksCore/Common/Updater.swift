@@ -38,7 +38,7 @@ public class Updater {
         self.pinboard = pinboard
     }
 
-    fileprivate func syncQueue_update() {
+    fileprivate func syncQueue_update(force: Bool) {
         dispatchPrecondition(condition: .onQueue(syncQueue))
 
         print("updating...")
@@ -48,7 +48,8 @@ public class Updater {
             // Check to see when the bookmarks were last updated and don't update if there are no new changes.
             let update = try self.pinboard.postsUpdate()
             if let lastUpdate = self.lastUpdate,
-               lastUpdate >= update.updateTime {
+               lastUpdate >= update.updateTime,
+               !force {
                 print("skipping empty update")
                 return
             }
@@ -103,15 +104,15 @@ public class Updater {
                     return
                 }
                 self.syncQueue.async {
-                    self.syncQueue_update()
+                    self.syncQueue_update(force: true)
                 }
             }
         }
     }
 
-    public func update() {
+    public func update(force: Bool = false) {
         syncQueue.async {
-            self.syncQueue_update()
+            self.syncQueue_update(force: force)
         }
     }
 

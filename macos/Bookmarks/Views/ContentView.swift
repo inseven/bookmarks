@@ -24,6 +24,7 @@ import SwiftUI
 import BookmarksCore
 import Interact
 
+
 struct ContentView: View {
 
     @Binding var sidebarSelection: BookmarksSection?
@@ -122,7 +123,7 @@ struct ContentView: View {
                 }
                 .font(.title3)
                 .lineLimit(1)
-                .frame(minWidth: 300)
+                .frame(minWidth: 400)
             }
         }
         .onReceive(tokenDebouncer.$debouncedValue) { tokens in
@@ -159,6 +160,7 @@ struct ContentView: View {
             // TODO: We're doing unnecessary round-trips here.
             let tokens = AnyQuery.queries(for: query.filter).map { query in
                 Token(query.filter)
+                    .displayString(query.displayString)
                     .associatedValue(query.filter)
             }
 

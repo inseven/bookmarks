@@ -33,6 +33,8 @@ struct ContentView: View {
     @StateObject var databaseView: ItemsView
     @StateObject var tagsView: TagsView
 
+    @State var trie = Trie()
+
     @StateObject var tokenDebouncer = Debouncer<[Token<String>]>(initialValue: [], delay: .seconds(0.2))
 
     private var subscription: AnyCancellable?
@@ -116,7 +118,7 @@ struct ContentView: View {
                         .tokenStyle(tagsView.tags.contains(string) ? .default : .none)
                         .associatedValue(tagsView.tags.contains(string) ? "tag:\(string)" : string)
                 } completions: { substring in
-                    tagsView.tags.filter { $0.starts(with: substring) }
+                    trie.findWordsWithPrefix(prefix: substring)
                 }
                 .font(.title3)
                 .lineLimit(1)
@@ -173,6 +175,17 @@ struct ContentView: View {
             sidebarSelection = underlyingSection
 
         })
+        .onReceive(tagsView.$tags) { tags in
+            DispatchQueue.global(qos: .background).async {
+                let trie = Trie()
+                for tag in tags {
+                    trie.insert(word: tag)
+                }
+                DispatchQueue.main.async {
+                    self.trie = trie
+                }
+            }
+        }
         .navigationTitle(navigationTitle)
     }
 }

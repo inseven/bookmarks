@@ -26,7 +26,7 @@ public class TagsView: ObservableObject {
     var database: Database
     var updateCancellable: AnyCancellable? = nil
 
-    @Published public var tags: [String] = []
+    @Published public var tags: Set<String> = Set()
 
     fileprivate var filter = ""
 
@@ -39,7 +39,7 @@ public class TagsView: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let tags):
-                    self.tags = Array(tags.sorted())
+                    self.tags = Set(tags)
                 case .failure(let error):
                     print("Failed to load data with error \(error)")
                 }

@@ -28,6 +28,7 @@
 		D8ACD7EB26BC81BA005F927A /* NSFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8ACD7EA26BC81BA005F927A /* NSFont.swift */; };
 		D8ACD7ED26BC81E4005F927A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8ACD7EC26BC81E4005F927A /* String.swift */; };
 		D8ACD7EF26BC81F7005F927A /* TokenField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8ACD7EE26BC81F7005F927A /* TokenField.swift */; };
+		D8ACD7F126BC96B6005F927A /* Trie.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8ACD7F026BC96B6005F927A /* Trie.swift */; };
 		D8B6E2C52620990400B2C239 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B6E2C42620990400B2C239 /* Item.swift */; };
 		D8CF8CC2261E369D00E52E85 /* BookmarksCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8CF8CC1261E369D00E52E85 /* BookmarksCore.framework */; };
 		D8CF8CC3261E369D00E52E85 /* BookmarksCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D8CF8CC1261E369D00E52E85 /* BookmarksCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -93,6 +94,7 @@
 		D8ACD7EA26BC81BA005F927A /* NSFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFont.swift; sourceTree = "<group>"; };
 		D8ACD7EC26BC81E4005F927A /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		D8ACD7EE26BC81F7005F927A /* TokenField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenField.swift; sourceTree = "<group>"; };
+		D8ACD7F026BC96B6005F927A /* Trie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trie.swift; sourceTree = "<group>"; };
 		D8B6E2C42620990400B2C239 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		D8CF8C6D261E34A300E52E85 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8CF8CC1261E369D00E52E85 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -217,6 +219,7 @@
 				D861257426AA048E00EB5FEF /* RenameTagView.swift */,
 				D861257B26AB741A00EB5FEF /* SidebarLink.swift */,
 				D8ACD7EE26BC81F7005F927A /* TokenField.swift */,
+				D8ACD7F026BC96B6005F927A /* Trie.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -376,6 +379,7 @@
 				D8B6E2C52620990400B2C239 /* Item.swift in Sources */,
 				D8A336FC26B56A4300436200 /* BookmarkShareCommands.swift in Sources */,
 				D840B006262103C4001E95D1 /* AccountSettingsView.swift in Sources */,
+				D8ACD7F126BC96B6005F927A /* Trie.swift in Sources */,
 				D8ACD7EF26BC81F7005F927A /* TokenField.swift in Sources */,
 				D8A3370026B56C1B00436200 /* BookmarkOpenCommands.swift in Sources */,
 				D861257326A60DF200EB5FEF /* Sidebar.swift in Sources */,

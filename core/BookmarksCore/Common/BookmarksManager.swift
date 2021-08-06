@@ -89,17 +89,7 @@ public class BookmarksManager {
     }
 
     public func updateItem(item: Item, completion: @escaping (Result<Item, Error>) -> Void) {
-        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        DispatchQueue.global(qos: .userInitiated).async {
-            let result = Result { () -> Item in
-                let item = try self.database.insertOrUpdate(item: item)
-                let post = Pinboard.Post(item: item)
-                try self.pinboard.postsAdd(post: post, replace: true)
-                self.updater.update()
-                return item
-            }
-            completion(result)
-        }
+        self.updater.updateItem(item: item, completion: completion)
     }
 
     public func renameTag(_ old: String, to new: String, completion: @escaping (Result<Void, Error>) -> Void) {

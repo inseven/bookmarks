@@ -70,8 +70,8 @@ public class BookmarksManager {
         settings.pinboardApiKey.components(separatedBy: ":").first
     }
 
-    public func refresh() {
-        self.updater.update()
+    public func refresh(force: Bool = false) {
+        self.updater.update(force: force)
     }
 
     // TODO: Move the Bookmark update APIs into the updater #237
@@ -107,7 +107,7 @@ public class BookmarksManager {
         DispatchQueue.global(qos: .userInitiated).async {
             let result = Result {
                 try self.pinboard.tagsRename(old, to: new)
-                self.refresh()
+                self.refresh(force: true)
             }
             completion(result)
         }

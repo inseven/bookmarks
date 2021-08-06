@@ -33,7 +33,33 @@ struct BookmarksApp: App {
         WindowGroup {
             NavigationView {
                 Sidebar(tagsView: TagsView(database: manager.database), settings: manager.settings, selection: $selection)
+                    .toolbar {
+                        ToolbarItem(placement: .destructiveAction) {
+                            Button {
+                                manager.refresh()
+                            } label: {
+                                SwiftUI.Image(systemName: "arrow.clockwise")
+                            }
+                        }
+                    }
+
                 ContentView(sidebarSelection: $selection, database: manager.database)
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigation) {
+                    HStack {
+                        Button {
+                            manager.refresh()
+                        } label: {
+                            SwiftUI.Image(systemName: "chevron.backward")
+                        }
+                        Button {
+                            manager.refresh()
+                        } label: {
+                            SwiftUI.Image(systemName: "chevron.forward")
+                        }
+                    }
+                }
             }
             .frameAutosaveName("Main Window")
         }

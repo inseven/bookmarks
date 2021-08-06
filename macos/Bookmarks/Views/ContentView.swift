@@ -116,13 +116,6 @@ struct ContentView: View {
         }
         .toolbar {
             ToolbarItem {
-                Button {
-                    manager.refresh()
-                } label: {
-                    SwiftUI.Image(systemName: "arrow.clockwise")
-                }
-            }
-            ToolbarItem {
                 SearchField(search: $searchDebouncer.value)
                     .frame(minWidth: 100, idealWidth: 300, maxWidth: .infinity)
             }

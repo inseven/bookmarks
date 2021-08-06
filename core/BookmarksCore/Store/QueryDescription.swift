@@ -42,7 +42,7 @@ extension QueryDescription where Self: Equatable {
 
 public struct Untagged: QueryDescription, Equatable {
 
-    public var displayString: String { "🏷 Untagged" }
+    public var displayString: String { "Untagged" }
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
         true
@@ -77,7 +77,7 @@ public struct Unread: QueryDescription, Equatable {
 
 public struct Shared: QueryDescription, Equatable {
 
-    public var displayString: String { shared ? "🌍 Public" : "🔒 Private" }
+    public var displayString: String { shared ? "Public" : "Private" }
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.shared == rhs.shared

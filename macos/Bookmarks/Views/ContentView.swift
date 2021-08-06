@@ -24,8 +24,107 @@ import SwiftUI
 import BookmarksCore
 import Interact
 
+struct AddTagsView: View {
+
+    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.manager) var manager: BookmarksManager
+    var item: Item
+    @State var isBusy = false
+
+    @State var tokens: [Token<String>] = []  // TODO: Support a payload on the tokens.
+
+    @StateObject var tagsView: TagsView
+    @State var trie = Trie()
+
+
+    let candidates = [
+        "cheese",
+        "chester",
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "michael-dales",
+        "sarah-barbour",
+        "sara-frederixon",
+    ]
+
+    init(database: Database, item: Item) {
+        _tagsView = StateObject(wrappedValue: TagsView(database: database))
+        self.item = item
+    }
+
+    var characterSet: CharacterSet {
+        let characterSet = NSTokenField.defaultTokenizingCharacterSet
+        let spaceCharacterSet = CharacterSet(charactersIn: " ")
+        return characterSet.union(spaceCharacterSet)
+    }
+
+    // TODO: Default focus when launching.
+    var body: some View {
+        Form {
+            Section {
+                TokenField("Add tags...", tokens: $tokens) { string in
+                    let tag = string.lowercased()
+                    return Token(tag)
+                        .associatedValue(tag)
+                } completions: { substring in
+                    trie.findWordsWithPrefix(prefix: substring)
+                }
+                .tokenizingCharacterSet(characterSet)
+                .font(.title)
+                .frame(minWidth: 400)
+                HStack {
+                    Spacer()
+                    Button("Cancel") {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                    .keyboardShortcut(.cancelAction)
+                    Button("OK") {
+                        isBusy = true
+                        let tags = tokens.compactMap { $0.associatedValue }
+                        let item = self.item
+                            .adding(tags: Set(tags))
+                            .setting(toRead: false)  // TODO: This is a hack that should be removed (maybe make it an option?)
+                        manager.updateItem(item: item, completion: Logging.log("add tags") {
+                            presentationMode.wrappedValue.dismiss()
+                        })
+                    }
+                    .keyboardShortcut(.defaultAction)
+                }
+            }
+        }
+        .frame(minWidth: 200)
+        .padding()
+        .disabled(isBusy)
+        .onAppear {
+            tagsView.start()
+        }
+        .onDisappear {
+            tagsView.stop()
+        }
+        .onReceive(tagsView.$tags) { tags in
+            DispatchQueue.global(qos: .background).async {
+                let trie = Trie()
+                for tag in tags {
+                    trie.insert(word: tag)
+                }
+                DispatchQueue.main.async {
+                    self.trie = trie
+                }
+            }
+        }
+    }
+
+}
+
 
 struct ContentView: View {
+
+    enum SheetType {
+        case addTags(item: Item)
+    }
 
     @Binding var sidebarSelection: BookmarksSection?
     @State var underlyingSection: BookmarksSection?
@@ -37,6 +136,8 @@ struct ContentView: View {
     @State var trie = Trie()
 
     @StateObject var tokenDebouncer = Debouncer<[Token<String>]>(initialValue: [], delay: .seconds(0.2))
+
+    @State var sheet: SheetType? = nil
 
     private var subscription: AnyCancellable?
 
@@ -71,6 +172,9 @@ struct ContentView: View {
                             } doubleClick: {
                                 NSWorkspace.shared.open(item.url)
                             }
+                            .onCommandClick {
+                                sheet = .addTags(item: item)
+                            }
                             .onCommandDoubleClick {
                                 do {
                                     NSWorkspace.shared.open(try item.pinboardUrl())
@@ -84,6 +188,9 @@ struct ContentView: View {
                                 BookmarkDesctructiveCommands(item: item)
                                 Divider()
                                 BookmarkEditCommands(item: item)
+                                Button("Add tags...") {
+                                    self.sheet = .addTags(item: item)
+                                }
                                 Divider()
                                 BookmarkShareCommands(item: item)
                                 Divider()
@@ -123,6 +230,7 @@ struct ContentView: View {
                 }
                 .font(.title3)
                 .lineLimit(1)
+                .wraps(false)
                 .frame(minWidth: 400)
             }
         }
@@ -188,6 +296,23 @@ struct ContentView: View {
                 }
             }
         }
+        .sheet(item: $sheet) { sheet in
+            switch sheet {
+            case .addTags(let item):
+                AddTagsView(database: manager.database, item: item)
+            }
+        }
         .navigationTitle(navigationTitle)
     }
+}
+
+extension ContentView.SheetType: Identifiable {
+
+    var id: String {
+        switch self {
+        case .addTags(let item):
+            return "addTags:\(item.url)"
+        }
+    }
+
 }

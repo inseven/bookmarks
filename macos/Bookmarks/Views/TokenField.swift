@@ -7,6 +7,41 @@
 
 import SwiftUI
 
+struct TokenizingCharacterSetKey: EnvironmentKey {
+    static var defaultValue: CharacterSet = NSTokenField.defaultTokenizingCharacterSet
+}
+
+extension EnvironmentValues {
+    var tokenizingCharacterSet: CharacterSet {
+        get { self[TokenizingCharacterSetKey.self] }
+        set { self[TokenizingCharacterSetKey.self] = newValue }
+    }
+}
+
+struct WrapsKey: EnvironmentKey {
+    static var defaultValue: Bool = true
+}
+
+extension EnvironmentValues {
+    var wraps: Bool {
+        get { self[WrapsKey.self] }
+        set { self[WrapsKey.self] = newValue }
+    }
+}
+
+extension View {
+
+    func tokenizingCharacterSet(_ tokenizingCharacterSet: CharacterSet) -> some View {
+        environment(\.tokenizingCharacterSet, tokenizingCharacterSet)
+    }
+
+    func wraps(_ wraps: Bool) -> some View {
+        environment(\.wraps, wraps)
+    }
+
+}
+
+
 public typealias TokenStyle = NSTokenField.TokenStyle
 
 public class TokenFieldWithMenuCallback: NSTokenField {
@@ -17,6 +52,7 @@ public class TokenFieldWithMenuCallback: NSTokenField {
         menuDelegate?.tokenField(self, didClickMenuItem: menuItem)
     }
 
+    // TODO: This should use the size of the parent.
     // https://stackoverflow.com/questions/17147366/auto-resizing-nstokenfield-with-constraint-based-layout
     public override var intrinsicContentSize: NSSize {
         var frame = self.frame
@@ -158,6 +194,8 @@ public struct TokenField<T>: NSViewRepresentable {
 
     @Environment(\.font) var font
     @Environment(\.lineLimit) var lineLimit
+    @Environment(\.tokenizingCharacterSet) var tokenizingCharacterSet
+    @Environment(\.wraps) var wraps
 
     @Binding var tokens: [Token]
 
@@ -181,9 +219,10 @@ public struct TokenField<T>: NSViewRepresentable {
 
     public func updateNSView(_ tokenField: TokenFieldWithMenuCallback, context: Context) {
         tokenField.placeholderString = self.title
-        tokenField.cell?.wraps = false
+        tokenField.cell?.wraps = wraps
         tokenField.font = NSFont.preferredFont(forFont: font)
         tokenField.maximumNumberOfLines = lineLimit ?? 0
+        tokenField.tokenizingCharacterSet = tokenizingCharacterSet
         tokenField.delegate = context.coordinator
         tokenField.menuDelegate = context.coordinator
 

@@ -33,25 +33,9 @@ These can be quickly decoded using the `build-tools` script:
 
 ### Managing Certificates
 
-#### macOS
+Builds use base64 encoded [PKCS 12](https://en.wikipedia.org/wiki/PKCS_12) certificate and private key containers specified in the `IOS_CERTIFICATE_BASE64` and `MACOS_CERTIFICATE_BASE64` environment variables (with the password given in the `IOS_CERTIFICATE_PASSWORD` and `MACOS_CERTIFICATE_PASSWORD` environment variables respectively). This loosely follows the GitHub approach to [managing certificates](https://docs.github.com/en/actions/guides/installing-an-apple-certificate-on-macos-runners-for-xcode-development).
 
-The build script (details below) uses Fastlane's match task to manage a certificates and a local keychain. Unfortunately, match seems very buggy when using Developer ID certificates, meaning it can't safely be used to fetch the certificates from Apple (it will keep creating new developer certificates until you reach your quota).
-
-Instead, you can manually import a manually created certificate and private keychain into an existing match certificate store:
-
-```bash
-fastlane match import --skip_certificate_matching true --type developer_id
-```
-
-Match will ask for the path to your certificate (`.cer`) and private key file (`.p12`).
-
-N.B. When manually importing certificates, match will not generate file names with identifiers so it's a good idea to name the certificate and private key with a matching, and obvious name.
-
-#### iOS
-
-With the introduction of signed iOS builds, the project now uses two certificate formats (to be simplified in the future). iOS builds use a base64 encoded [PKCS 12](https://en.wikipedia.org/wiki/PKCS_12) certificate and private key specified in the `IOS_CERTIFICATE_BASE64` environment variable (with the password given in the `IOS_CERTIFICATE_PASSWORD`). This setup loosely follows the GitHub approach to [managing certificates](https://docs.github.com/en/actions/guides/installing-an-apple-certificate-on-macos-runners-for-xcode-development).
-
-Keychain Access can be used to export your certificate and private key in the PKCS 12 format, and the base64 encoded version obtained as follows:
+Keychain Access can be used to export your certificate and private key in the PKCS 12 format, and the base64 encoded version is generated as follows:
 
 ```bash
 base64 build_certificate.p12 | pbcopy
@@ -63,11 +47,10 @@ This, along with the password used to protect the certificate, can then be added
 
 In order to make continuous integration easy the `scripts/build.sh` script builds the full project, including submitting the macOS app for notarization. In order to run this script (noting that you probably don't want to use it for regular development cycles), you'll need to configure your environment accordingly, by setting the following environment variables:
 
-- `MATCH_PASSWORD` -- the password/passphrase to secure the [match](https://docs.fastlane.tools/actions/match/) certificate store
-- `CERTIFICATE_REPOSITORY` -- the repository used for the match certificate store (must be HTTPS)
-- `CERTIFICATE_REPOSITORY_AUTHORIZATION_KEY` -- a GitHub authorization key used to access the certificate repository (see the [match authorization docs](https://docs.fastlane.tools/actions/match/#git-storage-on-github))
-- `IOS_CERTIFICATE_BASE64` -- base64 encoded PKCS 12 certificate (see above for details)
+- `IOS_CERTIFICATE_BASE64` -- base64 encoded PKCS 12 certificate for iOS App Store builds (see above for details)
 - `IOS_CERTIFICATE_PASSWORD` -- password used to protect the iOS certificate
+- `MACOS_CERTIFICATE_BASE64` -- base64 encoded PKCS 12 certificate for macOS Developer ID builds (see above for details)
+- `MACOS_CERTIFICATE_PASSWORD` -- password used to protect the macOS certificate
 - `APPLE_DEVELOPER_ID` -- individual Apple Developer Account ID (used for notarization)
 - `APPLE_API_KEY` -- base64 encoded App Store Connect API key (see https://appstoreconnect.apple.com/access/api)
 - `APPLE_API_KEY_ID` -- App Store Connect API key id (see https://appstoreconnect.apple.com/access/api)
@@ -81,11 +64,10 @@ The script (like Fastlane) will look for and source an environment file in the F
 
 ```bash
 # Certificate store
-export MATCH_PASSWORD=
-export CERTIFICATE_REPOSITORY=
-export CERTIFICATE_REPOSITORY_AUTHORIZATION_KEY=
 export IOS_CERTIFICATE_BASE64=
 export IOS_CERTIFICATE_PASSWORD=
+export MACOS_CERTIFICATE_BASE64=
+export MACOS_CERTIFICATE_PASSWORD=
 
 # Developer account
 export APPLE_DEVELOPER_ID=
@@ -96,12 +78,6 @@ export FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=
 
 # GitHub (only required if publishing releases locally)
 export GITHUB_TOKEN=
-```
-
-You can generate your GitHub authorization key (for `CERTIFICATE_REPOSITORY_AUTHORIZATION_KEY`) as follows:
-
-```bash
-echo -n your_github_username:your_personal_access_token | base64
 ```
 
 Once you've added your environment variables to this, run the script from the root of the project directory as follows:

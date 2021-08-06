@@ -96,8 +96,6 @@ public class BookmarksManager {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         DispatchQueue.global(qos: .userInitiated).async {
             let result = Result {
-                // TODO: Do this in the database.
-                // Why isn't this taking?
                 try self.pinboard.tagsRename(old, to: new)
                 self.refresh(force: true)
             }

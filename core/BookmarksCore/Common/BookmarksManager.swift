@@ -77,18 +77,11 @@ public class BookmarksManager {
     // TODO: Move the Bookmark update APIs into the updater #237
     //       https://github.com/inseven/bookmarks/issues/237
 
-    public func deleteItem(item: Item, completion: @escaping (Result<Void, Error>) -> Void) {
-        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        DispatchQueue.global(qos: .userInitiated).async {
-            let result = Result {
-                try self.database.deleteItem(identifier: item.identifier)
-                try self.pinboard.postsDelete(url: item.url)
-            }
-            completion(result)
-        }
+    public func deleteItem(_ item: Item, completion: @escaping (Result<Void, Error>) -> Void) {
+        updater.deleteItem(item, completion: completion)
     }
 
-    public func updateItem(item: Item, completion: @escaping (Result<Item, Error>) -> Void) {
+    public func updateItem(_ item: Item, completion: @escaping (Result<Item, Error>) -> Void) {
         self.updater.updateItem(item: item, completion: completion)
     }
 

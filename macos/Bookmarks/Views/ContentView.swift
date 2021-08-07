@@ -35,11 +35,34 @@ extension Item {
 
 }
 
+// TODO: Inject the colors
+// TODO: Inject the border radius
+
+struct BorderedSelection: ViewModifier {
+
+    var selected: Bool
+
+    func body(content: Content) -> some View {
+        if selected {
+            content
+                .padding(4)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 13)
+                        .stroke(Color.accentColor, lineWidth: 3))
+        } else {
+            content
+                .padding(4)
+        }
+    }
+
+}
+
+
 struct AddTagsView: View {
 
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.manager) var manager: BookmarksManager
-    var item: Item
+    var items: [Item]
     @State var isBusy = false
 
     @State var tokens: [Token<String>] = []  // TODO: Support a payload on the tokens.
@@ -47,23 +70,9 @@ struct AddTagsView: View {
     @StateObject var tagsView: TagsView
     @State var trie = Trie()
 
-
-    let candidates = [
-        "cheese",
-        "chester",
-        "one",
-        "two",
-        "three",
-        "four",
-        "five",
-        "michael-dales",
-        "sarah-barbour",
-        "sara-frederixon",
-    ]
-
-    init(database: Database, item: Item) {
+    init(database: Database, items: [Item]) {
         _tagsView = StateObject(wrappedValue: TagsView(database: database))
-        self.item = item
+        self.items = items
     }
 
     var characterSet: CharacterSet {
@@ -95,12 +104,13 @@ struct AddTagsView: View {
                     Button("OK") {
                         isBusy = true
                         let tags = tokens.compactMap { $0.associatedValue }
-                        let item = self.item
-                            .adding(tags: Set(tags))
-                            .setting(toRead: false)  // TODO: This is a hack that should be removed (maybe make it an option?)
-                        manager.updateItem(item: item, completion: Logging.log("add tags") {
-                            presentationMode.wrappedValue.dismiss()
-                        })
+                        for item in items {
+                            let item = item
+                                .adding(tags: Set(tags))
+                                .setting(toRead: false)  // TODO: This is a hack that should be removed (maybe make it an option?)
+                            manager.updateItem(item, completion: { _ in })
+                        }
+                        presentationMode.wrappedValue.dismiss()
                     }
                     .keyboardShortcut(.defaultAction)
                 }
@@ -131,10 +141,18 @@ struct AddTagsView: View {
 
 }
 
+extension Item: Hashable {
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier)
+    }
+
+}
+
 struct ContentView: View {
 
     enum SheetType {
-        case addTags(item: Item)
+        case addTags(items: [Item])
     }
 
     @Binding var sidebarSelection: BookmarksSection?
@@ -143,6 +161,8 @@ struct ContentView: View {
     @Environment(\.manager) var manager: BookmarksManager
     @StateObject var databaseView: ItemsView
     @StateObject var tagsView: TagsView
+
+    @StateObject var selectionTracker: SelectionTracker<Item>
 
     @State var trie = Trie()
 
@@ -154,8 +174,12 @@ struct ContentView: View {
 
     init(sidebarSelection: Binding<BookmarksSection?>, database: Database) {
         _sidebarSelection = sidebarSelection
-        _databaseView = StateObject(wrappedValue: ItemsView(database: database, query: True().eraseToAnyQuery()))
         _tagsView = StateObject(wrappedValue: TagsView(database: database))
+
+        let databaseView = Deferred(ItemsView(database: database, query: True().eraseToAnyQuery()))
+        let selectionTracker = Deferred(SelectionTracker(items: databaseView.get().$items))
+        _databaseView = StateObject(wrappedValue: databaseView.get())
+        _selectionTracker = StateObject(wrappedValue: selectionTracker.get())
     }
 
     var navigationTitle: String {
@@ -168,11 +192,17 @@ struct ContentView: View {
     var body: some View {
         VStack {
             ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 8)], spacing: 8) {
                     ForEach(databaseView.items) { item in
                         BookmarkCell(item: item)
+                            .onDrag {
+                                NSItemProvider(object: item.url as NSURL)
+                            }
+                            .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: item)))
                             .help(item.localDate)
-                            .onClick {
+                            .handleMouse {
+                                print("click")
+                                selectionTracker.handleClick(item: item)
                                 manager.database.item(identifier: item.identifier) { result in
                                     switch result {
                                     case .success(let item):
@@ -182,17 +212,14 @@ struct ContentView: View {
                                     }
                                 }
                             } doubleClick: {
+                                print("double click")
                                 NSWorkspace.shared.open(item.url)
-                            }
-                            .onCommandClick {
-                                sheet = .addTags(item: item)
-                            }
-                            .onCommandDoubleClick {
-                                do {
-                                    NSWorkspace.shared.open(try item.pinboardUrl())
-                                } catch {
-                                    print("Failed to edit with error \(error)")
-                                }
+                            } shiftClick: {
+                                print("shift click")
+                                selectionTracker.handleShiftClick(item: item)
+                            } commandClick: {
+                                print("command click")
+                                selectionTracker.handleCommandClick(item: item)
                             }
                             .contextMenu {
                                 BookmarkOpenCommands(item: item)
@@ -200,20 +227,21 @@ struct ContentView: View {
                                 BookmarkDesctructiveCommands(item: item)
                                 Divider()
                                 BookmarkEditCommands(item: item)
+                                // TODO: Move this into the bookmark edit commands
                                 Button("Add tags...") {
-                                    self.sheet = .addTags(item: item)
+                                    self.sheet = .addTags(items: [item])
                                 }
                                 Divider()
                                 BookmarkShareCommands(item: item)
                                 Divider()
                                 BookmarkTagCommands(sidebarSelection: $sidebarSelection, item: item)
                             }
-                            .onDrag {
-                                NSItemProvider(object: item.url as NSURL)
-                            }
                     }
                 }
                 .padding()
+            }
+            .handleMouse {
+                selectionTracker.clear()
             }
         }
         .onAppear {
@@ -225,6 +253,29 @@ struct ContentView: View {
             tagsView.stop()
         }
         .toolbar {
+            ToolbarItem {
+                Button {
+                    guard selectionTracker.selection.count > 0 else {
+                        return
+                    }
+                    sheet = .addTags(items: Array(selectionTracker.selection))
+                } label: {
+                    SwiftUI.Image(systemName: "tag")
+                }
+                .help("Add Tags")
+                .disabled(selectionTracker.selection.count == 0)
+            }
+            ToolbarItem {
+                Button {
+                    for item in selectionTracker.selection {
+                        manager.deleteItem(item, completion: { _ in })
+                    }
+                } label: {
+                    SwiftUI.Image(systemName: "trash")
+                }
+                .help("Add Tags")
+                .disabled(selectionTracker.selection.count == 0)
+            }
             ToolbarItem {
                 Button {
                     manager.refresh()
@@ -273,6 +324,7 @@ struct ContentView: View {
 
             underlyingSection = section
 
+            selectionTracker.clear()
             databaseView.clear()
             let query = section.query
             databaseView.query = query.eraseToAnyQuery()
@@ -310,8 +362,8 @@ struct ContentView: View {
         }
         .sheet(item: $sheet) { sheet in
             switch sheet {
-            case .addTags(let item):
-                AddTagsView(database: manager.database, item: item)
+            case .addTags(let items):
+                AddTagsView(database: manager.database, items: items)
             }
         }
         .navigationTitle(navigationTitle)
@@ -322,8 +374,8 @@ extension ContentView.SheetType: Identifiable {
 
     var id: String {
         switch self {
-        case .addTags(let item):
-            return "addTags:\(item.url)"
+        case .addTags(let items):
+            return "addTags:\(items.map { $0.identifier }.joined(separator: ","))"
         }
     }
 

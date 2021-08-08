@@ -197,26 +197,21 @@ extension Set where Element == Item {
 
 struct ContentView: View {
 
-    enum SheetType {
-        case addTags(items: [Item])
-    }
-
     @Binding var sidebarSelection: BookmarksSection?
     @State var underlyingSection: BookmarksSection?
 
-    @Environment(\.manager) var manager: BookmarksManager
+    @Environment(\.manager) var manager
+    @Environment(\.applicationHasFocus) var applicationHasFocus
+    @Environment(\.sheetHandler) var sheetHandler
     @StateObject var databaseView: ItemsView
     @StateObject var tagsView: TagsView
 
     @StateObject var selectionTracker: SelectionTracker<Item>
     @State var firstResponder: Bool = false
-    @FocusedBinding(\.selection) var itemSelection
 
     @State var trie = Trie()
 
     @StateObject var tokenDebouncer = Debouncer<[Token<String>]>(initialValue: [], delay: .seconds(0.2))
-
-    @State var sheet: SheetType? = nil
 
     private var subscription: AnyCancellable?
 
@@ -251,10 +246,6 @@ struct ContentView: View {
                                 BookmarkDesctructiveCommands(selection: $selectionTracker.selection)
                                 Divider()
                                 BookmarkEditCommands(selection: $selectionTracker.selection)
-                                // TODO: Move this into the bookmark edit commands
-                                Button("Add tags...") {
-                                    self.sheet = .addTags(items: [item])
-                                }
                                 Divider()
                                 BookmarkShareCommands(item: item)
                                 Divider()
@@ -273,11 +264,10 @@ struct ContentView: View {
                             }
                             .handleMouse {
                                 print("click")
-                                firstResponder = true
-                                // TODO: Move this into the selection tracker?
-                                if !selectionTracker.isSelected(item: item) {
+                                if firstResponder || !selectionTracker.isSelected(item: item) {
                                     selectionTracker.handleClick(item: item)
                                 }
+                                firstResponder = true
                             } doubleClick: {
                                 print("double click")
                                 NSWorkspace.shared.open(item.url)
@@ -293,22 +283,6 @@ struct ContentView: View {
                 .padding()
             }
             .acceptsFirstResponder(isFirstResponder: $firstResponder)
-//            .onMoveCommand { direction in
-//                switch direction {
-//                case .up:
-//                    guard let previous = selectionTracker.handleDirectionUp() else {
-//                        return
-//                    }
-//                    scrollView.scrollTo(previous.id)
-//                case .down:
-//                    guard let next = selectionTracker.handleDirectionDown() else {
-//                        return
-//                    }
-//                    scrollView.scrollTo(next.id)
-//                default:
-//                    return
-//                }
-//            }
             .handleMouse {
                 firstResponder = true
                 selectionTracker.clear()
@@ -338,7 +312,7 @@ struct ContentView: View {
                     guard selectionTracker.selection.count > 0 else {
                         return
                     }
-                    sheet = .addTags(items: Array(selectionTracker.selection))
+                    sheetHandler(.addTags(items: Array(selectionTracker.selection)))
                 } label: {
                     SwiftUI.Image(systemName: "tag")
                 }
@@ -435,23 +409,7 @@ struct ContentView: View {
                 }
             }
         }
-        .sheet(item: $sheet) { sheet in
-            switch sheet {
-            case .addTags(let items):
-                AddTagsView(database: manager.database, items: items)
-            }
-        }
         .navigationTitle(navigationTitle)
     }
 }
 
-extension ContentView.SheetType: Identifiable {
-
-    var id: String {
-        switch self {
-        case .addTags(let items):
-            return "addTags:\(items.map { $0.identifier }.joined(separator: ","))"
-        }
-    }
-
-}

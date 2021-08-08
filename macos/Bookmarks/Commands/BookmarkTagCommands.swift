@@ -24,22 +24,34 @@ import BookmarksCore
 
 struct BookmarkTagCommands: View {
 
-    @Environment(\.manager) var manager: BookmarksManager
+    @Environment(\.manager) var manager
+    @Environment(\.sheetHandler) var sheetHandler
     @Binding var sidebarSelection: BookmarksSection?
 
     var item: Item
 
     var body: some View {
-        if item.tags.isEmpty {
-            Button("No Tags") {}.disabled(true)
-        } else {
-            Menu("Tags") {
-                ForEach(Array(item.tags).sorted()) { tag in
-                    Button(tag) {
-                        sidebarSelection = tag.section
+        VStack {
+            if item.tags.isEmpty {
+                Button("No Tags") {}.disabled(true)
+            } else {
+                Menu("Tags") {
+                    ForEach(Array(item.tags).sorted()) { tag in
+                        Button(tag) {
+                            sidebarSelection = tag.section
+                        }
                     }
                 }
             }
+            Button("Copy Tags") {
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.setString(item.tags.joined(separator: " "), forType: .string)
+            }
+            .disabled(item.tags.count < 1)
+            Button("Add tags...") {
+                sheetHandler(.addTags(items: [item]))
+            }
         }
     }
+
 }

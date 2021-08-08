@@ -23,17 +23,6 @@ import SwiftUI
 
 import BookmarksCore
 
-struct SelectionKey: FocusedValueKey {
-    typealias Value = Binding<Set<Item>>
-}
-
-extension FocusedValues {
-    var selection: SelectionKey.Value? {
-        get { self[SelectionKey.self] }
-        set { self[SelectionKey.self] = newValue }
-    }
-}
-
 struct SelectionPreferenceKey: PreferenceKey {
     static var defaultValue: Set<Item> = Set()
 
@@ -42,15 +31,44 @@ struct SelectionPreferenceKey: PreferenceKey {
     }
 }
 
+enum SheetType {
+    case addTags(items: [Item])
+}
 
+extension SheetType: Identifiable {
+
+    var id: String {
+        switch self {
+        case .addTags(let items):
+            return "addTags:\(items.map { $0.identifier }.joined(separator: ","))"
+        }
+    }
+
+}
+
+typealias SheetHandler = (SheetType) -> Void
+
+struct SheetHandlerEnvironmentKey: EnvironmentKey {
+    static var defaultValue: SheetHandler = { _ in }
+}
+
+extension EnvironmentValues {
+    var sheetHandler: (SheetHandler) {
+        get { self[SheetHandlerEnvironmentKey.self] }
+        set { self[SheetHandlerEnvironmentKey.self] = newValue }
+    }
+}
+
+// TODO: Try using an environment to inject the selection back? Or are we just going to get terrible performance here?
 
 @main
 struct BookmarksApp: App {
 
-    @FocusedBinding(\.selection) var itemSelection
     @State var selectionPreference: Set<Item> = Set()
     @Environment(\.manager) var manager: BookmarksManager
     @State var selection: BookmarksSection? = .all  // TODO: Rename this to section
+
+    @State var sheet: SheetType? = nil // TODO: Push this down to the window group?
 
     var body: some Scene {
         WindowGroup {
@@ -59,9 +77,16 @@ struct BookmarksApp: App {
                 ContentView(sidebarSelection: $selection, database: manager.database)
             }
             .onPreferenceChange(SelectionPreferenceKey.self) { value in
-                // Bubble up the preference.
-                print("selection = \(value)")
                 self.selectionPreference = value
+            }
+            .environment(\.sheetHandler, { sheet in
+                self.sheet = sheet
+            })
+            .sheet(item: $sheet) { sheet in
+                switch sheet {
+                case .addTags(let items):
+                    AddTagsView(database: manager.database, items: items)
+                }
             }
             .observesApplicationFocus()
             .frameAutosaveName("Main Window")
@@ -110,9 +135,6 @@ struct BookmarksApp: App {
                 Divider()
                 BookmarkEditCommands(selection: $selectionPreference)
             }
-        }
-        .onChange(of: itemSelection) { selection in
-            print("selection = \(selection)")
         }
         SwiftUI.Settings {
             SettingsView()

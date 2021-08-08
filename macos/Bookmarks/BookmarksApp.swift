@@ -23,44 +23,6 @@ import SwiftUI
 
 import BookmarksCore
 
-struct SelectionPreferenceKey: PreferenceKey {
-    static var defaultValue: Set<Item> = Set()
-
-    static func reduce(value: inout Set<Item>, nextValue: () -> Set<Item>) {
-        value = nextValue()
-    }
-}
-
-enum SheetType {
-    case addTags(items: [Item])
-}
-
-extension SheetType: Identifiable {
-
-    var id: String {
-        switch self {
-        case .addTags(let items):
-            return "addTags:\(items.map { $0.identifier }.joined(separator: ","))"
-        }
-    }
-
-}
-
-typealias SheetHandler = (SheetType) -> Void
-
-struct SheetHandlerEnvironmentKey: EnvironmentKey {
-    static var defaultValue: SheetHandler = { _ in }
-}
-
-extension EnvironmentValues {
-    var sheetHandler: (SheetHandler) {
-        get { self[SheetHandlerEnvironmentKey.self] }
-        set { self[SheetHandlerEnvironmentKey.self] = newValue }
-    }
-}
-
-// TODO: Try using an environment to inject the selection back? Or are we just going to get terrible performance here?
-
 @main
 struct BookmarksApp: App {
 

@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		D8164D5E26C065F400756D43 /* ApplicationFocusObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D5D26C065F400756D43 /* ApplicationFocusObserver.swift */; };
+		D8164D6026C08B0600756D43 /* SelectionPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D5F26C08B0600756D43 /* SelectionPreferenceKey.swift */; };
+		D8164D6226C08B4100756D43 /* SheetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D6126C08B4100756D43 /* SheetType.swift */; };
+		D8164D6426C08BD500756D43 /* SheetHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D6326C08BD500756D43 /* SheetHandler.swift */; };
 		D840B006262103C4001E95D1 /* AccountSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840B005262103C4001E95D1 /* AccountSettingsView.swift */; };
 		D840B00A2621042B001E95D1 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840B0092621042B001E95D1 /* SettingsView.swift */; };
 		D840B01226210AF6001E95D1 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */; };
@@ -67,6 +70,9 @@
 
 /* Begin PBXFileReference section */
 		D8164D5D26C065F400756D43 /* ApplicationFocusObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationFocusObserver.swift; sourceTree = "<group>"; };
+		D8164D5F26C08B0600756D43 /* SelectionPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionPreferenceKey.swift; sourceTree = "<group>"; };
+		D8164D6126C08B4100756D43 /* SheetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetType.swift; sourceTree = "<group>"; };
+		D8164D6326C08BD500756D43 /* SheetHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetHandler.swift; sourceTree = "<group>"; };
 		D840B005262103C4001E95D1 /* AccountSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountSettingsView.swift; sourceTree = "<group>"; };
 		D840B0092621042B001E95D1 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
@@ -166,6 +172,9 @@
 				D891C45D261E32FB0024E1A6 /* Bookmarks.entitlements */,
 				D891C45C261E32FB0024E1A6 /* Info.plist */,
 				D891C459261E32FB0024E1A6 /* Preview Content */,
+				D8164D5F26C08B0600756D43 /* SelectionPreferenceKey.swift */,
+				D8164D6126C08B4100756D43 /* SheetType.swift */,
+				D8164D6326C08BD500756D43 /* SheetHandler.swift */,
 			);
 			path = Bookmarks;
 			sourceTree = "<group>";
@@ -385,9 +394,12 @@
 				D861257326A60DF200EB5FEF /* Sidebar.swift in Sources */,
 				D891C456261E32F90024E1A6 /* ContentView.swift in Sources */,
 				D861257526AA048E00EB5FEF /* RenameTagView.swift in Sources */,
+				D8164D6026C08B0600756D43 /* SelectionPreferenceKey.swift in Sources */,
 				D8164D5E26C065F400756D43 /* ApplicationFocusObserver.swift in Sources */,
 				D8A336FE26B56AF700436200 /* BookmarkDestructiveCommands.swift in Sources */,
 				D8A336FA26B569C200436200 /* BookmarkTagCommands.swift in Sources */,
+				D8164D6226C08B4100756D43 /* SheetType.swift in Sources */,
+				D8164D6426C08BD500756D43 /* SheetHandler.swift in Sources */,
 				D840B01226210AF6001E95D1 /* GeneralSettingsView.swift in Sources */,
 				D840B00A2621042B001E95D1 /* SettingsView.swift in Sources */,
 				D8ACD7EB26BC81BA005F927A /* NSFont.swift in Sources */,

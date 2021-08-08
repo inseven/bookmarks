@@ -40,6 +40,8 @@ extension Item {
 
 struct BorderedSelection: ViewModifier {
 
+    @Environment(\.selectionColor) var selectionColor
+
     var selected: Bool
 
     func body(content: Content) -> some View {
@@ -48,7 +50,7 @@ struct BorderedSelection: ViewModifier {
                 .padding(4)
                 .overlay(
                     RoundedRectangle(cornerRadius: 13)
-                        .stroke(Color.accentColor, lineWidth: 3))
+                        .stroke(selectionColor, lineWidth: 3))
         } else {
             content
                 .padding(4)
@@ -253,6 +255,15 @@ struct ContentView: View {
             tagsView.stop()
         }
         .toolbar {
+
+            ToolbarItem {
+                Button {
+                    manager.refresh(force: true)
+                } label: {
+                    SwiftUI.Image(systemName: "arrow.clockwise")
+                }
+            }
+
             ToolbarItem {
                 Button {
                     guard selectionTracker.selection.count > 0 else {
@@ -276,13 +287,7 @@ struct ContentView: View {
                 .help("Add Tags")
                 .disabled(selectionTracker.selection.count == 0)
             }
-            ToolbarItem {
-                Button {
-                    manager.refresh()
-                } label: {
-                    SwiftUI.Image(systemName: "arrow.clockwise")
-                }
-            }
+
             ToolbarItem {
                 TokenField("Search", tokens: $tokenDebouncer.value) { string in
                     Token(string)
@@ -296,6 +301,7 @@ struct ContentView: View {
                 .wraps(false)
                 .frame(minWidth: 400)
             }
+
         }
         .onReceive(tokenDebouncer.$debouncedValue) { tokens in
 

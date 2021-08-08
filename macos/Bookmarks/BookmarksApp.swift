@@ -23,17 +23,51 @@ import SwiftUI
 
 import BookmarksCore
 
+struct ApplicationHasFocusKey: EnvironmentKey {
+    static var defaultValue: Bool = true
+}
+
+extension EnvironmentValues {
+    var applicationHasFocus: Bool {
+        get { self[ApplicationHasFocusKey.self] }
+        set { self[ApplicationHasFocusKey.self] = newValue }
+    }
+}
+
+struct SelectionColorKey: EnvironmentKey {
+    static var defaultValue: Color = Color.selectedContentBackgroundColor
+}
+
+extension EnvironmentValues {
+    var selectionColor: Color {
+        get { self[SelectionColorKey.self] }
+        set { self[SelectionColorKey.self] = newValue }
+    }
+}
+
+
 @main
 struct BookmarksApp: App {
 
     @Environment(\.manager) var manager: BookmarksManager
     @State var selection: BookmarksSection? = .all
+    @State var applicationHasFocus = true
 
     var body: some Scene {
         WindowGroup {
             NavigationView {
                 Sidebar(tagsView: TagsView(database: manager.database), settings: manager.settings, selection: $selection)
                 ContentView(sidebarSelection: $selection, database: manager.database)
+            }
+            .environment(\.applicationHasFocus, applicationHasFocus)
+            .environment(\.selectionColor, applicationHasFocus ? Color.selectedContentBackgroundColor : Color.unemphasizedSelectedContentBackgroundColor)
+            .onReceive(NotificationCenter.default.publisher(for: NSApplication.willResignActiveNotification)) { _ in
+                print("lost focus")
+                applicationHasFocus = false
+            }
+            .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+                print("gained focus")
+                applicationHasFocus = true
             }
             .frameAutosaveName("Main Window")
         }

@@ -35,32 +35,6 @@ extension Item {
 
 }
 
-// TODO: Inject the colors
-// TODO: Inject the border radius
-
-struct BorderedSelection: ViewModifier {
-
-    @Environment(\.applicationHasFocus) var applicationHasFocus
-
-    var selected: Bool
-    var firstResponder: Bool
-
-    func body(content: Content) -> some View {
-        if selected {
-            content
-                .padding(4)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 13)
-                        .stroke(applicationHasFocus && firstResponder ? Color.accentColor : Color.unemphasizedSelectedContentBackgroundColor, lineWidth: 3))
-
-        } else {
-            content
-                .padding(4)
-        }
-    }
-
-}
-
 extension Item: Hashable {
 
     public func hash(into hasher: inout Hasher) {

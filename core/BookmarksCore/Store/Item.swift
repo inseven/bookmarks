@@ -153,12 +153,24 @@ public class Item: Equatable {
 }
 
 extension Item: Identifiable {
+
     public var id: String { identifier }
+
+}
+
+extension Item: Hashable {
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier)
+    }
+
 }
 
 extension Item: CustomStringConvertible {
 
-    public var description: String { "\(url.absoluteString) (title: \(title), tags: [\(tags.joined(separator: ", "))], date: \(date), toRead: \(toRead), notes: '\(self.notes)')" }
+    public var description: String {
+        "\(url.absoluteString) (title: \(title), tags: [\(tags.joined(separator: ", "))], date: \(date), toRead: \(toRead), notes: '\(self.notes)')"
+    }
 
 }
 

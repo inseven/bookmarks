@@ -35,14 +35,6 @@ extension Item {
 
 }
 
-extension Item: Hashable {
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(identifier)
-    }
-
-}
-
 extension Set where Element == Item {
 
     func open() {

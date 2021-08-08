@@ -29,10 +29,15 @@ struct BookmarkShareCommands: View {
     var item: Item
 
     var body: some View {
-        Button("Copy") {
+        Button("Copy Address") {
             NSPasteboard.general.clearContents()
             NSPasteboard.general.setString(item.url.absoluteString, forType: .string)
         }
+        Button("Copy Tags") {
+            NSPasteboard.general.clearContents()
+            NSPasteboard.general.setString(item.tags.joined(separator: " "), forType: .string)
+        }
+        .disabled(item.tags.count < 1)
     }
 
 }

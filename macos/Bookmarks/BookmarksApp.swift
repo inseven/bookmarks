@@ -34,16 +34,30 @@ extension EnvironmentValues {
     }
 }
 
-struct SelectionColorKey: EnvironmentKey {
-    static var defaultValue: Color = Color.selectedContentBackgroundColor
-}
+struct ApplicationFocusObserver: ViewModifier {
 
-extension EnvironmentValues {
-    var selectionColor: Color {
-        get { self[SelectionColorKey.self] }
-        set { self[SelectionColorKey.self] = newValue }
+    @State var applicationHasFocus = true
+
+    func body(content: Content) -> some View {
+        content
+            .environment(\.applicationHasFocus, applicationHasFocus)
+            .onReceive(NotificationCenter.default.publisher(for: NSApplication.willResignActiveNotification)) { _ in
+                applicationHasFocus = false
+            }
+            .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+                applicationHasFocus = true
+            }
     }
 }
+
+public extension View {
+
+    func observesApplicationFocus() -> some View {
+        return self.modifier(ApplicationFocusObserver())
+    }
+
+}
+
 
 
 @main
@@ -51,7 +65,6 @@ struct BookmarksApp: App {
 
     @Environment(\.manager) var manager: BookmarksManager
     @State var selection: BookmarksSection? = .all
-    @State var applicationHasFocus = true
 
     var body: some Scene {
         WindowGroup {
@@ -59,16 +72,7 @@ struct BookmarksApp: App {
                 Sidebar(tagsView: TagsView(database: manager.database), settings: manager.settings, selection: $selection)
                 ContentView(sidebarSelection: $selection, database: manager.database)
             }
-            .environment(\.applicationHasFocus, applicationHasFocus)
-            .environment(\.selectionColor, applicationHasFocus ? Color.selectedContentBackgroundColor : Color.unemphasizedSelectedContentBackgroundColor)
-            .onReceive(NotificationCenter.default.publisher(for: NSApplication.willResignActiveNotification)) { _ in
-                print("lost focus")
-                applicationHasFocus = false
-            }
-            .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
-                print("gained focus")
-                applicationHasFocus = true
-            }
+            .observesApplicationFocus()
             .frameAutosaveName("Main Window")
         }
         .commands {

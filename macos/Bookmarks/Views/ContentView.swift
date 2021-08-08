@@ -40,7 +40,7 @@ extension Item {
 
 struct BorderedSelection: ViewModifier {
 
-    @Environment(\.selectionColor) var selectionColor
+    @Environment(\.applicationHasFocus) var applicationHasFocus
 
     var selected: Bool
 
@@ -50,7 +50,8 @@ struct BorderedSelection: ViewModifier {
                 .padding(4)
                 .overlay(
                     RoundedRectangle(cornerRadius: 13)
-                        .stroke(selectionColor, lineWidth: 3))
+                        .stroke(applicationHasFocus ? Color.accentColor : Color.unemphasizedSelectedContentBackgroundColor, lineWidth: 3))
+
         } else {
             content
                 .padding(4)

@@ -51,7 +51,7 @@ struct AddTagsView: View {
     var body: some View {
         Form {
             Section {
-                TokenField("Add tags...", tokens: $tokens) { string in
+                TokenField("Add tags...", tokens: $tokens) { string, editing in
                     let tag = string.lowercased()
                     return Token(tag)
                         .associatedValue(tag)

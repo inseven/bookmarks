@@ -214,10 +214,10 @@ struct ContentView: View {
             }
 
             ToolbarItem {
-                TokenField("Search", tokens: $tokenDebouncer.value) { string in
+                TokenField("Search", tokens: $tokenDebouncer.value) { string, editing in
                     Token(string)
                         .tokenStyle(tagsView.tags.contains(string) ? .default : .none)
-                        .associatedValue(tagsView.tags.contains(string) ? "tag:\(string)" : string)
+                        .associatedValue(tagsView.tags.contains(string) && !editing ? "tag:\(string)" : string)
                 } completions: { substring in
                     trie.findWordsWithPrefix(prefix: substring)
                 }

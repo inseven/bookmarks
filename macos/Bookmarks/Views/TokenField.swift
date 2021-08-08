@@ -116,7 +116,7 @@ public struct TokenField<T>: NSViewRepresentable {
                     print("token (token) = \(token), \(token.tokenStyle), \(token.isPartial)")
                     tokens.append(token)
                 } else if let string = token as? String,
-                          let token = parent.token(string)?.isPartial(true) {
+                          let token = parent.token(string, true)?.isPartial(true) {
                     print("token (string) = \(token), \(token.tokenStyle), \(token.isPartial)")
                     tokens.append(token)
                 }
@@ -178,7 +178,7 @@ public struct TokenField<T>: NSViewRepresentable {
             }
             return tokens.compactMap {
                 print("test token '\($0)'")
-                return parent.token($0)
+                return parent.token($0, false)
             }
         }
 
@@ -200,12 +200,12 @@ public struct TokenField<T>: NSViewRepresentable {
     @Binding var tokens: [Token]
 
     var title: String
-    var token: (String) -> Token?
+    var token: (String, _ editing: Bool) -> Token?
     var completions: (String) -> [String]
 
     public init(_ title: String,
                 tokens: Binding<[Token]>,
-                token: @escaping (_ string: String) -> Token?,
+                token: @escaping (String, _ editing: Bool) -> Token?,
                 completions: @escaping (_ string: String) -> [String]) {
         self.title = title
         _tokens = tokens

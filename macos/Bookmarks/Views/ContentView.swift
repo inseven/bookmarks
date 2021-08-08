@@ -158,6 +158,14 @@ extension Set where Element == Item {
     func open() {
         open(archive: false)
     }
+
+    var containsUnreadBookmark: Bool {
+        self.first { $0.toRead } != nil
+    }
+
+    var containsPublicBookmark: Bool {
+        self.first { $0.shared } != nil
+    }
     
     func open(archive: Bool) {
         if archive {
@@ -171,6 +179,16 @@ extension Set where Element == Item {
         } else {
             for item in self {
                 NSWorkspace.shared.open(item.url)
+            }
+        }
+    }
+
+    func editOnPinboard() {
+        for item in self {
+            do {
+                NSWorkspace.shared.open(try item.pinboardUrl())
+            } catch {
+                print("Failed to open on the Internet Archive with error \(error)")
             }
         }
     }
@@ -192,6 +210,7 @@ struct ContentView: View {
 
     @StateObject var selectionTracker: SelectionTracker<Item>
     @State var firstResponder: Bool = false
+    @FocusedBinding(\.selection) var itemSelection
 
     @State var trie = Trie()
 
@@ -229,9 +248,9 @@ struct ContentView: View {
                             .contextMenuFocusable {
                                 BookmarkOpenCommands(selection: $selectionTracker.selection)
                                 Divider()
-                                BookmarkDesctructiveCommands(item: item)
+                                BookmarkDesctructiveCommands(selection: $selectionTracker.selection)
                                 Divider()
-                                BookmarkEditCommands(item: item)
+                                BookmarkEditCommands(selection: $selectionTracker.selection)
                                 // TODO: Move this into the bookmark edit commands
                                 Button("Add tags...") {
                                     self.sheet = .addTags(items: [item])
@@ -244,6 +263,7 @@ struct ContentView: View {
                                 guard focused == true else {
                                     return
                                 }
+                                firstResponder = true
                                 if !selectionTracker.isSelected(item: item) {
                                     selectionTracker.handleClick(item: item)
                                 }
@@ -252,16 +272,11 @@ struct ContentView: View {
                                 NSItemProvider(object: item.url as NSURL)
                             }
                             .handleMouse {
-                                firstResponder = true
                                 print("click")
-                                selectionTracker.handleClick(item: item)
-                                manager.database.item(identifier: item.identifier) { result in
-                                    switch result {
-                                    case .success(let item):
-                                        print(String(describing: item))
-                                    case .failure(let error):
-                                        print("failed to get item with error \(error)")
-                                    }
+                                firstResponder = true
+                                // TODO: Move this into the selection tracker?
+                                if !selectionTracker.isSelected(item: item) {
+                                    selectionTracker.handleClick(item: item)
                                 }
                             } doubleClick: {
                                 print("double click")
@@ -298,6 +313,7 @@ struct ContentView: View {
                 firstResponder = true
                 selectionTracker.clear()
             }
+            .preference(key: SelectionPreferenceKey.self, value: firstResponder ? selectionTracker.selection : [])
         }
         .onAppear {
             databaseView.start()

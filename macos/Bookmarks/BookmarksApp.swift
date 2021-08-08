@@ -23,39 +23,23 @@ import SwiftUI
 
 import BookmarksCore
 
-struct ApplicationHasFocusKey: EnvironmentKey {
-    static var defaultValue: Bool = true
+struct SelectionKey: FocusedValueKey {
+    typealias Value = Binding<Set<Item>>
 }
 
-extension EnvironmentValues {
-    var applicationHasFocus: Bool {
-        get { self[ApplicationHasFocusKey.self] }
-        set { self[ApplicationHasFocusKey.self] = newValue }
+extension FocusedValues {
+    var selection: SelectionKey.Value? {
+        get { self[SelectionKey.self] }
+        set { self[SelectionKey.self] = newValue }
     }
 }
 
-struct ApplicationFocusObserver: ViewModifier {
+struct SelectionPreferenceKey: PreferenceKey {
+    static var defaultValue: Set<Item> = Set()
 
-    @State var applicationHasFocus = true
-
-    func body(content: Content) -> some View {
-        content
-            .environment(\.applicationHasFocus, applicationHasFocus)
-            .onReceive(NotificationCenter.default.publisher(for: NSApplication.willResignActiveNotification)) { _ in
-                applicationHasFocus = false
-            }
-            .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
-                applicationHasFocus = true
-            }
+    static func reduce(value: inout Set<Item>, nextValue: () -> Set<Item>) {
+        value = nextValue()
     }
-}
-
-public extension View {
-
-    func observesApplicationFocus() -> some View {
-        return self.modifier(ApplicationFocusObserver())
-    }
-
 }
 
 
@@ -63,14 +47,21 @@ public extension View {
 @main
 struct BookmarksApp: App {
 
+    @FocusedBinding(\.selection) var itemSelection
+    @State var selectionPreference: Set<Item> = Set()
     @Environment(\.manager) var manager: BookmarksManager
-    @State var selection: BookmarksSection? = .all
+    @State var selection: BookmarksSection? = .all  // TODO: Rename this to section
 
     var body: some Scene {
         WindowGroup {
             NavigationView {
                 Sidebar(tagsView: TagsView(database: manager.database), settings: manager.settings, selection: $selection)
                 ContentView(sidebarSelection: $selection, database: manager.database)
+            }
+            .onPreferenceChange(SelectionPreferenceKey.self) { value in
+                // Bubble up the preference.
+                print("selection = \(value)")
+                self.selectionPreference = value
             }
             .observesApplicationFocus()
             .frameAutosaveName("Main Window")
@@ -112,6 +103,16 @@ struct BookmarksApp: App {
                 }
                 .keyboardShortcut("6", modifiers: .command)
             }
+            CommandMenu("Bookmark") {
+                BookmarkOpenCommands(selection: $selectionPreference)
+                Divider()
+                BookmarkDesctructiveCommands(selection: $selectionPreference)
+                Divider()
+                BookmarkEditCommands(selection: $selectionPreference)
+            }
+        }
+        .onChange(of: itemSelection) { selection in
+            print("selection = \(selection)")
         }
         SwiftUI.Settings {
             SettingsView()

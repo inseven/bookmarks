@@ -26,15 +26,16 @@ struct BookmarkOpenCommands: View {
 
     @Environment(\.manager) var manager: BookmarksManager
 
-//    var item: Item
-    @Binding var selection: Set<Item>
+    @Binding var selection: Set<Item>  // TODO: Inject this in the environment?
 
     var body: some View {
         Button("Open") {
             selection.open()
         }
+        .disabled(selection.isEmpty)
         Button("Open on Internet Archive") {
             selection.open(archive: true)
         }
+        .disabled(selection.isEmpty)
     }
 }

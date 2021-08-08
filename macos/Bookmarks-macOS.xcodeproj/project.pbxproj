@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D8164D5E26C065F400756D43 /* ApplicationFocusObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D5D26C065F400756D43 /* ApplicationFocusObserver.swift */; };
 		D840B006262103C4001E95D1 /* AccountSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840B005262103C4001E95D1 /* AccountSettingsView.swift */; };
 		D840B00A2621042B001E95D1 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840B0092621042B001E95D1 /* SettingsView.swift */; };
 		D840B01226210AF6001E95D1 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */; };
@@ -65,6 +66,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D8164D5D26C065F400756D43 /* ApplicationFocusObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationFocusObserver.swift; sourceTree = "<group>"; };
 		D840B005262103C4001E95D1 /* AccountSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountSettingsView.swift; sourceTree = "<group>"; };
 		D840B0092621042B001E95D1 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
@@ -218,6 +220,7 @@
 				D861257B26AB741A00EB5FEF /* SidebarLink.swift */,
 				D8ACD7EE26BC81F7005F927A /* TokenField.swift */,
 				D8ACD7F026BC96B6005F927A /* Trie.swift */,
+				D8164D5D26C065F400756D43 /* ApplicationFocusObserver.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -382,6 +385,7 @@
 				D861257326A60DF200EB5FEF /* Sidebar.swift in Sources */,
 				D891C456261E32F90024E1A6 /* ContentView.swift in Sources */,
 				D861257526AA048E00EB5FEF /* RenameTagView.swift in Sources */,
+				D8164D5E26C065F400756D43 /* ApplicationFocusObserver.swift in Sources */,
 				D8A336FE26B56AF700436200 /* BookmarkDestructiveCommands.swift in Sources */,
 				D8A336FA26B569C200436200 /* BookmarkTagCommands.swift in Sources */,
 				D840B01226210AF6001E95D1 /* GeneralSettingsView.swift in Sources */,

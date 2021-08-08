@@ -20,34 +20,37 @@
 
 import SwiftUI
 
-import BookmarksCore
+struct ApplicationHasFocusKey: EnvironmentKey {
+    static var defaultValue: Bool = true
+}
 
-struct BookmarkEditCommands: View {
-
-    @Environment(\.manager) var manager: BookmarksManager
-
-    @Binding var selection: Set<Item>
-
-    var body: some View {
-        Button(selection.containsUnreadBookmark ? "Mark as Read" : "Mark as Unread") {
-            // TODO: Show errors in the UI #218
-            //       https://github.com/inseven/bookmarks/issues/218
-            let toRead = !selection.containsUnreadBookmark
-            for item in selection {
-                manager.updateItem(item.setting(toRead: toRead), completion: Logging.log("read/unread"))
-            }
-        }
-        .keyboardShortcut("U", modifiers: .command)
-        Button(selection.containsPublicBookmark ? "Make Private" : "Make Public") {
-            // TODO: Show errors in the UI #218
-            //       https://github.com/inseven/bookmarks/issues/218
-            let shared = !selection.containsPublicBookmark
-            for item in selection {
-                manager.updateItem(item.setting(shared: !shared), completion: Logging.log("private/public"))
-            }
-        }
-        Button("Edit on Pinboard") {
-            selection.editOnPinboard() // TODO: Throws?
-        }
+extension EnvironmentValues {
+    var applicationHasFocus: Bool {
+        get { self[ApplicationHasFocusKey.self] }
+        set { self[ApplicationHasFocusKey.self] = newValue }
     }
+}
+
+struct ApplicationFocusObserver: ViewModifier {
+
+    @State var applicationHasFocus = true
+
+    func body(content: Content) -> some View {
+        content
+            .environment(\.applicationHasFocus, applicationHasFocus)
+            .onReceive(NotificationCenter.default.publisher(for: NSApplication.willResignActiveNotification)) { _ in
+                applicationHasFocus = false
+            }
+            .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+                applicationHasFocus = true
+            }
+    }
+}
+
+public extension View {
+
+    func observesApplicationFocus() -> some View {
+        return self.modifier(ApplicationFocusObserver())
+    }
+
 }

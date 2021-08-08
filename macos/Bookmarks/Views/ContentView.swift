@@ -43,6 +43,7 @@ struct BorderedSelection: ViewModifier {
     @Environment(\.applicationHasFocus) var applicationHasFocus
 
     var selected: Bool
+    var firstResponder: Bool
 
     func body(content: Content) -> some View {
         if selected {
@@ -50,7 +51,7 @@ struct BorderedSelection: ViewModifier {
                 .padding(4)
                 .overlay(
                     RoundedRectangle(cornerRadius: 13)
-                        .stroke(applicationHasFocus ? Color.accentColor : Color.unemphasizedSelectedContentBackgroundColor, lineWidth: 3))
+                        .stroke(applicationHasFocus && firstResponder ? Color.accentColor : Color.unemphasizedSelectedContentBackgroundColor, lineWidth: 3))
 
         } else {
             content
@@ -152,6 +153,30 @@ extension Item: Hashable {
 
 }
 
+extension Set where Element == Item {
+
+    func open() {
+        open(archive: false)
+    }
+    
+    func open(archive: Bool) {
+        if archive {
+            for item in self {
+                do {
+                    NSWorkspace.shared.open(try item.internetArchiveUrl())
+                } catch {
+                    print("Failed to open on the Internet Archive with error \(error)")
+                }
+            }
+        } else {
+            for item in self {
+                NSWorkspace.shared.open(item.url)
+            }
+        }
+    }
+    
+}
+
 struct ContentView: View {
 
     enum SheetType {
@@ -166,6 +191,7 @@ struct ContentView: View {
     @StateObject var tagsView: TagsView
 
     @StateObject var selectionTracker: SelectionTracker<Item>
+    @State var firstResponder: Bool = false
 
     @State var trie = Trie()
 
@@ -198,12 +224,35 @@ struct ContentView: View {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 8)], spacing: 8) {
                     ForEach(databaseView.items) { item in
                         BookmarkCell(item: item)
+                            .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: item), firstResponder: firstResponder))
+                            .help(item.localDate)
+                            .contextMenuFocusable {
+                                BookmarkOpenCommands(selection: $selectionTracker.selection)
+                                Divider()
+                                BookmarkDesctructiveCommands(item: item)
+                                Divider()
+                                BookmarkEditCommands(item: item)
+                                // TODO: Move this into the bookmark edit commands
+                                Button("Add tags...") {
+                                    self.sheet = .addTags(items: [item])
+                                }
+                                Divider()
+                                BookmarkShareCommands(item: item)
+                                Divider()
+                                BookmarkTagCommands(sidebarSelection: $sidebarSelection, item: item)
+                            } onContextMenuChange: { focused in
+                                guard focused == true else {
+                                    return
+                                }
+                                if !selectionTracker.isSelected(item: item) {
+                                    selectionTracker.handleClick(item: item)
+                                }
+                            }
                             .onDrag {
                                 NSItemProvider(object: item.url as NSURL)
                             }
-                            .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: item)))
-                            .help(item.localDate)
                             .handleMouse {
+                                firstResponder = true
                                 print("click")
                                 selectionTracker.handleClick(item: item)
                                 manager.database.item(identifier: item.identifier) { result in
@@ -224,26 +273,29 @@ struct ContentView: View {
                                 print("command click")
                                 selectionTracker.handleCommandClick(item: item)
                             }
-                            .contextMenu {
-                                BookmarkOpenCommands(item: item)
-                                Divider()
-                                BookmarkDesctructiveCommands(item: item)
-                                Divider()
-                                BookmarkEditCommands(item: item)
-                                // TODO: Move this into the bookmark edit commands
-                                Button("Add tags...") {
-                                    self.sheet = .addTags(items: [item])
-                                }
-                                Divider()
-                                BookmarkShareCommands(item: item)
-                                Divider()
-                                BookmarkTagCommands(sidebarSelection: $sidebarSelection, item: item)
-                            }
                     }
                 }
                 .padding()
             }
+            .acceptsFirstResponder(isFirstResponder: $firstResponder)
+//            .onMoveCommand { direction in
+//                switch direction {
+//                case .up:
+//                    guard let previous = selectionTracker.handleDirectionUp() else {
+//                        return
+//                    }
+//                    scrollView.scrollTo(previous.id)
+//                case .down:
+//                    guard let next = selectionTracker.handleDirectionDown() else {
+//                        return
+//                    }
+//                    scrollView.scrollTo(next.id)
+//                default:
+//                    return
+//                }
+//            }
             .handleMouse {
+                firstResponder = true
                 selectionTracker.clear()
             }
         }

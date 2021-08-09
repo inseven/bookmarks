@@ -32,24 +32,19 @@ struct BookmarkTagCommands: View {
 
     var body: some View {
         VStack {
-            if item.tags.isEmpty {
-                Button("No Tags") {}.disabled(true)
-            } else {
-                Menu("Tags") {
+            Button("Add Tags...") {
+                sheetHandler(.addTags(items: [item]))
+            }
+            Menu("Tags") {
+                if item.tags.isEmpty {
+                    Button("No Tags") {}.disabled(true)
+                } else {
                     ForEach(Array(item.tags).sorted()) { tag in
                         Button(tag) {
                             sidebarSelection = tag.section
                         }
                     }
                 }
-            }
-            Button("Copy Tags") {
-                NSPasteboard.general.clearContents()
-                NSPasteboard.general.setString(item.tags.joined(separator: " "), forType: .string)
-            }
-            .disabled(item.tags.count < 1)
-            Button("Add tags...") {
-                sheetHandler(.addTags(items: [item]))
             }
         }
     }

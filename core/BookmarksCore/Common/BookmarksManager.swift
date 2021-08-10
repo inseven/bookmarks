@@ -41,8 +41,6 @@ public class BookmarksManager {
     fileprivate var updater: Updater
     fileprivate var pinboard: Pinboard
 
-    public var tagsView: TagsView
-
     public var cache: NSCache = NSCache<NSString, SafeImage>()
 
     public var database: Database
@@ -59,8 +57,6 @@ public class BookmarksManager {
         pinboard = Pinboard(token: settings.pinboardApiKey)
         updater = Updater(database: database, pinboard: pinboard)
         updater.start()
-
-        tagsView = TagsView(database: database)
 
         #if os(macOS)
         let notificationCenter = NotificationCenter.default

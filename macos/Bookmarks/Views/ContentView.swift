@@ -35,76 +35,28 @@ extension Item {
 
 }
 
-extension Set where Element == Item {
-
-    func open() {
-        open(archive: false)
-    }
-
-    var containsUnreadBookmark: Bool {
-        self.first { $0.toRead } != nil
-    }
-
-    var containsPublicBookmark: Bool {
-        self.first { $0.shared } != nil
-    }
-    
-    func open(archive: Bool) {
-        if archive {
-            for item in self {
-                do {
-                    NSWorkspace.shared.open(try item.internetArchiveUrl())
-                } catch {
-                    print("Failed to open on the Internet Archive with error \(error)")
-                }
-            }
-        } else {
-            for item in self {
-                NSWorkspace.shared.open(item.url)
-            }
-        }
-    }
-
-    func editOnPinboard() {
-        for item in self {
-            do {
-                NSWorkspace.shared.open(try item.pinboardUrl())
-            } catch {
-                print("Failed to open on the Internet Archive with error \(error)")
-            }
-        }
-    }
-    
-}
-
 struct ContentView: View {
 
     @Binding var sidebarSelection: BookmarksSection?
     @State var underlyingSection: BookmarksSection?
 
-    @Environment(\.manager) var manager
-    @Environment(\.applicationHasFocus) var applicationHasFocus
-    @Environment(\.sheetHandler) var sheetHandler
+    @Environment(\.manager) var manager: BookmarksManager
     @StateObject var databaseView: ItemsView
-    @ObservedObject var tagsView: TagsView
 
-    @StateObject var selectionTracker: SelectionTracker<Item>
-    @State var firstResponder: Bool = false
-
-    @StateObject var tokenDebouncer = Debouncer<[Token<String>]>(initialValue: [], delay: .seconds(0.2))
+    @StateObject var searchDebouncer = Debouncer<String>(initialValue: "", delay: .seconds(0.2))
 
     private var subscription: AnyCancellable?
 
-    init(sidebarSelection: Binding<BookmarksSection?>, database: Database, tagsView: TagsView) {
+    init(sidebarSelection: Binding<BookmarksSection?>, database: Database) {
         _sidebarSelection = sidebarSelection
-        self.tagsView = tagsView
-        let databaseView = Deferred(ItemsView(database: database, query: True().eraseToAnyQuery()))
-        let selectionTracker = Deferred(SelectionTracker(items: databaseView.get().$items))
-        _databaseView = StateObject(wrappedValue: databaseView.get())
-        _selectionTracker = StateObject(wrappedValue: selectionTracker.get())
+        _databaseView = StateObject(wrappedValue: ItemsView(database: database, query: True().eraseToAnyQuery()))
     }
 
     var navigationTitle: String {
+        let queries = searchDebouncer.debouncedValue.queries
+        if (queries.section == .all && queries.count > 1) || queries.count > 1 {
+            return "Search: \(searchDebouncer.debouncedValue)"
+        }
         guard let title = sidebarSelection?.navigationTitle else {
             return "Unknown"
         }
@@ -114,125 +66,71 @@ struct ContentView: View {
     var body: some View {
         VStack {
             ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 8)], spacing: 8) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
                     ForEach(databaseView.items) { item in
                         BookmarkCell(item: item)
-                            .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: item), firstResponder: firstResponder))
                             .help(item.localDate)
-                            .contextMenuFocusable {
-                                BookmarkOpenCommands(selection: $selectionTracker.selection)
+                            .onClick {
+                                manager.database.item(identifier: item.identifier) { result in
+                                    switch result {
+                                    case .success(let item):
+                                        print(String(describing: item))
+                                    case .failure(let error):
+                                        print("failed to get item with error \(error)")
+                                    }
+                                }
+                            } doubleClick: {
+                                NSWorkspace.shared.open(item.url)
+                            }
+                            .onCommandDoubleClick {
+                                do {
+                                    NSWorkspace.shared.open(try item.pinboardUrl())
+                                } catch {
+                                    print("Failed to edit with error \(error)")
+                                }
+                            }
+                            .contextMenu {
+                                BookmarkOpenCommands(item: item)
                                 Divider()
-                                BookmarkDesctructiveCommands(selection: $selectionTracker.selection)
+                                BookmarkDesctructiveCommands(item: item)
                                 Divider()
-                                BookmarkEditCommands(selection: $selectionTracker.selection)
+                                BookmarkEditCommands(item: item)
                                 Divider()
                                 BookmarkShareCommands(item: item)
                                 Divider()
                                 BookmarkTagCommands(sidebarSelection: $sidebarSelection, item: item)
-                            } onContextMenuChange: { focused in
-                                guard focused == true else {
-                                    return
-                                }
-                                firstResponder = true
-                                if !selectionTracker.isSelected(item: item) {
-                                    selectionTracker.handleClick(item: item)
-                                }
                             }
                             .onDrag {
                                 NSItemProvider(object: item.url as NSURL)
-                            }
-                            .handleMouse {
-                                print("click")
-                                if firstResponder || !selectionTracker.isSelected(item: item) {
-                                    selectionTracker.handleClick(item: item)
-                                }
-                                firstResponder = true
-                            } doubleClick: {
-                                print("double click")
-                                NSWorkspace.shared.open(item.url)
-                            } shiftClick: {
-                                print("shift click")
-                                selectionTracker.handleShiftClick(item: item)
-                            } commandClick: {
-                                print("command click")
-                                selectionTracker.handleCommandClick(item: item)
                             }
                     }
                 }
                 .padding()
             }
-            .acceptsFirstResponder(isFirstResponder: $firstResponder)
-            .handleMouse {
-                firstResponder = true
-                selectionTracker.clear()
-            }
-            .preference(key: SelectionPreferenceKey.self, value: firstResponder ? selectionTracker.selection : [])
-            .overlay(databaseView.state == .loading ? LoadingView() : nil)
         }
         .onAppear {
             databaseView.start()
-            tagsView.start() // TODO: App wide view?
         }
         .onDisappear {
             databaseView.stop()
-            tagsView.stop()
         }
         .toolbar {
-
             ToolbarItem {
                 Button {
-                    manager.refresh(force: true)
+                    manager.refresh()
                 } label: {
                     SwiftUI.Image(systemName: "arrow.clockwise")
                 }
             }
-
             ToolbarItem {
-                Button {
-                    guard selectionTracker.selection.count > 0 else {
-                        return
-                    }
-                    sheetHandler(.addTags(items: Array(selectionTracker.selection)))
-                } label: {
-                    SwiftUI.Image(systemName: "tag")
-                }
-                .help("Add Tags")
-                .disabled(selectionTracker.selection.count == 0)
+                SearchField(search: $searchDebouncer.value)
+                    .frame(minWidth: 100, idealWidth: 300, maxWidth: .infinity)
             }
-            ToolbarItem {
-                Button {
-                    for item in selectionTracker.selection {
-                        manager.deleteItem(item, completion: { _ in })
-                    }
-                } label: {
-                    SwiftUI.Image(systemName: "trash")
-                }
-                .help("Add Tags")
-                .disabled(selectionTracker.selection.count == 0)
-            }
-
-            ToolbarItem {
-                TokenField("Search", tokens: $tokenDebouncer.value) { string, editing in
-                    Token(string)
-                        .tokenStyle(tagsView.contains(tag: string) ? .default : .none)
-                        .associatedValue(tagsView.contains(tag: string) && !editing ? "tag:\(string)" : string)
-                } completions: { substring in
-                    tagsView.tags(prefix: substring)
-                }
-                .font(.title3)
-                .lineLimit(1)
-                .wraps(false)
-                .frame(minWidth: 400)
-            }
-
         }
-        .onReceive(tokenDebouncer.$debouncedValue) { tokens in
+        .onReceive(searchDebouncer.$debouncedValue) { search in
 
-            let queries = tokens.compactMap { token in
-                token.associatedValue
-            }.map {
-                AnyQuery.parse(token: $0)
-            }
+            // Get the query corresponding to the current search text.
+            let queries = AnyQuery.queries(for: search)
 
             // Update the selected section if necessary.
             let section = queries.section
@@ -253,19 +151,10 @@ struct ContentView: View {
 
             underlyingSection = section
 
-            selectionTracker.clear()
             databaseView.clear()
             let query = section.query
+            searchDebouncer.value = query.filter
             databaseView.query = query.eraseToAnyQuery()
-
-            // TODO: We're doing unnecessary round-trips here.
-            let tokens = AnyQuery.queries(for: query.filter).map { query in
-                Token(query.filter)
-                    .displayString(query.displayString)
-                    .associatedValue(query.filter)
-            }
-
-            self.tokenDebouncer.value = tokens
 
         }
         .onChange(of: underlyingSection, perform: { underlyingSection in
@@ -281,4 +170,3 @@ struct ContentView: View {
         .navigationTitle(navigationTitle)
     }
 }
-

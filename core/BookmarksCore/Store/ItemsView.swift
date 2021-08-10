@@ -23,18 +23,12 @@ import Foundation
 
 public class ItemsView: ObservableObject {
 
-    public enum State {
-        case loading
-        case ready
-    }
-
     let database: Database
     var updateCancellable: AnyCancellable? = nil
     var searchCancellable: AnyCancellable? = nil
 
     @Published public var query: AnyQuery
     @Published public var items: [Item] = []
-    @Published public var state: State = .loading
 
     public init(database: Database, query: AnyQuery) {
         self.database = database
@@ -56,7 +50,6 @@ public class ItemsView: ObservableObject {
                 case .success(let items):
                     print("received \(items.count) items")
                     self.items = items
-                    self.state = .ready
                 case .failure(let error):
                     print("Failed to load data with error \(error)")
                 }
@@ -80,7 +73,6 @@ public class ItemsView: ObservableObject {
     public func clear() {
         dispatchPrecondition(condition: .onQueue(.main))
         self.items = []
-        self.state = .loading
     }
 
     public func stop() {

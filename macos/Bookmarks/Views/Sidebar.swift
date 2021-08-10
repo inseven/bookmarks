@@ -157,7 +157,7 @@ struct Sidebar: View {
                                     self.sheet = .rename(tag: tag)
                                 }
                                 Button("Delete") {
-                                    self.manager.deleteTag(tag: tag) { _ in }
+                                    self.manager.deleteTag(tag) { _ in }
                                 }
                                 Divider()
                                 Button("Add to Favorites") {

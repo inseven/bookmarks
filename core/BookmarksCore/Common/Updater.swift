@@ -140,4 +140,30 @@ public class Updater {
         }
     }
 
+    public func renameTag(_ old: String, to new: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
+        syncQueue.async {
+            let result = Result {
+                try self.pinboard.tagsRename(old, to: new)
+                // TODO: Perform the changes locally.
+                self.update(force: true)
+            }
+            completion(result)
+        }
+    }
+
+    public func deleteTag(_ tag: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
+        syncQueue.async {
+            let result = Result {
+                try self.database.deleteTag(tag: tag)
+                try self.pinboard.tagsDelete(tag)
+                // TODO: Perform the changes locally.
+                self.update(force: true)
+            }
+            completion(result)
+        }
+    }
+
+
 }

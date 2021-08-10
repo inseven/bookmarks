@@ -21,12 +21,15 @@
 import Combine
 import Foundation
 
+// TODO: Make this easier to test by injeting the parent queue?
 public class TagsView: ObservableObject {
 
     var database: Database
     var updateCancellable: AnyCancellable? = nil
 
-    @Published public var tags: Set<String> = Set()
+    public var tags: [String] = []
+    public var fastTags: Set<String> = Set()
+    var trie = Trie()
 
     fileprivate var filter = ""
 
@@ -36,13 +39,24 @@ public class TagsView: ObservableObject {
 
     func update() {
         database.tags { result in
+
+            guard case .success(let tags) = result else {
+                print("failed to load tags")
+                return
+            }
+
+            let trie = Trie()
+            for tag in tags {
+                trie.insert(word: tag)
+            }
+
+            let fastTags = Set(tags)
+
             DispatchQueue.main.async {
-                switch result {
-                case .success(let tags):
-                    self.tags = Set(tags)
-                case .failure(let error):
-                    print("Failed to load data with error \(error)")
-                }
+                self.objectWillChange.send()
+                self.tags = tags
+                self.fastTags = fastTags
+                self.trie = trie
             }
         }
     }
@@ -60,9 +74,21 @@ public class TagsView: ObservableObject {
 
     public func stop() {
         print("stop observing tags...")
+        dispatchPrecondition(condition: .onQueue(.main))
         self.updateCancellable?.cancel()
         self.updateCancellable = nil
         self.tags = []
+    }
+
+    // TODO: Rename this.
+    public func tags(prefix: String) -> [String] {
+        dispatchPrecondition(condition: .onQueue(.main))
+        return trie.findWordsWithPrefix(prefix: prefix)
+    }
+
+    public func contains(tag: String) -> Bool {
+        dispatchPrecondition(condition: .onQueue(.main))
+        return self.fastTags.contains(tag)
     }
 
 }

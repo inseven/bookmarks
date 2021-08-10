@@ -41,6 +41,8 @@ public class BookmarksManager {
     fileprivate var updater: Updater
     fileprivate var pinboard: Pinboard
 
+    public var tagsView: TagsView
+
     public var cache: NSCache = NSCache<NSString, SafeImage>()
 
     public var database: Database
@@ -57,6 +59,8 @@ public class BookmarksManager {
         pinboard = Pinboard(token: settings.pinboardApiKey)
         updater = Updater(database: database, pinboard: pinboard)
         updater.start()
+
+        tagsView = TagsView(database: database)
 
         #if os(macOS)
         let notificationCenter = NotificationCenter.default
@@ -86,26 +90,11 @@ public class BookmarksManager {
     }
 
     public func renameTag(_ old: String, to new: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        DispatchQueue.global(qos: .userInitiated).async {
-            let result = Result {
-                try self.pinboard.tagsRename(old, to: new)
-                self.refresh(force: true)
-            }
-            completion(result)
-        }
+        self.updater.renameTag(old, to: new, completion: completion)
     }
 
-    public func deleteTag(tag: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        DispatchQueue.global(qos: .userInitiated).async {
-            let result = Result {
-                try self.database.deleteTag(tag: tag)
-                try self.pinboard.tagsDelete(tag)
-                self.refresh()
-            }
-            completion(result)
-        }
+    public func deleteTag(_ tag: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        self.updater.deleteTag(tag, completion: completion)
     }
 
     @objc

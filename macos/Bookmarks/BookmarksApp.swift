@@ -35,8 +35,8 @@ struct BookmarksApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                Sidebar(tagsView: TagsView(database: manager.database), settings: manager.settings, selection: $selection)
-                ContentView(sidebarSelection: $selection, database: manager.database)
+                Sidebar(tagsView: manager.tagsView, settings: manager.settings, selection: $selection)
+                ContentView(sidebarSelection: $selection, database: manager.database, tagsView: manager.tagsView)
             }
             .onPreferenceChange(SelectionPreferenceKey.self) { value in
                 self.selectionPreference = value
@@ -47,7 +47,7 @@ struct BookmarksApp: App {
             .sheet(item: $sheet) { sheet in
                 switch sheet {
                 case .addTags(let items):
-                    AddTagsView(database: manager.database, items: items)
+                    AddTagsView(tagsView: manager.tagsView, items: items)
                 }
             }
             .observesApplicationFocus()

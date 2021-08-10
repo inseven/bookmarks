@@ -33,11 +33,10 @@ struct AddTagsView: View {
 
     @State var tokens: [Token<String>] = []  // TODO: Support a payload on the tokens.
 
-    @StateObject var tagsView: TagsView
-    @State var trie = Trie()
+    @ObservedObject var tagsView: TagsView
 
-    init(database: Database, items: [Item]) {
-        _tagsView = StateObject(wrappedValue: TagsView(database: database))
+    init(tagsView: TagsView, items: [Item]) {
+        self.tagsView = tagsView
         self.items = items
     }
 
@@ -56,7 +55,7 @@ struct AddTagsView: View {
                     return Token(tag)
                         .associatedValue(tag)
                 } completions: { substring in
-                    trie.findWordsWithPrefix(prefix: substring)
+                    tagsView.tags(prefix: substring)
                 }
                 .tokenizingCharacterSet(characterSet)
                 .font(.title)
@@ -85,24 +84,6 @@ struct AddTagsView: View {
         .frame(minWidth: 200)
         .padding()
         .disabled(isBusy)
-        .onAppear {
-            tagsView.start()
-        }
-        .onDisappear {
-            tagsView.stop()
-        }
-        .onReceive(tagsView.$tags) { tags in
-            DispatchQueue.global(qos: .background).async {
-                let trie = Trie()
-                for tag in tags {
-                    trie.insert(word: tag)
-                }
-                DispatchQueue.main.async {
-                    self.trie = trie
-                }
-            }
-        }
-
     }
 
 }

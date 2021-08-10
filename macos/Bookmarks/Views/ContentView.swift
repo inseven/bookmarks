@@ -86,20 +86,20 @@ struct ContentView: View {
     @Environment(\.applicationHasFocus) var applicationHasFocus
     @Environment(\.sheetHandler) var sheetHandler
     @StateObject var databaseView: ItemsView
-    @StateObject var tagsView: TagsView
+    @ObservedObject var tagsView: TagsView
 
     @StateObject var selectionTracker: SelectionTracker<Item>
     @State var firstResponder: Bool = false
-
-    @State var trie = Trie()
 
     @StateObject var tokenDebouncer = Debouncer<[Token<String>]>(initialValue: [], delay: .seconds(0.2))
 
     private var subscription: AnyCancellable?
 
-    init(sidebarSelection: Binding<BookmarksSection?>, database: Database) {
+    init(sidebarSelection: Binding<BookmarksSection?>, database: Database, tagsView: TagsView) {
         _sidebarSelection = sidebarSelection
-        _tagsView = StateObject(wrappedValue: TagsView(database: database))
+//        _tagsView = StateObject(wrappedValue: TagsView(database: database))
+
+        self.tagsView = tagsView
 
         let databaseView = Deferred(ItemsView(database: database, query: True().eraseToAnyQuery()))
         let selectionTracker = Deferred(SelectionTracker(items: databaseView.get().$items))
@@ -216,10 +216,10 @@ struct ContentView: View {
             ToolbarItem {
                 TokenField("Search", tokens: $tokenDebouncer.value) { string, editing in
                     Token(string)
-                        .tokenStyle(tagsView.tags.contains(string) ? .default : .none)
-                        .associatedValue(tagsView.tags.contains(string) && !editing ? "tag:\(string)" : string)
+                        .tokenStyle(tagsView.contains(tag: string) ? .default : .none)
+                        .associatedValue(tagsView.contains(tag: string) && !editing ? "tag:\(string)" : string)
                 } completions: { substring in
-                    trie.findWordsWithPrefix(prefix: substring)
+                    tagsView.tags(prefix: substring)
                 }
                 .font(.title3)
                 .lineLimit(1)
@@ -280,17 +280,6 @@ struct ContentView: View {
             sidebarSelection = underlyingSection
 
         })
-        .onReceive(tagsView.$tags) { tags in
-            DispatchQueue.global(qos: .background).async {
-                let trie = Trie()
-                for tag in tags {
-                    trie.insert(word: tag)
-                }
-                DispatchQueue.main.async {
-                    self.trie = trie
-                }
-            }
-        }
         .navigationTitle(navigationTitle)
     }
 }

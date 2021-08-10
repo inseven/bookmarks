@@ -108,6 +108,8 @@
 		D8EBC54B26ACBFC400604D84 /* Update.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EBC54926ACBFC400604D84 /* Update.swift */; };
 		D8F6AD4026B6338300BEC5C6 /* QueryDescriptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F6AD3F26B6338300BEC5C6 /* QueryDescriptionTests.swift */; };
 		D8F6AD4126B6338300BEC5C6 /* QueryDescriptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F6AD3F26B6338300BEC5C6 /* QueryDescriptionTests.swift */; };
+		D8FA3D1126C20D4100595BD0 /* Trie.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FA3D1026C20D4100595BD0 /* Trie.swift */; };
+		D8FA3D1226C20D4100595BD0 /* Trie.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FA3D1026C20D4100595BD0 /* Trie.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -185,6 +187,7 @@
 		D8D3F6CE261E685200B2D66F /* SafeImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafeImage.swift; sourceTree = "<group>"; };
 		D8EBC54926ACBFC400604D84 /* Update.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Update.swift; sourceTree = "<group>"; };
 		D8F6AD3F26B6338300BEC5C6 /* QueryDescriptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryDescriptionTests.swift; sourceTree = "<group>"; };
+		D8FA3D1026C20D4100595BD0 /* Trie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trie.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -344,6 +347,7 @@
 		D8D3F4F2261E573F00B2D66F /* Store */ = {
 			isa = PBXGroup;
 			children = (
+				D8FA3D1026C20D4100595BD0 /* Trie.swift */,
 				D890D1B426A0C48A00C47489 /* Database.swift */,
 				D890D1C726A3584400C47489 /* DatabasePublisher.swift */,
 				D8D3F4FB261E576000B2D66F /* Item.swift */,
@@ -609,6 +613,7 @@
 			files = (
 				D8EBC54A26ACBFC400604D84 /* Update.swift in Sources */,
 				D890D1BD26A2201700C47489 /* DispatchQueue.swift in Sources */,
+				D8FA3D1126C20D4100595BD0 /* Trie.swift in Sources */,
 				D8D3F54F261E592800B2D66F /* ImageCache.swift in Sources */,
 				D8D3F6CF261E685200B2D66F /* SafeImage.swift in Sources */,
 				D8D3F565261E593900B2D66F /* MemoryImageCache.swift in Sources */,
@@ -666,6 +671,7 @@
 			files = (
 				D8EBC54B26ACBFC400604D84 /* Update.swift in Sources */,
 				D890D1BE26A2201700C47489 /* DispatchQueue.swift in Sources */,
+				D8FA3D1226C20D4100595BD0 /* Trie.swift in Sources */,
 				D8D3F550261E592800B2D66F /* ImageCache.swift in Sources */,
 				D8D3F6D0261E685200B2D66F /* SafeImage.swift in Sources */,
 				D8D3F566261E593900B2D66F /* MemoryImageCache.swift in Sources */,

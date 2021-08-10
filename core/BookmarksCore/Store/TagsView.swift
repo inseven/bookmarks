@@ -21,7 +21,6 @@
 import Combine
 import Foundation
 
-// TODO: Make this easier to test by injeting the parent queue?
 public class TagsView: ObservableObject {
 
     var database: Database

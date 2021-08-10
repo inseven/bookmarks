@@ -31,6 +31,8 @@ public extension EnvironmentValues {
     }
 }
 
+// TODO: Explore whether it's possible make some of the BookmarksManager properties private #266
+//       https://github.com/inseven/bookmarks/issues/266
 public class BookmarksManager {
 
     var documentsUrl: URL

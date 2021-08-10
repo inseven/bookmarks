@@ -24,7 +24,7 @@ public struct Logging {
 
     public static func log<T>(_ name: String, completion: @escaping () -> Void = {}) -> (Result<T, Error>) -> () {
         let completion = DispatchQueue.main.asyncClosure(completion)
-        { result in
+        return { result in
             switch result {
             case .success:
                 print("\(name) succeeded")

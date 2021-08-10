@@ -28,7 +28,7 @@ struct BookmarksApp: App {
 
     @State var selectionPreference: Set<Item> = Set()
     @Environment(\.manager) var manager: BookmarksManager
-    @State var selection: BookmarksSection? = .all  // TODO: Rename this to section
+    @State var selection: BookmarksSection? = .all
 
     @State var sheet: SheetType? = nil // TODO: Push this down to the window group?
 

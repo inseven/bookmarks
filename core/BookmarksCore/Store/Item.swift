@@ -139,38 +139,15 @@ public class Item: Equatable {
              notes: notes)
     }
 
-    public func adding(tags: Set<String>) -> Item {
-        Item(identifier: identifier,
-             title: title,
-             url: url,
-             tags: self.tags.union(tags),
-             date: date,
-             toRead: toRead,
-             shared: shared,
-             notes: notes)
-    }
-
 }
 
 extension Item: Identifiable {
-
     public var id: String { identifier }
-
-}
-
-extension Item: Hashable {
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(identifier)
-    }
-
 }
 
 extension Item: CustomStringConvertible {
 
-    public var description: String {
-        "\(url.absoluteString) (title: \(title), tags: [\(tags.joined(separator: ", "))], date: \(date), toRead: \(toRead), notes: '\(self.notes)')"
-    }
+    public var description: String { "\(url.absoluteString) (title: \(title), tags: [\(tags.joined(separator: ", "))], date: \(date), toRead: \(toRead), notes: '\(self.notes)')" }
 
 }
 

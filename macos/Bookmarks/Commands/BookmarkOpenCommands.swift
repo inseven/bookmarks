@@ -26,16 +26,18 @@ struct BookmarkOpenCommands: View {
 
     @Environment(\.manager) var manager: BookmarksManager
 
-    @Binding var selection: Set<Item>  // TODO: Inject this in the environment?
+    var item: Item
 
     var body: some View {
         Button("Open") {
-            selection.open()
+            NSWorkspace.shared.open(item.url)
         }
-        .disabled(selection.isEmpty)
         Button("Open on Internet Archive") {
-            selection.open(archive: true)
+            do {
+                NSWorkspace.shared.open(try item.internetArchiveUrl())
+            } catch {
+                print("Failed to open on the Internet Archive with error \(error)")
+            }
         }
-        .disabled(selection.isEmpty)
     }
 }

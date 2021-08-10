@@ -79,7 +79,6 @@ public class TagsView: ObservableObject {
         self.tags = []
     }
 
-    // TODO: Rename this.
     public func tags(prefix: String) -> [String] {
         dispatchPrecondition(condition: .onQueue(.main))
         return trie.findWordsWithPrefix(prefix: prefix)

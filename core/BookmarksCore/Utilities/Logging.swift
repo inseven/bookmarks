@@ -22,7 +22,8 @@ import Foundation
 
 public struct Logging {
 
-    public static func log<T>(_ name: String, completion: @escaping () -> Void = {}) -> (Result<T, Error>) -> () {
+    public static func log<T>(_ name: String,
+                              completion: @escaping (Result<T, Error>) -> Void = { _ in }) -> (Result<T, Error>) -> () {
         let completion = DispatchQueue.main.asyncClosure(completion)
         return { result in
             switch result {
@@ -31,7 +32,7 @@ public struct Logging {
             case .failure(let error):
                 print("\(name) failed with error \(error)")
             }
-            completion()
+            completion(result)
         }
     }
 

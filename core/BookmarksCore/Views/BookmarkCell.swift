@@ -75,7 +75,7 @@ public struct BookmarkCell: View {
                     .lineLimit(1)
                     .foregroundColor(.secondary)
             }
-            .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, maxWidth: .infinity, alignment: .leading)
+            .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
             .background(Color.controlSecondaryBackground)
         }

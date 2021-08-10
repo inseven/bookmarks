@@ -24,7 +24,6 @@ import Foundation
 public class ItemsView: ObservableObject {
 
     public enum State {
-        case idle
         case loading
         case ready
     }
@@ -33,8 +32,7 @@ public class ItemsView: ObservableObject {
     var updateCancellable: AnyCancellable? = nil
     var searchCancellable: AnyCancellable? = nil
 
-    // TODO: Maybe don't make these independently published?
-    @Published public var query: AnyQuery  // TODO: Does this need to be published?
+    @Published public var query: AnyQuery
     @Published public var items: [Item] = []
     @Published public var state: State = .loading
 

@@ -73,7 +73,7 @@ public struct BookmarkCell: View {
                     .lineLimit(1)
                 Text(item.url.host ?? "Unknown")
                     .lineLimit(1)
-                    .foregroundColor(item.toRead ? Color.red : .secondary)
+                    .foregroundColor(.secondary)
             }
             .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, maxWidth: .infinity, alignment: .leading)
             .padding()

@@ -77,6 +77,19 @@ extension Set where Element == Item {
     
 }
 
+struct LoadingView: View {
+
+    var body: some View {
+        HStack {
+            ProgressView()
+                .progressViewStyle(CircularProgressViewStyle())
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.white)
+    }
+
+}
+
 struct ContentView: View {
 
     @Binding var sidebarSelection: BookmarksSection?
@@ -97,10 +110,7 @@ struct ContentView: View {
 
     init(sidebarSelection: Binding<BookmarksSection?>, database: Database, tagsView: TagsView) {
         _sidebarSelection = sidebarSelection
-//        _tagsView = StateObject(wrappedValue: TagsView(database: database))
-
         self.tagsView = tagsView
-
         let databaseView = Deferred(ItemsView(database: database, query: True().eraseToAnyQuery()))
         let selectionTracker = Deferred(SelectionTracker(items: databaseView.get().$items))
         _databaseView = StateObject(wrappedValue: databaseView.get())
@@ -170,6 +180,7 @@ struct ContentView: View {
                 selectionTracker.clear()
             }
             .preference(key: SelectionPreferenceKey.self, value: firstResponder ? selectionTracker.selection : [])
+            .overlay(databaseView.state == .loading ? LoadingView() : nil)
         }
         .onAppear {
             databaseView.start()

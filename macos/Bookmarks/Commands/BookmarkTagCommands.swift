@@ -32,17 +32,16 @@ struct BookmarkTagCommands: View {
 
     var body: some View {
         VStack {
-            Button("Add Tags...") {
-                sheetHandler(.addTags(items: [item]))
-            }
             Menu("Tags") {
-                if item.tags.isEmpty {
-                    Button("No Tags") {}.disabled(true)
-                } else {
-                    ForEach(Array(item.tags).sorted()) { tag in
-                        Button(tag) {
-                            sidebarSelection = tag.section
-                        }
+                Button("Add...") {
+                    sheetHandler(.addTags(items: [item]))
+                }
+                if !item.tags.isEmpty {
+                    Divider()
+                }
+                ForEach(Array(item.tags).sorted()) { tag in
+                    Button(tag) {
+                        sidebarSelection = tag.section
                     }
                 }
             }

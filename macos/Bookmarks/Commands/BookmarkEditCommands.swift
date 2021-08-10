@@ -37,7 +37,7 @@ struct BookmarkEditCommands: View {
                 manager.updateItem(item.setting(toRead: toRead), completion: Logging.log("read/unread"))
             }
         }
-        .keyboardShortcut("U", modifiers: .command)
+        .keyboardShortcut("u", modifiers: [.shift, .command])
         Button(selection.containsPublicBookmark ? "Make Private" : "Make Public") {
             // TODO: Show errors in the UI #218
             //       https://github.com/inseven/bookmarks/issues/218

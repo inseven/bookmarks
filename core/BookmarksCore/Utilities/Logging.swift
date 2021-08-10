@@ -22,7 +22,7 @@ import Foundation
 
 public struct Logging {
 
-    public static func log<T>(_ name: String, completion: @escaping () -> Void) -> (Result<T, Error>) -> () {
+    public static func log<T>(_ name: String, completion: @escaping () -> Void = {}) -> (Result<T, Error>) -> () {
         { result in
             switch result {
             case .success:
@@ -32,18 +32,6 @@ public struct Logging {
             }
             DispatchQueue.main.async {
                 completion()
-            }
-        }
-    }
-
-
-    public static func log<T>(_ name: String) -> (Result<T, Error>) -> () {
-        { result in
-            switch result {
-            case .success:
-                print("\(name) succeeded")
-            case .failure(let error):
-                print("\(name) failed with error \(error)")
             }
         }
     }

@@ -324,7 +324,6 @@ public class Database {
                 })
     }
 
-    // TODO: Inject order by?
     public func tags(completion: @escaping (Swift.Result<[String], Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {

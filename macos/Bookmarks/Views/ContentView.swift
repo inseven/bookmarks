@@ -107,6 +107,7 @@ struct ContentView: View {
                 }
                 .padding()
             }
+            .overlay(databaseView.state == .loading ? LoadingView() : nil)
         }
         .onAppear {
             databaseView.start()

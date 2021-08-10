@@ -26,7 +26,7 @@ public class TagsView: ObservableObject {
     var database: Database
     var updateCancellable: AnyCancellable? = nil
 
-    @Published public var tags: [String] = []
+    public var tags: [String] = []
 
     fileprivate var filter = ""
 
@@ -36,13 +36,15 @@ public class TagsView: ObservableObject {
 
     func update() {
         database.tags { result in
+
+            guard case .success(let tags) = result else {
+                print("failed to load tags")
+                return
+            }
+
             DispatchQueue.main.async {
-                switch result {
-                case .success(let tags):
-                    self.tags = Array(tags.sorted())
-                case .failure(let error):
-                    print("Failed to load data with error \(error)")
-                }
+                self.objectWillChange.send()
+                self.tags = tags
             }
         }
     }
@@ -60,6 +62,7 @@ public class TagsView: ObservableObject {
 
     public func stop() {
         print("stop observing tags...")
+        dispatchPrecondition(condition: .onQueue(.main))
         self.updateCancellable?.cancel()
         self.updateCancellable = nil
         self.tags = []

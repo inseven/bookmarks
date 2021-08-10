@@ -77,52 +77,20 @@ public class BookmarksManager {
     // TODO: Move the Bookmark update APIs into the updater #237
     //       https://github.com/inseven/bookmarks/issues/237
 
-    public func deleteItem(item: Item, completion: @escaping (Result<Void, Error>) -> Void) {
-        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        DispatchQueue.global(qos: .userInitiated).async {
-            let result = Result {
-                try self.database.deleteItem(identifier: item.identifier)
-                try self.pinboard.postsDelete(url: item.url)
-            }
-            completion(result)
-        }
+    public func deleteItem(_ item: Item, completion: @escaping (Result<Void, Error>) -> Void) {
+        updater.deleteItem(item, completion: completion)
     }
 
-    public func updateItem(item: Item, completion: @escaping (Result<Item, Error>) -> Void) {
-        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        DispatchQueue.global(qos: .userInitiated).async {
-            let result = Result { () -> Item in
-                let item = try self.database.insertOrUpdate(item: item)
-                let post = Pinboard.Post(item: item)
-                try self.pinboard.postsAdd(post: post, replace: true)
-                self.updater.update()
-                return item
-            }
-            completion(result)
-        }
+    public func updateItem(_ item: Item, completion: @escaping (Result<Item, Error>) -> Void) {
+        self.updater.updateItem(item: item, completion: completion)
     }
 
     public func renameTag(_ old: String, to new: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        DispatchQueue.global(qos: .userInitiated).async {
-            let result = Result {
-                try self.pinboard.tagsRename(old, to: new)
-                self.refresh(force: true)
-            }
-            completion(result)
-        }
+        self.updater.renameTag(old, to: new, completion: completion)
     }
 
-    public func deleteTag(tag: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        DispatchQueue.global(qos: .userInitiated).async {
-            let result = Result {
-                try self.database.deleteTag(tag: tag)
-                try self.pinboard.tagsDelete(tag)
-                self.refresh()
-            }
-            completion(result)
-        }
+    public func deleteTag(_ tag: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        self.updater.deleteTag(tag, completion: completion)
     }
 
     @objc

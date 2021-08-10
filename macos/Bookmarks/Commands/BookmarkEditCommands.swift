@@ -32,12 +32,12 @@ struct BookmarkEditCommands: View {
         Button(item.toRead ? "Mark as Read" : "Mark as Unread") {
             // TODO: Show errors in the UI #218
             //       https://github.com/inseven/bookmarks/issues/218
-            manager.updateItem(item: item.setting(toRead: !item.toRead), completion: log("read/unread"))
+            manager.updateItem(item.setting(toRead: !item.toRead), completion: log("read/unread"))
         }
         Button(item.shared ? "Make Private" : "Make Public") {
             // TODO: Show errors in the UI #218
             //       https://github.com/inseven/bookmarks/issues/218
-            manager.updateItem(item: item.setting(shared: !item.shared), completion: log("private/public"))
+            manager.updateItem(item.setting(shared: !item.shared), completion: log("private/public"))
         }
         Button("Edit on Pinboard") {
             do {

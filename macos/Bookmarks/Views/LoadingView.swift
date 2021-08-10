@@ -28,7 +28,8 @@ struct LoadingView: View {
                 .progressViewStyle(CircularProgressViewStyle())
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.white)
+        .background(Color(NSColor.textBackgroundColor))
+        .ignoresSafeArea()
     }
 
 }

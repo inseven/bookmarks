@@ -37,6 +37,7 @@
 		D8B6E2C52620990400B2C239 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B6E2C42620990400B2C239 /* Item.swift */; };
 		D8CF8CC2261E369D00E52E85 /* BookmarksCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8CF8CC1261E369D00E52E85 /* BookmarksCore.framework */; };
 		D8CF8CC3261E369D00E52E85 /* BookmarksCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D8CF8CC1261E369D00E52E85 /* BookmarksCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D8E0202C26C2E1CC00910833 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0202B26C2E1CC00910833 /* LoadingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,6 +109,7 @@
 		D8B6E2C42620990400B2C239 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		D8CF8C6D261E34A300E52E85 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8CF8CC1261E369D00E52E85 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8E0202B26C2E1CC00910833 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		D8ECA5DE2640580E00947EEC /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		D8ECA5DF2640582200947EEC /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		D8ECA5E02640583900947EEC /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
@@ -227,15 +229,16 @@
 				D840B005262103C4001E95D1 /* AccountSettingsView.swift */,
 				D8164D6526C08DD500756D43 /* AddTagsView.swift */,
 				D8164D5D26C065F400756D43 /* ApplicationFocusObserver.swift */,
+				D8164D6726C08EEC00756D43 /* BorderedSelection.swift */,
 				D891C455261E32F90024E1A6 /* ContentView.swift */,
 				D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */,
+				D8E0202B26C2E1CC00910833 /* LoadingView.swift */,
 				D861257426AA048E00EB5FEF /* RenameTagView.swift */,
 				D840B0092621042B001E95D1 /* SettingsView.swift */,
 				D861257226A60DF200EB5FEF /* Sidebar.swift */,
 				D861257B26AB741A00EB5FEF /* SidebarLink.swift */,
 				D8ACD7EE26BC81F7005F927A /* TokenField.swift */,
 				D8ACD7F026BC96B6005F927A /* Trie.swift */,
-				D8164D6726C08EEC00756D43 /* BorderedSelection.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -396,6 +399,7 @@
 				D840B006262103C4001E95D1 /* AccountSettingsView.swift in Sources */,
 				D8ACD7F126BC96B6005F927A /* Trie.swift in Sources */,
 				D8ACD7EF26BC81F7005F927A /* TokenField.swift in Sources */,
+				D8E0202C26C2E1CC00910833 /* LoadingView.swift in Sources */,
 				D8A3370026B56C1B00436200 /* BookmarkOpenCommands.swift in Sources */,
 				D861257326A60DF200EB5FEF /* Sidebar.swift in Sources */,
 				D8164D6826C08EEC00756D43 /* BorderedSelection.swift in Sources */,

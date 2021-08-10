@@ -77,19 +77,6 @@ extension Set where Element == Item {
     
 }
 
-struct LoadingView: View {
-
-    var body: some View {
-        HStack {
-            ProgressView()
-                .progressViewStyle(CircularProgressViewStyle())
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.white)
-    }
-
-}
-
 struct ContentView: View {
 
     @Binding var sidebarSelection: BookmarksSection?

@@ -31,18 +31,16 @@ struct BookmarkTagCommands: View {
     var item: Item
 
     var body: some View {
-        VStack {
-            Menu("Tags") {
-                Button("Add...") {
-                    sheetHandler(.addTags(items: [item]))
-                }
-                if !item.tags.isEmpty {
-                    Divider()
-                }
-                ForEach(Array(item.tags).sorted()) { tag in
-                    Button(tag) {
-                        sidebarSelection = tag.section
-                    }
+        Menu("Tags") {
+            Button("Add...") {
+                sheetHandler(.addTags(items: [item]))
+            }
+            if !item.tags.isEmpty {
+                Divider()
+            }
+            ForEach(Array(item.tags).sorted()) { tag in
+                Button(tag) {
+                    sidebarSelection = tag.section
                 }
             }
         }

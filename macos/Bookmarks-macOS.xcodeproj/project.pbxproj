@@ -206,9 +206,9 @@
 				D840B005262103C4001E95D1 /* AccountSettingsView.swift */,
 				D891C455261E32F90024E1A6 /* ContentView.swift */,
 				D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */,
+				D861257426AA048E00EB5FEF /* RenameTagView.swift */,
 				D840B0092621042B001E95D1 /* SettingsView.swift */,
 				D861257226A60DF200EB5FEF /* Sidebar.swift */,
-				D861257426AA048E00EB5FEF /* RenameTagView.swift */,
 				D861257B26AB741A00EB5FEF /* SidebarLink.swift */,
 			);
 			path = Views;

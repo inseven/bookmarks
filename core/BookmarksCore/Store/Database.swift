@@ -324,16 +324,14 @@ public class Database {
                 })
     }
 
-    public func tags(completion: @escaping (Swift.Result<[String], Error>) -> Void) {
+    public func tags(completion: @escaping (Swift.Result<Set<String>, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
             let lowercaseName = Schema.name.lowercaseString
             let result = Swift.Result {
-                try self.db.prepare(Schema.tags
-                                        .select(lowercaseName)
-                                        .order(lowercaseName)).map { row in
+                Set(try self.db.prepare(Schema.tags.select(lowercaseName)).map { row in
                     try row.get(lowercaseName)
-                }
+                })
             }
             completion(result)
         }
@@ -577,7 +575,7 @@ public extension Database {
         try AsyncOperation({ self.items(query: query, completion: $0) }).wait()
     }
 
-    func tags() throws -> [String] {
+    func tags() throws -> Set<String> {
         try AsyncOperation { self.tags(completion: $0) }.wait()
     }
 

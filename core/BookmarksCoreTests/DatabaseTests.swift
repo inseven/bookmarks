@@ -90,7 +90,7 @@ class DatabaseTests: XCTestCase {
         try database.insertOrUpdate(items: [item1, item2])
 
         let tags = try database.tags()
-        XCTAssertEqual(tags, ["cheese", "example", "website"])
+        XCTAssertEqual(tags, Set(["example", "website", "cheese"]))
 
         let fetchedItem1 = try database.item(identifier: item1.identifier)
         XCTAssertEqual(fetchedItem1, item1)
@@ -112,7 +112,7 @@ class DatabaseTests: XCTestCase {
 
         try database.insertOrUpdate(items: [item1, item2])
 
-        XCTAssertEqual(try database.tags(), ["cheese", "example", "website"])
+        XCTAssertEqual(try database.tags(), Set(["example", "website", "cheese"]))
         XCTAssertEqual(try database.items(query: True()), [item2, item1])
     }
 
@@ -130,7 +130,7 @@ class DatabaseTests: XCTestCase {
         try database.insertOrUpdate(items: [item1, item2])
         try database.deleteItems([item1])
 
-        XCTAssertEqual(try database.tags(), ["cheese", "website"])
+        XCTAssertEqual(try database.tags(), Set(["website", "cheese"]))
         XCTAssertEqual(try database.items(query: True()), [item2])
     }
 
@@ -169,14 +169,14 @@ class DatabaseTests: XCTestCase {
                         tags: ["example", "website"],
                         date: Date(timeIntervalSince1970: 0))
         try database.insertOrUpdate(items: [item])
-        XCTAssertEqual(try database.tags(), ["example", "website"])
+        XCTAssertEqual(try database.tags(), Set(["example", "website"]))
 
         let updatedItem = Item(title: "Example",
                                url: item.url,
                                tags: ["website", "cheese"],
                                date: item.date)
         try database.insertOrUpdate(items: [updatedItem])
-        XCTAssertEqual(try database.tags(), ["cheese", "website"])
+        XCTAssertEqual(try database.tags(), Set(["website", "cheese"]))
     }
 
     func testItemFilter() throws {
@@ -280,7 +280,7 @@ class DatabaseTests: XCTestCase {
 
         try database.insertOrUpdate(items: [item1, item2, item3])
 
-        XCTAssertEqual(try database.tags(), ["cheese", "example", "robert", "strawberries", "website"])
+        XCTAssertEqual(try database.tags(), Set(["example", "website", "cheese", "robert", "strawberries"]))
     }
 
     func testDeleteTags() throws {
@@ -301,10 +301,10 @@ class DatabaseTests: XCTestCase {
                          date: Date(timeIntervalSince1970: 20))
 
         try database.insertOrUpdate(items: [item1, item2, item3])
-        XCTAssertEqual(try database.tags(), ["cheese", "example", "robert", "strawberries", "website"])
+        XCTAssertEqual(try database.tags(), Set(["example", "website", "cheese", "robert", "strawberries"]))
 
         try database.deleteTag(tag: "website")
-        XCTAssertEqual(try database.tags(), ["cheese", "example", "robert", "strawberries"])
+        XCTAssertEqual(try database.tags(), Set(["example", "cheese", "robert", "strawberries"]))
         XCTAssertEqual(try database.items(query: True()), [item3, item2, item1].map { item in
             var tags = item.tags
             tags.remove("website")

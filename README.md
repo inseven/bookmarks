@@ -43,6 +43,14 @@ base64 build_certificate.p12 | pbcopy
 
 This, along with the password used to protect the certificate, can then be added to the GitHub project secrets.
 
+---
+
+Unlike `.cer` files (which can be viewed using [Quick Look](https://support.apple.com/en-gb/guide/mac-help/mh14119/mac)), macOS doesn't make it particularly easy to work with `.p12` PCKS 12 files; only Keychain Access is able to open these files and they will be automatically added to your keychain. If you want to double-check what's in a PCKS 12 file before adding it to your GitHub secrets, you can do this using `openssl`:
+
+```bash
+openssl pkcs12 -info -nodes -in build_certificate.p12
+```
+
 ### Builds
 
 In order to make continuous integration easy the `scripts/build.sh` script builds the full project, including submitting the macOS app for notarization. In order to run this script (noting that you probably don't want to use it for regular development cycles), you'll need to configure your environment accordingly, by setting the following environment variables:

@@ -26,28 +26,25 @@ struct BookmarkEditCommands: View {
 
     @Environment(\.manager) var manager: BookmarksManager
 
-    @Binding var selection: Set<Item>
+    var item: Item
 
     var body: some View {
-        Button(selection.containsUnreadBookmark ? "Mark as Read" : "Mark as Unread") {
+        Button(item.toRead ? "Mark as Read" : "Mark as Unread") {
             // TODO: Show errors in the UI #218
             //       https://github.com/inseven/bookmarks/issues/218
-            let toRead = !selection.containsUnreadBookmark
-            for item in selection {
-                manager.updateItem(item.setting(toRead: toRead), completion: Logging.log("read/unread"))
-            }
+            manager.updateItem(item.setting(toRead: !item.toRead), completion: log("read/unread"))
         }
-        .keyboardShortcut("u", modifiers: [.shift, .command])
-        Button(selection.containsPublicBookmark ? "Make Private" : "Make Public") {
+        Button(item.shared ? "Make Private" : "Make Public") {
             // TODO: Show errors in the UI #218
             //       https://github.com/inseven/bookmarks/issues/218
-            let shared = !selection.containsPublicBookmark
-            for item in selection {
-                manager.updateItem(item.setting(shared: !shared), completion: Logging.log("private/public"))
-            }
+            manager.updateItem(item.setting(shared: !item.shared), completion: log("private/public"))
         }
         Button("Edit on Pinboard") {
-            selection.editOnPinboard() // TODO: Throws?
+            do {
+                NSWorkspace.shared.open(try item.pinboardUrl())
+            } catch {
+                print("Failed to edit with error \(error)")
+            }
         }
     }
 }

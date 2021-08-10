@@ -63,6 +63,7 @@ public class BookmarksManager {
         updater.start()
 
         tagsView = TagsView(database: database)
+        tagsView.start()
 
         #if os(macOS)
         let notificationCenter = NotificationCenter.default

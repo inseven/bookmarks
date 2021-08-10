@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D8164D5E26C065F400756D43 /* ApplicationFocusObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D5D26C065F400756D43 /* ApplicationFocusObserver.swift */; };
 		D8164D6026C08B0600756D43 /* SelectionPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D5F26C08B0600756D43 /* SelectionPreferenceKey.swift */; };
 		D8164D6226C08B4100756D43 /* SheetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D6126C08B4100756D43 /* SheetType.swift */; };
 		D8164D6426C08BD500756D43 /* SheetHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D6326C08BD500756D43 /* SheetHandler.swift */; };
@@ -72,7 +71,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		D8164D5D26C065F400756D43 /* ApplicationFocusObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationFocusObserver.swift; sourceTree = "<group>"; };
 		D8164D5F26C08B0600756D43 /* SelectionPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionPreferenceKey.swift; sourceTree = "<group>"; };
 		D8164D6126C08B4100756D43 /* SheetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetType.swift; sourceTree = "<group>"; };
 		D8164D6326C08BD500756D43 /* SheetHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetHandler.swift; sourceTree = "<group>"; };
@@ -228,7 +226,6 @@
 			children = (
 				D840B005262103C4001E95D1 /* AccountSettingsView.swift */,
 				D8164D6526C08DD500756D43 /* AddTagsView.swift */,
-				D8164D5D26C065F400756D43 /* ApplicationFocusObserver.swift */,
 				D8164D6726C08EEC00756D43 /* BorderedSelection.swift */,
 				D891C455261E32F90024E1A6 /* ContentView.swift */,
 				D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */,
@@ -406,7 +403,6 @@
 				D891C456261E32F90024E1A6 /* ContentView.swift in Sources */,
 				D861257526AA048E00EB5FEF /* RenameTagView.swift in Sources */,
 				D8164D6026C08B0600756D43 /* SelectionPreferenceKey.swift in Sources */,
-				D8164D5E26C065F400756D43 /* ApplicationFocusObserver.swift in Sources */,
 				D8A336FE26B56AF700436200 /* BookmarkDestructiveCommands.swift in Sources */,
 				D8A336FA26B569C200436200 /* BookmarkTagCommands.swift in Sources */,
 				D8164D6226C08B4100756D43 /* SheetType.swift in Sources */,

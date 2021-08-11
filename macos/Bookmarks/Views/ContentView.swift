@@ -76,6 +76,7 @@ struct ContentView: View {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 8)], spacing: 8) {
                     ForEach(databaseView.items) { item in
                         BookmarkCell(item: item)
+                            .shadow(color: .shadow, radius: 8)
                             .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: item), firstResponder: firstResponder))
                             .help(item.localDate)
                             .contextMenuFocusable {
@@ -126,6 +127,7 @@ struct ContentView: View {
                 selectionTracker.clear()
             }
             .preference(key: SelectionPreferenceKey.self, value: firstResponder ? selectionTracker.selection : [])
+            .background(Color(NSColor.textBackgroundColor))
             .overlay(databaseView.state == .loading ? LoadingView() : nil)
         }
         .onAppear {

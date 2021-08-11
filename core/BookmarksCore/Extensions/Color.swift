@@ -22,7 +22,7 @@ import SwiftUI
 
 extension Color {
 
-    static var tertiaryLabel: Color {
+    public static var tertiaryLabel: Color {
         #if os(iOS)
         Color(UIColor.tertiaryLabel)
         #else
@@ -30,7 +30,7 @@ extension Color {
         #endif
     }
 
-    static var controlBackground: Color {
+    public static var controlBackground: Color {
         #if os(iOS)
         Color(UIColor.systemBackground)
         #else
@@ -38,13 +38,17 @@ extension Color {
         #endif
     }
 
-    static var controlSecondaryBackground: Color {
+    public static var controlSecondaryBackground: Color {
         #if os(iOS)
         Color(UIColor.secondarySystemBackground)
         #else
         let bundle = Bundle(for: BookmarksManager.self)
         return Color("ControlSecondaryBackground", bundle: bundle)
         #endif
+    }
+
+    public static var shadow: Color {
+        Color(.sRGBLinear, white: 0, opacity: 0.12)
     }
 
 }

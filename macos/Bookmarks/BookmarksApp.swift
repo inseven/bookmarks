@@ -91,13 +91,6 @@ struct BookmarksApp: App {
                 }
                 .keyboardShortcut("6", modifiers: .command)
             }
-            CommandMenu("Bookmark") {
-                BookmarkOpenCommands(selection: $selectionPreference)
-                Divider()
-                BookmarkDesctructiveCommands(selection: $selectionPreference)
-                Divider()
-                BookmarkEditCommands(selection: $selectionPreference)
-            }
         }
         SwiftUI.Settings {
             SettingsView()

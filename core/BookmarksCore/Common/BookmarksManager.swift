@@ -85,8 +85,8 @@ public class BookmarksManager {
     // TODO: Move the Bookmark update APIs into the updater #237
     //       https://github.com/inseven/bookmarks/issues/237
 
-    public func deleteItem(_ item: Item, completion: @escaping (Result<Void, Error>) -> Void) {
-        updater.deleteItem(item, completion: completion)
+    public func deleteItems(_ items: [Item], completion: @escaping (Result<Void, Error>) -> Void) {
+        updater.deleteItems(items, completion: completion)
     }
 
     public func updateItem(_ item: Item, completion: @escaping (Result<Item, Error>) -> Void) {

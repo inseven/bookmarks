@@ -116,12 +116,14 @@ public class Updater {
         }
     }
 
-    public func deleteItem(_ item: Item, completion: @escaping (Result<Void, Error>) -> Void) {
+    public func deleteItems(_ items: [Item], completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
             let result = Result {
-                try self.database.deleteItem(identifier: item.identifier)
-                try self.pinboard.postsDelete(url: item.url)
+                for item in items {
+                    try self.database.deleteItem(identifier: item.identifier)
+                    try self.pinboard.postsDelete(url: item.url)
+                }
             }
             completion(result)
         }

@@ -33,7 +33,7 @@ struct BookmarkDesctructiveCommands: View {
             // TODO: Show errors in the UI #218
             //       https://github.com/inseven/bookmarks/issues/218
             for item in selection {
-                manager.deleteItem(item, completion: Logging.log("delete \(item.url)"))
+                manager.deleteItems([item], completion: Logging.log("delete \(item.url)"))
             }
         }
         .keyboardShortcut(.delete)

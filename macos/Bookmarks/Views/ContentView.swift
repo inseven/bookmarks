@@ -43,6 +43,7 @@ struct ContentView: View {
     @Environment(\.manager) var manager
     @Environment(\.applicationHasFocus) var applicationHasFocus
     @Environment(\.sheetHandler) var sheetHandler
+    @Environment(\.errorHandler) var errorHandler
     @StateObject var databaseView: ItemsView
     @ObservedObject var tagsView: TagsView
 
@@ -157,8 +158,11 @@ struct ContentView: View {
             }
             ToolbarItem {
                 Button {
-                    for item in selectionTracker.selection {
-                        manager.deleteItem(item, completion: { _ in })
+                    manager.deleteItems(Array(selectionTracker.selection)) { result in
+                        guard case .failure(let error) = result else {
+                            return
+                        }
+                        errorHandler(error)
                     }
                 } label: {
                     SwiftUI.Image(systemName: "trash")

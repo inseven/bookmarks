@@ -92,14 +92,18 @@ struct ContentView: View {
                             }
                             .contextMenu {
                                 BookmarkOpenCommands(selection: Binding.constant(Set([item])))
-                                Divider()
+                                    .trailingDivider()
                                 BookmarkDesctructiveCommands(selection: Binding.constant(Set([item])))
-                                Divider()
+                                    .trailingDivider()
                                 BookmarkEditCommands(selection: Binding.constant(Set([item])))
-                                Divider()
+                                    .trailingDivider()
                                 BookmarkShareCommands(item: item)
-                                Divider()
+                                    .trailingDivider()
                                 BookmarkTagCommands(sidebarSelection: $sidebarSelection, item: item)
+                                #if DEBUG
+                                BookmarkDebugCommands()
+                                    .leadingDivider()
+                                #endif
                             }
                             .onDrag {
                                 NSItemProvider(object: item.url as NSURL)

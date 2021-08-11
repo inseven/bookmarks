@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D80710ED26C48594007272C0 /* LeadingDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80710EC26C48594007272C0 /* LeadingDivider.swift */; };
+		D80710EF26C485CA007272C0 /* TrailingDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80710EE26C485CA007272C0 /* TrailingDivider.swift */; };
+		D80710F026C48606007272C0 /* TrailingDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80710EE26C485CA007272C0 /* TrailingDivider.swift */; };
+		D80710F126C48609007272C0 /* LeadingDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80710EC26C48594007272C0 /* LeadingDivider.swift */; };
 		D84CE46D261E29A900AF1901 /* Boolean.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CE46C261E29A900AF1901 /* Boolean.swift */; };
 		D84CE484261E2AD000AF1901 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CE483261E2AD000AF1901 /* Post.swift */; };
 		D84CE488261E2B7D00AF1901 /* Pinboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CE487261E2B7D00AF1901 /* Pinboard.swift */; };
@@ -126,6 +130,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D80710EC26C48594007272C0 /* LeadingDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadingDivider.swift; sourceTree = "<group>"; };
+		D80710EE26C485CA007272C0 /* TrailingDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrailingDivider.swift; sourceTree = "<group>"; };
 		D84CE46C261E29A900AF1901 /* Boolean.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Boolean.swift; sourceTree = "<group>"; };
 		D84CE483261E2AD000AF1901 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		D84CE487261E2B7D00AF1901 /* Pinboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pinboard.swift; sourceTree = "<group>"; };
@@ -285,6 +291,8 @@
 			isa = PBXGroup;
 			children = (
 				D895D22826B2F19D00614260 /* BookmarkCell.swift */,
+				D80710EC26C48594007272C0 /* LeadingDivider.swift */,
+				D80710EE26C485CA007272C0 /* TrailingDivider.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -609,6 +617,7 @@
 				D890D1C826A3584400C47489 /* DatabasePublisher.swift in Sources */,
 				D8D3F59F261E5AAE00B2D66F /* WebViewDownloader.swift in Sources */,
 				D8989D5C26B7506300F06A85 /* BookmarksSection.swift in Sources */,
+				D80710EF26C485CA007272C0 /* TrailingDivider.swift in Sources */,
 				D8B04B1F261EC65D00376ADD /* Settings.swift in Sources */,
 				D84CE484261E2AD000AF1901 /* Post.swift in Sources */,
 				D890D1C026A2219F00C47489 /* ItemsView.swift in Sources */,
@@ -621,6 +630,7 @@
 				D8D3F643261E5EB500B2D66F /* TFHppleElement.m in Sources */,
 				D8D3F63D261E5EB500B2D66F /* TFHpple.m in Sources */,
 				D8D3F5B6261E5AF300B2D66F /* UIImage.swift in Sources */,
+				D80710ED26C48594007272C0 /* LeadingDivider.swift in Sources */,
 				D8D3F612261E5C0C00B2D66F /* View.swift in Sources */,
 				D8A1057C26B1C66B00C7FAA9 /* QueryDescription.swift in Sources */,
 				D8D3F55B261E593300B2D66F /* FileImageCache.swift in Sources */,
@@ -653,6 +663,7 @@
 			files = (
 				D8EBC54B26ACBFC400604D84 /* Update.swift in Sources */,
 				D890D1BE26A2201700C47489 /* DispatchQueue.swift in Sources */,
+				D80710F126C48609007272C0 /* LeadingDivider.swift in Sources */,
 				D8D3F550261E592800B2D66F /* ImageCache.swift in Sources */,
 				D8D3F6D0261E685200B2D66F /* SafeImage.swift in Sources */,
 				D8D3F566261E593900B2D66F /* MemoryImageCache.swift in Sources */,
@@ -668,6 +679,7 @@
 				D8B04B1E261EC65D00376ADD /* Settings.swift in Sources */,
 				D8CF8CA1261E35B300E52E85 /* Pinboard.swift in Sources */,
 				D890D1C126A2219F00C47489 /* ItemsView.swift in Sources */,
+				D80710F026C48606007272C0 /* TrailingDivider.swift in Sources */,
 				D8717C4F2679153F007617C5 /* URL.swift in Sources */,
 				D895D22D26B301E600614260 /* Color.swift in Sources */,
 				D8B04B32261EC7E700376ADD /* BookmarksManager.swift in Sources */,

@@ -32,7 +32,7 @@ struct BookmarksApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                Sidebar(tagsView: TagsView(database: manager.database), settings: manager.settings, selection: $selection)
+                Sidebar(tagsView: manager.tagsView, settings: manager.settings, selection: $selection)
                 ContentView(sidebarSelection: $selection, database: manager.database)
             }
             .frameAutosaveName("Main Window")

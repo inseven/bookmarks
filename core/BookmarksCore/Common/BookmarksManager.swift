@@ -31,6 +31,8 @@ public extension EnvironmentValues {
     }
 }
 
+// TODO: Explore whether it's possible make some of the BookmarksManager properties private #266
+//       https://github.com/inseven/bookmarks/issues/266
 public class BookmarksManager {
 
     var documentsUrl: URL
@@ -40,6 +42,8 @@ public class BookmarksManager {
     public var settings = Settings()
     fileprivate var updater: Updater
     fileprivate var pinboard: Pinboard
+
+    public var tagsView: TagsView
 
     public var cache: NSCache = NSCache<NSString, SafeImage>()
 
@@ -57,6 +61,9 @@ public class BookmarksManager {
         pinboard = Pinboard(token: settings.pinboardApiKey)
         updater = Updater(database: database, pinboard: pinboard)
         updater.start()
+
+        tagsView = TagsView(database: database)
+        tagsView.start()
 
         #if os(macOS)
         let notificationCenter = NotificationCenter.default

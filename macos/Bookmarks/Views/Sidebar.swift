@@ -196,12 +196,6 @@ struct Sidebar: View {
                 RenameTagView(tag: tag)
             }
         }
-        .onAppear {
-            tagsView.start()
-        }
-        .onDisappear {
-            tagsView.stop()
-        }
     }
 }
 

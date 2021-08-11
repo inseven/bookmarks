@@ -139,17 +139,6 @@ public class Item: Equatable {
              notes: notes)
     }
 
-    public func adding(tags: Set<String>) -> Item {
-        Item(identifier: identifier,
-             title: title,
-             url: url,
-             tags: self.tags.union(tags),
-             date: date,
-             toRead: toRead,
-             shared: shared,
-             notes: notes)
-    }
-
 }
 
 extension Item: Identifiable {

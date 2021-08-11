@@ -42,13 +42,7 @@ struct BookmarkEditCommands: View {
             manager.updateItems(items, completion: errorHandlingCompletion(errorHandler))
         }
         Button("Edit on Pinboard") {
-            print("edit on pinboard")
-            manager.editOnPinboard(items: Array(selection)) { result in
-                guard case .failure(let error) = result else {
-                    return
-                }
-                errorHandler(error)
-            }
+            manager.editOnPinboard(items: Array(selection), completion: errorHandlingCompletion(errorHandler))
         }
     }
 }

@@ -69,6 +69,7 @@ struct ContentView: View {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
                     ForEach(databaseView.items) { item in
                         BookmarkCell(item: item)
+                            .shadow(color: .shadow, radius: 8)
                             .help(item.localDate)
                             .onClick {
                                 manager.database.item(identifier: item.identifier) { result in
@@ -107,6 +108,7 @@ struct ContentView: View {
                 }
                 .padding()
             }
+            .background(Color(NSColor.textBackgroundColor))
             .overlay(databaseView.state == .loading ? LoadingView() : nil)
         }
         .onAppear {

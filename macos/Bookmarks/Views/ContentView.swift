@@ -37,10 +37,6 @@ extension Item {
 
 extension Set where Element == Item {
 
-    func open() {
-        open(archive: false)
-    }
-
     var containsUnreadBookmark: Bool {
         self.first { $0.toRead } != nil
     }
@@ -48,23 +44,7 @@ extension Set where Element == Item {
     var containsPublicBookmark: Bool {
         self.first { $0.shared } != nil
     }
-    
-    func open(archive: Bool) {
-        if archive {
-            for item in self {
-                do {
-                    NSWorkspace.shared.open(try item.internetArchiveUrl())
-                } catch {
-                    print("Failed to open on the Internet Archive with error \(error)")
-                }
-            }
-        } else {
-            for item in self {
-                NSWorkspace.shared.open(item.url)
-            }
-        }
-    }
-    
+        
 }
 
 struct ContentView: View {

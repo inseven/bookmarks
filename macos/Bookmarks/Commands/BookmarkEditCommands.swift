@@ -49,9 +49,10 @@ struct BookmarkEditCommands: View {
         }
         Button("Edit on Pinboard") {
             print("edit on pinboard")
-            do {
-                try manager.editOnPinboard(items: Array(selection))
-            } catch {
+            manager.editOnPinboard(items: Array(selection)) { result in
+                guard case .failure(let error) = result else {
+                    return
+                }
                 errorHandler(error)
             }
         }

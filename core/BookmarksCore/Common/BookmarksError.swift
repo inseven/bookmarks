@@ -37,6 +37,8 @@ public enum BookmarksError: Error, Equatable {
     case corrupt
     case timeout
     case malformedBookmark
+
+    case openFailure
     
 }
 
@@ -66,6 +68,8 @@ extension BookmarksError: LocalizedError {
             return "Database timeout."
         case .malformedBookmark:
             return "Malformed bookmark."
+        case .openFailure:
+            return "Unable to open URL"
         }
     }
 

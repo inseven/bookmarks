@@ -60,11 +60,7 @@ struct HandlesError: ViewModifier {
         content
             .environment(\.errorHandler, { error in
                 dispatchPrecondition(condition: .onQueue(.main))
-                #if os(macOS)
-                NSApplication.shared.mainWindow?.presentError(error)
-                #else
                 self.error = IdentifiableError(error: error)
-                #endif
             })
             .alert(item: $error) { error in
                 return Alert(title: Text("Error"), message: Text(error.error.localizedDescription))

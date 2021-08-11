@@ -20,13 +20,20 @@
 
 import Foundation
 
-public func log<T>(_ name: String) -> (Result<T, Error>) -> () {
-    { result in
-        switch result {
-        case .success:
-            print("\(name) succeeded")
-        case .failure(let error):
-            print("\(name) failed with error \(error)")
+public struct Logging {
+
+    public static func log<T>(_ name: String,
+                              completion: @escaping (Result<T, Error>) -> Void = { _ in }) -> (Result<T, Error>) -> () {
+        let completion = DispatchQueue.main.asyncClosure(completion)
+        return { result in
+            switch result {
+            case .success:
+                print("\(name) succeeded")
+            case .failure(let error):
+                print("\(name) failed with error \(error)")
+            }
+            completion(result)
         }
     }
+
 }

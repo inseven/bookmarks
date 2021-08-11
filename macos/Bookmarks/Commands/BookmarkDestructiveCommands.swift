@@ -33,7 +33,6 @@ struct BookmarkDesctructiveCommands: View {
         Button("Delete") {
             manager.deleteItems(Array(selection), completion: errorHandlingCompletion(errorHandler))
         }
-        .keyboardShortcut(.delete)
     }
 
 }

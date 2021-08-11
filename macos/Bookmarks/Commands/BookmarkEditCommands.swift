@@ -35,7 +35,6 @@ struct BookmarkEditCommands: View {
             let items = selection.map { $0.setting(toRead: toRead) }
             manager.updateItems(items, completion: errorHandlingCompletion(errorHandler))
         }
-        .keyboardShortcut("u", modifiers: [.shift, .command])
         Button(selection.containsPublicBookmark ? "Make Private" : "Make Public") {
             let shared = !selection.containsPublicBookmark
             let items = selection.map { $0.setting(shared: !shared) }

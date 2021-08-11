@@ -33,10 +33,8 @@ struct BookmarkOpenCommands: View {
         Button("Open") {
             manager.open(items: Array(selection), completion: errorHandlingCompletion(errorHandler))
         }
-        .disabled(selection.isEmpty)
         Button("Open on Internet Archive") {
             manager.openOnInternetArchive(items: Array(selection), completion: errorHandlingCompletion(errorHandler))
         }
-        .disabled(selection.isEmpty)
     }
 }

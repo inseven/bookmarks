@@ -22,21 +22,31 @@ import SwiftUI
 
 import BookmarksCore
 
+extension View {
+
+    func errorHandlingCompletion<T>(_ errorHandler: @escaping (Error) -> Void) -> (Result<T, Error>) -> Void {
+        return { result in
+            guard case .failure(let error) = result else {
+                return
+            }
+            DispatchQueue.main.async {
+                errorHandler(error)
+            }
+        }
+    }
+
+}
+
 struct BookmarkDesctructiveCommands: View {
 
     @Environment(\.manager) var manager: BookmarksManager
     @Environment(\.errorHandler) var errorHandler
     
-    @Binding var selection: Set<Item>  // TODO: Inject this in the environment?
+    @Binding var selection: Set<Item>
 
     var body: some View {
         Button("Delete") {
-            manager.deleteItems(Array(selection)) { result in
-                guard case .failure(let error) = result else {
-                    return
-                }
-                errorHandler(error)
-            }
+            manager.deleteItems(Array(selection), completion: errorHandlingCompletion(errorHandler))
         }
         .keyboardShortcut(.delete)
     }

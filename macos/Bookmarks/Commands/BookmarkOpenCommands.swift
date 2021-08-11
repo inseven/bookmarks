@@ -27,25 +27,15 @@ struct BookmarkOpenCommands: View {
     @Environment(\.manager) var manager: BookmarksManager
     @Environment(\.errorHandler) var errorHandler
 
-    @Binding var selection: Set<Item>  // TODO: Inject this in the environment?
+    @Binding var selection: Set<Item>
 
     var body: some View {
         Button("Open") {
-            manager.open(items: Array(selection)) { result in
-                guard case .failure(let error) = result else {
-                    return
-                }
-                errorHandler(error)
-            }
+            manager.open(items: Array(selection), completion: errorHandlingCompletion(errorHandler))
         }
         .disabled(selection.isEmpty)
         Button("Open on Internet Archive") {
-            manager.openOnInternetArchive(items: Array(selection)) { result in
-                guard case .failure(let error) = result else {
-                    return
-                }
-                errorHandler(error)
-            }
+            manager.openOnInternetArchive(items: Array(selection), completion: errorHandlingCompletion(errorHandler))
         }
         .disabled(selection.isEmpty)
     }

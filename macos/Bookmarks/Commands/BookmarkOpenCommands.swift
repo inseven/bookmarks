@@ -25,28 +25,19 @@ import BookmarksCore
 struct BookmarkOpenCommands: View {
 
     @Environment(\.manager) var manager: BookmarksManager
-    @Environment(\.errorHandler) var errorHandler
 
-    @Binding var selection: Set<Item>  // TODO: Inject this in the environment?
+    var item: Item
 
     var body: some View {
         Button("Open") {
-            manager.open(items: Array(selection)) { result in
-                guard case .failure(let error) = result else {
-                    return
-                }
-                errorHandler(error)
-            }
+            NSWorkspace.shared.open(item.url)
         }
-        .disabled(selection.isEmpty)
         Button("Open on Internet Archive") {
-            manager.openOnInternetArchive(items: Array(selection)) { result in
-                guard case .failure(let error) = result else {
-                    return
-                }
-                errorHandler(error)
+            do {
+                NSWorkspace.shared.open(try item.internetArchiveUrl())
+            } catch {
+                print("Failed to open on the Internet Archive with error \(error)")
             }
         }
-        .disabled(selection.isEmpty)
     }
 }

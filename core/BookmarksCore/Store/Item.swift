@@ -139,38 +139,15 @@ public class Item: Equatable {
              notes: notes)
     }
 
-    public func adding(tags: Set<String>) -> Item {
-        Item(identifier: identifier,
-             title: title,
-             url: url,
-             tags: self.tags.union(tags),
-             date: date,
-             toRead: toRead,
-             shared: shared,
-             notes: notes)
-    }
-
 }
 
 extension Item: Identifiable {
-
     public var id: String { identifier }
-
-}
-
-extension Item: Hashable {
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(identifier)
-    }
-
 }
 
 extension Item: CustomStringConvertible {
 
-    public var description: String {
-        "\(url.absoluteString) (title: \(title), tags: [\(tags.joined(separator: ", "))], date: \(date), toRead: \(toRead), notes: '\(self.notes)')"
-    }
+    public var description: String { "\(url.absoluteString) (title: \(title), tags: [\(tags.joined(separator: ", "))], date: \(date), toRead: \(toRead), notes: '\(self.notes)')" }
 
 }
 
@@ -188,18 +165,6 @@ extension Item {
          try "https://pinboard.in/add".asUrl().settingQueryItems([
             URLQueryItem(name: "url", value: url.absoluteString)
         ])
-    }
-
-}
-
-extension Set where Element == Item {
-
-    public var containsUnreadBookmark: Bool {
-        self.first { $0.toRead } != nil
-    }
-
-    public var containsPublicBookmark: Bool {
-        self.first { $0.shared } != nil
     }
 
 }

@@ -18,7 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Combine
 import SwiftUI
 
 public struct ManagerEnvironmentKey: EnvironmentKey {
@@ -99,81 +98,6 @@ public class BookmarksManager {
 
     public func deleteTag(_ tag: String, completion: @escaping (Result<Void, Error>) -> Void) {
         self.updater.deleteTag(tag, completion: completion)
-    }
-
-    public func open(items: [Item], completion: @escaping (Result<Void, Error>) -> Void) {
-        let completion = DispatchQueue.main.asyncClosure(completion)
-        let many = open(urls: items.map { $0.url })
-        _ = many.sink { result in
-            switch result {
-            case .finished:
-                completion(.success(()))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        } receiveValue: { _ in }
-    }
-
-    public func openOnInternetArchive(items: [Item], completion: @escaping (Result<Void, Error>) -> Void) {
-        let completion = DispatchQueue.main.asyncClosure(completion)
-        do {
-            let many = open(urls: try items.map { try $0.internetArchiveUrl() })
-            _ = many.sink { result in
-                switch result {
-                case .finished:
-                    completion(.success(()))
-                case .failure(let error):
-                    completion(.failure(error))
-                }
-            } receiveValue: { _ in }
-        } catch {
-            completion(.failure(error))
-        }
-    }
-
-    public func editOnPinboard(items: [Item], completion: @escaping (Result<Void, Error>) -> Void) {
-        let completion = DispatchQueue.main.asyncClosure(completion)
-        do {
-            let many = open(urls: try items.map { try $0.pinboardUrl() })
-            _ = many.sink { result in
-                switch result {
-                case .finished:
-                    completion(.success(()))
-                case .failure(let error):
-                    completion(.failure(error))
-                }
-            } receiveValue: { _ in }
-        } catch {
-            completion(.failure(error))
-        }
-    }
-
-    fileprivate func open(urls: [URL]) -> Publishers.MergeMany<Future<Void, Error>> {
-        let openers = urls.map { self.open(url: $0) }
-        let many = Publishers.MergeMany(openers)
-        return many
-    }
-
-    fileprivate func open(url: URL) -> Future<Void, Error> {
-        return Future() { promise in
-            self.open(url: url) { success in
-                if success {
-                    promise(.success(()))
-                } else {
-                    promise(.failure(BookmarksError.openFailure))
-                }
-            }
-        }
-    }
-
-    fileprivate func open(url: URL, completion: @escaping (Bool) -> Void) {
-        let completion = DispatchQueue.main.asyncClosure(completion)
-        #if os(macOS)
-        NSWorkspace.shared.open(url)
-        completion(true)
-        #else
-        UIApplication.shared.open(url, options: [:], completionHandler: completion)
-        #endif
     }
 
     @objc

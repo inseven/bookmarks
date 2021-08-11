@@ -78,8 +78,8 @@ public class BookmarksManager {
         settings.pinboardApiKey.components(separatedBy: ":").first
     }
 
-    public func refresh(force: Bool = false) {
-        self.updater.update(force: force)
+    public func refresh() {
+        self.updater.update(force: true)
     }
 
     // TODO: Move the Bookmark update APIs into the updater #237

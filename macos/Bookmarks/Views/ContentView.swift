@@ -88,7 +88,7 @@ struct ContentView: View {
                                 Divider()
                                 BookmarkShareCommands(item: item)
                                 Divider()
-                                BookmarkTagCommands(sidebarSelection: $sidebarSelection, item: item)
+                                BookmarkTagCommands(sidebarSelection: $sidebarSelection, selection: $selectionTracker.selection)
                             } onContextMenuChange: { focused in
                                 guard focused == true else {
                                     return
@@ -139,7 +139,7 @@ struct ContentView: View {
         .toolbar {
             ToolbarItem {
                 Button {
-                    manager.refresh(force: true)
+                    manager.refresh()
                 } label: {
                     SwiftUI.Image(systemName: "arrow.clockwise")
                 }

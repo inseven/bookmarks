@@ -28,19 +28,20 @@ struct BookmarkTagCommands: View {
     @Environment(\.sheetHandler) var sheetHandler
     @Binding var sidebarSelection: BookmarksSection?
 
-    var item: Item
+    @Binding var selection: Set<Item>
 
     var body: some View {
         Menu("Tags") {
             Button("Add...") {
-                sheetHandler(.addTags(items: [item]))
+                sheetHandler(.addTags(items: Array(selection)))
             }
-            if !item.tags.isEmpty {
+            if selection.count == 1,
+               let item = selection.first {
                 Divider()
-            }
-            ForEach(Array(item.tags).sorted()) { tag in
-                Button(tag) {
-                    sidebarSelection = tag.section
+                ForEach(Array(item.tags).sorted()) { tag in
+                    Button(tag) {
+                        sidebarSelection = tag.section
+                    }
                 }
             }
         }

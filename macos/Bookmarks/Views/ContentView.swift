@@ -35,18 +35,6 @@ extension Item {
 
 }
 
-extension Set where Element == Item {
-
-    var containsUnreadBookmark: Bool {
-        self.first { $0.toRead } != nil
-    }
-
-    var containsPublicBookmark: Bool {
-        self.first { $0.shared } != nil
-    }
-        
-}
-
 struct ContentView: View {
 
     @Binding var sidebarSelection: BookmarksSection?

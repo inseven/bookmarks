@@ -49,7 +49,6 @@ struct AddTagsView: View {
         return characterSet.union(spaceCharacterSet)
     }
 
-    // TODO: Default focus when launching.
     var body: some View {
         Form {
             Section() {

@@ -22,21 +22,6 @@ import SwiftUI
 
 import BookmarksCore
 
-extension View {
-
-    func errorHandlingCompletion<T>(_ errorHandler: @escaping (Error) -> Void) -> (Result<T, Error>) -> Void {
-        return { result in
-            guard case .failure(let error) = result else {
-                return
-            }
-            DispatchQueue.main.async {
-                errorHandler(error)
-            }
-        }
-    }
-
-}
-
 struct BookmarkDesctructiveCommands: View {
 
     @Environment(\.manager) var manager: BookmarksManager

@@ -81,14 +81,18 @@ struct ContentView: View {
                             .help(item.localDate)
                             .contextMenuFocusable {
                                 BookmarkOpenCommands(selection: $selectionTracker.selection)
-                                Divider()
+                                    .trailingDivider()
                                 BookmarkDesctructiveCommands(selection: $selectionTracker.selection)
-                                Divider()
+                                    .trailingDivider()
                                 BookmarkEditCommands(selection: $selectionTracker.selection)
-                                Divider()
+                                    .trailingDivider()
                                 BookmarkShareCommands(item: item)
-                                Divider()
+                                    .trailingDivider()
                                 BookmarkTagCommands(sidebarSelection: $sidebarSelection, selection: $selectionTracker.selection)
+                                #if DEBUG
+                                BookmarkDebugCommands()
+                                    .leadingDivider()
+                                #endif
                             } onContextMenuChange: { focused in
                                 guard focused == true else {
                                     return

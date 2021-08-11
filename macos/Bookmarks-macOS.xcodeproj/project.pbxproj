@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D80710EB26C4847D007272C0 /* BookmarkDebugCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80710EA26C4847D007272C0 /* BookmarkDebugCommands.swift */; };
 		D8164D6026C08B0600756D43 /* SelectionPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D5F26C08B0600756D43 /* SelectionPreferenceKey.swift */; };
 		D8164D6226C08B4100756D43 /* SheetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D6126C08B4100756D43 /* SheetType.swift */; };
 		D8164D6426C08BD500756D43 /* SheetHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D6326C08BD500756D43 /* SheetHandler.swift */; };
@@ -70,6 +71,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D80710EA26C4847D007272C0 /* BookmarkDebugCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkDebugCommands.swift; sourceTree = "<group>"; };
 		D8164D5F26C08B0600756D43 /* SelectionPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionPreferenceKey.swift; sourceTree = "<group>"; };
 		D8164D6126C08B4100756D43 /* SheetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetType.swift; sourceTree = "<group>"; };
 		D8164D6326C08BD500756D43 /* SheetHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetHandler.swift; sourceTree = "<group>"; };
@@ -216,6 +218,7 @@
 				D8A336FF26B56C1B00436200 /* BookmarkOpenCommands.swift */,
 				D8A336FB26B56A4300436200 /* BookmarkShareCommands.swift */,
 				D8A336F926B569C200436200 /* BookmarkTagCommands.swift */,
+				D80710EA26C4847D007272C0 /* BookmarkDebugCommands.swift */,
 			);
 			path = Commands;
 			sourceTree = "<group>";
@@ -399,6 +402,7 @@
 				D891C456261E32F90024E1A6 /* ContentView.swift in Sources */,
 				D861257526AA048E00EB5FEF /* RenameTagView.swift in Sources */,
 				D8164D6026C08B0600756D43 /* SelectionPreferenceKey.swift in Sources */,
+				D80710EB26C4847D007272C0 /* BookmarkDebugCommands.swift in Sources */,
 				D8A336FE26B56AF700436200 /* BookmarkDestructiveCommands.swift in Sources */,
 				D8A336FA26B569C200436200 /* BookmarkTagCommands.swift in Sources */,
 				D8164D6226C08B4100756D43 /* SheetType.swift in Sources */,

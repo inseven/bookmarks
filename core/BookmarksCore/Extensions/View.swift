@@ -26,4 +26,15 @@ extension View {
         return AnyView(self)
     }
 
+    public func errorHandlingCompletion<T>(_ errorHandler: @escaping (Error) -> Void) -> (Result<T, Error>) -> Void {
+        return { result in
+            guard case .failure(let error) = result else {
+                return
+            }
+            DispatchQueue.main.async {
+                errorHandler(error)
+            }
+        }
+    }
+
 }

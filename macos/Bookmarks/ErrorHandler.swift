@@ -18,22 +18,53 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
+import SwiftUI
 
-public struct Logging {
+typealias ErrorHandler = (Error) -> Void
 
-    public static func log<T>(_ name: String,
-                              completion: @escaping (Result<T, Error>) -> Void = { _ in }) -> (Result<T, Error>) -> () {
-        let completion = DispatchQueue.main.asyncClosure(completion)
-        return { result in
-            switch result {
-            case .success:
-                print("\(name) succeeded")
-            case .failure(let error):
-                print("\(name) failed with error \(error)")
+struct ErrorHandlerEnvironmentKey: EnvironmentKey {
+
+    static var defaultValue: ErrorHandler = { _ in }
+
+}
+
+extension EnvironmentValues {
+
+    var errorHandler: (ErrorHandler) {
+        get { self[ErrorHandlerEnvironmentKey.self] }
+        set { self[ErrorHandlerEnvironmentKey.self] = newValue }
+    }
+
+}
+
+extension View {
+
+    func handlesError() -> some View {
+        modifier(HandlesError())
+    }
+
+}
+
+struct IdentifiableError: Identifiable {
+
+    var id = UUID()
+    var error: Error
+
+}
+
+struct HandlesError: ViewModifier {
+
+    @State var error: IdentifiableError? = nil
+
+    func body(content: Content) -> some View {
+        content
+            .environment(\.errorHandler, { error in
+                dispatchPrecondition(condition: .onQueue(.main))
+                self.error = IdentifiableError(error: error)
+            })
+            .alert(item: $error) { error in
+                return Alert(title: Text("Error"), message: Text(error.error.localizedDescription))
             }
-            completion(result)
-        }
     }
 
 }

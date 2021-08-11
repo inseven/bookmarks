@@ -90,11 +90,11 @@ struct ContentView: View {
                                 }
                             }
                             .contextMenu {
-                                BookmarkOpenCommands(item: item)
+                                BookmarkOpenCommands(selection: Binding.constant(Set([item])))
                                 Divider()
-                                BookmarkDesctructiveCommands(item: item)
+                                BookmarkDesctructiveCommands(selection: Binding.constant(Set([item])))
                                 Divider()
-                                BookmarkEditCommands(item: item)
+                                BookmarkEditCommands(selection: Binding.constant(Set([item])))
                                 Divider()
                                 BookmarkShareCommands(item: item)
                                 Divider()

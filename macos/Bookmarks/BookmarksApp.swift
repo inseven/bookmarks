@@ -35,6 +35,7 @@ struct BookmarksApp: App {
                 Sidebar(tagsView: manager.tagsView, settings: manager.settings, selection: $selection)
                 ContentView(sidebarSelection: $selection, database: manager.database)
             }
+            .handlesError()
             .frameAutosaveName("Main Window")
         }
         .commands {

@@ -29,6 +29,7 @@
 		D8CF8CC2261E369D00E52E85 /* BookmarksCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8CF8CC1261E369D00E52E85 /* BookmarksCore.framework */; };
 		D8CF8CC3261E369D00E52E85 /* BookmarksCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D8CF8CC1261E369D00E52E85 /* BookmarksCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D8E0202C26C2E1CC00910833 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0202B26C2E1CC00910833 /* LoadingView.swift */; };
+		D8EB6E4526C3357F00C23B19 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EB6E4426C3357F00C23B19 /* ErrorHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -92,6 +93,7 @@
 		D8CF8C6D261E34A300E52E85 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8CF8CC1261E369D00E52E85 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8E0202B26C2E1CC00910833 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		D8EB6E4426C3357F00C23B19 /* ErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandler.swift; sourceTree = "<group>"; };
 		D8ECA5DE2640580E00947EEC /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		D8ECA5DF2640582200947EEC /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		D8ECA5E02640583900947EEC /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 				D891C45D261E32FB0024E1A6 /* Bookmarks.entitlements */,
 				D891C45C261E32FB0024E1A6 /* Info.plist */,
 				D891C459261E32FB0024E1A6 /* Preview Content */,
+				D8EB6E4426C3357F00C23B19 /* ErrorHandler.swift */,
 			);
 			path = Bookmarks;
 			sourceTree = "<group>";
@@ -381,6 +384,7 @@
 				D840B00A2621042B001E95D1 /* SettingsView.swift in Sources */,
 				D891C454261E32F90024E1A6 /* BookmarksApp.swift in Sources */,
 				D8A3370326B56C7400436200 /* BookmarkEditCommands.swift in Sources */,
+				D8EB6E4526C3357F00C23B19 /* ErrorHandler.swift in Sources */,
 				D861257C26AB741A00EB5FEF /* SidebarLink.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

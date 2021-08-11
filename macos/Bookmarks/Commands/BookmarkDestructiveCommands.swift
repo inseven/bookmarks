@@ -25,14 +25,13 @@ import BookmarksCore
 struct BookmarkDesctructiveCommands: View {
 
     @Environment(\.manager) var manager: BookmarksManager
-
-    var item: Item
+    @Environment(\.errorHandler) var errorHandler
+    
+    @Binding var selection: Set<Item>
 
     var body: some View {
         Button("Delete") {
-            // TODO: Show errors in the UI #218
-            //       https://github.com/inseven/bookmarks/issues/218
-            manager.deleteItem(item, completion: Logging.log("delete \(item.url)"))
+            manager.deleteItems(Array(selection), completion: errorHandlingCompletion(errorHandler))
         }
     }
 

@@ -25,26 +25,23 @@ import BookmarksCore
 struct BookmarkEditCommands: View {
 
     @Environment(\.manager) var manager: BookmarksManager
+    @Environment(\.errorHandler) var errorHandler
 
-    var item: Item
+    @Binding var selection: Set<Item>
 
     var body: some View {
-        Button(item.toRead ? "Mark as Read" : "Mark as Unread") {
-            // TODO: Show errors in the UI #218
-            //       https://github.com/inseven/bookmarks/issues/218
-            manager.updateItem(item.setting(toRead: !item.toRead), completion: Logging.log("read/unread"))
+        Button(selection.containsUnreadBookmark ? "Mark as Read" : "Mark as Unread") {
+            let toRead = !selection.containsUnreadBookmark
+            let items = selection.map { $0.setting(toRead: toRead) }
+            manager.updateItems(items, completion: errorHandlingCompletion(errorHandler))
         }
-        Button(item.shared ? "Make Private" : "Make Public") {
-            // TODO: Show errors in the UI #218
-            //       https://github.com/inseven/bookmarks/issues/218
-            manager.updateItem(item.setting(shared: !item.shared), completion: Logging.log("private/public"))
+        Button(selection.containsPublicBookmark ? "Make Private" : "Make Public") {
+            let shared = !selection.containsPublicBookmark
+            let items = selection.map { $0.setting(shared: !shared) }
+            manager.updateItems(items, completion: errorHandlingCompletion(errorHandler))
         }
         Button("Edit on Pinboard") {
-            do {
-                NSWorkspace.shared.open(try item.pinboardUrl())
-            } catch {
-                print("Failed to edit with error \(error)")
-            }
+            manager.editOnPinboard(items: Array(selection), completion: errorHandlingCompletion(errorHandler))
         }
     }
 }

@@ -20,7 +20,7 @@
 
 import Foundation
 
-enum BookmarksError: Error, Equatable {
+public enum BookmarksError: Error, Equatable {
 
     case resizeFailure
 
@@ -37,5 +37,7 @@ enum BookmarksError: Error, Equatable {
     case corrupt
     case timeout
     case malformedBookmark
+
+    case openFailure
     
 }

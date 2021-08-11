@@ -124,6 +124,7 @@ struct ContentView: View {
                 } label: {
                     SwiftUI.Image(systemName: "arrow.clockwise")
                 }
+                .help("Refresh")
             }
             ToolbarItem {
                 SearchField(search: $searchDebouncer.value)

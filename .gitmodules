@@ -13,6 +13,3 @@
 [submodule "scripts/build-tools"]
 	path = scripts/build-tools
 	url = git@github.com:jbmorley/build-tools.git
-[submodule "core/swift-algorithm-club"]
-	path = core/swift-algorithm-club
-	url = git@github.com:jbmorley/swift-algorithm-club.git

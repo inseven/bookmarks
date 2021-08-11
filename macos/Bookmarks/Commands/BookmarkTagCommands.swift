@@ -24,20 +24,16 @@ import BookmarksCore
 
 struct BookmarkTagCommands: View {
 
-    @Environment(\.manager) var manager
-    @Environment(\.sheetHandler) var sheetHandler
+    @Environment(\.manager) var manager: BookmarksManager
     @Binding var sidebarSelection: BookmarksSection?
 
-    @Binding var selection: Set<Item>
+    var item: Item
 
     var body: some View {
-        Menu("Tags") {
-            Button("Add...") {
-                sheetHandler(.addTags(items: Array(selection)))
-            }
-            if selection.count == 1,
-               let item = selection.first {
-                Divider()
+        if item.tags.isEmpty {
+            Button("No Tags") {}.disabled(true)
+        } else {
+            Menu("Tags") {
                 ForEach(Array(item.tags).sorted()) { tag in
                     Button(tag) {
                         sidebarSelection = tag.section
@@ -46,5 +42,4 @@ struct BookmarkTagCommands: View {
             }
         }
     }
-
 }

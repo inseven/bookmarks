@@ -31,21 +31,15 @@ struct BookmarkEditCommands: View {
 
     var body: some View {
         Button(selection.containsUnreadBookmark ? "Mark as Read" : "Mark as Unread") {
-            // TODO: Show errors in the UI #218
-            //       https://github.com/inseven/bookmarks/issues/218
             let toRead = !selection.containsUnreadBookmark
-            for item in selection {
-                manager.updateItem(item.setting(toRead: toRead), completion: Logging.log("read/unread"))
-            }
+            let items = selection.map { $0.setting(toRead: toRead) }
+            manager.updateItems(items, completion: errorHandlingCompletion(errorHandler))
         }
         .keyboardShortcut("u", modifiers: [.shift, .command])
         Button(selection.containsPublicBookmark ? "Make Private" : "Make Public") {
-            // TODO: Show errors in the UI #218
-            //       https://github.com/inseven/bookmarks/issues/218
             let shared = !selection.containsPublicBookmark
-            for item in selection {
-                manager.updateItem(item.setting(shared: !shared), completion: Logging.log("private/public"))
-            }
+            let items = selection.map { $0.setting(shared: !shared) }
+            manager.updateItems(items, completion: errorHandlingCompletion(errorHandler))
         }
         Button("Edit on Pinboard") {
             print("edit on pinboard")

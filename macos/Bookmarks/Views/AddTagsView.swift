@@ -73,7 +73,7 @@ struct AddTagsView: View {
                             let item = item
                                 .adding(tags: Set(tags))
                                 .setting(toRead: false)  // TODO: This is a hack that should be removed (maybe make it an option?)
-                            manager.updateItem(item, completion: { _ in })
+                            manager.updateItems([item], completion: { _ in })
                         }
                         presentationMode.wrappedValue.dismiss()
                     }

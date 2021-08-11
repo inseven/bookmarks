@@ -129,14 +129,15 @@ public class Updater {
         }
     }
 
-    public func updateItem(item: Item, completion: @escaping (Result<Item, Error>) -> Void) {
+    public func updateItems(_ items: [Item], completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
-            let result = Result { () -> Item in
-                let item = try self.database.insertOrUpdate(item: item)
-                let post = Pinboard.Post(item: item)
-                try self.pinboard.postsAdd(post: post, replace: true)
-                return item
+            let result = Result { () -> Void in
+                for item in items {
+                    _ = try self.database.insertOrUpdate(item: item)
+                    let post = Pinboard.Post(item: item)
+                    try self.pinboard.postsAdd(post: post, replace: true)
+                }
             }
             completion(result)
         }

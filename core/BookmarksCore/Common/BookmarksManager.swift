@@ -89,8 +89,8 @@ public class BookmarksManager {
         updater.deleteItems(items, completion: completion)
     }
 
-    public func updateItem(_ item: Item, completion: @escaping (Result<Item, Error>) -> Void) {
-        self.updater.updateItem(item: item, completion: completion)
+    public func updateItems(_ items: [Item], completion: @escaping (Result<Void, Error>) -> Void) {
+        self.updater.updateItems(items, completion: completion)
     }
 
     public func renameTag(_ old: String, to new: String, completion: @escaping (Result<Void, Error>) -> Void) {

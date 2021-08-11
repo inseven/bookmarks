@@ -41,7 +41,6 @@ extension View {
 
 }
 
-
 public typealias TokenStyle = NSTokenField.TokenStyle
 
 public class TokenFieldWithMenuCallback: NSTokenField {
@@ -52,14 +51,10 @@ public class TokenFieldWithMenuCallback: NSTokenField {
         menuDelegate?.tokenField(self, didClickMenuItem: menuItem)
     }
 
-    // TODO: This should use the size of the parent.
     // https://stackoverflow.com/questions/17147366/auto-resizing-nstokenfield-with-constraint-based-layout
     public override var intrinsicContentSize: NSSize {
         var frame = self.frame
-//        let width = frame.size.width
-        // Make the frame very high, while keeping the width
         frame.size.height = CGFloat.greatestFiniteMagnitude;
-        // Calculate new height within the frame with practically infinite height.
         let height = self.cell?.cellSize(forBounds: frame).height ?? 0
         return NSMakeSize(200, height);
     }
@@ -122,12 +117,6 @@ public struct TokenField<T>: NSViewRepresentable {
                 }
             }
             parent.tokens = tokens
-
-//            guard let safeTokens = tokenField.objectValue as? [Token] else {
-//                print("unexpected token field value")
-//                return
-//            }
-//            parent.tokens = safeTokens
         }
 
         fileprivate func token(for representedObject: Any) -> Token? { representedObject as? Token }
@@ -171,13 +160,11 @@ public struct TokenField<T>: NSViewRepresentable {
             return token.tokenStyle
         }
 
-        // Can return the generic object?
         public func tokenField(_ tokenField: NSTokenField, shouldAdd tokens: [Any], at index: Int) -> [Any] {
             guard let tokens = tokens as? [String] else {
                 return []
             }
             return tokens.compactMap {
-                print("test token '\($0)'")
                 return parent.token($0, false)
             }
         }

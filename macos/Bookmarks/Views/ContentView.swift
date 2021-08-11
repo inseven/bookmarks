@@ -239,4 +239,3 @@ struct ContentView: View {
         .navigationTitle(navigationTitle)
     }
 }
-

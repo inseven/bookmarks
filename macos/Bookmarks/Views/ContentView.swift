@@ -102,19 +102,15 @@ struct ContentView: View {
                                 NSItemProvider(object: item.url as NSURL)
                             }
                             .handleMouse {
-                                print("click")
                                 if firstResponder || !selectionTracker.isSelected(item: item) {
                                     selectionTracker.handleClick(item: item)
                                 }
                                 firstResponder = true
                             } doubleClick: {
-                                print("double click")
                                 NSWorkspace.shared.open(item.url)
                             } shiftClick: {
-                                print("shift click")
                                 selectionTracker.handleShiftClick(item: item)
                             } commandClick: {
-                                print("command click")
                                 selectionTracker.handleCommandClick(item: item)
                             }
                     }

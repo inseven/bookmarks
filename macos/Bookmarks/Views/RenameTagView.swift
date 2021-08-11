@@ -24,8 +24,10 @@ import BookmarksCore
 
 struct RenameTagView: View {
 
-    @Environment(\.presentationMode) var presentationMode
     @Environment(\.manager) var manager: BookmarksManager
+    @Environment(\.errorHandler) var errorHandler
+    @Environment(\.presentationMode) var presentationMode
+
     @State var tag: String
     @State var isBusy = false
 
@@ -50,15 +52,16 @@ struct RenameTagView: View {
                     Button("OK") {
                         isBusy = true
                         manager.renameTag(tag, to: newTag) { result in
-                            switch result {
-                            case .failure(let error):
-                                // TODO: Show errors in the UI #218
-                                //       https://github.com/inseven/bookmarks/issues/218
-                                print("Failed to rename tag with error \(error)")
-                                isBusy = false
-                            case .success:
-                                print("Successfully renamed tag")
-                                presentationMode.wrappedValue.dismiss()
+                            DispatchQueue.main.async {
+                                switch result {
+                                case .failure(let error):
+                                    DispatchQueue.main.async {
+                                        errorHandler(error)
+                                    }
+                                case .success:
+                                    print("Successfully renamed tag")
+                                    presentationMode.wrappedValue.dismiss()
+                                }
                             }
                         }
                     }

@@ -26,12 +26,15 @@ import Interact
 
 struct AddTagsView: View {
 
-    @Environment(\.presentationMode) var presentationMode
     @Environment(\.manager) var manager: BookmarksManager
+    @Environment(\.errorHandler) var errorHandler
+    @Environment(\.presentationMode) var presentationMode
+
     var items: [Item]
     @State var isBusy = false
+    @State var markAsRead = false
 
-    @State var tokens: [Token<String>] = []  // TODO: Support a payload on the tokens.
+    @State var tokens: [Token<String>] = []
 
     @ObservedObject var tagsView: TagsView
 
@@ -49,17 +52,20 @@ struct AddTagsView: View {
     // TODO: Default focus when launching.
     var body: some View {
         Form {
-            Section {
-                TokenField("Add tags...", tokens: $tokens) { string, editing in
-                    let tag = string.lowercased()
-                    return Token(tag)
-                        .associatedValue(tag)
-                } completions: { substring in
-                    tagsView.tags(prefix: substring)
+            Section() {
+                VStack(alignment: .leading, spacing: 16) {
+                    TokenField("Add tags...", tokens: $tokens) { string, editing in
+                        let tag = string.lowercased()
+                        return Token(tag)
+                            .associatedValue(tag)
+                    } completions: { substring in
+                        tagsView.tags(prefix: substring)
+                    }
+                    .tokenizingCharacterSet(characterSet)
+                    .font(.title)
+                    .frame(minWidth: 400)
+                    Toggle("Mark as read", isOn: $markAsRead)
                 }
-                .tokenizingCharacterSet(characterSet)
-                .font(.title)
-                .frame(minWidth: 400)
                 HStack {
                     Spacer()
                     Button("Cancel") {
@@ -69,13 +75,21 @@ struct AddTagsView: View {
                     Button("OK") {
                         isBusy = true
                         let tags = tokens.compactMap { $0.associatedValue }
-                        for item in items {
-                            let item = item
+                        let updatedItems = items.map { item in
+                            item
                                 .adding(tags: Set(tags))
-                                .setting(toRead: false)  // TODO: This is a hack that should be removed (maybe make it an option?)
-                            manager.updateItems([item], completion: { _ in })
+                                .setting(toRead: markAsRead ? false : item.toRead)
                         }
-                        presentationMode.wrappedValue.dismiss()
+                        manager.updateItems(updatedItems) { result in
+                            DispatchQueue.main.async {
+                                guard case .failure(let error) = result else {
+                                    presentationMode.wrappedValue.dismiss()
+                                    return
+                                }
+                                errorHandler(error)
+                            }
+                        }
+
                     }
                     .keyboardShortcut(.defaultAction)
                 }

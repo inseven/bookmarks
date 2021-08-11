@@ -141,6 +141,7 @@ struct ContentView: View {
                 } label: {
                     SwiftUI.Image(systemName: "arrow.clockwise")
                 }
+                .help("Refresh")
             }
 
             ToolbarItem {
@@ -166,7 +167,7 @@ struct ContentView: View {
                 } label: {
                     SwiftUI.Image(systemName: "trash")
                 }
-                .help("Add Tags")
+                .help("Delete")
                 .disabled(selectionTracker.selection.count == 0)
             }
 

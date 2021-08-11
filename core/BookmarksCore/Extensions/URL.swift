@@ -26,7 +26,7 @@ public extension URL {
     //       https://github.com/inseven/bookmarks/issues/142
     func asComponents() throws -> URLComponents {
         guard let components = URLComponents(string: absoluteString) else {
-            throw BookmarksError.invalidURL(self)
+            throw BookmarksError.invalidURL(url: self)
         }
         return components
     }

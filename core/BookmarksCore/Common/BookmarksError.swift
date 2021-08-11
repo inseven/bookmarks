@@ -24,15 +24,15 @@ public enum BookmarksError: Error, Equatable {
 
     case resizeFailure
 
-    case invalidURLString(String)
-    case invalidURL(URL)
-    case invalidURLComponents(URLComponents)
+    case invalidURL(string: String)
+    case invalidURL(url: URL)
+    case invalidURL(components: URLComponents)
 
     case unknownMigration(version: Int32)
 
-    case itemNotFoundIdentifier(String)
-    case itemNotFoundURL(URL)
-    case tagNotFound(String)
+    case itemNotFound(identifier: String)
+    case itemNotFound(url: URL)
+    case tagNotFound(name: String)
 
     case corrupt
     case timeout
@@ -40,37 +40,4 @@ public enum BookmarksError: Error, Equatable {
 
     case openFailure
     
-}
-
-extension BookmarksError: LocalizedError {
-
-    public var errorDescription: String? {
-        switch self {
-        case .resizeFailure:
-            return "Unable to resize image."
-        case .invalidURLString(let string):
-            return "\(string) is not a valid URL."
-        case .invalidURL(let url):
-            return "\(url) is not a valid URL."
-        case .invalidURLComponents:
-            return "Invalid URL"
-        case .unknownMigration(let version):
-            return "Failed to migrate database with unknown migration \(version)."
-        case .itemNotFoundIdentifier(let identifier):
-            return "Unable to find bookmark with identifier \(identifier)."
-        case .itemNotFoundURL(let url):
-            return "Unable to find bookmark with URL \(url.absoluteString)."
-        case .tagNotFound(let tag):
-            return "Unable to find tag \(tag)"
-        case .corrupt:
-            return "Database corrupt."
-        case .timeout:
-            return "Database timeout."
-        case .malformedBookmark:
-            return "Malformed bookmark."
-        case .openFailure:
-            return "Unable to open URL"
-        }
-    }
-
 }

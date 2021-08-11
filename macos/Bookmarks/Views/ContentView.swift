@@ -135,7 +135,6 @@ struct ContentView: View {
             databaseView.stop()
         }
         .toolbar {
-
             ToolbarItem {
                 Button {
                     manager.refresh(force: true)

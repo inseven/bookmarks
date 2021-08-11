@@ -25,6 +25,7 @@ import BookmarksCore
 struct BookmarkDesctructiveCommands: View {
 
     @Environment(\.manager) var manager: BookmarksManager
+    @Environment(\.errorHandler) var errorHandler
     
     @Binding var selection: Set<Item>  // TODO: Inject this in the environment?
 
@@ -32,8 +33,11 @@ struct BookmarkDesctructiveCommands: View {
         Button("Delete") {
             // TODO: Show errors in the UI #218
             //       https://github.com/inseven/bookmarks/issues/218
-            for item in selection {
-                manager.deleteItems([item], completion: Logging.log("delete \(item.url)"))
+            manager.deleteItems(Array(selection)) { result in
+                guard case .failure(let error) = result else {
+                    return
+                }
+                errorHandler(error)
             }
         }
         .keyboardShortcut(.delete)

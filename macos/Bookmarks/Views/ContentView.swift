@@ -129,11 +129,9 @@ struct ContentView: View {
         }
         .onAppear {
             databaseView.start()
-            tagsView.start() // TODO: App wide view?
         }
         .onDisappear {
             databaseView.stop()
-            tagsView.stop()
         }
         .toolbar {
 

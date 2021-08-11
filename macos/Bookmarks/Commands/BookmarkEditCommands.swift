@@ -25,6 +25,7 @@ import BookmarksCore
 struct BookmarkEditCommands: View {
 
     @Environment(\.manager) var manager: BookmarksManager
+    @Environment(\.errorHandler) var errorHandler
 
     @Binding var selection: Set<Item>
 
@@ -47,7 +48,12 @@ struct BookmarkEditCommands: View {
             }
         }
         Button("Edit on Pinboard") {
-            selection.editOnPinboard() // TODO: Throws?
+            print("edit on pinboard")
+            do {
+                try manager.editOnPinboard(items: Array(selection))
+            } catch {
+                errorHandler(error)
+            }
         }
     }
 }

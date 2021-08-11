@@ -64,16 +64,6 @@ extension Set where Element == Item {
             }
         }
     }
-
-    func editOnPinboard() {
-        for item in self {
-            do {
-                NSWorkspace.shared.open(try item.pinboardUrl())
-            } catch {
-                print("Failed to open on the Internet Archive with error \(error)")
-            }
-        }
-    }
     
 }
 

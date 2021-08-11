@@ -35,7 +35,7 @@ extension String: Identifiable {
     //       https://github.com/inseven/bookmarks/issues/142
     public func asUrl() throws -> URL {
         guard let url = URL(string: self) else {
-            throw BookmarksError.invalidURL(string: self)
+            throw BookmarksError.invalidURLString(self)
         }
         return url
     }

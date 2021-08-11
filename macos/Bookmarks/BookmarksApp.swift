@@ -51,6 +51,7 @@ struct BookmarksApp: App {
                 }
             }
             .observesApplicationFocus()
+            .handlesError()
             .frameAutosaveName("Main Window")
         }
         .commands {

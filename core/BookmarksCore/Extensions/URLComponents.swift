@@ -30,7 +30,7 @@ extension URLComponents {
     //       https://github.com/inseven/bookmarks/issues/142
     public func asUrl() throws -> URL {
         guard let url = self.url else {
-            throw BookmarksError.invalidURL(components: self)
+            throw BookmarksError.invalidURLComponents(self)
         }
         return url
     }

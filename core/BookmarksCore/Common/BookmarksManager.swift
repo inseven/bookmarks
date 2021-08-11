@@ -99,6 +99,17 @@ public class BookmarksManager {
         self.updater.deleteTag(tag, completion: completion)
     }
 
+    public func editOnPinboard(items: [Item]) throws {
+        #if os(macOS)
+        throw BookmarksError.corrupt
+//        for item in items {
+//            NSWorkspace.shared.open(try item.pinboardUrl())
+//        }
+        #else
+        assert(false, "editing on pinboard is only supported on macOS")
+        #endif
+    }
+
     @objc
     func nsApplicationDidBecomeActive() {
         self.updater.update()

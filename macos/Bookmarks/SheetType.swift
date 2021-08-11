@@ -36,3 +36,17 @@ extension SheetType: Identifiable {
     }
 
 }
+
+enum AlertType {
+    case error(_ error: Error)
+}
+
+extension AlertType: Identifiable {
+
+    var id: String {
+        switch self {
+        case .error(let error):
+            return "error:\(String(describing: error))"
+        }
+    }
+}

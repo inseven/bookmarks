@@ -244,14 +244,14 @@ public class Token<T>: Identifiable, Equatable {
     let title: String
     let displayString: String
     let tokenStyle: TokenStyle
-    let menu: AMenu<T>?
+    let menu: TokenMenu<T>?
     let isPartial: Bool
     let associatedValue: T?
 
     fileprivate init(title: String,
                      displayString: String,
                      tokenStyle: TokenStyle,
-                     menu: AMenu<T>?,
+                     menu: TokenMenu<T>?,
                      isPartial: Bool,
                      associatedValue: T?) {
         self.title = title
@@ -289,7 +289,7 @@ public class Token<T>: Identifiable, Equatable {
               associatedValue: associatedValue)
     }
 
-    public func menu(_ menu: AMenu<T>) -> Token {
+    public func menu(_ menu: TokenMenu<T>) -> Token {
         Token(title: title,
               displayString: displayString,
               tokenStyle: tokenStyle,
@@ -299,7 +299,7 @@ public class Token<T>: Identifiable, Equatable {
     }
 
     public func menu(@MenuBuilder<T> _ content: () -> [MenuItem<T>]) -> Token {
-        menu(AMenu<T>(content))
+        menu(TokenMenu<T>(content))
     }
 
     func isPartial(_ isPartial: Bool) -> Token {
@@ -360,7 +360,7 @@ extension MenuBuilder {
 
 }
 
-public class AMenu<T>: NSObject {
+public class TokenMenu<T>: NSObject {
 
     var items: [MenuItem<T>]
 

@@ -27,6 +27,7 @@ public protocol QueryDescription: Sectionable {
     var sql: String { get }
     var filter: String { get }
     func isEqualTo(_ other: QueryDescription) -> Bool
+    var displayString: String { get }
 
 }
 
@@ -40,6 +41,8 @@ extension QueryDescription where Self: Equatable {
 }
 
 public struct Untagged: QueryDescription, Equatable {
+
+    public var displayString: String { "Untagged" }
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
         true
@@ -58,6 +61,8 @@ public struct Untagged: QueryDescription, Equatable {
 
 public struct Unread: QueryDescription, Equatable {
 
+    public var displayString: String { "Unread" }
+
     public static func == (lhs: Self, rhs: Self) -> Bool {
         true
     }
@@ -71,6 +76,8 @@ public struct Unread: QueryDescription, Equatable {
 }
 
 public struct Shared: QueryDescription, Equatable {
+
+    public var displayString: String { shared ? "Public" : "Private" }
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.shared == rhs.shared
@@ -89,6 +96,8 @@ public struct Shared: QueryDescription, Equatable {
 }
 
 public struct Tag: QueryDescription, Equatable {
+
+    public var displayString: String { name }
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.name == rhs.name
@@ -123,6 +132,8 @@ public struct Tag: QueryDescription, Equatable {
 }
 
 public struct Like: QueryDescription, Equatable {
+
+    public var displayString: String { "*" }
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.value == rhs.value
@@ -162,6 +173,8 @@ public extension QueryDescription where Self: Equatable {
 
 public struct Search: QueryDescription, Equatable {
 
+    public var displayString: String { "*" }
+
     public static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.search == rhs.search
     }
@@ -182,6 +195,8 @@ public struct Search: QueryDescription, Equatable {
 }
 
 public struct And<A, B>: QueryDescription, Equatable where A: QueryDescription & Equatable, B: QueryDescription & Equatable {
+
+    public var displayString: String { "*" }
 
     public static func == (lhs: And, rhs: And) -> Bool {
         guard lhs.lhs == rhs.lhs else {
@@ -215,6 +230,8 @@ func &&<T: QueryDescription, Q: QueryDescription>(lhs: T, rhs: Q) -> And<T, Q> {
 
 public struct True: QueryDescription, Equatable {
 
+    public var displayString: String { "*" }
+
     public static func == (lhs: Self, rhs: Self) -> Bool {
         return true
     }
@@ -228,6 +245,8 @@ public struct True: QueryDescription, Equatable {
 }
 
 public class Today: QueryDescription, Equatable {
+
+    public var displayString: String { "Today" }
 
     public static func == (lhs: Today, rhs: Today) -> Bool {
         return true
@@ -249,6 +268,7 @@ public struct AnyQuery: QueryDescription, Equatable {
 
     public let query: QueryDescription
 
+    public var displayString: String { query.displayString }
     public var sql: String { query.sql }
     public var filter: String { query.filter }
     public var section: BookmarksSection { query.section }

@@ -65,32 +65,38 @@ struct AddTagsView: View {
                     .frame(minWidth: 400)
                     Toggle("Mark as read", isOn: $markAsRead)
                 }
-                HStack {
+                HStack(spacing: 8) {
                     Spacer()
-                    Button("Cancel") {
-                        presentationMode.wrappedValue.dismiss()
+                    if isBusy {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle())
+                            .controlSize(.small)
                     }
-                    .keyboardShortcut(.cancelAction)
-                    Button("OK") {
-                        isBusy = true
-                        let tags = tokens.compactMap { $0.associatedValue }
-                        let updatedItems = items.map { item in
-                            item
-                                .adding(tags: Set(tags))
-                                .setting(toRead: markAsRead ? false : item.toRead)
+                    HStack {
+                        Button("Cancel") {
+                            presentationMode.wrappedValue.dismiss()
                         }
-                        manager.updateItems(updatedItems) { result in
-                            DispatchQueue.main.async {
-                                guard case .failure(let error) = result else {
-                                    presentationMode.wrappedValue.dismiss()
-                                    return
+                        .keyboardShortcut(.cancelAction)
+                        Button("OK") {
+                            isBusy = true
+                            let tags = tokens.compactMap { $0.associatedValue }
+                            let updatedItems = items.map { item in
+                                item
+                                    .adding(tags: Set(tags))
+                                    .setting(toRead: markAsRead ? false : item.toRead)
+                            }
+                            manager.updateItems(updatedItems) { result in
+                                DispatchQueue.main.async {
+                                    guard case .failure(let error) = result else {
+                                        presentationMode.wrappedValue.dismiss()
+                                        return
+                                    }
+                                    errorHandler(error)
                                 }
-                                errorHandler(error)
                             }
                         }
-
+                        .keyboardShortcut(.defaultAction)
                     }
-                    .keyboardShortcut(.defaultAction)
                 }
             }
         }

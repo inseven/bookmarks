@@ -25,6 +25,7 @@ public enum SettingsKey: String {
     case useInAppBrowser = "use-in-app-browser"
     case maximumConcurrentThumbnailDownloads = "maximum-concurrent-thumbnail-downloads"
     case favoriteTags = "favorite-tags"
+    case addTagsMarkAsRead = "add-tags-mark-as-read"
 }
 
 final public class Settings: ObservableObject {

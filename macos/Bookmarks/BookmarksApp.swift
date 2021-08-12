@@ -31,12 +31,7 @@ struct BookmarksApp: App {
 
     var body: some Scene {
         WindowGroup {
-            NavigationView {
-                Sidebar(tagsView: manager.tagsView, settings: manager.settings, selection: $selection)
-                ContentView(sidebarSelection: $selection, database: manager.database)
-            }
-            .handlesError()
-            .frameAutosaveName("Main Window")
+            MainWindow(selection: $selection)
         }
         .commands {
             SidebarCommands()

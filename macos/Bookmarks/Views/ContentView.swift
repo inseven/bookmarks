@@ -71,7 +71,7 @@ struct ContentView: View {
                         BookmarkCell(item: item)
                             .shadow(color: .shadow, radius: 8)
                             .help(item.localDate)
-                            .onClick {
+                            .handleMouse {
                                 manager.database.item(identifier: item.identifier) { result in
                                     switch result {
                                     case .success(let item):
@@ -83,13 +83,6 @@ struct ContentView: View {
                             } doubleClick: {
                                 NSWorkspace.shared.open(item.url)
                             }
-                            .onCommandDoubleClick {
-                                do {
-                                    NSWorkspace.shared.open(try item.pinboardUrl())
-                                } catch {
-                                    print("Failed to edit with error \(error)")
-                                }
-                            }
                             .contextMenu {
                                 BookmarkOpenCommands(selection: Binding.constant(Set([item])))
                                     .trailingDivider()
@@ -99,7 +92,8 @@ struct ContentView: View {
                                     .trailingDivider()
                                 BookmarkShareCommands(item: item)
                                     .trailingDivider()
-                                BookmarkTagCommands(sidebarSelection: $sidebarSelection, item: item)
+                                BookmarkTagCommands(sidebarSelection: $sidebarSelection,
+                                                    selection: Binding.constant(Set([item])))
                                 #if DEBUG
                                 BookmarkDebugCommands()
                                     .leadingDivider()

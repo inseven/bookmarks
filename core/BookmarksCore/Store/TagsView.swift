@@ -27,6 +27,8 @@ public class TagsView: ObservableObject {
     var updateCancellable: AnyCancellable? = nil
 
     public var tags: [String] = []
+    public var fastTags: Set<String> = Set()
+    var trie = Trie()
 
     fileprivate var filter = ""
 
@@ -42,9 +44,18 @@ public class TagsView: ObservableObject {
                 return
             }
 
+            let trie = Trie()
+            for tag in tags {
+                trie.insert(word: tag)
+            }
+
+            let fastTags = Set(tags)
+
             DispatchQueue.main.async {
                 self.objectWillChange.send()
                 self.tags = tags
+                self.fastTags = fastTags
+                self.trie = trie
             }
         }
     }
@@ -66,6 +77,16 @@ public class TagsView: ObservableObject {
         self.updateCancellable?.cancel()
         self.updateCancellable = nil
         self.tags = []
+    }
+
+    public func tags(prefix: String) -> [String] {
+        dispatchPrecondition(condition: .onQueue(.main))
+        return trie.findWordsWithPrefix(prefix: prefix)
+    }
+
+    public func contains(tag: String) -> Bool {
+        dispatchPrecondition(condition: .onQueue(.main))
+        return self.fastTags.contains(tag)
     }
 
 }

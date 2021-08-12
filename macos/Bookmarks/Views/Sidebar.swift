@@ -99,7 +99,7 @@ struct Sidebar: View {
     @StateObject var tagsView: TagsView
     @ObservedObject var settings: BookmarksCore.Settings
 
-    @Binding var selection: BookmarksSection?
+    @Binding var section: BookmarksSection?
 
     @State var sheet: SheetType? = nil
 
@@ -109,7 +109,7 @@ struct Sidebar: View {
 
     var body: some View {
         ScrollViewReader { scrollView in
-            List(selection: $selection) {
+            List(selection: $section) {
 
                 Section(header: Text("Smart Filters")) {
                     SidebarLink(tag: .all)
@@ -182,12 +182,12 @@ struct Sidebar: View {
                 }
 
             }
-            .onChange(of: selection) { selection in
-                guard let selection = selection else {
+            .onChange(of: section) { section in
+                guard let section = section else {
                     return
                 }
-                print("scrolling to \(selection)")
-                scrollView.scrollTo(selection)
+                print("scrolling to \(section)")
+                scrollView.scrollTo(section)
             }
         }
         .sheet(item: $sheet) { sheet in

@@ -27,11 +27,11 @@ import BookmarksCore
 struct BookmarksApp: App {
 
     @Environment(\.manager) var manager: BookmarksManager
-    @State var selection: BookmarksSection? = .all
+    @State var section: BookmarksSection? = .all
 
     var body: some Scene {
         WindowGroup {
-            MainWindow(selection: $selection)
+            MainWindow(section: $section)
         }
         .commands {
             SidebarCommands()
@@ -45,28 +45,28 @@ struct BookmarksApp: App {
             }
             CommandMenu("Go") {
                 Button("All Bookmarks") {
-                    selection = .all
+                    section = .all
                 }
                 .keyboardShortcut("1", modifiers: .command)
                 Button("Private") {
-                    selection = .shared(false)
+                    section = .shared(false)
                 }
                 .keyboardShortcut("2", modifiers: .command)
                 Button("Public") {
-                    selection = .shared(true)
+                    section = .shared(true)
                 }
                 .keyboardShortcut("3", modifiers: .command)
                 Button("Today") {
-                    selection = .today
+                    section = .today
                 }
                 .keyboardShortcut("4", modifiers: .command)
 
                 Button("Unread") {
-                    selection = .unread
+                    section = .unread
                 }
                 .keyboardShortcut("5", modifiers: .command)
                 Button("Untagged") {
-                    selection = .untagged
+                    section = .untagged
                 }
                 .keyboardShortcut("6", modifiers: .command)
             }

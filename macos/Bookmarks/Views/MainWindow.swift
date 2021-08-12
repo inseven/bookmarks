@@ -36,14 +36,14 @@ struct MainWindow: View {
 
     @Environment(\.manager) var manager: BookmarksManager
 
-    @Binding var selection: BookmarksSection?
+    @Binding var section: BookmarksSection?
 
     @State var sheet: SheetType? = nil
 
     var body: some View {
         NavigationView {
-            Sidebar(tagsView: manager.tagsView, settings: manager.settings, selection: $selection)
-            ContentView(sidebarSelection: $selection, database: manager.database)
+            Sidebar(tagsView: manager.tagsView, settings: manager.settings, section: $section)
+            ContentView(section: $section, database: manager.database)
         }
         .environment(\.sheetHandler, { sheet in
             self.sheet = sheet

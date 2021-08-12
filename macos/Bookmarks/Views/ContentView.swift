@@ -161,12 +161,7 @@ struct ContentView: View {
             }
             ToolbarItem {
                 Button {
-                    manager.deleteItems(Array(selectionTracker.selection)) { result in
-                        guard case .failure(let error) = result else {
-                            return
-                        }
-                        errorHandler(error)
-                    }
+                    manager.deleteItems(selectionTracker.selection, completion: errorHandlingCompletion(errorHandler))
                 } label: {
                     SwiftUI.Image(systemName: "trash")
                 }

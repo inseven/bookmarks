@@ -31,7 +31,7 @@ struct BookmarkDesctructiveCommands: View {
 
     var body: some View {
         Button("Delete") {
-            manager.deleteItems(Array(selection), completion: errorHandlingCompletion(errorHandler))
+            manager.deleteItems(selection, completion: errorHandlingCompletion(errorHandler))
         }
     }
 

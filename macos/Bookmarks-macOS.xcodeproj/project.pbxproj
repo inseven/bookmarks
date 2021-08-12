@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		D80710EB26C4847D007272C0 /* BookmarkDebugCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80710EA26C4847D007272C0 /* BookmarkDebugCommands.swift */; };
 		D80710F326C4B855007272C0 /* MainWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80710F226C4B855007272C0 /* MainWindow.swift */; };
-		D8164D6026C08B0600756D43 /* SelectionPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D5F26C08B0600756D43 /* SelectionPreferenceKey.swift */; };
 		D8164D6626C08DD500756D43 /* AddTagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D6526C08DD500756D43 /* AddTagsView.swift */; };
 		D8164D6826C08EEC00756D43 /* BorderedSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D6726C08EEC00756D43 /* BorderedSelection.swift */; };
 		D840B006262103C4001E95D1 /* AccountSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840B005262103C4001E95D1 /* AccountSettingsView.swift */; };
@@ -72,7 +71,6 @@
 /* Begin PBXFileReference section */
 		D80710EA26C4847D007272C0 /* BookmarkDebugCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkDebugCommands.swift; sourceTree = "<group>"; };
 		D80710F226C4B855007272C0 /* MainWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
-		D8164D5F26C08B0600756D43 /* SelectionPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionPreferenceKey.swift; sourceTree = "<group>"; };
 		D8164D6526C08DD500756D43 /* AddTagsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTagsView.swift; sourceTree = "<group>"; };
 		D8164D6726C08EEC00756D43 /* BorderedSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderedSelection.swift; sourceTree = "<group>"; };
 		D840B005262103C4001E95D1 /* AccountSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountSettingsView.swift; sourceTree = "<group>"; };
@@ -174,7 +172,6 @@
 				D891C45D261E32FB0024E1A6 /* Bookmarks.entitlements */,
 				D891C45C261E32FB0024E1A6 /* Info.plist */,
 				D891C459261E32FB0024E1A6 /* Preview Content */,
-				D8164D5F26C08B0600756D43 /* SelectionPreferenceKey.swift */,
 				D8EB6E4426C3357F00C23B19 /* ErrorHandler.swift */,
 			);
 			path = Bookmarks;
@@ -398,7 +395,6 @@
 				D8164D6826C08EEC00756D43 /* BorderedSelection.swift in Sources */,
 				D891C456261E32F90024E1A6 /* ContentView.swift in Sources */,
 				D861257526AA048E00EB5FEF /* RenameTagView.swift in Sources */,
-				D8164D6026C08B0600756D43 /* SelectionPreferenceKey.swift in Sources */,
 				D80710EB26C4847D007272C0 /* BookmarkDebugCommands.swift in Sources */,
 				D8A336FE26B56AF700436200 /* BookmarkDestructiveCommands.swift in Sources */,
 				D8A336FA26B569C200436200 /* BookmarkTagCommands.swift in Sources */,

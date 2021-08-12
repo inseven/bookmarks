@@ -45,18 +45,16 @@ struct ContentView: View {
     @Environment(\.sheetHandler) var sheetHandler
     @Environment(\.errorHandler) var errorHandler
     @StateObject var databaseView: ItemsView
-    @ObservedObject var tagsView: TagsView
 
     @StateObject var selectionTracker: SelectionTracker<Item>
     @State var firstResponder: Bool = false
 
-    @StateObject var tokenDebouncer = Debouncer<[Token<String>]>(initialValue: [], delay: .seconds(0.2))
+    @StateObject var searchDebouncer = Debouncer<String>(initialValue: "", delay: .seconds(0.2))
 
     private var subscription: AnyCancellable?
 
-    init(sidebarSelection: Binding<BookmarksSection?>, database: Database, tagsView: TagsView) {
+    init(sidebarSelection: Binding<BookmarksSection?>, database: Database) {
         _sidebarSelection = sidebarSelection
-        self.tagsView = tagsView
         let databaseView = Deferred(ItemsView(database: database, query: True().eraseToAnyQuery()))
         let selectionTracker = Deferred(SelectionTracker(items: databaseView.get().$items))
         _databaseView = StateObject(wrappedValue: databaseView.get())
@@ -64,6 +62,10 @@ struct ContentView: View {
     }
 
     var navigationTitle: String {
+        let queries = searchDebouncer.debouncedValue.queries
+        if (queries.section == .all && queries.count > 1) || queries.count > 1 {
+            return "Search: \(searchDebouncer.debouncedValue)"
+        }
         guard let title = sidebarSelection?.navigationTitle else {
             return "Unknown"
         }
@@ -126,7 +128,6 @@ struct ContentView: View {
                 firstResponder = true
                 selectionTracker.clear()
             }
-            .preference(key: SelectionPreferenceKey.self, value: firstResponder ? selectionTracker.selection : [])
             .background(Color(NSColor.textBackgroundColor))
             .overlay(databaseView.state == .loading ? LoadingView() : nil)
         }
@@ -174,27 +175,14 @@ struct ContentView: View {
             }
 
             ToolbarItem {
-                TokenField("Search", tokens: $tokenDebouncer.value) { string, editing in
-                    Token(string)
-                        .tokenStyle(tagsView.contains(tag: string) ? .default : .none)
-                        .associatedValue(tagsView.contains(tag: string) && !editing ? "tag:\(string)" : string)
-                } completions: { substring in
-                    tagsView.tags(prefix: substring)
-                }
-                .font(.title3)
-                .lineLimit(1)
-                .wraps(false)
-                .frame(minWidth: 400)
+                SearchField(search: $searchDebouncer.value)
+                    .frame(minWidth: 100, idealWidth: 300, maxWidth: .infinity)
             }
-
         }
-        .onReceive(tokenDebouncer.$debouncedValue) { tokens in
+        .onReceive(searchDebouncer.$debouncedValue) { search in
 
-            let queries = tokens.compactMap { token in
-                token.associatedValue
-            }.map {
-                AnyQuery.parse(token: $0)
-            }
+            // Get the query corresponding to the current search text.
+            let queries = AnyQuery.queries(for: search)
 
             // Update the selected section if necessary.
             let section = queries.section
@@ -218,16 +206,8 @@ struct ContentView: View {
             selectionTracker.clear()
             databaseView.clear()
             let query = section.query
+            searchDebouncer.value = query.filter
             databaseView.query = query.eraseToAnyQuery()
-
-            // TODO: We're doing unnecessary round-trips here.
-            let tokens = AnyQuery.queries(for: query.filter).map { query in
-                Token(query.filter)
-                    .displayString(query.displayString)
-                    .associatedValue(query.filter)
-            }
-
-            self.tokenDebouncer.value = tokens
 
         }
         .onChange(of: underlyingSection, perform: { underlyingSection in

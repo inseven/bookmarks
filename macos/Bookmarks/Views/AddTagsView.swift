@@ -32,7 +32,7 @@ struct AddTagsView: View {
 
     var items: [Item]
     @State var isBusy = false
-    @State var markAsRead = false
+    @AppStorage(SettingsKey.addTagsMarkAsRead.rawValue) var markAsRead: Bool = false
 
     @State var tokens: [Token<String>] = []
 

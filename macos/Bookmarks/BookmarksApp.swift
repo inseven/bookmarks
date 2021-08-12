@@ -26,12 +26,17 @@ import BookmarksCore
 @main
 struct BookmarksApp: App {
 
-    @Environment(\.manager) var manager: BookmarksManager
+    @Environment(\.manager) var manager
+//    @Environment(\.selection) var selection
+
+    @StateObject var selection = BookmarksSelection()
+    
     @State var section: BookmarksSection? = .all
 
     var body: some Scene {
         WindowGroup {
             MainWindow(section: $section)
+                .environment(\.selection, selection)
         }
         .commands {
             SidebarCommands()
@@ -69,6 +74,16 @@ struct BookmarksApp: App {
                     section = .untagged
                 }
                 .keyboardShortcut("6", modifiers: .command)
+            }
+            CommandMenu("Bookmark") {
+                Button("Delete") {
+                    selection.delete(manager: manager)
+                }
+                .keyboardShortcut(.delete, modifiers: .command)
+                .disabled(selection.isEmpty)
+                .trailingDivider()
+                BookmarkTagCommands(section: $section)
+                    .environment(\.selection, selection)
             }
         }
         SwiftUI.Settings {

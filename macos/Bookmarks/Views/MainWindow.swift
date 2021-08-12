@@ -24,59 +24,20 @@ import BookmarksCore
 
 struct MainWindow: View {
 
-    enum SheetType {
-        case addTags(items: [Item])
-    }
-
-    typealias SheetHandler = (SheetType) -> Void
-
-    struct SheetHandlerEnvironmentKey: EnvironmentKey {
-        static var defaultValue: MainWindow.SheetHandler = { _ in }
-    }
-
-    @Environment(\.manager) var manager: BookmarksManager
+    @Environment(\.manager) var manager
+    @Environment(\.selection) var selection
 
     @Binding var section: BookmarksSection?
-
-    @State var sheet: SheetType? = nil
 
     var body: some View {
         NavigationView {
             Sidebar(tagsView: manager.tagsView, settings: manager.settings, section: $section)
             ContentView(section: $section, database: manager.database)
         }
-        .environment(\.sheetHandler, { sheet in
-            self.sheet = sheet
-        })
-        .sheet(item: $sheet) { sheet in
-            switch sheet {
-            case .addTags(let items):
-                AddTagsView(tagsView: manager.tagsView, items: items)
-            }
-        }
         .handlesError()
+        .handlesSelectionSheets(selection)
         .observesApplicationFocus()
         .frameAutosaveName("Main Window")
     }
 
-}
-
-extension MainWindow.SheetType: Identifiable {
-
-    var id: String {
-        switch self {
-        case .addTags(let items):
-            return "addTags:\(items.map { $0.identifier }.joined(separator: ","))"
-        }
-    }
-
-}
-
-extension EnvironmentValues {
-
-    var sheetHandler: (MainWindow.SheetHandler) {
-        get { self[MainWindow.SheetHandlerEnvironmentKey.self] }
-        set { self[MainWindow.SheetHandlerEnvironmentKey.self] = newValue }
-    }
-    
 }

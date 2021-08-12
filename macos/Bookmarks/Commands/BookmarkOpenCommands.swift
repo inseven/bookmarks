@@ -24,17 +24,15 @@ import BookmarksCore
 
 struct BookmarkOpenCommands: View {
 
-    @Environment(\.manager) var manager: BookmarksManager
-    @Environment(\.errorHandler) var errorHandler
-
-    @Binding var selection: Set<Item>
+    @Environment(\.manager) var manager
+    @Environment(\.selection) var selection
 
     var body: some View {
         Button("Open") {
-            manager.open(items: Array(selection), completion: errorHandlingCompletion(errorHandler))
+            selection.open(manager: manager)
         }
         Button("Open on Internet Archive") {
-            manager.openOnInternetArchive(items: Array(selection), completion: errorHandlingCompletion(errorHandler))
+            selection.openOnInternetArchive(manager: manager)
         }
     }
 }

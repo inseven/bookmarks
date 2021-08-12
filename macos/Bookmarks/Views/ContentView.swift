@@ -27,8 +27,8 @@ import Interact
 struct ContentView: View {
 
     @Environment(\.manager) var manager
+    @Environment(\.selection) var selection
     @Environment(\.applicationHasFocus) var applicationHasFocus
-    @Environment(\.sheetHandler) var sheetHandler
     @Environment(\.errorHandler) var errorHandler
 
     @Binding var section: BookmarksSection?
@@ -70,7 +70,7 @@ struct ContentView: View {
                             .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: item), firstResponder: firstResponder))
                             .help(item.localDate)
                             .contextMenuFocusable {
-                                BookmarkOpenCommands(selection: $selectionTracker.selection)
+                                BookmarkOpenCommands()
                                     .trailingDivider()
                                 BookmarkDesctructiveCommands(selection: $selectionTracker.selection)
                                     .trailingDivider()
@@ -78,7 +78,7 @@ struct ContentView: View {
                                     .trailingDivider()
                                 BookmarkShareCommands(item: item)
                                     .trailingDivider()
-                                BookmarkTagCommands(section: $section, selection: $selectionTracker.selection)
+                                BookmarkTagCommands(section: $section)
                                 #if DEBUG
                                 BookmarkDebugCommands()
                                     .leadingDivider()
@@ -140,7 +140,7 @@ struct ContentView: View {
                     guard selectionTracker.selection.count > 0 else {
                         return
                     }
-                    sheetHandler(.addTags(items: Array(selectionTracker.selection)))
+                    selection.addTags()
                 } label: {
                     SwiftUI.Image(systemName: "tag")
                 }
@@ -203,6 +203,12 @@ struct ContentView: View {
             section = underlyingSection
 
         })
+        .onChange(of: selectionTracker.selection, perform: { newSelection in
+            selection.items = newSelection
+        })
+//        .onChange(of: selectionTracker.selection) { newSelection
+//            selection.items = newSelection
+//        }
         .navigationTitle(navigationTitle)
     }
 }

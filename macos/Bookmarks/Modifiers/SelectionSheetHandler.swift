@@ -20,30 +20,40 @@
 
 import SwiftUI
 
-import BookmarksCore
-
-struct BookmarkTagCommands: View {
+struct SelectionSheetHandler: ViewModifier {
 
     @Environment(\.manager) var manager
-    @Environment(\.selection) var selection
+    @Environment(\.errorHandler) var errorHandler
 
-    @Binding var section: BookmarksSection?
+    @ObservedObject var selection: BookmarksSelection
 
-    var body: some View {
-        Menu("Tags") {
-            Button("Add...") {
-                selection.addTags()
-            }
-            .keyboardShortcut("t", modifiers: .command)
-            if selection.items.count == 1,
-               let item = selection.items.first {
-                Divider()
-                ForEach(Array(item.tags).sorted()) { tag in
-                    Button(tag) {
-                        section = tag.section
-                    }
+    @State var error: IdentifiableError? = nil
+
+    func body(content: Content) -> some View {
+        content
+            .sheet(item: $selection.sheet) { sheet in
+                switch sheet {
+                case .addTags(let items):
+                    AddTagsView(tagsView: manager.tagsView, items: items)
                 }
             }
-        }
+            .alert(item: $error) { error in
+                return Alert(title: Text("Error"), message: Text(error.error.localizedDescription))
+            }
+            .onReceive(selection.$lastError) { error in
+                guard let error = error else {
+                    return
+                }
+                self.error = IdentifiableError(error: error)
+            }
     }
+
+}
+
+extension View {
+
+    func handlesSelectionSheets(_ selection: BookmarksSelection) -> some View {
+        modifier(SelectionSheetHandler(selection: selection))
+    }
+
 }

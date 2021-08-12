@@ -26,8 +26,8 @@ struct BookmarkTagCommands: View {
 
     @Environment(\.manager) var manager
     @Environment(\.sheetHandler) var sheetHandler
-    @Binding var sidebarSelection: BookmarksSection?
 
+    @Binding var section: BookmarksSection?
     @Binding var selection: Set<Item>
 
     var body: some View {
@@ -40,7 +40,7 @@ struct BookmarkTagCommands: View {
                 Divider()
                 ForEach(Array(item.tags).sorted()) { tag in
                     Button(tag) {
-                        sidebarSelection = tag.section
+                        section = tag.section
                     }
                 }
             }

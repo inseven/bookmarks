@@ -37,24 +37,23 @@ extension Item {
 
 struct ContentView: View {
 
-    @Binding var sidebarSelection: BookmarksSection?
-    @State var underlyingSection: BookmarksSection?
-
     @Environment(\.manager) var manager
     @Environment(\.applicationHasFocus) var applicationHasFocus
     @Environment(\.sheetHandler) var sheetHandler
     @Environment(\.errorHandler) var errorHandler
-    @StateObject var databaseView: ItemsView
 
+    @Binding var section: BookmarksSection?
+
+    @State var underlyingSection: BookmarksSection?
+    @StateObject var databaseView: ItemsView
     @StateObject var selectionTracker: SelectionTracker<Item>
     @State var firstResponder: Bool = false
-
     @StateObject var searchDebouncer = Debouncer<String>(initialValue: "", delay: .seconds(0.2))
 
     private var subscription: AnyCancellable?
 
-    init(sidebarSelection: Binding<BookmarksSection?>, database: Database) {
-        _sidebarSelection = sidebarSelection
+    init(section: Binding<BookmarksSection?>, database: Database) {
+        _section = section
         let databaseView = Deferred(ItemsView(database: database, query: True().eraseToAnyQuery()))
         let selectionTracker = Deferred(SelectionTracker(items: databaseView.get().$items))
         _databaseView = StateObject(wrappedValue: databaseView.get())
@@ -66,7 +65,7 @@ struct ContentView: View {
         if (queries.section == .all && queries.count > 1) || queries.count > 1 {
             return "Search: \(searchDebouncer.debouncedValue)"
         }
-        guard let title = sidebarSelection?.navigationTitle else {
+        guard let title = section?.navigationTitle else {
             return "Unknown"
         }
         return title
@@ -90,7 +89,7 @@ struct ContentView: View {
                                     .trailingDivider()
                                 BookmarkShareCommands(item: item)
                                     .trailingDivider()
-                                BookmarkTagCommands(sidebarSelection: $sidebarSelection, selection: $selectionTracker.selection)
+                                BookmarkTagCommands(section: $section, selection: $selectionTracker.selection)
                                 #if DEBUG
                                 BookmarkDebugCommands()
                                     .leadingDivider()
@@ -186,7 +185,7 @@ struct ContentView: View {
 
             // Update the selected section if necessary.
             let section = queries.section
-            if section != sidebarSelection {
+            if section != section {
                 underlyingSection = section
             }
 
@@ -194,7 +193,7 @@ struct ContentView: View {
             databaseView.query = AnyQuery.and(queries)
 
         }
-        .onChange(of: sidebarSelection) { section in
+        .onChange(of: section) { section in
 
             guard underlyingSection != section,
                   let section = section else {
@@ -212,12 +211,12 @@ struct ContentView: View {
         }
         .onChange(of: underlyingSection, perform: { underlyingSection in
 
-            guard sidebarSelection != underlyingSection else {
+            guard section != underlyingSection else {
                 return
             }
 
             // Bring the sidebar section in-line with the underlying section.
-            sidebarSelection = underlyingSection
+            section = underlyingSection
 
         })
         .navigationTitle(navigationTitle)

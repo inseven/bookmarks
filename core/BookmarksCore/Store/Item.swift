@@ -192,6 +192,17 @@ extension Item {
 
 }
 
+extension Item {
+
+    public var localDate: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = .medium
+        dateFormatter.dateStyle = .long
+        return "Added \(dateFormatter.string(from: date))"
+    }
+
+}
+
 extension Set where Element == Item {
 
     public var containsUnreadBookmark: Bool {

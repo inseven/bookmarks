@@ -30,29 +30,9 @@ struct BookmarksApp: App {
     @Environment(\.manager) var manager: BookmarksManager
     @State var selection: BookmarksSection? = .all
 
-    @State var sheet: SheetType? = nil // TODO: Push this down to the window group?
-
     var body: some Scene {
         WindowGroup {
-            NavigationView {
-                Sidebar(tagsView: manager.tagsView, settings: manager.settings, selection: $selection)
-                ContentView(sidebarSelection: $selection, database: manager.database, tagsView: manager.tagsView)
-            }
-            .onPreferenceChange(SelectionPreferenceKey.self) { value in
-                self.selectionPreference = value
-            }
-            .environment(\.sheetHandler, { sheet in
-                self.sheet = sheet
-            })
-            .sheet(item: $sheet) { sheet in
-                switch sheet {
-                case .addTags(let items):
-                    AddTagsView(tagsView: manager.tagsView, items: items)
-                }
-            }
-            .observesApplicationFocus()
-            .handlesError()
-            .frameAutosaveName("Main Window")
+            MainWindow(selection: $selection, selectionPreference: $selectionPreference)
         }
         .commands {
             SidebarCommands()

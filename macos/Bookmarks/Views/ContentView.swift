@@ -24,17 +24,6 @@ import SwiftUI
 import BookmarksCore
 import Interact
 
-extension Item {
-
-    var localDate: String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeStyle = .medium
-        dateFormatter.dateStyle = .long
-        return "Added \(dateFormatter.string(from: date))"
-    }
-
-}
-
 struct ContentView: View {
 
     @Binding var sidebarSelection: BookmarksSection?

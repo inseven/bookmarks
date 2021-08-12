@@ -26,13 +26,12 @@ import BookmarksCore
 @main
 struct BookmarksApp: App {
 
-    @State var selectionPreference: Set<Item> = Set()
     @Environment(\.manager) var manager: BookmarksManager
     @State var selection: BookmarksSection? = .all
 
     var body: some Scene {
         WindowGroup {
-            MainWindow(selection: $selection, selectionPreference: $selectionPreference)
+            MainWindow(selection: $selection)
         }
         .commands {
             SidebarCommands()

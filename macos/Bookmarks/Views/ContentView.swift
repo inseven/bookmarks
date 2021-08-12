@@ -41,7 +41,6 @@ struct ContentView: View {
     @State var underlyingSection: BookmarksSection?
 
     @Environment(\.manager) var manager: BookmarksManager
-    @Environment(\.sheetHandler) var sheetHandler
     @StateObject var databaseView: ItemsView
 
     @StateObject var searchDebouncer = Debouncer<String>(initialValue: "", delay: .seconds(0.2))

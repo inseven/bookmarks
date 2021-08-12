@@ -55,6 +55,7 @@ struct MainWindow: View {
             }
         }
         .handlesError()
+        .observesApplicationFocus()
         .frameAutosaveName("Main Window")
     }
 

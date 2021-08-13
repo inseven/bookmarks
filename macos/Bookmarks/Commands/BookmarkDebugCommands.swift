@@ -24,15 +24,13 @@ import BookmarksCore
 
 struct BookmarkDebugCommands: View {
 
-    @Environment(\.manager) var manager: BookmarksManager
-    @Environment(\.errorHandler) var errorHandler
+    @Environment(\.manager) var manager
+    @Environment(\.selection) var selection
 
     var body: some View {
         Menu("Debug") {
             Button("Show Error") {
-                DispatchQueue.main.async {
-                    errorHandler(BookmarksError.corrupt)
-                }
+                selection.showError(error: BookmarksError.corrupt)
             }
         }
     }

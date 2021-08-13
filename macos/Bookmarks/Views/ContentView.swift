@@ -29,7 +29,7 @@ struct ContentView: View {
     @Environment(\.manager) var manager
     @Environment(\.selection) var selection
     @Environment(\.applicationHasFocus) var applicationHasFocus
-    @Environment(\.errorHandler) var errorHandler
+//    @Environment(\.errorHandler) var errorHandler
 
     @Binding var section: BookmarksSection?
 
@@ -70,11 +70,11 @@ struct ContentView: View {
                             .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: item), firstResponder: firstResponder))
                             .help(item.localDate)
                             .contextMenuFocusable {
-                                BookmarkOpenCommands()
+                                BookmarkOpenCommands(selection: selection)
                                     .trailingDivider()
-                                BookmarkDesctructiveCommands(selection: $selectionTracker.selection)
+                                BookmarkDesctructiveCommands(selection: selection)
                                     .trailingDivider()
-                                BookmarkEditCommands(selection: $selectionTracker.selection)
+                                BookmarkEditCommands(selection: selection)
                                     .trailingDivider()
                                 BookmarkShareCommands(item: item)
                                     .trailingDivider()
@@ -149,12 +149,12 @@ struct ContentView: View {
             }
             ToolbarItem {
                 Button {
-                    manager.deleteItems(selectionTracker.selection, completion: errorHandlingCompletion(errorHandler))
+                    selection.delete(manager: manager)
                 } label: {
                     SwiftUI.Image(systemName: "trash")
                 }
                 .help("Delete")
-                .disabled(selectionTracker.selection.count == 0)
+                .disabled(selection.isEmpty)
             }
 
             ToolbarItem {

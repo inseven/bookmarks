@@ -76,12 +76,12 @@ struct BookmarksApp: App {
                 .keyboardShortcut("6", modifiers: .command)
             }
             CommandMenu("Bookmark") {
-                Button("Delete") {
-                    selection.delete(manager: manager)
-                }
-                .keyboardShortcut(.delete, modifiers: .command)
-                .disabled(selection.isEmpty)
-                .trailingDivider()
+                BookmarkOpenCommands(selection: selection)
+                    .trailingDivider()
+                BookmarkDesctructiveCommands(selection: selection)
+                    .trailingDivider()
+                BookmarkEditCommands(selection: selection)
+                    .trailingDivider()
                 BookmarkTagCommands(section: $section)
                     .environment(\.selection, selection)
             }

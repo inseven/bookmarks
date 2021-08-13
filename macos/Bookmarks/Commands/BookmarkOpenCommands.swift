@@ -25,14 +25,20 @@ import BookmarksCore
 struct BookmarkOpenCommands: View {
 
     @Environment(\.manager) var manager
-    @Environment(\.selection) var selection
+//    @Environment(\.selection) var selection
+
+    @State var selection: BookmarksSelection
 
     var body: some View {
         Button("Open") {
             selection.open(manager: manager)
         }
+        .keyboardShortcut(.return, modifiers: [.command])
+        .disabled(selection.isEmpty)
         Button("Open on Internet Archive") {
             selection.openOnInternetArchive(manager: manager)
         }
+        .keyboardShortcut(.return, modifiers: [.command, .shift])
+        .disabled(selection.isEmpty)
     }
 }

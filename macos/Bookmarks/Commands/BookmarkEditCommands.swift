@@ -25,23 +25,24 @@ import BookmarksCore
 struct BookmarkEditCommands: View {
 
     @Environment(\.manager) var manager: BookmarksManager
-    @Environment(\.errorHandler) var errorHandler
 
-    @Binding var selection: Set<Item>
+    @State var selection: BookmarksSelection
 
     var body: some View {
         Button(selection.containsUnreadBookmark ? "Mark as Read" : "Mark as Unread") {
             let toRead = !selection.containsUnreadBookmark
-            let items = selection.map { $0.setting(toRead: toRead) }
-            manager.updateItems(items, completion: errorHandlingCompletion(errorHandler))
+            selection.update(manager: manager, toRead: toRead)
         }
+        .keyboardShortcut("U", modifiers: [.command, .shift])
+        .disabled(selection.isEmpty)
         Button(selection.containsPublicBookmark ? "Make Private" : "Make Public") {
             let shared = !selection.containsPublicBookmark
-            let items = selection.map { $0.setting(shared: !shared) }
-            manager.updateItems(items, completion: errorHandlingCompletion(errorHandler))
+            selection.update(manager: manager, shared: shared)
         }
+        .disabled(selection.isEmpty)
         Button("Edit on Pinboard") {
-            manager.editOnPinboard(items: Array(selection), completion: errorHandlingCompletion(errorHandler))
+            selection.editOnPinboard(manager: manager)
         }
+        .disabled(selection.isEmpty)
     }
 }

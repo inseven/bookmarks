@@ -20,10 +20,17 @@
 
 import SwiftUI
 
+
 struct SelectionSheetHandler: ViewModifier {
 
+    struct IdentifiableError: Identifiable {
+
+        var id = UUID()
+        var error: Error
+
+    }
+
     @Environment(\.manager) var manager
-    @Environment(\.errorHandler) var errorHandler
 
     @ObservedObject var selection: BookmarksSelection
 

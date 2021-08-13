@@ -34,7 +34,6 @@ struct MainWindow: View {
             Sidebar(tagsView: manager.tagsView, settings: manager.settings, section: $section)
             ContentView(section: $section, database: manager.database)
         }
-        .handlesError()
         .handlesSelectionSheets(selection)
         .observesApplicationFocus()
         .frameAutosaveName("Main Window")

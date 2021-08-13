@@ -26,8 +26,9 @@ import Interact
 
 struct AddTagsView: View {
 
-    @Environment(\.manager) var manager: BookmarksManager
-    @Environment(\.errorHandler) var errorHandler
+    @Environment(\.manager) var manager
+    @Environment(\.selection) var selection
+
     @Environment(\.presentationMode) var presentationMode
 
     var items: [Item]
@@ -85,15 +86,7 @@ struct AddTagsView: View {
                                     .adding(tags: Set(tags))
                                     .setting(toRead: markAsRead ? false : item.toRead)
                             }
-                            manager.updateItems(updatedItems) { result in
-                                DispatchQueue.main.async {
-                                    guard case .failure(let error) = result else {
-                                        presentationMode.wrappedValue.dismiss()
-                                        return
-                                    }
-                                    errorHandler(error)
-                                }
-                            }
+                            selection.update(manager: manager, items: updatedItems)
                         }
                         .keyboardShortcut(.defaultAction)
                     }

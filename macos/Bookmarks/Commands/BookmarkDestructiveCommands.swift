@@ -25,14 +25,15 @@ import BookmarksCore
 struct BookmarkDesctructiveCommands: View {
 
     @Environment(\.manager) var manager: BookmarksManager
-    @Environment(\.errorHandler) var errorHandler
-    
-    @Binding var selection: Set<Item>
+
+    @State var selection: BookmarksSelection
 
     var body: some View {
         Button("Delete") {
-            manager.deleteItems(selection, completion: errorHandlingCompletion(errorHandler))
+            selection.delete(manager: manager)
         }
+        .keyboardShortcut(.delete, modifiers: [.command])
+        .disabled(selection.isEmpty)
     }
 
 }

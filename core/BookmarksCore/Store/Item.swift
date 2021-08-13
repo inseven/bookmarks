@@ -210,6 +210,12 @@ extension Set where Element == Item {
         self.first { $0.shared } != nil
     }
 
+    public var tags: Set<String> {
+        reduce(Set<String>()) { result, item in
+            result.union(item.tags)
+        }
+    }
+
 }
 
 extension Pinboard.Post {

@@ -40,8 +40,9 @@ struct BookmarkEditCommands: View {
             let items = selection.map { $0.setting(shared: !shared) }
             manager.updateItems(items, completion: errorHandlingCompletion(errorHandler))
         }
+        Divider()
         Button("Edit on Pinboard") {
-            manager.editOnPinboard(items: Array(selection), completion: errorHandlingCompletion(errorHandler))
+            manager.openItems(selection, location: .pinboard, completion: errorHandlingCompletion(errorHandler))
         }
     }
 }

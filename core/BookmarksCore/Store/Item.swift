@@ -20,10 +20,6 @@
 
 import Foundation
 
-#if os(iOS)
-import UIKit
-#endif
-
 public class Item: Equatable {
 
     public enum Location {

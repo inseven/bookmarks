@@ -29,30 +29,37 @@ public class BookmarksSelection: ObservableObject {
     }
 
     @Published var sheet: SheetType? = nil
-    @Published var isEmpty: Bool = true
+
+//    @Published var isEmpty: Bool = true
+//    @Published var containsUnreadBookmark = false
+//    @Published var containsPublicBookmark = false
+
     @Published var lastError: Error? = nil
 
+    @Published var items: Set<Item> = []
 
-    @Published var containsUnreadBookmark = false
-    @Published var containsPublicBookmark = false
+//    var items: Set<Item> = [] {
+//        didSet {
+//            // We play this little trick with `summary propertiesto ensure that the application, which necessarily owns
+//            // the selection (as-of SwiftUI 2) doesn't perform a full re-render whenever the selection changes, only
+//            // when the menu state needs to change (which is almost certainly gated on these summaries.
+//            if isEmpty != items.isEmpty {
+//                isEmpty = items.isEmpty
+//            }
+//            if containsUnreadBookmark != items.containsUnreadBookmark {
+//                containsUnreadBookmark = items.containsUnreadBookmark
+//            }
+//            if containsPublicBookmark != items.containsPublicBookmark {
+//                containsPublicBookmark = items.containsPublicBookmark
+//            }
+//            print("selection count = \(items.count)")
+//        }
+//    }
 
-    var items: Set<Item> = [] {
-        didSet {
-            // We play this little trick with `summary propertiesto ensure that the application, which necessarily owns
-            // the selection (as-of SwiftUI 2) doesn't perform a full re-render whenever the selection changes, only
-            // when the menu state needs to change (which is almost certainly gated on these summaries.
-            if isEmpty != items.isEmpty {
-                isEmpty = items.isEmpty
-            }
-            if containsUnreadBookmark != items.containsUnreadBookmark {
-                containsUnreadBookmark = items.containsUnreadBookmark
-            }
-            if containsPublicBookmark != items.containsPublicBookmark {
-                containsPublicBookmark = items.containsPublicBookmark
-            }
-        }
-    }
     var count: Int { items.count }
+    var isEmpty: Bool { items.isEmpty }
+    var containsUnreadBookmark: Bool { items.containsUnreadBookmark }
+    var containsPublicBookmark: Bool { items.containsPublicBookmark }
 
     public init() {
 

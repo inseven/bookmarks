@@ -26,7 +26,7 @@ struct BookmarkEditCommands: View {
 
     @Environment(\.manager) var manager: BookmarksManager
 
-    @State var selection: BookmarksSelection
+    @ObservedObject var selection: BookmarksSelection
 
     var body: some View {
         Button(selection.containsUnreadBookmark ? "Mark as Read" : "Mark as Unread") {

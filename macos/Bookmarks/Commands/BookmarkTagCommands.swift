@@ -25,7 +25,8 @@ import BookmarksCore
 struct BookmarkTagCommands: View {
 
     @Environment(\.manager) var manager
-    @Environment(\.selection) var selection
+
+    @ObservedObject var selection: BookmarksSelection
 
     @Binding var section: BookmarksSection?
 
@@ -35,7 +36,7 @@ struct BookmarkTagCommands: View {
                 selection.addTags()
             }
             .keyboardShortcut("t", modifiers: .command)
-            if selection.items.count == 1,
+            if selection.count == 1,
                let item = selection.items.first {
                 Divider()
                 ForEach(Array(item.tags).sorted()) { tag in

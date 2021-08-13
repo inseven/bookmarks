@@ -26,17 +26,27 @@ struct BookmarkShareCommands: View {
 
     @Environment(\.manager) var manager: BookmarksManager
 
-    var item: Item
+    @ObservedObject var selection: BookmarksSelection
 
     var body: some View {
         Button("Copy Address") {
+            guard let item = selection.items.first else {
+                return
+            }
             NSPasteboard.general.clearContents()
             NSPasteboard.general.setString(item.url.absoluteString, forType: .string)
         }
+        .keyboardShortcut("c", modifiers: [.command])
+        .disabled(selection.items.count != 1)
         Button("Copy Tags") {
+            guard let item = selection.items.first else {
+                return
+            }
             NSPasteboard.general.clearContents()
             NSPasteboard.general.setString(item.tags.joined(separator: " "), forType: .string)
         }
+        .keyboardShortcut("c", modifiers: [.command, .shift])
+        .disabled(selection.items.count != 1)
     }
 
 }

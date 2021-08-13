@@ -82,7 +82,9 @@ struct BookmarksApp: App {
                     .trailingDivider()
                 BookmarkEditCommands(selection: selection)
                     .trailingDivider()
-                BookmarkTagCommands(section: $section)
+                BookmarkShareCommands(selection: selection)
+                    .trailingDivider()
+                BookmarkTagCommands(selection: selection, section: $section)
                     .environment(\.selection, selection)
             }
         }

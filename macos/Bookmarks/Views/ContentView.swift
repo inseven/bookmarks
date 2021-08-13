@@ -76,9 +76,9 @@ struct ContentView: View {
                                     .trailingDivider()
                                 BookmarkEditCommands(selection: selection)
                                     .trailingDivider()
-                                BookmarkShareCommands(item: item)
+                                BookmarkShareCommands(selection: selection)
                                     .trailingDivider()
-                                BookmarkTagCommands(section: $section)
+                                BookmarkTagCommands(selection: selection, section: $section)
                                 #if DEBUG
                                 BookmarkDebugCommands()
                                     .leadingDivider()

@@ -25,9 +25,8 @@ import BookmarksCore
 struct BookmarkOpenCommands: View {
 
     @Environment(\.manager) var manager
-//    @Environment(\.selection) var selection
 
-    @State var selection: BookmarksSelection
+    @ObservedObject var selection: BookmarksSelection
 
     var body: some View {
         Button("Open") {

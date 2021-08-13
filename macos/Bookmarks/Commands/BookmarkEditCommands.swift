@@ -26,22 +26,26 @@ struct BookmarkEditCommands: View {
 
     @Environment(\.manager) var manager: BookmarksManager
 
+
     @ObservedObject var selection: BookmarksSelection
 
     var body: some View {
         Button(selection.containsUnreadBookmark ? "Mark as Read" : "Mark as Unread") {
             let toRead = !selection.containsUnreadBookmark
             selection.update(manager: manager, toRead: toRead)
+
         }
         .keyboardShortcut("U", modifiers: [.command, .shift])
         .disabled(selection.isEmpty)
         Button(selection.containsPublicBookmark ? "Make Private" : "Make Public") {
             let shared = !selection.containsPublicBookmark
             selection.update(manager: manager, shared: shared)
+
         }
         .disabled(selection.isEmpty)
+        Divider()
         Button("Edit on Pinboard") {
-            selection.editOnPinboard(manager: manager)
+            selection.open(manager: manager, location: .pinboard)
         }
         .disabled(selection.isEmpty)
     }

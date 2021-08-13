@@ -76,18 +76,9 @@ public class BookmarksSelection: ObservableObject {
         }
     }
 
-    // TODO: Enum for the open type?
     // TODO: These don't need the manager (which should still be renamed to a store.
-    public func open(manager: BookmarksManager) {
-        manager.open(items: Array(items), completion: errorHandler())
-    }
-
-    public func openOnInternetArchive(manager: BookmarksManager) {
-        manager.openOnInternetArchive(items: Array(items), completion: errorHandler())
-    }
-
-    public func editOnPinboard(manager: BookmarksManager) {
-        manager.editOnPinboard(items: Array(items), completion: errorHandler())
+    public func open(manager: BookmarksManager, location: Item.Location = .web) {
+        manager.openItems(items, location: location, completion: errorHandler())
     }
 
     public func update(manager: BookmarksManager, toRead: Bool) {
@@ -110,6 +101,17 @@ public class BookmarksSelection: ObservableObject {
 
     public func delete(manager: BookmarksManager) {
         manager.deleteItems(items, completion: errorHandler())
+    }
+
+    public func copy() {
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.writeObjects(items.map { $0.url.absoluteString as NSString })
+        NSPasteboard.general.writeObjects(items.map { $0.url as NSURL })
+    }
+
+    public func copyTags() {
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.writeObjects(items.tags.map { $0 as NSString })
     }
 
     public func showError(error: Error) {

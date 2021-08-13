@@ -26,6 +26,7 @@ struct BookmarkOpenCommands: View {
 
     @Environment(\.manager) var manager
 
+
     @ObservedObject var selection: BookmarksSelection
 
     var body: some View {
@@ -35,7 +36,7 @@ struct BookmarkOpenCommands: View {
         .keyboardShortcut(.return, modifiers: [.command])
         .disabled(selection.isEmpty)
         Button("Open on Internet Archive") {
-            selection.openOnInternetArchive(manager: manager)
+            selection.open(manager: manager, location: .internetArchive)
         }
         .keyboardShortcut(.return, modifiers: [.command, .shift])
         .disabled(selection.isEmpty)

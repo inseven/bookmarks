@@ -31,6 +31,7 @@ struct ContentView: View {
     @Environment(\.applicationHasFocus) var applicationHasFocus
 //    @Environment(\.errorHandler) var errorHandler
 
+
     @Binding var section: BookmarksSection?
 
     @State var underlyingSection: BookmarksSection?

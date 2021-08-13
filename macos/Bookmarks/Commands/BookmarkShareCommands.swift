@@ -29,24 +29,16 @@ struct BookmarkShareCommands: View {
     @ObservedObject var selection: BookmarksSelection
 
     var body: some View {
-        Button("Copy Address") {
-            guard let item = selection.items.first else {
-                return
-            }
-            NSPasteboard.general.clearContents()
-            NSPasteboard.general.setString(item.url.absoluteString, forType: .string)
+        Button("Copy") {
+            selection.copy()
         }
         .keyboardShortcut("c", modifiers: [.command])
-        .disabled(selection.items.count != 1)
+        .disabled(selection.isEmpty)
         Button("Copy Tags") {
-            guard let item = selection.items.first else {
-                return
-            }
-            NSPasteboard.general.clearContents()
-            NSPasteboard.general.setString(item.tags.joined(separator: " "), forType: .string)
+            selection.copyTags()
         }
         .keyboardShortcut("c", modifiers: [.command, .shift])
-        .disabled(selection.items.count != 1)
+        .disabled(selection.isEmpty)
     }
 
 }

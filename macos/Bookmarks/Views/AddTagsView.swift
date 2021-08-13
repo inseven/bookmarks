@@ -45,7 +45,7 @@ struct AddTagsView: View {
 
     var characterSet: CharacterSet {
         let characterSet = NSTokenField.defaultTokenizingCharacterSet
-        let spaceCharacterSet = CharacterSet(charactersIn: " ")
+        let spaceCharacterSet = CharacterSet(charactersIn: " \n")
         return characterSet.union(spaceCharacterSet)
     }
 

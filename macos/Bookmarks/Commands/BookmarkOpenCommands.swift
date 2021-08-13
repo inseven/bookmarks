@@ -31,10 +31,10 @@ struct BookmarkOpenCommands: View {
 
     var body: some View {
         Button("Open") {
-            manager.open(items: Array(selection), completion: errorHandlingCompletion(errorHandler))
+            manager.openItems(selection, completion: errorHandlingCompletion(errorHandler))
         }
         Button("Open on Internet Archive") {
-            manager.openOnInternetArchive(items: Array(selection), completion: errorHandlingCompletion(errorHandler))
+            manager.openItems(selection, location: .internetArchive, completion: errorHandlingCompletion(errorHandler))
         }
     }
 }

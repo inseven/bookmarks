@@ -106,40 +106,18 @@ public class BookmarksManager {
         self.updater.deleteTag(tag, completion: completion)
     }
 
-    public func open(items: [Item], completion: @escaping (Result<Void, Error>) -> Void) {
-        let completion = DispatchQueue.main.asyncClosure(completion)
-        let many = open(urls: items.map { $0.url })
-        _ = many.sink { result in
-            switch result {
-            case .finished:
-                completion(.success(()))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        } receiveValue: { _ in }
+    public func openItems(_ items: Set<Item>,
+                          location: Item.Location = .web,
+                          completion: @escaping (Result<Void, Error>) -> Void) {
+        openItems(Array(items), location: location, completion: completion)
     }
 
-    public func openOnInternetArchive(items: [Item], completion: @escaping (Result<Void, Error>) -> Void) {
+    public func openItems(_ items: [Item],
+                          location: Item.Location = .web,
+                          completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.main.asyncClosure(completion)
         do {
-            let many = open(urls: try items.map { try $0.internetArchiveUrl() })
-            _ = many.sink { result in
-                switch result {
-                case .finished:
-                    completion(.success(()))
-                case .failure(let error):
-                    completion(.failure(error))
-                }
-            } receiveValue: { _ in }
-        } catch {
-            completion(.failure(error))
-        }
-    }
-
-    public func editOnPinboard(items: [Item], completion: @escaping (Result<Void, Error>) -> Void) {
-        let completion = DispatchQueue.main.asyncClosure(completion)
-        do {
-            let many = open(urls: try items.map { try $0.pinboardUrl() })
+            let many = open(urls: try items.map { try $0.url(location) })
             _ = many.sink { result in
                 switch result {
                 case .finished:

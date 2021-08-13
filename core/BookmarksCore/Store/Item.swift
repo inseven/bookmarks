@@ -20,11 +20,13 @@
 
 import Foundation
 
-#if os(iOS)
-import UIKit
-#endif
-
 public class Item: Equatable {
+
+    public enum Location {
+        case web
+        case internetArchive
+        case pinboard
+    }
 
     public let identifier: String
     public let title: String
@@ -150,6 +152,19 @@ public class Item: Equatable {
              notes: notes)
     }
 
+    public func url(_ location: Location) throws -> URL {
+        switch location {
+        case .web:
+            return url
+        case .internetArchive:
+            return try "https://web.archive.org/web/*/".asUrl().appendingPathComponent(url.absoluteString)
+        case .pinboard:
+            return try "https://pinboard.in/add".asUrl().settingQueryItems([
+                URLQueryItem(name: "url", value: url.absoluteString)
+            ])
+        }
+    }
+
 }
 
 extension Item: Identifiable {
@@ -176,24 +191,6 @@ extension Item: CustomStringConvertible {
 
 extension Item {
 
-    // TODO: Update to throwing properties when adopting Swift 5.5 #142
-     //       https://github.com/inseven/bookmarks/issues/142
-    public func internetArchiveUrl() throws -> URL {
-        try "https://web.archive.org/web/*/".asUrl().appendingPathComponent(url.absoluteString)
-    }
-
-    // TODO: Update to throwing properties when adopting Swift 5.5 #142
-     //       https://github.com/inseven/bookmarks/issues/142
-    public func pinboardUrl() throws -> URL {
-         try "https://pinboard.in/add".asUrl().settingQueryItems([
-            URLQueryItem(name: "url", value: url.absoluteString)
-        ])
-    }
-
-}
-
-extension Item {
-
     public var localDate: String {
         let dateFormatter = DateFormatter()
         dateFormatter.timeStyle = .medium
@@ -211,6 +208,12 @@ extension Set where Element == Item {
 
     public var containsPublicBookmark: Bool {
         self.first { $0.shared } != nil
+    }
+
+    public var tags: Set<String> {
+        reduce(Set<String>()) { result, item in
+            result.union(item.tags)
+        }
     }
 
 }

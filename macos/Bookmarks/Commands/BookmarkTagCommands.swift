@@ -35,14 +35,11 @@ struct BookmarkTagCommands: View {
             Button("Add...") {
                 selection.addTags()
             }
-            .keyboardShortcut("t", modifiers: .command)
-            if selection.count == 1,
-               let item = selection.items.first {
-                Divider()
-                ForEach(Array(item.tags).sorted()) { tag in
-                    Button(tag) {
-                        section = tag.section
-                    }
+            .contextAwareKeyboardShortcut("t", modifiers: .command)
+            Divider()
+            ForEach(Array(selection.items.tags).sorted()) { tag in
+                Button(tag) {
+                    section = tag.section
                 }
             }
         }

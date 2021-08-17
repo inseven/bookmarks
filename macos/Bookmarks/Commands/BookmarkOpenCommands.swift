@@ -22,10 +22,95 @@ import SwiftUI
 
 import BookmarksCore
 
+struct ContextAwareKeyboardShortcut: ViewModifier {
+
+    @Environment(\.menuType) var menuType
+
+    var key: KeyEquivalent
+    var modifiers: EventModifiers
+
+    init(_ key: KeyEquivalent, modifiers: EventModifiers = .command) {
+        self.key = key
+        self.modifiers = modifiers
+    }
+
+    func body(content: Content) -> some View {
+        switch menuType {
+        case .main:
+            content.keyboardShortcut(key, modifiers: modifiers)
+        case .context:
+            content
+        }
+    }
+
+}
+
+extension View {
+
+    public func contextAwareKeyboardShortcut(_ key: KeyEquivalent, modifiers: EventModifiers = .command) -> some View {
+        modifier(ContextAwareKeyboardShortcut(key, modifiers: modifiers))
+    }
+
+}
+
+protocol Countable {
+    var isEmpty: Bool { get }
+    var count: Int { get }
+}
+
+struct CountDisabling: ViewModifier {
+
+    enum Requirement {
+        case nonEmpty
+        case count(Int)
+    }
+
+    @Environment(\.menuType) var menuType
+
+    var requirement: Requirement
+    var collection: Countable
+
+    init(_ requirement: Requirement, collection: Countable) {
+        self.requirement = requirement
+        self.collection = collection
+    }
+
+    var isMainMenu: Bool {
+        menuType == .main
+    }
+
+    var passesRequirement: Bool {
+        switch requirement {
+        case .nonEmpty:
+            return !collection.isEmpty
+        case .count(let count):
+            return collection.count == count
+        }
+    }
+
+    func body(content: Content) -> some View {
+        content
+            .disabled(isMainMenu && !passesRequirement)
+    }
+
+}
+
+extension View {
+
+    func requires(_ requirement: CountDisabling.Requirement, collection: Countable) -> some View {
+        modifier(CountDisabling(requirement, collection: collection))
+    }
+
+}
+
+extension Set: Countable {
+
+}
+
 struct BookmarkOpenCommands: View {
 
     @Environment(\.manager) var manager
-
+    @Environment(\.menuType) var menuType
 
     @ObservedObject var selection: BookmarksSelection
 
@@ -33,12 +118,13 @@ struct BookmarkOpenCommands: View {
         Button("Open") {
             selection.open(manager: manager)
         }
-        .keyboardShortcut(.return, modifiers: [.command])
-        .disabled(selection.isEmpty)
+        .contextAwareKeyboardShortcut(.return, modifiers: [.command])
+        .requires(.nonEmpty, collection: selection.items)
         Button("Open on Internet Archive") {
             selection.open(manager: manager, location: .internetArchive)
         }
-        .keyboardShortcut(.return, modifiers: [.command, .shift])
-        .disabled(selection.isEmpty)
+        .contextAwareKeyboardShortcut(.return, modifiers: [.command, .shift])
+        .requires(.nonEmpty, collection: selection.items)
     }
+
 }

@@ -32,7 +32,7 @@ struct MainWindow: View {
     var body: some View {
         NavigationView {
             Sidebar(tagsView: manager.tagsView, settings: manager.settings, section: $section)
-            ContentView(section: $section, database: manager.database)
+            ContentView(selection: selection, section: $section, database: manager.database)
         }
         .handlesSelectionSheets(selection)
         .observesApplicationFocus()

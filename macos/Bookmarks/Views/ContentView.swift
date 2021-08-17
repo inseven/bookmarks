@@ -27,11 +27,9 @@ import Interact
 struct ContentView: View {
 
     @Environment(\.manager) var manager
-    @Environment(\.selection) var selection
     @Environment(\.applicationHasFocus) var applicationHasFocus
-//    @Environment(\.errorHandler) var errorHandler
 
-
+    @ObservedObject var selection: BookmarksSelection
     @Binding var section: BookmarksSection?
 
     @State var underlyingSection: BookmarksSection?
@@ -42,7 +40,8 @@ struct ContentView: View {
 
     private var subscription: AnyCancellable?
 
-    init(section: Binding<BookmarksSection?>, database: Database) {
+    init(selection: BookmarksSelection, section: Binding<BookmarksSection?>, database: Database) {
+        self.selection = selection
         _section = section
         let databaseView = Deferred(ItemsView(database: database, query: True().eraseToAnyQuery()))
         let selectionTracker = Deferred(SelectionTracker(items: databaseView.get().$items))
@@ -69,7 +68,7 @@ struct ContentView: View {
                         BookmarkCell(item: item)
                             .shadow(color: .shadow, radius: 8)
                             .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: item), firstResponder: firstResponder))
-                            .help(item.localDate)
+                            .help(item.url.absoluteString)
                             .contextMenuFocusable {
                                 BookmarkOpenCommands(selection: selection)
                                     .trailingDivider()
@@ -93,6 +92,7 @@ struct ContentView: View {
                                     selectionTracker.handleClick(item: item)
                                 }
                             }
+                            .menuType(.context)
                             .onDrag {
                                 NSItemProvider(object: item.url as NSURL)
                             }
@@ -146,7 +146,7 @@ struct ContentView: View {
                     SwiftUI.Image(systemName: "tag")
                 }
                 .help("Add Tags")
-                .disabled(selectionTracker.selection.count == 0)
+                .disabled(selection.isEmpty)
             }
             ToolbarItem {
                 Button {

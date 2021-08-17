@@ -32,13 +32,13 @@ struct BookmarkShareCommands: View {
         Button("Copy") {
             selection.copy()
         }
-        .keyboardShortcut("c", modifiers: [.command])
-        .disabled(selection.isEmpty)
+        .contextAwareKeyboardShortcut("c", modifiers: [.command])
+        .requires(.nonEmpty, collection: selection.items)
         Button("Copy Tags") {
             selection.copyTags()
         }
-        .keyboardShortcut("c", modifiers: [.command, .shift])
-        .disabled(selection.isEmpty)
+        .contextAwareKeyboardShortcut("c", modifiers: [.command, .shift])
+        .requires(.nonEmpty, collection: selection.items)
     }
 
 }

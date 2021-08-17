@@ -32,8 +32,8 @@ struct BookmarkDesctructiveCommands: View {
         Button("Delete") {
             selection.delete(manager: manager)
         }
-        .keyboardShortcut(.delete, modifiers: [.command])
-        .disabled(selection.isEmpty)
+        .contextAwareKeyboardShortcut(.delete, modifiers: [.command])
+        .requires(.nonEmpty, collection: selection.items)
     }
 
 }

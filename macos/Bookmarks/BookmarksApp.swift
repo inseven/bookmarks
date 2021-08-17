@@ -23,11 +23,37 @@ import SwiftUI
 
 import BookmarksCore
 
+enum MenuType {
+    case main
+    case context
+}
+
+
+struct MenuTypeEnvironmentKey: EnvironmentKey {
+    static var defaultValue: MenuType = .main
+}
+
+extension EnvironmentValues {
+
+    var menuType: MenuType {
+        get { self[MenuTypeEnvironmentKey.self] }
+        set { self[MenuTypeEnvironmentKey.self] = newValue }
+    }
+
+}
+
+extension View {
+
+    func menuType(_ menuType: MenuType) -> some View {
+        environment(\.menuType, menuType)
+    }
+
+}
+
 @main
 struct BookmarksApp: App {
 
     @Environment(\.manager) var manager
-//    @Environment(\.selection) var selection
 
     @StateObject var selection = BookmarksSelection()
     

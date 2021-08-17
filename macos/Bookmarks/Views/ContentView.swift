@@ -204,12 +204,9 @@ struct ContentView: View {
             section = underlyingSection
 
         })
-        .onChange(of: selectionTracker.selection, perform: { newSelection in
+        .onChange(of: selectionTracker.selection) { newSelection in
             selection.items = newSelection
-        })
-//        .onChange(of: selectionTracker.selection) { newSelection
-//            selection.items = newSelection
-//        }
+        }
         .navigationTitle(navigationTitle)
     }
 }

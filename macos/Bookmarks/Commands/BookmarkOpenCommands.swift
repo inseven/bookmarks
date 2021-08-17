@@ -22,60 +22,6 @@ import SwiftUI
 
 import BookmarksCore
 
-protocol Countable {
-    var isEmpty: Bool { get }
-    var count: Int { get }
-}
-
-struct CountDisabling: ViewModifier {
-
-    enum Requirement {
-        case nonEmpty
-        case count(Int)
-    }
-
-    @Environment(\.menuType) var menuType
-
-    var requirement: Requirement
-    var collection: Countable
-
-    init(_ requirement: Requirement, collection: Countable) {
-        self.requirement = requirement
-        self.collection = collection
-    }
-
-    var isMainMenu: Bool {
-        menuType == .main
-    }
-
-    var passesRequirement: Bool {
-        switch requirement {
-        case .nonEmpty:
-            return !collection.isEmpty
-        case .count(let count):
-            return collection.count == count
-        }
-    }
-
-    func body(content: Content) -> some View {
-        content
-            .disabled(isMainMenu && !passesRequirement)
-    }
-
-}
-
-extension View {
-
-    func requires(_ requirement: CountDisabling.Requirement, collection: Countable) -> some View {
-        modifier(CountDisabling(requirement, collection: collection))
-    }
-
-}
-
-extension Set: Countable {
-
-}
-
 struct BookmarkOpenCommands: View {
 
     @Environment(\.manager) var manager
@@ -88,12 +34,12 @@ struct BookmarkOpenCommands: View {
             selection.open(manager: manager)
         }
         .contextAwareKeyboardShortcut(.return, modifiers: [.command])
-        .requires(.nonEmpty, collection: selection.items)
+        .mainMenuItemCondition(.nonEmpty, selection.items)
         Button("Open on Internet Archive") {
             selection.open(manager: manager, location: .internetArchive)
         }
         .contextAwareKeyboardShortcut(.return, modifiers: [.command, .shift])
-        .requires(.nonEmpty, collection: selection.items)
+        .mainMenuItemCondition(.nonEmpty, selection.items)
     }
 
 }

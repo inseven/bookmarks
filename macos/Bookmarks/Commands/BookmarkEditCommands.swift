@@ -33,15 +33,15 @@ struct BookmarkEditCommands: View {
             selection.update(manager: manager, toRead: !selection.containsUnreadBookmark)
         }
         .contextAwareKeyboardShortcut("U", modifiers: [.command, .shift])
-        .requires(.nonEmpty, collection: selection.items)
+        .mainMenuItemCondition(.nonEmpty, selection.items)
         Button(selection.containsPublicBookmark ? "Make Private" : "Make Public") {
             selection.update(manager: manager, shared: !selection.containsPublicBookmark)
         }
-        .requires(.nonEmpty, collection: selection.items)
+        .mainMenuItemCondition(.nonEmpty, selection.items)
         Divider()
         Button("Edit on Pinboard") {
             selection.open(manager: manager, location: .pinboard)
         }
-        .requires(.nonEmpty, collection: selection.items)
+        .mainMenuItemCondition(.nonEmpty, selection.items)
     }
 }

@@ -52,7 +52,6 @@ public class BookmarksSelection: ObservableObject {
         }
     }
 
-    // TODO: These don't need the manager (which should still be renamed to a store.
     public func open(manager: BookmarksManager, location: Item.Location = .web) {
         manager.openItems(items, location: location, completion: errorHandler())
     }

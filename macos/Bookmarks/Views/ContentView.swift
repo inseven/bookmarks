@@ -28,9 +28,8 @@ struct ContentView: View {
 
     @Environment(\.manager) var manager
     @Environment(\.applicationHasFocus) var applicationHasFocus
-    @Environment(\.sheetHandler) var sheetHandler
-    @Environment(\.errorHandler) var errorHandler
 
+    @ObservedObject var selection: BookmarksSelection
     @Binding var section: BookmarksSection?
 
     @State var underlyingSection: BookmarksSection?
@@ -41,7 +40,8 @@ struct ContentView: View {
 
     private var subscription: AnyCancellable?
 
-    init(section: Binding<BookmarksSection?>, database: Database) {
+    init(selection: BookmarksSelection, section: Binding<BookmarksSection?>, database: Database) {
+        self.selection = selection
         _section = section
         let databaseView = Deferred(ItemsView(database: database, query: True().eraseToAnyQuery()))
         let selectionTracker = Deferred(SelectionTracker(items: databaseView.get().$items))
@@ -68,17 +68,17 @@ struct ContentView: View {
                         BookmarkCell(item: item)
                             .shadow(color: .shadow, radius: 8)
                             .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: item), firstResponder: firstResponder))
-                            .help(item.localDate)
+                            .help(item.url.absoluteString)
                             .contextMenuFocusable {
-                                BookmarkOpenCommands(selection: $selectionTracker.selection)
+                                BookmarkOpenCommands(selection: selection)
                                     .trailingDivider()
-                                BookmarkDesctructiveCommands(selection: $selectionTracker.selection)
+                                BookmarkDesctructiveCommands(selection: selection)
                                     .trailingDivider()
-                                BookmarkEditCommands(selection: $selectionTracker.selection)
+                                BookmarkEditCommands(selection: selection)
                                     .trailingDivider()
-                                BookmarkShareCommands(selection: $selectionTracker.selection)
+                                BookmarkShareCommands(selection: selection)
                                     .trailingDivider()
-                                BookmarkTagCommands(section: $section, selection: $selectionTracker.selection)
+                                BookmarkTagCommands(selection: selection, section: $section)
                                 #if DEBUG
                                 BookmarkDebugCommands()
                                     .leadingDivider()
@@ -92,6 +92,7 @@ struct ContentView: View {
                                     selectionTracker.handleClick(item: item)
                                 }
                             }
+                            .menuType(.context)
                             .onDrag {
                                 NSItemProvider(object: item.url as NSURL)
                             }
@@ -140,21 +141,21 @@ struct ContentView: View {
                     guard selectionTracker.selection.count > 0 else {
                         return
                     }
-                    sheetHandler(.addTags(items: Array(selectionTracker.selection)))
+                    selection.addTags()
                 } label: {
                     SwiftUI.Image(systemName: "tag")
                 }
                 .help("Add Tags")
-                .disabled(selectionTracker.selection.count == 0)
+                .disabled(selection.isEmpty)
             }
             ToolbarItem {
                 Button {
-                    manager.deleteItems(selectionTracker.selection, completion: errorHandlingCompletion(errorHandler))
+                    selection.delete(manager: manager)
                 } label: {
                     SwiftUI.Image(systemName: "trash")
                 }
                 .help("Delete")
-                .disabled(selectionTracker.selection.count == 0)
+                .disabled(selection.isEmpty)
             }
 
             ToolbarItem {
@@ -203,6 +204,9 @@ struct ContentView: View {
             section = underlyingSection
 
         })
+        .onChange(of: selectionTracker.selection) { newSelection in
+            selection.items = newSelection
+        }
         .navigationTitle(navigationTitle)
     }
 }

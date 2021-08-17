@@ -20,25 +20,33 @@
 
 import SwiftUI
 
-import BookmarksCore
+struct ContextAwareKeyboardShortcut: ViewModifier {
 
-struct BookmarkShareCommands: View {
+    @Environment(\.menuType) var menuType
 
-    @Environment(\.manager) var manager: BookmarksManager
+    var key: KeyEquivalent
+    var modifiers: EventModifiers
 
-    @ObservedObject var selection: BookmarksSelection
+    init(_ key: KeyEquivalent, modifiers: EventModifiers = .command) {
+        self.key = key
+        self.modifiers = modifiers
+    }
 
-    var body: some View {
-        Button("Copy") {
-            selection.copy()
+    func body(content: Content) -> some View {
+        switch menuType {
+        case .main:
+            content.keyboardShortcut(key, modifiers: modifiers)
+        case .context:
+            content
         }
-        .contextAwareKeyboardShortcut("c", modifiers: [.command])
-        .mainMenuItemCondition(.nonEmpty, selection)
-        Button("Copy Tags") {
-            selection.copyTags()
-        }
-        .contextAwareKeyboardShortcut("c", modifiers: [.command, .shift])
-        .mainMenuItemCondition(.nonEmpty, selection)
+    }
+
+}
+
+extension View {
+
+    public func contextAwareKeyboardShortcut(_ key: KeyEquivalent, modifiers: EventModifiers = .command) -> some View {
+        modifier(ContextAwareKeyboardShortcut(key, modifiers: modifiers))
     }
 
 }

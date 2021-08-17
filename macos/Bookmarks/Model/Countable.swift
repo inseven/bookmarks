@@ -18,27 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import SwiftUI
+import Foundation
 
-import BookmarksCore
-
-struct BookmarkShareCommands: View {
-
-    @Environment(\.manager) var manager: BookmarksManager
-
-    @ObservedObject var selection: BookmarksSelection
-
-    var body: some View {
-        Button("Copy") {
-            selection.copy()
-        }
-        .contextAwareKeyboardShortcut("c", modifiers: [.command])
-        .mainMenuItemCondition(.nonEmpty, selection)
-        Button("Copy Tags") {
-            selection.copyTags()
-        }
-        .contextAwareKeyboardShortcut("c", modifiers: [.command, .shift])
-        .mainMenuItemCondition(.nonEmpty, selection)
-    }
-
+protocol Countable {
+    var isEmpty: Bool { get }
+    var count: Int { get }
 }

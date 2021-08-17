@@ -22,11 +22,11 @@ import Foundation
 
 extension DispatchQueue {
 
-    func asyncClosure(_ closure: @escaping () -> Void) -> () -> Void {
+    public func asyncClosure(_ closure: @escaping () -> Void) -> () -> Void {
         return { self.async { closure() } }
     }
 
-    func asyncClosure<T>(_ closure: @escaping (T) -> Void) -> (T) -> Void {
+    public func asyncClosure<T>(_ closure: @escaping (T) -> Void) -> (T) -> Void {
         return { i in self.async { closure(i) } }
     }
 

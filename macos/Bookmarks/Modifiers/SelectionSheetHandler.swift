@@ -20,25 +20,47 @@
 
 import SwiftUI
 
-import BookmarksCore
 
-struct BookmarkShareCommands: View {
+struct SelectionSheetHandler: ViewModifier {
 
-    @Environment(\.manager) var manager: BookmarksManager
+    struct IdentifiableError: Identifiable {
+
+        var id = UUID()
+        var error: Error
+
+    }
+
+    @Environment(\.manager) var manager
 
     @ObservedObject var selection: BookmarksSelection
 
-    var body: some View {
-        Button("Copy") {
-            selection.copy()
-        }
-        .contextAwareKeyboardShortcut("c", modifiers: [.command])
-        .mainMenuItemCondition(.nonEmpty, selection)
-        Button("Copy Tags") {
-            selection.copyTags()
-        }
-        .contextAwareKeyboardShortcut("c", modifiers: [.command, .shift])
-        .mainMenuItemCondition(.nonEmpty, selection)
+    @State var error: IdentifiableError? = nil
+
+    func body(content: Content) -> some View {
+        content
+            .sheet(item: $selection.sheet) { sheet in
+                switch sheet {
+                case .addTags(let items):
+                    AddTagsView(tagsView: manager.tagsView, items: items)
+                }
+            }
+            .alert(item: $error) { error in
+                return Alert(title: Text("Error"), message: Text(error.error.localizedDescription))
+            }
+            .onReceive(selection.$lastError) { error in
+                guard let error = error else {
+                    return
+                }
+                self.error = IdentifiableError(error: error)
+            }
+    }
+
+}
+
+extension View {
+
+    func handlesSelectionSheets(_ selection: BookmarksSelection) -> some View {
+        modifier(SelectionSheetHandler(selection: selection))
     }
 
 }

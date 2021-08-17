@@ -20,25 +20,28 @@
 
 import SwiftUI
 
-import BookmarksCore
+enum MenuType {
+    case main
+    case context
+}
 
-struct BookmarkShareCommands: View {
+struct MenuTypeEnvironmentKey: EnvironmentKey {
+    static var defaultValue: MenuType = .main
+}
 
-    @Environment(\.manager) var manager: BookmarksManager
+extension EnvironmentValues {
 
-    @ObservedObject var selection: BookmarksSelection
+    var menuType: MenuType {
+        get { self[MenuTypeEnvironmentKey.self] }
+        set { self[MenuTypeEnvironmentKey.self] = newValue }
+    }
 
-    var body: some View {
-        Button("Copy") {
-            selection.copy()
-        }
-        .contextAwareKeyboardShortcut("c", modifiers: [.command])
-        .mainMenuItemCondition(.nonEmpty, selection)
-        Button("Copy Tags") {
-            selection.copyTags()
-        }
-        .contextAwareKeyboardShortcut("c", modifiers: [.command, .shift])
-        .mainMenuItemCondition(.nonEmpty, selection)
+}
+
+extension View {
+
+    func menuType(_ menuType: MenuType) -> some View {
+        environment(\.menuType, menuType)
     }
 
 }

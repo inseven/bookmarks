@@ -28,51 +28,27 @@ public class BookmarksSelection: ObservableObject {
         case addTags(items: [Item])
     }
 
+    // TODO: Consider renaming sheet to operation?
     @Published var sheet: SheetType? = nil
-
-//    @Published var isEmpty: Bool = true
-//    @Published var containsUnreadBookmark = false
-//    @Published var containsPublicBookmark = false
-
     @Published var lastError: Error? = nil
-
     @Published var items: Set<Item> = []
-
-//    var items: Set<Item> = [] {
-//        didSet {
-//            // We play this little trick with `summary propertiesto ensure that the application, which necessarily owns
-//            // the selection (as-of SwiftUI 2) doesn't perform a full re-render whenever the selection changes, only
-//            // when the menu state needs to change (which is almost certainly gated on these summaries.
-//            if isEmpty != items.isEmpty {
-//                isEmpty = items.isEmpty
-//            }
-//            if containsUnreadBookmark != items.containsUnreadBookmark {
-//                containsUnreadBookmark = items.containsUnreadBookmark
-//            }
-//            if containsPublicBookmark != items.containsPublicBookmark {
-//                containsPublicBookmark = items.containsPublicBookmark
-//            }
-//            print("selection count = \(items.count)")
-//        }
-//    }
 
     var count: Int { items.count }
     var isEmpty: Bool { items.isEmpty }
     var containsUnreadBookmark: Bool { items.containsUnreadBookmark }
     var containsPublicBookmark: Bool { items.containsPublicBookmark }
 
-    public init() {
+    public init() {}
 
-    }
-
-    public func errorHandler<T>() -> (Result<T, Error>) -> Void {
+    public func errorHandler<T>(_ completion: @escaping (Result<T, Error>) -> Void = { _ in }) -> (Result<T, Error>) -> Void {
+        let completion = DispatchQueue.global().asyncClosure(completion)
         return { result in
-            guard case .failure(let error) = result else {
-                return
+            if case .failure(let error) = result {
+                DispatchQueue.main.async {
+                    self.lastError = error
+                }
             }
-            DispatchQueue.main.async {
-                self.lastError = error
-            }
+            completion(result)
         }
     }
 
@@ -83,16 +59,18 @@ public class BookmarksSelection: ObservableObject {
 
     public func update(manager: BookmarksManager, toRead: Bool) {
         let items = items.map { $0.setting(toRead: toRead) }
+        // TODO: Use the common update method.
         manager.updateItems(items, completion: errorHandler())
     }
 
     public func update(manager: BookmarksManager, shared: Bool) {
         let items = items.map { $0.setting(shared: shared) }
+        // TODO: Use the common update method.
         manager.updateItems(items, completion: errorHandler())
     }
 
-    public func update(manager: BookmarksManager, items: [Item]) {
-        manager.updateItems(items, completion: errorHandler())
+    public func update(manager: BookmarksManager, items: [Item], completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
+        manager.updateItems(items, completion: errorHandler(completion))
     }
 
     public func addTags() {

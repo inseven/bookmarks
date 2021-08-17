@@ -86,7 +86,11 @@ struct AddTagsView: View {
                                     .adding(tags: Set(tags))
                                     .setting(toRead: markAsRead ? false : item.toRead)
                             }
-                            selection.update(manager: manager, items: updatedItems)
+                            selection.update(manager: manager, items: updatedItems) { result in
+                                DispatchQueue.main.async {
+                                    presentationMode.wrappedValue.dismiss()
+                                }
+                            }
                         }
                         .keyboardShortcut(.defaultAction)
                     }

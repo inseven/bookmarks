@@ -59,13 +59,11 @@ public class BookmarksSelection: ObservableObject {
 
     public func update(manager: BookmarksManager, toRead: Bool) {
         let items = items.map { $0.setting(toRead: toRead) }
-        // TODO: Use the common update method.
         manager.updateItems(items, completion: errorHandler())
     }
 
     public func update(manager: BookmarksManager, shared: Bool) {
         let items = items.map { $0.setting(shared: shared) }
-        // TODO: Use the common update method.
         manager.updateItems(items, completion: errorHandler())
     }
 

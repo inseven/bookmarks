@@ -18,6 +18,7 @@
 		D861257526AA048E00EB5FEF /* RenameTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D861257426AA048E00EB5FEF /* RenameTagView.swift */; };
 		D861257C26AB741A00EB5FEF /* SidebarLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = D861257B26AB741A00EB5FEF /* SidebarLink.swift */; };
 		D879448F26CB4A5400D97155 /* MenuType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D879448E26CB4A5400D97155 /* MenuType.swift */; };
+		D879449126CB57BE00D97155 /* ContextAwareKeyboardShortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = D879449026CB57BE00D97155 /* ContextAwareKeyboardShortcut.swift */; };
 		D891C454261E32F90024E1A6 /* BookmarksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D891C453261E32F90024E1A6 /* BookmarksApp.swift */; };
 		D891C456261E32F90024E1A6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D891C455261E32F90024E1A6 /* ContentView.swift */; };
 		D891C458261E32FB0024E1A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D891C457261E32FB0024E1A6 /* Assets.xcassets */; };
@@ -83,6 +84,7 @@
 		D861257426AA048E00EB5FEF /* RenameTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenameTagView.swift; sourceTree = "<group>"; };
 		D861257B26AB741A00EB5FEF /* SidebarLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarLink.swift; sourceTree = "<group>"; };
 		D879448E26CB4A5400D97155 /* MenuType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuType.swift; sourceTree = "<group>"; };
+		D879449026CB57BE00D97155 /* ContextAwareKeyboardShortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextAwareKeyboardShortcut.swift; sourceTree = "<group>"; };
 		D891C450261E32F90024E1A6 /* Bookmarks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bookmarks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D891C453261E32F90024E1A6 /* BookmarksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksApp.swift; sourceTree = "<group>"; };
 		D891C455261E32F90024E1A6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -223,6 +225,7 @@
 		D8931F6226C5E15300A8021E /* Modifiers */ = {
 			isa = PBXGroup;
 			children = (
+				D879449026CB57BE00D97155 /* ContextAwareKeyboardShortcut.swift */,
 				D8931F6326C5E16200A8021E /* SelectionSheetHandler.swift */,
 			);
 			path = Modifiers;
@@ -434,6 +437,7 @@
 				D8EB6E4526C3357F00C23B19 /* ErrorHandler.swift in Sources */,
 				D861257C26AB741A00EB5FEF /* SidebarLink.swift in Sources */,
 				D8164D6626C08DD500756D43 /* AddTagsView.swift in Sources */,
+				D879449126CB57BE00D97155 /* ContextAwareKeyboardShortcut.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

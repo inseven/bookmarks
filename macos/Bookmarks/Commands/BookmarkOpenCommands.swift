@@ -22,37 +22,6 @@ import SwiftUI
 
 import BookmarksCore
 
-struct ContextAwareKeyboardShortcut: ViewModifier {
-
-    @Environment(\.menuType) var menuType
-
-    var key: KeyEquivalent
-    var modifiers: EventModifiers
-
-    init(_ key: KeyEquivalent, modifiers: EventModifiers = .command) {
-        self.key = key
-        self.modifiers = modifiers
-    }
-
-    func body(content: Content) -> some View {
-        switch menuType {
-        case .main:
-            content.keyboardShortcut(key, modifiers: modifiers)
-        case .context:
-            content
-        }
-    }
-
-}
-
-extension View {
-
-    public func contextAwareKeyboardShortcut(_ key: KeyEquivalent, modifiers: EventModifiers = .command) -> some View {
-        modifier(ContextAwareKeyboardShortcut(key, modifiers: modifiers))
-    }
-
-}
-
 protocol Countable {
     var isEmpty: Bool { get }
     var count: Int { get }

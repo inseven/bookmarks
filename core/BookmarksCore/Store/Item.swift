@@ -216,14 +216,6 @@ extension Set where Element == Item {
         }
     }
 
-    public func setting(toRead: Bool) -> Set<Item> {
-        Set(map { $0.setting(toRead: toRead) })
-    }
-
-    public func setting(shared: Bool) -> Set<Item> {
-        Set(map { $0.setting(shared: shared) })
-    }
-
 }
 
 extension Pinboard.Post {

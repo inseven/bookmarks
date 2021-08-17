@@ -122,3 +122,7 @@ public extension EnvironmentValues {
     }
 
 }
+
+extension BookmarksSelection: Countable {
+
+}

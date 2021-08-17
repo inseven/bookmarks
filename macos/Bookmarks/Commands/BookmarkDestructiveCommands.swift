@@ -33,7 +33,7 @@ struct BookmarkDesctructiveCommands: View {
             selection.delete(manager: manager)
         }
         .contextAwareKeyboardShortcut(.delete, modifiers: [.command])
-        .mainMenuItemCondition(.nonEmpty, selection.items)
+        .mainMenuItemCondition(.nonEmpty, selection)
     }
 
 }

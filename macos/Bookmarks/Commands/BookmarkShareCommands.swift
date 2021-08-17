@@ -33,12 +33,12 @@ struct BookmarkShareCommands: View {
             selection.copy()
         }
         .contextAwareKeyboardShortcut("c", modifiers: [.command])
-        .mainMenuItemCondition(.nonEmpty, selection.items)
+        .mainMenuItemCondition(.nonEmpty, selection)
         Button("Copy Tags") {
             selection.copyTags()
         }
         .contextAwareKeyboardShortcut("c", modifiers: [.command, .shift])
-        .mainMenuItemCondition(.nonEmpty, selection.items)
+        .mainMenuItemCondition(.nonEmpty, selection)
     }
 
 }

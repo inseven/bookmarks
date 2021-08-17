@@ -84,7 +84,6 @@ struct BookmarksApp: App {
                 BookmarkShareCommands(selection: selection)
                     .trailingDivider()
                 BookmarkTagCommands(selection: selection, section: $section)
-                    .environment(\.selection, selection)
             }
         }
         SwiftUI.Settings {

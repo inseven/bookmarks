@@ -28,7 +28,6 @@ public class BookmarksSelection: ObservableObject {
         case addTags(items: [Item])
     }
 
-    // TODO: Consider renaming sheet to operation?
     @Published var sheet: SheetType? = nil
     @Published var lastError: Error? = nil
     @Published var items: Set<Item> = []

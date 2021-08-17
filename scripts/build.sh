@@ -140,8 +140,8 @@ echo "$TEMPORARY_KEYCHAIN_PASSWORD" | build-tools create-keychain "$KEYCHAIN_PAT
 function cleanup {
     # Cleanup the temporary files and keychain.
     cd "$ROOT_DIRECTORY"
-    build-tools delete-keychain "$KEYCHAIN_PATH"
-    rm -rf "$TEMPORARY_DIRECTORY"
+    # build-tools delete-keychain "$KEYCHAIN_PATH"
+    # rm -rf "$TEMPORARY_DIRECTORY"
 }
 
 trap cleanup EXIT

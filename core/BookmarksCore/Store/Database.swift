@@ -28,7 +28,7 @@ public protocol DatabaseObserver {
     func databaseDidUpdate(database: Database)
 }
 
-extension Item {
+extension Bookmark {
 
     convenience init(row: Row) throws {
         self.init(identifier: try row.get(Database.Schema.identifier),
@@ -194,16 +194,6 @@ public class Database {
     var db: Connection  // Synchronized on syncQueue
     var observers: [DatabaseObserver] = []  // Synchronized on syncQueue
 
-    static func itemQuery(filter: String? = nil) -> QueryType {
-        guard let filter = filter,
-              !filter.isEmpty else {
-            return Schema.items.order(Schema.date.desc)
-        }
-        let filters = filter.tokens.map { Schema.title.like("%\($0)%") || Schema.url.like("%s\($0)%") }
-        let query = Schema.items.filter(filters.reduce(Expression<Bool>(value: true)) { $0 && $1 })
-        return query.order(Schema.date.desc)
-    }
-
     public init(path: URL) throws {
         self.path = path
         self.db = try Connection(path.path)
@@ -262,36 +252,36 @@ public class Database {
         }
     }
 
-    fileprivate func syncQueue_item(identifier: String) throws -> Item {
-        let run = try db.prepare(Schema.items.filter(Schema.identifier == identifier).limit(1)).map(Item.init)
+    fileprivate func syncQueue_bookmark(identifier: String) throws -> Bookmark {
+        let run = try db.prepare(Schema.items.filter(Schema.identifier == identifier).limit(1)).map(Bookmark.init)
         guard let result = run.first else {
-            throw BookmarksError.itemNotFound(identifier: identifier)
+            throw BookmarksError.bookmarkNotFound(identifier: identifier)
         }
-        let tags = try syncQueue_tags(itemIdentifier: result.identifier)
-        return Item(identifier: result.identifier,
-                    title: result.title,
-                    url: result.url,
-                    tags: Set(tags),
-                    date: result.date,
-                    toRead: result.toRead,
-                    shared: result.shared,
-                    notes: result.notes)
+        let tags = try syncQueue_tags(bookmarkIdentifier: result.identifier)
+        return Bookmark(identifier: result.identifier,
+                        title: result.title,
+                        url: result.url,
+                        tags: Set(tags),
+                        date: result.date,
+                        toRead: result.toRead,
+                        shared: result.shared,
+                        notes: result.notes)
     }
 
-    fileprivate func syncQueue_item(url: URL) throws -> Item {
-        let run = try db.prepare(Schema.items.filter(Schema.url == url.absoluteString).limit(1)).map(Item.init)
+    fileprivate func syncQueue_bookmark(url: URL) throws -> Bookmark {
+        let run = try db.prepare(Schema.items.filter(Schema.url == url.absoluteString).limit(1)).map(Bookmark.init)
         guard let result = run.first else {
-            throw BookmarksError.itemNotFound(url: url)
+            throw BookmarksError.bookmarkNotFound(url: url)
         }
-        let tags = try syncQueue_tags(itemIdentifier: result.identifier)
-        return Item(identifier: result.identifier,
-                    title: result.title,
-                    url: result.url,
-                    tags: Set(tags),
-                    date: result.date,
-                    toRead: result.toRead,
-                    shared: result.shared,
-                    notes: result.notes)
+        let tags = try syncQueue_tags(bookmarkIdentifier: result.identifier)
+        return Bookmark(identifier: result.identifier,
+                        title: result.title,
+                        url: result.url,
+                        tags: Set(tags),
+                        date: result.date,
+                        toRead: result.toRead,
+                        shared: result.shared,
+                        notes: result.notes)
     }
 
     fileprivate func syncQueue_fetchOrInsertTag(name: String) throws -> Int64 {
@@ -314,11 +304,11 @@ public class Database {
         return result
     }
 
-    fileprivate func syncQueue_tags(itemIdentifier: String) throws -> Set<String> {
+    fileprivate func syncQueue_tags(bookmarkIdentifier: String) throws -> Set<String> {
         Set(try self.db.prepare(Schema.items_to_tags
                                     .join(Schema.items, on: Schema.items_to_tags[Schema.itemId] == Schema.items[Schema.id])
                                     .join(Schema.tags, on: Schema.items_to_tags[Schema.tagId] == Schema.tags[Schema.id])
-                                    .filter(Schema.identifier == itemIdentifier))
+                                    .filter(Schema.identifier == bookmarkIdentifier))
                 .map { row -> String in
                     try row.get(Schema.tags[Schema.name])
                 })
@@ -339,12 +329,12 @@ public class Database {
         }
     }
 
-    public func item(identifier: String, completion: @escaping (Swift.Result<Item, Error>) -> Void) {
+    public func bookmark(identifier: String, completion: @escaping (Swift.Result<Bookmark, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
             do {
                 try self.db.transaction {
-                    let result = Swift.Result { try self.syncQueue_item(identifier: identifier) }
+                    let result = Swift.Result { try self.syncQueue_bookmark(identifier: identifier) }
                     completion(result)
                 }
             } catch {
@@ -353,12 +343,12 @@ public class Database {
         }
     }
 
-    public func item(url: URL, completion: @escaping (Swift.Result<Item, Error>) -> Void) {
+    public func bookmark(url: URL, completion: @escaping (Swift.Result<Bookmark, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
             do {
                 try self.db.transaction {
-                    let result = Swift.Result { try self.syncQueue_item(url: url) }
+                    let result = Swift.Result { try self.syncQueue_bookmark(url: url) }
                     completion(result)
                 }
             } catch {
@@ -368,17 +358,17 @@ public class Database {
     }
 
 
-    fileprivate func syncQueue_insertOrReplace(item: Item) throws {
-        let tags = try item.tags.map { try syncQueue_fetchOrInsertTag(name: $0) }
+    fileprivate func syncQueue_insertOrReplaceBookmark(_ bookmark: Bookmark) throws {
+        let tags = try bookmark.tags.map { try syncQueue_fetchOrInsertTag(name: $0) }
         let itemId = try self.db.run(
             Schema.items.insert(or: .replace,
-                                Schema.identifier <- item.identifier,
-                                Schema.title <- item.title,
-                                Schema.url <- item.url.absoluteString,
-                                Schema.date <- item.date,
-                                Schema.toRead <- item.toRead,
-                                Schema.shared <- item.shared,
-                                Schema.notes <- item.notes
+                                Schema.identifier <- bookmark.identifier,
+                                Schema.title <- bookmark.title,
+                                Schema.url <- bookmark.url.absoluteString,
+                                Schema.date <- bookmark.date,
+                                Schema.toRead <- bookmark.toRead,
+                                Schema.shared <- bookmark.shared,
+                                Schema.notes <- bookmark.notes
             ))
         for tagId in tags {
             _ = try self.db.run(
@@ -389,29 +379,29 @@ public class Database {
         try syncQueue_pruneTags()
     }
 
-    public func insertOrUpdate(_ item: Item, completion: @escaping (Swift.Result<Item, Error>) -> Void) {
+    public func insertOrUpdateBookmark(_ bookmark: Bookmark, completion: @escaping (Swift.Result<Bookmark, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
-            let result = Swift.Result<Item, Error> {
+            let result = Swift.Result<Bookmark, Error> {
                 try self.db.transaction {
                     // N.B. While it would be possible to use an insert or replace strategy directly, we want to ensure
                     // we only notify observers if the data has actually changed so we instead fetch the item and
                     // compare.
-                    if let existingItem = try? self.syncQueue_item(identifier: item.identifier) {
-                        if existingItem != item {
-                            print("updating \(item)...")
-                            print("existing tags \(existingItem.tags)")
-                            print("item tags \(item.tags)")
-                            try self.syncQueue_insertOrReplace(item: item)
+                    if let existingBookmark = try? self.syncQueue_bookmark(identifier: bookmark.identifier) {
+                        if existingBookmark != bookmark {
+                            print("updating \(bookmark)...")
+                            print("existing tags \(existingBookmark.tags)")
+                            print("bookmark tags \(bookmark.tags)")
+                            try self.syncQueue_insertOrReplaceBookmark(bookmark)
                             self.syncQueue_notifyObservers()
                         }
                     } else {
-                        print("inserting \(item)...")
-                        try self.syncQueue_insertOrReplace(item: item)
+                        print("inserting \(bookmark)...")
+                        try self.syncQueue_insertOrReplaceBookmark(bookmark)
                         self.syncQueue_notifyObservers()
                     }
                 }
-                return item
+                return bookmark
             }
             completion(result)
         }
@@ -433,7 +423,7 @@ public class Database {
             """)
     }
 
-    public func deleteItem(identifier: String, completion: @escaping (Swift.Result<Void, Error>) -> Void) {
+    public func deleteBookmark(identifier: String, completion: @escaping (Swift.Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             do {
@@ -441,7 +431,7 @@ public class Database {
                     let result = Swift.Result { () -> Void in
                         let count = try self.db.run(Schema.items.filter(Schema.identifier == identifier).delete())
                         if count == 0 {
-                            throw BookmarksError.itemNotFound(identifier: identifier)
+                            throw BookmarksError.bookmarkNotFound(identifier: identifier)
                         }
                         try self.syncQueue_pruneTags()
                     }
@@ -471,7 +461,7 @@ public class Database {
         }
     }
 
-    public func syncQueue_items(where whereClause: String) throws -> [Item] {
+    public func syncQueue_bookmarks(where whereClause: String) throws -> [Bookmark] {
         dispatchPrecondition(condition: .onQueue(syncQueue))
 
         let selectQuery = """
@@ -508,25 +498,25 @@ public class Database {
             """
 
         let statement = try db.prepare(selectQuery)
-        let items = try statement.map { row -> Item in
-            return Item(identifier: try row.string(0),
-                        title: try row.string(1),
-                        url: try row.url(2),
-                        tags: try row.set(3),
-                        date: try row.date(4),
-                        toRead: try row.bool(5),
-                        shared: try row.bool(6),
-                        notes: try row.string(7))
+        let bookmarks = try statement.map { row in
+            return Bookmark(identifier: try row.string(0),
+                            title: try row.string(1),
+                            url: try row.url(2),
+                            tags: try row.set(3),
+                            date: try row.date(4),
+                            toRead: try row.bool(5),
+                            shared: try row.bool(6),
+                            notes: try row.string(7))
         }
 
-        return items
+        return bookmarks
     }
 
-    public func items<T: QueryDescription>(query: T, completion: @escaping (Swift.Result<[Item], Error>) -> Void) {
+    public func bookmarks<T: QueryDescription>(query: T, completion: @escaping (Swift.Result<[Bookmark], Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
-            let result = Swift.Result<[Item], Error> {
-                try self.syncQueue_items(where: query.sql)
+            let result = Swift.Result<[Bookmark], Error> {
+                try self.syncQueue_bookmarks(where: query.sql)
             }
             completion(result)
         }
@@ -549,19 +539,19 @@ public class Database {
 
 public extension Database {
 
-    func insertOrUpdate(item: Item) throws -> Item {
-        try AsyncOperation { self.insertOrUpdate(item, completion: $0) }.wait()
+    func insertOrUpdateBookmark(_ bookmark: Bookmark) throws -> Bookmark {
+        try AsyncOperation { self.insertOrUpdateBookmark(bookmark, completion: $0) }.wait()
     }
 
-    func insertOrUpdate(items: [Item]) throws {
-        for item in items {
-            _ = try self.insertOrUpdate(item: item)
+    func insertOrUpdateBookmarks(_ bookmarks: [Bookmark]) throws {
+        for bookmark in bookmarks {
+            _ = try self.insertOrUpdateBookmark(bookmark)
         }
     }
 
-    func deleteItems(_ items: [Item]) throws {
-        for item in items {
-            try deleteItem(identifier: item.identifier)
+    func deleteBookmarks(_ bookmarks: [Bookmark]) throws {
+        for bookmark in bookmarks {
+            try deleteBookmark(identifier: bookmark.identifier)
         }
     }
 
@@ -569,12 +559,12 @@ public extension Database {
         _ = try AsyncOperation({ self.deleteTag(tag: tag, completion: $0) }).wait()
     }
 
-    func deleteItem(identifier: String) throws {
-        try AsyncOperation { self.deleteItem(identifier: identifier, completion: $0) }.wait()
+    func deleteBookmark(identifier: String) throws {
+        try AsyncOperation { self.deleteBookmark(identifier: identifier, completion: $0) }.wait()
     }
 
-    func items<T: QueryDescription>(query: T) throws -> [Item] {
-        try AsyncOperation({ self.items(query: query, completion: $0) }).wait()
+    func bookmarks<T: QueryDescription>(query: T) throws -> [Bookmark] {
+        try AsyncOperation({ self.bookmarks(query: query, completion: $0) }).wait()
     }
 
     func tags() throws -> [String] {
@@ -585,14 +575,14 @@ public extension Database {
         try AsyncOperation { self.identifiers(completion: $0) }.wait()
     }
 
-    func item(identifier: String) throws -> Item {
-        try AsyncOperation { self.item(identifier: identifier, completion: $0) }.wait()
+    func bookmark(identifier: String) throws -> Bookmark {
+        try AsyncOperation { self.bookmark(identifier: identifier, completion: $0) }.wait()
     }
 
     // TODO: Test the Database APIs for fetching items by URL #217
     //       https://github.com/inseven/bookmarks/issues/217
-    func item(url: URL) throws -> Item {
-        try AsyncOperation { self.item(url: url, completion: $0) }.wait()
+    func bookmark(url: URL) throws -> Bookmark {
+        try AsyncOperation { self.bookmark(url: url, completion: $0) }.wait()
     }
 
 }

@@ -20,7 +20,7 @@
 
 import Foundation
 
-public class Item: Equatable {
+public class Bookmark: Equatable {
 
     public enum Location {
         case web
@@ -58,7 +58,7 @@ public class Item: Equatable {
         self.thumbnail = thumbnail
     }
 
-    public static func == (lhs: Item, rhs: Item) -> Bool {
+    public static func == (lhs: Bookmark, rhs: Bookmark) -> Bool {
         guard lhs.identifier == rhs.identifier else {
             return false
         }
@@ -86,70 +86,70 @@ public class Item: Equatable {
         return true
     }
 
-    public func setting(notes: String) -> Item {
-        Item(identifier: identifier,
-             title: title,
-             url: url,
-             tags: tags,
-             date: date,
-             toRead: toRead,
-             shared: shared,
-             notes: notes)
+    public func setting(notes: String) -> Bookmark {
+        Bookmark(identifier: identifier,
+                 title: title,
+                 url: url,
+                 tags: tags,
+                 date: date,
+                 toRead: toRead,
+                 shared: shared,
+                 notes: notes)
     }
 
-    public func setting(tags: Set<String>) -> Item {
-        Item(identifier: identifier,
-             title: title,
-             url: url,
-             tags: tags,
-             date: date,
-             toRead: toRead,
-             shared: shared,
-             notes: notes)
+    public func setting(tags: Set<String>) -> Bookmark {
+        Bookmark(identifier: identifier,
+                 title: title,
+                 url: url,
+                 tags: tags,
+                 date: date,
+                 toRead: toRead,
+                 shared: shared,
+                 notes: notes)
     }
 
-    public func setting(toRead: Bool) -> Item {
-        Item(identifier: identifier,
-             title: title,
-             url: url,
-             tags: tags,
-             date: date,
-             toRead: toRead,
-             shared: shared,
-             notes: notes)
+    public func setting(toRead: Bool) -> Bookmark {
+        Bookmark(identifier: identifier,
+                 title: title,
+                 url: url,
+                 tags: tags,
+                 date: date,
+                 toRead: toRead,
+                 shared: shared,
+                 notes: notes)
     }
 
-    public func setting(shared: Bool) -> Item {
-        Item(identifier: identifier,
-             title: title,
-             url: url,
-             tags: tags,
-             date: date,
-             toRead: toRead,
-             shared: shared,
-             notes: notes)
+    public func setting(shared: Bool) -> Bookmark {
+        Bookmark(identifier: identifier,
+                 title: title,
+                 url: url,
+                 tags: tags,
+                 date: date,
+                 toRead: toRead,
+                 shared: shared,
+                 notes: notes)
     }
 
-    public func adding(tag: String) -> Item {
-        Item(identifier: identifier,
-             title: title,
-             url: url,
-             tags: Set(tags + [tag]),
-             date: date,
-             toRead: toRead,
-             shared: shared,
-             notes: notes)
+    public func adding(tag: String) -> Bookmark {
+        Bookmark(identifier: identifier,
+                 title: title,
+                 url: url,
+                 tags: Set(tags + [tag]),
+                 date: date,
+                 toRead: toRead,
+                 shared: shared,
+                 notes: notes)
     }
 
-    public func adding(tags: Set<String>) -> Item {
-        Item(identifier: identifier,
-             title: title,
-             url: url,
-             tags: self.tags.union(tags),
-             date: date,
-             toRead: toRead,
-             shared: shared,
-             notes: notes)
+    public func adding(tags: Set<String>) -> Bookmark {
+        Bookmark(identifier: identifier,
+                 title: title,
+                 url: url,
+                 tags: self.tags.union(tags),
+                 date: date,
+                 toRead: toRead,
+                 shared: shared,
+                 notes: notes)
     }
 
     public func url(_ location: Location) throws -> URL {
@@ -167,13 +167,13 @@ public class Item: Equatable {
 
 }
 
-extension Item: Identifiable {
+extension Bookmark: Identifiable {
 
     public var id: String { identifier }
 
 }
 
-extension Item: Hashable {
+extension Bookmark: Hashable {
 
     public func hash(into hasher: inout Hasher) {
         hasher.combine(identifier)
@@ -181,7 +181,7 @@ extension Item: Hashable {
 
 }
 
-extension Item: CustomStringConvertible {
+extension Bookmark: CustomStringConvertible {
 
     public var description: String {
         "\(url.absoluteString) (title: \(title), tags: [\(tags.joined(separator: ", "))], date: \(date), toRead: \(toRead), notes: '\(self.notes)')"
@@ -189,7 +189,7 @@ extension Item: CustomStringConvertible {
 
 }
 
-extension Item {
+extension Bookmark {
 
     public var localDate: String {
         let dateFormatter = DateFormatter()
@@ -200,7 +200,7 @@ extension Item {
 
 }
 
-extension Set where Element == Item {
+extension Set where Element == Bookmark {
 
     public var containsUnreadBookmark: Bool {
         self.first { $0.toRead } != nil
@@ -211,8 +211,8 @@ extension Set where Element == Item {
     }
 
     public var tags: Set<String> {
-        reduce(Set<String>()) { result, item in
-            result.union(item.tags)
+        reduce(Set<String>()) { result, bookmark in
+            result.union(bookmark.tags)
         }
     }
 
@@ -222,16 +222,16 @@ extension Pinboard.Post {
 
     // TODO: Review the nullability of the properties on the Pinboard.Post struct #216
     //       https://github.com/inseven/bookmarks/issues/216
-    init(item: Item) {
-        self.init(href: item.url,
-                  description: item.title,
-                  extended: item.notes,
+    init(_ bookmark: Bookmark) {
+        self.init(href: bookmark.url,
+                  description: bookmark.title,
+                  extended: bookmark.notes,
                   hash: "",
                   meta: "",
-                  shared: item.shared,
-                  tags: Array(item.tags),
-                  time: item.date,
-                  toRead: item.toRead)
+                  shared: bookmark.shared,
+                  tags: Array(bookmark.tags),
+                  time: bookmark.date,
+                  toRead: bookmark.toRead)
     }
 
 }

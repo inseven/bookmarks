@@ -262,7 +262,7 @@ public class Database {
         }
     }
 
-    fileprivate func syncQueue_item(identifier: String) throws -> Bookmark {
+    fileprivate func syncQueue_bookmark(identifier: String) throws -> Bookmark {
         let run = try db.prepare(Schema.items.filter(Schema.identifier == identifier).limit(1)).map(Bookmark.init)
         guard let result = run.first else {
             throw BookmarksError.bookmarkNotFound(identifier: identifier)
@@ -278,7 +278,7 @@ public class Database {
                         notes: result.notes)
     }
 
-    fileprivate func syncQueue_item(url: URL) throws -> Bookmark {
+    fileprivate func syncQueue_bookmark(url: URL) throws -> Bookmark {
         let run = try db.prepare(Schema.items.filter(Schema.url == url.absoluteString).limit(1)).map(Bookmark.init)
         guard let result = run.first else {
             throw BookmarksError.bookmarkNotFound(url: url)
@@ -344,7 +344,7 @@ public class Database {
         syncQueue.async {
             do {
                 try self.db.transaction {
-                    let result = Swift.Result { try self.syncQueue_item(identifier: identifier) }
+                    let result = Swift.Result { try self.syncQueue_bookmark(identifier: identifier) }
                     completion(result)
                 }
             } catch {
@@ -358,7 +358,7 @@ public class Database {
         syncQueue.async {
             do {
                 try self.db.transaction {
-                    let result = Swift.Result { try self.syncQueue_item(url: url) }
+                    let result = Swift.Result { try self.syncQueue_bookmark(url: url) }
                     completion(result)
                 }
             } catch {
@@ -368,17 +368,17 @@ public class Database {
     }
 
 
-    fileprivate func syncQueue_insertOrReplace(item: Bookmark) throws {
-        let tags = try item.tags.map { try syncQueue_fetchOrInsertTag(name: $0) }
+    fileprivate func syncQueue_insertOrReplaceBookmark(_ bookmark: Bookmark) throws {
+        let tags = try bookmark.tags.map { try syncQueue_fetchOrInsertTag(name: $0) }
         let itemId = try self.db.run(
             Schema.items.insert(or: .replace,
-                                Schema.identifier <- item.identifier,
-                                Schema.title <- item.title,
-                                Schema.url <- item.url.absoluteString,
-                                Schema.date <- item.date,
-                                Schema.toRead <- item.toRead,
-                                Schema.shared <- item.shared,
-                                Schema.notes <- item.notes
+                                Schema.identifier <- bookmark.identifier,
+                                Schema.title <- bookmark.title,
+                                Schema.url <- bookmark.url.absoluteString,
+                                Schema.date <- bookmark.date,
+                                Schema.toRead <- bookmark.toRead,
+                                Schema.shared <- bookmark.shared,
+                                Schema.notes <- bookmark.notes
             ))
         for tagId in tags {
             _ = try self.db.run(
@@ -389,7 +389,7 @@ public class Database {
         try syncQueue_pruneTags()
     }
 
-    public func insertOrUpdate(_ item: Bookmark, completion: @escaping (Swift.Result<Bookmark, Error>) -> Void) {
+    public func insertOrUpdateBookmark(_ bookmark: Bookmark, completion: @escaping (Swift.Result<Bookmark, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             let result = Swift.Result<Bookmark, Error> {
@@ -397,21 +397,21 @@ public class Database {
                     // N.B. While it would be possible to use an insert or replace strategy directly, we want to ensure
                     // we only notify observers if the data has actually changed so we instead fetch the item and
                     // compare.
-                    if let existingItem = try? self.syncQueue_item(identifier: item.identifier) {
-                        if existingItem != item {
-                            print("updating \(item)...")
-                            print("existing tags \(existingItem.tags)")
-                            print("item tags \(item.tags)")
-                            try self.syncQueue_insertOrReplace(item: item)
+                    if let existingBookmark = try? self.syncQueue_bookmark(identifier: bookmark.identifier) {
+                        if existingBookmark != bookmark {
+                            print("updating \(bookmark)...")
+                            print("existing tags \(existingBookmark.tags)")
+                            print("bookmark tags \(bookmark.tags)")
+                            try self.syncQueue_insertOrReplaceBookmark(bookmark)
                             self.syncQueue_notifyObservers()
                         }
                     } else {
-                        print("inserting \(item)...")
-                        try self.syncQueue_insertOrReplace(item: item)
+                        print("inserting \(bookmark)...")
+                        try self.syncQueue_insertOrReplaceBookmark(bookmark)
                         self.syncQueue_notifyObservers()
                     }
                 }
-                return item
+                return bookmark
             }
             completion(result)
         }
@@ -471,7 +471,7 @@ public class Database {
         }
     }
 
-    public func syncQueue_items(where whereClause: String) throws -> [Bookmark] {
+    public func syncQueue_bookmarks(where whereClause: String) throws -> [Bookmark] {
         dispatchPrecondition(condition: .onQueue(syncQueue))
 
         let selectQuery = """
@@ -526,7 +526,7 @@ public class Database {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             let result = Swift.Result<[Bookmark], Error> {
-                try self.syncQueue_items(where: query.sql)
+                try self.syncQueue_bookmarks(where: query.sql)
             }
             completion(result)
         }
@@ -550,7 +550,7 @@ public class Database {
 public extension Database {
 
     func insertOrUpdateBookmark(_ item: Bookmark) throws -> Bookmark {
-        try AsyncOperation { self.insertOrUpdate(item, completion: $0) }.wait()
+        try AsyncOperation { self.insertOrUpdateBookmark(item, completion: $0) }.wait()
     }
 
     func insertOrUpdateBookmarks(_ items: [Bookmark]) throws {

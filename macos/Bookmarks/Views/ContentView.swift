@@ -33,7 +33,7 @@ struct ContentView: View {
     @Binding var section: BookmarksSection?
 
     @State var underlyingSection: BookmarksSection?
-    @StateObject var databaseView: ItemsView
+    @StateObject var databaseView: BookmarksView
     @StateObject var selectionTracker: SelectionTracker<Bookmark>
     @State var firstResponder: Bool = false
     @StateObject var searchDebouncer = Debouncer<String>(initialValue: "", delay: .seconds(0.2))
@@ -43,7 +43,7 @@ struct ContentView: View {
     init(selection: BookmarksSelection, section: Binding<BookmarksSection?>, database: Database) {
         self.selection = selection
         _section = section
-        let databaseView = Deferred(ItemsView(database: database, query: True().eraseToAnyQuery()))
+        let databaseView = Deferred(BookmarksView(database: database, query: True().eraseToAnyQuery()))
         let selectionTracker = Deferred(SelectionTracker(items: databaseView.get().$bookmarks))
         _databaseView = StateObject(wrappedValue: databaseView.get())
         _selectionTracker = StateObject(wrappedValue: selectionTracker.get())

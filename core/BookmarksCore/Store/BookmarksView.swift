@@ -21,7 +21,7 @@
 import Combine
 import Foundation
 
-public class ItemsView: ObservableObject {
+public class BookmarksView: ObservableObject {
 
     public enum State {
         case loading

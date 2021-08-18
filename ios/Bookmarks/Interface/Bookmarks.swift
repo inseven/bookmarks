@@ -22,14 +22,14 @@ import SwiftUI
 
 import BookmarksCore
 
-struct BookmarksView: View {
+struct Bookmarks: View {
 
     enum SheetType {
         case settings
     }
 
     @Environment(\.manager) var manager: BookmarksManager
-    @StateObject var databaseView: ItemsView
+    @StateObject var databaseView: BookmarksView
 
     @StateObject var searchDebouncer = Debouncer<String>(initialValue: "", delay: .seconds(0.2))
     @State var sheet: SheetType?
@@ -84,6 +84,6 @@ struct BookmarksView: View {
 
 }
 
-extension BookmarksView.SheetType: Identifiable {
+extension Bookmarks.SheetType: Identifiable {
     public var id: Self { self }
 }

@@ -12,7 +12,7 @@
 		D81FBAC626B99E70004AC4A4 /* LicenseRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81FBAC526B99E70004AC4A4 /* LicenseRow.swift */; };
 		D81FBAC826B99E94004AC4A4 /* LicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81FBAC726B99E94004AC4A4 /* LicenseView.swift */; };
 		D832EEC724816901004C64E3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D832EEC624816901004C64E3 /* SettingsView.swift */; };
-		D8478554261539AA00B2318B /* BookmarksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8478553261539AA00B2318B /* BookmarksView.swift */; };
+		D8478554261539AA00B2318B /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8478553261539AA00B2318B /* Bookmarks.swift */; };
 		D84785822615474900B2318B /* SearchBoxModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84785812615474900B2318B /* SearchBoxModifier.swift */; };
 		D84CE47E261E2A1400AF1901 /* BookmarksCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D84CE47D261E2A1400AF1901 /* BookmarksCore.framework */; };
 		D84CE47F261E2A1400AF1901 /* BookmarksCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D84CE47D261E2A1400AF1901 /* BookmarksCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -66,7 +66,7 @@
 		D81FBAC726B99E94004AC4A4 /* LicenseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LicenseView.swift; sourceTree = "<group>"; };
 		D832EEC624816901004C64E3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D832EECA2481B6D1004C64E3 /* Bookmarks.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Bookmarks.entitlements; sourceTree = "<group>"; };
-		D8478553261539AA00B2318B /* BookmarksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksView.swift; sourceTree = "<group>"; };
+		D8478553261539AA00B2318B /* Bookmarks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bookmarks.swift; sourceTree = "<group>"; };
 		D84785812615474900B2318B /* SearchBoxModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBoxModifier.swift; sourceTree = "<group>"; };
 		D84CE47D261E2A1400AF1901 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D864E47021C93FD200EAB9AD /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
@@ -119,7 +119,7 @@
 			isa = PBXGroup;
 			children = (
 				D81FBAC326B99E26004AC4A4 /* AboutView.swift */,
-				D8478553261539AA00B2318B /* BookmarksView.swift */,
+				D8478553261539AA00B2318B /* Bookmarks.swift */,
 				D81E7483254A0D1B002336DC /* ContentView.swift */,
 				D81FBAC526B99E70004AC4A4 /* LicenseRow.swift */,
 				D81FBAC726B99E94004AC4A4 /* LicenseView.swift */,
@@ -342,7 +342,7 @@
 				D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */,
 				D84785822615474900B2318B /* SearchBoxModifier.swift in Sources */,
 				D81FBAC426B99E26004AC4A4 /* AboutView.swift in Sources */,
-				D8478554261539AA00B2318B /* BookmarksView.swift in Sources */,
+				D8478554261539AA00B2318B /* Bookmarks.swift in Sources */,
 				D81FBAC626B99E70004AC4A4 /* LicenseRow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

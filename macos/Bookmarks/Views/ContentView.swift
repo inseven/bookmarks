@@ -44,7 +44,7 @@ struct ContentView: View {
         self.selection = selection
         _section = section
         let databaseView = Deferred(ItemsView(database: database, query: True().eraseToAnyQuery()))
-        let selectionTracker = Deferred(SelectionTracker(items: databaseView.get().$items))
+        let selectionTracker = Deferred(SelectionTracker(items: databaseView.get().$bookmarks))
         _databaseView = StateObject(wrappedValue: databaseView.get())
         _selectionTracker = StateObject(wrappedValue: selectionTracker.get())
     }
@@ -64,7 +64,7 @@ struct ContentView: View {
         VStack {
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 8)], spacing: 8) {
-                    ForEach(databaseView.items) { item in
+                    ForEach(databaseView.bookmarks) { item in
                         BookmarkCell(bookmark: item)
                             .shadow(color: .shadow, radius: 8)
                             .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: item), firstResponder: firstResponder))

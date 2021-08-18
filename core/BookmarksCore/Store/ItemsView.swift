@@ -33,7 +33,7 @@ public class ItemsView: ObservableObject {
     var searchCancellable: AnyCancellable? = nil
 
     @Published public var query: AnyQuery
-    @Published public var items: [Bookmark] = []
+    @Published public var bookmarks: [Bookmark] = []
     @Published public var state: State = .loading
 
     public init(database: Database, query: AnyQuery) {
@@ -55,7 +55,7 @@ public class ItemsView: ObservableObject {
                 switch result {
                 case .success(let items):
                     print("received \(items.count) items")
-                    self.items = items
+                    self.bookmarks = items
                     self.state = .ready
                 case .failure(let error):
                     print("Failed to load data with error \(error)")
@@ -79,7 +79,7 @@ public class ItemsView: ObservableObject {
 
     public func clear() {
         dispatchPrecondition(condition: .onQueue(.main))
-        self.items = []
+        self.bookmarks = []
         self.state = .loading
     }
 
@@ -90,7 +90,7 @@ public class ItemsView: ObservableObject {
         self.updateCancellable = nil
         self.searchCancellable?.cancel()
         self.searchCancellable = nil
-        self.items = []
+        self.bookmarks = []
     }
 
 }

@@ -549,19 +549,19 @@ public class Database {
 
 public extension Database {
 
-    func insertOrUpdateBookmark(_ item: Bookmark) throws -> Bookmark {
-        try AsyncOperation { self.insertOrUpdateBookmark(item, completion: $0) }.wait()
+    func insertOrUpdateBookmark(_ bookmark: Bookmark) throws -> Bookmark {
+        try AsyncOperation { self.insertOrUpdateBookmark(bookmark, completion: $0) }.wait()
     }
 
-    func insertOrUpdateBookmarks(_ items: [Bookmark]) throws {
-        for item in items {
-            _ = try self.insertOrUpdateBookmark(item)
+    func insertOrUpdateBookmarks(_ bookmarks: [Bookmark]) throws {
+        for bookmark in bookmarks {
+            _ = try self.insertOrUpdateBookmark(bookmark)
         }
     }
 
-    func deleteBookmarks(_ items: [Bookmark]) throws {
-        for item in items {
-            try deleteBookmark(identifier: item.identifier)
+    func deleteBookmarks(_ bookmarks: [Bookmark]) throws {
+        for bookmark in bookmarks {
+            try deleteBookmark(identifier: bookmark.identifier)
         }
     }
 

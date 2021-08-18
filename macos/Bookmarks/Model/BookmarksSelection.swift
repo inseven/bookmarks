@@ -25,7 +25,7 @@ import BookmarksCore
 public class BookmarksSelection: ObservableObject {
 
     enum SheetType {
-        case addTags(items: [Bookmark])
+        case addTags(bookmarks: [Bookmark])
     }
 
     @Published var sheet: SheetType? = nil
@@ -72,7 +72,7 @@ public class BookmarksSelection: ObservableObject {
     }
 
     public func addTags() {
-        sheet = .addTags(items: Array(bookmarks))
+        sheet = .addTags(bookmarks: Array(bookmarks))
     }
 
     public func delete(manager: BookmarksManager) {
@@ -102,8 +102,8 @@ extension BookmarksSelection.SheetType: Identifiable {
 
     var id: String {
         switch self {
-        case .addTags(let items):
-            return "addTags:\(items.map { $0.identifier }.joined(separator: ","))"
+        case .addTags(let bookmarks):
+            return "addTags:\(bookmarks.map { $0.identifier }.joined(separator: ","))"
         }
     }
 

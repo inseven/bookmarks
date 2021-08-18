@@ -31,7 +31,7 @@ struct AddTagsView: View {
 
     @Environment(\.presentationMode) var presentationMode
 
-    var items: [Bookmark]
+    var bookmarks: [Bookmark]
     @State var isBusy = false
     @AppStorage(SettingsKey.addTagsMarkAsRead.rawValue) var markAsRead: Bool = false
 
@@ -39,9 +39,9 @@ struct AddTagsView: View {
 
     @ObservedObject var tagsView: TagsView
 
-    init(tagsView: TagsView, items: [Bookmark]) {
+    init(tagsView: TagsView, bookmarks: [Bookmark]) {
         self.tagsView = tagsView
-        self.items = items
+        self.bookmarks = bookmarks
     }
 
     var characterSet: CharacterSet {
@@ -81,7 +81,7 @@ struct AddTagsView: View {
                         Button("OK") {
                             isBusy = true
                             let tags = tokens.compactMap { $0.associatedValue }
-                            let updatedItems = items.map { item in
+                            let updatedItems = bookmarks.map { item in
                                 item
                                     .adding(tags: Set(tags))
                                     .setting(toRead: markAsRead ? false : item.toRead)

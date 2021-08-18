@@ -44,15 +44,15 @@ struct Bookmarks: View {
             }
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
-                    ForEach(bookmarksView.bookmarks) { item in
-                        BookmarkCell(bookmark: item)
+                    ForEach(bookmarksView.bookmarks) { bookmark in
+                        BookmarkCell(bookmark: bookmark)
                             .onTapGesture {
-                                UIApplication.shared.open(item.url)
+                                UIApplication.shared.open(bookmark.url)
                             }
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Share") {
                                     print("Share")
-                                    print(item.identifier)
+                                    print(bookmark.identifier)
                                 }
                             }))
                     }

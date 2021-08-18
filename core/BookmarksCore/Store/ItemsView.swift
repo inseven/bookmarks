@@ -33,7 +33,7 @@ public class ItemsView: ObservableObject {
     var searchCancellable: AnyCancellable? = nil
 
     @Published public var query: AnyQuery
-    @Published public var items: [Item] = []
+    @Published public var items: [Bookmark] = []
     @Published public var state: State = .loading
 
     public init(database: Database, query: AnyQuery) {

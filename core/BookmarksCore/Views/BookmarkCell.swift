@@ -23,13 +23,13 @@ import SwiftUI
 
 public struct BookmarkCell: View {
 
-    var item: Item
+    var item: Bookmark
 
     @Environment(\.manager) var manager: BookmarksManager
     @State var image: SafeImage?
     @State var publisher: AnyCancellable?
 
-    public init(item: Item) {
+    public init(item: Bookmark) {
         self.item = item
         _image = State(wrappedValue: manager.cache.object(forKey: item.url.absoluteString as NSString))
     }

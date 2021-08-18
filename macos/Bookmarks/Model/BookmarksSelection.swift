@@ -25,12 +25,12 @@ import BookmarksCore
 public class BookmarksSelection: ObservableObject {
 
     enum SheetType {
-        case addTags(items: [Item])
+        case addTags(items: [Bookmark])
     }
 
     @Published var sheet: SheetType? = nil
     @Published var lastError: Error? = nil
-    @Published var items: Set<Item> = []
+    @Published var items: Set<Bookmark> = []
 
     var count: Int { items.count }
     var isEmpty: Bool { items.isEmpty }
@@ -51,7 +51,7 @@ public class BookmarksSelection: ObservableObject {
         }
     }
 
-    public func open(manager: BookmarksManager, location: Item.Location = .web) {
+    public func open(manager: BookmarksManager, location: Bookmark.Location = .web) {
         manager.openItems(items, location: location, completion: errorHandler())
     }
 
@@ -65,7 +65,7 @@ public class BookmarksSelection: ObservableObject {
         manager.updateItems(items, completion: errorHandler())
     }
 
-    public func update(manager: BookmarksManager, items: [Item], completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
+    public func update(manager: BookmarksManager, items: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
         manager.updateItems(items, completion: errorHandler(completion))
     }
 

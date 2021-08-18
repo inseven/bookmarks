@@ -31,7 +31,7 @@ struct AddTagsView: View {
 
     @Environment(\.presentationMode) var presentationMode
 
-    var items: [Item]
+    var items: [Bookmark]
     @State var isBusy = false
     @AppStorage(SettingsKey.addTagsMarkAsRead.rawValue) var markAsRead: Bool = false
 
@@ -39,7 +39,7 @@ struct AddTagsView: View {
 
     @ObservedObject var tagsView: TagsView
 
-    init(tagsView: TagsView, items: [Item]) {
+    init(tagsView: TagsView, items: [Bookmark]) {
         self.tagsView = tagsView
         self.items = items
     }

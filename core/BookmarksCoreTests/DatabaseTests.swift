@@ -23,7 +23,7 @@ import Foundation
 import XCTest
 @testable import BookmarksCore
 
-extension Item {
+extension Bookmark {
 
     convenience init(title: String,
                      url: URL,
@@ -77,15 +77,15 @@ class DatabaseTests: XCTestCase {
 
     func testSingleQuery() throws {
 
-        let item1 = Item(title: "Example",
-                         url: URL(string: "https://example.com")!,
-                         tags: ["example", "website"],
-                         date: Date(timeIntervalSince1970: 0))
+        let item1 = Bookmark(title: "Example",
+                             url: URL(string: "https://example.com")!,
+                             tags: ["example", "website"],
+                             date: Date(timeIntervalSince1970: 0))
 
-        let item2 = Item(title: "Cheese",
-                         url: URL(string: "https://fromage.com")!,
-                         tags: ["cheese", "website"],
-                         date: Date(timeIntervalSince1970: 0))
+        let item2 = Bookmark(title: "Cheese",
+                             url: URL(string: "https://fromage.com")!,
+                             tags: ["cheese", "website"],
+                             date: Date(timeIntervalSince1970: 0))
 
         try database.insertOrUpdate(items: [item1, item2])
 
@@ -100,15 +100,15 @@ class DatabaseTests: XCTestCase {
 
     func testMultipleQuery() throws {
 
-        let item1 = Item(title: "Example",
-                         url: URL(string: "https://example.com")!,
-                         tags: ["example", "website"],
-                         date: Date(timeIntervalSince1970: 0))
+        let item1 = Bookmark(title: "Example",
+                             url: URL(string: "https://example.com")!,
+                             tags: ["example", "website"],
+                             date: Date(timeIntervalSince1970: 0))
 
-        let item2 = Item(title: "Cheese",
-                         url: URL(string: "https://fromage.com")!,
-                         tags: ["cheese", "website"],
-                         date: Date(timeIntervalSince1970: 10))
+        let item2 = Bookmark(title: "Cheese",
+                             url: URL(string: "https://fromage.com")!,
+                             tags: ["cheese", "website"],
+                             date: Date(timeIntervalSince1970: 10))
 
         try database.insertOrUpdate(items: [item1, item2])
 
@@ -117,15 +117,15 @@ class DatabaseTests: XCTestCase {
     }
 
     func testItemDeletion() throws {
-        let item1 = Item(title: "Example",
-                         url: URL(string: "https://example.com")!,
-                         tags: ["example", "website"],
-                         date: Date(timeIntervalSince1970: 0))
+        let item1 = Bookmark(title: "Example",
+                             url: URL(string: "https://example.com")!,
+                             tags: ["example", "website"],
+                             date: Date(timeIntervalSince1970: 0))
 
-        let item2 = Item(title: "Cheese",
-                         url: URL(string: "https://fromage.com")!,
-                         tags: ["cheese", "website"],
-                         date: Date(timeIntervalSince1970: 10))
+        let item2 = Bookmark(title: "Cheese",
+                             url: URL(string: "https://fromage.com")!,
+                             tags: ["cheese", "website"],
+                             date: Date(timeIntervalSince1970: 10))
 
         try database.insertOrUpdate(items: [item1, item2])
         try database.deleteItems([item1])
@@ -136,11 +136,11 @@ class DatabaseTests: XCTestCase {
 
     func testItemNotes() throws {
         let notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus blandit nec mauris quis feugiat."
-        let item = Item(title: "Example",
-                         url: URL(string: "https://example.com")!,
-                         tags: ["example", "website"],
-                         date: Date(timeIntervalSince1970: 0),
-                         notes: notes)
+        let item = Bookmark(title: "Example",
+                            url: URL(string: "https://example.com")!,
+                            tags: ["example", "website"],
+                            date: Date(timeIntervalSince1970: 0),
+                            notes: notes)
         _ = try database.insertOrUpdate(item: item)
         let fetchedItem = try database.item(identifier: item.identifier)
         XCTAssertEqual(item, fetchedItem)
@@ -164,37 +164,37 @@ class DatabaseTests: XCTestCase {
 
     func testItemUpdateCleansUpTags() throws {
 
-        let item = Item(title: "Example",
-                        url: URL(string: "https://example.com")!,
-                        tags: ["example", "website"],
-                        date: Date(timeIntervalSince1970: 0))
+        let item = Bookmark(title: "Example",
+                            url: URL(string: "https://example.com")!,
+                            tags: ["example", "website"],
+                            date: Date(timeIntervalSince1970: 0))
         try database.insertOrUpdate(items: [item])
         XCTAssertEqual(try database.tags(), ["example", "website"])
 
-        let updatedItem = Item(title: "Example",
-                               url: item.url,
-                               tags: ["website", "cheese"],
-                               date: item.date)
+        let updatedItem = Bookmark(title: "Example",
+                                   url: item.url,
+                                   tags: ["website", "cheese"],
+                                   date: item.date)
         try database.insertOrUpdate(items: [updatedItem])
         XCTAssertEqual(try database.tags(), ["cheese", "website"])
     }
 
     func testItemFilter() throws {
 
-        let item1 = Item(title: "Example",
-                         url: URL(string: "https://example.com")!,
-                         tags: ["example", "website"],
-                         date: Date(timeIntervalSince1970: 0))
+        let item1 = Bookmark(title: "Example",
+                             url: URL(string: "https://example.com")!,
+                             tags: ["example", "website"],
+                             date: Date(timeIntervalSince1970: 0))
 
-        let item2 = Item(title: "Cheese",
-                         url: URL(string: "https://blue.com")!,
-                         tags: ["cheese", "website"],
-                         date: Date(timeIntervalSince1970: 10))
+        let item2 = Bookmark(title: "Cheese",
+                             url: URL(string: "https://blue.com")!,
+                             tags: ["cheese", "website"],
+                             date: Date(timeIntervalSince1970: 10))
 
-        let item3 = Item(title: "Fromage and Cheese",
-                         url: URL(string: "https://fruit.co.uk")!,
-                         tags: ["robert", "website", "strawberries"],
-                         date: Date(timeIntervalSince1970: 20))
+        let item3 = Bookmark(title: "Fromage and Cheese",
+                             url: URL(string: "https://fruit.co.uk")!,
+                             tags: ["robert", "website", "strawberries"],
+                             date: Date(timeIntervalSince1970: 20))
 
         try database.insertOrUpdate(items: [item1, item2, item3])
 
@@ -213,20 +213,20 @@ class DatabaseTests: XCTestCase {
 
     func testItemFilterWithTags() throws {
 
-        let item1 = Item(title: "Example",
-                         url: URL(string: "https://example.com")!,
-                         tags: ["example", "website"],
-                         date: Date(timeIntervalSince1970: 0))
+        let item1 = Bookmark(title: "Example",
+                             url: URL(string: "https://example.com")!,
+                             tags: ["example", "website"],
+                             date: Date(timeIntervalSince1970: 0))
 
-        let item2 = Item(title: "Cheese",
-                         url: URL(string: "https://blue.com")!,
-                         tags: ["cheese", "website"],
-                         date: Date(timeIntervalSince1970: 10))
+        let item2 = Bookmark(title: "Cheese",
+                             url: URL(string: "https://blue.com")!,
+                             tags: ["cheese", "website"],
+                             date: Date(timeIntervalSince1970: 10))
 
-        let item3 = Item(title: "Fromage and Cheese",
-                         url: URL(string: "https://fruit.co.uk")!,
-                         tags: ["robert", "website", "strawberries", "cheese"],
-                         date: Date(timeIntervalSince1970: 20))
+        let item3 = Bookmark(title: "Fromage and Cheese",
+                             url: URL(string: "https://fruit.co.uk")!,
+                             tags: ["robert", "website", "strawberries", "cheese"],
+                             date: Date(timeIntervalSince1970: 20))
 
         try database.insertOrUpdate(items: [item1, item2, item3])
 
@@ -239,23 +239,22 @@ class DatabaseTests: XCTestCase {
 
     func testItemFilterEmptyTags() throws {
 
-        let item1 = Item(title: "Example",
-                         url: URL(string: "https://example.com")!,
-                         tags: [],
-                         date: Date(timeIntervalSince1970: 0))
+        let item1 = Bookmark(title: "Example",
+                             url: URL(string: "https://example.com")!,
+                             tags: [],
+                             date: Date(timeIntervalSince1970: 0))
 
-        let item2 = Item(title: "Cheese",
-                         url: URL(string: "https://blue.com")!,
-                         tags: ["cheese", "website"],
-                         date: Date(timeIntervalSince1970: 10))
+        let item2 = Bookmark(title: "Cheese",
+                             url: URL(string: "https://blue.com")!,
+                             tags: ["cheese", "website"],
+                             date: Date(timeIntervalSince1970: 10))
 
-        let item3 = Item(title: "Fromage and Cheese",
-                         url: URL(string: "https://fruit.co.uk")!,
-                         tags: [],
-                         date: Date(timeIntervalSince1970: 20))
+        let item3 = Bookmark(title: "Fromage and Cheese",
+                             url: URL(string: "https://fruit.co.uk")!,
+                             tags: [],
+                             date: Date(timeIntervalSince1970: 20))
 
         try database.insertOrUpdate(items: [item1, item2, item3])
-
         XCTAssertEqual(try database.items(query: Untagged()), [item3, item1])
         XCTAssertEqual(try database.items(query: Untagged() && Search("co")), [item3, item1])
         XCTAssertEqual(try database.items(query: Untagged() && Search("com")), [item1])
@@ -263,20 +262,20 @@ class DatabaseTests: XCTestCase {
 
     func testTags() throws {
 
-        let item1 = Item(title: "Example",
-                         url: URL(string: "https://example.com")!,
-                         tags: ["example", "website"],
-                         date: Date(timeIntervalSince1970: 0))
+        let item1 = Bookmark(title: "Example",
+                             url: URL(string: "https://example.com")!,
+                             tags: ["example", "website"],
+                             date: Date(timeIntervalSince1970: 0))
 
-        let item2 = Item(title: "Cheese",
-                         url: URL(string: "https://blue.com")!,
-                         tags: ["cheese", "website"],
-                         date: Date(timeIntervalSince1970: 10))
+        let item2 = Bookmark(title: "Cheese",
+                             url: URL(string: "https://blue.com")!,
+                             tags: ["cheese", "website"],
+                             date: Date(timeIntervalSince1970: 10))
 
-        let item3 = Item(title: "Fromage and Cheese",
-                         url: URL(string: "https://fruit.co.uk")!,
-                         tags: ["robert", "website", "strawberries"],
-                         date: Date(timeIntervalSince1970: 20))
+        let item3 = Bookmark(title: "Fromage and Cheese",
+                             url: URL(string: "https://fruit.co.uk")!,
+                             tags: ["robert", "website", "strawberries"],
+                             date: Date(timeIntervalSince1970: 20))
 
         try database.insertOrUpdate(items: [item1, item2, item3])
 
@@ -285,20 +284,20 @@ class DatabaseTests: XCTestCase {
 
     func testDeleteTags() throws {
 
-        let item1 = Item(title: "Example",
-                         url: URL(string: "https://example.com")!,
-                         tags: ["example", "website"],
-                         date: Date(timeIntervalSince1970: 0))
+        let item1 = Bookmark(title: "Example",
+                             url: URL(string: "https://example.com")!,
+                             tags: ["example", "website"],
+                             date: Date(timeIntervalSince1970: 0))
 
-        let item2 = Item(title: "Cheese",
-                         url: URL(string: "https://blue.com")!,
-                         tags: ["cheese", "website"],
-                         date: Date(timeIntervalSince1970: 10))
+        let item2 = Bookmark(title: "Cheese",
+                             url: URL(string: "https://blue.com")!,
+                             tags: ["cheese", "website"],
+                             date: Date(timeIntervalSince1970: 10))
 
-        let item3 = Item(title: "Fromage and Cheese",
-                         url: URL(string: "https://fruit.co.uk")!,
-                         tags: ["robert", "website", "strawberries"],
-                         date: Date(timeIntervalSince1970: 20))
+        let item3 = Bookmark(title: "Fromage and Cheese",
+                             url: URL(string: "https://fruit.co.uk")!,
+                             tags: ["robert", "website", "strawberries"],
+                             date: Date(timeIntervalSince1970: 20))
 
         try database.insertOrUpdate(items: [item1, item2, item3])
         XCTAssertEqual(try database.tags(), ["cheese", "example", "robert", "strawberries", "website"])
@@ -308,14 +307,14 @@ class DatabaseTests: XCTestCase {
         XCTAssertEqual(try database.items(query: True()), [item3, item2, item1].map { item in
             var tags = item.tags
             tags.remove("website")
-            return Item(identifier: item.identifier,
-                        title: item.title,
-                        url: item.url,
-                        tags: tags,
-                        date: item.date,
-                        toRead: item.toRead,
-                        shared: item.shared,
-                        notes: item.notes)
+            return Bookmark(identifier: item.identifier,
+                            title: item.title,
+                            url: item.url,
+                            tags: tags,
+                            date: item.date,
+                            toRead: item.toRead,
+                            shared: item.shared,
+                            notes: item.notes)
         })
     }
 

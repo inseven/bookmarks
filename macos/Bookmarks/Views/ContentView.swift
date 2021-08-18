@@ -34,7 +34,7 @@ struct ContentView: View {
 
     @State var underlyingSection: BookmarksSection?
     @StateObject var databaseView: ItemsView
-    @StateObject var selectionTracker: SelectionTracker<Item>
+    @StateObject var selectionTracker: SelectionTracker<Bookmark>
     @State var firstResponder: Bool = false
     @StateObject var searchDebouncer = Debouncer<String>(initialValue: "", delay: .seconds(0.2))
 

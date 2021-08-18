@@ -37,7 +37,7 @@ public class ThumbnailManager {
         self.downloadManager = downloadManager
     }
 
-    func cachedImage(for item: Item) -> Future<SafeImage, Error> {
+    func cachedImage(for item: Bookmark) -> Future<SafeImage, Error> {
         return Future { (promise) in
             self.imageCache.get(identifier: item.identifier) { (result) in
                 promise(result)
@@ -45,14 +45,14 @@ public class ThumbnailManager {
         }
     }
 
-    func fetchImage(for item: Item, scale: CGFloat) -> AnyPublisher<SafeImage, Error> {
+    func fetchImage(for item: Bookmark, scale: CGFloat) -> AnyPublisher<SafeImage, Error> {
         return Utilities.meta(for: item.url)
             .catch { _ in self.downloadManager.thumbnail(for: item.url) }
             .flatMap { $0.resize(height: 200 * scale) }
             .eraseToAnyPublisher()
     }
 
-    public func thumbnail(for item: Item, scale: CGFloat) -> AnyPublisher<SafeImage, Error> {
+    public func thumbnail(for item: Bookmark, scale: CGFloat) -> AnyPublisher<SafeImage, Error> {
         return cachedImage(for: item)
             .catch { _ in self.fetchImage(for: item, scale: scale)
                 .map { (image) -> SafeImage in

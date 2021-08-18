@@ -66,14 +66,14 @@ public class Updater {
                     let date = post.time else {
                         continue
                 }
-                let item = Item(identifier: post.hash,
-                                title: post.description ?? "",
-                                url: url,
-                                tags: Set(post.tags),
-                                date: date,
-                                toRead: post.toRead,
-                                shared: post.shared,
-                                notes: post.extended)
+                let item = Bookmark(identifier: post.hash,
+                                    title: post.description ?? "",
+                                    url: url,
+                                    tags: Set(post.tags),
+                                    date: date,
+                                    toRead: post.toRead,
+                                    shared: post.shared,
+                                    notes: post.extended)
                 identifiers.insert(item.identifier)
                 _ = try self.database.insertOrUpdate(item: item)
             }
@@ -116,7 +116,7 @@ public class Updater {
         }
     }
 
-    public func deleteItems(_ items: [Item], completion: @escaping (Result<Void, Error>) -> Void) {
+    public func deleteItems(_ items: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
             let result = Result {
@@ -129,7 +129,7 @@ public class Updater {
         }
     }
 
-    public func updateItems(_ items: [Item], completion: @escaping (Result<Void, Error>) -> Void) {
+    public func updateItems(_ items: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
             let result = Result { () -> Void in

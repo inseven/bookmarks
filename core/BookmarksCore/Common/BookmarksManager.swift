@@ -82,20 +82,20 @@ public class BookmarksManager {
         self.updater.update(force: true)
     }
 
-    public func deleteItems(_ items: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
-        updater.deleteItems(items, completion: completion)
+    public func deleteBookmarks(_ items: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
+        updater.deleteBookmarks(items, completion: completion)
     }
 
-    public func deleteItems(_ items: Set<Bookmark>, completion: @escaping (Result<Void, Error>) -> Void) {
-        deleteItems(Array(items), completion: completion)
+    public func deleteBookmarks(_ items: Set<Bookmark>, completion: @escaping (Result<Void, Error>) -> Void) {
+        deleteBookmarks(Array(items), completion: completion)
     }
 
-    public func updateItems(_ items: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
-        self.updater.updateItems(items, completion: completion)
+    public func updateBookmarks(_ items: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
+        self.updater.updateBookmarks(items, completion: completion)
     }
 
-    public func updateItems(_ items: Set<Bookmark>, completion: @escaping (Result<Void, Error>) -> Void) {
-        updateItems(Array(items), completion: completion)
+    public func updateBookmarks(_ items: Set<Bookmark>, completion: @escaping (Result<Void, Error>) -> Void) {
+        updateBookmarks(Array(items), completion: completion)
     }
 
     public func renameTag(_ old: String, to new: String, completion: @escaping (Result<Void, Error>) -> Void) {

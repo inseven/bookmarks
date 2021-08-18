@@ -75,7 +75,7 @@ public class Updater {
                                     shared: post.shared,
                                     notes: post.extended)
                 identifiers.insert(item.identifier)
-                _ = try self.database.insertOrUpdate(item: item)
+                _ = try self.database.insertOrUpdateBookmark(item)
             }
 
             // Delete missing items.
@@ -116,7 +116,7 @@ public class Updater {
         }
     }
 
-    public func deleteItems(_ items: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
+    public func deleteBookmarks(_ items: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
             let result = Result {
@@ -129,12 +129,12 @@ public class Updater {
         }
     }
 
-    public func updateItems(_ items: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
+    public func updateBookmarks(_ items: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
             let result = Result { () -> Void in
                 for item in items {
-                    _ = try self.database.insertOrUpdate(item: item)
+                    _ = try self.database.insertOrUpdateBookmark(item)
                     let post = Pinboard.Post(item: item)
                     try self.pinboard.postsAdd(post: post, replace: true)
                 }

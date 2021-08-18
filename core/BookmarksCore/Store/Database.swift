@@ -549,13 +549,13 @@ public class Database {
 
 public extension Database {
 
-    func insertOrUpdate(item: Bookmark) throws -> Bookmark {
+    func insertOrUpdateBookmark(_ item: Bookmark) throws -> Bookmark {
         try AsyncOperation { self.insertOrUpdate(item, completion: $0) }.wait()
     }
 
     func insertOrUpdate(items: [Bookmark]) throws {
         for item in items {
-            _ = try self.insertOrUpdate(item: item)
+            _ = try self.insertOrUpdateBookmark(item)
         }
     }
 

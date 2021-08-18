@@ -141,13 +141,13 @@ class DatabaseTests: XCTestCase {
                             tags: ["example", "website"],
                             date: Date(timeIntervalSince1970: 0),
                             notes: notes)
-        _ = try database.insertOrUpdate(item: item)
+        _ = try database.insertOrUpdateBookmark(item)
         let fetchedItem = try database.bookmark(identifier: item.identifier)
         XCTAssertEqual(item, fetchedItem)
         XCTAssertEqual(fetchedItem.notes, notes)
 
         let update = item.setting(notes: "Cheese")
-        _ = try database.insertOrUpdate(item: update)
+        _ = try database.insertOrUpdateBookmark(update)
         let fetchedUpdate = try database.bookmark(identifier: item.identifier)
         XCTAssertNotEqual(item, update)
         XCTAssertEqual(update, fetchedUpdate)

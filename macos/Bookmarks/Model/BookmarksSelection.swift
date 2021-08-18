@@ -57,16 +57,16 @@ public class BookmarksSelection: ObservableObject {
 
     public func update(manager: BookmarksManager, toRead: Bool) {
         let items = items.map { $0.setting(toRead: toRead) }
-        manager.updateItems(items, completion: errorHandler())
+        manager.updateBookmarks(items, completion: errorHandler())
     }
 
     public func update(manager: BookmarksManager, shared: Bool) {
         let items = items.map { $0.setting(shared: shared) }
-        manager.updateItems(items, completion: errorHandler())
+        manager.updateBookmarks(items, completion: errorHandler())
     }
 
     public func update(manager: BookmarksManager, items: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
-        manager.updateItems(items, completion: errorHandler(completion))
+        manager.updateBookmarks(items, completion: errorHandler(completion))
     }
 
     public func addTags() {
@@ -74,7 +74,7 @@ public class BookmarksSelection: ObservableObject {
     }
 
     public func delete(manager: BookmarksManager) {
-        manager.deleteItems(items, completion: errorHandler())
+        manager.deleteBookmarks(items, completion: errorHandler())
     }
 
     public func copy() {

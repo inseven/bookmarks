@@ -45,7 +45,7 @@ jobs:
         FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
 
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        NOTARIZE: ${{ github.ref == 'refs/heads/main' }}
+        NOTARIZE: true
         TRY_RELEASE: true
         TESTFLIGHT_UPLOAD: true
 

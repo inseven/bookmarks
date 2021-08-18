@@ -37,7 +37,7 @@ struct BookmarkTagCommands: View {
             }
             .contextAwareKeyboardShortcut("t", modifiers: .command)
             Divider()
-            ForEach(Array(selection.items.tags).sorted()) { tag in
+            ForEach(Array(selection.bookmarks.tags).sorted()) { tag in
                 Button(tag) {
                     section = tag.section
                 }

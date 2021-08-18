@@ -82,20 +82,20 @@ public class BookmarksManager {
         self.updater.update(force: true)
     }
 
-    public func deleteItems(_ items: [Item], completion: @escaping (Result<Void, Error>) -> Void) {
-        updater.deleteItems(items, completion: completion)
+    public func deleteBookmarks(_ bookmarks: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
+        updater.deleteBookmarks(bookmarks, completion: completion)
     }
 
-    public func deleteItems(_ items: Set<Item>, completion: @escaping (Result<Void, Error>) -> Void) {
-        deleteItems(Array(items), completion: completion)
+    public func deleteBookmarks(_ bookmarks: Set<Bookmark>, completion: @escaping (Result<Void, Error>) -> Void) {
+        deleteBookmarks(Array(bookmarks), completion: completion)
     }
 
-    public func updateItems(_ items: [Item], completion: @escaping (Result<Void, Error>) -> Void) {
-        self.updater.updateItems(items, completion: completion)
+    public func updateBookmarks(_ bookmarks: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
+        self.updater.updateBookmarks(bookmarks, completion: completion)
     }
 
-    public func updateItems(_ items: Set<Item>, completion: @escaping (Result<Void, Error>) -> Void) {
-        updateItems(Array(items), completion: completion)
+    public func updateBookmarks(_ bookmarks: Set<Bookmark>, completion: @escaping (Result<Void, Error>) -> Void) {
+        updateBookmarks(Array(bookmarks), completion: completion)
     }
 
     public func renameTag(_ old: String, to new: String, completion: @escaping (Result<Void, Error>) -> Void) {
@@ -106,18 +106,18 @@ public class BookmarksManager {
         self.updater.deleteTag(tag, completion: completion)
     }
 
-    public func openItems(_ items: Set<Item>,
-                          location: Item.Location = .web,
-                          completion: @escaping (Result<Void, Error>) -> Void) {
-        openItems(Array(items), location: location, completion: completion)
+    public func openBookmarks(_ bookmarks: Set<Bookmark>,
+                              location: Bookmark.Location = .web,
+                              completion: @escaping (Result<Void, Error>) -> Void) {
+        openBookmarks(Array(bookmarks), location: location, completion: completion)
     }
 
-    public func openItems(_ items: [Item],
-                          location: Item.Location = .web,
-                          completion: @escaping (Result<Void, Error>) -> Void) {
+    public func openBookmarks(_ bookmarks: [Bookmark],
+                              location: Bookmark.Location = .web,
+                              completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.main.asyncClosure(completion)
         do {
-            let many = open(urls: try items.map { try $0.url(location) })
+            let many = open(urls: try bookmarks.map { try $0.url(location) })
             _ = many.sink { result in
                 switch result {
                 case .finished:

@@ -21,7 +21,7 @@
 import Combine
 import Foundation
 
-public class ItemsView: ObservableObject {
+public class BookmarksView: ObservableObject {
 
     public enum State {
         case loading
@@ -33,7 +33,7 @@ public class ItemsView: ObservableObject {
     var searchCancellable: AnyCancellable? = nil
 
     @Published public var query: AnyQuery
-    @Published public var items: [Item] = []
+    @Published public var bookmarks: [Bookmark] = []
     @Published public var state: State = .loading
 
     public init(database: Database, query: AnyQuery) {
@@ -43,19 +43,19 @@ public class ItemsView: ObservableObject {
 
     func update() {
         dispatchPrecondition(condition: .onQueue(.main))
-        print("fetching items...")
+        print("fetching bookmarks...")
 
         let activeQuery = self.query
-        database.items(query: activeQuery) { result in
+        database.bookmarks(query: activeQuery) { result in
             DispatchQueue.main.async {
                 guard self.query == activeQuery else {
                     print("ignoring out-of-date results...")
                     return
                 }
                 switch result {
-                case .success(let items):
-                    print("received \(items.count) items")
-                    self.items = items
+                case .success(let bookmarks):
+                    print("received \(bookmarks.count) bookmarks")
+                    self.bookmarks = bookmarks
                     self.state = .ready
                 case .failure(let error):
                     print("Failed to load data with error \(error)")
@@ -79,7 +79,7 @@ public class ItemsView: ObservableObject {
 
     public func clear() {
         dispatchPrecondition(condition: .onQueue(.main))
-        self.items = []
+        self.bookmarks = []
         self.state = .loading
     }
 
@@ -90,7 +90,7 @@ public class ItemsView: ObservableObject {
         self.updateCancellable = nil
         self.searchCancellable?.cancel()
         self.searchCancellable = nil
-        self.items = []
+        self.bookmarks = []
     }
 
 }

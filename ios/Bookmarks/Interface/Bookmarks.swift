@@ -22,14 +22,14 @@ import SwiftUI
 
 import BookmarksCore
 
-struct BookmarksView: View {
+struct Bookmarks: View {
 
     enum SheetType {
         case settings
     }
 
     @Environment(\.manager) var manager: BookmarksManager
-    @StateObject var databaseView: ItemsView
+    @StateObject var bookmarksView: BookmarksView
 
     @StateObject var searchDebouncer = Debouncer<String>(initialValue: "", delay: .seconds(0.2))
     @State var sheet: SheetType?
@@ -44,15 +44,15 @@ struct BookmarksView: View {
             }
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
-                    ForEach(databaseView.items) { item in
-                        BookmarkCell(item: item)
+                    ForEach(bookmarksView.bookmarks) { bookmark in
+                        BookmarkCell(bookmark: bookmark)
                             .onTapGesture {
-                                UIApplication.shared.open(item.url)
+                                UIApplication.shared.open(bookmark.url)
                             }
                             .contextMenu(ContextMenu(menuItems: {
                                 Button("Share") {
                                     print("Share")
-                                    print(item.identifier)
+                                    print(bookmark.identifier)
                                 }
                             }))
                     }
@@ -72,18 +72,18 @@ struct BookmarksView: View {
             sheet = .settings
         })
         .onAppear {
-            databaseView.start()
+            bookmarksView.start()
         }
         .onDisappear {
-            databaseView.stop()
+            bookmarksView.stop()
         }
         .onReceive(searchDebouncer.$debouncedValue) { value in
-            databaseView.query = AnyQuery.parse(filter: value)
+            bookmarksView.query = AnyQuery.parse(filter: value)
         }
     }
 
 }
 
-extension BookmarksView.SheetType: Identifiable {
+extension Bookmarks.SheetType: Identifiable {
     public var id: Self { self }
 }

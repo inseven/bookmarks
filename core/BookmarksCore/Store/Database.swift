@@ -194,16 +194,6 @@ public class Database {
     var db: Connection  // Synchronized on syncQueue
     var observers: [DatabaseObserver] = []  // Synchronized on syncQueue
 
-    static func itemQuery(filter: String? = nil) -> QueryType {
-        guard let filter = filter,
-              !filter.isEmpty else {
-            return Schema.items.order(Schema.date.desc)
-        }
-        let filters = filter.tokens.map { Schema.title.like("%\($0)%") || Schema.url.like("%s\($0)%") }
-        let query = Schema.items.filter(filters.reduce(Expression<Bool>(value: true)) { $0 && $1 })
-        return query.order(Schema.date.desc)
-    }
-
     public init(path: URL) throws {
         self.path = path
         self.db = try Connection(path.path)

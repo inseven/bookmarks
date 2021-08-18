@@ -211,8 +211,8 @@ extension Set where Element == Bookmark {
     }
 
     public var tags: Set<String> {
-        reduce(Set<String>()) { result, item in
-            result.union(item.tags)
+        reduce(Set<String>()) { result, bookmark in
+            result.union(bookmark.tags)
         }
     }
 

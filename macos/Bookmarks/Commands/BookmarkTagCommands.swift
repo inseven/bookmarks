@@ -25,23 +25,21 @@ import BookmarksCore
 struct BookmarkTagCommands: View {
 
     @Environment(\.manager) var manager
-    @Environment(\.sheetHandler) var sheetHandler
+
+    @ObservedObject var selection: BookmarksSelection
 
     @Binding var section: BookmarksSection?
-    @Binding var selection: Set<Item>
 
     var body: some View {
         Menu("Tags") {
             Button("Add...") {
-                sheetHandler(.addTags(items: Array(selection)))
+                selection.addTags()
             }
-            if selection.count == 1,
-               let item = selection.first {
-                Divider()
-                ForEach(Array(item.tags).sorted()) { tag in
-                    Button(tag) {
-                        section = tag.section
-                    }
+            .contextAwareKeyboardShortcut("t", modifiers: .command)
+            Divider()
+            ForEach(Array(selection.items.tags).sorted()) { tag in
+                Button(tag) {
+                    section = tag.section
                 }
             }
         }

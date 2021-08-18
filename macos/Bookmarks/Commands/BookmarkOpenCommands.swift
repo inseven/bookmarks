@@ -24,17 +24,22 @@ import BookmarksCore
 
 struct BookmarkOpenCommands: View {
 
-    @Environment(\.manager) var manager: BookmarksManager
-    @Environment(\.errorHandler) var errorHandler
+    @Environment(\.manager) var manager
+    @Environment(\.menuType) var menuType
 
-    @Binding var selection: Set<Item>
+    @ObservedObject var selection: BookmarksSelection
 
     var body: some View {
         Button("Open") {
-            manager.openItems(selection, completion: errorHandlingCompletion(errorHandler))
+            selection.open(manager: manager)
         }
+        .contextAwareKeyboardShortcut(.return, modifiers: [.command])
+        .mainMenuItemCondition(.nonEmpty, selection)
         Button("Open on Internet Archive") {
-            manager.openItems(selection, location: .internetArchive, completion: errorHandlingCompletion(errorHandler))
+            selection.open(manager: manager, location: .internetArchive)
         }
+        .contextAwareKeyboardShortcut(.return, modifiers: [.command, .shift])
+        .mainMenuItemCondition(.nonEmpty, selection)
     }
+
 }

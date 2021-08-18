@@ -257,7 +257,7 @@ public class Database {
         guard let result = run.first else {
             throw BookmarksError.bookmarkNotFound(identifier: identifier)
         }
-        let tags = try syncQueue_tags(itemIdentifier: result.identifier)
+        let tags = try syncQueue_tags(bookmarkIdentifier: result.identifier)
         return Bookmark(identifier: result.identifier,
                         title: result.title,
                         url: result.url,
@@ -273,7 +273,7 @@ public class Database {
         guard let result = run.first else {
             throw BookmarksError.bookmarkNotFound(url: url)
         }
-        let tags = try syncQueue_tags(itemIdentifier: result.identifier)
+        let tags = try syncQueue_tags(bookmarkIdentifier: result.identifier)
         return Bookmark(identifier: result.identifier,
                         title: result.title,
                         url: result.url,
@@ -304,11 +304,11 @@ public class Database {
         return result
     }
 
-    fileprivate func syncQueue_tags(itemIdentifier: String) throws -> Set<String> {
+    fileprivate func syncQueue_tags(bookmarkIdentifier: String) throws -> Set<String> {
         Set(try self.db.prepare(Schema.items_to_tags
                                     .join(Schema.items, on: Schema.items_to_tags[Schema.itemId] == Schema.items[Schema.id])
                                     .join(Schema.tags, on: Schema.items_to_tags[Schema.tagId] == Schema.tags[Schema.id])
-                                    .filter(Schema.identifier == itemIdentifier))
+                                    .filter(Schema.identifier == bookmarkIdentifier))
                 .map { row -> String in
                     try row.get(Schema.tags[Schema.name])
                 })
@@ -498,7 +498,7 @@ public class Database {
             """
 
         let statement = try db.prepare(selectQuery)
-        let items = try statement.map { row in
+        let bookmarks = try statement.map { row in
             return Bookmark(identifier: try row.string(0),
                             title: try row.string(1),
                             url: try row.url(2),
@@ -509,7 +509,7 @@ public class Database {
                             notes: try row.string(7))
         }
 
-        return items
+        return bookmarks
     }
 
     public func bookmarks<T: QueryDescription>(query: T, completion: @escaping (Swift.Result<[Bookmark], Error>) -> Void) {

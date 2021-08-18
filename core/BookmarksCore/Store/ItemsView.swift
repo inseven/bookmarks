@@ -43,7 +43,7 @@ public class ItemsView: ObservableObject {
 
     func update() {
         dispatchPrecondition(condition: .onQueue(.main))
-        print("fetching items...")
+        print("fetching bookmarks...")
 
         let activeQuery = self.query
         database.bookmarks(query: activeQuery) { result in
@@ -53,9 +53,9 @@ public class ItemsView: ObservableObject {
                     return
                 }
                 switch result {
-                case .success(let items):
-                    print("received \(items.count) items")
-                    self.bookmarks = items
+                case .success(let bookmarks):
+                    print("received \(bookmarks.count) items")
+                    self.bookmarks = bookmarks
                     self.state = .ready
                 case .failure(let error):
                     print("Failed to load data with error \(error)")

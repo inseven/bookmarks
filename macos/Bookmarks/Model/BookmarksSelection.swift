@@ -30,12 +30,12 @@ public class BookmarksSelection: ObservableObject {
 
     @Published var sheet: SheetType? = nil
     @Published var lastError: Error? = nil
-    @Published var items: Set<Bookmark> = []
+    @Published var bookmarks: Set<Bookmark> = []
 
-    var count: Int { items.count }
-    var isEmpty: Bool { items.isEmpty }
-    var containsUnreadBookmark: Bool { items.containsUnreadBookmark }
-    var containsPublicBookmark: Bool { items.containsPublicBookmark }
+    var count: Int { bookmarks.count }
+    var isEmpty: Bool { bookmarks.isEmpty }
+    var containsUnreadBookmark: Bool { bookmarks.containsUnreadBookmark }
+    var containsPublicBookmark: Bool { bookmarks.containsPublicBookmark }
 
     public init() {}
 
@@ -52,40 +52,42 @@ public class BookmarksSelection: ObservableObject {
     }
 
     public func open(manager: BookmarksManager, location: Bookmark.Location = .web) {
-        manager.openBookmarks(items, location: location, completion: errorHandler())
+        manager.openBookmarks(bookmarks, location: location, completion: errorHandler())
     }
 
     public func update(manager: BookmarksManager, toRead: Bool) {
-        let items = items.map { $0.setting(toRead: toRead) }
+        let items = bookmarks.map { $0.setting(toRead: toRead) }
         manager.updateBookmarks(items, completion: errorHandler())
     }
 
     public func update(manager: BookmarksManager, shared: Bool) {
-        let items = items.map { $0.setting(shared: shared) }
-        manager.updateBookmarks(items, completion: errorHandler())
+        let bookmarks = bookmarks.map { $0.setting(shared: shared) }
+        manager.updateBookmarks(bookmarks, completion: errorHandler())
     }
 
-    public func update(manager: BookmarksManager, items: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
-        manager.updateBookmarks(items, completion: errorHandler(completion))
+    public func update(manager: BookmarksManager,
+                       bookmarks: [Bookmark],
+                       completion: @escaping (Result<Void, Error>) -> Void = { _ in }) {
+        manager.updateBookmarks(bookmarks, completion: errorHandler(completion))
     }
 
     public func addTags() {
-        sheet = .addTags(items: Array(items))
+        sheet = .addTags(items: Array(bookmarks))
     }
 
     public func delete(manager: BookmarksManager) {
-        manager.deleteBookmarks(items, completion: errorHandler())
+        manager.deleteBookmarks(bookmarks, completion: errorHandler())
     }
 
     public func copy() {
         NSPasteboard.general.clearContents()
-        NSPasteboard.general.writeObjects(items.map { $0.url.absoluteString as NSString })
-        NSPasteboard.general.writeObjects(items.map { $0.url as NSURL })
+        NSPasteboard.general.writeObjects(bookmarks.map { $0.url.absoluteString as NSString })
+        NSPasteboard.general.writeObjects(bookmarks.map { $0.url as NSURL })
     }
 
     public func copyTags() {
         NSPasteboard.general.clearContents()
-        NSPasteboard.general.writeObjects(items.tags.map { $0 as NSString })
+        NSPasteboard.general.writeObjects(bookmarks.tags.map { $0 as NSString })
     }
 
     public func showError(error: Error) {

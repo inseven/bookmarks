@@ -205,7 +205,7 @@ struct ContentView: View {
 
         })
         .onChange(of: selectionTracker.selection) { newSelection in
-            selection.items = newSelection
+            selection.bookmarks = newSelection
         }
         .navigationTitle(navigationTitle)
     }

@@ -339,7 +339,7 @@ public class Database {
         }
     }
 
-    public func item(identifier: String, completion: @escaping (Swift.Result<Bookmark, Error>) -> Void) {
+    public func bookmark(identifier: String, completion: @escaping (Swift.Result<Bookmark, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
             do {
@@ -353,7 +353,7 @@ public class Database {
         }
     }
 
-    public func item(url: URL, completion: @escaping (Swift.Result<Bookmark, Error>) -> Void) {
+    public func bookmark(url: URL, completion: @escaping (Swift.Result<Bookmark, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
             do {
@@ -585,14 +585,14 @@ public extension Database {
         try AsyncOperation { self.identifiers(completion: $0) }.wait()
     }
 
-    func item(identifier: String) throws -> Bookmark {
-        try AsyncOperation { self.item(identifier: identifier, completion: $0) }.wait()
+    func bookmark(identifier: String) throws -> Bookmark {
+        try AsyncOperation { self.bookmark(identifier: identifier, completion: $0) }.wait()
     }
 
     // TODO: Test the Database APIs for fetching items by URL #217
     //       https://github.com/inseven/bookmarks/issues/217
-    func item(url: URL) throws -> Bookmark {
-        try AsyncOperation { self.item(url: url, completion: $0) }.wait()
+    func bookmark(url: URL) throws -> Bookmark {
+        try AsyncOperation { self.bookmark(url: url, completion: $0) }.wait()
     }
 
 }

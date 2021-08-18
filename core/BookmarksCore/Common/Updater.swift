@@ -82,7 +82,7 @@ public class Updater {
             let allIdentifiers = try self.database.identifiers()
             let deletedIdentifiers = Set(allIdentifiers).subtracting(identifiers)
             for identifier in deletedIdentifiers {
-                let item = try self.database.item(identifier: identifier)
+                let item = try self.database.bookmark(identifier: identifier)
                 print("deleting \(item)...")
                 _ = try self.database.deleteBookmark(identifier: identifier)
             }

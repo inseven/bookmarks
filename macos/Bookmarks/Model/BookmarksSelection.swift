@@ -52,7 +52,7 @@ public class BookmarksSelection: ObservableObject {
     }
 
     public func open(manager: BookmarksManager, location: Bookmark.Location = .web) {
-        manager.openItems(items, location: location, completion: errorHandler())
+        manager.openBookmarks(items, location: location, completion: errorHandler())
     }
 
     public func update(manager: BookmarksManager, toRead: Bool) {

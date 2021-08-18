@@ -81,12 +81,12 @@ struct AddTagsView: View {
                         Button("OK") {
                             isBusy = true
                             let tags = tokens.compactMap { $0.associatedValue }
-                            let updatedItems = bookmarks.map { item in
+                            let updatedBookmarks = bookmarks.map { item in
                                 item
                                     .adding(tags: Set(tags))
                                     .setting(toRead: markAsRead ? false : item.toRead)
                             }
-                            selection.update(manager: manager, bookmarks: updatedItems) { result in
+                            selection.update(manager: manager, bookmarks: updatedBookmarks) { result in
                                 DispatchQueue.main.async {
                                     presentationMode.wrappedValue.dismiss()
                                 }

@@ -56,8 +56,8 @@ public class BookmarksSelection: ObservableObject {
     }
 
     public func update(manager: BookmarksManager, toRead: Bool) {
-        let items = bookmarks.map { $0.setting(toRead: toRead) }
-        manager.updateBookmarks(items, completion: errorHandler())
+        let bookmarks = bookmarks.map { $0.setting(toRead: toRead) }
+        manager.updateBookmarks(bookmarks, completion: errorHandler())
     }
 
     public func update(manager: BookmarksManager, shared: Bool) {

@@ -129,13 +129,13 @@ public class Updater {
         }
     }
 
-    public func updateBookmarks(_ items: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
+    public func updateBookmarks(_ bookmarks: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
             let result = Result { () -> Void in
-                for item in items {
-                    _ = try self.database.insertOrUpdateBookmark(item)
-                    let post = Pinboard.Post(item: item)
+                for bookmark in bookmarks {
+                    _ = try self.database.insertOrUpdateBookmark(bookmark)
+                    let post = Pinboard.Post(bookmark)
                     try self.pinboard.postsAdd(post: post, replace: true)
                 }
             }

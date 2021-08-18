@@ -222,7 +222,7 @@ extension Pinboard.Post {
 
     // TODO: Review the nullability of the properties on the Pinboard.Post struct #216
     //       https://github.com/inseven/bookmarks/issues/216
-    init(item: Bookmark) {
+    init(_ item: Bookmark) {
         self.init(href: item.url,
                   description: item.title,
                   extended: item.notes,

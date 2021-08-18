@@ -20,7 +20,7 @@
 
 import BookmarksCore
 
-extension Item {
+extension Bookmark {
 
     public func localizedStandardContains(_ string: String) -> Bool {
         return (title.localizedSearchMatches(string: string) ||

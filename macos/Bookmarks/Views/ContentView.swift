@@ -33,8 +33,8 @@ struct ContentView: View {
     @Binding var section: BookmarksSection?
 
     @State var underlyingSection: BookmarksSection?
-    @StateObject var databaseView: ItemsView
-    @StateObject var selectionTracker: SelectionTracker<Item>
+    @StateObject var bookmarksView: BookmarksView
+    @StateObject var selectionTracker: SelectionTracker<Bookmark>
     @State var firstResponder: Bool = false
     @StateObject var tokenDebouncer = Debouncer<[Token<String>]>(initialValue: [], delay: .seconds(0.2))
 
@@ -43,13 +43,14 @@ struct ContentView: View {
     init(selection: BookmarksSelection, section: Binding<BookmarksSection?>, database: Database) {
         self.selection = selection
         _section = section
-        let databaseView = Deferred(ItemsView(database: database, query: True().eraseToAnyQuery()))
-        let selectionTracker = Deferred(SelectionTracker(items: databaseView.get().$items))
-        _databaseView = StateObject(wrappedValue: databaseView.get())
+        let bookmarksView = Deferred(BookmarksView(database: database, query: True().eraseToAnyQuery()))
+        let selectionTracker = Deferred(SelectionTracker(items: bookmarksView.get().$bookmarks))
+        _bookmarksView = StateObject(wrappedValue: bookmarksView.get())
         _selectionTracker = StateObject(wrappedValue: selectionTracker.get())
     }
 
     var navigationTitle: String {
+
 
         guard let title = section?.navigationTitle else {
             return "Unknown"
@@ -61,11 +62,11 @@ struct ContentView: View {
         VStack {
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 8)], spacing: 8) {
-                    ForEach(databaseView.items) { item in
-                        BookmarkCell(item: item)
+                    ForEach(bookmarksView.bookmarks) { bookmark in
+                        BookmarkCell(bookmark: bookmark)
                             .shadow(color: .shadow, radius: 8)
-                            .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: item), firstResponder: firstResponder))
-                            .help(item.url.absoluteString)
+                            .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: bookmark), firstResponder: firstResponder))
+                            .help(bookmark.url.absoluteString)
                             .contextMenuFocusable {
                                 BookmarkOpenCommands(selection: selection)
                                     .trailingDivider()
@@ -85,25 +86,25 @@ struct ContentView: View {
                                     return
                                 }
                                 firstResponder = true
-                                if !selectionTracker.isSelected(item: item) {
-                                    selectionTracker.handleClick(item: item)
+                                if !selectionTracker.isSelected(item: bookmark) {
+                                    selectionTracker.handleClick(item: bookmark)
                                 }
                             }
                             .menuType(.context)
                             .onDrag {
-                                NSItemProvider(object: item.url as NSURL)
+                                NSItemProvider(object: bookmark.url as NSURL)
                             }
                             .handleMouse {
-                                if firstResponder || !selectionTracker.isSelected(item: item) {
-                                    selectionTracker.handleClick(item: item)
+                                if firstResponder || !selectionTracker.isSelected(item: bookmark) {
+                                    selectionTracker.handleClick(item: bookmark)
                                 }
                                 firstResponder = true
                             } doubleClick: {
-                                NSWorkspace.shared.open(item.url)
+                                NSWorkspace.shared.open(bookmark.url)
                             } shiftClick: {
-                                selectionTracker.handleShiftClick(item: item)
+                                selectionTracker.handleShiftClick(item: bookmark)
                             } commandClick: {
-                                selectionTracker.handleCommandClick(item: item)
+                                selectionTracker.handleCommandClick(item: bookmark)
                             }
                     }
                 }
@@ -115,13 +116,13 @@ struct ContentView: View {
                 selectionTracker.clear()
             }
             .background(Color(NSColor.textBackgroundColor))
-            .overlay(databaseView.state == .loading ? LoadingView() : nil)
+            .overlay(bookmarksView.state == .loading ? LoadingView() : nil)
         }
         .onAppear {
-            databaseView.start()
+            bookmarksView.start()
         }
         .onDisappear {
-            databaseView.stop()
+            bookmarksView.stop()
         }
         .toolbar {
             ToolbarItem {
@@ -184,7 +185,7 @@ struct ContentView: View {
             }
 
             // Update the database query.
-            databaseView.query = AnyQuery.and(queries)
+            bookmarksView.query = AnyQuery.and(queries)
 
         }
         .onChange(of: section) { section in
@@ -197,10 +198,10 @@ struct ContentView: View {
             underlyingSection = section
 
             selectionTracker.clear()
-            databaseView.clear()
+            bookmarksView.clear()
             let query = section.query
 
-            databaseView.query = query.eraseToAnyQuery()
+            bookmarksView.query = query.eraseToAnyQuery()
 
             // TODO: We're doing unnecessary round-trips here.
             let tokens = AnyQuery.queries(for: query.filter).map { query in
@@ -223,7 +224,7 @@ struct ContentView: View {
 
         })
         .onChange(of: selectionTracker.selection) { newSelection in
-            selection.items = newSelection
+            selection.bookmarks = newSelection
         }
         .navigationTitle(navigationTitle)
     }

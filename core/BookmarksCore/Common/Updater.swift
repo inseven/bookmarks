@@ -59,32 +59,32 @@ public class Updater {
 
             var identifiers = Set<String>()
 
-            // Insert or update items.
+            // Insert or update bookmarks.
             for post in posts {
                 guard
                     let url = post.href,
                     let date = post.time else {
                         continue
                 }
-                let item = Item(identifier: post.hash,
-                                title: post.description ?? "",
-                                url: url,
-                                tags: Set(post.tags),
-                                date: date,
-                                toRead: post.toRead,
-                                shared: post.shared,
-                                notes: post.extended)
-                identifiers.insert(item.identifier)
-                _ = try self.database.insertOrUpdate(item: item)
+                let bookmark = Bookmark(identifier: post.hash,
+                                        title: post.description ?? "",
+                                        url: url,
+                                        tags: Set(post.tags),
+                                        date: date,
+                                        toRead: post.toRead,
+                                        shared: post.shared,
+                                        notes: post.extended)
+                identifiers.insert(bookmark.identifier)
+                _ = try self.database.insertOrUpdateBookmark(bookmark)
             }
 
-            // Delete missing items.
+            // Delete missing bookmarks.
             let allIdentifiers = try self.database.identifiers()
             let deletedIdentifiers = Set(allIdentifiers).subtracting(identifiers)
             for identifier in deletedIdentifiers {
-                let item = try self.database.item(identifier: identifier)
-                print("deleting \(item)...")
-                _ = try self.database.deleteItem(identifier: identifier)
+                let bookmark = try self.database.bookmark(identifier: identifier)
+                print("deleting \(bookmark)...")
+                _ = try self.database.deleteBookmark(identifier: identifier)
             }
             print("update complete")
 
@@ -92,7 +92,7 @@ public class Updater {
             self.lastUpdate = update.updateTime
 
         } catch {
-            print("failed to update items with error \(error)")
+            print("failed to update bookmarks with error \(error)")
         }
     }
 
@@ -116,26 +116,26 @@ public class Updater {
         }
     }
 
-    public func deleteItems(_ items: [Item], completion: @escaping (Result<Void, Error>) -> Void) {
+    public func deleteBookmarks(_ bookmarks: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
             let result = Result {
-                for item in items {
-                    try self.database.deleteItem(identifier: item.identifier)
-                    try self.pinboard.postsDelete(url: item.url)
+                for bookmark in bookmarks {
+                    try self.database.deleteBookmark(identifier: bookmark.identifier)
+                    try self.pinboard.postsDelete(url: bookmark.url)
                 }
             }
             completion(result)
         }
     }
 
-    public func updateItems(_ items: [Item], completion: @escaping (Result<Void, Error>) -> Void) {
+    public func updateBookmarks(_ bookmarks: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
             let result = Result { () -> Void in
-                for item in items {
-                    _ = try self.database.insertOrUpdate(item: item)
-                    let post = Pinboard.Post(item: item)
+                for bookmark in bookmarks {
+                    _ = try self.database.insertOrUpdateBookmark(bookmark)
+                    let post = Pinboard.Post(bookmark)
                     try self.pinboard.postsAdd(post: post, replace: true)
                 }
             }

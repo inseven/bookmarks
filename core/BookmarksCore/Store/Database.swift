@@ -522,7 +522,7 @@ public class Database {
         return items
     }
 
-    public func items<T: QueryDescription>(query: T, completion: @escaping (Swift.Result<[Bookmark], Error>) -> Void) {
+    public func bookmarks<T: QueryDescription>(query: T, completion: @escaping (Swift.Result<[Bookmark], Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             let result = Swift.Result<[Bookmark], Error> {
@@ -573,8 +573,8 @@ public extension Database {
         try AsyncOperation { self.deleteBookmark(identifier: identifier, completion: $0) }.wait()
     }
 
-    func items<T: QueryDescription>(query: T) throws -> [Bookmark] {
-        try AsyncOperation({ self.items(query: query, completion: $0) }).wait()
+    func bookmarks<T: QueryDescription>(query: T) throws -> [Bookmark] {
+        try AsyncOperation({ self.bookmarks(query: query, completion: $0) }).wait()
     }
 
     func tags() throws -> [String] {

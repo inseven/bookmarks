@@ -46,7 +46,7 @@ public class ItemsView: ObservableObject {
         print("fetching items...")
 
         let activeQuery = self.query
-        database.items(query: activeQuery) { result in
+        database.bookmarks(query: activeQuery) { result in
             DispatchQueue.main.async {
                 guard self.query == activeQuery else {
                     print("ignoring out-of-date results...")

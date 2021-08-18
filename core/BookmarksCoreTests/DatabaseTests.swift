@@ -113,7 +113,7 @@ class DatabaseTests: XCTestCase {
         try database.insertOrUpdate(items: [item1, item2])
 
         XCTAssertEqual(try database.tags(), ["cheese", "example", "website"])
-        XCTAssertEqual(try database.items(query: True()), [item2, item1])
+        XCTAssertEqual(try database.bookmarks(query: True()), [item2, item1])
     }
 
     func testItemDeletion() throws {
@@ -131,7 +131,7 @@ class DatabaseTests: XCTestCase {
         try database.deleteBookmarks([item1])
 
         XCTAssertEqual(try database.tags(), ["cheese", "website"])
-        XCTAssertEqual(try database.items(query: True()), [item2])
+        XCTAssertEqual(try database.bookmarks(query: True()), [item2])
     }
 
     func testItemNotes() throws {
@@ -198,17 +198,17 @@ class DatabaseTests: XCTestCase {
 
         try database.insertOrUpdate(items: [item1, item2, item3])
 
-        XCTAssertEqual(try database.items(query: Search(".com")), [item2, item1])
-        XCTAssertEqual(try database.items(query: Search(".COM")), [item2, item1])
-        XCTAssertEqual(try database.items(query: Search("example.COM")), [item1])
-        XCTAssertEqual(try database.items(query: Search("example.com")), [item1])
-        XCTAssertEqual(try database.items(query: Search("Example")), [item1])
-        XCTAssertEqual(try database.items(query: Search("EXaMPle")), [item1])
-        XCTAssertEqual(try database.items(query: Search("amp")), [item1])
-        XCTAssertEqual(try database.items(query: Search("Cheese")), [item3, item2])
-        XCTAssertEqual(try database.items(query: Search("Cheese co")), [item3, item2])
-        XCTAssertEqual(try database.items(query: Search("Cheese com")), [item2])
-        XCTAssertEqual(try database.items(query: Search("Fromage CHEESE")), [item3])
+        XCTAssertEqual(try database.bookmarks(query: Search(".com")), [item2, item1])
+        XCTAssertEqual(try database.bookmarks(query: Search(".COM")), [item2, item1])
+        XCTAssertEqual(try database.bookmarks(query: Search("example.COM")), [item1])
+        XCTAssertEqual(try database.bookmarks(query: Search("example.com")), [item1])
+        XCTAssertEqual(try database.bookmarks(query: Search("Example")), [item1])
+        XCTAssertEqual(try database.bookmarks(query: Search("EXaMPle")), [item1])
+        XCTAssertEqual(try database.bookmarks(query: Search("amp")), [item1])
+        XCTAssertEqual(try database.bookmarks(query: Search("Cheese")), [item3, item2])
+        XCTAssertEqual(try database.bookmarks(query: Search("Cheese co")), [item3, item2])
+        XCTAssertEqual(try database.bookmarks(query: Search("Cheese com")), [item2])
+        XCTAssertEqual(try database.bookmarks(query: Search("Fromage CHEESE")), [item3])
     }
 
     func testItemFilterWithTags() throws {
@@ -230,11 +230,11 @@ class DatabaseTests: XCTestCase {
 
         try database.insertOrUpdate(items: [item1, item2, item3])
 
-        XCTAssertEqual(try database.items(query: Search("Cheese") && Tag("cheese")), [item3, item2])
-        XCTAssertEqual(try database.items(query: Search("Cheese co") && Tag("cheese")), [item3, item2])
-        XCTAssertEqual(try database.items(query: Search("Cheese com") && Tag("cheese")), [item2])
-        XCTAssertEqual(try database.items(query: Search("Fromage CHEESE") && Tag("cheese")), [item3])
-        XCTAssertEqual(try database.items(query: Search("strawberries") && Tag("cheese")), [item3])
+        XCTAssertEqual(try database.bookmarks(query: Search("Cheese") && Tag("cheese")), [item3, item2])
+        XCTAssertEqual(try database.bookmarks(query: Search("Cheese co") && Tag("cheese")), [item3, item2])
+        XCTAssertEqual(try database.bookmarks(query: Search("Cheese com") && Tag("cheese")), [item2])
+        XCTAssertEqual(try database.bookmarks(query: Search("Fromage CHEESE") && Tag("cheese")), [item3])
+        XCTAssertEqual(try database.bookmarks(query: Search("strawberries") && Tag("cheese")), [item3])
     }
 
     func testItemFilterEmptyTags() throws {
@@ -255,9 +255,9 @@ class DatabaseTests: XCTestCase {
                              date: Date(timeIntervalSince1970: 20))
 
         try database.insertOrUpdate(items: [item1, item2, item3])
-        XCTAssertEqual(try database.items(query: Untagged()), [item3, item1])
-        XCTAssertEqual(try database.items(query: Untagged() && Search("co")), [item3, item1])
-        XCTAssertEqual(try database.items(query: Untagged() && Search("com")), [item1])
+        XCTAssertEqual(try database.bookmarks(query: Untagged()), [item3, item1])
+        XCTAssertEqual(try database.bookmarks(query: Untagged() && Search("co")), [item3, item1])
+        XCTAssertEqual(try database.bookmarks(query: Untagged() && Search("com")), [item1])
     }
 
     func testTags() throws {
@@ -304,7 +304,7 @@ class DatabaseTests: XCTestCase {
 
         try database.deleteTag(tag: "website")
         XCTAssertEqual(try database.tags(), ["cheese", "example", "robert", "strawberries"])
-        XCTAssertEqual(try database.items(query: True()), [item3, item2, item1].map { item in
+        XCTAssertEqual(try database.bookmarks(query: True()), [item3, item2, item1].map { item in
             var tags = item.tags
             tags.remove("website")
             return Bookmark(identifier: item.identifier,

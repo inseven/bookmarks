@@ -64,11 +64,11 @@ struct ContentView: View {
         VStack {
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 8)], spacing: 8) {
-                    ForEach(bookmarksView.bookmarks) { item in
-                        BookmarkCell(bookmark: item)
+                    ForEach(bookmarksView.bookmarks) { bookmark in
+                        BookmarkCell(bookmark: bookmark)
                             .shadow(color: .shadow, radius: 8)
-                            .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: item), firstResponder: firstResponder))
-                            .help(item.url.absoluteString)
+                            .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: bookmark), firstResponder: firstResponder))
+                            .help(bookmark.url.absoluteString)
                             .contextMenuFocusable {
                                 BookmarkOpenCommands(selection: selection)
                                     .trailingDivider()
@@ -88,25 +88,25 @@ struct ContentView: View {
                                     return
                                 }
                                 firstResponder = true
-                                if !selectionTracker.isSelected(item: item) {
-                                    selectionTracker.handleClick(item: item)
+                                if !selectionTracker.isSelected(item: bookmark) {
+                                    selectionTracker.handleClick(item: bookmark)
                                 }
                             }
                             .menuType(.context)
                             .onDrag {
-                                NSItemProvider(object: item.url as NSURL)
+                                NSItemProvider(object: bookmark.url as NSURL)
                             }
                             .handleMouse {
-                                if firstResponder || !selectionTracker.isSelected(item: item) {
-                                    selectionTracker.handleClick(item: item)
+                                if firstResponder || !selectionTracker.isSelected(item: bookmark) {
+                                    selectionTracker.handleClick(item: bookmark)
                                 }
                                 firstResponder = true
                             } doubleClick: {
-                                NSWorkspace.shared.open(item.url)
+                                NSWorkspace.shared.open(bookmark.url)
                             } shiftClick: {
-                                selectionTracker.handleShiftClick(item: item)
+                                selectionTracker.handleShiftClick(item: bookmark)
                             } commandClick: {
-                                selectionTracker.handleCommandClick(item: item)
+                                selectionTracker.handleCommandClick(item: bookmark)
                             }
                     }
                 }

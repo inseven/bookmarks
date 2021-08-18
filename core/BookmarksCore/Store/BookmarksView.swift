@@ -54,7 +54,7 @@ public class BookmarksView: ObservableObject {
                 }
                 switch result {
                 case .success(let bookmarks):
-                    print("received \(bookmarks.count) items")
+                    print("received \(bookmarks.count) bookmarks")
                     self.bookmarks = bookmarks
                     self.state = .ready
                 case .failure(let error):

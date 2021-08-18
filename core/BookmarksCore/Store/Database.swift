@@ -433,7 +433,7 @@ public class Database {
             """)
     }
 
-    public func deleteItem(identifier: String, completion: @escaping (Swift.Result<Void, Error>) -> Void) {
+    public func deleteBookmark(identifier: String, completion: @escaping (Swift.Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             do {
@@ -559,9 +559,9 @@ public extension Database {
         }
     }
 
-    func deleteItems(_ items: [Bookmark]) throws {
+    func deleteBookmarks(_ items: [Bookmark]) throws {
         for item in items {
-            try deleteItem(identifier: item.identifier)
+            try deleteBookmark(identifier: item.identifier)
         }
     }
 
@@ -569,8 +569,8 @@ public extension Database {
         _ = try AsyncOperation({ self.deleteTag(tag: tag, completion: $0) }).wait()
     }
 
-    func deleteItem(identifier: String) throws {
-        try AsyncOperation { self.deleteItem(identifier: identifier, completion: $0) }.wait()
+    func deleteBookmark(identifier: String) throws {
+        try AsyncOperation { self.deleteBookmark(identifier: identifier, completion: $0) }.wait()
     }
 
     func items<T: QueryDescription>(query: T) throws -> [Bookmark] {

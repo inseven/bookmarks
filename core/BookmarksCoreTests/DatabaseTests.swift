@@ -128,7 +128,7 @@ class DatabaseTests: XCTestCase {
                              date: Date(timeIntervalSince1970: 10))
 
         try database.insertOrUpdate(items: [item1, item2])
-        try database.deleteItems([item1])
+        try database.deleteBookmarks([item1])
 
         XCTAssertEqual(try database.tags(), ["cheese", "website"])
         XCTAssertEqual(try database.items(query: True()), [item2])
@@ -156,7 +156,7 @@ class DatabaseTests: XCTestCase {
 
     func testDeleteItemFailsOnMissingItem() throws {
         let identifier = UUID().uuidString
-        XCTAssertThrowsError(try database.deleteItem(identifier: identifier)) { error in
+        XCTAssertThrowsError(try database.deleteBookmark(identifier: identifier)) { error in
             XCTAssertEqual(error as! BookmarksError, BookmarksError.bookmarkNotFound(identifier: identifier))
         }
 

@@ -84,7 +84,7 @@ public class Updater {
             for identifier in deletedIdentifiers {
                 let item = try self.database.item(identifier: identifier)
                 print("deleting \(item)...")
-                _ = try self.database.deleteItem(identifier: identifier)
+                _ = try self.database.deleteBookmark(identifier: identifier)
             }
             print("update complete")
 
@@ -121,7 +121,7 @@ public class Updater {
         syncQueue.async {
             let result = Result {
                 for item in items {
-                    try self.database.deleteItem(identifier: item.identifier)
+                    try self.database.deleteBookmark(identifier: item.identifier)
                     try self.pinboard.postsDelete(url: item.url)
                 }
             }

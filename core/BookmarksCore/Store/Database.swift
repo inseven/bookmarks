@@ -553,7 +553,7 @@ public extension Database {
         try AsyncOperation { self.insertOrUpdate(item, completion: $0) }.wait()
     }
 
-    func insertOrUpdate(items: [Bookmark]) throws {
+    func insertOrUpdateBookmarks(_ items: [Bookmark]) throws {
         for item in items {
             _ = try self.insertOrUpdateBookmark(item)
         }

@@ -87,7 +87,7 @@ class DatabaseTests: XCTestCase {
                              tags: ["cheese", "website"],
                              date: Date(timeIntervalSince1970: 0))
 
-        try database.insertOrUpdate(items: [item1, item2])
+        try database.insertOrUpdateBookmarks([item1, item2])
 
         let tags = try database.tags()
         XCTAssertEqual(tags, ["cheese", "example", "website"])
@@ -110,7 +110,7 @@ class DatabaseTests: XCTestCase {
                              tags: ["cheese", "website"],
                              date: Date(timeIntervalSince1970: 10))
 
-        try database.insertOrUpdate(items: [item1, item2])
+        try database.insertOrUpdateBookmarks([item1, item2])
 
         XCTAssertEqual(try database.tags(), ["cheese", "example", "website"])
         XCTAssertEqual(try database.bookmarks(query: True()), [item2, item1])
@@ -127,7 +127,7 @@ class DatabaseTests: XCTestCase {
                              tags: ["cheese", "website"],
                              date: Date(timeIntervalSince1970: 10))
 
-        try database.insertOrUpdate(items: [item1, item2])
+        try database.insertOrUpdateBookmarks([item1, item2])
         try database.deleteBookmarks([item1])
 
         XCTAssertEqual(try database.tags(), ["cheese", "website"])
@@ -168,14 +168,14 @@ class DatabaseTests: XCTestCase {
                             url: URL(string: "https://example.com")!,
                             tags: ["example", "website"],
                             date: Date(timeIntervalSince1970: 0))
-        try database.insertOrUpdate(items: [item])
+        try database.insertOrUpdateBookmarks([item])
         XCTAssertEqual(try database.tags(), ["example", "website"])
 
         let updatedItem = Bookmark(title: "Example",
                                    url: item.url,
                                    tags: ["website", "cheese"],
                                    date: item.date)
-        try database.insertOrUpdate(items: [updatedItem])
+        try database.insertOrUpdateBookmarks([updatedItem])
         XCTAssertEqual(try database.tags(), ["cheese", "website"])
     }
 
@@ -196,7 +196,7 @@ class DatabaseTests: XCTestCase {
                              tags: ["robert", "website", "strawberries"],
                              date: Date(timeIntervalSince1970: 20))
 
-        try database.insertOrUpdate(items: [item1, item2, item3])
+        try database.insertOrUpdateBookmarks([item1, item2, item3])
 
         XCTAssertEqual(try database.bookmarks(query: Search(".com")), [item2, item1])
         XCTAssertEqual(try database.bookmarks(query: Search(".COM")), [item2, item1])
@@ -228,7 +228,7 @@ class DatabaseTests: XCTestCase {
                              tags: ["robert", "website", "strawberries", "cheese"],
                              date: Date(timeIntervalSince1970: 20))
 
-        try database.insertOrUpdate(items: [item1, item2, item3])
+        try database.insertOrUpdateBookmarks([item1, item2, item3])
 
         XCTAssertEqual(try database.bookmarks(query: Search("Cheese") && Tag("cheese")), [item3, item2])
         XCTAssertEqual(try database.bookmarks(query: Search("Cheese co") && Tag("cheese")), [item3, item2])
@@ -254,7 +254,7 @@ class DatabaseTests: XCTestCase {
                              tags: [],
                              date: Date(timeIntervalSince1970: 20))
 
-        try database.insertOrUpdate(items: [item1, item2, item3])
+        try database.insertOrUpdateBookmarks([item1, item2, item3])
         XCTAssertEqual(try database.bookmarks(query: Untagged()), [item3, item1])
         XCTAssertEqual(try database.bookmarks(query: Untagged() && Search("co")), [item3, item1])
         XCTAssertEqual(try database.bookmarks(query: Untagged() && Search("com")), [item1])
@@ -277,7 +277,7 @@ class DatabaseTests: XCTestCase {
                              tags: ["robert", "website", "strawberries"],
                              date: Date(timeIntervalSince1970: 20))
 
-        try database.insertOrUpdate(items: [item1, item2, item3])
+        try database.insertOrUpdateBookmarks([item1, item2, item3])
 
         XCTAssertEqual(try database.tags(), ["cheese", "example", "robert", "strawberries", "website"])
     }
@@ -299,7 +299,7 @@ class DatabaseTests: XCTestCase {
                              tags: ["robert", "website", "strawberries"],
                              date: Date(timeIntervalSince1970: 20))
 
-        try database.insertOrUpdate(items: [item1, item2, item3])
+        try database.insertOrUpdateBookmarks([item1, item2, item3])
         XCTAssertEqual(try database.tags(), ["cheese", "example", "robert", "strawberries", "website"])
 
         try database.deleteTag(tag: "website")

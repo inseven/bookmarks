@@ -265,7 +265,7 @@ public class Database {
     fileprivate func syncQueue_item(identifier: String) throws -> Bookmark {
         let run = try db.prepare(Schema.items.filter(Schema.identifier == identifier).limit(1)).map(Bookmark.init)
         guard let result = run.first else {
-            throw BookmarksError.itemNotFound(identifier: identifier)
+            throw BookmarksError.bookmarkNotFound(identifier: identifier)
         }
         let tags = try syncQueue_tags(itemIdentifier: result.identifier)
         return Bookmark(identifier: result.identifier,
@@ -281,7 +281,7 @@ public class Database {
     fileprivate func syncQueue_item(url: URL) throws -> Bookmark {
         let run = try db.prepare(Schema.items.filter(Schema.url == url.absoluteString).limit(1)).map(Bookmark.init)
         guard let result = run.first else {
-            throw BookmarksError.itemNotFound(url: url)
+            throw BookmarksError.bookmarkNotFound(url: url)
         }
         let tags = try syncQueue_tags(itemIdentifier: result.identifier)
         return Bookmark(identifier: result.identifier,
@@ -441,7 +441,7 @@ public class Database {
                     let result = Swift.Result { () -> Void in
                         let count = try self.db.run(Schema.items.filter(Schema.identifier == identifier).delete())
                         if count == 0 {
-                            throw BookmarksError.itemNotFound(identifier: identifier)
+                            throw BookmarksError.bookmarkNotFound(identifier: identifier)
                         }
                         try self.syncQueue_pruneTags()
                     }

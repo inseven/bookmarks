@@ -29,7 +29,7 @@ struct Bookmarks: View {
     }
 
     @Environment(\.manager) var manager: BookmarksManager
-    @StateObject var databaseView: BookmarksView
+    @StateObject var bookmarksView: BookmarksView
 
     @StateObject var searchDebouncer = Debouncer<String>(initialValue: "", delay: .seconds(0.2))
     @State var sheet: SheetType?
@@ -44,7 +44,7 @@ struct Bookmarks: View {
             }
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
-                    ForEach(databaseView.bookmarks) { item in
+                    ForEach(bookmarksView.bookmarks) { item in
                         BookmarkCell(bookmark: item)
                             .onTapGesture {
                                 UIApplication.shared.open(item.url)
@@ -72,13 +72,13 @@ struct Bookmarks: View {
             sheet = .settings
         })
         .onAppear {
-            databaseView.start()
+            bookmarksView.start()
         }
         .onDisappear {
-            databaseView.stop()
+            bookmarksView.stop()
         }
         .onReceive(searchDebouncer.$debouncedValue) { value in
-            databaseView.query = AnyQuery.parse(filter: value)
+            bookmarksView.query = AnyQuery.parse(filter: value)
         }
     }
 

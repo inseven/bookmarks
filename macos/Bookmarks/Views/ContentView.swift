@@ -33,7 +33,7 @@ struct ContentView: View {
     @Binding var section: BookmarksSection?
 
     @State var underlyingSection: BookmarksSection?
-    @StateObject var databaseView: BookmarksView
+    @StateObject var bookmarksView: BookmarksView
     @StateObject var selectionTracker: SelectionTracker<Bookmark>
     @State var firstResponder: Bool = false
     @StateObject var searchDebouncer = Debouncer<String>(initialValue: "", delay: .seconds(0.2))
@@ -43,9 +43,9 @@ struct ContentView: View {
     init(selection: BookmarksSelection, section: Binding<BookmarksSection?>, database: Database) {
         self.selection = selection
         _section = section
-        let databaseView = Deferred(BookmarksView(database: database, query: True().eraseToAnyQuery()))
-        let selectionTracker = Deferred(SelectionTracker(items: databaseView.get().$bookmarks))
-        _databaseView = StateObject(wrappedValue: databaseView.get())
+        let bookmarksView = Deferred(BookmarksView(database: database, query: True().eraseToAnyQuery()))
+        let selectionTracker = Deferred(SelectionTracker(items: bookmarksView.get().$bookmarks))
+        _bookmarksView = StateObject(wrappedValue: bookmarksView.get())
         _selectionTracker = StateObject(wrappedValue: selectionTracker.get())
     }
 
@@ -64,7 +64,7 @@ struct ContentView: View {
         VStack {
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 8)], spacing: 8) {
-                    ForEach(databaseView.bookmarks) { item in
+                    ForEach(bookmarksView.bookmarks) { item in
                         BookmarkCell(bookmark: item)
                             .shadow(color: .shadow, radius: 8)
                             .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: item), firstResponder: firstResponder))
@@ -118,13 +118,13 @@ struct ContentView: View {
                 selectionTracker.clear()
             }
             .background(Color(NSColor.textBackgroundColor))
-            .overlay(databaseView.state == .loading ? LoadingView() : nil)
+            .overlay(bookmarksView.state == .loading ? LoadingView() : nil)
         }
         .onAppear {
-            databaseView.start()
+            bookmarksView.start()
         }
         .onDisappear {
-            databaseView.stop()
+            bookmarksView.stop()
         }
         .toolbar {
             ToolbarItem {
@@ -175,7 +175,7 @@ struct ContentView: View {
             }
 
             // Update the database query.
-            databaseView.query = AnyQuery.and(queries)
+            bookmarksView.query = AnyQuery.and(queries)
 
         }
         .onChange(of: section) { section in
@@ -188,10 +188,10 @@ struct ContentView: View {
             underlyingSection = section
 
             selectionTracker.clear()
-            databaseView.clear()
+            bookmarksView.clear()
             let query = section.query
             searchDebouncer.value = query.filter
-            databaseView.query = query.eraseToAnyQuery()
+            bookmarksView.query = query.eraseToAnyQuery()
 
         }
         .onChange(of: underlyingSection, perform: { underlyingSection in

@@ -29,7 +29,7 @@ struct ContentView: View {
 
     var body: some View {
         NavigationView {
-            Bookmarks(databaseView: BookmarksView(database: manager.database, query: True().eraseToAnyQuery()))
+            Bookmarks(bookmarksView: BookmarksView(database: manager.database, query: True().eraseToAnyQuery()))
                 .navigationBarTitle("Bookmarks", displayMode: .large)
         }
         .navigationViewStyle(StackNavigationViewStyle())

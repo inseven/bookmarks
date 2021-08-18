@@ -45,7 +45,7 @@ struct BookmarksView: View {
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
                     ForEach(databaseView.items) { item in
-                        BookmarkCell(item: item)
+                        BookmarkCell(bookmark: item)
                             .onTapGesture {
                                 UIApplication.shared.open(item.url)
                             }

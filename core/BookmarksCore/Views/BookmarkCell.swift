@@ -23,23 +23,23 @@ import SwiftUI
 
 public struct BookmarkCell: View {
 
-    var item: Bookmark
+    var bookmark: Bookmark
 
     @Environment(\.manager) var manager: BookmarksManager
     @State var image: SafeImage?
     @State var publisher: AnyCancellable?
 
-    public init(item: Bookmark) {
-        self.item = item
-        _image = State(wrappedValue: manager.cache.object(forKey: item.url.absoluteString as NSString))
+    public init(bookmark: Bookmark) {
+        self.bookmark = bookmark
+        _image = State(wrappedValue: manager.cache.object(forKey: bookmark.url.absoluteString as NSString))
     }
 
     var title: String {
-        if !item.title.isEmpty {
-            return item.title
-        } else if !item.url.lastPathComponent.isEmpty && item.url.lastPathComponent != "/" {
-            return item.url.lastPathComponent
-        } else if let host = item.url.host {
+        if !bookmark.title.isEmpty {
+            return bookmark.title
+        } else if !bookmark.url.lastPathComponent.isEmpty && bookmark.url.lastPathComponent != "/" {
+            return bookmark.url.lastPathComponent
+        } else if let host = bookmark.url.host {
             return host
         } else {
             return "Unknown"
@@ -71,7 +71,7 @@ public struct BookmarkCell: View {
             VStack(alignment: .leading) {
                 Text(title)
                     .lineLimit(1)
-                Text(item.url.host ?? "Unknown")
+                Text(bookmark.url.host ?? "Unknown")
                     .lineLimit(1)
                     .foregroundColor(.secondary)
             }
@@ -87,7 +87,7 @@ public struct BookmarkCell: View {
                 return
             }
             // TODO: Determine the appropriate default size for thumbnails.
-            publisher = manager.thumbnailManager.thumbnail(for: item, scale: 2)
+            publisher = manager.thumbnailManager.thumbnail(for: bookmark, scale: 2)
                 .receive(on: DispatchQueue.main)
                 .sink(receiveCompletion: { (completion) in
                     if case .failure(let error) = completion {
@@ -95,7 +95,7 @@ public struct BookmarkCell: View {
                     }
                 }, receiveValue: { image in
                     self.image = image
-                    self.manager.cache.setObject(image, forKey: item.url.absoluteString as NSString)
+                    self.manager.cache.setObject(image, forKey: bookmark.url.absoluteString as NSString)
                 })
         }
         .onDisappear {

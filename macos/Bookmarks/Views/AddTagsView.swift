@@ -99,6 +99,7 @@ struct AddTagsView: View {
         }
         .frame(minWidth: 200)
         .padding()
+        .background(.ultraThinMaterial)
         .disabled(isBusy)
     }
 

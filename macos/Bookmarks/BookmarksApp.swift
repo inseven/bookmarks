@@ -30,7 +30,7 @@ struct BookmarksApp: App {
 
     @StateObject var selection = BookmarksSelection()
     
-    @AppStorage(SettingsKey.section.rawValue) var section: BookmarksSection? = .all
+    @State var section: BookmarksSection? = .all
 
     var body: some Scene {
         WindowGroup {

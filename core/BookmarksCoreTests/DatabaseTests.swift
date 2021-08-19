@@ -52,8 +52,6 @@ class DatabaseTests: XCTestCase {
         FileManager.default.temporaryDirectory.appendingPathComponent("store.db")
     }
 
-    // TODO: Update to throwing properties when adopting Swift 5.5 #142
-    //       https://github.com/inseven/bookmarks/issues/142
     // TODO: Use a unique temporary directory for the database tests #140
     //       https://github.com/inseven/bookmarks/issues/140
     lazy var database: Database = {

@@ -26,13 +26,13 @@ extension URLComponents {
         self.init(string: unsafeString.replacingOccurrences(of: " ", with: "%20"))
     }
 
-    // TODO: Update to throwing properties when adopting Swift 5.5 #142
-    //       https://github.com/inseven/bookmarks/issues/142
-    public func asUrl() throws -> URL {
-        guard let url = self.url else {
-            throw BookmarksError.invalidURL(components: self)
+    public var safeUrl: URL {
+        get throws {
+            guard let url = self.url else {
+                throw BookmarksError.invalidURL(components: self)
+            }
+            return url
         }
-        return url
     }
 
 }

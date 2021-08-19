@@ -21,23 +21,62 @@
 import SwiftUI
 
 public protocol Sectionable {
+
     var section: BookmarksSection { get }
+
 }
 
 public enum BookmarksSection {
+
     case all
     case untagged
     case today
     case unread
     case shared(_ shared: Bool)
     case tag(_ tag: String)
+
 }
 
 extension BookmarksSection: CustomStringConvertible, Hashable, Identifiable {
 
-    public var id: String { String(describing: self) }
+    public var id: String { self.rawValue }
 
-    public var description: String {
+    public var description: String { self.rawValue }
+
+}
+
+extension String: Sectionable {
+
+    public var section: BookmarksSection { .tag(self) }
+
+}
+
+extension BookmarksSection: RawRepresentable {
+
+    public typealias RawValue = String
+
+    public init?(rawValue: RawValue) {
+        switch rawValue {
+        case "uk.co.inseven.bookmarks.all-bookmarks":
+            self = .all
+        case "uk.co.inseven.bookmarks.untagged":
+            self = .untagged
+        case "uk.co.inseven.bookmarks.unread":
+            self = .unread
+        case "uk.co.inseven.bookmarks.today":
+            self = .today
+        case "uk.co.inseven.bookmarks.shared":
+            self = .shared(true)
+        case "uk.co.inseven.bookmarks.shared.false":
+            self = .shared(false)
+        case _ where rawValue.starts(with: "uk.co.inseven.bookmarks.tags."):
+            self = .tag(String(rawValue.dropFirst("uk.co.inseven.bookmarks.tags.".count)))
+        default:
+            return nil
+        }
+    }
+
+    public var rawValue: RawValue {
         switch self {
         case .all:
             return "uk.co.inseven.bookmarks.all-bookmarks"
@@ -58,6 +97,22 @@ extension BookmarksSection: CustomStringConvertible, Hashable, Identifiable {
 
 }
 
-extension String: Sectionable {
-    public var section: BookmarksSection { .tag(self) }
+extension Optional: RawRepresentable where Wrapped == BookmarksSection {
+
+    public typealias RawValue = String
+
+    public init?(rawValue: String) {
+        guard !rawValue.isEmpty else {
+            return nil
+        }
+        self = BookmarksSection(rawValue: rawValue)
+    }
+
+    public var rawValue: String {
+        guard let bookmarksSection = self else {
+            return ""
+        }
+        return bookmarksSection.rawValue
+    }
+
 }

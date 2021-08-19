@@ -34,32 +34,27 @@ struct Bookmarks: View {
     @StateObject var searchDebouncer = Debouncer<String>(initialValue: "", delay: .seconds(0.2))
     @State var sheet: SheetType?
 
+    @State var search: String = ""
+
     var body: some View {
-        VStack {
-            HStack {
-                TextField("Search", text: $searchDebouncer.value)
-                    .autocapitalization(.none)
-                    .modifier(SearchBoxModifier(text: $searchDebouncer.value))
-                    .padding()
-            }
-            ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
-                    ForEach(bookmarksView.bookmarks) { bookmark in
-                        BookmarkCell(bookmark: bookmark)
-                            .onTapGesture {
-                                UIApplication.shared.open(bookmark.url)
+        ScrollView {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
+                ForEach(bookmarksView.bookmarks) { bookmark in
+                    BookmarkCell(bookmark: bookmark)
+                        .onTapGesture {
+                            UIApplication.shared.open(bookmark.url)
+                        }
+                        .contextMenu(ContextMenu {
+                            Button("Share") {
+                                print("Share")
+                                print(bookmark.identifier)
                             }
-                            .contextMenu(ContextMenu(menuItems: {
-                                Button("Share") {
-                                    print("Share")
-                                    print(bookmark.identifier)
-                                }
-                            }))
-                    }
+                        })
                 }
-                .padding()
             }
+            .padding()
         }
+        .searchable(text: $searchDebouncer.value)
         .sheet(item: $sheet) { sheet in
             switch sheet {
             case .settings:
@@ -68,6 +63,7 @@ struct Bookmarks: View {
                 }
             }
         }
+        .navigationTitle("Bookmarks")
         .navigationBarItems(leading: Button("Settings") {
             sheet = .settings
         })

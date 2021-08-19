@@ -13,7 +13,6 @@
 		D81FBAC826B99E94004AC4A4 /* LicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81FBAC726B99E94004AC4A4 /* LicenseView.swift */; };
 		D832EEC724816901004C64E3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D832EEC624816901004C64E3 /* SettingsView.swift */; };
 		D8478554261539AA00B2318B /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8478553261539AA00B2318B /* Bookmarks.swift */; };
-		D84785822615474900B2318B /* SearchBoxModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84785812615474900B2318B /* SearchBoxModifier.swift */; };
 		D84CE47E261E2A1400AF1901 /* BookmarksCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D84CE47D261E2A1400AF1901 /* BookmarksCore.framework */; };
 		D84CE47F261E2A1400AF1901 /* BookmarksCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D84CE47D261E2A1400AF1901 /* BookmarksCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D864E47121C93FD200EAB9AD /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D864E47021C93FD200EAB9AD /* libxml2.2.tbd */; };
@@ -67,7 +66,6 @@
 		D832EEC624816901004C64E3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D832EECA2481B6D1004C64E3 /* Bookmarks.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Bookmarks.entitlements; sourceTree = "<group>"; };
 		D8478553261539AA00B2318B /* Bookmarks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bookmarks.swift; sourceTree = "<group>"; };
-		D84785812615474900B2318B /* SearchBoxModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBoxModifier.swift; sourceTree = "<group>"; };
 		D84CE47D261E2A1400AF1901 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D864E47021C93FD200EAB9AD /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 		D864E47221C9417F00EAB9AD /* Bookmarks-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bookmarks-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -123,7 +121,6 @@
 				D81E7483254A0D1B002336DC /* ContentView.swift */,
 				D81FBAC526B99E70004AC4A4 /* LicenseRow.swift */,
 				D81FBAC726B99E94004AC4A4 /* LicenseView.swift */,
-				D84785812615474900B2318B /* SearchBoxModifier.swift */,
 				D832EEC624816901004C64E3 /* SettingsView.swift */,
 			);
 			path = Interface;
@@ -340,7 +337,6 @@
 				D81E7484254A0D1B002336DC /* ContentView.swift in Sources */,
 				D81FBAC826B99E94004AC4A4 /* LicenseView.swift in Sources */,
 				D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */,
-				D84785822615474900B2318B /* SearchBoxModifier.swift in Sources */,
 				D81FBAC426B99E26004AC4A4 /* AboutView.swift in Sources */,
 				D8478554261539AA00B2318B /* Bookmarks.swift in Sources */,
 				D81FBAC626B99E70004AC4A4 /* LicenseRow.swift in Sources */,
@@ -445,7 +441,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -505,7 +501,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

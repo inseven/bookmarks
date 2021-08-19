@@ -48,9 +48,9 @@ public class Pinboard {
     }
 
     fileprivate func serviceUrl(_ path: Path, parameters: [String:String] = [:]) throws -> URL {
-        let baseUrl = try self.baseUrl.asUrl()
+        let baseUrl = try self.baseUrl.url
         let url = baseUrl.appendingPathComponent(path.rawValue)
-        var components = try url.asComponents()
+        var components = try url.components
         var queryItems: [URLQueryItem] = [
             URLQueryItem(name: "auth_token", value: token),
             URLQueryItem(name: "format", value: "json"),
@@ -59,7 +59,7 @@ public class Pinboard {
             queryItems.append(URLQueryItem(name: name, value: value))
         }
         components.queryItems = queryItems
-        return try components.asUrl()
+        return try components.safeUrl
     }
 
     // TODO: Consider using a promise for this?

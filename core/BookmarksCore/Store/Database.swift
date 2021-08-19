@@ -33,7 +33,7 @@ extension Bookmark {
     convenience init(row: Row) throws {
         self.init(identifier: try row.get(Database.Schema.identifier),
                   title: try row.get(Database.Schema.title),
-                  url: try row.get(Database.Schema.url).asUrl(),
+                  url: try row.get(Database.Schema.url).url,
                   tags: [],
                   date: try row.get(Database.Schema.date),
                   toRead: try row.get(Database.Schema.toRead),
@@ -62,7 +62,7 @@ extension Statement.Element {
     }
 
     func url(_ index: Int) throws -> URL {
-        try string(index).asUrl()
+        try string(index).url
     }
 
     func set(_ index: Int) throws -> Set<String> {

@@ -31,13 +31,13 @@ extension String: Identifiable {
         return self.lowercased().contains(search.lowercased())
     }
 
-    // TODO: Update to throwing properties when adopting Swift 5.5 #142
-    //       https://github.com/inseven/bookmarks/issues/142
-    public func asUrl() throws -> URL {
-        guard let url = URL(string: self) else {
-            throw BookmarksError.invalidURL(string: self)
+    public var url: URL {
+        get throws {
+            guard let url = URL(string: self) else {
+                throw BookmarksError.invalidURL(string: self)
+            }
+            return url
         }
-        return url
     }
 
     public var tokens: [String] {
@@ -45,7 +45,7 @@ extension String: Identifiable {
     }
 
     public func pinboardTagUrl(for user: String) throws -> URL {
-        return try "https://pinboard.in/u:\(user)/t:\(self)/".asUrl()
+        return try "https://pinboard.in/u:\(user)/t:\(self)/".url
     }
 
 }

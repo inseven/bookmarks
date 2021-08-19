@@ -22,19 +22,19 @@ import Foundation
 
 public extension URL {
 
-    // TODO: Update to throwing properties when adopting Swift 5.5 #142
-    //       https://github.com/inseven/bookmarks/issues/142
-    func asComponents() throws -> URLComponents {
-        guard let components = URLComponents(string: absoluteString) else {
-            throw BookmarksError.invalidURL(url: self)
+    var components: URLComponents {
+        get throws {
+            guard let components = URLComponents(string: absoluteString) else {
+                throw BookmarksError.invalidURL(url: self)
+            }
+            return components
         }
-        return components
     }
 
     func settingQueryItems(_ queryItems: [URLQueryItem]) throws -> URL {
-        var components = try asComponents()
+        var components = try components
         components.queryItems = queryItems
-        return try components.asUrl()
+        return try components.safeUrl
     }
 
 }

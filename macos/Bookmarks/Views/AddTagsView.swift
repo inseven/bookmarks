@@ -59,10 +59,10 @@ struct AddTagsView: View {
                         return Token(tag)
                             .associatedValue(tag)
                     } completions: { substring in
-                        let currentTags = Set(tokens.filter { !$0.isPartial }.compactMap { $0.associatedValue })
-                        let tags = Set(tagsView.tags(prefix: substring))
-                        let suggestions = Array(tags.subtracting(currentTags))
-                        return suggestions
+                        tagsView.suggestions(prefix: substring,
+                                             existing: tokens
+                                                .filter { !$0.isPartial }
+                                                .compactMap { $0.associatedValue })
                     }
                     .tokenizingCharacterSet(characterSet)
                     .font(.title)

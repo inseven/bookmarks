@@ -89,5 +89,12 @@ public class TagsView: ObservableObject {
         return self.fastTags.contains(tag)
     }
 
+    public func suggestions(prefix: String, existing: [String]) -> [String] {
+        let currentTags = Set(existing)
+        let tags = Set(tags(prefix: prefix))
+        let suggestions = Array(tags.subtracting(currentTags))
+        return suggestions.sorted()
+    }
+
 }
 

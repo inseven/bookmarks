@@ -40,5 +40,20 @@ extension Pinboard {
         }
         
     }
+
+    public struct Token: Codable {
+
+        public let result: String
+
+        public enum CodingKeys: String, CodingKey {
+            case result = "result"
+        }
+
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            self.result = try container.decode(String.self, forKey: .result)
+        }
+
+    }
     
 }

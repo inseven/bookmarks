@@ -156,6 +156,39 @@ public class Pinboard {
         self.fetch(path: .tagsRename, parameters: parameters, completion: completion) { _ in }
     }
 
+    public func apiToken(username: String, password: String, completion: @escaping (Result<String, Error>) -> Void) {
+        let completion = DispatchQueue.global().asyncClosure(completion)
+        do {
+            let url = try "https://\(username):\(password)@api.pinboard.in/v1/user/api_token/".url.settingQueryItems([
+                URLQueryItem(name: "format", value: "json"),
+            ])
+            let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+                guard let data = data else {
+                    guard let error = error else {
+                        completion(.failure(PinboardError.inconsistentState(message: "Missing error when processing URL completion")))
+                        return
+                    }
+                    completion(.failure(error))
+                    return
+                }
+                guard let httpStatus = response as? HTTPURLResponse,
+                      httpStatus.statusCode == 200 else {
+                          completion(.failure(BookmarksError.corrupt))
+                          return
+                }
+                do {
+                    let token = try JSONDecoder().decode(Token.self, from: data)
+                    completion(.success("\(username):\(token.result)"))
+                } catch {
+                    completion(.failure(error))
+                }
+            }
+            task.resume()
+        } catch {
+            completion(.failure(error))
+        }
+    }
+
 }
 
 extension Pinboard {

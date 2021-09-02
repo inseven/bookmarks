@@ -42,7 +42,7 @@ public class BookmarksManager {
     var downloadManager: DownloadManager
     public var settings = Settings()
     fileprivate var updater: Updater
-    fileprivate var pinboard: Pinboard
+    public var pinboard: Pinboard
 
     public var tagsView: TagsView
 

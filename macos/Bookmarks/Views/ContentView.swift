@@ -157,6 +157,16 @@ struct ContentView: View {
                 .help("Delete")
                 .disabled(selection.isEmpty)
             }
+            ToolbarItem {
+                Button {
+                    print("click")
+                    manager.pinboard.apiToken(username: "jbmorley", password: "sHlec7nart7") { result in
+                        print("auth = \(result)")
+                    }
+                } label: {
+                    SwiftUI.Image(systemName: "person")
+                }
+            }
 
             ToolbarItem {
                 SearchField(search: $searchDebouncer.value)

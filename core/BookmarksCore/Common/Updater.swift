@@ -27,15 +27,15 @@ public class Updater {
     let syncQueue = DispatchQueue(label: "Updater.syncQueue")
 
     let database: Database
-    let pinboard: Pinboard
+    let token: String
 
     var timer: Timer? = nil
 
     var lastUpdate: Date? = nil  // Synchronized on syncQueue
 
-    public init(database: Database, pinboard: Pinboard) {
+    public init(database: Database, token: String) {
         self.database = database
-        self.pinboard = pinboard
+        self.token = token
     }
 
     fileprivate func syncQueue_update(force: Bool) {
@@ -46,7 +46,8 @@ public class Updater {
         do {
 
             // Check to see when the bookmarks were last updated and don't update if there are no new changes.
-            let update = try self.pinboard.postsUpdate()
+            let pinboard = Pinboard(token: token)
+            let update = try pinboard.postsUpdate()
             if let lastUpdate = self.lastUpdate,
                lastUpdate >= update.updateTime,
                !force {
@@ -55,7 +56,7 @@ public class Updater {
             }
 
             // Get the posts.
-            let posts = try self.pinboard.postsAll()
+            let posts = try pinboard.postsAll()
 
             var identifiers = Set<String>()
 
@@ -119,10 +120,11 @@ public class Updater {
     public func deleteBookmarks(_ bookmarks: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
+            let pinboard = Pinboard(token: self.token)
             let result = Result {
                 for bookmark in bookmarks {
                     try self.database.deleteBookmark(identifier: bookmark.identifier)
-                    try self.pinboard.postsDelete(url: bookmark.url)
+                    try pinboard.postsDelete(url: bookmark.url)
                 }
             }
             completion(result)
@@ -132,11 +134,12 @@ public class Updater {
     public func updateBookmarks(_ bookmarks: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
+            let pinboard = Pinboard(token: self.token)
             let result = Result { () -> Void in
                 for bookmark in bookmarks {
                     _ = try self.database.insertOrUpdateBookmark(bookmark)
                     let post = Pinboard.Post(bookmark)
-                    try self.pinboard.postsAdd(post: post, replace: true)
+                    try pinboard.postsAdd(post: post, replace: true)
                 }
             }
             completion(result)
@@ -146,8 +149,9 @@ public class Updater {
     public func renameTag(_ old: String, to new: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
+            let pinboard = Pinboard(token: self.token)
             let result = Result {
-                try self.pinboard.tagsRename(old, to: new)
+                try pinboard.tagsRename(old, to: new)
                 // TODO: Perform the changes locally.
                 self.update(force: true)
             }
@@ -158,9 +162,10 @@ public class Updater {
     public func deleteTag(_ tag: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
+            let pinboard = Pinboard(token: self.token)
             let result = Result {
                 try self.database.deleteTag(tag: tag)
-                try self.pinboard.tagsDelete(tag)
+                try pinboard.tagsDelete(tag)
                 // TODO: Perform the changes locally.
                 self.update(force: true)
             }

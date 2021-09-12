@@ -156,7 +156,7 @@ public class Pinboard {
         self.fetch(path: .tagsRename, parameters: parameters, completion: completion) { _ in }
     }
 
-    public func apiToken(username: String, password: String, completion: @escaping (Result<String, Error>) -> Void) {
+    public static func apiToken(username: String, password: String, completion: @escaping (Result<String, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         do {
             let url = try "https://\(username):\(password)@api.pinboard.in/v1/user/api_token/".url.settingQueryItems([

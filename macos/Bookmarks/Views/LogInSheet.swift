@@ -22,43 +22,38 @@ import SwiftUI
 
 import BookmarksCore
 
-struct MainWindow: View {
-
-    enum ApplicationSheet {
-        case logIn
-    }
+struct LogInSheet: View {
 
     @Environment(\.manager) var manager
-    @Environment(\.selection) var selection
 
-    @Binding var section: BookmarksSection?
-    @State var sheet: ApplicationSheet? = nil
+    @Environment(\.presentationMode) var presentationMode
+
+    @State var username: String = ""
+    @State var password: String = ""
 
     var body: some View {
-        NavigationView {
-            Sidebar(tagsView: manager.tagsView, settings: manager.settings, section: $section)
-            ContentView(selection: selection, section: $section, database: manager.database, sheet: $sheet)
-        }
-        .handlesSelectionSheets(selection)
-        .sheet(item: $sheet, content: { sheet in
-            switch sheet {
-            case .logIn:
-                LogInSheet()
+        VStack {
+            TextField("Username", text: $username, prompt: Text("Username"))
+            TextField("Password", text: $password, prompt: Text("Password"))
+            HStack {
+                Button("Cancel") {
+                    presentationMode.wrappedValue.dismiss()
+                }
+                .keyboardShortcut(.cancelAction)
+                Button("OK") {
+                    Pinboard.apiToken(username: username, password: password) { result in
+                        switch result {
+                        case .success(let token):
+                            print("got token \(token)")
+                        case .failure(let error):
+                            print("failed with error \(error)")
+                        }
+                    }
+                }
+                .keyboardShortcut(.defaultAction)
             }
-        })
-        .observesApplicationFocus()
-        .frameAutosaveName("Main Window")
-    }
-
-}
-
-extension MainWindow.ApplicationSheet: Identifiable {
-
-    var id: String {
-        switch self {
-        case .logIn:
-            return "logIn"
         }
+        .padding()
     }
 
 }

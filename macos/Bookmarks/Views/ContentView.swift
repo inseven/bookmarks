@@ -31,6 +31,7 @@ struct ContentView: View {
 
     @ObservedObject var selection: BookmarksSelection
     @Binding var section: BookmarksSection?
+    @Binding var sheet: MainWindow.ApplicationSheet?
 
     @State var underlyingSection: BookmarksSection?
     @StateObject var bookmarksView: BookmarksView
@@ -40,13 +41,14 @@ struct ContentView: View {
 
     private var subscription: AnyCancellable?
 
-    init(selection: BookmarksSelection, section: Binding<BookmarksSection?>, database: Database) {
+    init(selection: BookmarksSelection, section: Binding<BookmarksSection?>, database: Database, sheet: Binding<MainWindow.ApplicationSheet?>) {
         self.selection = selection
         _section = section
         let bookmarksView = Deferred(BookmarksView(database: database, query: True().eraseToAnyQuery()))
         let selectionTracker = Deferred(SelectionTracker(items: bookmarksView.get().$bookmarks))
         _bookmarksView = StateObject(wrappedValue: bookmarksView.get())
         _selectionTracker = StateObject(wrappedValue: selectionTracker.get())
+        _sheet = sheet
     }
 
     var navigationTitle: String {
@@ -159,13 +161,11 @@ struct ContentView: View {
             }
             ToolbarItem {
                 Button {
-                    print("click")
-                    manager.pinboard.apiToken(username: "jbmorley", password: "sHlec7nart7") { result in
-                        print("auth = \(result)")
-                    }
+                    sheet = .logIn
                 } label: {
                     SwiftUI.Image(systemName: "person")
                 }
+                .help("Log In")
             }
 
             ToolbarItem {

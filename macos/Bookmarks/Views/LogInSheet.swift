@@ -31,26 +31,33 @@ struct LogInSheet: View {
     @State var username: String = ""
     @State var password: String = ""
 
+    func submit() {
+        dispatchPrecondition(condition: .onQueue(.main))
+        Pinboard.apiToken(username: username, password: password) { result in
+            switch result {
+            case .success(let token):
+                print("got token \(token)")
+            case .failure(let error):
+                print("failed with error \(error)")
+            }
+        }
+    }
+
+    func dismiss() {
+        dispatchPrecondition(condition: .onQueue(.main))
+        presentationMode.wrappedValue.dismiss()
+    }
+
     var body: some View {
         VStack {
             TextField("Username", text: $username, prompt: Text("Username"))
             TextField("Password", text: $password, prompt: Text("Password"))
+                .onSubmit(submit)
             HStack {
-                Button("Cancel") {
-                    presentationMode.wrappedValue.dismiss()
-                }
-                .keyboardShortcut(.cancelAction)
-                Button("OK") {
-                    Pinboard.apiToken(username: username, password: password) { result in
-                        switch result {
-                        case .success(let token):
-                            print("got token \(token)")
-                        case .failure(let error):
-                            print("failed with error \(error)")
-                        }
-                    }
-                }
-                .keyboardShortcut(.defaultAction)
+                Button("Cancel", action: dismiss)
+                    .keyboardShortcut(.cancelAction)
+                Button("OK", action: submit)
+                    .keyboardShortcut(.defaultAction)
             }
         }
         .padding()

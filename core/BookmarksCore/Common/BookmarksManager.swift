@@ -42,7 +42,6 @@ public class BookmarksManager {
     var downloadManager: DownloadManager
     public var settings = Settings()
     fileprivate var updater: Updater
-    public var pinboard: Pinboard
 
     public var tagsView: TagsView
 
@@ -59,8 +58,7 @@ public class BookmarksManager {
         imageCache = FileImageCache(path: documentsUrl.appendingPathComponent("thumbnails"))
         downloadManager = DownloadManager(limit: settings.maximumConcurrentThumbnailDownloads)
         thumbnailManager = ThumbnailManager(imageCache: imageCache, downloadManager: downloadManager)
-        pinboard = Pinboard(token: settings.pinboardApiKey)
-        updater = Updater(database: database, pinboard: pinboard)
+        updater = Updater(database: database, token: settings.pinboardApiKey)
         updater.start()
 
         tagsView = TagsView(database: database)

@@ -54,17 +54,30 @@ struct LogInSheet: View {
 
     var body: some View {
         VStack {
-            TextField("Username", text: $username, prompt: Text("Username"))
-            TextField("Password", text: $password, prompt: Text("Password"))
-                .onSubmit(submit)
-            HStack {
-                Button("Cancel", action: dismiss)
-                    .keyboardShortcut(.cancelAction)
-                Button("OK", action: submit)
-                    .keyboardShortcut(.defaultAction)
+            Form {
+                TextField("Username:", text: $username)
+                SecureField("Password:", text: $password)
+                    .onSubmit(submit)
             }
+            Spacer()
+            VStack {
+                Button(action: submit) {
+                    Text("Log In").frame(maxWidth: 300)
+                }
+                .keyboardShortcut(.defaultAction)
+                .headerProminence(.increased)
+                Button(action: dismiss) {
+                    Text("Cancel").frame(maxWidth: 300)
+                }
+                    .buttonStyle(.bordered)
+                    .keyboardShortcut(.cancelAction)
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.large)
+
         }
         .padding()
+        .frame(minWidth: 300, idealWidth: 400)
     }
 
 }

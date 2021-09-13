@@ -27,10 +27,11 @@ public class Updater {
     let syncQueue = DispatchQueue(label: "Updater.syncQueue")
 
     let database: Database
-    let token: String
 
     var timer: Timer? = nil
 
+    // TODO: This should be nullable
+    var token: String // Synchronized on syncQueue
     var lastUpdate: Date? = nil  // Synchronized on syncQueue
 
     public init(database: Database, token: String) {
@@ -108,6 +109,13 @@ public class Updater {
                     self.syncQueue_update(force: true)
                 }
             }
+        }
+    }
+
+    public func set(token: String) {
+        syncQueue.async {
+            self.token = token
+            self.syncQueue_update(force: true)
         }
     }
 

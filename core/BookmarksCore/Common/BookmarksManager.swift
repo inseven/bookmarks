@@ -32,6 +32,14 @@ public extension EnvironmentValues {
     }
 }
 
+public extension String {
+
+    var user: String? {
+        components(separatedBy: ":").first
+    }
+
+}
+
 // TODO: Explore whether it's possible make some of the BookmarksManager properties private #266
 //       https://github.com/inseven/bookmarks/issues/266
 public class BookmarksManager {
@@ -72,8 +80,12 @@ public class BookmarksManager {
         #endif
     }
 
-    public var user: String? {
-        settings.pinboardApiKey.components(separatedBy: ":").first
+    public var user: String? { settings.pinboardApiKey.user }
+
+    // TODO: Consider pushing this down into an account?
+    public func set(token: String) {
+        settings.pinboardApiKey = token
+        updater.set(token: token)
     }
 
     public func refresh() {

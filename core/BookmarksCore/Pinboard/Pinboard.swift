@@ -159,10 +159,21 @@ public class Pinboard {
     public static func apiToken(username: String, password: String, completion: @escaping (Result<String, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         do {
-            let url = try "https://\(username):\(password)@api.pinboard.in/v1/user/api_token/".url.settingQueryItems([
+            let url = try "https://api.pinboard.in/v1/user/api_token/".url.settingQueryItems([
                 URLQueryItem(name: "format", value: "json"),
             ])
-            let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+
+            let loginString = "\(username):\(password)"
+            guard let loginData = loginString.data(using: String.Encoding.utf8) else {
+                return
+            }
+            let base64LoginString = loginData.base64EncodedString()
+
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            request.setValue("Basic \(base64LoginString)", forHTTPHeaderField: "Authorization")
+
+            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
                 guard let data = data else {
                     guard let error = error else {
                         completion(.failure(PinboardError.inconsistentState(message: "Missing error when processing URL completion")))
@@ -173,6 +184,8 @@ public class Pinboard {
                 }
                 guard let httpStatus = response as? HTTPURLResponse,
                       httpStatus.statusCode == 200 else {
+                          let response = String(data: data, encoding: .utf8)
+                          print("HTTP call failed with message '\(response ?? "")'")
                           completion(.failure(BookmarksError.corrupt))
                           return
                 }
@@ -183,6 +196,11 @@ public class Pinboard {
                     completion(.failure(error))
                 }
             }
+
+
+
+
+
             task.resume()
         } catch {
             completion(.failure(error))

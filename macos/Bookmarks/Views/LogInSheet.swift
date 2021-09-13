@@ -58,7 +58,7 @@ struct LogInSheet: View {
                 .resizable()
                 .frame(width: 64, height: 64)
                 .background(Color.white)
-                .clipShape(RoundedRectangle(cornerRadius: 4))
+                .clipShape(RoundedRectangle(cornerRadius: 6))
             Text("Sign in to Pinboard")
                 .bold()
                 .frame(maxWidth: .infinity)

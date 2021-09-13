@@ -39,11 +39,6 @@ struct SettingsView: View {
                     Label("General", systemImage: "gear")
                 }
                 .tag(Tabs.general)
-            AccountSettingsView(settings: manager.settings)
-                .tabItem {
-                    Label("Account", systemImage: "at")
-                }
-                .tag(Tabs.account)
         }
         .padding()
         .frame(minWidth: 320, maxWidth: .infinity)

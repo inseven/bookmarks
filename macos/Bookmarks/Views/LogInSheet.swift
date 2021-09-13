@@ -59,6 +59,12 @@ struct LogInSheet: View {
                 SecureField("Password:", text: $password)
                     .onSubmit(submit)
             }
+            Button(action: {
+                NSWorkspace.shared.open(URL(string: "https://pinboard.in/signup/")!)
+            }, label: {
+                Text("Create Pinboard account")
+            })
+            .buttonStyle(LinkButtonStyle())
             Spacer()
             VStack {
                 Button(action: submit) {

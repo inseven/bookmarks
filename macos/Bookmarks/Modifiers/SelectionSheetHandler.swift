@@ -20,7 +20,6 @@
 
 import SwiftUI
 
-
 struct SelectionSheetHandler: ViewModifier {
 
     struct IdentifiableError: Identifiable {

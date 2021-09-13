@@ -180,6 +180,7 @@ struct Sidebar: View {
 
                     }
                 }
+                .accentColor(.secondary)
 
             }
             .onChange(of: section) { section in

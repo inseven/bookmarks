@@ -47,9 +47,9 @@ struct LogInSheet: View {
         }
     }
 
-    func dismiss() {
+    func createAccount() {
         dispatchPrecondition(condition: .onQueue(.main))
-        presentationMode.wrappedValue.dismiss()
+        NSWorkspace.shared.open(URL(string: "https://pinboard.in/signup/")!)
     }
 
     var body: some View {
@@ -59,12 +59,6 @@ struct LogInSheet: View {
                 SecureField("Password:", text: $password)
                     .onSubmit(submit)
             }
-            Button(action: {
-                NSWorkspace.shared.open(URL(string: "https://pinboard.in/signup/")!)
-            }, label: {
-                Text("Create Pinboard account")
-            })
-            .buttonStyle(LinkButtonStyle())
             Spacer()
             VStack {
                 Button(action: submit) {
@@ -72,11 +66,9 @@ struct LogInSheet: View {
                 }
                 .keyboardShortcut(.defaultAction)
                 .headerProminence(.increased)
-                Button(action: dismiss) {
-                    Text("Cancel").frame(maxWidth: 300)
+                Button(action: createAccount) {
+                    Text("Create Account").frame(maxWidth: 300)
                 }
-                    .buttonStyle(.bordered)
-                    .keyboardShortcut(.cancelAction)
             }
             .buttonStyle(.bordered)
             .controlSize(.large)

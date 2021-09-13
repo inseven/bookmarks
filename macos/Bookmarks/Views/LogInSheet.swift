@@ -54,11 +54,24 @@ struct LogInSheet: View {
 
     var body: some View {
         VStack {
+            Image("PinboardLogo")
+                .resizable()
+                .frame(width: 64, height: 64)
+                .background(Color.white)
+                .clipShape(RoundedRectangle(cornerRadius: 4))
+            Text("Sign in to Pinboard")
+                .bold()
+                .frame(maxWidth: .infinity)
+            Spacer()
             Form {
                 TextField("Username:", text: $username)
                 SecureField("Password:", text: $password)
                     .onSubmit(submit)
             }
+            Text("Your username and password are used to access your Pinboard API token and are not stored. You can reset your Pinboard API token anytime from the Pinboard website.")
+                .multilineTextAlignment(.center)
+                .font(.footnote)
+                .foregroundColor(.secondary)
             Spacer()
             VStack {
                 Button(action: submit) {
@@ -75,7 +88,7 @@ struct LogInSheet: View {
 
         }
         .padding()
-        .frame(minWidth: 300, idealWidth: 400)
+        .frame(minWidth: 300, idealWidth: 400, minHeight: 300, idealHeight: 340)
     }
 
 }

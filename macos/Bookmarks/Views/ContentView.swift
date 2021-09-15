@@ -475,8 +475,15 @@ struct ContentView: View {
                             .menuType(.context)
                             .onDrag {
                                 NSItemProvider(object: bookmark.url as NSURL)
+                            } preview: {
+                                Text(bookmark.title)
+                                    .lineLimit(2)
+                                    .padding(8)
+                                    .background(.white)
+                                    .cornerRadius(8)
                             }
                             .selectable(tracker: selectionTracker, id: bookmark.id)  // TODO: Can I inject the ID?
+                            // TODO: Put the context menu after this and make it custom to this class?
                     }
                 }
                 .padding()

@@ -51,7 +51,7 @@ extension NSView {
 
 }
 
-struct RelativeView<ID: Hashable> {
+struct ViewInfo<ID: Hashable> {
 
     let view: SelectableMarker<ID>.SelectableMarkerView
     let frame: CGRect
@@ -66,11 +66,23 @@ struct RelativeView<ID: Hashable> {
 
 }
 
+extension CGRect {
+    init(p1: CGPoint, p2: CGPoint) {
+        self.init(x: min(p1.x, p2.x),
+                  y: min(p1.y, p2.y),
+                  width: abs(p1.x - p2.x),
+                  height: abs(p1.y - p2.y))
+    }
+}
+
 struct LayerView<Element, ID>: NSViewRepresentable where Element: Identifiable & Hashable, ID: Hashable {
 
     class InjectionHostingView: NSView {
 
         var focus: Binding<Element.ID?>
+
+        var startPoint : NSPoint!
+        var shapeLayer : CAShapeLayer!
 
         required init(focus: Binding<Element.ID?>) {
             self.focus = focus
@@ -88,7 +100,48 @@ struct LayerView<Element, ID>: NSViewRepresentable where Element: Identifiable &
         override func mouseDown(with event: NSEvent) {
             // TODO: Consider passing on the mouse down event?
             window?.makeFirstResponder(self)
+
+            self.startPoint = self.convert(event.locationInWindow, from: nil)
+
+            shapeLayer = CAShapeLayer()
+            shapeLayer.lineWidth = 1.0
+            shapeLayer.fillColor = NSColor(red: 0, green: 0, blue: 0, alpha: 0.1).cgColor
+            shapeLayer.strokeColor = NSColor(red: 0, green: 0, blue: 0, alpha: 0.3).cgColor
+            self.layer?.addSublayer(shapeLayer)
+
         }
+
+        override func mouseDragged(with event: NSEvent) {
+
+            let point = self.convert(event.locationInWindow, from: nil)
+            let path = CGMutablePath()
+            path.move(to: self.startPoint)
+            path.addLine(to: NSPoint(x: self.startPoint.x, y: point.y))
+            path.addLine(to: point)
+            path.addLine(to: NSPoint(x:point.x,y:self.startPoint.y))
+            path.closeSubpath()
+            self.shapeLayer.path = path
+
+            let selection = CGRect(p1: startPoint, p2: point)
+            let views = selectableViews.filter { $0.frame.intersects(selection) }
+            self.focus.wrappedValue = views.first?.view.id
+        }
+
+        override func mouseUp(with event: NSEvent) {
+            self.shapeLayer.removeFromSuperlayer()
+            self.shapeLayer = nil
+        }
+
+        var selectableViews: [ViewInfo<Element.ID>] {
+            guard let superview = superview?.superview,
+                  let subviews = superview.subviews(matching: {
+                      type(of: $0) == SelectableMarker<Element.ID>.SelectableMarkerView.self
+                  }) as? [SelectableMarker<Element.ID>.SelectableMarkerView] else {
+                return []
+            }
+            return subviews.map { ViewInfo(view: $0, frame: $0.frame(in: self)) }
+        }
+
 
         override func keyDown(with event: NSEvent) {
             let character = event.characters?.first
@@ -106,10 +159,10 @@ struct LayerView<Element, ID>: NSViewRepresentable where Element: Identifiable &
             }
         }
 
-        override func hitTest(_ point: NSPoint) -> NSView? {
-            window?.makeFirstResponder(self)
-            return nil
-        }
+//        override func hitTest(_ point: NSPoint) -> NSView? {
+//            window?.makeFirstResponder(self)
+//            return nil
+//        }
 
         // TODO: This view could store the known selection?
 
@@ -117,26 +170,17 @@ struct LayerView<Element, ID>: NSViewRepresentable where Element: Identifiable &
             // TODO: The views should probably not descend into other selectable regions to avoid overlap?
             // TODO: Do I need some sort of proxy for the focusableSection?
 
-            guard let superview = superview?.superview else {
-                return
-            }
-
-            guard let views = superview.subviews(matching: { type(of: $0) == SelectableMarker<Element.ID>.SelectableMarkerView.self }) as? [SelectableMarker<Element.ID>.SelectableMarkerView] else {
-                print("selection: no selectable views")
-                return
-            }
-
             print(direction)
 
-            let relativeViews = views.map { RelativeView(view: $0, frame: $0.frame(in: self)) }
+            let relativeViews = selectableViews
 
             guard let focusedView = relativeViews.first(where: { $0.view.id == focus.wrappedValue }) else {
-                focus.wrappedValue = views.first?.id
+                focus.wrappedValue = relativeViews.first?.view.id
                 return
             }
 
             // Filter the views by views in the same plane.
-            var candidateViews: [RelativeView<Element.ID>] = []
+            var candidateViews: [ViewInfo<Element.ID>] = []
             switch direction {
             case .up, .down:
                 candidateViews = relativeViews.filter { focusedView.xRange.overlaps($0.xRange) }
@@ -146,7 +190,7 @@ struct LayerView<Element, ID>: NSViewRepresentable where Element: Identifiable &
                 print("unknown direction")
             }
 
-            var sortedViews: [RelativeView<Element.ID>] = []
+            var sortedViews: [ViewInfo<Element.ID>] = []
             switch direction {
             case .up:
                 sortedViews = candidateViews.sorted(by: { $0.frame.origin.y < $1.frame.origin.y })
@@ -174,7 +218,7 @@ struct LayerView<Element, ID>: NSViewRepresentable where Element: Identifiable &
                 }
             } else {
                 print("selection: selecting the first view")
-                focus.wrappedValue = views.first?.id
+                focus.wrappedValue = relativeViews.first?.view.id
             }
 
         }
@@ -353,7 +397,7 @@ struct ContentView: View {
                     ForEach(bookmarksView.bookmarks) { bookmark in
                         BookmarkCell(bookmark: bookmark)
                             .shadow(color: .shadow, radius: 8)
-                            .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: bookmark), firstResponder: firstResponder))
+                            .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: bookmark), firstResponder: true))
                             .help(bookmark.url.absoluteString)
                             .contextMenuFocusable {
                                 BookmarkOpenCommands(selection: selection)

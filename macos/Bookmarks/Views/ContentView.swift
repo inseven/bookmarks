@@ -51,6 +51,7 @@ extension NSView {
 
 }
 
+// TODO: Promote the ID?
 struct ViewInfo<ID: Hashable> {
 
     let view: SelectableMarker<ID>.SelectableMarkerView
@@ -75,20 +76,30 @@ extension CGRect {
     }
 }
 
+extension NSObject {
+  var className: String {
+    return String(describing: type(of: self))
+  }
+
+  class var className: String {
+    return String(describing: self)
+  }
+}
+
 struct LayerView<Element, ID>: NSViewRepresentable where Element: Identifiable & Hashable, ID: Hashable {
 
     class InjectionHostingView: NSView {
 
-        var focus: Binding<Element.ID?>
+        @Binding var region: CGRect?
+        var tracker: SelectionTracker<Element>
 
         var startPoint : NSPoint!
-        var shapeLayer : CAShapeLayer!
 
-        required init(focus: Binding<Element.ID?>) {
-            self.focus = focus
+        required init(region: Binding<CGRect?>, tracker: SelectionTracker<Element>) {
+            _region = region
+            self.tracker = tracker
             super.init(frame: .zero)
             self.wantsLayer = true
-            self.layer?.backgroundColor = CGColor(red: 1, green: 0, blue: 1, alpha: 0.01)
         }
 
         @MainActor @objc required dynamic init?(coder aDecoder: NSCoder) {
@@ -98,38 +109,40 @@ struct LayerView<Element, ID>: NSViewRepresentable where Element: Identifiable &
         override var acceptsFirstResponder: Bool { true }
 
         override func mouseDown(with event: NSEvent) {
-            // TODO: Consider passing on the mouse down event?
             window?.makeFirstResponder(self)
-
             self.startPoint = self.convert(event.locationInWindow, from: nil)
+            region = flipCoordinates(rect: CGRect(p1: startPoint, p2: startPoint))
+        }
 
-            shapeLayer = CAShapeLayer()
-            shapeLayer.lineWidth = 1.0
-            shapeLayer.fillColor = NSColor(red: 0, green: 0, blue: 0, alpha: 0.1).cgColor
-            shapeLayer.strokeColor = NSColor(red: 0, green: 0, blue: 0, alpha: 0.3).cgColor
-            self.layer?.addSublayer(shapeLayer)
+        func flipCoordinates(rect: CGRect) -> CGRect {
+            CGRect(x: rect.origin.x, y: self.frame.height - rect.origin.y - rect.height, width: rect.width, height: rect.height)
+        }
 
+        override func hitTest(_ point: NSPoint) -> NSView? {
+            // Dodge our children.
+            if self.selectableViews.filter({ $0.frame.contains(point) }).count > 0 {
+                return nil
+            }
+            return self
         }
 
         override func mouseDragged(with event: NSEvent) {
-
             let point = self.convert(event.locationInWindow, from: nil)
-            let path = CGMutablePath()
-            path.move(to: self.startPoint)
-            path.addLine(to: NSPoint(x: self.startPoint.x, y: point.y))
-            path.addLine(to: point)
-            path.addLine(to: NSPoint(x:point.x,y:self.startPoint.y))
-            path.closeSubpath()
-            self.shapeLayer.path = path
-
-            let selection = CGRect(p1: startPoint, p2: point)
-            let views = selectableViews.filter { $0.frame.intersects(selection) }
-            self.focus.wrappedValue = views.first?.view.id
+            updateSelection(start: startPoint, end: point)
+            region = flipCoordinates(rect: CGRect(p1: startPoint, p2: point))
         }
 
         override func mouseUp(with event: NSEvent) {
-            self.shapeLayer.removeFromSuperlayer()
-            self.shapeLayer = nil
+            let end = self.convert(event.locationInWindow, from: nil)
+            updateSelection(start: startPoint, end: end)
+            region = nil
+        }
+
+        func updateSelection(start: CGPoint, end: CGPoint) {
+            let selection = CGRect(p1: start, p2: end)
+            let views = selectableViews.filter { $0.frame.intersects(selection) }
+            let ids = views.map { $0.view.id }
+            tracker.select(ids: ids)
         }
 
         var selectableViews: [ViewInfo<Element.ID>] {
@@ -147,26 +160,21 @@ struct LayerView<Element, ID>: NSViewRepresentable where Element: Identifiable &
             let character = event.characters?.first
             switch character {
             case KeyEquivalent.downArrow.character:
-                select(direction: .down)
+                select(direction: .down, event: event)
             case KeyEquivalent.upArrow.character:
-                select(direction: .up)
+                select(direction: .up, event: event)
             case KeyEquivalent.leftArrow.character:
-                select(direction: .left)
+                select(direction: .left, event: event)
             case KeyEquivalent.rightArrow.character:
-                select(direction: .right)
+                select(direction: .right, event: event)
             default:
                 super.keyDown(with: event)
             }
         }
 
-//        override func hitTest(_ point: NSPoint) -> NSView? {
-//            window?.makeFirstResponder(self)
-//            return nil
-//        }
-
         // TODO: This view could store the known selection?
 
-        func select(direction: MoveCommandDirection) {
+        func select(direction: MoveCommandDirection, event: NSEvent) {
             // TODO: The views should probably not descend into other selectable regions to avoid overlap?
             // TODO: Do I need some sort of proxy for the focusableSection?
 
@@ -174,8 +182,8 @@ struct LayerView<Element, ID>: NSViewRepresentable where Element: Identifiable &
 
             let relativeViews = selectableViews
 
-            guard let focusedView = relativeViews.first(where: { $0.view.id == focus.wrappedValue }) else {
-                focus.wrappedValue = relativeViews.first?.view.id
+            guard let focusedView = relativeViews.first(where: { $0.view.id == tracker.cursor?.id }) else {
+                _ = tracker.handleDirectionDown()
                 return
             }
 
@@ -204,21 +212,30 @@ struct LayerView<Element, ID>: NSViewRepresentable where Element: Identifiable &
                 print("unknown direction")
             }
 
-            if let index = sortedViews.firstIndex(where: { $0.view.id == focus.wrappedValue }) {
+            if let index = sortedViews.firstIndex(where: { $0.view.id == tracker.cursor?.id }) {
                 print("selection: current index = \(index)")
                 if index < sortedViews.count - 1 {
                     let nextView = sortedViews[index + 1].view
                     print("selection: setting id...")
-                    focus.wrappedValue = nextView.id
-                    if let scrollView = self.scrollView {
-                        let nextFrame = nextView.frame(in: scrollView)
-                        scrollView.contentView.scrollToVisible(nextFrame)
-                        print("selection: next selection frame = \(nextFrame)")
+
+                    if let item = tracker.items.first(where: { $0.id == nextView.id }) {
+                        if event.modifierFlags.contains(.shift) {
+                            tracker.handleShiftClick(item: item)
+                        } else {
+                            tracker.handleClick(item: item)
+                        }
+                        if let scrollView = self.scrollView {
+                            let nextFrame = nextView.frame(in: scrollView)
+                            scrollView.contentView.scrollToVisible(nextFrame)
+                            print("selection: next selection frame = \(nextFrame)")
+                        }
+
                     }
+
                 }
             } else {
                 print("selection: selecting the first view")
-                focus.wrappedValue = relativeViews.first?.view.id
+                _ = tracker.handleDirectionDown()
             }
 
         }
@@ -235,6 +252,7 @@ struct LayerView<Element, ID>: NSViewRepresentable where Element: Identifiable &
 
     }
 
+    @Binding var region: CGRect?
     var tracker: SelectionTracker<Element>
 
     func makeCoordinator() -> Coordinator {
@@ -242,17 +260,7 @@ struct LayerView<Element, ID>: NSViewRepresentable where Element: Identifiable &
     }
 
     func makeNSView(context: Context) -> InjectionHostingView {
-
-        let binding = Binding<Element.ID?>(get: {
-            tracker.cursor?.id
-        }, set: { id in
-            guard let id = id else {
-                tracker.clear()
-                return
-            }
-            tracker.handleClick(id: id)
-        })
-        return InjectionHostingView(focus: binding)
+        return InjectionHostingView(region: $region, tracker: tracker)
     }
 
     func updateNSView(_ view: InjectionHostingView, context: NSViewRepresentableContext<LayerView>) {
@@ -280,14 +288,6 @@ struct SelectableMarker<ID>: NSViewRepresentable where ID: Hashable {
             fatalError("init(coder:) has not been implemented")
         }
 
-//        func focus() {
-//            hasSelectionFocus.wrappedValue = true
-//        }
-//
-//        func unfocus() {
-//            hasSelectionFocus.wrappedValue = false
-//        }
-
     }
 
     class Coordinator: NSObject {
@@ -314,15 +314,43 @@ struct SelectableMarker<ID>: NSViewRepresentable where ID: Hashable {
 }
 
 
-struct Selectable<ID>: ViewModifier where ID: Hashable {
+struct Selectable<Element>: ViewModifier where Element: Identifiable & Hashable {
 
-    var id: ID
+    var tracker: SelectionTracker<Element>
+    var id: Element.ID
+    @State var firstResponder: Bool = false
     @State var hasSelectionFocus: Bool = false
 
     var onSelectionChange: (Bool) -> Void = { _ in }
 
+    func element() -> Element? {
+        tracker.items.first(where: { $0.id == id })
+    }
+
     func body(content: Content) -> some View {
         content
+            .handleMouse {
+                guard let element = element() else {
+                    return
+                }
+                if firstResponder || !tracker.isSelected(item: element) {
+                    tracker.handleClick(item: element)
+                }
+                firstResponder = true
+            } doubleClick: {
+                // TODO: Double click action.
+//                NSWorkspace.shared.open(bookmark.url)
+            } shiftClick: {
+                guard let element = element() else {
+                    return
+                }
+                tracker.handleShiftClick(item: element)
+            } commandClick: {
+                guard let element = element() else {
+                    return
+                }
+                tracker.handleCommandClick(item: element)
+            }
             .background(SelectableMarker(id: id, hasSelectionFocus: $hasSelectionFocus))
             .onChange(of: hasSelectionFocus, perform: onSelectionChange)
     }
@@ -331,8 +359,8 @@ struct Selectable<ID>: ViewModifier where ID: Hashable {
 
 extension View {
 
-    public func selectable<ID: Hashable>(id: ID, onSelectionChange: @escaping (Bool) -> Void = { _ in }) -> some View {
-        modifier(Selectable(id: id, onSelectionChange: onSelectionChange))
+    public func selectable<Element: Hashable & Identifiable>(tracker: SelectionTracker<Element>, id: Element.ID, onSelectionChange: @escaping (Bool) -> Void = { _ in }) -> some View {
+        modifier(Selectable(tracker: tracker, id: id, onSelectionChange: onSelectionChange))
     }
 
     public func selectionContainer<Element: Hashable & Identifiable>(tracker: SelectionTracker<Element>) -> some View {
@@ -341,14 +369,35 @@ extension View {
 
 }
 
+struct SelectedRegion: View {
+
+    var region: CGRect
+
+    var body: some View {
+        let path = Path { path in
+            path.addRect(region)
+        }
+        path
+        .fill(Color.primary)
+        .opacity(0.2)
+        .overlay(path.stroke(Color.primary)
+                    .opacity(0.4))
+    }
+
+}
+
 struct SelectionContainer<Element>: ViewModifier where Element: Hashable & Identifiable {
 
+    @State var region: CGRect?
     var tracker: SelectionTracker<Element>
 
     func body(content: Content) -> some View {
         ZStack {
+            LayerView<Element, Element.ID>(region: $region, tracker: tracker)
             content
-            LayerView<Element, Element.ID>(tracker: tracker)
+            if let region = region {
+                SelectedRegion(region: region)
+            }
         }
     }
 
@@ -421,24 +470,13 @@ struct ContentView: View {
                                 if !selectionTracker.isSelected(item: bookmark) {
                                     selectionTracker.handleClick(item: bookmark)
                                 }
+                                selection.bookmarks = selectionTracker.selection
                             }
                             .menuType(.context)
                             .onDrag {
                                 NSItemProvider(object: bookmark.url as NSURL)
                             }
-                            .handleMouse {
-                                if firstResponder || !selectionTracker.isSelected(item: bookmark) {
-                                    selectionTracker.handleClick(item: bookmark)
-                                }
-                                firstResponder = true
-                            } doubleClick: {
-                                NSWorkspace.shared.open(bookmark.url)
-                            } shiftClick: {
-                                selectionTracker.handleShiftClick(item: bookmark)
-                            } commandClick: {
-                                selectionTracker.handleCommandClick(item: bookmark)
-                            }
-                            .selectable(id: bookmark.id)
+                            .selectable(tracker: selectionTracker, id: bookmark.id)  // TODO: Can I inject the ID?
                     }
                 }
                 .padding()
@@ -452,7 +490,6 @@ struct ContentView: View {
 //            }
             .background(Color(NSColor.textBackgroundColor))
             .overlay(bookmarksView.state == .loading ? LoadingView() : nil)
-//            .overlay(ExampleView2())
         }
         .onAppear {
             bookmarksView.start()

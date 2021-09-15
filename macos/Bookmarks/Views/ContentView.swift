@@ -25,37 +25,12 @@ import BookmarksCore
 import Interact
 import XCTest
 
-extension NSView {
-
-    func subviews(matching matcher: (NSView) -> Bool) -> [NSView] {
-        var result: [NSView] = []
-        for view in subviews {
-            if matcher(view) {
-                result.append(view)
-            }
-            result = result + view.subviews(matching: matcher)
-        }
-        return result
-    }
-
-    var scrollView: NSScrollView? {
-        if let scrollView = self as? NSScrollView {
-            return scrollView
-        }
-        return self.superview?.scrollView
-    }
-
-    func frame(in view: NSView) -> CGRect {
-        view.convert(self.frame, from: self)
-    }
-
-}
-
-// TODO: Promote the ID?
-struct ViewInfo<ID: Hashable> {
+struct SelectableViewInfo<ID: Hashable> {
 
     let view: SelectableMarker<ID>.SelectableMarkerView
     let frame: CGRect
+
+    var id: ID { view.id }
 
     var xRange: Range<CGFloat> {
         Range(uncheckedBounds: (frame.origin.x, frame.origin.x + frame.size.width))
@@ -68,22 +43,14 @@ struct ViewInfo<ID: Hashable> {
 }
 
 extension CGRect {
+
     init(p1: CGPoint, p2: CGPoint) {
         self.init(x: min(p1.x, p2.x),
                   y: min(p1.y, p2.y),
                   width: abs(p1.x - p2.x),
                   height: abs(p1.y - p2.y))
     }
-}
 
-extension NSObject {
-  var className: String {
-    return String(describing: type(of: self))
-  }
-
-  class var className: String {
-    return String(describing: self)
-  }
 }
 
 struct LayerView<Element, ID>: NSViewRepresentable where Element: Identifiable & Hashable, ID: Hashable {
@@ -106,30 +73,32 @@ struct LayerView<Element, ID>: NSViewRepresentable where Element: Identifiable &
             fatalError("init(coder:) has not been implemented")
         }
 
+        // We flip the coordinate system so we get coordinates that play nicely with SwiftUI.
+        override var isFlipped: Bool { true }
+
         override var acceptsFirstResponder: Bool { true }
 
         override func mouseDown(with event: NSEvent) {
             window?.makeFirstResponder(self)
             self.startPoint = self.convert(event.locationInWindow, from: nil)
-            region = flipCoordinates(rect: CGRect(p1: startPoint, p2: startPoint))
-        }
-
-        func flipCoordinates(rect: CGRect) -> CGRect {
-            CGRect(x: rect.origin.x, y: self.frame.height - rect.origin.y - rect.height, width: rect.width, height: rect.height)
+            region = CGRect(p1: startPoint, p2: startPoint)
         }
 
         override func hitTest(_ point: NSPoint) -> NSView? {
-            // Dodge our children.
+
+            // Even though we're below the other views in the view heirarchy, we will still consume touches
+            // that should go to the views above us in the ZStack unless explicitly avoid them.
             if self.selectableViews.filter({ $0.frame.contains(point) }).count > 0 {
                 return nil
             }
+
             return self
         }
 
         override func mouseDragged(with event: NSEvent) {
             let point = self.convert(event.locationInWindow, from: nil)
             updateSelection(start: startPoint, end: point)
-            region = flipCoordinates(rect: CGRect(p1: startPoint, p2: point))
+            region = CGRect(p1: startPoint, p2: point)
         }
 
         override func mouseUp(with event: NSEvent) {
@@ -141,54 +110,39 @@ struct LayerView<Element, ID>: NSViewRepresentable where Element: Identifiable &
         func updateSelection(start: CGPoint, end: CGPoint) {
             let selection = CGRect(p1: start, p2: end)
             let views = selectableViews.filter { $0.frame.intersects(selection) }
-            let ids = views.map { $0.view.id }
+            let ids = views.map { $0.id }
             tracker.select(ids: ids)
         }
 
-        var selectableViews: [ViewInfo<Element.ID>] {
+        var selectableViews: [SelectableViewInfo<Element.ID>] {
             guard let superview = superview?.superview,
-                  let subviews = superview.subviews(matching: {
+                  let subviews = superview.recursiveSubviews(matching: {
                       type(of: $0) == SelectableMarker<Element.ID>.SelectableMarkerView.self
                   }) as? [SelectableMarker<Element.ID>.SelectableMarkerView] else {
                 return []
             }
-            return subviews.map { ViewInfo(view: $0, frame: $0.frame(in: self)) }
+            return subviews.map { SelectableViewInfo(view: $0, frame: $0.frame(in: self)) }
         }
-
 
         override func keyDown(with event: NSEvent) {
-            let character = event.characters?.first
-            switch character {
-            case KeyEquivalent.downArrow.character:
-                select(direction: .down, event: event)
-            case KeyEquivalent.upArrow.character:
-                select(direction: .up, event: event)
-            case KeyEquivalent.leftArrow.character:
-                select(direction: .left, event: event)
-            case KeyEquivalent.rightArrow.character:
-                select(direction: .right, event: event)
-            default:
+            guard let direction = event.moveCommandDirection else {
                 super.keyDown(with: event)
+                return
             }
+            select(direction: direction, event: event)
         }
 
-        // TODO: This view could store the known selection?
-
         func select(direction: MoveCommandDirection, event: NSEvent) {
-            // TODO: The views should probably not descend into other selectable regions to avoid overlap?
-            // TODO: Do I need some sort of proxy for the focusableSection?
-
-            print(direction)
 
             let relativeViews = selectableViews
 
-            guard let focusedView = relativeViews.first(where: { $0.view.id == tracker.cursor?.id }) else {
+            guard let focusedView = relativeViews.first(where: { $0.id == tracker.cursor?.id }) else {
                 _ = tracker.handleDirectionDown()
                 return
             }
 
             // Filter the views by views in the same plane.
-            var candidateViews: [ViewInfo<Element.ID>] = []
+            var candidateViews: [SelectableViewInfo<Element.ID>] = []
             switch direction {
             case .up, .down:
                 candidateViews = relativeViews.filter { focusedView.xRange.overlaps($0.xRange) }
@@ -198,12 +152,12 @@ struct LayerView<Element, ID>: NSViewRepresentable where Element: Identifiable &
                 print("unknown direction")
             }
 
-            var sortedViews: [ViewInfo<Element.ID>] = []
+            var sortedViews: [SelectableViewInfo<Element.ID>] = []
             switch direction {
             case .up:
-                sortedViews = candidateViews.sorted(by: { $0.frame.origin.y < $1.frame.origin.y })
-            case .down:
                 sortedViews = candidateViews.sorted(by: { $0.frame.origin.y < $1.frame.origin.y }).reversed()
+            case .down:
+                sortedViews = candidateViews.sorted(by: { $0.frame.origin.y < $1.frame.origin.y })
             case .left:
                 sortedViews = candidateViews.sorted(by: { $0.frame.origin.x < $1.frame.origin.x }).reversed()
             case .right:
@@ -212,7 +166,7 @@ struct LayerView<Element, ID>: NSViewRepresentable where Element: Identifiable &
                 print("unknown direction")
             }
 
-            if let index = sortedViews.firstIndex(where: { $0.view.id == tracker.cursor?.id }) {
+            if let index = sortedViews.firstIndex(where: { $0.id == tracker.cursor?.id }) {
                 print("selection: current index = \(index)")
                 if index < sortedViews.count - 1 {
                     let nextView = sortedViews[index + 1].view
@@ -330,6 +284,7 @@ struct Selectable<Element>: ViewModifier where Element: Identifiable & Hashable 
     func body(content: Content) -> some View {
         content
             .handleMouse {
+                // TODO: This behaviour differs between lists and grids.
                 guard let element = element() else {
                     return
                 }
@@ -474,7 +429,8 @@ struct ContentView: View {
                             }
                             .menuType(.context)
                             .onDrag {
-                                NSItemProvider(object: bookmark.url as NSURL)
+                                selectionTracker.handleClick(item: bookmark)
+                                return NSItemProvider(object: bookmark.url as NSURL)
                             } preview: {
                                 Text(bookmark.title)
                                     .lineLimit(2)

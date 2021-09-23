@@ -34,6 +34,7 @@ public class Pinboard {
         case postsAdd = "posts/add"
         case postsAll = "posts/all"
         case postsDelete = "posts/delete"
+        case postsSuggest = "posts/suggest"
 
         case tagsDelete = "tags/delete"
         case tagsRename = "tags/rename"
@@ -141,6 +142,26 @@ public class Pinboard {
         self.fetch(path: .postsDelete, parameters: parameters, completion: completion) { _ in }
     }
 
+    public func postsSuggest(url: URL, completion: @escaping (Result<Suggestions, Swift.Error>) -> Void) {
+        let parameters = [
+            "url": url.absoluteString,
+        ]
+        self.fetch(path: .postsSuggest, parameters: parameters, completion: completion) { data in
+            print(String(data: data, encoding: .utf8)!)
+            let contents = try JSONDecoder().decode([[String:[String]]].self, from: data)
+            let dictionary = contents.reduce(into: [String: [String]]()) { partialResult, namedSuggestions in
+                for (key, value) in namedSuggestions {
+                    partialResult[key] = value
+                }
+            }
+            guard let popular = dictionary["popular"],
+                  let recommended = dictionary["recommended"] else {
+                throw BookmarksError.corrupt
+            }
+            return Suggestions(popular: Set(popular), recommended: Set(recommended))
+        }
+    }
+
     public func tagsDelete(_ tag: String, completion: @escaping (Result<Void, Swift.Error>) -> Void) {
         let parameters = [
             "tag": tag,
@@ -182,6 +203,29 @@ extension Pinboard {
 
     func tagsRename(_ old: String, to new: String) throws {
         try AsyncOperation({ self.tagsRename(old, to: new, completion: $0) }).wait()
+    }
+
+}
+
+extension Pinboard {
+
+    // TODO: Review the nullability of the properties on the Pinboard.Post struct #216
+    //       https://github.com/inseven/bookmarks/issues/216
+    public struct Suggestions: Codable {
+
+        public let popular: Set<String>
+        public let recommended: Set<String>
+
+        public enum CodingKeys: String, CodingKey {
+            case popular = "popular"
+            case recommended = "recommended"
+        }
+
+        init(popular: Set<String>, recommended: Set<String>) {
+            self.popular = popular
+            self.recommended = recommended
+        }
+
     }
 
 }

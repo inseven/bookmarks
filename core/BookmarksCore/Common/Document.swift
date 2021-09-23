@@ -24,7 +24,41 @@ import Foundation
 import UIKit
 #endif
 
-class Document {
+extension Array where Element == String {
+
+    var keywords: [String] {
+        reduce(into: [String]()) { partialResult, string in
+            partialResult.append(contentsOf: string.keywords)
+        }
+    }
+
+}
+
+public extension String {
+
+    func replacingCharacters(in characterSet: CharacterSet, with replacement: String) -> String {
+        components(separatedBy: characterSet)
+            .filter { !$0.isEmpty }  // TODO: Make this clear that it replaces n+ characters
+            .joined(separator: replacement)
+    }
+
+    var safeKeyword: String {
+        lowercased()
+            .replacingOccurrences(of: ".", with: "")
+            .replacingCharacters(in: CharacterSet.letters.inverted, with: " ")
+            .trimmingCharacters(in: CharacterSet.whitespaces)
+            .replacingCharacters(in: CharacterSet.whitespaces, with: "-")
+    }
+
+    var keywords: [String] {
+        components(separatedBy: CharacterSet(charactersIn: ",/"))
+            .map { $0.safeKeyword }
+            .filter { !$0.isEmpty }
+    }
+
+}
+
+public class Document {
 
     let location: URL
     let contents: TFHpple
@@ -53,6 +87,47 @@ class Document {
             }
             return nil
         }
+    }
+
+    public func first(query: String) throws -> String {
+        guard let elements = contents.search(withXPathQuery: query) as? [TFHppleElement] else {
+            throw OpenGraphError.invalidArgument(message: "Unable to find open graph image tag")
+        }
+        guard let element = elements.first else {
+            throw OpenGraphError.invalidArgument(message: "Malformed open graph image tag")
+        }
+        guard let content = element.content else {
+            throw OpenGraphError.invalidArgument(message: "Image tag had no content")
+        }
+        return content
+    }
+
+    public func contents(query: String) -> [String] {
+        guard let elements = contents.search(withXPathQuery: query) as? [TFHppleElement] else {
+            return []
+        }
+        return elements.compactMap { element in element.content }
+    }
+
+    public var keywords: [String] {
+        get {
+            // TODO: Case insensitive searches
+            let queries = [
+                "//meta[@name='Keywords']/@content",
+                "//meta[@name='keywords']/@content",
+                "//meta[@name='parsely-tags']/@content",
+                "//meta[@name='sailthru.tags']/@content",
+            ]
+            let results = queries.map { contents(query: $0) }
+            let flattendResults = results.reduce([String]()) { partialResult, result in
+                return partialResult + result
+            }
+            return flattendResults.keywords
+        }
+    }
+
+    public var tags: [String] {
+        contents(query: "//meta[@property='article:tag']/@content")
     }
 
     func image(for query: String) throws -> SafeImage {

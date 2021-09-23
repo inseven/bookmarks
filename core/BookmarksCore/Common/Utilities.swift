@@ -29,6 +29,23 @@ enum OpenGraphError: Error {
     case invalidArgument(message: String)
 }
 
+public extension URL {
+
+    var request: URLRequest { URLRequest(url: self) }
+
+    // TODO: Property?
+    func document() async throws -> Document {
+        let (data, _) = try await URLSession.shared.data(for: request)
+        // TODO: Check the response.
+
+        guard let contents = TFHpple(htmlData: data) else {
+            throw OpenGraphError.invalidArgument(message: "Unable to parse the data")
+        }
+        return Document(location: self, contents: contents)
+    }
+
+}
+
 class Utilities {
 
     static func simpleThumbnail(for url: URL, completion: @escaping (Result<SafeImage, Error>) -> Void) {
@@ -41,7 +58,7 @@ class Utilities {
                 completion(.failure(OpenGraphError.invalidArgument(message: "Unable to parse the data")))
                 return
             }
-            let document = Document(location: url, contents: doc)
+            let document = Document(location: url, contents: doc)  // TODO: Why is this named location?
             guard let image = document.openGraphImage else {
                 completion(.failure(OpenGraphError.invalidArgument(message: "Failed to find image")))
                 return

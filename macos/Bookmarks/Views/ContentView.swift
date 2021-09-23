@@ -42,17 +42,6 @@ struct SelectableViewInfo<ID: Hashable> {
 
 }
 
-extension CGRect {
-
-    init(p1: CGPoint, p2: CGPoint) {
-        self.init(x: min(p1.x, p2.x),
-                  y: min(p1.y, p2.y),
-                  width: abs(p1.x - p2.x),
-                  height: abs(p1.y - p2.y))
-    }
-
-}
-
 struct LayerView<Element, ID>: NSViewRepresentable where Element: Identifiable & Hashable, ID: Hashable {
 
     class InjectionHostingView: NSView {
@@ -324,23 +313,6 @@ extension View {
 
 }
 
-struct SelectedRegion: View {
-
-    var region: CGRect
-
-    var body: some View {
-        let path = Path { path in
-            path.addRect(region)
-        }
-        path
-        .fill(Color.primary)
-        .opacity(0.2)
-        .overlay(path.stroke(Color.primary)
-                    .opacity(0.4))
-    }
-
-}
-
 struct SelectionContainer<Element>: ViewModifier where Element: Hashable & Identifiable {
 
     @State var region: CGRect?
@@ -351,7 +323,7 @@ struct SelectionContainer<Element>: ViewModifier where Element: Hashable & Ident
             LayerView<Element, Element.ID>(region: $region, tracker: tracker)
             content
             if let region = region {
-                SelectedRegion(region: region)
+                SelectionIndicator(region: region)
             }
         }
     }

@@ -105,6 +105,11 @@ function build_scheme {
 
 cd "$ROOT_DIRECTORY"
 
+# Select the correct Xcode.
+IOS_XCODE_PATH=${IOS_XCODE_PATH:-/Applications/Xcode.app}
+MACOS_XCODE_PATH=${MACOS_XCODE_PATH:-/Applications/Xcode.app}
+sudo xcode-select --switch "$IOS_XCODE_PATH"
+
 # List the available schemes.
 xcode_project -list
 

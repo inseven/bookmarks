@@ -43,6 +43,9 @@ CHANGES_GITHUB_RELEASE_SCRIPT="${CHANGES_DIRECTORY}/examples/gh-release.sh"
 PATH=$PATH:$CHANGES_DIRECTORY
 PATH=$PATH:$BUILD_TOOLS_DIRECTORY
 
+IOS_XCODE_PATH=${IOS_XCODE_PATH:-/Applications/Xcode.app}
+MACOS_XCODE_PATH=${MACOS_XCODE_PATH:-/Applications/Xcode.app}
+
 source "${SCRIPTS_DIRECTORY}/environment.sh"
 
 # Check that the GitHub command is available on the path.
@@ -106,22 +109,23 @@ function build_scheme {
 cd "$ROOT_DIRECTORY"
 
 # List the available schemes.
+sudo xcode-select --switch "$IOS_XCODE_PATH"
 xcode_project -list
 
 # Smoke test builds.
 
-# BookmarksCore
+# iOS
+sudo xcode-select --switch "$IOS_XCODE_PATH"
 build_scheme "BookmarksCore iOS" clean build build-for-testing test \
     -sdk iphonesimulator \
     -destination "$IPHONE_DESTINATION"
-build_scheme "BookmarksCore macOS" clean build build-for-testing test
-
-# iOS
 build_scheme "Bookmarks iOS" clean build build-for-testing test \
     -sdk iphonesimulator \
     -destination "$IPHONE_DESTINATION"
 
 # macOS
+sudo xcode-select --switch "$MACOS_XCODE_PATH"
+build_scheme "BookmarksCore macOS" clean build build-for-testing test
 build_scheme "Bookmarks macOS" clean build build-for-testing
 
 # Clean up the build directory.
@@ -159,6 +163,7 @@ build-tools install-provisioning-profile "macos/Bookmarks_Developer_ID_Applicati
 build-tools install-provisioning-profile "ios/Bookmarks_App_Store_Profile.mobileprovision"
 
 # Build and archive the iOS project.
+sudo xcode-select --switch "$IOS_XCODE_PATH"
 xcode_project \
     -scheme "Bookmarks iOS" \
     -config Release \
@@ -189,6 +194,7 @@ if $TESTFLIGHT_UPLOAD ; then
 fi
 
 # Build and archive the macOS project.
+sudo xcode-select --switch "$MACOS_XCODE_PATH"
 xcode_project \
     -scheme "Bookmarks macOS" \
     -config Release \

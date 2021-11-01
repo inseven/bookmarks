@@ -21,24 +21,20 @@
 import Foundation
 
 extension Pinboard {
-    
-    public struct Update: Codable {
-        
-        public let updateTime: Date
-        
+
+    public struct Token: Codable {
+
+        public let result: String
+
         public enum CodingKeys: String, CodingKey {
-            case updateTime = "update_time"
+            case result = "result"
         }
-        
+
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
-            let updateTimeString = try container.decode(String.self, forKey: .updateTime)
-            guard let updateTime = ISO8601DateFormatter.init().date(from: updateTimeString) else {
-                throw BookmarksError.invalidResponse
-            }
-            self.updateTime = updateTime
+            self.result = try container.decode(String.self, forKey: .result)
         }
-        
+
     }
 
 }

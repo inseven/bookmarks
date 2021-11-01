@@ -62,7 +62,6 @@ public class Pinboard {
     }
 
     // TODO: Consider using a promise for this?
-    // TODO: Generics.
     fileprivate func fetch<T>(path: Path,
                               parameters: [String: String] = [:],
                               completion: @escaping (Result<T, Error>) -> Void,
@@ -187,7 +186,8 @@ public class Pinboard {
                     completion(.failure(error))
                     return
                 }
-                // TODO: Process the HTTP error here!
+                // TODO: Handle HTTP error codes in the Pinboard API responses #135
+                 //       https://github.com/inseven/bookmarks/issues/135
                 guard let httpStatus = response as? HTTPURLResponse,
                       httpStatus.statusCode == 200 else {
                           let response = String(data: data, encoding: .utf8)

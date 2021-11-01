@@ -23,14 +23,91 @@ import SwiftUI
 
 import BookmarksCore
 
+struct LogInSheet: View {
+
+    @Environment(\.manager) var manager
+    @Environment(\.presentationMode) var presentationMode
+
+    @State var username: String = ""
+    @State var password: String = ""
+    @State var authenticating = false
+
+    func submit() {
+        dispatchPrecondition(condition: .onQueue(.main))
+        authenticating = true
+        manager.authenticate(username: username, password: password) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    break
+                case .failure(let error):
+                    // TODO: Show this error.
+                    print("failed with error \(error)")
+                }
+                authenticating = false
+            }
+        }
+    }
+
+    func createAccount() {
+        dispatchPrecondition(condition: .onQueue(.main))
+        guard let url = URL(string: "https://pinboard.in/signup/") else {
+            return
+        }
+        manager.open(url: url, completion: { _ in })
+    }
+
+    var body: some View {
+        NavigationView {
+            Form {
+                Section {
+                    TextField("Username", text: $username)
+                        .textInputAutocapitalization(.never)
+                        .disableAutocorrection(true)
+                    SecureField("Password", text: $password)
+                        .onSubmit(submit)
+                } footer: {
+                    Text("Your username and password are used to access your Pinboard API token and are not stored. You can reset your Pinboard API token anytime from the Pinboard website.")
+                }
+                Button(action: createAccount) {
+                    Text("Create Account")
+                        .frame(maxWidth: .infinity)
+                }
+            }
+            .navigationTitle("Sign In")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(trailing: Button(action: submit) {
+                Text("Next")
+            }.disabled(authenticating))
+        }
+        .navigationViewStyle(.stack)
+    }
+
+}
+
 struct ContentView: View {
 
-    @Environment(\.manager) var manager: BookmarksManager
+    @ObservedObject var manager: BookmarksManager
+    @State var sheet: ApplicationState? = nil
 
     var body: some View {
         NavigationView {
             Bookmarks(bookmarksView: BookmarksView(database: manager.database, query: True().eraseToAnyQuery()))
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+        .navigationViewStyle(.stack)
+        .sheet(item: $sheet) { sheet in
+            switch sheet {
+            case .logIn:
+                LogInSheet()
+            }
+        }
+        .onChange(of: manager.state) { newValue in
+            switch newValue {
+            case .idle:
+                sheet = nil
+            case .unauthorized:
+                sheet = .logIn
+            }
+        }
     }
 }

@@ -38,6 +38,9 @@ public enum BookmarksError: Error, Equatable {
     case corrupt
     case timeout
     case malformedBookmark
+    case unknownResponse
+    case invalidResponse
+    case httpError(HTTPStatus)
 
     case openFailure
     

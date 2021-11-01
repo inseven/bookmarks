@@ -106,9 +106,10 @@ public class BookmarksManager: ObservableObject {
     }
 
     public func logout() {
+        // TODO: Cancel any ongoing operation.
         dispatchPrecondition(condition: .onQueue(.main))
         settings.pinboardApiKey = nil
-        updater.logout()
+        updater.logout()  // TODO: Completion
     }
 
     public func refresh() {
@@ -182,7 +183,8 @@ public class BookmarksManager: ObservableObject {
         }
     }
 
-    fileprivate func open(url: URL, completion: @escaping (Bool) -> Void) {
+    // TODO: Support nullable callback.
+    public func open(url: URL, completion: @escaping (Bool) -> Void) {
         let completion = DispatchQueue.main.asyncClosure(completion)
         #if os(macOS)
         NSWorkspace.shared.open(url)
@@ -209,12 +211,12 @@ extension BookmarksManager: UpdaterDelegate {
     func updater(_ updater: Updater, didFailWithError error: Error) {
         print("Failed to update bookmarks with error \(error)")
         switch error {
-        case BookmarksError.unauthorized:
+        case BookmarksError.httpError(.unauthorized), BookmarksError.unauthorized:
             DispatchQueue.main.async {
                 self.state = .unauthorized
             }
         default:
-            print("Unhandled error \(error)")
+            print("Ignoring error \(error)...")
         }
     }
 

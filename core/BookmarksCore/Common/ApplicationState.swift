@@ -20,40 +20,15 @@
 
 import Foundation
 
-extension Pinboard {
-    
-    public struct Update: Codable {
-        
-        public let updateTime: Date
-        
-        public enum CodingKeys: String, CodingKey {
-            case updateTime = "update_time"
+public enum ApplicationState: Identifiable {
+
+    case logIn
+
+    public var id: String {
+        switch self {
+        case .logIn:
+            return "logIn"
         }
-        
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.container(keyedBy: CodingKeys.self)
-            let updateTimeString = try container.decode(String.self, forKey: .updateTime)
-            guard let updateTime = ISO8601DateFormatter.init().date(from: updateTimeString) else {
-                throw BookmarksError.invalidResponse
-            }
-            self.updateTime = updateTime
-        }
-        
     }
 
-    public struct Token: Codable {
-
-        public let result: String
-
-        public enum CodingKeys: String, CodingKey {
-            case result = "result"
-        }
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.container(keyedBy: CodingKeys.self)
-            self.result = try container.decode(String.self, forKey: .result)
-        }
-
-    }
-    
 }

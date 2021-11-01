@@ -25,7 +25,6 @@ import BookmarksCore
 struct LogInSheet: View {
 
     @Environment(\.manager) var manager
-
     @Environment(\.presentationMode) var presentationMode
 
     @State var username: String = ""

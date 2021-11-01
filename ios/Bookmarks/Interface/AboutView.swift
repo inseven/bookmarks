@@ -58,7 +58,7 @@ struct AboutView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("App")) {
+                Section {
                     HStack {
                         Text("Version")
                         Spacer()
@@ -72,7 +72,7 @@ struct AboutView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                Section(header: Text("InSeven Limited")) {
+                Section("InSeven") {
                     Button("Company") {
                         UIApplication.shared.open(URL(string: "https://inseven.co.uk")!)
                     }
@@ -84,16 +84,16 @@ struct AboutView: View {
                         UIApplication.shared.open(components.url!)
                     }
                 }
-                Section(header: Text("With Thanks")) {
+                Section("Thanks") {
                     ForEach(people) { person in
                         Text(person)
                     }
                 }
             }
             .navigationBarTitle("About", displayMode: .inline)
-            .navigationBarItems(trailing: Button(action: {
+            .navigationBarItems(trailing: Button {
                 presentationMode.wrappedValue.dismiss()
-            }) {
+            } label: {
                 Text("Done")
                     .fontWeight(.regular)
             })

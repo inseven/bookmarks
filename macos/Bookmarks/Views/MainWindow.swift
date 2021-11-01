@@ -24,16 +24,12 @@ import BookmarksCore
 
 struct MainWindow: View {
 
-    enum ApplicationSheet {
-        case logIn
-    }
-
     @Environment(\.selection) var selection
 
     // TODO: Consider making this an environment object.
     @ObservedObject var manager: BookmarksManager
     @Binding var section: BookmarksSection?
-    @State var sheet: ApplicationSheet? = nil
+    @State var sheet: ApplicationState? = nil
 
     var body: some View {
         NavigationView {
@@ -57,17 +53,6 @@ struct MainWindow: View {
         }
         .observesApplicationFocus()
         .frameAutosaveName("Main Window")
-    }
-
-}
-
-extension MainWindow.ApplicationSheet: Identifiable {
-
-    var id: String {
-        switch self {
-        case .logIn:
-            return "logIn"
-        }
     }
 
 }

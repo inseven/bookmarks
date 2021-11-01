@@ -20,11 +20,80 @@
 
 import Foundation
 
+
+// https://stackoverflow.com/questions/5752214/are-the-http-status-codes-defined-anywhere-in-the-ios-sdk
+public enum HTTPStatus: Int {
+
+    case `continue` = 100
+    case switchingProtocols = 101
+    case processing = 102
+    case ok = 200
+    case created = 201
+    case accepted = 202
+    case nonAuthoritativeInformation = 203
+    case noContent = 204
+    case resetContent = 205
+    case partialContent = 206
+    case multiStatus = 207
+    case alreadyReported = 208
+    case iAmUsed = 226
+    case multipleChoices = 300
+    case movedPermanently = 301
+    case found = 302
+    case seeOther = 303
+    case notModified = 304
+    case useProxy = 305
+    case temporaryRedirect = 307
+    case permanentRedirect = 308
+    case badRequest = 400
+    case unauthorized = 401
+    case paymentRequired = 402
+    case forbidden = 403
+    case notFound = 404
+    case methodNotAllowed = 405
+    case notAcceptable = 406
+    case proxyAuthenticationRequired = 407
+    case requestTimeout = 408
+    case conflict = 409
+    case gone = 410
+    case lengthRequired = 411
+    case preconditionFailed = 412
+    case payloadTooLarge = 413
+    case requestURITooLong = 414
+    case unsupportedMediaType = 415
+    case requestedRangeNotSatisfiable = 416
+    case expectationFailed = 417
+    case iAmATeapot = 418
+    case misdirectedRequest = 421
+    case unprocessableEntity = 422
+    case locked = 423
+    case failedDependency = 424
+    case upgradeRequired = 426
+    case preconditionRequired = 428
+    case tooManyRequests = 429
+    case requestHeaderFieldsTooLarge = 431
+    case connectionClosedWithoutResponse = 444
+    case unavailableForLegalReasons = 451
+    case clientClosedRequest = 499
+    case internalServerError = 500
+    case notImplemented = 501
+    case badGateway = 502
+    case serviceUnavailable = 503
+    case gatewayTimeout = 504
+    case httpVersionNotSupported = 505
+    case variantAlsoNegotiates = 506
+    case insufficientStorage = 507
+    case loopDetected = 508
+    case notExtended = 510
+    case networkAuthenticationRequired = 511
+    case networkConnectTimeoutError = 599
+
+}
+
 public class Pinboard {
 
     enum PinboardError: Error {
-        case inconsistentState(message: String)
-        case unexpectedResponse
+        case inconsistentState
     }
 
     fileprivate enum Path: String {
@@ -63,6 +132,7 @@ public class Pinboard {
     }
 
     // TODO: Consider using a promise for this?
+    // TODO: Generics.
     fileprivate func fetch<T>(path: Path,
                               parameters: [String: String] = [:],
                               completion: @escaping (Result<T, Error>) -> Void,
@@ -70,18 +140,23 @@ public class Pinboard {
         let completion = DispatchQueue.global().asyncClosure(completion)
         do {
             let url = try serviceUrl(path, parameters: parameters)
-            let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-                guard let data = data else {
+            let task = URLSession.shared.dataTask(with: url) { data, response, error in
+                guard let data = data, let response = response as? HTTPURLResponse else {
                     guard let error = error else {
-                        completion(.failure(PinboardError.inconsistentState(message: "Missing error when processing URL completion")))
+                        completion(.failure(PinboardError.inconsistentState))
                         return
                     }
                     completion(.failure(error))
                     return
                 }
-                // TODO: Handle HTTP error codes in the Pinboard API responses #135
-                //       https://github.com/inseven/bookmarks/issues/135
-                print("response = \(String(describing: response))")
+                guard 200 ..< 300 ~= response.statusCode else {
+                    guard let code = HTTPStatus(rawValue: response.statusCode) else {
+                        completion(.failure(BookmarksError.unknownResponse))
+                        return
+                    }
+                    completion(.failure(BookmarksError.httpError(code)))
+                    return
+                }
                 do {
                     let result = try transform(data)
                     completion(.success(result))
@@ -176,12 +251,13 @@ public class Pinboard {
             let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
                 guard let data = data else {
                     guard let error = error else {
-                        completion(.failure(PinboardError.inconsistentState(message: "Missing error when processing URL completion")))
+                        completion(.failure(PinboardError.inconsistentState))
                         return
                     }
                     completion(.failure(error))
                     return
                 }
+                // TODO: Process the HTTP error here!
                 guard let httpStatus = response as? HTTPURLResponse,
                       httpStatus.statusCode == 200 else {
                           let response = String(data: data, encoding: .utf8)

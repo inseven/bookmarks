@@ -70,7 +70,17 @@ struct SettingsView: View {
                     }
                 }
                 Section {
-                    Button(action: { sheet = .about }) {
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                        manager.logout()
+                    } label: {
+                        Text("Log Out")
+                    }
+                }
+                Section {
+                    Button {
+                        sheet = .about
+                    } label: {
                         Text("About Bookmarks")
                     }
                 }

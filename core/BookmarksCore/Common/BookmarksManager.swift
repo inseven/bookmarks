@@ -78,7 +78,6 @@ public class BookmarksManager: ObservableObject {
         #endif
     }
 
-    // TODO: Is this used?
     public var user: String? {
         return updater.user
     }

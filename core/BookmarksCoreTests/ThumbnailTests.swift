@@ -40,7 +40,7 @@ class ThumbnailTests: XCTestCase {
             }
             image = blockImage
             XCTAssertNotNil(image)
-        }
+        }
         self.wait(for: [expectation], timeout: 20)
         return image
     }

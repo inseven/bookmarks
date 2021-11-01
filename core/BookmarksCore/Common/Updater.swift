@@ -192,8 +192,6 @@ public class Updater {
     public func update(force: Bool = false) {
         syncQueue.async {
             self.syncQueue_update(force: force)
-            // TODO: Delete everything.
-            self.syncQueue_update(force: true)
         }
     }
 

@@ -186,11 +186,13 @@ public class BookmarksManager: ObservableObject {
         }
     }
 
-    // TODO: Support nullable callback.
-    public func open(url: URL, completion: @escaping (Bool) -> Void) {
+    public func open(url: URL, completion: ((Bool) -> Void)? = nil) {
         let completion = DispatchQueue.main.asyncClosure(completion)
         #if os(macOS)
         NSWorkspace.shared.open(url)
+        guard let completion = completion else {
+            return
+        }
         completion(true)
         #else
         UIApplication.shared.open(url, options: [:], completionHandler: completion)

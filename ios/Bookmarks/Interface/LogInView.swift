@@ -55,7 +55,7 @@ struct LogInView: View {
         guard let url = URL(string: "https://pinboard.in/signup/") else {
             return
         }
-        manager.open(url: url, completion: { _ in })
+        manager.open(url: url)
     }
 
     var body: some View {

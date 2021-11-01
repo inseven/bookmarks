@@ -152,14 +152,18 @@ public class Updater {
         }
     }
 
-    public func logout() {
+    public func logout(completion: @escaping (Result<Void, Error>) -> Void) {
+        let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             self.token = nil
+            // TODO: Cancel any ongoing sync.
+            // TODO: Handle the error?
             self.database.clear { result in
                 print("result = \(result)")
+                completion(result)
             }
             // TODO: Right now this has the side effect of changing the top-level state but we should do it ourselves.
-            self.syncQueue_update(force: true)  // TODO: Do I want to do this?
+//            self.syncQueue_update(force: true)  // TODO: Do I want to do this?
             // TODO: Empty the database.
             // TODO: This should clear the last updated?
             // TODO: Would it be cleaner to store all state in a single variable so it can be cleared out / easily serialized?

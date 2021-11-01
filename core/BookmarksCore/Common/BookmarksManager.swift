@@ -32,8 +32,6 @@ public extension EnvironmentValues {
     }
 }
 
-// TODO: Explore whether it's possible make some of the BookmarksManager properties private #266
-//       https://github.com/inseven/bookmarks/issues/266
 public class BookmarksManager: ObservableObject {
 
     public enum State {
@@ -43,6 +41,8 @@ public class BookmarksManager: ObservableObject {
 
     @Published public var state: State = .idle
 
+    // TODO: Explore whether it's possible make some of the BookmarksManager properties private #266
+    //       https://github.com/inseven/bookmarks/issues/266
     public var imageCache: ImageCache!
     public var thumbnailManager: ThumbnailManager
     public var settings = Settings()
@@ -108,8 +108,13 @@ public class BookmarksManager: ObservableObject {
     public func logout() {
         // TODO: Cancel any ongoing operation.
         dispatchPrecondition(condition: .onQueue(.main))
-        settings.pinboardApiKey = nil
-        updater.logout()  // TODO: Completion so we can show progress?
+        settings.pinboardApiKey = nil  // TODO: Push this down.
+        updater.logout { result in
+            print("logout result = \(result)")
+            DispatchQueue.main.async {
+                self.state = .unauthorized
+            }
+        }
     }
 
     public func refresh() {

@@ -32,22 +32,27 @@ public extension EnvironmentValues {
     }
 }
 
-// TODO: Explore whether it's possible make some of the BookmarksManager properties private #266
-//       https://github.com/inseven/bookmarks/issues/266
-public class BookmarksManager {
+public class BookmarksManager: ObservableObject {
 
-    var documentsUrl: URL
+    public enum State {
+        case idle
+        case unauthorized
+    }
+
+    @Published public var state: State = .idle
+
+    // TODO: Explore whether it's possible make some of the BookmarksManager properties private #266
+    //       https://github.com/inseven/bookmarks/issues/266
     public var imageCache: ImageCache!
     public var thumbnailManager: ThumbnailManager
-    var downloadManager: DownloadManager
     public var settings = Settings()
-    fileprivate var updater: Updater
-
     public var tagsView: TagsView
-
     public var cache: NSCache = NSCache<NSString, SafeImage>()
-
     public var database: Database
+
+    private var documentsUrl: URL
+    private var downloadManager: DownloadManager
+    private var updater: Updater
 
     public init() {
         documentsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -58,10 +63,11 @@ public class BookmarksManager {
         imageCache = FileImageCache(path: documentsUrl.appendingPathComponent("thumbnails"))
         downloadManager = DownloadManager(limit: settings.maximumConcurrentThumbnailDownloads)
         thumbnailManager = ThumbnailManager(imageCache: imageCache, downloadManager: downloadManager)
-        updater = Updater(database: database, token: settings.pinboardApiKey)
-        updater.start()
-
+        updater = Updater(database: database, settings: settings)
         tagsView = TagsView(database: database)
+
+        updater.delegate = self
+        updater.start()
         tagsView.start()
 
         #if os(macOS)
@@ -73,7 +79,40 @@ public class BookmarksManager {
     }
 
     public var user: String? {
-        settings.pinboardApiKey.components(separatedBy: ":").first
+        return updater.user
+    }
+
+    public func authenticate(username: String,
+                             password: String,
+                             completion: @escaping (Result<Void, Error>) -> Void) {
+        let completion = DispatchQueue.global().asyncClosure(completion)
+        updater.authenticate(username: username, password: password) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success():
+                    self.state = .idle
+                    completion(.success(()))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+        }
+    }
+
+    public func logout(completion: @escaping (Result<Void, Error>) -> Void) {
+        dispatchPrecondition(condition: .onQueue(.main))
+        let completion = DispatchQueue.global().asyncClosure(completion)
+        updater.logout { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success():
+                    self.state = .unauthorized
+                    completion(.success(()))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+        }
     }
 
     public func refresh() {
@@ -147,19 +186,43 @@ public class BookmarksManager {
         }
     }
 
-    fileprivate func open(url: URL, completion: @escaping (Bool) -> Void) {
+    public func open(url: URL, completion: ((Bool) -> Void)? = nil) {
         let completion = DispatchQueue.main.asyncClosure(completion)
         #if os(macOS)
         NSWorkspace.shared.open(url)
+        guard let completion = completion else {
+            return
+        }
         completion(true)
         #else
         UIApplication.shared.open(url, options: [:], completionHandler: completion)
         #endif
     }
 
-    @objc
-    func nsApplicationDidBecomeActive() {
+    @objc func nsApplicationDidBecomeActive() {
         self.updater.update()
+    }
+
+}
+
+extension BookmarksManager: UpdaterDelegate {
+
+    func updaterDidStart(_ updater: Updater) {
+    }
+
+    func updaterDidFinish(_ updater: Updater) {
+    }
+
+    func updater(_ updater: Updater, didFailWithError error: Error) {
+        print("Failed to update bookmarks with error \(error)")
+        switch error {
+        case BookmarksError.httpError(.unauthorized), BookmarksError.unauthorized:
+            DispatchQueue.main.async {
+                self.state = .unauthorized
+            }
+        default:
+            print("Ignoring error \(error)...")
+        }
     }
 
 }

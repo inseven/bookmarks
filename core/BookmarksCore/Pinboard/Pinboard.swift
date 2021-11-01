@@ -23,8 +23,7 @@ import Foundation
 public class Pinboard {
 
     enum PinboardError: Error {
-        case inconsistentState(message: String)
-        case unexpectedResponse
+        case inconsistentState
     }
 
     fileprivate enum Path: String {
@@ -70,18 +69,23 @@ public class Pinboard {
         let completion = DispatchQueue.global().asyncClosure(completion)
         do {
             let url = try serviceUrl(path, parameters: parameters)
-            let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-                guard let data = data else {
+            let task = URLSession.shared.dataTask(with: url) { data, response, error in
+                guard let data = data, let response = response as? HTTPURLResponse else {
                     guard let error = error else {
-                        completion(.failure(PinboardError.inconsistentState(message: "Missing error when processing URL completion")))
+                        completion(.failure(PinboardError.inconsistentState))
                         return
                     }
                     completion(.failure(error))
                     return
                 }
-                // TODO: Handle HTTP error codes in the Pinboard API responses #135
-                //       https://github.com/inseven/bookmarks/issues/135
-                print("response = \(String(describing: response))")
+                guard 200 ..< 300 ~= response.statusCode else {
+                    guard let code = HTTPStatus(rawValue: response.statusCode) else {
+                        completion(.failure(BookmarksError.unknownResponse))
+                        return
+                    }
+                    completion(.failure(BookmarksError.httpError(code)))
+                    return
+                }
                 do {
                     let result = try transform(data)
                     completion(.success(result))
@@ -154,6 +158,59 @@ public class Pinboard {
             "new": new,
         ]
         self.fetch(path: .tagsRename, parameters: parameters, completion: completion) { _ in }
+    }
+
+    public static func apiToken(username: String, password: String, completion: @escaping (Result<String, Error>) -> Void) {
+        let completion = DispatchQueue.global().asyncClosure(completion)
+        do {
+            let url = try "https://api.pinboard.in/v1/user/api_token/".url.settingQueryItems([
+                URLQueryItem(name: "format", value: "json"),
+            ])
+
+            let loginString = "\(username):\(password)"
+            guard let loginData = loginString.data(using: String.Encoding.utf8) else {
+                return
+            }
+            let base64LoginString = loginData.base64EncodedString()
+
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            request.setValue("Basic \(base64LoginString)", forHTTPHeaderField: "Authorization")
+
+            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+                guard let data = data else {
+                    guard let error = error else {
+                        completion(.failure(PinboardError.inconsistentState))
+                        return
+                    }
+                    completion(.failure(error))
+                    return
+                }
+                // TODO: Handle HTTP error codes in the Pinboard API responses #135
+                 //       https://github.com/inseven/bookmarks/issues/135
+                guard let httpStatus = response as? HTTPURLResponse,
+                      httpStatus.statusCode == 200 else {
+                          let response = String(data: data, encoding: .utf8)
+                          print("HTTP call failed with message '\(response ?? "")'")
+                          completion(.failure(BookmarksError.corrupt))
+                          return
+                }
+                do {
+                    let token = try JSONDecoder().decode(Token.self, from: data)
+                    completion(.success("\(username):\(token.result)"))
+                } catch {
+                    completion(.failure(error))
+                }
+            }
+
+
+
+
+
+            task.resume()
+        } catch {
+            completion(.failure(error))
+        }
     }
 
 }

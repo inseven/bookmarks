@@ -1,4 +1,4 @@
-// Copyright (c) 2018-2021 InSeven Limited
+// Copyright (c) 2020-2021 InSeven Limited
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,30 +18,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import SwiftUI
+import Foundation
 
-import BookmarksCore
+public enum ApplicationState: Identifiable {
 
-struct AccountSettingsView: View {
+    case logIn
 
-    @Environment(\.manager) var manager: BookmarksManager
-
-    @ObservedObject var settings: BookmarksCore.Settings
-
-    var body: some View {
-        VStack {
-            Form {
-                Section {
-                    TextField("API Token", text: $settings.pinboardApiKey)
-                    Button(action: {
-                        NSWorkspace.shared.open(URL(string: "https://pinboard.in/settings/password")!)
-                    }, label: {
-                        Text("Get your API token")
-                    })
-                    .buttonStyle(LinkButtonStyle())
-                }
-            }
-            Spacer()
+    public var id: String {
+        switch self {
+        case .logIn:
+            return "logIn"
         }
     }
 

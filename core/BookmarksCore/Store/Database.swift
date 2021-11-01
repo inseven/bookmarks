@@ -423,6 +423,25 @@ public class Database {
             """)
     }
 
+    public func clear(completion: @escaping (Swift.Result<Void, Error>) -> Void) {
+        let completion = DispatchQueue.global().asyncClosure(completion)
+        syncQueue.async {
+            do {
+                try self.db.transaction {
+                    let result = Swift.Result { () -> Void in
+                        try self.db.run(Schema.items.delete())
+                        try self.db.run(Schema.tags.delete())
+                        try self.db.run(Schema.items_to_tags.delete())
+                    }
+                    self.syncQueue_notifyObservers()
+                    completion(result)
+                }
+            } catch {
+                completion(.failure(error))
+            }
+        }
+    }
+
     public func deleteBookmark(identifier: String, completion: @escaping (Swift.Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {

@@ -18,34 +18,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Combine
-import SwiftUI
+import Foundation
 
-import BookmarksCore
+extension Pinboard {
 
-struct ContentView: View {
+    public struct Token: Codable {
 
-    @ObservedObject var manager: BookmarksManager
-    @State var sheet: ApplicationState? = nil
+        public let result: String
 
-    var body: some View {
-        NavigationView {
-            Bookmarks(bookmarksView: BookmarksView(database: manager.database, query: True().eraseToAnyQuery()))
+        public enum CodingKeys: String, CodingKey {
+            case result = "result"
         }
-        .navigationViewStyle(.stack)
-        .sheet(item: $sheet) { sheet in
-            switch sheet {
-            case .logIn:
-                LogInView()
-            }
+
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            self.result = try container.decode(String.self, forKey: .result)
         }
-        .onChange(of: manager.state) { newValue in
-            switch newValue {
-            case .idle:
-                sheet = nil
-            case .unauthorized:
-                sheet = .logIn
-            }
-        }
+
     }
+
 }

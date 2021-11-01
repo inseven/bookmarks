@@ -26,7 +26,21 @@ extension DispatchQueue {
         return { self.async { closure() } }
     }
 
+    public func asyncClosure(_ closure: (() -> Void)?) -> (() -> Void)? {
+        guard let closure = closure else {
+            return nil
+        }
+        return { self.async { closure() } }
+    }
+
     public func asyncClosure<T>(_ closure: @escaping (T) -> Void) -> (T) -> Void {
+        return { i in self.async { closure(i) } }
+    }
+
+    public func asyncClosure<T>(_ closure: ((T) -> Void)?) -> ((T) -> Void)? {
+        guard let closure = closure else {
+            return nil
+        }
         return { i in self.async { closure(i) } }
     }
 

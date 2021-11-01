@@ -24,17 +24,33 @@ import BookmarksCore
 
 struct MainWindow: View {
 
-    @Environment(\.manager) var manager
     @Environment(\.selection) var selection
 
+    @ObservedObject var manager: BookmarksManager
     @Binding var section: BookmarksSection?
+
+    @State var sheet: ApplicationState? = nil
 
     var body: some View {
         NavigationView {
             Sidebar(tagsView: manager.tagsView, settings: manager.settings, section: $section)
-            ContentView(selection: selection, section: $section, database: manager.database)
+            ContentView(selection: selection, section: $section, database: manager.database, sheet: $sheet)
         }
         .handlesSelectionSheets(selection)
+        .sheet(item: $sheet) { sheet in
+            switch sheet {
+            case .logIn:
+                LogInView()
+            }
+        }
+        .onChange(of: manager.state) { newValue in
+            switch newValue {
+            case .idle:
+                sheet = nil
+            case .unauthorized:
+                sheet = .logIn
+            }
+        }
         .observesApplicationFocus()
         .frameAutosaveName("Main Window")
     }

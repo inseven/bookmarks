@@ -43,28 +43,16 @@ struct SettingsView: View {
     var body: some View {
         VStack {
             Form {
-                Section(header: Text("Pinboard")) {
-                    TextField("API Token", text: $settings.pinboardApiKey)
-                    Button(action: {
-                        UIApplication.shared.open(URL(string: "https://pinboard.in/settings/password")!,
-                                                  options: [:],
-                                                  completionHandler: nil)
-                    }, label: {
-                        Text("Get your API token")
-                    })
-                }
-                Section() {
+                Section("Viewing") {
                     Toggle("Use In-App Browser", isOn: $settings.useInAppBrowser)
                 }
-                Section(header: Text("Thumbnails")) {
-                    Picker("Concurrent Downloads", selection: $settings.maximumConcurrentThumbnailDownloads) {
+                Section("Debug") {
+                    Picker("Concurrent Thumbnail Downloads", selection: $settings.maximumConcurrentThumbnailDownloads) {
                         ForEach(1 ..< 4) {
                             Text("\($0)").tag($0)
                         }
                     }
-                }
-                Section() {
-                    Button(action: {
+                    Button(role: .destructive) {
                         manager.imageCache.clear() { (result) in
                             DispatchQueue.main.async {
                                 switch result {
@@ -75,23 +63,36 @@ struct SettingsView: View {
                                 }
                             }
                         }
-                    }) {
-                        Text("Clear Cache").foregroundColor(.red)
+                    } label: {
+                        Text("Clear Cache")
+                            .frame(maxWidth: .infinity)
                     }
                 }
                 Section {
-                    Button(action: { sheet = .about }) {
-                        Text("About Bookmarks")
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                        manager.logout { _ in }
+                    } label: {
+                        Text("Log Out")
+                            .frame(maxWidth: .infinity)
+                    }
+                }
+                Section {
+                    Button {
+                        sheet = .about
+                    } label: {
+                        Text("About Bookmarks...")
+                            .foregroundColor(.primary)
                     }
                 }
             }
         }
         .navigationBarTitle("Settings", displayMode: .inline)
-        .navigationBarItems(trailing: Button(action: {
+        .navigationBarItems(trailing: Button {
             presentationMode.wrappedValue.dismiss()
-        }) {
+        } label: {
             Text("Done")
-                .fontWeight(.regular)
+                .bold()
         })
         .sheet(item: $sheet) { sheet in
             switch sheet {

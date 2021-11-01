@@ -11,7 +11,6 @@
 		D80710F326C4B855007272C0 /* MainWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80710F226C4B855007272C0 /* MainWindow.swift */; };
 		D8164D6626C08DD500756D43 /* AddTagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D6526C08DD500756D43 /* AddTagsView.swift */; };
 		D8164D6826C08EEC00756D43 /* BorderedSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D6726C08EEC00756D43 /* BorderedSelection.swift */; };
-		D840B006262103C4001E95D1 /* AccountSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840B005262103C4001E95D1 /* AccountSettingsView.swift */; };
 		D840B00A2621042B001E95D1 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840B0092621042B001E95D1 /* SettingsView.swift */; };
 		D840B01226210AF6001E95D1 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */; };
 		D861257326A60DF200EB5FEF /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D861257226A60DF200EB5FEF /* Sidebar.swift */; };
@@ -41,6 +40,7 @@
 		D8CF8CC3261E369D00E52E85 /* BookmarksCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D8CF8CC1261E369D00E52E85 /* BookmarksCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D8E0202C26C2E1CC00910833 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0202B26C2E1CC00910833 /* LoadingView.swift */; };
 		D8EB6E4526C3357F00C23B19 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EB6E4426C3357F00C23B19 /* ErrorHandler.swift */; };
+		D8F3F28F26EE776900BFA43B /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F3F28E26EE776900BFA43B /* LogInView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,7 +79,6 @@
 		D80710F226C4B855007272C0 /* MainWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
 		D8164D6526C08DD500756D43 /* AddTagsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTagsView.swift; sourceTree = "<group>"; };
 		D8164D6726C08EEC00756D43 /* BorderedSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderedSelection.swift; sourceTree = "<group>"; };
-		D840B005262103C4001E95D1 /* AccountSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountSettingsView.swift; sourceTree = "<group>"; };
 		D840B0092621042B001E95D1 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		D861257226A60DF200EB5FEF /* Sidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
@@ -119,6 +118,7 @@
 		D8ECA5DE2640580E00947EEC /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		D8ECA5DF2640582200947EEC /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		D8ECA5E02640583900947EEC /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		D8F3F28E26EE776900BFA43B /* LogInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -253,7 +253,6 @@
 		D8B04B43261F4A1200376ADD /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				D840B005262103C4001E95D1 /* AccountSettingsView.swift */,
 				D8164D6526C08DD500756D43 /* AddTagsView.swift */,
 				D8164D6726C08EEC00756D43 /* BorderedSelection.swift */,
 				D891C455261E32F90024E1A6 /* ContentView.swift */,
@@ -265,6 +264,7 @@
 				D861257B26AB741A00EB5FEF /* SidebarLink.swift */,
 				D8ACD7EE26BC81F7005F927A /* TokenField.swift */,
 				D80710F226C4B855007272C0 /* MainWindow.swift */,
+				D8F3F28E26EE776900BFA43B /* LogInView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -353,7 +353,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1240;
-				LastUpgradeCheck = 1250;
+				LastUpgradeCheck = 1310;
 				TargetAttributes = {
 					D891C44F261E32F90024E1A6 = {
 						CreatedOnToolsVersion = 12.4;
@@ -422,7 +422,6 @@
 				D879448F26CB4A5400D97155 /* MenuType.swift in Sources */,
 				D8B6E2C52620990400B2C239 /* Item.swift in Sources */,
 				D8A336FC26B56A4300436200 /* BookmarkShareCommands.swift in Sources */,
-				D840B006262103C4001E95D1 /* AccountSettingsView.swift in Sources */,
 				D8ACD7EF26BC81F7005F927A /* TokenField.swift in Sources */,
 				D8E0202C26C2E1CC00910833 /* LoadingView.swift in Sources */,
 				D879449526CB5E3D00D97155 /* Countable.swift in Sources */,
@@ -444,6 +443,7 @@
 				D8EB6E4526C3357F00C23B19 /* ErrorHandler.swift in Sources */,
 				D861257C26AB741A00EB5FEF /* SidebarLink.swift in Sources */,
 				D8164D6626C08DD500756D43 /* AddTagsView.swift in Sources */,
+				D8F3F28F26EE776900BFA43B /* LogInView.swift in Sources */,
 				D879449326CB5E1900D97155 /* MainMenuItemCondition.swift in Sources */,
 				D879449126CB57BE00D97155 /* ContextAwareKeyboardShortcut.swift in Sources */,
 			);

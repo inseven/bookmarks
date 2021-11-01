@@ -34,11 +34,11 @@ extension Pinboard {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             let updateTimeString = try container.decode(String.self, forKey: .updateTime)
             guard let updateTime = ISO8601DateFormatter.init().date(from: updateTimeString) else {
-                throw PinboardError.unexpectedResponse
+                throw BookmarksError.invalidResponse
             }
             self.updateTime = updateTime
         }
         
     }
-    
+
 }

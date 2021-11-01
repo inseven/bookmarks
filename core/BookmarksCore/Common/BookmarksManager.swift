@@ -54,8 +54,6 @@ public class BookmarksManager: ObservableObject {
     private var downloadManager: DownloadManager
     private var updater: Updater
 
-    // TODO: Inject the settings store in the future?
-
     public init() {
         documentsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         try! FileManager.default.createDirectory(at: documentsUrl, withIntermediateDirectories: true, attributes: nil)

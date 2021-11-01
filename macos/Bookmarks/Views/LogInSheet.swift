@@ -33,14 +33,13 @@ struct LogInSheet: View {
 
     func submit() {
         dispatchPrecondition(condition: .onQueue(.main))
-        Pinboard.apiToken(username: username, password: password) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let token):
-                    print("got token \(token)")
-                    manager.set(token: token)
-                    presentationMode.wrappedValue.dismiss()
-                case .failure(let error):
+        manager.authenticate(username: username, password: password) { result in
+            switch result {
+            case .success:
+                break
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    // TODO: Show this error.
                     print("failed with error \(error)")
                 }
             }

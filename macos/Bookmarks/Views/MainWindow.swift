@@ -28,9 +28,10 @@ struct MainWindow: View {
         case logIn
     }
 
-    @Environment(\.manager) var manager
     @Environment(\.selection) var selection
 
+    // TODO: Consider making this an environment object.
+    @ObservedObject var manager: BookmarksManager
     @Binding var section: BookmarksSection?
     @State var sheet: ApplicationSheet? = nil
 
@@ -40,12 +41,20 @@ struct MainWindow: View {
             ContentView(selection: selection, section: $section, database: manager.database, sheet: $sheet)
         }
         .handlesSelectionSheets(selection)
-        .sheet(item: $sheet, content: { sheet in
+        .sheet(item: $sheet) { sheet in
             switch sheet {
             case .logIn:
                 LogInSheet()
             }
-        })
+        }
+        .onChange(of: manager.state) { newValue in
+            switch newValue {
+            case .idle:
+                sheet = nil
+            case .unauthorized:
+                sheet = .logIn
+            }
+        }
         .observesApplicationFocus()
         .frameAutosaveName("Main Window")
     }

@@ -20,21 +20,37 @@
 
 import Foundation
 
+protocol UpdaterDelegate: AnyObject {
+
+    func updaterDidStart(_ updater: Updater)
+    func updaterDidFinish(_ updater: Updater)
+    func updater(_ updater: Updater, didFailWithError error: Error)
+
+}
+
 public class Updater {
 
     static var updateTimeoutSeconds = 5 * 60.0
 
-    let syncQueue = DispatchQueue(label: "Updater.syncQueue")
+    private let syncQueue = DispatchQueue(label: "Updater.syncQueue")
+    private let targetQueue = DispatchQueue(label: "Updater.targetQueue")
+    private let database: Database
+    private var timer: Timer?
 
-    let database: Database
+    private var token: String? // Synchronized on syncQueue
+    private var lastUpdate: Date? = nil  // Synchronized on syncQueue
+    weak var delegate: UpdaterDelegate?
 
-    var timer: Timer? = nil
+    public var user: String? {
+        dispatchPrecondition(condition: .notOnQueue(syncQueue))
+        var user: String? = nil
+        syncQueue.sync {
+            user = self.token?.components(separatedBy: ":").first
+        }
+        return user
+    }
 
-    // TODO: This should be nullable
-    var token: String // Synchronized on syncQueue
-    var lastUpdate: Date? = nil  // Synchronized on syncQueue
-
-    public init(database: Database, token: String) {
+    public init(database: Database, token: String?) {
         self.database = database
         self.token = token
     }
@@ -43,6 +59,16 @@ public class Updater {
         dispatchPrecondition(condition: .onQueue(syncQueue))
 
         print("updating...")
+        targetQueue.async {
+            self.delegate?.updaterDidStart(self)
+        }
+
+        guard let token = token else {
+            targetQueue.async {
+                self.delegate?.updater(self, didFailWithError: BookmarksError.unauthorized)
+            }
+            return
+        }
 
         do {
 
@@ -93,15 +119,22 @@ public class Updater {
             // Update the last update date.
             self.lastUpdate = update.updateTime
 
+            targetQueue.async {
+                self.delegate?.updaterDidFinish(self)
+            }
+
         } catch {
-            print("failed to update bookmarks with error \(error)")
+            targetQueue.async {
+                self.delegate?.updater(self, didFailWithError: error)
+            }
         }
     }
 
     public func start() {
         dispatchPrecondition(condition: .notOnQueue(syncQueue))
         syncQueue.sync {
-            timer = Timer.scheduledTimer(withTimeInterval: Self.updateTimeoutSeconds, repeats: true) { [weak self] timer in
+            timer = Timer.scheduledTimer(withTimeInterval: Self.updateTimeoutSeconds,
+                                         repeats: true) { [weak self] timer in
                 guard let self = self else {
                     return
                 }
@@ -115,20 +148,34 @@ public class Updater {
     public func set(token: String) {
         syncQueue.async {
             self.token = token
-            self.syncQueue_update(force: true)
+            self.syncQueue_update(force: true)  // TODO: Do I want to do this?
+        }
+    }
+
+    public func logout() {
+        syncQueue.async {
+            self.token = nil
+            self.syncQueue_update(force: true)  // TODO: Do I want to do this?
+            // TODO: Empty the database.
         }
     }
 
     public func update(force: Bool = false) {
         syncQueue.async {
             self.syncQueue_update(force: force)
+            // TODO: Delete everything.
+            self.syncQueue_update(force: true)
         }
     }
 
     public func deleteBookmarks(_ bookmarks: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
+        guard let token = token else {
+            completion(.failure(BookmarksError.unauthorized))
+            return
+        }
         syncQueue.async {
-            let pinboard = Pinboard(token: self.token)
+            let pinboard = Pinboard(token: token)
             let result = Result {
                 for bookmark in bookmarks {
                     try self.database.deleteBookmark(identifier: bookmark.identifier)
@@ -141,8 +188,12 @@ public class Updater {
 
     public func updateBookmarks(_ bookmarks: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
+        guard let token = token else {
+            completion(.failure(BookmarksError.unauthorized))
+            return
+        }
         syncQueue.async {
-            let pinboard = Pinboard(token: self.token)
+            let pinboard = Pinboard(token: token)
             let result = Result { () -> Void in
                 for bookmark in bookmarks {
                     _ = try self.database.insertOrUpdateBookmark(bookmark)
@@ -156,8 +207,12 @@ public class Updater {
 
     public func renameTag(_ old: String, to new: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
+        guard let token = token else {
+            completion(.failure(BookmarksError.unauthorized))
+            return
+        }
         syncQueue.async {
-            let pinboard = Pinboard(token: self.token)
+            let pinboard = Pinboard(token: token)
             let result = Result {
                 try pinboard.tagsRename(old, to: new)
                 // TODO: Perform the changes locally.
@@ -169,8 +224,12 @@ public class Updater {
 
     public func deleteTag(_ tag: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
+        guard let token = token else {
+            completion(.failure(BookmarksError.unauthorized))
+            return
+        }
         syncQueue.async {
-            let pinboard = Pinboard(token: self.token)
+            let pinboard = Pinboard(token: token)
             let result = Result {
                 try self.database.deleteTag(tag: tag)
                 try pinboard.tagsDelete(tag)

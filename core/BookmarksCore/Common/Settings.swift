@@ -34,7 +34,7 @@ final public class Settings: ObservableObject {
         UserDefaults.standard
     }
 
-    @Published public var pinboardApiKey: String {
+    @Published public var pinboardApiKey: String? {
         didSet { defaults.set(pinboardApiKey, forKey: SettingsKey.pinboardApiKey.rawValue) }
     }
 

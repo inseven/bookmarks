@@ -34,7 +34,7 @@ struct BookmarksApp: App {
 
     var body: some Scene {
         WindowGroup {
-            MainWindow(section: $section)
+            MainWindow(manager: manager, section: $section)
                 .environment(\.selection, selection)
         }
         .commands {
@@ -84,6 +84,11 @@ struct BookmarksApp: App {
                 BookmarkShareCommands(selection: selection)
                     .trailingDivider()
                 BookmarkTagCommands(selection: selection, section: $section)
+            }
+            CommandMenu("Account") {
+                Button("Log Out...") {
+                    manager.logout()
+                }
             }
         }
         SwiftUI.Settings {

@@ -155,8 +155,14 @@ public class Updater {
     public func logout() {
         syncQueue.async {
             self.token = nil
+            self.database.clear { result in
+                print("result = \(result)")
+            }
+            // TODO: Right now this has the side effect of changing the top-level state but we should do it ourselves.
             self.syncQueue_update(force: true)  // TODO: Do I want to do this?
             // TODO: Empty the database.
+            // TODO: This should clear the last updated?
+            // TODO: Would it be cleaner to store all state in a single variable so it can be cleared out / easily serialized?
         }
     }
 

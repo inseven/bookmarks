@@ -109,7 +109,7 @@ public class BookmarksManager: ObservableObject {
         // TODO: Cancel any ongoing operation.
         dispatchPrecondition(condition: .onQueue(.main))
         settings.pinboardApiKey = nil
-        updater.logout()  // TODO: Completion
+        updater.logout()  // TODO: Completion so we can show progress?
     }
 
     public func refresh() {

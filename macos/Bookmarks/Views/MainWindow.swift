@@ -26,9 +26,9 @@ struct MainWindow: View {
 
     @Environment(\.selection) var selection
 
-    // TODO: Consider making this an environment object.
     @ObservedObject var manager: BookmarksManager
     @Binding var section: BookmarksSection?
+
     @State var sheet: ApplicationState? = nil
 
     var body: some View {
@@ -40,7 +40,7 @@ struct MainWindow: View {
         .sheet(item: $sheet) { sheet in
             switch sheet {
             case .logIn:
-                LogInSheet()
+                LogInView()
             }
         }
         .onChange(of: manager.state) { newValue in

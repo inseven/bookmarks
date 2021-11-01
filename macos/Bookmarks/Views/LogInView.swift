@@ -22,7 +22,7 @@ import SwiftUI
 
 import BookmarksCore
 
-struct LogInSheet: View {
+struct LogInView: View {
 
     @Environment(\.manager) var manager
 

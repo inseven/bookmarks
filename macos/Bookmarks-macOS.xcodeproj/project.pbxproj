@@ -40,7 +40,7 @@
 		D8CF8CC3261E369D00E52E85 /* BookmarksCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D8CF8CC1261E369D00E52E85 /* BookmarksCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D8E0202C26C2E1CC00910833 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0202B26C2E1CC00910833 /* LoadingView.swift */; };
 		D8EB6E4526C3357F00C23B19 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EB6E4426C3357F00C23B19 /* ErrorHandler.swift */; };
-		D8F3F28F26EE776900BFA43B /* LogInSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F3F28E26EE776900BFA43B /* LogInSheet.swift */; };
+		D8F3F28F26EE776900BFA43B /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F3F28E26EE776900BFA43B /* LogInView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -118,7 +118,7 @@
 		D8ECA5DE2640580E00947EEC /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		D8ECA5DF2640582200947EEC /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		D8ECA5E02640583900947EEC /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
-		D8F3F28E26EE776900BFA43B /* LogInSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInSheet.swift; sourceTree = "<group>"; };
+		D8F3F28E26EE776900BFA43B /* LogInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -264,7 +264,7 @@
 				D861257B26AB741A00EB5FEF /* SidebarLink.swift */,
 				D8ACD7EE26BC81F7005F927A /* TokenField.swift */,
 				D80710F226C4B855007272C0 /* MainWindow.swift */,
-				D8F3F28E26EE776900BFA43B /* LogInSheet.swift */,
+				D8F3F28E26EE776900BFA43B /* LogInView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -443,7 +443,7 @@
 				D8EB6E4526C3357F00C23B19 /* ErrorHandler.swift in Sources */,
 				D861257C26AB741A00EB5FEF /* SidebarLink.swift in Sources */,
 				D8164D6626C08DD500756D43 /* AddTagsView.swift in Sources */,
-				D8F3F28F26EE776900BFA43B /* LogInSheet.swift in Sources */,
+				D8F3F28F26EE776900BFA43B /* LogInView.swift in Sources */,
 				D879449326CB5E1900D97155 /* MainMenuItemCondition.swift in Sources */,
 				D879449126CB57BE00D97155 /* ContextAwareKeyboardShortcut.swift in Sources */,
 			);

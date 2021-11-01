@@ -46,15 +46,13 @@ struct SettingsView: View {
                 Section {
                     Toggle("Use In-App Browser", isOn: $settings.useInAppBrowser)
                 }
-                Section("Thumbnails") {
-                    Picker("Concurrent Downloads", selection: $settings.maximumConcurrentThumbnailDownloads) {
+                Section("Debug") {
+                    Picker("Concurrent Thumbnail Downloads", selection: $settings.maximumConcurrentThumbnailDownloads) {
                         ForEach(1 ..< 4) {
                             Text("\($0)").tag($0)
                         }
                     }
-                }
-                Section {
-                    Button(action: {
+                    Button {
                         manager.imageCache.clear() { (result) in
                             DispatchQueue.main.async {
                                 switch result {
@@ -65,8 +63,9 @@ struct SettingsView: View {
                                 }
                             }
                         }
-                    }) {
-                        Text("Clear Cache").foregroundColor(.red)
+                    } label: {
+                        Text("Clear Cache")
+                            .foregroundColor(.red)
                     }
                 }
                 Section {
@@ -87,9 +86,9 @@ struct SettingsView: View {
             }
         }
         .navigationBarTitle("Settings", displayMode: .inline)
-        .navigationBarItems(trailing: Button(action: {
+        .navigationBarItems(trailing: Button {
             presentationMode.wrappedValue.dismiss()
-        }) {
+        } label: {
             Text("Done")
                 .fontWeight(.regular)
         })

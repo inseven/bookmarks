@@ -87,7 +87,7 @@ struct BookmarksApp: App {
             }
             CommandMenu("Account") {
                 Button("Log Out...") {
-                    manager.logout()
+                    manager.logout { _ in }
                 }
             }
         }

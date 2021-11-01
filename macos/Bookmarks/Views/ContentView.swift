@@ -31,7 +31,7 @@ struct ContentView: View {
 
     @ObservedObject var selection: BookmarksSelection
     @Binding var section: BookmarksSection?
-    @Binding var sheet: MainWindow.ApplicationSheet?
+    @Binding var sheet: ApplicationState?
 
     @State var underlyingSection: BookmarksSection?
     @StateObject var bookmarksView: BookmarksView
@@ -41,7 +41,7 @@ struct ContentView: View {
 
     private var subscription: AnyCancellable?
 
-    init(selection: BookmarksSelection, section: Binding<BookmarksSection?>, database: Database, sheet: Binding<MainWindow.ApplicationSheet?>) {
+    init(selection: BookmarksSelection, section: Binding<BookmarksSection?>, database: Database, sheet: Binding<ApplicationState?>) {
         self.selection = selection
         _section = section
         let bookmarksView = Deferred(BookmarksView(database: database, query: True().eraseToAnyQuery()))
@@ -158,14 +158,6 @@ struct ContentView: View {
                 }
                 .help("Delete")
                 .disabled(selection.isEmpty)
-            }
-            ToolbarItem {
-                Button {
-                    sheet = .logIn
-                } label: {
-                    SwiftUI.Image(systemName: "person")
-                }
-                .help("Log In")
             }
 
             ToolbarItem {

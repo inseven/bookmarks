@@ -43,7 +43,7 @@ struct SettingsView: View {
     var body: some View {
         VStack {
             Form {
-                Section {
+                Section("Viewing") {
                     Toggle("Use In-App Browser", isOn: $settings.useInAppBrowser)
                 }
                 Section("Debug") {
@@ -52,7 +52,7 @@ struct SettingsView: View {
                             Text("\($0)").tag($0)
                         }
                     }
-                    Button {
+                    Button(role: .destructive) {
                         manager.imageCache.clear() { (result) in
                             DispatchQueue.main.async {
                                 switch result {
@@ -65,22 +65,24 @@ struct SettingsView: View {
                         }
                     } label: {
                         Text("Clear Cache")
-                            .foregroundColor(.red)
+                            .frame(maxWidth: .infinity)
                     }
                 }
                 Section {
                     Button {
                         presentationMode.wrappedValue.dismiss()
-                        manager.logout()
+                        manager.logout { _ in }
                     } label: {
                         Text("Log Out")
+                            .frame(maxWidth: .infinity)
                     }
                 }
                 Section {
                     Button {
                         sheet = .about
                     } label: {
-                        Text("About Bookmarks")
+                        Text("About Bookmarks...")
+                            .foregroundColor(.primary)
                     }
                 }
             }
@@ -90,7 +92,7 @@ struct SettingsView: View {
             presentationMode.wrappedValue.dismiss()
         } label: {
             Text("Done")
-                .fontWeight(.regular)
+                .bold()
         })
         .sheet(item: $sheet) { sheet in
             switch sheet {

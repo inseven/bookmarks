@@ -37,7 +37,7 @@ public class Updater {
     private let database: Database
     private var timer: Timer?
 
-    private var token: String? // Synchronized on syncQueue
+    private var settings: Settings
     private var lastUpdate: Date? = nil  // Synchronized on syncQueue
     weak var delegate: UpdaterDelegate?
 
@@ -45,14 +45,30 @@ public class Updater {
         dispatchPrecondition(condition: .notOnQueue(syncQueue))
         var user: String? = nil
         syncQueue.sync {
-            user = self.token?.components(separatedBy: ":").first
+            user = self.settings.pinboardApiKey?.components(separatedBy: ":").first
         }
         return user
     }
 
-    public init(database: Database, token: String?) {
+    private func syncQueue_token() -> String? {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
+        var token: String? = nil
+        DispatchQueue.main.sync {
+            token = settings.pinboardApiKey
+        }
+        return token
+    }
+
+    private func syncQueue_setToken(_ token: String?) {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
+        DispatchQueue.main.sync {
+            settings.pinboardApiKey = token
+        }
+    }
+
+    public init(database: Database, settings: Settings) {
         self.database = database
-        self.token = token
+        self.settings = settings
     }
 
     fileprivate func syncQueue_update(force: Bool) {
@@ -63,7 +79,7 @@ public class Updater {
             self.delegate?.updaterDidStart(self)
         }
 
-        guard let token = token else {
+        guard let token = syncQueue_token() else {
             targetQueue.async {
                 self.delegate?.updater(self, didFailWithError: BookmarksError.unauthorized)
             }
@@ -145,28 +161,31 @@ public class Updater {
         }
     }
 
-    public func set(token: String) {
-        syncQueue.async {
-            self.token = token
-            self.syncQueue_update(force: true)  // TODO: Do I want to do this?
+    public func authenticate(username: String,
+                             password: String,
+                             completion: @escaping (Result<Void, Error>) -> Void) {
+        let completion = DispatchQueue.global().asyncClosure(completion)
+        Pinboard.apiToken(username: username, password: password) { result in
+            self.syncQueue.sync {
+                switch result {
+                case .success(let token):
+                    self.syncQueue_setToken(token)
+                    self.update(force: true)  // Enqueue an initial update.
+                    completion(.success(()))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
         }
     }
 
     public func logout(completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
-            self.token = nil
             // TODO: Cancel any ongoing sync.
-            // TODO: Handle the error?
-            self.database.clear { result in
-                print("result = \(result)")
-                completion(result)
-            }
-            // TODO: Right now this has the side effect of changing the top-level state but we should do it ourselves.
-//            self.syncQueue_update(force: true)  // TODO: Do I want to do this?
-            // TODO: Empty the database.
-            // TODO: This should clear the last updated?
-            // TODO: Would it be cleaner to store all state in a single variable so it can be cleared out / easily serialized?
+            self.syncQueue_setToken(nil)
+            self.lastUpdate = nil
+            self.database.clear(completion: completion)
         }
     }
 
@@ -180,7 +199,7 @@ public class Updater {
 
     public func deleteBookmarks(_ bookmarks: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        guard let token = token else {
+        guard let token = syncQueue_token() else {
             completion(.failure(BookmarksError.unauthorized))
             return
         }
@@ -198,7 +217,7 @@ public class Updater {
 
     public func updateBookmarks(_ bookmarks: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        guard let token = token else {
+        guard let token = syncQueue_token() else {
             completion(.failure(BookmarksError.unauthorized))
             return
         }
@@ -217,7 +236,7 @@ public class Updater {
 
     public func renameTag(_ old: String, to new: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        guard let token = token else {
+        guard let token = syncQueue_token() else {
             completion(.failure(BookmarksError.unauthorized))
             return
         }
@@ -234,7 +253,7 @@ public class Updater {
 
     public func deleteTag(_ tag: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        guard let token = token else {
+        guard let token = syncQueue_token() else {
             completion(.failure(BookmarksError.unauthorized))
             return
         }

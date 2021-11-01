@@ -25,7 +25,6 @@ import BookmarksCore
 struct LogInSheet: View {
 
     @Environment(\.manager) var manager
-    @Environment(\.presentationMode) var presentationMode
 
     @State var username: String = ""
     @State var password: String = ""
@@ -47,7 +46,10 @@ struct LogInSheet: View {
 
     func createAccount() {
         dispatchPrecondition(condition: .onQueue(.main))
-        NSWorkspace.shared.open(URL(string: "https://pinboard.in/signup/")!)
+        guard let url = URL(string: "https://pinboard.in/signup/") else {
+            return
+        }
+        manager.open(url: url, completion: { _ in })
     }
 
     var body: some View {
@@ -76,12 +78,12 @@ struct LogInSheet: View {
                     Text("Log In").frame(maxWidth: 300)
                 }
                 .keyboardShortcut(.defaultAction)
-                .headerProminence(.increased)
+                .buttonStyle(.borderedProminent)
                 Button(action: createAccount) {
                     Text("Create Account").frame(maxWidth: 300)
                 }
+                .buttonStyle(.bordered)
             }
-            .buttonStyle(.bordered)
             .controlSize(.large)
 
         }

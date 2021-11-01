@@ -95,7 +95,7 @@ struct AboutView: View {
                 presentationMode.wrappedValue.dismiss()
             } label: {
                 Text("Done")
-                    .fontWeight(.regular)
+                    .bold()
             })
         }
         .navigationViewStyle(StackNavigationViewStyle())

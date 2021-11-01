@@ -65,7 +65,7 @@ public class BookmarksManager: ObservableObject {
         imageCache = FileImageCache(path: documentsUrl.appendingPathComponent("thumbnails"))
         downloadManager = DownloadManager(limit: settings.maximumConcurrentThumbnailDownloads)
         thumbnailManager = ThumbnailManager(imageCache: imageCache, downloadManager: downloadManager)
-        updater = Updater(database: database, token: settings.pinboardApiKey)
+        updater = Updater(database: database, settings: settings)
         tagsView = TagsView(database: database)
 
         updater.delegate = self
@@ -85,34 +85,35 @@ public class BookmarksManager: ObservableObject {
         return updater.user
     }
 
-    // TODO: Push the authentication down into the account?
     public func authenticate(username: String,
                              password: String,
                              completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
-        Pinboard.apiToken(username: username, password: password) { result in
-            switch result {
-            case .success(let token):
-                DispatchQueue.main.sync {
-                    self.settings.pinboardApiKey = token
-                    self.updater.set(token: token)
+        updater.authenticate(username: username, password: password) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success():
                     self.state = .idle
+                    completion(.success(()))
+                case .failure(let error):
+                    completion(.failure(error))
                 }
-                completion(.success(()))
-            case .failure(let error):
-                completion(.failure(error))
             }
         }
     }
 
-    public func logout() {
-        // TODO: Cancel any ongoing operation.
+    public func logout(completion: @escaping (Result<Void, Error>) -> Void) {
         dispatchPrecondition(condition: .onQueue(.main))
-        settings.pinboardApiKey = nil  // TODO: Push this down.
+        let completion = DispatchQueue.global().asyncClosure(completion)
         updater.logout { result in
-            print("logout result = \(result)")
             DispatchQueue.main.async {
-                self.state = .unauthorized
+                switch result {
+                case .success():
+                    self.state = .unauthorized
+                    completion(.success(()))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
             }
         }
     }

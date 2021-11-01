@@ -74,14 +74,20 @@ struct AboutView: View {
                 }
                 Section("InSeven") {
                     Button("Company") {
-                        UIApplication.shared.open(URL(string: "https://inseven.co.uk")!)
+                        guard let url = URL(string: "https://inseven.co.uk") else {
+                            return
+                        }
+                        UIApplication.shared.open(url)
                     }
                     Button("Support") {
                         var components = URLComponents()
                         components.scheme = "mailto"
                         components.path = "support@inseven.co.uk"
                         components.queryItems = [URLQueryItem(name: "subject", value: "Bookmarks Support")]
-                        UIApplication.shared.open(components.url!)
+                        guard let url = components.url else {
+                            return
+                        }
+                        UIApplication.shared.open(url)
                     }
                 }
                 Section("Thanks") {

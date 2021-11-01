@@ -42,8 +42,8 @@ public class FileImageCache: ImageCache {
     }
 
     public func set(identifier: String, image: SafeImage, completion: @escaping (Result<Bool, Error>) -> Void) {
+        let targetQueueCompletion = Utilities.completion(on: self.targetQueue, completion: completion)
         syncQueue.async {
-            let targetQueueCompletion = Utilities.completion(on: self.targetQueue, completion: completion)
             do {
                 let path = self.path(for: identifier)
                 let data = image.pngData()
@@ -56,8 +56,8 @@ public class FileImageCache: ImageCache {
     }
 
     public func get(identifier: String, completion: @escaping (Result<SafeImage, Error>) -> Void) {
+        let targetQueueCompletion = Utilities.completion(on: self.targetQueue, completion: completion)
         syncQueue.async {
-            let targetQueueCompletion = Utilities.completion(on: self.targetQueue, completion: completion)
             let path = self.path(for: identifier)
             do {
                 let data = try Data(contentsOf: path)
@@ -73,8 +73,8 @@ public class FileImageCache: ImageCache {
     }
 
     public func clear(completion: @escaping (Result<Bool, Error>) -> Void) {
+        let targetQueueCompletion = Utilities.completion(on: self.targetQueue, completion: completion)
         syncQueue.async {
-            let targetQueueCompletion = Utilities.completion(on: self.targetQueue, completion: completion)
             do {
                 try FileManager.default.removeItem(at: self.path)
                 try! FileManager.default.createDirectory(at: self.path, withIntermediateDirectories: true)

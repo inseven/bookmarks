@@ -337,6 +337,7 @@ struct ContentView: View {
 
     @ObservedObject var selection: BookmarksSelection
     @Binding var section: BookmarksSection?
+    @Binding var sheet: ApplicationState?
 
     @State var underlyingSection: BookmarksSection?
     @StateObject var bookmarksView: BookmarksView
@@ -346,13 +347,14 @@ struct ContentView: View {
 
     private var subscription: AnyCancellable?
 
-    init(selection: BookmarksSelection, section: Binding<BookmarksSection?>, database: Database) {
+    init(selection: BookmarksSelection, section: Binding<BookmarksSection?>, database: Database, sheet: Binding<ApplicationState?>) {
         self.selection = selection
         _section = section
         let bookmarksView = Deferred(BookmarksView(database: database, query: True().eraseToAnyQuery()))
         let selectionTracker = Deferred(SelectionTracker(items: bookmarksView.get().$bookmarks))
         _bookmarksView = StateObject(wrappedValue: bookmarksView.get())
         _selectionTracker = StateObject(wrappedValue: selectionTracker.get())
+        _sheet = sheet
     }
 
     var navigationTitle: String {

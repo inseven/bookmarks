@@ -34,9 +34,13 @@ public enum BookmarksError: Error, Equatable {
     case bookmarkNotFound(url: URL)
     case tagNotFound(name: String)
 
+    case unauthorized
     case corrupt
     case timeout
     case malformedBookmark
+    case unknownResponse
+    case invalidResponse
+    case httpError(HTTPStatus)
 
     case openFailure
     

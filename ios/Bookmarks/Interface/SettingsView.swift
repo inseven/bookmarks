@@ -43,27 +43,17 @@ struct SettingsView: View {
     var body: some View {
         VStack {
             Form {
-                Section(header: Text("Pinboard")) {
-                    TextField("API Token", text: $settings.pinboardApiKey)
-                    Button(action: {
-                        UIApplication.shared.open(URL(string: "https://pinboard.in/settings/password")!,
-                                                  options: [:],
-                                                  completionHandler: nil)
-                    }, label: {
-                        Text("Get your API token")
-                    })
-                }
-                Section() {
+                Section {
                     Toggle("Use In-App Browser", isOn: $settings.useInAppBrowser)
                 }
-                Section(header: Text("Thumbnails")) {
+                Section("Thumbnails") {
                     Picker("Concurrent Downloads", selection: $settings.maximumConcurrentThumbnailDownloads) {
                         ForEach(1 ..< 4) {
                             Text("\($0)").tag($0)
                         }
                     }
                 }
-                Section() {
+                Section {
                     Button(action: {
                         manager.imageCache.clear() { (result) in
                             DispatchQueue.main.async {

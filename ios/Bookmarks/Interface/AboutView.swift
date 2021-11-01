@@ -45,7 +45,11 @@ struct AboutView: View {
         Bundle.main.infoDictionary?["CFBundleVersion"] as? String
     }
 
-    var people = [
+    var contributors = [
+        "Jason Morley",
+    ]
+
+    var thanks = [
         "Blake Merryman",
         "Joanne Wong",
         "Lukas Fittl",
@@ -90,8 +94,13 @@ struct AboutView: View {
                         UIApplication.shared.open(url)
                     }
                 }
+                Section("Contributors") {
+                    ForEach(contributors) { person in
+                        Text(person)
+                    }
+                }
                 Section("Thanks") {
-                    ForEach(people) { person in
+                    ForEach(thanks) { person in
                         Text(person)
                     }
                 }

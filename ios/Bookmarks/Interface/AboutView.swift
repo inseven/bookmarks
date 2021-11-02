@@ -29,7 +29,7 @@ struct AboutView: View {
     var body: some View {
         NavigationView {
             Form {
-                BuildSection()
+                BuildSection("inseven/bookmarks")
                 Section("InSeven") {
                     Button("Company") {
                         guard let url = URL(string: "https://inseven.co.uk") else {

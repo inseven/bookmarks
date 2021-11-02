@@ -73,11 +73,20 @@ struct LogInView: View {
                     }
                 }
             }
+            .disabled(authenticating)
             .navigationTitle("Sign In")
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(trailing: Button(action: submit) {
-                Text("Next")
-            }.disabled(authenticating))
+            .navigationBarItems(trailing: HStack {
+                switch authenticating {
+                case true:
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                case false:
+                    Button(action: submit) {
+                        Text("Next")
+                    }
+                }
+            }.animation(.none, value: authenticating))
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                     self.focus = .username

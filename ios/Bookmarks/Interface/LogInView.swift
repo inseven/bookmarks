@@ -25,13 +25,19 @@ import BookmarksCore
 import Introspect
 
 struct LogInView: View {
+    
+    enum Field: Hashable {
+        case username
+        case password
+    }
 
     @Environment(\.manager) var manager
     @Environment(\.presentationMode) var presentationMode
 
-    @State var username: String = ""
-    @State var password: String = ""
-    @State var authenticating = false
+    @FocusState private var focus: Field?
+    @State private var username: String = ""
+    @State private var password: String = ""
+    @State private var authenticating = false
 
     func submit() {
         dispatchPrecondition(condition: .onQueue(.main))
@@ -65,8 +71,10 @@ struct LogInView: View {
                     TextField("Username", text: $username)
                         .textInputAutocapitalization(.never)
                         .disableAutocorrection(true)
+                        .focused($focus, equals: .username)
                     SecureField("Password", text: $password)
                         .onSubmit(submit)
+                        .focused($focus, equals: .password)
                 } footer: {
                     VStack {
                         Text("Your username and password are used to access your Pinboard API token and are not stored. You can reset your Pinboard API token anytime from the Pinboard website.\n\nCreate an account at [https://pinboard.in/signup/](https://pinboard.in/signup/).")
@@ -78,6 +86,11 @@ struct LogInView: View {
             .navigationBarItems(trailing: Button(action: submit) {
                 Text("Next")
             }.disabled(authenticating))
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    self.focus = .username
+                }
+            }
         }
         .navigationViewStyle(.stack)
         .introspectViewController { navigationController in

@@ -46,26 +46,9 @@ struct SettingsView: View {
                 Section("Viewing") {
                     Toggle("Use In-App Browser", isOn: $settings.useInAppBrowser)
                 }
-                Section("Debug") {
-                    Picker("Concurrent Thumbnail Downloads", selection: $settings.maximumConcurrentThumbnailDownloads) {
-                        ForEach(1 ..< 4) {
-                            Text("\($0)").tag($0)
-                        }
-                    }
-                    Button(role: .destructive) {
-                        manager.imageCache.clear() { (result) in
-                            DispatchQueue.main.async {
-                                switch result {
-                                case .success:
-                                    alert = .success(message: "Successfully cleared the cache!")
-                                case .failure(let error):
-                                    alert = .error(error: error)
-                                }
-                            }
-                        }
-                    } label: {
-                        Text("Clear Cache")
-                            .frame(maxWidth: .infinity)
+                Section {
+                    NavigationLink("Debug") {
+                        DebugView(settings: settings)
                     }
                 }
                 Section {

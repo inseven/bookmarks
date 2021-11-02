@@ -16,3 +16,6 @@
 [submodule "core/swift-algorithm-club"]
 	path = core/swift-algorithm-club
 	url = git@github.com:jbmorley/swift-algorithm-club.git
+[submodule "diligence"]
+	path = diligence
+	url = git@github.com:inseven/diligence.git

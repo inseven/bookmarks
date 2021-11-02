@@ -20,17 +20,12 @@
 
 import SwiftUI
 
-struct LicenseView: View {
+public extension Alert {
 
-    var name: String
-    var filename: String
-
-    var body: some View {
-        ScrollView {
-            Text(contentsOf: filename)
-                .padding()
-        }
-        .navigationTitle(name)
+    init(error: Error?) {
+        self.init(title: Text("Error"),
+                  message: Text(error?.localizedDescription ?? ""),
+                  dismissButton: .default(Text("OK")))
     }
 
 }

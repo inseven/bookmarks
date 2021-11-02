@@ -45,9 +45,14 @@ struct Bookmarks: View {
                             UIApplication.shared.open(bookmark.url)
                         }
                         .contextMenu(ContextMenu {
-                            Button("Share") {
-                                print("Share")
+                            Button {
                                 print(bookmark.identifier)
+                            } label: {
+                                HStack {
+                                    Text("Share")
+                                    Spacer()
+                                    Image(systemName: "square.and.arrow.up")
+                                }
                             }
                         })
                 }

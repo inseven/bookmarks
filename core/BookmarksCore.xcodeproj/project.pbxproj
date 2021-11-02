@@ -17,6 +17,10 @@
 		D82BF6212730978B004978AD /* HTTPStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82BF61F2730978B004978AD /* HTTPStatus.swift */; };
 		D82BF623273098D1004978AD /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82BF622273098D1004978AD /* Token.swift */; };
 		D82BF624273098D1004978AD /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82BF622273098D1004978AD /* Token.swift */; };
+		D82BF6292730A249004978AD /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82BF6282730A249004978AD /* Alert.swift */; };
+		D82BF62A2730A249004978AD /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82BF6282730A249004978AD /* Alert.swift */; };
+		D82BF62C2730A27E004978AD /* Binding+mappedToBool.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82BF62B2730A27E004978AD /* Binding+mappedToBool.swift */; };
+		D82BF62D2730A27E004978AD /* Binding+mappedToBool.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82BF62B2730A27E004978AD /* Binding+mappedToBool.swift */; };
 		D84CE46D261E29A900AF1901 /* Boolean.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CE46C261E29A900AF1901 /* Boolean.swift */; };
 		D84CE484261E2AD000AF1901 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CE483261E2AD000AF1901 /* Post.swift */; };
 		D84CE488261E2B7D00AF1901 /* Pinboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CE487261E2B7D00AF1901 /* Pinboard.swift */; };
@@ -143,6 +147,8 @@
 		D80710EE26C485CA007272C0 /* TrailingDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrailingDivider.swift; sourceTree = "<group>"; };
 		D82BF61F2730978B004978AD /* HTTPStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPStatus.swift; sourceTree = "<group>"; };
 		D82BF622273098D1004978AD /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
+		D82BF6282730A249004978AD /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
+		D82BF62B2730A27E004978AD /* Binding+mappedToBool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Binding+mappedToBool.swift"; sourceTree = "<group>"; };
 		D84CE46C261E29A900AF1901 /* Boolean.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Boolean.swift; sourceTree = "<group>"; };
 		D84CE483261E2AD000AF1901 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		D84CE487261E2B7D00AF1901 /* Pinboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pinboard.swift; sourceTree = "<group>"; };
@@ -332,6 +338,8 @@
 		D8AA4053261E2E7A00D11421 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				D82BF6282730A249004978AD /* Alert.swift */,
+				D82BF62B2730A27E004978AD /* Binding+mappedToBool.swift */,
 				D895D22B26B301E600614260 /* Color.swift */,
 				D890D1BC26A2201700C47489 /* DispatchQueue.swift */,
 				D895D22E26B3027700614260 /* Image.swift */,
@@ -654,6 +662,7 @@
 				D8AA4055261E2E8D00D11421 /* String.swift in Sources */,
 				D861257026A60CF300EB5FEF /* TagsView.swift in Sources */,
 				D8D3F643261E5EB500B2D66F /* TFHppleElement.m in Sources */,
+				D82BF6292730A249004978AD /* Alert.swift in Sources */,
 				D8D3F63D261E5EB500B2D66F /* TFHpple.m in Sources */,
 				D82BF6202730978B004978AD /* HTTPStatus.swift in Sources */,
 				D8D3F5B6261E5AF300B2D66F /* UIImage.swift in Sources */,
@@ -668,6 +677,7 @@
 				D8989D5F26B76C8300F06A85 /* Debouncer.swift in Sources */,
 				D895D22F26B3027700614260 /* Image.swift in Sources */,
 				D8AA4061261E305200D11421 /* NSCoder.swift in Sources */,
+				D82BF62C2730A27E004978AD /* Binding+mappedToBool.swift in Sources */,
 				D8D3F4FC261E576000B2D66F /* Bookmark.swift in Sources */,
 				D890D1B526A0C48A00C47489 /* Database.swift in Sources */,
 				D8E63DB0272FB1E800EA9974 /* ApplicationState.swift in Sources */,
@@ -716,6 +726,7 @@
 				D8CF8CB0261E35BB00E52E85 /* String.swift in Sources */,
 				D861257126A60CF300EB5FEF /* TagsView.swift in Sources */,
 				D8D3F644261E5EB500B2D66F /* TFHppleElement.m in Sources */,
+				D82BF62A2730A249004978AD /* Alert.swift in Sources */,
 				D8D3F63E261E5EB500B2D66F /* TFHpple.m in Sources */,
 				D82BF6212730978B004978AD /* HTTPStatus.swift in Sources */,
 				D80710E926C47410007272C0 /* Trie.swift in Sources */,
@@ -730,6 +741,7 @@
 				D8989D6026B76C8300F06A85 /* Debouncer.swift in Sources */,
 				D895D23026B3027700614260 /* Image.swift in Sources */,
 				D8CF8CAB261E35B900E52E85 /* NSCoder.swift in Sources */,
+				D82BF62D2730A27E004978AD /* Binding+mappedToBool.swift in Sources */,
 				D8D3F4FD261E576000B2D66F /* Bookmark.swift in Sources */,
 				D890D1B626A0C48A00C47489 /* Database.swift in Sources */,
 				D8E63DB1272FB1E800EA9974 /* ApplicationState.swift in Sources */,

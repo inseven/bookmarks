@@ -20,75 +20,51 @@
 
 import SwiftUI
 
-extension Text {
-
-    init(contentsOf filename: String) {
-        guard let path = Bundle.main.path(forResource: filename, ofType: nil),
-              let contents = try? String(contentsOfFile: path) else {
-            self.init("missing file")
-            return
-        }
-        self.init(contents)
-    }
-
-}
+import Diligence
 
 struct AboutView: View {
 
     @Environment(\.presentationMode) var presentationMode
 
-    var version: String? {
-        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
-    }
-
-    var build: String? {
-        Bundle.main.infoDictionary?["CFBundleVersion"] as? String
-    }
-
-    var people = [
-        "Blake Merryman",
-        "Joanne Wong",
-        "Lukas Fittl",
-        "Pavlos Vinieratos",
-        "Sara Frederixon",
-        "Sarah Barbour",
-        "Terrence Talbot",
-    ]
-
     var body: some View {
         NavigationView {
             Form {
-                Section {
-                    HStack {
-                        Text("Version")
-                        Spacer()
-                        Text(version ?? "")
-                            .foregroundColor(.secondary)
-                    }
-                    HStack {
-                        Text("Build")
-                        Spacer()
-                        Text(build ?? "")
-                            .foregroundColor(.secondary)
-                    }
-                }
+                BuildSection("inseven/bookmarks")
                 Section("InSeven") {
                     Button("Company") {
-                        UIApplication.shared.open(URL(string: "https://inseven.co.uk")!)
+                        guard let url = URL(string: "https://inseven.co.uk") else {
+                            return
+                        }
+                        UIApplication.shared.open(url)
                     }
                     Button("Support") {
                         var components = URLComponents()
                         components.scheme = "mailto"
                         components.path = "support@inseven.co.uk"
                         components.queryItems = [URLQueryItem(name: "subject", value: "Bookmarks Support")]
-                        UIApplication.shared.open(components.url!)
+                        guard let url = components.url else {
+                            return
+                        }
+                        UIApplication.shared.open(url)
                     }
                 }
-                Section("Thanks") {
-                    ForEach(people) { person in
-                        Text(person)
-                    }
-                }
+                CreditSection("Contributors", [
+                    "Jason Morley",
+                ])
+                CreditSection("Thanks", [
+                    "Blake Merryman",
+                    "Joanne Wong",
+                    "Lukas Fittl",
+                    "Pavlos Vinieratos",
+                    "Sara Frederixon",
+                    "Sarah Barbour",
+                    "Terrence Talbot",
+                ])
+                LicenseSection("Licenses", [
+                    License(name: "Binding+mappedToBool", author: "Joseph Duffy", filename: "Binding+mappedToBool"),
+                    License(name: "Diligence", author: "InSeven Limited", filename: "Diligence"),
+                    License(name: "Introspect", author: "Timber Software", filename: "Introspect"),
+                ])
             }
             .navigationBarTitle("About", displayMode: .inline)
             .navigationBarItems(trailing: Button {

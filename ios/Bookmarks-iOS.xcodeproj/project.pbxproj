@@ -17,6 +17,8 @@
 		D84CE47F261E2A1400AF1901 /* BookmarksCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D84CE47D261E2A1400AF1901 /* BookmarksCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D864E47121C93FD200EAB9AD /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D864E47021C93FD200EAB9AD /* libxml2.2.tbd */; };
 		D8743909273106C000B676A5 /* Diligence in Frameworks */ = {isa = PBXBuildFile; productRef = D8743908273106C000B676A5 /* Diligence */; };
+		D874390C273108DD00B676A5 /* Diligence in Resources */ = {isa = PBXBuildFile; fileRef = D874390B273108DD00B676A5 /* Diligence */; };
+		D874390E2731094000B676A5 /* Introspect in Resources */ = {isa = PBXBuildFile; fileRef = D874390D2731094000B676A5 /* Introspect */; };
 		D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BDE1172551C56100C95945 /* BookmarksApp.swift */; };
 		D8BDE1472554782000C95945 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = D8BDE1462554782000C95945 /* Introspect */; };
 		D8D3BC0121C6AEBD00D6FB97 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */; };
@@ -68,6 +70,8 @@
 		D864E47021C93FD200EAB9AD /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 		D864E47221C9417F00EAB9AD /* Bookmarks-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bookmarks-Bridging-Header.h"; sourceTree = "<group>"; };
 		D87439072731068C00B676A5 /* diligence */ = {isa = PBXFileReference; lastKnownFileType = folder; name = diligence; path = ../diligence; sourceTree = "<group>"; };
+		D874390B273108DD00B676A5 /* Diligence */ = {isa = PBXFileReference; lastKnownFileType = text; path = Diligence; sourceTree = "<group>"; };
+		D874390D2731094000B676A5 /* Introspect */ = {isa = PBXFileReference; lastKnownFileType = text; path = Introspect; sourceTree = "<group>"; };
 		D89C65E326AF5A8E00D49D11 /* Common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		D89C65E426AF5A8E00D49D11 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		D89C65E526AF5A8E00D49D11 /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
@@ -143,6 +147,15 @@
 			name = Packages;
 			sourceTree = "<group>";
 		};
+		D874390A273108CC00B676A5 /* Licenses */ = {
+			isa = PBXGroup;
+			children = (
+				D874390B273108DD00B676A5 /* Diligence */,
+				D874390D2731094000B676A5 /* Introspect */,
+			);
+			path = Licenses;
+			sourceTree = "<group>";
+		};
 		D8D3BBED21C6AEBC00D6FB97 = {
 			isa = PBXGroup;
 			children = (
@@ -171,13 +184,14 @@
 		D8D3BBF821C6AEBC00D6FB97 /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
-				D8578479254FF56E00AE241C /* Interface */,
 				D832EECA2481B6D1004C64E3 /* Bookmarks.entitlements */,
 				D864E47221C9417F00EAB9AD /* Bookmarks-Bridging-Header.h */,
 				D8D3BC0521C6AEBD00D6FB97 /* Info.plist */,
-				D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */,
-				D8D3BC0221C6AEBD00D6FB97 /* LaunchScreen.storyboard */,
 				D8BDE1172551C56100C95945 /* BookmarksApp.swift */,
+				D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */,
+				D8578479254FF56E00AE241C /* Interface */,
+				D8D3BC0221C6AEBD00D6FB97 /* LaunchScreen.storyboard */,
+				D874390A273108CC00B676A5 /* Licenses */,
 			);
 			path = Bookmarks;
 			sourceTree = "<group>";
@@ -315,7 +329,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8D3BC0421C6AEBD00D6FB97 /* LaunchScreen.storyboard in Resources */,
+				D874390E2731094000B676A5 /* Introspect in Resources */,
 				D8D3BC0121C6AEBD00D6FB97 /* Assets.xcassets in Resources */,
+				D874390C273108DD00B676A5 /* Diligence in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -20,62 +20,16 @@
 
 import SwiftUI
 
-extension Text {
-
-    init(contentsOf filename: String) {
-        guard let path = Bundle.main.path(forResource: filename, ofType: nil),
-              let contents = try? String(contentsOfFile: path) else {
-            self.init("missing file")
-            return
-        }
-        self.init(contents)
-    }
-
-}
+import Diligence
 
 struct AboutView: View {
 
     @Environment(\.presentationMode) var presentationMode
 
-    var version: String? {
-        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
-    }
-
-    var build: String? {
-        Bundle.main.infoDictionary?["CFBundleVersion"] as? String
-    }
-
-    var contributors = [
-        "Jason Morley",
-    ]
-
-    var thanks = [
-        "Blake Merryman",
-        "Joanne Wong",
-        "Lukas Fittl",
-        "Pavlos Vinieratos",
-        "Sara Frederixon",
-        "Sarah Barbour",
-        "Terrence Talbot",
-    ]
-
     var body: some View {
         NavigationView {
             Form {
-                Section {
-                    HStack {
-                        Text("Version")
-                        Spacer()
-                        Text(version ?? "")
-                            .foregroundColor(.secondary)
-                    }
-                    HStack {
-                        Text("Build")
-                        Spacer()
-                        Text(build ?? "")
-                            .foregroundColor(.secondary)
-                    }
-                }
+                BuildSection()
                 Section("InSeven") {
                     Button("Company") {
                         guard let url = URL(string: "https://inseven.co.uk") else {
@@ -94,16 +48,18 @@ struct AboutView: View {
                         UIApplication.shared.open(url)
                     }
                 }
-                Section("Contributors") {
-                    ForEach(contributors) { person in
-                        Text(person)
-                    }
-                }
-                Section("Thanks") {
-                    ForEach(thanks) { person in
-                        Text(person)
-                    }
-                }
+                CreditSection("Contributors", [
+                    "Jason Morley",
+                ])
+                CreditSection("Thanks", [
+                    "Blake Merryman",
+                    "Joanne Wong",
+                    "Lukas Fittl",
+                    "Pavlos Vinieratos",
+                    "Sara Frederixon",
+                    "Sarah Barbour",
+                    "Terrence Talbot",
+                ])
             }
             .navigationBarTitle("About", displayMode: .inline)
             .navigationBarItems(trailing: Button {

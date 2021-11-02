@@ -60,6 +60,10 @@ struct AboutView: View {
                     "Sarah Barbour",
                     "Terrence Talbot",
                 ])
+                LicenseSection("Licenses", [
+                    License(name: "Diligence", author: "InSeven Limited", filename: "Diligence"),
+                    License(name: "Introspect", author: "Timber Software", filename: "Introspect"),
+                ])
             }
             .navigationBarTitle("About", displayMode: .inline)
             .navigationBarItems(trailing: Button {

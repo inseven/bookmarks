@@ -22,10 +22,6 @@ import Foundation
 
 public class Pinboard {
 
-    enum PinboardError: Error {
-        case inconsistentState
-    }
-
     fileprivate enum Path: String {
 
         case postsUpdate = "posts/update"
@@ -72,7 +68,7 @@ public class Pinboard {
             let task = URLSession.shared.dataTask(with: url) { data, response, error in
                 guard let data = data, let response = response as? HTTPURLResponse else {
                     guard let error = error else {
-                        completion(.failure(PinboardError.inconsistentState))
+                        completion(.failure(BookmarksError.inconsistentState))
                         return
                     }
                     completion(.failure(error))
@@ -180,7 +176,7 @@ public class Pinboard {
             let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
                 guard let data = data else {
                     guard let error = error else {
-                        completion(.failure(PinboardError.inconsistentState))
+                        completion(.failure(BookmarksError.inconsistentState))
                         return
                     }
                     completion(.failure(error))

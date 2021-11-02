@@ -56,14 +56,6 @@ struct LogInView: View {
         }
     }
 
-    func createAccount() {
-        dispatchPrecondition(condition: .onQueue(.main))
-        guard let url = URL(string: "https://pinboard.in/signup/") else {
-            return
-        }
-        manager.open(url: url)
-    }
-
     var body: some View {
         NavigationView {
             Form {

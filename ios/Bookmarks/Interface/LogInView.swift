@@ -38,6 +38,7 @@ struct LogInView: View {
     @State private var username: String = ""
     @State private var password: String = ""
     @State private var authenticating = false
+    @State private var error: Error?
 
     func submit() {
         dispatchPrecondition(condition: .onQueue(.main))
@@ -48,8 +49,7 @@ struct LogInView: View {
                 case .success:
                     break
                 case .failure(let error):
-                    // TODO: Show this error.
-                    print("failed with error \(error)")
+                    self.error = error
                 }
                 authenticating = false
             }
@@ -92,6 +92,9 @@ struct LogInView: View {
                     self.focus = .username
                 }
             }
+        }
+        .alert(isPresented: $error.mappedToBool()) {
+            Alert(error: error)
         }
         .navigationViewStyle(.stack)
         .introspectViewController { navigationController in

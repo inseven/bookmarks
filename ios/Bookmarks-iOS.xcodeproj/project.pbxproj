@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D8019A182731B1B0001736DE /* Binding+mappedToBool in Sources */ = {isa = PBXBuildFile; fileRef = D8019A172731B1B0001736DE /* Binding+mappedToBool */; };
+		D8019A192731B260001736DE /* Binding+mappedToBool in Resources */ = {isa = PBXBuildFile; fileRef = D8019A172731B1B0001736DE /* Binding+mappedToBool */; };
 		D81E7484254A0D1B002336DC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81E7483254A0D1B002336DC /* ContentView.swift */; };
 		D81FBAC426B99E26004AC4A4 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81FBAC326B99E26004AC4A4 /* AboutView.swift */; };
 		D82BF61E273090FE004978AD /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82BF61D273090FE004978AD /* LogInView.swift */; };
@@ -59,6 +61,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D8019A172731B1B0001736DE /* Binding+mappedToBool */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Binding+mappedToBool"; sourceTree = "<group>"; };
 		D81E7483254A0D1B002336DC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D81FBAC326B99E26004AC4A4 /* AboutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		D82BF61D273090FE004978AD /* LogInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
@@ -150,6 +153,7 @@
 		D874390A273108CC00B676A5 /* Licenses */ = {
 			isa = PBXGroup;
 			children = (
+				D8019A172731B1B0001736DE /* Binding+mappedToBool */,
 				D874390B273108DD00B676A5 /* Diligence */,
 				D874390D2731094000B676A5 /* Introspect */,
 			);
@@ -328,6 +332,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8019A192731B260001736DE /* Binding+mappedToBool in Resources */,
 				D8D3BC0421C6AEBD00D6FB97 /* LaunchScreen.storyboard in Resources */,
 				D874390E2731094000B676A5 /* Introspect in Resources */,
 				D8D3BC0121C6AEBD00D6FB97 /* Assets.xcassets in Resources */,
@@ -357,6 +362,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D832EEC724816901004C64E3 /* SettingsView.swift in Sources */,
+				D8019A182731B1B0001736DE /* Binding+mappedToBool in Sources */,
 				D81E7484254A0D1B002336DC /* ContentView.swift in Sources */,
 				D82BF6272730A0D0004978AD /* DebugView.swift in Sources */,
 				D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */,

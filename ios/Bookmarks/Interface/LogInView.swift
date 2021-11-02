@@ -68,11 +68,9 @@ struct LogInView: View {
                     SecureField("Password", text: $password)
                         .onSubmit(submit)
                 } footer: {
-                    Text("Your username and password are used to access your Pinboard API token and are not stored. You can reset your Pinboard API token anytime from the Pinboard website.")
-                }
-                Button(action: createAccount) {
-                    Text("Create Account")
-                        .frame(maxWidth: .infinity)
+                    VStack {
+                        Text("Your username and password are used to access your Pinboard API token and are not stored. You can reset your Pinboard API token anytime from the Pinboard website.\n\nCreate an account at [https://pinboard.in/signup/](https://pinboard.in/signup/).")
+                    }
                 }
             }
             .navigationTitle("Sign In")

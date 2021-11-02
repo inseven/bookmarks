@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		D81E7484254A0D1B002336DC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81E7483254A0D1B002336DC /* ContentView.swift */; };
 		D81FBAC426B99E26004AC4A4 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81FBAC326B99E26004AC4A4 /* AboutView.swift */; };
-		D81FBAC626B99E70004AC4A4 /* LicenseRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81FBAC526B99E70004AC4A4 /* LicenseRow.swift */; };
-		D81FBAC826B99E94004AC4A4 /* LicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81FBAC726B99E94004AC4A4 /* LicenseView.swift */; };
 		D82BF61E273090FE004978AD /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82BF61D273090FE004978AD /* LogInView.swift */; };
 		D82BF6272730A0D0004978AD /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82BF6262730A0D0004978AD /* DebugView.swift */; };
 		D832EEC724816901004C64E3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D832EEC624816901004C64E3 /* SettingsView.swift */; };
@@ -18,6 +16,7 @@
 		D84CE47E261E2A1400AF1901 /* BookmarksCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D84CE47D261E2A1400AF1901 /* BookmarksCore.framework */; };
 		D84CE47F261E2A1400AF1901 /* BookmarksCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D84CE47D261E2A1400AF1901 /* BookmarksCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D864E47121C93FD200EAB9AD /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D864E47021C93FD200EAB9AD /* libxml2.2.tbd */; };
+		D8743909273106C000B676A5 /* Diligence in Frameworks */ = {isa = PBXBuildFile; productRef = D8743908273106C000B676A5 /* Diligence */; };
 		D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BDE1172551C56100C95945 /* BookmarksApp.swift */; };
 		D8BDE1472554782000C95945 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = D8BDE1462554782000C95945 /* Introspect */; };
 		D8D3BC0121C6AEBD00D6FB97 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */; };
@@ -60,8 +59,6 @@
 /* Begin PBXFileReference section */
 		D81E7483254A0D1B002336DC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D81FBAC326B99E26004AC4A4 /* AboutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
-		D81FBAC526B99E70004AC4A4 /* LicenseRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LicenseRow.swift; sourceTree = "<group>"; };
-		D81FBAC726B99E94004AC4A4 /* LicenseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LicenseView.swift; sourceTree = "<group>"; };
 		D82BF61D273090FE004978AD /* LogInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
 		D82BF6262730A0D0004978AD /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		D832EEC624816901004C64E3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -70,6 +67,7 @@
 		D84CE47D261E2A1400AF1901 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D864E47021C93FD200EAB9AD /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 		D864E47221C9417F00EAB9AD /* Bookmarks-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bookmarks-Bridging-Header.h"; sourceTree = "<group>"; };
+		D87439072731068C00B676A5 /* diligence */ = {isa = PBXFileReference; lastKnownFileType = folder; name = diligence; path = ../diligence; sourceTree = "<group>"; };
 		D89C65E326AF5A8E00D49D11 /* Common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		D89C65E426AF5A8E00D49D11 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		D89C65E526AF5A8E00D49D11 /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
@@ -92,6 +90,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D864E47121C93FD200EAB9AD /* libxml2.2.tbd in Frameworks */,
+				D8743909273106C000B676A5 /* Diligence in Frameworks */,
 				D84CE47E261E2A1400AF1901 /* BookmarksCore.framework in Frameworks */,
 				D8BDE1472554782000C95945 /* Introspect in Frameworks */,
 			);
@@ -120,8 +119,6 @@
 				D81FBAC326B99E26004AC4A4 /* AboutView.swift */,
 				D8478553261539AA00B2318B /* Bookmarks.swift */,
 				D81E7483254A0D1B002336DC /* ContentView.swift */,
-				D81FBAC526B99E70004AC4A4 /* LicenseRow.swift */,
-				D81FBAC726B99E94004AC4A4 /* LicenseView.swift */,
 				D82BF61D273090FE004978AD /* LogInView.swift */,
 				D832EEC624816901004C64E3 /* SettingsView.swift */,
 				D82BF6262730A0D0004978AD /* DebugView.swift */,
@@ -138,9 +135,18 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		D87439062731068C00B676A5 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				D87439072731068C00B676A5 /* diligence */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
 		D8D3BBED21C6AEBC00D6FB97 = {
 			isa = PBXGroup;
 			children = (
+				D87439062731068C00B676A5 /* Packages */,
 				D89C65E326AF5A8E00D49D11 /* Common.xcconfig */,
 				D89C65E526AF5A8E00D49D11 /* Debug.xcconfig */,
 				D89C65E426AF5A8E00D49D11 /* Release.xcconfig */,
@@ -213,6 +219,7 @@
 			name = Bookmarks;
 			packageProductDependencies = (
 				D8BDE1462554782000C95945 /* Introspect */,
+				D8743908273106C000B676A5 /* Diligence */,
 			);
 			productName = Stuff;
 			productReference = D8D3BBF621C6AEBC00D6FB97 /* Bookmarks.app */;
@@ -335,13 +342,11 @@
 			files = (
 				D832EEC724816901004C64E3 /* SettingsView.swift in Sources */,
 				D81E7484254A0D1B002336DC /* ContentView.swift in Sources */,
-				D81FBAC826B99E94004AC4A4 /* LicenseView.swift in Sources */,
 				D82BF6272730A0D0004978AD /* DebugView.swift in Sources */,
 				D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */,
 				D81FBAC426B99E26004AC4A4 /* AboutView.swift in Sources */,
 				D8478554261539AA00B2318B /* Bookmarks.swift in Sources */,
 				D82BF61E273090FE004978AD /* LogInView.swift in Sources */,
-				D81FBAC626B99E70004AC4A4 /* LicenseRow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -695,6 +700,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D8743908273106C000B676A5 /* Diligence */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Diligence;
+		};
 		D8BDE1462554782000C95945 /* Introspect */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D8BDE1452554782000C95945 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;

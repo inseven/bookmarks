@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D8019A182731B1B0001736DE /* Binding+mappedToBool in Sources */ = {isa = PBXBuildFile; fileRef = D8019A172731B1B0001736DE /* Binding+mappedToBool */; };
 		D8019A192731B260001736DE /* Binding+mappedToBool in Resources */ = {isa = PBXBuildFile; fileRef = D8019A172731B1B0001736DE /* Binding+mappedToBool */; };
 		D81E7484254A0D1B002336DC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81E7483254A0D1B002336DC /* ContentView.swift */; };
 		D81FBAC426B99E26004AC4A4 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81FBAC326B99E26004AC4A4 /* AboutView.swift */; };
@@ -362,7 +361,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D832EEC724816901004C64E3 /* SettingsView.swift in Sources */,
-				D8019A182731B1B0001736DE /* Binding+mappedToBool in Sources */,
 				D81E7484254A0D1B002336DC /* ContentView.swift in Sources */,
 				D82BF6272730A0D0004978AD /* DebugView.swift in Sources */,
 				D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */,

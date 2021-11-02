@@ -33,6 +33,8 @@ public enum BookmarksError: Error, Equatable {
     case bookmarkNotFound(identifier: String)
     case bookmarkNotFound(url: URL)
     case tagNotFound(name: String)
+    
+    case inconsistentState
 
     case unauthorized
     case corrupt

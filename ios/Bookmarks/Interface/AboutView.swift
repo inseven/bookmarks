@@ -61,6 +61,7 @@ struct AboutView: View {
                     "Terrence Talbot",
                 ])
                 LicenseSection("Licenses", [
+                    License(name: "Binding+mappedToBool", author: "Joseph Duffy", filename: "Binding+mappedToBool"),
                     License(name: "Diligence", author: "InSeven Limited", filename: "Diligence"),
                     License(name: "Introspect", author: "Timber Software", filename: "Introspect"),
                 ])

@@ -47,6 +47,11 @@ struct SettingsView: View {
                     Toggle("Use In-App Browser", isOn: $settings.useInAppBrowser)
                 }
                 Section {
+                    NavigationLink("Debug") {
+                        DebugView(settings: settings)
+                    }
+                }
+                Section {
                     Button {
                         presentationMode.wrappedValue.dismiss()
                         manager.logout { _ in }
@@ -61,11 +66,6 @@ struct SettingsView: View {
                     } label: {
                         Text("About Bookmarks...")
                             .foregroundColor(.primary)
-                    }
-                }
-                Section {
-                    NavigationLink("Debug") {
-                        DebugView(settings: settings)
                     }
                 }
             }

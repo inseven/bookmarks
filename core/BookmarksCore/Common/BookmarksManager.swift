@@ -128,7 +128,7 @@ public class BookmarksManager: ObservableObject {
     }
 
     public func updateBookmarks(_ bookmarks: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
-        self.updater.updateBookmarks(bookmarks, completion: completion)
+        updater.updateBookmarks(bookmarks, completion: completion)
     }
 
     public func updateBookmarks(_ bookmarks: Set<Bookmark>, completion: @escaping (Result<Void, Error>) -> Void) {

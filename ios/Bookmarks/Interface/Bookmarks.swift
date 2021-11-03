@@ -35,6 +35,7 @@ struct Bookmarks: View {
     @State var sheet: SheetType?
 
     @State var search: String = ""
+    @State var sharedItems: [Any]?
 
     var body: some View {
         ScrollView {
@@ -47,6 +48,10 @@ struct Bookmarks: View {
                         .contextMenu(ContextMenu {
                             Button {
                                 print(bookmark.identifier)
+                                self.sharedItems = [bookmark.url]
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                                    self.sharedItems = [bookmark.url]
+                                }
                             } label: {
                                 HStack {
                                     Text("Share")
@@ -60,6 +65,7 @@ struct Bookmarks: View {
             .padding()
         }
         .searchable(text: $searchDebouncer.value)
+        .sharing(items: $sharedItems)
         .sheet(item: $sheet) { sheet in
             switch sheet {
             case .settings:
@@ -86,5 +92,7 @@ struct Bookmarks: View {
 }
 
 extension Bookmarks.SheetType: Identifiable {
+    
     public var id: Self { self }
+    
 }

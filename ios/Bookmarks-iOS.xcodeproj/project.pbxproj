@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D8019A192731B260001736DE /* Binding+mappedToBool in Resources */ = {isa = PBXBuildFile; fileRef = D8019A172731B1B0001736DE /* Binding+mappedToBool */; };
+		D8019A1B273210F2001736DE /* ShareController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8019A1A273210F2001736DE /* ShareController.swift */; };
 		D81E7484254A0D1B002336DC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81E7483254A0D1B002336DC /* ContentView.swift */; };
 		D81FBAC426B99E26004AC4A4 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81FBAC326B99E26004AC4A4 /* AboutView.swift */; };
 		D82BF61E273090FE004978AD /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82BF61D273090FE004978AD /* LogInView.swift */; };
@@ -61,6 +62,7 @@
 
 /* Begin PBXFileReference section */
 		D8019A172731B1B0001736DE /* Binding+mappedToBool */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Binding+mappedToBool"; sourceTree = "<group>"; };
+		D8019A1A273210F2001736DE /* ShareController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareController.swift; sourceTree = "<group>"; };
 		D81E7483254A0D1B002336DC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D81FBAC326B99E26004AC4A4 /* AboutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		D82BF61D273090FE004978AD /* LogInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
@@ -125,9 +127,10 @@
 				D81FBAC326B99E26004AC4A4 /* AboutView.swift */,
 				D8478553261539AA00B2318B /* Bookmarks.swift */,
 				D81E7483254A0D1B002336DC /* ContentView.swift */,
+				D82BF6262730A0D0004978AD /* DebugView.swift */,
 				D82BF61D273090FE004978AD /* LogInView.swift */,
 				D832EEC624816901004C64E3 /* SettingsView.swift */,
-				D82BF6262730A0D0004978AD /* DebugView.swift */,
+				D8019A1A273210F2001736DE /* ShareController.swift */,
 			);
 			path = Interface;
 			sourceTree = "<group>";
@@ -367,6 +370,7 @@
 				D81FBAC426B99E26004AC4A4 /* AboutView.swift in Sources */,
 				D8478554261539AA00B2318B /* Bookmarks.swift in Sources */,
 				D82BF61E273090FE004978AD /* LogInView.swift in Sources */,
+				D8019A1B273210F2001736DE /* ShareController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

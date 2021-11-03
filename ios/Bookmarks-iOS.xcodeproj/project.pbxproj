@@ -18,6 +18,7 @@
 		D84CE47E261E2A1400AF1901 /* BookmarksCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D84CE47D261E2A1400AF1901 /* BookmarksCore.framework */; };
 		D84CE47F261E2A1400AF1901 /* BookmarksCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D84CE47D261E2A1400AF1901 /* BookmarksCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D864E47121C93FD200EAB9AD /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D864E47021C93FD200EAB9AD /* libxml2.2.tbd */; };
+		D871B4E5273242ED00712182 /* AddTagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D871B4E4273242ED00712182 /* AddTagsView.swift */; };
 		D8743909273106C000B676A5 /* Diligence in Frameworks */ = {isa = PBXBuildFile; productRef = D8743908273106C000B676A5 /* Diligence */; };
 		D874390C273108DD00B676A5 /* Diligence in Resources */ = {isa = PBXBuildFile; fileRef = D874390B273108DD00B676A5 /* Diligence */; };
 		D874390E2731094000B676A5 /* Introspect in Resources */ = {isa = PBXBuildFile; fileRef = D874390D2731094000B676A5 /* Introspect */; };
@@ -73,6 +74,7 @@
 		D84CE47D261E2A1400AF1901 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D864E47021C93FD200EAB9AD /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 		D864E47221C9417F00EAB9AD /* Bookmarks-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bookmarks-Bridging-Header.h"; sourceTree = "<group>"; };
+		D871B4E4273242ED00712182 /* AddTagsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTagsView.swift; sourceTree = "<group>"; };
 		D87439072731068C00B676A5 /* diligence */ = {isa = PBXFileReference; lastKnownFileType = folder; name = diligence; path = ../diligence; sourceTree = "<group>"; };
 		D874390B273108DD00B676A5 /* Diligence */ = {isa = PBXFileReference; lastKnownFileType = text; path = Diligence; sourceTree = "<group>"; };
 		D874390D2731094000B676A5 /* Introspect */ = {isa = PBXFileReference; lastKnownFileType = text; path = Introspect; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 				D82BF61D273090FE004978AD /* LogInView.swift */,
 				D832EEC624816901004C64E3 /* SettingsView.swift */,
 				D8019A1A273210F2001736DE /* ShareController.swift */,
+				D871B4E4273242ED00712182 /* AddTagsView.swift */,
 			);
 			path = Interface;
 			sourceTree = "<group>";
@@ -371,6 +374,7 @@
 				D8478554261539AA00B2318B /* Bookmarks.swift in Sources */,
 				D82BF61E273090FE004978AD /* LogInView.swift in Sources */,
 				D8019A1B273210F2001736DE /* ShareController.swift in Sources */,
+				D871B4E5273242ED00712182 /* AddTagsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

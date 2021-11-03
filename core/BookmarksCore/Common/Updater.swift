@@ -215,11 +215,11 @@ public class Updater {
 
     public func updateBookmarks(_ bookmarks: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        guard let token = syncQueue_token() else {
-            completion(.failure(BookmarksError.unauthorized))
-            return
-        }
         syncQueue.async {
+            guard let token = self.syncQueue_token() else {
+                completion(.failure(BookmarksError.unauthorized))
+                return
+            }
             let pinboard = Pinboard(token: token)
             let result = Result { () -> Void in
                 for bookmark in bookmarks {
@@ -234,11 +234,11 @@ public class Updater {
 
     public func renameTag(_ old: String, to new: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        guard let token = syncQueue_token() else {
-            completion(.failure(BookmarksError.unauthorized))
-            return
-        }
         syncQueue.async {
+            guard let token = self.syncQueue_token() else {
+                completion(.failure(BookmarksError.unauthorized))
+                return
+            }
             let pinboard = Pinboard(token: token)
             let result = Result {
                 try pinboard.tagsRename(old, to: new)
@@ -251,11 +251,11 @@ public class Updater {
 
     public func deleteTag(_ tag: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        guard let token = syncQueue_token() else {
-            completion(.failure(BookmarksError.unauthorized))
-            return
-        }
         syncQueue.async {
+            guard let token = self.syncQueue_token() else {
+                completion(.failure(BookmarksError.unauthorized))
+                return
+            }
             let pinboard = Pinboard(token: token)
             let result = Result {
                 try self.database.deleteTag(tag: tag)

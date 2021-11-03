@@ -26,6 +26,7 @@ struct Bookmarks: View {
 
     enum SheetType {
         case settings
+        case tags(Bookmark)
     }
 
     @Environment(\.manager) var manager: BookmarksManager
@@ -47,16 +48,22 @@ struct Bookmarks: View {
                         }
                         .contextMenu(ContextMenu {
                             Button {
-                                print(bookmark.identifier)
-                                self.sharedItems = [bookmark.url]
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-                                    self.sharedItems = [bookmark.url]
-                                }
+                                sharedItems = [bookmark.url]
                             } label: {
                                 HStack {
                                     Text("Share")
                                     Spacer()
                                     Image(systemName: "square.and.arrow.up")
+                                }
+                            }
+                            Divider()
+                            Button {
+                                sheet = .tags(bookmark)
+                            } label: {
+                                HStack {
+                                    Text("Tags")
+                                    Spacer()
+                                    Image(systemName: "tag")
                                 }
                             }
                         })
@@ -72,6 +79,8 @@ struct Bookmarks: View {
                 NavigationView {
                     SettingsView(settings: manager.settings)
                 }
+            case .tags(let bookmark):
+                AddTagsView(tagsView: manager.tagsView, bookmark: bookmark)
             }
         }
         .navigationTitle("Bookmarks")
@@ -93,6 +102,13 @@ struct Bookmarks: View {
 
 extension Bookmarks.SheetType: Identifiable {
     
-    public var id: Self { self }
+    public var id: String {
+        switch self {
+        case .settings:
+            return "settings"
+        case .tags(let bookmark):
+            return "tags-\(bookmark.id)"
+        }
+    }
     
 }

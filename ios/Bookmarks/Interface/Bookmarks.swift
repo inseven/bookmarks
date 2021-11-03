@@ -41,10 +41,10 @@ struct Bookmarks: View {
     @State var sharedItems: [Any]?
     @State var error: Error?
     
-    func updateBookmarks(_ bookmarks: [Bookmark]) {
+    func perform(action: @escaping () async throws -> Void) {
         Task(priority: .high) {
             do {
-                try await manager.updateBookmarks(bookmarks)
+                try await action()
             } catch {
                 DispatchQueue.main.async {
                     self.error = error
@@ -52,7 +52,7 @@ struct Bookmarks: View {
             }
         }
     }
-
+    
     var body: some View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
@@ -74,29 +74,44 @@ struct Bookmarks: View {
                             }
                             if bookmark.toRead {
                                 Button {
-                                    updateBookmarks([bookmark.setting(toRead: false)])
+                                    perform {
+                                        try await manager.updateBookmarks([bookmark.setting(toRead: false)])
+                                    }
                                 } label: {
                                     Label("Mark as Read", systemImage: "circle")
                                 }
                             } else {
                                 Button {
-                                    updateBookmarks([bookmark.setting(toRead: true)])
+                                    perform {
+                                        try await manager.updateBookmarks([bookmark.setting(toRead: true)])
+                                    }
                                 } label: {
                                     Label("Mark as Unread", systemImage: "circle.inset.filled")
                                 }
                             }
                             if bookmark.shared {
                                 Button {
-                                    updateBookmarks([bookmark.setting(shared: false)])
+                                    perform {
+                                        try await manager.updateBookmarks([bookmark.setting(shared: false)])
+                                    }
                                 } label: {
                                     Label("Make Private", systemImage: "lock")
                                 }
                             } else {
                                 Button {
-                                    updateBookmarks([bookmark.setting(shared: true)])
+                                    perform {
+                                        try await manager.updateBookmarks([bookmark.setting(shared: true)])
+                                    }
                                 } label: {
                                     Label("Make Public", systemImage: "globe")
                                 }
+                            }
+                            Button(role: .destructive) {
+                                perform {
+                                    try await manager.deleteBookmarks([bookmark])
+                                }
+                            } label: {
+                                Label("Delete", systemImage: "trash")
                             }
                         })
                 }

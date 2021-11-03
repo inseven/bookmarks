@@ -197,11 +197,11 @@ public class Updater {
 
     public func deleteBookmarks(_ bookmarks: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        guard let token = syncQueue_token() else {
-            completion(.failure(BookmarksError.unauthorized))
-            return
-        }
         syncQueue.async {
+            guard let token = self.syncQueue_token() else {
+                completion(.failure(BookmarksError.unauthorized))
+                return
+            }
             let pinboard = Pinboard(token: token)
             let result = Result {
                 for bookmark in bookmarks {

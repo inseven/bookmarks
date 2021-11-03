@@ -116,7 +116,7 @@ public class BookmarksManager: ObservableObject {
     }
 
     public func refresh() {
-        self.updater.update(force: true)
+        updater.update(force: true)
     }
 
     public func deleteBookmarks(_ bookmarks: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
@@ -124,23 +124,37 @@ public class BookmarksManager: ObservableObject {
     }
 
     public func deleteBookmarks(_ bookmarks: Set<Bookmark>, completion: @escaping (Result<Void, Error>) -> Void) {
-        deleteBookmarks(Array(bookmarks), completion: completion)
+        updater.deleteBookmarks(Array(bookmarks), completion: completion)
     }
 
     public func updateBookmarks(_ bookmarks: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
-        self.updater.updateBookmarks(bookmarks, completion: completion)
+        updater.updateBookmarks(bookmarks, completion: completion)
     }
 
     public func updateBookmarks(_ bookmarks: Set<Bookmark>, completion: @escaping (Result<Void, Error>) -> Void) {
-        updateBookmarks(Array(bookmarks), completion: completion)
+        updater.updateBookmarks(Array(bookmarks), completion: completion)
+    }
+    
+    public func updateBookmarks(_ bookmarks: [Bookmark]) async throws {
+        return try await withCheckedThrowingContinuation { continuation in
+            updater.updateBookmarks(bookmarks) { result in
+                switch result {
+                case .success:
+                    continuation.resume()
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+                
+            }
+        }
     }
 
     public func renameTag(_ old: String, to new: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        self.updater.renameTag(old, to: new, completion: completion)
+        updater.renameTag(old, to: new, completion: completion)
     }
 
     public func deleteTag(_ tag: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        self.updater.deleteTag(tag, completion: completion)
+        updater.deleteTag(tag, completion: completion)
     }
 
     public func openBookmarks(_ bookmarks: Set<Bookmark>,

@@ -20,17 +20,21 @@
 
 import SwiftUI
 
+import BookmarksCore
+
 struct Sidebar: View {
+    
+    @State var section: BookmarksSection? = .all
     
     var body: some View {
         List {
             Section("Smart Filters") {
-                SidebarLink(section: .all)
-                SidebarLink(section: .shared(false))
-                SidebarLink(section: .shared(true))
-                SidebarLink(section: .today)
-                SidebarLink(section: .unread)
-                SidebarLink(section: .untagged)
+                SidebarLink(selection: $section, section: .all)
+                SidebarLink(selection: $section, section: .shared(false))
+                SidebarLink(selection: $section, section: .shared(true))
+                SidebarLink(selection: $section, section: .today)
+                SidebarLink(selection: $section, section: .unread)
+                SidebarLink(selection: $section, section: .untagged)
             }
         }
         .navigationTitle("Filters")

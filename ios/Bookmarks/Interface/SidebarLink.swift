@@ -26,10 +26,12 @@ import BookmarksCore
 struct SidebarLink: View {
     
     @Environment(\.manager) var manager: BookmarksManager
+    
+    @Binding var selection: BookmarksSection?
     var section: BookmarksSection
 
     var body: some View {
-        NavigationLink {
+        NavigationLink(tag: section, selection: $selection) {
             Bookmarks(section: section, bookmarksView: BookmarksView(database: manager.database, query: section.query))
         } label: {
             Label(section.navigationTitle, systemImage: section.systemImage)

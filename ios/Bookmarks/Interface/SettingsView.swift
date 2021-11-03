@@ -46,11 +46,13 @@ struct SettingsView: View {
                 Section("Viewing") {
                     Toggle("Use In-App Browser", isOn: $settings.useInAppBrowser)
                 }
+#if DEBUG
                 Section {
                     NavigationLink("Debug") {
                         DebugView(settings: settings)
                     }
                 }
+#endif
                 Section {
                     Button {
                         presentationMode.wrappedValue.dismiss()

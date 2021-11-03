@@ -56,7 +56,6 @@ struct Bookmarks: View {
                                     Image(systemName: "square.and.arrow.up")
                                 }
                             }
-                            Divider()
                             Button {
                                 sheet = .tags(bookmark)
                             } label: {

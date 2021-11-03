@@ -81,6 +81,7 @@ struct AddTagsView: View {
                                     Text(tag)
                                     Spacer()
                                     Image(systemName: "xmark.circle.fill")
+                                        .imageScale(.medium)
                                         .foregroundColor(.secondary)
                                 }
                             }
@@ -96,6 +97,7 @@ struct AddTagsView: View {
                                 Text(tag)
                                 Spacer()
                                 Image(systemName: "plus.circle")
+                                    .imageScale(.medium)
                                     .foregroundColor(.accentColor)
                             }
                         }
@@ -116,6 +118,7 @@ struct AddTagsView: View {
                                     Text(tag)
                                     Spacer()
                                     Image(systemName: "plus.circle")
+                                        .imageScale(.medium)
                                         .foregroundColor(.accentColor)
                                 }
                             }

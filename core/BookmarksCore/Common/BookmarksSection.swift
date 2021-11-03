@@ -116,3 +116,68 @@ extension Optional: RawRepresentable where Wrapped == BookmarksSection {
     }
 
 }
+
+public extension BookmarksSection {
+
+    var query: AnyQuery {
+        switch self {
+        case .all:
+            return True().eraseToAnyQuery()
+        case .untagged:
+            return Untagged().eraseToAnyQuery()
+        case .today:
+            return Today().eraseToAnyQuery()
+        case .unread:
+            return Unread().eraseToAnyQuery()
+        case .shared(let shared):
+            return Shared(shared).eraseToAnyQuery()
+        case .tag(tag: let tag):
+            return Tag(tag).eraseToAnyQuery()
+        }
+    }
+
+    var navigationTitle: String {
+        switch self {
+        case .all:
+            return "All Bookmarks"
+        case .untagged:
+            return "Untagged"
+        case .today:
+            return "Today"
+        case .unread:
+            return "Unread"
+        case .shared(let shared):
+            if shared {
+                return "Public"
+            } else {
+                return "Private"
+            }
+
+        case .tag(tag: let tag):
+            return tag
+        }
+    }
+
+    var systemImage: String {
+        switch self {
+        case .all:
+            return "bookmark"
+        case .untagged:
+            return "tag"
+        case .today:
+            return "sun.max"
+        case .unread:
+            return "circle"
+        case .shared(let shared):
+            if shared {
+                return "globe"
+            } else {
+                return "lock"
+            }
+
+        case .tag:
+            return "tag"
+        }
+    }
+
+}

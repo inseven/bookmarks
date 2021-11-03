@@ -23,39 +23,17 @@ import SwiftUI
 
 import BookmarksCore
 
-struct ContentView: View {
-
-    @ObservedObject var manager: BookmarksManager
-    @State var sheet: ApplicationState? = nil
+struct SidebarLink: View {
+    
+    @Environment(\.manager) var manager: BookmarksManager
+    var section: BookmarksSection
 
     var body: some View {
-        NavigationView {
-            List {
-                Section("Smart Filters") {
-                    SidebarLink(section: .all)
-                    SidebarLink(section: .shared(false))
-                    SidebarLink(section: .shared(true))
-                    SidebarLink(section: .today)
-                    SidebarLink(section: .unread)
-                    SidebarLink(section: .untagged)
-                }
-            }
-            .navigationTitle("Filters")
-        }
-        .navigationViewStyle(.stack)
-        .sheet(item: $sheet) { sheet in
-            switch sheet {
-            case .logIn:
-                LogInView()
-            }
-        }
-        .onChange(of: manager.state) { newValue in
-            switch newValue {
-            case .idle:
-                sheet = nil
-            case .unauthorized:
-                sheet = .logIn
-            }
+        NavigationLink {
+            Bookmarks(section: section, bookmarksView: BookmarksView(database: manager.database, query: section.query))
+        } label: {
+            Label(section.navigationTitle, systemImage: section.systemImage)
         }
     }
+    
 }

@@ -91,6 +91,37 @@ struct Bookmarks: View {
                                     Label("Mark as Unread", systemImage: "circle.inset.filled")
                                 }
                             }
+                            if bookmark.shared {
+                                Button {
+                                    manager.updateBookmarks([bookmark.setting(shared: false)]) { result in
+                                        DispatchQueue.main.async {
+                                            switch result {
+                                            case .success:
+                                                break
+                                            case .failure(let error):
+                                                self.error = error
+                                            }
+                                        }
+                                    }
+                                } label: {
+                                    Label("Make Private", systemImage: "lock")
+                                }
+                            } else {
+                                Button {
+                                    manager.updateBookmarks([bookmark.setting(shared: true)]) { result in
+                                        DispatchQueue.main.async {
+                                            switch result {
+                                            case .success:
+                                                break
+                                            case .failure(let error):
+                                                self.error = error
+                                            }
+                                        }
+                                    }
+                                } label: {
+                                    Label("Make Public", systemImage: "globe")
+                                }
+                            }
                         })
                 }
             }

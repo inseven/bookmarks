@@ -134,6 +134,20 @@ public class BookmarksManager: ObservableObject {
     public func updateBookmarks(_ bookmarks: Set<Bookmark>, completion: @escaping (Result<Void, Error>) -> Void) {
         updateBookmarks(Array(bookmarks), completion: completion)
     }
+    
+    public func updateBookmarks(_ bookmarks: [Bookmark]) async throws {
+        return try await withCheckedThrowingContinuation { continuation in
+            updateBookmarks(bookmarks) { result in
+                switch result {
+                case .success:
+                    continuation.resume()
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+                
+            }
+        }
+    }
 
     public func renameTag(_ old: String, to new: String, completion: @escaping (Result<Void, Error>) -> Void) {
         self.updater.renameTag(old, to: new, completion: completion)

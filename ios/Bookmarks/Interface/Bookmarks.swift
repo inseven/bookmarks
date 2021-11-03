@@ -40,6 +40,18 @@ struct Bookmarks: View {
     @State var search: String = ""
     @State var sharedItems: [Any]?
     @State var error: Error?
+    
+    func updateBookmarks(_ bookmarks: [Bookmark]) {
+        Task {
+            do {
+                try await manager.updateBookmarks(bookmarks)
+            } catch {
+                DispatchQueue.main.async {
+                    self.error = error
+                }
+            }
+        }
+    }
 
     var body: some View {
         ScrollView {
@@ -62,62 +74,26 @@ struct Bookmarks: View {
                             }
                             if bookmark.toRead {
                                 Button {
-                                    manager.updateBookmarks([bookmark.setting(toRead: false)]) { result in
-                                        DispatchQueue.main.async {
-                                            switch result {
-                                            case .success:
-                                                break
-                                            case .failure(let error):
-                                                self.error = error
-                                            }
-                                        }
-                                    }
+                                    updateBookmarks([bookmark.setting(toRead: false)])
                                 } label: {
                                     Label("Mark as Read", systemImage: "circle")
                                 }
                             } else {
                                 Button {
-                                    manager.updateBookmarks([bookmark.setting(toRead: true)]) { result in
-                                        DispatchQueue.main.async {
-                                            switch result {
-                                            case .success:
-                                                break
-                                            case .failure(let error):
-                                                self.error = error
-                                            }
-                                        }
-                                    }
+                                    updateBookmarks([bookmark.setting(toRead: true)])
                                 } label: {
                                     Label("Mark as Unread", systemImage: "circle.inset.filled")
                                 }
                             }
                             if bookmark.shared {
                                 Button {
-                                    manager.updateBookmarks([bookmark.setting(shared: false)]) { result in
-                                        DispatchQueue.main.async {
-                                            switch result {
-                                            case .success:
-                                                break
-                                            case .failure(let error):
-                                                self.error = error
-                                            }
-                                        }
-                                    }
+                                    updateBookmarks([bookmark.setting(shared: false)])
                                 } label: {
                                     Label("Make Private", systemImage: "lock")
                                 }
                             } else {
                                 Button {
-                                    manager.updateBookmarks([bookmark.setting(shared: true)]) { result in
-                                        DispatchQueue.main.async {
-                                            switch result {
-                                            case .success:
-                                                break
-                                            case .failure(let error):
-                                                self.error = error
-                                            }
-                                        }
-                                    }
+                                    updateBookmarks([bookmark.setting(shared: true)])
                                 } label: {
                                     Label("Make Public", systemImage: "globe")
                                 }

@@ -30,6 +30,7 @@
 		D8D3BC0421C6AEBD00D6FB97 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8D3BC0221C6AEBD00D6FB97 /* LaunchScreen.storyboard */; };
 		D8D3BC0F21C6AEBD00D6FB97 /* BookmarksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BC0E21C6AEBD00D6FB97 /* BookmarksTests.swift */; };
 		D8D3BC1A21C6AEBD00D6FB97 /* BookmarksUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BC1921C6AEBD00D6FB97 /* BookmarksUITests.swift */; };
+		D8F521382732EEF40031F0CC /* AddTagLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F521372732EEF40031F0CC /* AddTagLabel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +97,7 @@
 		D8D3BC1521C6AEBD00D6FB97 /* BookmarksUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookmarksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8D3BC1921C6AEBD00D6FB97 /* BookmarksUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksUITests.swift; sourceTree = "<group>"; };
 		D8D3BC1B21C6AEBD00D6FB97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D8F521372732EEF40031F0CC /* AddTagLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTagLabel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				D81FBAC326B99E26004AC4A4 /* AboutView.swift */,
+				D8F521372732EEF40031F0CC /* AddTagLabel.swift */,
 				D871B4E4273242ED00712182 /* AddTagsView.swift */,
 				D8478553261539AA00B2318B /* Bookmarks.swift */,
 				D81E7483254A0D1B002336DC /* ContentView.swift */,
@@ -373,6 +376,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D832EEC724816901004C64E3 /* SettingsView.swift in Sources */,
+				D8F521382732EEF40031F0CC /* AddTagLabel.swift in Sources */,
 				D81E7484254A0D1B002336DC /* ContentView.swift in Sources */,
 				D82BF6272730A0D0004978AD /* DebugView.swift in Sources */,
 				D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */,

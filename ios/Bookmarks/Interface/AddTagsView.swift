@@ -22,6 +22,24 @@ import SwiftUI
 
 import BookmarksCore
 
+extension String {
+    
+    func replacingCharacters(in characterSet: CharacterSet, with replacement: String) -> String {
+         components(separatedBy: characterSet)
+             .filter { !$0.isEmpty }
+             .joined(separator: replacement)
+     }
+    
+    var safeKeyword: String {
+         lowercased()
+             .replacingOccurrences(of: ".", with: "")
+             .replacingCharacters(in: CharacterSet.letters.inverted, with: " ")
+             .trimmingCharacters(in: CharacterSet.whitespaces)
+             .replacingCharacters(in: CharacterSet.whitespaces, with: "-")
+     }
+    
+}
+
 struct AddTagsView: View {
     
     @Environment(\.manager) var manager: BookmarksManager
@@ -86,6 +104,7 @@ struct AddTagsView: View {
                                 }
                             }
                         }
+                        .foregroundColor(.primary)
                     }
                 }
                 Section("Existing") {
@@ -93,33 +112,33 @@ struct AddTagsView: View {
                         Button {
                             tags.append(tag)
                         } label: {
-                            HStack {
-                                Text(tag)
-                                Spacer()
-                                Image(systemName: "plus.circle")
-                                    .imageScale(.medium)
-                                    .foregroundColor(.accentColor)
-                            }
+                            AddTagLabel(tag)
                         }
                     }
+                    .foregroundColor(.primary)
                 }
             }
-            .foregroundColor(.primary)
             .listStyle(.grouped)
             .overlay {
                 if !search.isEmpty {
                     List {
-                        ForEach(filteredTags) { tag in
-                            Button {
-                                tags.append(tag)
-                                search = ""
-                            } label: {
-                                HStack {
-                                    Text(tag)
-                                    Spacer()
-                                    Image(systemName: "plus.circle")
-                                        .imageScale(.medium)
-                                        .foregroundColor(.accentColor)
+                        if !tags.contains(search.safeKeyword) {
+                            Section("Suggested") {
+                                Button {
+                                    tags.append(search.safeKeyword)
+                                    search = ""
+                                } label: {
+                                    AddTagLabel(search.safeKeyword)
+                                }
+                            }
+                        }
+                        Section("Similar") {
+                            ForEach(filteredTags) { tag in
+                                Button {
+                                    tags.append(tag)
+                                    search = ""
+                                } label: {
+                                    AddTagLabel(tag)
                                 }
                             }
                         }

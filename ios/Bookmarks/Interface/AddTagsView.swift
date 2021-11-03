@@ -86,7 +86,7 @@ struct AddTagsView: View {
     var body: some View {
         NavigationView {
             List {
-                Section("Selected") {
+                Section {
                     if tags.isEmpty {
                         Text("None")
                             .foregroundColor(.secondary)
@@ -106,16 +106,6 @@ struct AddTagsView: View {
                         }
                         .foregroundColor(.primary)
                     }
-                }
-                Section("Existing") {
-                    ForEach(available) { tag in
-                        Button {
-                            tags.append(tag)
-                        } label: {
-                            AddTagLabel(tag)
-                        }
-                    }
-                    .foregroundColor(.primary)
                 }
             }
             .listStyle(.grouped)

@@ -18,34 +18,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Combine
 import SwiftUI
 
-import BookmarksCore
-
-struct ContentView: View {
-
-    @ObservedObject var manager: BookmarksManager
-    @State var sheet: ApplicationState? = nil
-
+struct Sidebar: View {
+    
     var body: some View {
-        NavigationView {
-            Sidebar()
-        }
-        .navigationViewStyle(.stack)
-        .sheet(item: $sheet) { sheet in
-            switch sheet {
-            case .logIn:
-                LogInView()
+        List {
+            Section("Smart Filters") {
+                SidebarLink(section: .all)
+                SidebarLink(section: .shared(false))
+                SidebarLink(section: .shared(true))
+                SidebarLink(section: .today)
+                SidebarLink(section: .unread)
+                SidebarLink(section: .untagged)
             }
         }
-        .onChange(of: manager.state) { newValue in
-            switch newValue {
-            case .idle:
-                sheet = nil
-            case .unauthorized:
-                sheet = .logIn
-            }
-        }
+        .navigationTitle("Filters")
     }
+    
 }

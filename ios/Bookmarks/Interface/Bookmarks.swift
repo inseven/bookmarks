@@ -37,6 +37,7 @@ struct Bookmarks: View {
 
     @State var search: String = ""
     @State var sharedItems: [Any]?
+    @State var error: Error?
 
     var body: some View {
         ScrollView {
@@ -50,19 +51,42 @@ struct Bookmarks: View {
                             Button {
                                 sharedItems = [bookmark.url]
                             } label: {
-                                HStack {
-                                    Text("Share")
-                                    Spacer()
-                                    Image(systemName: "square.and.arrow.up")
-                                }
+                                Label("Share", systemImage: "square.and.arrow.up")
                             }
                             Button {
                                 sheet = .tags(bookmark)
                             } label: {
-                                HStack {
-                                    Text("Tags")
-                                    Spacer()
-                                    Image(systemName: "tag")
+                                Label("Tags", systemImage: "tag")
+                            }
+                            if bookmark.toRead {
+                                Button {
+                                    manager.updateBookmarks([bookmark.setting(toRead: false)]) { result in
+                                        DispatchQueue.main.async {
+                                            switch result {
+                                            case .success:
+                                                break
+                                            case .failure(let error):
+                                                self.error = error
+                                            }
+                                        }
+                                    }
+                                } label: {
+                                    Label("Mark as Read", systemImage: "circle")
+                                }
+                            } else {
+                                Button {
+                                    manager.updateBookmarks([bookmark.setting(toRead: true)]) { result in
+                                        DispatchQueue.main.async {
+                                            switch result {
+                                            case .success:
+                                                break
+                                            case .failure(let error):
+                                                self.error = error
+                                            }
+                                        }
+                                    }
+                                } label: {
+                                    Label("Mark as Unread", systemImage: "circle.inset.filled")
                                 }
                             }
                         })
@@ -81,6 +105,9 @@ struct Bookmarks: View {
             case .tags(let bookmark):
                 AddTagsView(tagsView: manager.tagsView, bookmark: bookmark)
             }
+        }
+        .alert(isPresented: $error.mappedToBool()) {
+            Alert(error: error)
         }
         .navigationTitle("Bookmarks")
         .navigationBarItems(leading: Button("Settings") {

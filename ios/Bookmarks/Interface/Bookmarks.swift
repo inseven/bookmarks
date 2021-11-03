@@ -30,6 +30,8 @@ struct Bookmarks: View {
     }
 
     @Environment(\.manager) var manager: BookmarksManager
+    
+    var section: BookmarksSection
     @StateObject var bookmarksView: BookmarksView
 
     @StateObject var searchDebouncer = Debouncer<String>(initialValue: "", delay: .seconds(0.2))
@@ -56,7 +58,7 @@ struct Bookmarks: View {
                             Button {
                                 sheet = .tags(bookmark)
                             } label: {
-                                Label("Tags", systemImage: "tag")
+                                Label("Tags (\(bookmark.tags.count))", systemImage: "tag")
                             }
                             if bookmark.toRead {
                                 Button {
@@ -109,8 +111,9 @@ struct Bookmarks: View {
         .alert(isPresented: $error.mappedToBool()) {
             Alert(error: error)
         }
-        .navigationTitle("Bookmarks")
-        .navigationBarItems(leading: Button("Settings") {
+        .navigationTitle(section.navigationTitle)
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarItems(trailing: Button("Settings") {
             sheet = .settings
         })
         .onAppear {
@@ -120,7 +123,7 @@ struct Bookmarks: View {
             bookmarksView.stop()
         }
         .onReceive(searchDebouncer.$debouncedValue) { value in
-            bookmarksView.query = AnyQuery.parse(filter: value)
+            bookmarksView.query = AnyQuery.and([section.query, AnyQuery.parse(filter: value)])
         }
     }
 

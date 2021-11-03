@@ -42,7 +42,7 @@ struct Bookmarks: View {
     @State var error: Error?
     
     func updateBookmarks(_ bookmarks: [Bookmark]) {
-        Task {
+        Task(priority: .high) {
             do {
                 try await manager.updateBookmarks(bookmarks)
             } catch {

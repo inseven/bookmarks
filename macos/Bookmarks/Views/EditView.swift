@@ -24,7 +24,7 @@ import SwiftUI
 import BookmarksCore
 import Interact
 
-struct AddTagsView: View {
+struct EditView: View {
 
     @Environment(\.manager) var manager
     @Environment(\.selection) var selection

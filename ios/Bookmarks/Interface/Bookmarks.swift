@@ -70,7 +70,7 @@ struct Bookmarks: View {
                             Button {
                                 sheet = .tags(bookmark)
                             } label: {
-                                Label("Tags (\(bookmark.tags.count))", systemImage: "tag")
+                                Label("Edit", systemImage: "square.and.pencil")
                             }
                             if bookmark.toRead {
                                 Button {
@@ -127,14 +127,13 @@ struct Bookmarks: View {
                     SettingsView(settings: manager.settings)
                 }
             case .tags(let bookmark):
-                AddTagsView(tagsView: manager.tagsView, bookmark: bookmark)
+                EditView(tagsView: manager.tagsView, bookmark: bookmark)
             }
         }
         .alert(isPresented: $error.mappedToBool()) {
             Alert(error: error)
         }
         .navigationTitle(section.navigationTitle)
-        .navigationBarTitleDisplayMode(.inline)
         .navigationBarItems(trailing: Button("Settings") {
             sheet = .settings
         })

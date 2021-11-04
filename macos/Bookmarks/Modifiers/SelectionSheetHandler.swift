@@ -40,7 +40,7 @@ struct SelectionSheetHandler: ViewModifier {
             .sheet(item: $selection.sheet) { sheet in
                 switch sheet {
                 case .addTags(let bookmarks):
-                    AddTagsView(tagsView: manager.tagsView, bookmarks: bookmarks)
+                    EditView(tagsView: manager.tagsView, bookmarks: bookmarks)
                 }
             }
             .alert(item: $error) { error in

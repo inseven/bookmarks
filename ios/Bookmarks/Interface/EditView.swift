@@ -22,25 +22,11 @@ import SwiftUI
 
 import BookmarksCore
 
-extension String {
+struct EditView: View {
     
-    func replacingCharacters(in characterSet: CharacterSet, with replacement: String) -> String {
-         components(separatedBy: characterSet)
-             .filter { !$0.isEmpty }
-             .joined(separator: replacement)
-     }
-    
-    var safeKeyword: String {
-         lowercased()
-             .replacingOccurrences(of: ".", with: "")
-             .replacingCharacters(in: CharacterSet.letters.inverted, with: " ")
-             .trimmingCharacters(in: CharacterSet.whitespaces)
-             .replacingCharacters(in: CharacterSet.whitespaces, with: "-")
-     }
-    
-}
-
-struct AddTagsView: View {
+    enum SheetType {
+        case addTag
+    }
     
     @Environment(\.manager) var manager: BookmarksManager
     @Environment(\.presentationMode) var presentationMode
@@ -48,28 +34,30 @@ struct AddTagsView: View {
     @ObservedObject var tagsView: TagsView
     var bookmark: Bookmark
     @State var search: String = ""
+    @State var title: String
+    @State var toRead: Bool
+    @State var shared: Bool
     @State var tags: [String]
     @State var saving = false
     
-    var available: [String] {
-        // TODO: Make this async.
-        return tagsView.suggestions(prefix: "", existing: tags)
-    }
-    
-    var filteredTags: [String] {
-        // TODO: Make this async.
-        return tagsView.suggestions(prefix: search, existing: tags)
-    }
+    @State var sheet: SheetType?
         
     init(tagsView: TagsView, bookmark: Bookmark) {
         self.tagsView = tagsView
         self.bookmark = bookmark
+        _title = State(initialValue: bookmark.title)
         _tags = State(initialValue: Array(bookmark.tags))
+        _shared = State(initialValue: bookmark.shared)
+        _toRead = State(initialValue: bookmark.toRead)
     }
     
     func save() {
         saving = true
-        let bookmark = bookmark.setting(tags: Set(tags))
+        let bookmark = bookmark
+            .setting(title: title)
+            .setting(tags: Set(tags))
+            .setting(shared: shared)
+            .setting(toRead: toRead)
         manager.updateBookmarks([bookmark]) { result in
             DispatchQueue.main.async {
                 switch result {
@@ -85,7 +73,14 @@ struct AddTagsView: View {
 
     var body: some View {
         NavigationView {
-            List {
+            Form {
+                Section {
+                    TextField("Title", text: $title)
+                }
+                Section {
+                    Toggle("Unread", isOn: $toRead)
+                    Toggle("Public", isOn: $shared)
+                }
                 Section {
                     if tags.isEmpty {
                         Text("None")
@@ -106,38 +101,23 @@ struct AddTagsView: View {
                         }
                         .foregroundColor(.primary)
                     }
+                } header: {
+                    HStack {
+                        Text("Tags")
+                        Spacer()
+                        Button {
+                            sheet = .addTag
+                        } label: {
+                            Text("Add...")
+                        }
+                    }
+                }
+                Section {
+                    Text(bookmark.url.absoluteString)
                 }
             }
             .listStyle(.grouped)
-            .overlay {
-                if !search.isEmpty {
-                    List {
-                        if !tags.contains(search.safeKeyword) {
-                            Section("Suggested") {
-                                Button {
-                                    tags.append(search.safeKeyword)
-                                    search = ""
-                                } label: {
-                                    AddTagLabel(search.safeKeyword)
-                                }
-                            }
-                        }
-                        Section("Similar") {
-                            ForEach(filteredTags) { tag in
-                                Button {
-                                    tags.append(tag)
-                                    search = ""
-                                } label: {
-                                    AddTagLabel(tag)
-                                }
-                            }
-                        }
-                    }
-                    .listStyle(.grouped)
-                }
-            }
-            .searchable(text: $search, placement: .navigationBarDrawer(displayMode: .always))
-            .navigationTitle("Tags")
+            .navigationTitle(bookmark.url.absoluteString)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -149,13 +129,24 @@ struct AddTagsView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: save) {
-                        Text("Done")
+                        Text("Save")
                             .bold()
                     }
+                }
+            }
+            .sheet(item: $sheet) { sheet in
+                switch sheet {
+                case .addTag:
+                    AddTagView(tagsView: tagsView, tags: $tags)
                 }
             }
         }
         .navigationViewStyle(.stack)
     }
+    
+}
+extension EditView.SheetType: Identifiable {
+    
+    public var id: Self { self }
     
 }

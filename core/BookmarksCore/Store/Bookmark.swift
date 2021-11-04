@@ -85,6 +85,17 @@ public class Bookmark: Equatable {
         }
         return true
     }
+    
+    public func setting(title: String) -> Bookmark {
+        Bookmark(identifier: identifier,
+                 title: title,
+                 url: url,
+                 tags: tags,
+                 date: date,
+                 toRead: toRead,
+                 shared: shared,
+                 notes: notes)
+    }
 
     public func setting(notes: String) -> Bookmark {
         Bookmark(identifier: identifier,

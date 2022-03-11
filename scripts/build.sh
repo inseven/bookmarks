@@ -151,7 +151,7 @@ function cleanup {
 trap cleanup EXIT
 
 # Determine the version and build number.
-VERSION_NUMBER=`changes --scope macOS version`
+VERSION_NUMBER=`changes version`
 BUILD_NUMBER=`build-tools generate-build-number`
 
 # Import the certificates into our dedicated keychain.
@@ -238,7 +238,6 @@ popd
 # Attempt to create a version tag and publish a GitHub release; fails quietly if there's no new release.
 if $RELEASE ; then
     changes \
-        --scope macOS \
         release \
         --skip-if-empty \
         --push \

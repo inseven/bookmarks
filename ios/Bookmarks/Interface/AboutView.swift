@@ -29,15 +29,13 @@ struct AboutView: View {
     var body: some View {
         NavigationView {
             Form {
+                HeaderSection {
+                    IconView(uiImage: UIImage(named: "Icon")!)
+                }
                 BuildSection("inseven/bookmarks")
-                Section("InSeven") {
-                    Button("Company") {
-                        guard let url = URL(string: "https://inseven.co.uk") else {
-                            return
-                        }
-                        UIApplication.shared.open(url)
-                    }
-                    Button("Support") {
+                Section {
+                    Link("InSeven Limited", url: URL(string: "https://inseven.co.uk")!)
+                    Button {
                         var components = URLComponents()
                         components.scheme = "mailto"
                         components.path = "support@inseven.co.uk"
@@ -46,10 +44,18 @@ struct AboutView: View {
                             return
                         }
                         UIApplication.shared.open(url)
+                    } label: {
+                        HStack {
+                            Text("Support")
+                            Spacer()
+                            Image(systemName: "envelope")
+                                .foregroundColor(.secondary)
+                        }
                     }
                 }
+                .foregroundColor(.primary)
                 CreditSection("Contributors", [
-                    "Jason Morley",
+                    Credit("Jason Morley", url: URL(string: "https://jbmorley.co.uk")),
                 ])
                 CreditSection("Thanks", [
                     "Blake Merryman",

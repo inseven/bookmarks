@@ -122,8 +122,7 @@ struct Sidebar: View {
                 guard let section = section else {
                     return
                 }
-                print("scrolling to \(section)")
-                scrollView.scrollTo(section)
+                scrollView.scrollTo(section, anchor: .center)
             }
         }
         .sheet(item: $sheet) { sheet in

@@ -24,8 +24,15 @@ import BookmarksCore
 
 struct Bookmarks: View {
 
-    enum SheetType {
-        case settings
+    enum SheetType: Identifiable {
+
+        public var id: String {
+            switch self {
+            case .tags(let bookmark):
+                return "tags-\(bookmark.id)"
+            }
+        }
+
         case tags(Bookmark)
     }
 
@@ -122,10 +129,6 @@ struct Bookmarks: View {
         .sharing(items: $sharedItems)
         .sheet(item: $sheet) { sheet in
             switch sheet {
-            case .settings:
-                NavigationView {
-                    SettingsView(settings: manager.settings)
-                }
             case .tags(let bookmark):
                 EditView(tagsView: manager.tagsView, bookmark: bookmark)
             }
@@ -134,9 +137,6 @@ struct Bookmarks: View {
             Alert(error: error)
         }
         .navigationTitle(section.navigationTitle)
-        .navigationBarItems(trailing: Button("Settings") {
-            sheet = .settings
-        })
         .onAppear {
             bookmarksView.start()
         }
@@ -148,17 +148,4 @@ struct Bookmarks: View {
         }
     }
 
-}
-
-extension Bookmarks.SheetType: Identifiable {
-    
-    public var id: String {
-        switch self {
-        case .settings:
-            return "settings"
-        case .tags(let bookmark):
-            return "tags-\(bookmark.id)"
-        }
-    }
-    
 }

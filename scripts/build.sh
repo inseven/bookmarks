@@ -160,6 +160,7 @@ echo "$MACOS_CERTIFICATE_PASSWORD" | build-tools import-base64-certificate --pas
 
 # Install the provisioning profiles.
 build-tools install-provisioning-profile "macos/Bookmarks_Developer_ID_Application.provisionprofile"
+build-tools install-provisioning-profile "macos/Bookmarks_macOS_App_Store_Profile.provisionprofile"
 build-tools install-provisioning-profile "ios/Bookmarks_App_Store_Profile.mobileprovision"
 
 # Build and archive the iOS project.
@@ -208,6 +209,11 @@ xcodebuild \
     -exportArchive \
     -exportPath "$BUILD_DIRECTORY" \
     -exportOptionsPlist "macos/ExportOptions.plist"
+    xcodebuild \
+        -archivePath "$MACOS_ARCHIVE_PATH" \
+        -exportArchive \
+        -exportPath "$BUILD_DIRECTORY" \
+        -exportOptionsPlist "macos/ExportOptions_App_Store.plist"
 
 APP_BASENAME="Bookmarks.app"
 APP_PATH="$BUILD_DIRECTORY/$APP_BASENAME"

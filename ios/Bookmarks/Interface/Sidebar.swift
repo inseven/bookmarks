@@ -23,8 +23,17 @@ import SwiftUI
 import BookmarksCore
 
 struct Sidebar: View {
-    
+
+    enum Sheet: Identifiable {
+
+        var id: Self { self }
+
+        case settings
+    }
+
+    @Environment(\.manager) var manager: BookmarksManager
     @State var section: BookmarksSection? = .all
+    @State var sheet: Sheet?
     
     var body: some View {
         List {
@@ -37,7 +46,20 @@ struct Sidebar: View {
                 SidebarLink(selection: $section, section: .untagged)
             }
         }
+        .sheet(item: $sheet) { sheet in
+            switch sheet {
+            case .settings:
+                NavigationView {
+                    SettingsView(settings: manager.settings)
+                }
+            }
+        }
         .navigationTitle("Filters")
+        .navigationBarItems(leading: Button {
+            sheet = .settings
+        } label: {
+            Image(systemName: "gear")
+        })
     }
     
 }

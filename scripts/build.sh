@@ -188,11 +188,6 @@ xcodebuild \
     -exportArchive \
     -exportPath "$BUILD_DIRECTORY" \
     -exportOptionsPlist "macos/ExportOptions.plist"
-xcodebuild \
-    -archivePath "$MACOS_ARCHIVE_PATH" \
-    -exportArchive \
-    -exportPath "$BUILD_DIRECTORY" \
-    -exportOptionsPlist "macos/ExportOptions_App_Store.plist"
 
 APP_BASENAME="Bookmarks.app"
 APP_PATH="$BUILD_DIRECTORY/$APP_BASENAME"

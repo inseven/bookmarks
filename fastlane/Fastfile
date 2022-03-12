@@ -40,6 +40,8 @@ lane :upload do |options|
         api_key: api_key,
         skip_submission: true,
         ipa: options[:ipa],
-        notify_external_testers: false
+        pkg: options[:pkg],
+        notify_external_testers: false,
+        changelog: options[:changelog],
     )
 end

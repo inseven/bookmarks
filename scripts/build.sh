@@ -218,6 +218,7 @@ zip -r --symlinks "$ZIP_BASENAME" "$APP_BASENAME"
 build-tools verify-notarized-zip "$ZIP_BASENAME"
 rm -r "$APP_BASENAME"
 popd
+APP_PATH="${BUILD_DIRECTORY}/${ZIP_BASENAME}"
 
 # Archive the build directory.
 ZIP_BASENAME="build-${VERSION_NUMBER}-${BUILD_NUMBER}.zip"
@@ -230,7 +231,6 @@ if $RELEASE ; then
 
     IPA_PATH="${BUILD_DIRECTORY}/Bookmarks.ipa"
     PKG_PATH="${BUILD_DIRECTORY}/Bookmarks.pkg"
-    APP_PATH="${BUILD_DIRECTORY}/${ZIP_BASENAME}"
 
     export API_KEY_PATH="${TEMPORARY_DIRECTORY}/AuthKey.p8"
     echo -n "$APPLE_API_KEY" | base64 --decode --output "$API_KEY_PATH"

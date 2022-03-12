@@ -56,7 +56,6 @@ which gh || (echo "GitHub cli (gh) not available on the path." && exit 1)
 POSITIONAL=()
 NOTARIZE=${NOTARIZE:-false}
 RELEASE=${TRY_RELEASE:-false}
-TESTFLIGHT_UPLOAD=${TESTFLIGHT_UPLOAD:-false}
 while [[ $# -gt 0 ]]
 do
     key="$1"
@@ -67,10 +66,6 @@ do
         ;;
         -r|--release)
         RELEASE=true
-        shift
-        ;;
-        -t|--testflight-upload)
-        TESTFLIGHT_UPLOAD=true
         shift
         ;;
         *)

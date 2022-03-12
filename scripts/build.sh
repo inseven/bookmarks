@@ -32,7 +32,8 @@ BUILD_DIRECTORY="${ROOT_DIRECTORY}/build"
 TEMPORARY_DIRECTORY="${ROOT_DIRECTORY}/temp"
 
 KEYCHAIN_PATH="${TEMPORARY_DIRECTORY}/temporary.keychain"
-ARCHIVE_PATH="${BUILD_DIRECTORY}/Bookmarks.xcarchive"
+IOS_ARCHIVE_PATH="${BUILD_DIRECTORY}/Bookmarks-iOS.xcarchive"
+MACOS_ARCHIVE_PATH="${BUILD_DIRECTORY}/Bookmarks-macOS.xcarchive"
 FASTLANE_ENV_PATH="${ROOT_DIRECTORY}/fastlane/.env"
 
 CHANGES_DIRECTORY="${SCRIPTS_DIRECTORY}/changes"
@@ -157,6 +158,7 @@ BUILD_NUMBER=`build-tools generate-build-number`
 # Import the certificates into our dedicated keychain.
 echo "$IOS_CERTIFICATE_PASSWORD" | build-tools import-base64-certificate --password "$KEYCHAIN_PATH" "$IOS_CERTIFICATE_BASE64"
 echo "$MACOS_CERTIFICATE_PASSWORD" | build-tools import-base64-certificate --password "$KEYCHAIN_PATH" "$MACOS_CERTIFICATE_BASE64"
+echo "$MACOS_DEVELOPER_INSTALLER_CERTIFICATE_PASSWORD" | build-tools import-base64-certificate --password "$KEYCHAIN_PATH" "$MACOS_DEVELOPER_INSTALLER_CERTIFICATE"
 
 # Install the provisioning profiles.
 build-tools install-provisioning-profile "macos/Bookmarks_Developer_ID_Application.provisionprofile"
@@ -168,13 +170,13 @@ sudo xcode-select --switch "$IOS_XCODE_PATH"
 xcode_project \
     -scheme "Bookmarks iOS" \
     -config Release \
-    -archivePath "$ARCHIVE_PATH" \
+    -archivePath "$IOS_ARCHIVE_PATH" \
     OTHER_CODE_SIGN_FLAGS="--keychain=\"${KEYCHAIN_PATH}\"" \
     BUILD_NUMBER=$BUILD_NUMBER \
     MARKETING_VERSION=$VERSION_NUMBER \
     clean archive
 xcodebuild \
-    -archivePath "$ARCHIVE_PATH" \
+    -archivePath "$IOS_ARCHIVE_PATH" \
     -exportArchive \
     -exportPath "$BUILD_DIRECTORY" \
     -exportOptionsPlist "ios/ExportOptions.plist"
@@ -187,16 +189,16 @@ sudo xcode-select --switch "$MACOS_XCODE_PATH"
 xcode_project \
     -scheme "Bookmarks macOS" \
     -config Release \
-    -archivePath "$ARCHIVE_PATH" \
+    -archivePath "$MACOS_ARCHIVE_PATH" \
     OTHER_CODE_SIGN_FLAGS="--keychain=\"${KEYCHAIN_PATH}\"" \
     BUILD_NUMBER=$BUILD_NUMBER \
     MARKETING_VERSION=$VERSION_NUMBER \
     clean archive
-# xcodebuild \
-#     -archivePath "$ARCHIVE_PATH" \
-#     -exportArchive \
-#     -exportPath "$BUILD_DIRECTORY" \
-#     -exportOptionsPlist "macos/ExportOptions.plist"
+xcodebuild \
+    -archivePath "$MACOS_ARCHIVE_PATH" \
+    -exportArchive \
+    -exportPath "$BUILD_DIRECTORY" \
+    -exportOptionsPlist "macos/ExportOptions.plist"
 xcodebuild \
     -archivePath "$MACOS_ARCHIVE_PATH" \
     -exportArchive \

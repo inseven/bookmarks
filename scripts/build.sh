@@ -192,16 +192,16 @@ xcode_project \
     BUILD_NUMBER=$BUILD_NUMBER \
     MARKETING_VERSION=$VERSION_NUMBER \
     clean archive
+# xcodebuild \
+#     -archivePath "$ARCHIVE_PATH" \
+#     -exportArchive \
+#     -exportPath "$BUILD_DIRECTORY" \
+#     -exportOptionsPlist "macos/ExportOptions.plist"
 xcodebuild \
-    -archivePath "$ARCHIVE_PATH" \
+    -archivePath "$MACOS_ARCHIVE_PATH" \
     -exportArchive \
     -exportPath "$BUILD_DIRECTORY" \
-    -exportOptionsPlist "macos/ExportOptions.plist"
-    xcodebuild \
-        -archivePath "$MACOS_ARCHIVE_PATH" \
-        -exportArchive \
-        -exportPath "$BUILD_DIRECTORY" \
-        -exportOptionsPlist "macos/ExportOptions_App_Store.plist"
+    -exportOptionsPlist "macos/ExportOptions_App_Store.plist"
 
 APP_BASENAME="Bookmarks.app"
 APP_PATH="$BUILD_DIRECTORY/$APP_BASENAME"
@@ -222,18 +222,18 @@ build-tools verify-notarized-zip "$ZIP_BASENAME"
 rm -r "$APP_BASENAME"
 popd
 
+# Archive the build directory.
+ZIP_BASENAME="build-${VERSION_NUMBER}-${BUILD_NUMBER}.zip"
+ZIP_PATH="${BUILD_DIRECTORY}/${ZIP_BASENAME}"
+pushd "${BUILD_DIRECTORY}"
+zip -r "${ZIP_BASENAME}" .
+popd
+
 if $RELEASE ; then
 
     IPA_PATH="${BUILD_DIRECTORY}/Bookmarks.ipa"
     PKG_PATH="${BUILD_DIRECTORY}/Bookmarks.pkg"
     APP_PATH="${BUILD_DIRECTORY}/${ZIP_BASENAME}"
-
-    # Archive the build directory.
-    ZIP_BASENAME="build-${VERSION_NUMBER}-${BUILD_NUMBER}.zip"
-    ZIP_PATH="${BUILD_DIRECTORY}/${ZIP_BASENAME}"
-    pushd "${BUILD_DIRECTORY}"
-    zip -r "${ZIP_BASENAME}" .
-    popd
 
     export API_KEY_PATH="${TEMPORARY_DIRECTORY}/AuthKey.p8"
     echo -n "$APPLE_API_KEY" | base64 --decode --output "$API_KEY_PATH"

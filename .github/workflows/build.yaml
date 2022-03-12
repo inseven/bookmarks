@@ -31,8 +31,8 @@ jobs:
 
         IOS_CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_BASE64 }}
         IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
-        MACOS_CERTIFICATE_BASE64: ${{ secrets.MACOS_CERTIFICATE_BASE64 }}
-        MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+        MACOS_DEVELOPER_INSTALLER_CERTIFICATE: ${{ secrets.MACOS_DEVELOPER_INSTALLER_CERTIFICATE }}
+        MACOS_DEVELOPER_INSTALLER_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_DEVELOPER_INSTALLER_CERTIFICATE_PASSWORD }}
 
         APPLE_DEVELOPER_ID: ${{ secrets.APPLE_DEVELOPER_ID }}
         APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
@@ -41,22 +41,15 @@ jobs:
         FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
 
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        NOTARIZE: ${{ github.ref == 'refs/heads/main' }}
-        TRY_RELEASE: ${{ github.ref == 'refs/heads/main' }}
-        TESTFLIGHT_UPLOAD: ${{ github.ref == 'refs/heads/main' }}
+        # RELEASE: ${{ github.ref == 'refs/heads/main' }}
+        RELEASE: true
 
       run: |
         scripts/build.sh
-
-    - name: Archive the binary
-      uses: actions/upload-artifact@v2
-      with:
-        name: Artifacts
-        path: build/Artifacts.zip
 
     - name: Archive the build directory
       uses: actions/upload-artifact@v2
       if: always()
       with:
-        name: Build Directory
+        name: Build
         path: build

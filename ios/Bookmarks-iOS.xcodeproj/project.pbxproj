@@ -577,7 +577,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks.new;
 				PRODUCT_NAME = Bookmarks;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Bookmarks/Bookmarks-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -600,7 +600,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks.new;
 				PRODUCT_NAME = Bookmarks;
 				PROVISIONING_PROFILE_SPECIFIER = "Bookmarks App Store Profile";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Bookmarks/Bookmarks-Bridging-Header.h";

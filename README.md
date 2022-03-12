@@ -33,7 +33,7 @@ These can be quickly decoded using the `build-tools` script:
 
 ### Managing Certificates
 
-Builds use base64 encoded [PKCS 12](https://en.wikipedia.org/wiki/PKCS_12) certificate and private key containers specified in the `IOS_CERTIFICATE_BASE64` and `MACOS_CERTIFICATE_BASE64` environment variables (with the password given in the `IOS_CERTIFICATE_PASSWORD` and `MACOS_CERTIFICATE_PASSWORD` environment variables respectively). This loosely follows the GitHub approach to [managing certificates](https://docs.github.com/en/actions/guides/installing-an-apple-certificate-on-macos-runners-for-xcode-development).
+Builds use base64 encoded [PKCS 12](https://en.wikipedia.org/wiki/PKCS_12) certificate and private key containers specified in the `IOS_CERTIFICATE_BASE64` and `MACOS_DEVELOPER_INSTALLER_CERTIFICATE` environment variables (with the password given in the `IOS_CERTIFICATE_PASSWORD` and `MACOS_DEVELOPER_INSTALLER_CERTIFICATE_PASSWORD` environment variables respectively). This loosely follows the GitHub approach to [managing certificates](https://docs.github.com/en/actions/guides/installing-an-apple-certificate-on-macos-runners-for-xcode-development).
 
 Keychain Access can be used to export your certificate and private key in the PKCS 12 format, and the base64 encoded version is generated as follows:
 
@@ -57,8 +57,8 @@ In order to make continuous integration easy the `scripts/build.sh` script build
 
 - `IOS_CERTIFICATE_BASE64` -- base64 encoded PKCS 12 certificate for iOS App Store builds (see above for details)
 - `IOS_CERTIFICATE_PASSWORD` -- password used to protect the iOS certificate
-- `MACOS_CERTIFICATE_BASE64` -- base64 encoded PKCS 12 certificate for macOS Developer ID builds (see above for details)
-- `MACOS_CERTIFICATE_PASSWORD` -- password used to protect the macOS certificate
+- `MACOS_DEVELOPER_INSTALLER_CERTIFICATE` -- base64 encoded PKCS 12 certificate for macOS Developer ID builds (see above for details)
+- `MACOS_DEVELOPER_INSTALLER_CERTIFICATE_PASSWORD` -- password used to protect the macOS certificate
 - `APPLE_DEVELOPER_ID` -- individual Apple Developer Account ID (used for notarization)
 - `APPLE_API_KEY` -- base64 encoded App Store Connect API key (see https://appstoreconnect.apple.com/access/api)
 - `APPLE_API_KEY_ID` -- App Store Connect API key id (see https://appstoreconnect.apple.com/access/api)
@@ -74,8 +74,8 @@ The script (like Fastlane) will look for and source an environment file in the F
 # Certificate store
 export IOS_CERTIFICATE_BASE64=
 export IOS_CERTIFICATE_PASSWORD=
-export MACOS_CERTIFICATE_BASE64=
-export MACOS_CERTIFICATE_PASSWORD=
+export MACOS_DEVELOPER_INSTALLER_CERTIFICATE=
+export MACOS_DEVELOPER_INSTALLER_CERTIFICATE_PASSWORD=
 
 # Developer account
 export APPLE_DEVELOPER_ID=

@@ -94,12 +94,6 @@ Once you've added your environment variables to this, run the script from the ro
 ./scripts/build.sh
 ```
 
-You can notarize local builds by specifying the `--notarize` parameter:
-
-```bash
-./scripts/build.sh --notarize
-```
-
 You can publish a build locally by specifying the `--release` parameter:
 
 ```bash

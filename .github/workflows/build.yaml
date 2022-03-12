@@ -41,8 +41,7 @@ jobs:
         FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
 
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # RELEASE: ${{ github.ref == 'refs/heads/main' }}
-        RELEASE: true
+        RELEASE: ${{ github.ref == 'refs/heads/main' }}
 
       run: |
         scripts/build.sh

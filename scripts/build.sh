@@ -239,7 +239,7 @@ if $RELEASE ; then
         --skip-if-empty \
         --pre-release \
         --push \
-        --exec "${CHANGES_GITHUB_RELEASE_SCRIPT}" \
-        "${BUILD_DIRECTORY}/${ZIP_BASENAME}"
+        --exec "${RELEASE_SCRIPT_PATH}" \
         "${IPA_PATH}" "${PKG_PATH}" "${APP_PATH}" "${ZIP_PATH}"
+    unlink "$API_KEY_PATH"
 fi

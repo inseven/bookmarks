@@ -151,7 +151,6 @@ echo "$MACOS_CERTIFICATE_PASSWORD" | build-tools import-base64-certificate --pas
 echo "$MACOS_DEVELOPER_INSTALLER_CERTIFICATE_PASSWORD" | build-tools import-base64-certificate --password "$KEYCHAIN_PATH" "$MACOS_DEVELOPER_INSTALLER_CERTIFICATE"
 
 # Install the provisioning profiles.
-build-tools install-provisioning-profile "macos/Bookmarks_Developer_ID_Application.provisionprofile"
 build-tools install-provisioning-profile "macos/Bookmarks_macOS_App_Store_Profile.provisionprofile"
 build-tools install-provisioning-profile "ios/Bookmarks_App_Store_Profile.mobileprovision"
 

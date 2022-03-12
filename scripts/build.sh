@@ -38,7 +38,7 @@ FASTLANE_ENV_PATH="${ROOT_DIRECTORY}/fastlane/.env"
 CHANGES_DIRECTORY="${SCRIPTS_DIRECTORY}/changes"
 BUILD_TOOLS_DIRECTORY="${SCRIPTS_DIRECTORY}/build-tools"
 
-CHANGES_GITHUB_RELEASE_SCRIPT="${CHANGES_DIRECTORY}/examples/gh-release.sh"
+RELEASE_SCRIPT_PATH="${SCRIPTS_DIRECTORY}/release.sh"
 
 PATH=$PATH:$CHANGES_DIRECTORY
 PATH=$PATH:$BUILD_TOOLS_DIRECTORY
@@ -182,18 +182,6 @@ xcodebuild \
 IPA_BASENAME="Bookmarks.ipa"
 IPA_PATH="$BUILD_DIRECTORY/$IPA_BASENAME"
 
-# Upload the build to TestFlight
-if $TESTFLIGHT_UPLOAD ; then
-    API_KEY_PATH="${TEMPORARY_DIRECTORY}/AuthKey.p8"
-    echo -n "$APPLE_API_KEY" | base64 --decode --output "$API_KEY_PATH"
-    bundle exec fastlane upload \
-        api_key:"$API_KEY_PATH" \
-        api_key_id:"$APPLE_API_KEY_ID" \
-        api_key_issuer_id:"$APPLE_API_KEY_ISSUER_ID" \
-        ipa:"$IPA_PATH"
-    unlink "$API_KEY_PATH"
-fi
-
 # Build and archive the macOS project.
 sudo xcode-select --switch "$MACOS_XCODE_PATH"
 xcode_project \
@@ -226,21 +214,35 @@ if $NOTARIZE ; then
     fastlane notarize_release package:"$APP_PATH"
 fi
 
-# Archive the results.
+# Create the compressed macOS build.
 pushd "$BUILD_DIRECTORY"
 ZIP_BASENAME="Bookmarks-macOS-${VERSION_NUMBER}.zip"
 zip -r --symlinks "$ZIP_BASENAME" "$APP_BASENAME"
 build-tools verify-notarized-zip "$ZIP_BASENAME"
 rm -r "$APP_BASENAME"
-zip -r "Artifacts.zip" "."
 popd
 
-# Attempt to create a version tag and publish a GitHub release; fails quietly if there's no new release.
 if $RELEASE ; then
+
+    IPA_PATH="${BUILD_DIRECTORY}/Bookmarks.ipa"
+    PKG_PATH="${BUILD_DIRECTORY}/Bookmarks.pkg"
+    APP_PATH="${BUILD_DIRECTORY}/${ZIP_BASENAME}"
+
+    # Archive the build directory.
+    ZIP_BASENAME="build-${VERSION_NUMBER}-${BUILD_NUMBER}.zip"
+    ZIP_PATH="${BUILD_DIRECTORY}/${ZIP_BASENAME}"
+    pushd "${BUILD_DIRECTORY}"
+    zip -r "${ZIP_BASENAME}" .
+    popd
+
+    export API_KEY_PATH="${TEMPORARY_DIRECTORY}/AuthKey.p8"
+    echo -n "$APPLE_API_KEY" | base64 --decode --output "$API_KEY_PATH"
     changes \
         release \
         --skip-if-empty \
+        --pre-release \
         --push \
         --exec "${CHANGES_GITHUB_RELEASE_SCRIPT}" \
         "${BUILD_DIRECTORY}/${ZIP_BASENAME}"
+        "${IPA_PATH}" "${PKG_PATH}" "${APP_PATH}" "${ZIP_PATH}"
 fi

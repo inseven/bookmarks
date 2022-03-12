@@ -54,16 +54,11 @@ which gh || (echo "GitHub cli (gh) not available on the path." && exit 1)
 
 # Process the command line arguments.
 POSITIONAL=()
-NOTARIZE=${NOTARIZE:-false}
-RELEASE=${TRY_RELEASE:-false}
+RELEASE=${RELEASE:-false}
 while [[ $# -gt 0 ]]
 do
     key="$1"
     case $key in
-        -n|--notarize)
-        NOTARIZE=true
-        shift
-        ;;
         -r|--release)
         RELEASE=true
         shift
@@ -203,23 +198,6 @@ xcodebuild \
 APP_BASENAME="Bookmarks.app"
 APP_PATH="$BUILD_DIRECTORY/$APP_BASENAME"
 
-# Show the code signing details.
-codesign -dvv "$APP_PATH"
-
-# Notarize the release build.
-if $NOTARIZE ; then
-    fastlane notarize_release package:"$APP_PATH"
-fi
-
-# Create the compressed macOS build.
-pushd "$BUILD_DIRECTORY"
-ZIP_BASENAME="Bookmarks-macOS-${VERSION_NUMBER}.zip"
-zip -r --symlinks "$ZIP_BASENAME" "$APP_BASENAME"
-build-tools verify-notarized-zip "$ZIP_BASENAME"
-rm -r "$APP_BASENAME"
-popd
-APP_PATH="${BUILD_DIRECTORY}/${ZIP_BASENAME}"
-
 # Archive the build directory.
 ZIP_BASENAME="build-${VERSION_NUMBER}-${BUILD_NUMBER}.zip"
 ZIP_PATH="${BUILD_DIRECTORY}/${ZIP_BASENAME}"
@@ -240,6 +218,6 @@ if $RELEASE ; then
         --pre-release \
         --push \
         --exec "${RELEASE_SCRIPT_PATH}" \
-        "${IPA_PATH}" "${PKG_PATH}" "${APP_PATH}" "${ZIP_PATH}"
+        "${IPA_PATH}" "${PKG_PATH}" "${ZIP_PATH}"
     unlink "$API_KEY_PATH"
 fi

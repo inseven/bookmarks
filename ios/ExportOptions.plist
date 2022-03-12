@@ -4,7 +4,7 @@
 <dict>
 	<key>provisioningProfiles</key>
 	<dict>
-		<key>uk.co.inseven.bookmarks</key>
+		<key>uk.co.inseven.bookmarks.new</key>
 		<string>Bookmarks App Store Profile</string>
 	</dict>
 	<key>destination</key>

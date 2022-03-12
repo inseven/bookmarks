@@ -618,7 +618,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 0.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks.new;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -645,7 +645,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 0.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks.new;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Bookmarks Developer ID Application";
 				SWIFT_VERSION = 5.0;

@@ -58,9 +58,10 @@ struct SettingsView: View {
                         presentationMode.wrappedValue.dismiss()
                         manager.logout { _ in }
                     } label: {
-                        Text("Log Out")
-                            .frame(maxWidth: .infinity)
+                        Label("Log Out", systemImage: "xmark")
+                            .labelStyle(ButtonLabelStyle())
                     }
+                    .foregroundColor(.primary)
                 }
                 Section {
                     Button {

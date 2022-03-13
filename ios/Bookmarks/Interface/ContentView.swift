@@ -32,7 +32,6 @@ struct ContentView: View {
         NavigationView {
             Sidebar()
         }
-        .navigationViewStyle(.stack)
         .sheet(item: $sheet) { sheet in
             switch sheet {
             case .logIn:

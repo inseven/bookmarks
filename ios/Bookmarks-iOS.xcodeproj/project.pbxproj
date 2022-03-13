@@ -25,6 +25,7 @@
 		D8743909273106C000B676A5 /* Diligence in Frameworks */ = {isa = PBXBuildFile; productRef = D8743908273106C000B676A5 /* Diligence */; };
 		D874390C273108DD00B676A5 /* Diligence in Resources */ = {isa = PBXBuildFile; fileRef = D874390B273108DD00B676A5 /* Diligence */; };
 		D874390E2731094000B676A5 /* Introspect in Resources */ = {isa = PBXBuildFile; fileRef = D874390D2731094000B676A5 /* Introspect */; };
+		D89956D727DE41150023FC84 /* ButtonLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89956D627DE41150023FC84 /* ButtonLabelStyle.swift */; };
 		D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BDE1172551C56100C95945 /* BookmarksApp.swift */; };
 		D8BDE1472554782000C95945 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = D8BDE1462554782000C95945 /* Introspect */; };
 		D8D3BC0121C6AEBD00D6FB97 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */; };
@@ -85,6 +86,7 @@
 		D87439072731068C00B676A5 /* diligence */ = {isa = PBXFileReference; lastKnownFileType = folder; name = diligence; path = ../diligence; sourceTree = "<group>"; };
 		D874390B273108DD00B676A5 /* Diligence */ = {isa = PBXFileReference; lastKnownFileType = text; path = Diligence; sourceTree = "<group>"; };
 		D874390D2731094000B676A5 /* Introspect */ = {isa = PBXFileReference; lastKnownFileType = text; path = Introspect; sourceTree = "<group>"; };
+		D89956D627DE41150023FC84 /* ButtonLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonLabelStyle.swift; sourceTree = "<group>"; };
 		D89C65E326AF5A8E00D49D11 /* Common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		D89C65E426AF5A8E00D49D11 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		D89C65E526AF5A8E00D49D11 /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
@@ -177,6 +179,14 @@
 			path = Licenses;
 			sourceTree = "<group>";
 		};
+		D89956D527DE41030023FC84 /* Styles */ = {
+			isa = PBXGroup;
+			children = (
+				D89956D627DE41150023FC84 /* ButtonLabelStyle.swift */,
+			);
+			path = Styles;
+			sourceTree = "<group>";
+		};
 		D8D3BBED21C6AEBC00D6FB97 = {
 			isa = PBXGroup;
 			children = (
@@ -213,6 +223,7 @@
 				D8578479254FF56E00AE241C /* Interface */,
 				D8D3BC0221C6AEBD00D6FB97 /* LaunchScreen.storyboard */,
 				D874390A273108CC00B676A5 /* Licenses */,
+				D89956D527DE41030023FC84 /* Styles */,
 			);
 			path = Bookmarks;
 			sourceTree = "<group>";
@@ -390,6 +401,7 @@
 				D82BF61E273090FE004978AD /* LogInView.swift in Sources */,
 				D840327C2732E41D004CD998 /* Sidebar.swift in Sources */,
 				D8019A1B273210F2001736DE /* ShareController.swift in Sources */,
+				D89956D727DE41150023FC84 /* ButtonLabelStyle.swift in Sources */,
 				D871B4E5273242ED00712182 /* EditView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

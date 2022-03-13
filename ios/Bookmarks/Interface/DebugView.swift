@@ -52,8 +52,8 @@ struct DebugView: View {
                         }
                     }
                 } label: {
-                    Text("Clear Thumbnail Cache")
-                        .frame(maxWidth: .infinity)
+                    Label("Clear Thumbnail Cache", systemImage: "trash")
+                        .labelStyle(ButtonLabelStyle())
                 }
             }
         }

@@ -137,6 +137,7 @@ struct Bookmarks: View {
             Alert(error: error)
         }
         .navigationTitle(section.navigationTitle)
+        .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             bookmarksView.start()
         }

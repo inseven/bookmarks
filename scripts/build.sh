@@ -105,19 +105,19 @@ xcode_project -list
 
 # Smoke test builds.
 
-# iOS
-sudo xcode-select --switch "$IOS_XCODE_PATH"
-build_scheme "BookmarksCore iOS" clean build build-for-testing test \
-    -sdk iphonesimulator \
-    -destination "$IPHONE_DESTINATION"
-build_scheme "Bookmarks iOS" clean build build-for-testing test \
-    -sdk iphonesimulator \
-    -destination "$IPHONE_DESTINATION"
-
-# macOS
-sudo xcode-select --switch "$MACOS_XCODE_PATH"
-build_scheme "BookmarksCore macOS" clean build build-for-testing test
-build_scheme "Bookmarks macOS" clean build build-for-testing
+# # iOS
+# sudo xcode-select --switch "$IOS_XCODE_PATH"
+# build_scheme "BookmarksCore iOS" clean build build-for-testing test \
+#     -sdk iphonesimulator \
+#     -destination "$IPHONE_DESTINATION"
+# build_scheme "Bookmarks iOS" clean build build-for-testing test \
+#     -sdk iphonesimulator \
+#     -destination "$IPHONE_DESTINATION"
+#
+# # macOS
+# sudo xcode-select --switch "$MACOS_XCODE_PATH"
+# build_scheme "BookmarksCore macOS" clean build build-for-testing test
+# build_scheme "Bookmarks macOS" clean build build-for-testing
 
 # Clean up the build directory.
 if [ -d "$BUILD_DIRECTORY" ] ; then

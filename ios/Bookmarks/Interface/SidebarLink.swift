@@ -31,6 +31,8 @@ struct SidebarLink: View {
     var section: BookmarksSection
 
     var body: some View {
+        // TODO: Migrate to the new NavigationLink and re-enable warnings as errors #397
+        //       https://github.com/inseven/bookmarks/issues/397
         NavigationLink(tag: section, selection: $selection) {
             Bookmarks(section: section, bookmarksView: BookmarksView(database: manager.database, query: section.query))
         } label: {

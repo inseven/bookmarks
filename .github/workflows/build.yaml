@@ -13,7 +13,7 @@ jobs:
   test:
 
     name: Build and test iOS and macOS
-    runs-on: macos-monterey
+    runs-on: macos-ventura
 
     steps:
 

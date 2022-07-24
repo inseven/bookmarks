@@ -27,21 +27,33 @@ set -x
 # This script expects the iOS IPA to be passed as the first argument, the macOS PKG as the second argument, and any
 # additional files to be attached to the GitHub release to be passed as subsequent arguments.
 
-# Upload the build to TestFlight.
-bundle exec fastlane upload \
-    api_key:"$API_KEY_PATH" \
-    api_key_id:"$APPLE_API_KEY_ID" \
-    api_key_issuer_id:"$APPLE_API_KEY_ISSUER_ID" \
-    ipa:"$1" \
-    changelog:"${CHANGES_NOTES}"
+# Validate and upload the iOS build.
+xcrun altool --validate-app \
+    -f "$1" \
+    --apiKey "$APPLE_API_KEY_ID" \
+    --apiIssuer "$APPLE_API_KEY_ISSUER_ID" \
+    --output-format json \
+    --type ios
+xcrun altool --upload-app \
+    -f "$1" \
+    --primary-bundle-id "uk.co.inseven.bookmarks" \
+    --apiKey "$APPLE_API_KEY_ID" \
+    --apiIssuer "$APPLE_API_KEY_ISSUER_ID" \
+    --type ios
 
-# Upload the build to TestFlight.
-bundle exec fastlane upload \
-    api_key:"$API_KEY_PATH" \
-    api_key_id:"$APPLE_API_KEY_ID" \
-    api_key_issuer_id:"$APPLE_API_KEY_ISSUER_ID" \
-    pkg:"$2" \
-    changelog:"${CHANGES_NOTES}"
+# Validate and upload the macOS build.
+xcrun altool --validate-app \
+    -f "$2" \
+    --apiKey "$APPLE_API_KEY_ID" \
+    --apiIssuer "$APPLE_API_KEY_ISSUER_ID" \
+    --output-format json \
+    --type macos
+xcrun altool --upload-app \
+    -f "$2" \
+    --primary-bundle-id "uk.co.inseven.bookmarks" \
+    --apiKey "$APPLE_API_KEY_ID" \
+    --apiIssuer "$APPLE_API_KEY_ISSUER_ID" \
+    --type macos
 
 # Actually make the release.
 FLAGS=()

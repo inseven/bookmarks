@@ -133,10 +133,16 @@ mkdir -p "$TEMPORARY_DIRECTORY"
 echo "$TEMPORARY_KEYCHAIN_PASSWORD" | build-tools create-keychain "$KEYCHAIN_PATH" --password
 
 function cleanup {
+
     # Cleanup the temporary files and keychain.
     cd "$ROOT_DIRECTORY"
     build-tools delete-keychain "$KEYCHAIN_PATH"
     rm -rf "$TEMPORARY_DIRECTORY"
+
+    # Clean up any private keys.
+    if [ -f ~/.appstoreconnect/private_keys ]; then
+        rm -r ~/.appstoreconnect/private_keys
+    fi
 }
 
 trap cleanup EXIT
@@ -203,8 +209,10 @@ if $RELEASE ; then
     IPA_PATH="${BUILD_DIRECTORY}/Bookmarks.ipa"
     PKG_PATH="${BUILD_DIRECTORY}/Bookmarks.pkg"
 
-    export API_KEY_PATH="${TEMPORARY_DIRECTORY}/AuthKey.p8"
-    echo -n "$APPLE_API_KEY" | base64 --decode --output "$API_KEY_PATH"
+    # Install the private key.
+    mkdir -p ~/.appstoreconnect/private_keys/
+    echo -n "$APPLE_API_KEY" | base64 --decode -o ~/".appstoreconnect/private_keys/AuthKey_${APPLE_API_KEY_ID}.p8"
+
     changes \
         release \
         --skip-if-empty \
@@ -213,4 +221,5 @@ if $RELEASE ; then
         --exec "${RELEASE_SCRIPT_PATH}" \
         "${IPA_PATH}" "${PKG_PATH}" "${ZIP_PATH}"
     unlink "$API_KEY_PATH"
+
 fi

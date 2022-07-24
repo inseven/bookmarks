@@ -39,10 +39,7 @@ pip3 install --user pipenv
 PIPENV_PIPFILE="$changes_directory/Pipfile" pipenv install
 PIPENV_PIPFILE="$build_tools_directory/Pipfile" pipenv install
 
-# Install the Ruby dependencies
 cd "$root_directory"
-gem install bundler
-bundle install
 
 # Install the GitHub CLI
 github_cli_url="https://github.com"`curl -s -L https://github.com/cli/cli/releases/latest | grep -o -e "/.*macOS.*tar.gz"`

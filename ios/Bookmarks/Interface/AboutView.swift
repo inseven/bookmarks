@@ -73,7 +73,6 @@ struct AboutView: View {
                     License(name: "Introspect", author: "Timber Software", filename: "Introspect"),
                 ])
             }
-            .navigationBarTitle("About", displayMode: .inline)
             .navigationBarItems(trailing: Button {
                 presentationMode.wrappedValue.dismiss()
             } label: {

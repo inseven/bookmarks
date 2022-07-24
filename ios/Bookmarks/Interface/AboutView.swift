@@ -31,6 +31,7 @@ struct AboutView: View {
             Form {
                 HeaderSection {
                     IconView(uiImage: UIImage(named: "Icon")!)
+                    ApplicationNameHeaderView()
                 }
                 BuildSection("inseven/bookmarks")
                 Section {

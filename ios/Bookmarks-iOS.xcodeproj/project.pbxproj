@@ -28,6 +28,7 @@
 		D89956D727DE41150023FC84 /* ButtonLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89956D627DE41150023FC84 /* ButtonLabelStyle.swift */; };
 		D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BDE1172551C56100C95945 /* BookmarksApp.swift */; };
 		D8BDE1472554782000C95945 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = D8BDE1462554782000C95945 /* Introspect */; };
+		D8BE36BE288DC94E00C49BB6 /* ApplicationNameHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BE36BD288DC94E00C49BB6 /* ApplicationNameHeaderView.swift */; };
 		D8D3BC0121C6AEBD00D6FB97 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */; };
 		D8D3BC0421C6AEBD00D6FB97 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8D3BC0221C6AEBD00D6FB97 /* LaunchScreen.storyboard */; };
 		D8D3BC0F21C6AEBD00D6FB97 /* BookmarksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BC0E21C6AEBD00D6FB97 /* BookmarksTests.swift */; };
@@ -91,6 +92,7 @@
 		D89C65E426AF5A8E00D49D11 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		D89C65E526AF5A8E00D49D11 /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		D8BDE1172551C56100C95945 /* BookmarksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksApp.swift; sourceTree = "<group>"; };
+		D8BE36BD288DC94E00C49BB6 /* ApplicationNameHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationNameHeaderView.swift; sourceTree = "<group>"; };
 		D8D3BBF621C6AEBC00D6FB97 /* Bookmarks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bookmarks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D8D3BC0321C6AEBD00D6FB97 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 				D81FBAC326B99E26004AC4A4 /* AboutView.swift */,
 				D8F521372732EEF40031F0CC /* AddTagLabel.swift */,
 				D859CE012733A9CD00E9B466 /* AddTagView.swift */,
+				D8BE36BD288DC94E00C49BB6 /* ApplicationNameHeaderView.swift */,
 				D8478553261539AA00B2318B /* Bookmarks.swift */,
 				D81E7483254A0D1B002336DC /* ContentView.swift */,
 				D82BF6262730A0D0004978AD /* DebugView.swift */,
@@ -402,6 +405,7 @@
 				D840327C2732E41D004CD998 /* Sidebar.swift in Sources */,
 				D8019A1B273210F2001736DE /* ShareController.swift in Sources */,
 				D89956D727DE41150023FC84 /* ButtonLabelStyle.swift in Sources */,
+				D8BE36BE288DC94E00C49BB6 /* ApplicationNameHeaderView.swift in Sources */,
 				D871B4E5273242ED00712182 /* EditView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

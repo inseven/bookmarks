@@ -39,6 +39,9 @@ struct ContentView: View {
     @State var firstResponder: Bool = false
     @StateObject var searchDebouncer = Debouncer<String>(initialValue: "", delay: .seconds(0.2))
 
+    @State var tokens: [String] = []
+    @State var suggestedTokens: [String] = []
+
     private var subscription: AnyCancellable?
 
     init(selection: BookmarksSelection, section: Binding<BookmarksSection?>, database: Database, sheet: Binding<ApplicationState?>) {
@@ -128,6 +131,9 @@ struct ContentView: View {
         .onDisappear {
             bookmarksView.stop()
         }
+        .searchable(text: $searchDebouncer.value, tokens: $tokens, suggestedTokens: $suggestedTokens) { token in
+            Label(token, systemImage: "tag")
+        }
         .toolbar {
             ToolbarItem {
                 Button {
@@ -159,16 +165,23 @@ struct ContentView: View {
                 .help("Delete")
                 .disabled(selection.isEmpty)
             }
-
-            ToolbarItem {
-                SearchField(search: $searchDebouncer.value)
-                    .frame(minWidth: 100, idealWidth: 300, maxWidth: .infinity)
-            }
         }
         .onReceive(searchDebouncer.$debouncedValue) { search in
 
+            // Update the suggestions.
+
+            if search.count > 0 {
+                self.suggestedTokens = manager.tagsView.tags(prefix: search)
+            } else {
+                self.suggestedTokens = []
+            }
+
+            // Update the view.
+
             // Get the query corresponding to the current search text.
             let queries = AnyQuery.queries(for: search)
+
+            let tags = self.tokens.map { Tag($0).eraseToAnyQuery() }
 
             // Update the selected section if necessary.
             let section = queries.section
@@ -177,7 +190,7 @@ struct ContentView: View {
             }
 
             // Update the database query.
-            bookmarksView.query = AnyQuery.and(queries)
+            bookmarksView.query = AnyQuery.and(queries + tags)
 
         }
         .onChange(of: section) { section in

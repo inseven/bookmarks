@@ -86,8 +86,10 @@ public struct BookmarkCell: View {
         .background(Color.controlBackground)
         .cornerRadius(LayoutMetrics.cornerRadius)
         .contentShape(RoundedRectangle(cornerRadius: LayoutMetrics.cornerRadius, style: .continuous))
+#if os(iOS)
         .contentShape([.contextMenuPreview],
                       RoundedRectangle(cornerRadius: LayoutMetrics.cornerRadius, style: .continuous))
+#endif
         .onAppear {
             guard image == nil else {
                 return

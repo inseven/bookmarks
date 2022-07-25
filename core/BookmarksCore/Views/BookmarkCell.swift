@@ -23,6 +23,10 @@ import SwiftUI
 
 public struct BookmarkCell: View {
 
+    private struct LayoutMetrics {
+        static let cornerRadius = 10.0
+    }
+
     var bookmark: Bookmark
 
     @Environment(\.manager) var manager: BookmarksManager
@@ -80,8 +84,10 @@ public struct BookmarkCell: View {
             .background(Color.controlSecondaryBackground)
         }
         .background(Color.controlBackground)
-        .cornerRadius(10)
-        .contentShape(RoundedRectangle(cornerRadius: 10))
+        .cornerRadius(LayoutMetrics.cornerRadius)
+        .contentShape(RoundedRectangle(cornerRadius: LayoutMetrics.cornerRadius, style: .continuous))
+        .contentShape([.contextMenuPreview],
+                      RoundedRectangle(cornerRadius: LayoutMetrics.cornerRadius, style: .continuous))
         .onAppear {
             guard image == nil else {
                 return

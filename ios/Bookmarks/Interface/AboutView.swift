@@ -55,7 +55,7 @@ struct AboutView: View {
                     }
                 }
                 .foregroundColor(.primary)
-                CreditSection("Contributors", [
+                CreditSection("Developers", [
                     Credit("Jason Morley", url: URL(string: "https://jbmorley.co.uk")),
                 ])
                 CreditSection("Thanks", [

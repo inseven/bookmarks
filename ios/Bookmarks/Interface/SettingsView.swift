@@ -55,20 +55,22 @@ struct SettingsView: View {
 #endif
                 Section {
                     Button {
-                        presentationMode.wrappedValue.dismiss()
-                        manager.logout { _ in }
-                    } label: {
-                        Label("Log Out", systemImage: "xmark")
-                            .labelStyle(ButtonLabelStyle())
-                    }
-                    .foregroundColor(.primary)
-                }
-                Section {
-                    Button {
                         sheet = .about
                     } label: {
                         Text("About Bookmarks...")
                             .foregroundColor(.primary)
+                    }
+                }
+                Section {
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                        manager.logout { _ in }
+                    } label: {
+                        HStack {
+                            Spacer()
+                            Text("Log Out")
+                            Spacer()
+                        }
                     }
                 }
             }

@@ -44,6 +44,9 @@ struct Bookmarks: View {
     @StateObject var searchDebouncer = Debouncer<String>(initialValue: "", delay: .seconds(0.2))
     @State var sheet: SheetType?
 
+    @State var tokens: [String] = []
+    @State var suggestedTokens: [String] = []
+
     @State var search: String = ""
     @State var sharedItems: [Any]?
     @State var error: Error?
@@ -125,7 +128,9 @@ struct Bookmarks: View {
             }
             .padding()
         }
-        .searchable(text: $searchDebouncer.value)
+        .searchable(text: $searchDebouncer.value, tokens: $tokens, suggestedTokens: $suggestedTokens) { token in
+            Label(token, systemImage: "tag")
+        }
         .sharing(items: $sharedItems)
         .sheet(item: $sheet) { sheet in
             switch sheet {
@@ -144,8 +149,18 @@ struct Bookmarks: View {
         .onDisappear {
             bookmarksView.stop()
         }
-        .onReceive(searchDebouncer.$debouncedValue) { value in
-            bookmarksView.query = AnyQuery.and([section.query, AnyQuery.parse(filter: value)])
+        .onReceive(searchDebouncer.$debouncedValue) { search in
+
+            // Suggest tags.
+            if search.count > 0 {
+                self.suggestedTokens = manager.tagsView.tags(prefix: search)
+            } else {
+                self.suggestedTokens = []
+            }
+
+            // Update the view.
+            let tags = self.tokens.map { Tag($0).eraseToAnyQuery() }
+            bookmarksView.query = AnyQuery.and([section.query, AnyQuery.parse(filter: search)] + tags)
         }
     }
 

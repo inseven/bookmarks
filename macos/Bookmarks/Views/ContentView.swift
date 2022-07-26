@@ -44,7 +44,10 @@ struct ContentView: View {
 
     private var subscription: AnyCancellable?
 
-    init(selection: BookmarksSelection, section: Binding<BookmarksSection?>, database: Database, sheet: Binding<ApplicationState?>) {
+    init(selection: BookmarksSelection,
+         section: Binding<BookmarksSection?>,
+         database: Database,
+         sheet: Binding<ApplicationState?>) {
         self.selection = selection
         _section = section
         let bookmarksView = Deferred(BookmarksView(database: database, query: True().eraseToAnyQuery()))
@@ -54,13 +57,6 @@ struct ContentView: View {
         _sheet = sheet
     }
 
-    var navigationTitle: String {
-        guard let title = section?.navigationTitle else {
-            return "Unknown"
-        }
-        return title
-    }
-
     var body: some View {
         VStack {
             ScrollView {
@@ -68,7 +64,8 @@ struct ContentView: View {
                     ForEach(bookmarksView.bookmarks) { bookmark in
                         BookmarkCell(bookmark: bookmark)
                             .shadow(color: .shadow, radius: 8)
-                            .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: bookmark), firstResponder: firstResponder))
+                            .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: bookmark),
+                                                        firstResponder: firstResponder))
                             .help(bookmark.url.absoluteString)
                             .contextMenuFocusable {
                                 BookmarkOpenCommands(selection: selection)
@@ -164,8 +161,11 @@ struct ContentView: View {
         }
         .onReceive(searchDebouncer.$debouncedValue) { search in
 
-            // Update the suggestions.
+            guard let section = section else {
+                return
+            }
 
+            // Update the suggestions.
             if search.count > 0 {
                 self.suggestedTokens = manager.tagsView.tags(prefix: search)
             } else {
@@ -173,39 +173,28 @@ struct ContentView: View {
             }
 
             // Update the view.
-
-            // Get the query corresponding to the current search text.
             let queries = AnyQuery.queries(for: search)
-
             let tags = self.tokens.map { Tag($0).eraseToAnyQuery() }
-
-            // Update the selected section if necessary.
-            let section = queries.section
-            if section != section {
-                underlyingSection = section
-            }
-
-            // Update the database query.
-            bookmarksView.query = AnyQuery.and(queries + tags)
-
+            bookmarksView.query = AnyQuery.and([section.query] + queries + tags)
         }
         .onChange(of: section) { section in
 
             guard underlyingSection != section,
-                  let section = section else {
+                  let section = section
+            else {
                 return
             }
 
             underlyingSection = section
+            tokens = []
+            searchDebouncer.value = ""
 
             selectionTracker.clear()
             bookmarksView.clear()
-            let query = section.query
-            searchDebouncer.value = query.filter
-            bookmarksView.query = query.eraseToAnyQuery()
+            bookmarksView.query = section.query.eraseToAnyQuery()
 
         }
-        .onChange(of: underlyingSection, perform: { underlyingSection in
+        .onChange(of: underlyingSection) { underlyingSection in
 
             guard section != underlyingSection else {
                 return
@@ -214,10 +203,10 @@ struct ContentView: View {
             // Bring the sidebar section in-line with the underlying section.
             section = underlyingSection
 
-        })
+        }
         .onChange(of: selectionTracker.selection) { newSelection in
             selection.bookmarks = newSelection
         }
-        .navigationTitle(navigationTitle)
+        .navigationTitle(section?.navigationTitle ?? "Unknown")
     }
 }

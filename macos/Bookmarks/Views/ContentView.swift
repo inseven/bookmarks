@@ -55,10 +55,6 @@ struct ContentView: View {
     }
 
     var navigationTitle: String {
-        let queries = searchDebouncer.debouncedValue.queries
-        if (queries.section == .all && queries.count > 1) || queries.count > 1 {
-            return "Search: \(searchDebouncer.debouncedValue)"
-        }
         guard let title = section?.navigationTitle else {
             return "Unknown"
         }

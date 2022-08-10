@@ -10,18 +10,6 @@
 
 Bookmarks follows the version numbering, build and signing conventions for InSeven Limited apps. Further details can be found [here](https://github.com/inseven/build-documentation).
 
-### Managing Certificates
-
-Builds use base64 encoded [PKCS 12](https://en.wikipedia.org/wiki/PKCS_12) certificate and private key containers specified in the `IOS_CERTIFICATE_BASE64` and `MACOS_DEVELOPER_INSTALLER_CERTIFICATE` environment variables (with the password given in the `IOS_CERTIFICATE_PASSWORD` and `MACOS_DEVELOPER_INSTALLER_CERTIFICATE_PASSWORD` environment variables respectively). This loosely follows the GitHub approach to [managing certificates](https://docs.github.com/en/actions/guides/installing-an-apple-certificate-on-macos-runners-for-xcode-development).
-
-Keychain Access can be used to export your certificate and private key in the PKCS 12 format, and the base64 encoded version is generated as follows:
-
-```bash
-base64 build_certificate.p12 | pbcopy
-```
-
-This, along with the password used to protect the certificate, can then be added to the GitHub project secrets.
-
 ### Builds
 
 In order to make continuous integration easy the `scripts/build.sh` script builds the full project, including submitting the macOS app for notarization. In order to run this script (noting that you probably don't want to use it for regular development cycles), you'll need to configure your environment accordingly, by setting the following environment variables:

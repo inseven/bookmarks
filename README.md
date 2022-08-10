@@ -38,7 +38,6 @@ In order to make continuous integration easy the `scripts/build.sh` script build
 - `IOS_CERTIFICATE_PASSWORD` -- password used to protect the iOS certificate
 - `MACOS_DEVELOPER_INSTALLER_CERTIFICATE` -- base64 encoded PKCS 12 certificate for macOS Developer ID builds (see above for details)
 - `MACOS_DEVELOPER_INSTALLER_CERTIFICATE_PASSWORD` -- password used to protect the macOS certificate
-- `APPLE_DEVELOPER_ID` -- individual Apple Developer Account ID (used for notarization)
 - `APPLE_API_KEY` -- base64 encoded App Store Connect API key (see https://appstoreconnect.apple.com/access/api)
 - `APPLE_API_KEY_ID` -- App Store Connect API key id (see https://appstoreconnect.apple.com/access/api)
 - `APPLE_API_KEY_ISSUER_ID` -- App Store connect API key issuer id (see https://appstoreconnect.apple.com/access/api)
@@ -56,7 +55,6 @@ export MACOS_DEVELOPER_INSTALLER_CERTIFICATE=
 export MACOS_DEVELOPER_INSTALLER_CERTIFICATE_PASSWORD=
 
 # Developer account
-export APPLE_DEVELOPER_ID=
 export APPLE_API_KEY=
 export APPLE_API_KEY_ID=
 export APPLE_API_KEY_ISSUER_ID=

@@ -8,28 +8,7 @@
 
 ## Development
 
-### Build Numbers
-
-The iOS and macOS apps use auto-generated build numbers that attempt to encode the build timestamp, along with some details of the commit used. They follow the format:
-
-```
-YYmmddHHMMxxxxxxxx
-```
-
-- `YY` -- two-digit year
-- `mm` -- month
-- `dd` -- day
-- `HH` -- hours (24h)
-- `MM` -- minutes
-- `xxxxxxxx` -- zero-padded integer representation of a 6-character commit SHA
-
-These can be quickly decoded using the `build-tools` script:
-
-```
-% scripts/build-tools/build-tools parse-build-number 210727192100869578
-2021-07-27 19:21:00 (UTC)
-0d44ca
-```
+Bookmarks follows the version numbering, build and signing conventions for InSeven Limited apps. Further details can be found [here](https://github.com/inseven/build-documentation).
 
 ### Managing Certificates
 
@@ -43,27 +22,17 @@ base64 build_certificate.p12 | pbcopy
 
 This, along with the password used to protect the certificate, can then be added to the GitHub project secrets.
 
-#### Inspecting Certificates
-
-Unlike `.cer` files (which can be viewed using [Quick Look](https://support.apple.com/en-gb/guide/mac-help/mh14119/mac)), macOS doesn't make it particularly easy to work with `.p12` PCKS 12 files; only Keychain Access is able to open these files and they will be automatically added to your keychain. If you want to double-check what's in a PCKS 12 file before adding it to your GitHub secrets, you can do this using `openssl`:
-
-```bash
-openssl pkcs12 -info -nodes -in build_certificate.p12
-```
-
 ### Builds
 
 In order to make continuous integration easy the `scripts/build.sh` script builds the full project, including submitting the macOS app for notarization. In order to run this script (noting that you probably don't want to use it for regular development cycles), you'll need to configure your environment accordingly, by setting the following environment variables:
 
-- `IOS_CERTIFICATE_BASE64` -- base64 encoded PKCS 12 certificate for iOS App Store builds (see above for details)
-- `IOS_CERTIFICATE_PASSWORD` -- password used to protect the iOS certificate
+- `APPLE_DISTRIBUTION_CERTIFICATE_BASE64` -- base64 encoded PKCS 12 certificate for iOS App Store builds (see above for details)
+- `APPLE_DISTRIBUTION_CERTIFICATE_PASSWORD` -- password used to protect the iOS certificate
 - `MACOS_DEVELOPER_INSTALLER_CERTIFICATE` -- base64 encoded PKCS 12 certificate for macOS Developer ID builds (see above for details)
 - `MACOS_DEVELOPER_INSTALLER_CERTIFICATE_PASSWORD` -- password used to protect the macOS certificate
-- `APPLE_DEVELOPER_ID` -- individual Apple Developer Account ID (used for notarization)
 - `APPLE_API_KEY` -- base64 encoded App Store Connect API key (see https://appstoreconnect.apple.com/access/api)
 - `APPLE_API_KEY_ID` -- App Store Connect API key id (see https://appstoreconnect.apple.com/access/api)
 - `APPLE_API_KEY_ISSUER_ID` -- App Store connect API key issuer id (see https://appstoreconnect.apple.com/access/api)
-- `FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD` -- [app-specific password](https://support.apple.com/en-us/HT204397) for the Developer Account
 - `NOTARIZE` -- boolean indicating whether to attempt notarize the build (conditionally set based on the current branch using `${{ github.ref == 'refs/heads/main' }}`)
 - `TRY_RELEASE` -- boolean indicating whether to attempt a release (conditionally set based on the current branch using `${{ github.ref == 'refs/heads/main' }}`)
 - `GITHUB_TOKEN` -- [GitHub token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) used to create the release
@@ -72,17 +41,15 @@ The script (like Fastlane) will look for and source an environment file in the F
 
 ```bash
 # Certificate store
-export IOS_CERTIFICATE_BASE64=
-export IOS_CERTIFICATE_PASSWORD=
+export APPLE_DISTRIBUTION_CERTIFICATE_BASE64=
+export APPLE_DISTRIBUTION_CERTIFICATE_PASSWORD=
 export MACOS_DEVELOPER_INSTALLER_CERTIFICATE=
 export MACOS_DEVELOPER_INSTALLER_CERTIFICATE_PASSWORD=
 
 # Developer account
-export APPLE_DEVELOPER_ID=
 export APPLE_API_KEY=
 export APPLE_API_KEY_ID=
 export APPLE_API_KEY_ISSUER_ID=
-export FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=
 
 # GitHub (only required if publishing releases locally)
 export GITHUB_TOKEN=

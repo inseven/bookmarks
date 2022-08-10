@@ -5,9 +5,8 @@
 xcuserdata/
 **.xcuserdatad
 
-# Fastlane
-fastlane/.env
-fastlane/report.xml
+# Build
+.env
 build
 temp
 

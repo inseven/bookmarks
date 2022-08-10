@@ -34,8 +34,8 @@ openssl pkcs12 -info -nodes -in build_certificate.p12
 
 In order to make continuous integration easy the `scripts/build.sh` script builds the full project, including submitting the macOS app for notarization. In order to run this script (noting that you probably don't want to use it for regular development cycles), you'll need to configure your environment accordingly, by setting the following environment variables:
 
-- `IOS_CERTIFICATE_BASE64` -- base64 encoded PKCS 12 certificate for iOS App Store builds (see above for details)
-- `IOS_CERTIFICATE_PASSWORD` -- password used to protect the iOS certificate
+- `APPLE_DISTRIBUTION_CERTIFICATE_BASE64` -- base64 encoded PKCS 12 certificate for iOS App Store builds (see above for details)
+- `APPLE_DISTRIBUTION_CERTIFICATE_PASSWORD` -- password used to protect the iOS certificate
 - `MACOS_DEVELOPER_INSTALLER_CERTIFICATE` -- base64 encoded PKCS 12 certificate for macOS Developer ID builds (see above for details)
 - `MACOS_DEVELOPER_INSTALLER_CERTIFICATE_PASSWORD` -- password used to protect the macOS certificate
 - `APPLE_API_KEY` -- base64 encoded App Store Connect API key (see https://appstoreconnect.apple.com/access/api)
@@ -49,8 +49,8 @@ The script (like Fastlane) will look for and source an environment file in the F
 
 ```bash
 # Certificate store
-export IOS_CERTIFICATE_BASE64=
-export IOS_CERTIFICATE_PASSWORD=
+export APPLE_DISTRIBUTION_CERTIFICATE_BASE64=
+export APPLE_DISTRIBUTION_CERTIFICATE_PASSWORD=
 export MACOS_DEVELOPER_INSTALLER_CERTIFICATE=
 export MACOS_DEVELOPER_INSTALLER_CERTIFICATE_PASSWORD=
 

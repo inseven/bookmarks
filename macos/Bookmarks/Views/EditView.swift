@@ -57,7 +57,7 @@ struct EditView: View {
         Form {
             Section() {
                 VStack(alignment: .leading, spacing: 16) {
-                    TokenField("Add tags...", tokens: $tokens) { string, editing in
+                    TokenField("Tags", tokens: $tokens) { string, editing in
                         let tag = string.lowercased()
                         return Token(tag)
                             .associatedValue(tag)

@@ -33,8 +33,7 @@ struct Sidebar: View {
     @Environment(\.manager) var manager: BookmarksManager
     @StateObject var tagsView: TagsView
     @ObservedObject var settings: BookmarksCore.Settings
-
-    @Binding var section: BookmarksSection?
+    @ObservedObject var windowModel: WindowModel
 
     @State var sheet: SheetType? = nil
 
@@ -43,62 +42,21 @@ struct Sidebar: View {
     }
 
     var body: some View {
-        ScrollViewReader { scrollView in
-            List(selection: $section) {
-
-                Section(header: Text("Smart Filters")) {
-                    SidebarLink(tag: .all)
-                    SidebarLink(tag: .shared(false))
-                    SidebarLink(tag: .shared(true))
-                    SidebarLink(tag: .today)
-                    SidebarLink(tag: .unread)
-                    SidebarLink(tag: .untagged)
+        List(selection: $windowModel.section) {
+            Section {
+                ForEach(BookmarksSection.defaultSections) { section in
+                    SectionLink(section)
                 }
+            }
 
-                if settings.favoriteTags.count > 0 {
+            if settings.favoriteTags.count > 0 {
 
-                    Section(header: Text("Favorites")) {
-                        ForEach(settings.favoriteTags.sorted(), id: \.section) { tag in
-
-                            SidebarLink(tag: tag.section)
-                                .contextMenu(ContextMenu(menuItems: {
-                                    Button("Remove from Favorites") {
-                                        settings.favoriteTags = settings.favoriteTags.filter { $0 != tag }
-                                    }
-                                    Divider()
-                                    Button("Edit on Pinboard") {
-                                        do {
-                                            guard let user = manager.user else {
-                                                return
-                                            }
-                                            NSWorkspace.shared.open(try tag.pinboardTagUrl(for: user))
-                                        } catch {
-                                            print("Failed to open on Pinboard error \(error)")
-                                        }
-                                    }
-                                }))
-
-                        }
-                    }
-
-                }
-
-                Section(header: Text("Tags")) {
-                    ForEach(tags, id: \.section) { tag in
-
-                        SidebarLink(tag: tag.section)
+                Section("Favorites") {
+                    ForEach(settings.favoriteTags.sorted(), id: \.section) { tag in
+                        SectionLink(tag.section)
                             .contextMenu(ContextMenu(menuItems: {
-                                Button("Rename") {
-                                    self.sheet = .rename(tag: tag)
-                                }
-                                Button("Delete") {
-                                    self.manager.deleteTag(tag) { _ in }
-                                }
-                                Divider()
-                                Button("Add to Favorites") {
-                                    var favoriteTags = settings.favoriteTags
-                                    favoriteTags.append(tag)
-                                    settings.favoriteTags = favoriteTags
+                                Button("Remove from Favorites") {
+                                    settings.favoriteTags = settings.favoriteTags.filter { $0 != tag }
                                 }
                                 Divider()
                                 Button("Edit on Pinboard") {
@@ -112,18 +70,43 @@ struct Sidebar: View {
                                     }
                                 }
                             }))
-
                     }
                 }
-                .accentColor(.secondary)
+            }
 
-            }
-            .onChange(of: section) { section in
-                guard let section = section else {
-                    return
+            Section("Tags") {
+                ForEach(tags, id: \.section) { tag in
+                    SectionLink(tag.section)
+                        .contextMenu(ContextMenu(menuItems: {
+                            Button("Rename") {
+                                self.sheet = .rename(tag: tag)
+                            }
+                            Button("Delete") {
+                                self.manager.deleteTag(tag) { _ in }
+                            }
+                            Divider()
+                            Button("Add to Favorites") {
+                                var favoriteTags = settings.favoriteTags
+                                favoriteTags.append(tag)
+                                settings.favoriteTags = favoriteTags
+                            }
+                            Divider()
+                            Button("Edit on Pinboard") {
+                                do {
+                                    guard let user = manager.user else {
+                                        return
+                                    }
+                                    NSWorkspace.shared.open(try tag.pinboardTagUrl(for: user))
+                                } catch {
+                                    print("Failed to open on Pinboard error \(error)")
+                                }
+                            }
+                        }))
+
                 }
-                scrollView.scrollTo(section)
             }
+            .accentColor(.secondary)
+
         }
         .sheet(item: $sheet) { sheet in
             switch sheet {

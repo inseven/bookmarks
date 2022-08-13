@@ -23,42 +23,21 @@ import SwiftUI
 
 import BookmarksCore
 
-struct MainWindow: View {
+class WindowModel: ObservableObject {
 
-    @Environment(\.selection) var selection
+    @Published var section: BookmarksSection? = .all
+    @Published var title: String = ""
 
-    @ObservedObject var manager: BookmarksManager
+    private var cancellables: Set<AnyCancellable> = []
 
-    @StateObject var windowModel = WindowModel()
-    @State var sheet: ApplicationState? = nil
-
-    var body: some View {
-        NavigationSplitView {
-            Sidebar(tagsView: manager.tagsView, settings: manager.settings, windowModel: windowModel)
-        } detail: {
-            ContentView(selection: selection, windowModel: windowModel, database: manager.database, sheet: $sheet)
-        }
-        .handlesSelectionSheets(selection)
-        .sheet(item: $sheet) { sheet in
-            switch sheet {
-            case .logIn:
-                LogInView()
+    func run() {
+        $section
+            .map { $0?.navigationTitle ?? "Unknown" }
+            .receive(on: DispatchQueue.main)
+            .sink { title in
+                self.title = title
             }
-        }
-        .onChange(of: manager.state) { newValue in
-            switch newValue {
-            case .idle:
-                sheet = nil
-            case .unauthorized:
-                sheet = .logIn
-            }
-        }
-        .observesApplicationFocus()
-        .frameAutosaveName("Main Window")
-        .onAppear {
-            windowModel.run()
-        }
-        .focusedValue(\.windowModel, windowModel)
+            .store(in: &cancellables)
     }
 
 }

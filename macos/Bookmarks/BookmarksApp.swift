@@ -24,56 +24,40 @@ import SwiftUI
 import BookmarksCore
 import Diligence
 
+struct FocusedNoteValue: FocusedValueKey {
+    typealias Value = WindowModel
+}
+
+extension FocusedValues {
+    var windowModel: FocusedNoteValue.Value? {
+        get { self[FocusedNoteValue.self] }
+        set { self[FocusedNoteValue.self] = newValue }
+    }
+}
+
+
 @main
 struct BookmarksApp: App {
 
     @Environment(\.manager) var manager
 
     @StateObject var selection = BookmarksSelection()
-    
-    @State var section: BookmarksSection? = .all
 
     var body: some Scene {
         WindowGroup {
-            MainWindow(manager: manager, section: $section)
+            MainWindow(manager: manager)
                 .environment(\.selection, selection)
         }
         .commands {
             SidebarCommands()
             ToolbarCommands()
+            SectionCommands()
             CommandGroup(after: .newItem) {
                 Divider()
                 Button("Refresh") {
                     manager.refresh()
                 }
                 .keyboardShortcut("r", modifiers: .command)
-            }
-            CommandMenu("Go") {
-                Button("All Bookmarks") {
-                    section = .all
-                }
-                .keyboardShortcut("1", modifiers: .command)
-                Button("Private") {
-                    section = .shared(false)
-                }
-                .keyboardShortcut("2", modifiers: .command)
-                Button("Public") {
-                    section = .shared(true)
-                }
-                .keyboardShortcut("3", modifiers: .command)
-                Button("Today") {
-                    section = .today
-                }
-                .keyboardShortcut("4", modifiers: .command)
-
-                Button("Unread") {
-                    section = .unread
-                }
-                .keyboardShortcut("5", modifiers: .command)
-                Button("Untagged") {
-                    section = .untagged
-                }
-                .keyboardShortcut("6", modifiers: .command)
             }
             CommandMenu("Bookmark") {
                 BookmarkOpenCommands(selection: selection)
@@ -84,13 +68,9 @@ struct BookmarksApp: App {
                     .trailingDivider()
                 BookmarkShareCommands(selection: selection)
                     .trailingDivider()
-                BookmarkTagCommands(selection: selection, section: $section)
+                BookmarkTagCommands(selection: selection)
             }
-            CommandMenu("Account") {
-                Button("Log Out...") {
-                    manager.logout { _ in }
-                }
-            }
+            AccountCommands()
             AboutCommands()
         }
         SwiftUI.Settings {

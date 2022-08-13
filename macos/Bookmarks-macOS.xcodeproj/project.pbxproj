@@ -15,7 +15,6 @@
 		D840B01226210AF6001E95D1 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */; };
 		D861257326A60DF200EB5FEF /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D861257226A60DF200EB5FEF /* Sidebar.swift */; };
 		D861257526AA048E00EB5FEF /* RenameTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D861257426AA048E00EB5FEF /* RenameTagView.swift */; };
-		D861257C26AB741A00EB5FEF /* SidebarLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = D861257B26AB741A00EB5FEF /* SidebarLink.swift */; };
 		D879448F26CB4A5400D97155 /* MenuType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D879448E26CB4A5400D97155 /* MenuType.swift */; };
 		D879449126CB57BE00D97155 /* ContextAwareKeyboardShortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = D879449026CB57BE00D97155 /* ContextAwareKeyboardShortcut.swift */; };
 		D879449326CB5E1900D97155 /* MainMenuItemCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D879449226CB5E1900D97155 /* MainMenuItemCondition.swift */; };
@@ -30,6 +29,10 @@
 		D891C472261E32FB0024E1A6 /* BookmarksUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D891C471261E32FB0024E1A6 /* BookmarksUITests.swift */; };
 		D8931F6126C5E12E00A8021E /* BookmarksSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8931F6026C5E12E00A8021E /* BookmarksSelection.swift */; };
 		D8931F6426C5E16200A8021E /* SelectionSheetHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8931F6326C5E16200A8021E /* SelectionSheetHandler.swift */; };
+		D8A06F1D28A7E2120002A56D /* SectionCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A06F1C28A7E2120002A56D /* SectionCommands.swift */; };
+		D8A06F1F28A7E85B0002A56D /* SectionLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A06F1E28A7E85B0002A56D /* SectionLink.swift */; };
+		D8A06F2128A7E92F0002A56D /* AccountCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A06F2028A7E92F0002A56D /* AccountCommands.swift */; };
+		D8A06F2328A7EA170002A56D /* WindowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A06F2228A7EA170002A56D /* WindowModel.swift */; };
 		D8A0D7662620165D00C9F190 /* Interact in Frameworks */ = {isa = PBXBuildFile; productRef = D8A0D7652620165D00C9F190 /* Interact */; };
 		D8A336FA26B569C200436200 /* BookmarkTagCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A336F926B569C200436200 /* BookmarkTagCommands.swift */; };
 		D8A336FC26B56A4300436200 /* BookmarkShareCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A336FB26B56A4300436200 /* BookmarkShareCommands.swift */; };
@@ -91,7 +94,6 @@
 		D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		D861257226A60DF200EB5FEF /* Sidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
 		D861257426AA048E00EB5FEF /* RenameTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenameTagView.swift; sourceTree = "<group>"; };
-		D861257B26AB741A00EB5FEF /* SidebarLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarLink.swift; sourceTree = "<group>"; };
 		D879448E26CB4A5400D97155 /* MenuType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuType.swift; sourceTree = "<group>"; };
 		D879449026CB57BE00D97155 /* ContextAwareKeyboardShortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextAwareKeyboardShortcut.swift; sourceTree = "<group>"; };
 		D879449226CB5E1900D97155 /* MainMenuItemCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuItemCondition.swift; sourceTree = "<group>"; };
@@ -113,6 +115,10 @@
 		D891C473261E32FB0024E1A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D8931F6026C5E12E00A8021E /* BookmarksSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksSelection.swift; sourceTree = "<group>"; };
 		D8931F6326C5E16200A8021E /* SelectionSheetHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionSheetHandler.swift; sourceTree = "<group>"; };
+		D8A06F1C28A7E2120002A56D /* SectionCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionCommands.swift; sourceTree = "<group>"; };
+		D8A06F1E28A7E85B0002A56D /* SectionLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionLink.swift; sourceTree = "<group>"; };
+		D8A06F2028A7E92F0002A56D /* AccountCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountCommands.swift; sourceTree = "<group>"; };
+		D8A06F2228A7EA170002A56D /* WindowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowModel.swift; sourceTree = "<group>"; };
 		D8A0D75A262015E700C9F190 /* interact */ = {isa = PBXFileReference; lastKnownFileType = folder; name = interact; path = ../interact; sourceTree = "<group>"; };
 		D8A336F926B569C200436200 /* BookmarkTagCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkTagCommands.swift; sourceTree = "<group>"; };
 		D8A336FB26B56A4300436200 /* BookmarkShareCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkShareCommands.swift; sourceTree = "<group>"; };
@@ -241,6 +247,7 @@
 				D8931F6026C5E12E00A8021E /* BookmarksSelection.swift */,
 				D879449426CB5E3D00D97155 /* Countable.swift */,
 				D879448E26CB4A5400D97155 /* MenuType.swift */,
+				D8A06F2228A7EA170002A56D /* WindowModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -258,12 +265,14 @@
 		D8A336F826B5685800436200 /* Commands */ = {
 			isa = PBXGroup;
 			children = (
+				D8A06F2028A7E92F0002A56D /* AccountCommands.swift */,
+				D80710EA26C4847D007272C0 /* BookmarkDebugCommands.swift */,
 				D8A336FD26B56AF700436200 /* BookmarkDestructiveCommands.swift */,
 				D8A3370226B56C7400436200 /* BookmarkEditCommands.swift */,
 				D8A336FF26B56C1B00436200 /* BookmarkOpenCommands.swift */,
 				D8A336FB26B56A4300436200 /* BookmarkShareCommands.swift */,
 				D8A336F926B569C200436200 /* BookmarkTagCommands.swift */,
-				D80710EA26C4847D007272C0 /* BookmarkDebugCommands.swift */,
+				D8A06F1C28A7E2120002A56D /* SectionCommands.swift */,
 			);
 			path = Commands;
 			sourceTree = "<group>";
@@ -271,18 +280,18 @@
 		D8B04B43261F4A1200376ADD /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				D8164D6526C08DD500756D43 /* EditView.swift */,
 				D8164D6726C08EEC00756D43 /* BorderedSelection.swift */,
 				D891C455261E32F90024E1A6 /* ContentView.swift */,
+				D8164D6526C08DD500756D43 /* EditView.swift */,
 				D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */,
 				D8E0202B26C2E1CC00910833 /* LoadingView.swift */,
+				D8F3F28E26EE776900BFA43B /* LogInView.swift */,
+				D80710F226C4B855007272C0 /* MainWindow.swift */,
 				D861257426AA048E00EB5FEF /* RenameTagView.swift */,
+				D8A06F1E28A7E85B0002A56D /* SectionLink.swift */,
 				D840B0092621042B001E95D1 /* SettingsView.swift */,
 				D861257226A60DF200EB5FEF /* Sidebar.swift */,
-				D861257B26AB741A00EB5FEF /* SidebarLink.swift */,
 				D8ACD7EE26BC81F7005F927A /* TokenField.swift */,
-				D80710F226C4B855007272C0 /* MainWindow.swift */,
-				D8F3F28E26EE776900BFA43B /* LogInView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -468,12 +477,14 @@
 				D879448F26CB4A5400D97155 /* MenuType.swift in Sources */,
 				D8FF9E9B28A766F30081E57A /* SQLite-swift in Sources */,
 				D8B6E2C52620990400B2C239 /* Item.swift in Sources */,
+				D8A06F2128A7E92F0002A56D /* AccountCommands.swift in Sources */,
 				D8A336FC26B56A4300436200 /* BookmarkShareCommands.swift in Sources */,
 				D8ACD7EF26BC81F7005F927A /* TokenField.swift in Sources */,
 				D8E0202C26C2E1CC00910833 /* LoadingView.swift in Sources */,
 				D879449526CB5E3D00D97155 /* Countable.swift in Sources */,
 				D8A3370026B56C1B00436200 /* BookmarkOpenCommands.swift in Sources */,
 				D861257326A60DF200EB5FEF /* Sidebar.swift in Sources */,
+				D8A06F1F28A7E85B0002A56D /* SectionLink.swift in Sources */,
 				D8164D6826C08EEC00756D43 /* BorderedSelection.swift in Sources */,
 				D891C456261E32F90024E1A6 /* ContentView.swift in Sources */,
 				D861257526AA048E00EB5FEF /* RenameTagView.swift in Sources */,
@@ -485,10 +496,11 @@
 				D840B01226210AF6001E95D1 /* GeneralSettingsView.swift in Sources */,
 				D840B00A2621042B001E95D1 /* SettingsView.swift in Sources */,
 				D8931F6126C5E12E00A8021E /* BookmarksSelection.swift in Sources */,
+				D8A06F2328A7EA170002A56D /* WindowModel.swift in Sources */,
 				D891C454261E32F90024E1A6 /* BookmarksApp.swift in Sources */,
+				D8A06F1D28A7E2120002A56D /* SectionCommands.swift in Sources */,
 				D8A3370326B56C7400436200 /* BookmarkEditCommands.swift in Sources */,
 				D8EB6E4526C3357F00C23B19 /* ErrorHandler.swift in Sources */,
-				D861257C26AB741A00EB5FEF /* SidebarLink.swift in Sources */,
 				D8164D6626C08DD500756D43 /* EditView.swift in Sources */,
 				D8F3F28F26EE776900BFA43B /* LogInView.swift in Sources */,
 				D879449326CB5E1900D97155 /* MainMenuItemCondition.swift in Sources */,

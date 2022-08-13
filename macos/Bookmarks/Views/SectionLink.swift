@@ -18,47 +18,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Combine
 import SwiftUI
 
 import BookmarksCore
 
-struct MainWindow: View {
+struct SectionLink: View {
 
-    @Environment(\.selection) var selection
+    var section: BookmarksSection
 
-    @ObservedObject var manager: BookmarksManager
-
-    @StateObject var windowModel = WindowModel()
-    @State var sheet: ApplicationState? = nil
+    init(_ section: BookmarksSection) {
+        self.section = section
+    }
 
     var body: some View {
-        NavigationSplitView {
-            Sidebar(tagsView: manager.tagsView, settings: manager.settings, windowModel: windowModel)
-        } detail: {
-            ContentView(selection: selection, windowModel: windowModel, database: manager.database, sheet: $sheet)
+        NavigationLink(value: section) {
+            Label(section.navigationTitle, systemImage: section.systemImage)
         }
-        .handlesSelectionSheets(selection)
-        .sheet(item: $sheet) { sheet in
-            switch sheet {
-            case .logIn:
-                LogInView()
-            }
-        }
-        .onChange(of: manager.state) { newValue in
-            switch newValue {
-            case .idle:
-                sheet = nil
-            case .unauthorized:
-                sheet = .logIn
-            }
-        }
-        .observesApplicationFocus()
-        .frameAutosaveName("Main Window")
-        .onAppear {
-            windowModel.run()
-        }
-        .focusedValue(\.windowModel, windowModel)
     }
 
 }

@@ -118,6 +118,7 @@ struct BookmarksApp: App {
             License("Diligence", author: "InSeven Limited", filename: "Diligence")
             License("Introspect", author: "Timber Software", filename: "Introspect")
             License("SQLite.swift", author: "Stephen Celis", filename: "SQLite-swift")
+            License("TFHpple", author: "Topfunky Corporation", filename: "TFHpple")
         }
 
     }

@@ -22,6 +22,7 @@ import AppKit
 import SwiftUI
 
 import BookmarksCore
+import Diligence
 
 @main
 struct BookmarksApp: App {
@@ -90,9 +91,33 @@ struct BookmarksApp: App {
                     manager.logout { _ in }
                 }
             }
+            AboutCommands()
         }
         SwiftUI.Settings {
             SettingsView()
         }
+
+        AboutWindowGroup {
+            Action("InSeven Limited", url: URL(string: "https://inseven.co.uk")!)
+            Action("Support", url: URL(address: "support@inseven.co.uk", subject: "Bookmarks Support")!)
+        } acknowledgements: {
+            Acknowledgements("Developers") {
+                Credit("Jason Morley", url: URL(string: "https://jbmorley.co.uk"))
+            }
+            Acknowledgements("Thanks") {
+                Credit("Blake Merryman")
+                Credit("Joanne Wong")
+                Credit("Lukas Fittl")
+                Credit("Pavlos Vinieratos")
+                Credit("Sara Frederixon")
+                Credit("Sarah Barbour")
+                Credit("Terrence Talbot")
+            }
+        } licenses: {
+            License("Binding+mappedToBool", author: "Joseph Duffy", filename: "Binding+mappedToBool")
+            License("Diligence", author: "InSeven Limited", filename: "Diligence")
+            License("Introspect", author: "Timber Software", filename: "Introspect")
+        }
+
     }
 }

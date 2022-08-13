@@ -30,48 +30,31 @@ struct AboutView: View {
         NavigationView {
             Form {
                 HeaderSection {
-                    IconView(uiImage: UIImage(named: "Icon")!)
-                    ApplicationNameHeaderView()
+                    Icon("Icon")
+                    ApplicationNameTitle()
                 }
                 BuildSection("inseven/bookmarks")
-                Section {
-                    Link("InSeven Limited", url: URL(string: "https://inseven.co.uk")!)
-                    Button {
-                        var components = URLComponents()
-                        components.scheme = "mailto"
-                        components.path = "support@inseven.co.uk"
-                        components.queryItems = [URLQueryItem(name: "subject", value: "Bookmarks Support")]
-                        guard let url = components.url else {
-                            return
-                        }
-                        UIApplication.shared.open(url)
-                    } label: {
-                        HStack {
-                            Text("Support")
-                            Spacer()
-                            Image(systemName: "envelope")
-                                .foregroundColor(.secondary)
-                        }
-                    }
+                ActionSection {
+                    Action("InSeven Limited", url: URL(string: "https://inseven.co.uk")!)
+                    Action("Support", url: URL(address: "support@inseven.co.uk", subject: "Bookmarks Support")!)
                 }
-                .foregroundColor(.primary)
-                CreditSection("Developers", [
-                    Credit("Jason Morley", url: URL(string: "https://jbmorley.co.uk")),
-                ])
-                CreditSection("Thanks", [
-                    "Blake Merryman",
-                    "Joanne Wong",
-                    "Lukas Fittl",
-                    "Pavlos Vinieratos",
-                    "Sara Frederixon",
-                    "Sarah Barbour",
-                    "Terrence Talbot",
-                ])
-                LicenseSection("Licenses", [
-                    License(name: "Binding+mappedToBool", author: "Joseph Duffy", filename: "Binding+mappedToBool"),
-                    License(name: "Diligence", author: "InSeven Limited", filename: "Diligence"),
-                    License(name: "Introspect", author: "Timber Software", filename: "Introspect"),
-                ])
+                CreditSection("Developers") {
+                    Credit("Jason Morley", url: URL(string: "https://jbmorley.co.uk"))
+                }
+                CreditSection("Thanks") {
+                    Credit("Blake Merryman")
+                    Credit("Joanne Wong")
+                    Credit("Lukas Fittl")
+                    Credit("Pavlos Vinieratos")
+                    Credit("Sara Frederixon")
+                    Credit("Sarah Barbour")
+                    Credit("Terrence Talbot")
+                }
+                LicenseSection("Licenses") {
+                    License("Binding+mappedToBool", author: "Joseph Duffy", filename: "Binding+mappedToBool")
+                    License("Diligence", author: "InSeven Limited", filename: "Diligence")
+                    License("Introspect", author: "Timber Software", filename: "Introspect")
+                }
             }
             .navigationBarItems(trailing: Button {
                 presentationMode.wrappedValue.dismiss()

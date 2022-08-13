@@ -25,6 +25,7 @@
 		D8743909273106C000B676A5 /* Diligence in Frameworks */ = {isa = PBXBuildFile; productRef = D8743908273106C000B676A5 /* Diligence */; };
 		D874390C273108DD00B676A5 /* Diligence in Resources */ = {isa = PBXBuildFile; fileRef = D874390B273108DD00B676A5 /* Diligence */; };
 		D874390E2731094000B676A5 /* Introspect in Resources */ = {isa = PBXBuildFile; fileRef = D874390D2731094000B676A5 /* Introspect */; };
+		D87FBF5228A7B62500A8753D /* TFHpple in Resources */ = {isa = PBXBuildFile; fileRef = D87FBF5128A7B5A700A8753D /* TFHpple */; };
 		D89956D727DE41150023FC84 /* ButtonLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89956D627DE41150023FC84 /* ButtonLabelStyle.swift */; };
 		D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BDE1172551C56100C95945 /* BookmarksApp.swift */; };
 		D8BDE1472554782000C95945 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = D8BDE1462554782000C95945 /* Introspect */; };
@@ -87,6 +88,7 @@
 		D87439072731068C00B676A5 /* diligence */ = {isa = PBXFileReference; lastKnownFileType = folder; name = diligence; path = ../diligence; sourceTree = "<group>"; };
 		D874390B273108DD00B676A5 /* Diligence */ = {isa = PBXFileReference; lastKnownFileType = text; path = Diligence; sourceTree = "<group>"; };
 		D874390D2731094000B676A5 /* Introspect */ = {isa = PBXFileReference; lastKnownFileType = text; path = Introspect; sourceTree = "<group>"; };
+		D87FBF5128A7B5A700A8753D /* TFHpple */ = {isa = PBXFileReference; lastKnownFileType = text; path = TFHpple; sourceTree = "<group>"; };
 		D89956D627DE41150023FC84 /* ButtonLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonLabelStyle.swift; sourceTree = "<group>"; };
 		D89C65E326AF5A8E00D49D11 /* Common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		D89C65E426AF5A8E00D49D11 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 				D874390B273108DD00B676A5 /* Diligence */,
 				D874390D2731094000B676A5 /* Introspect */,
 				D8FF9E9D28A76B050081E57A /* SQLite-swift */,
+				D87FBF5128A7B5A700A8753D /* TFHpple */,
 			);
 			path = Licenses;
 			sourceTree = "<group>";
@@ -363,6 +366,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D87FBF5228A7B62500A8753D /* TFHpple in Resources */,
 				D8FF9E9E28A76B520081E57A /* SQLite-swift in Resources */,
 				D8019A192731B260001736DE /* Binding+mappedToBool in Resources */,
 				D8D3BC0421C6AEBD00D6FB97 /* LaunchScreen.storyboard in Resources */,

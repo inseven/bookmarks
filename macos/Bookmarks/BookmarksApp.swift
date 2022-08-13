@@ -116,6 +116,7 @@ struct BookmarksApp: App {
         } licenses: {
             License("Binding+mappedToBool", author: "Joseph Duffy", filename: "Binding+mappedToBool")
             License("Diligence", author: "InSeven Limited", filename: "Diligence")
+            License("Interact", author: "InSeven Limited", filename: "interact-license")
             License("Introspect", author: "Timber Software", filename: "Introspect")
             License("SQLite.swift", author: "Stephen Celis", filename: "SQLite-swift")
             License("TFHpple", author: "Topfunky Corporation", filename: "TFHpple")

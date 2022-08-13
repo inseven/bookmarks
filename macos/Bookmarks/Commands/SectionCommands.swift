@@ -18,47 +18,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Combine
 import SwiftUI
 
 import BookmarksCore
 
-struct MainWindow: View {
+struct SectionCommands: Commands {
 
-    @Environment(\.selection) var selection
+    @FocusedValue(\.windowModel) var windowModel
 
-    @ObservedObject var manager: BookmarksManager
+    static func keyEquivalent(_ value: Int) -> KeyEquivalent {
+        return KeyEquivalent(String(value).first!)
+    }
 
-    @StateObject var windowModel = WindowModel()
-    @State var sheet: ApplicationState? = nil
-
-    var body: some View {
-        NavigationSplitView {
-            Sidebar(tagsView: manager.tagsView, settings: manager.settings, windowModel: windowModel)
-        } detail: {
-            ContentView(selection: selection, windowModel: windowModel, database: manager.database, sheet: $sheet)
-        }
-        .handlesSelectionSheets(selection)
-        .sheet(item: $sheet) { sheet in
-            switch sheet {
-            case .logIn:
-                LogInView()
+    var body: some Commands {
+        CommandMenu("Go") {
+            ForEach(Array(BookmarksSection.defaultSections.enumerated()), id: \.element.id) { index, section in
+                Button(section.navigationTitle) {
+                    windowModel?.section = section
+                }
+                .keyboardShortcut(Self.keyEquivalent(index + 1), modifiers: .command)
+                .disabled(windowModel == nil)
             }
         }
-        .onChange(of: manager.state) { newValue in
-            switch newValue {
-            case .idle:
-                sheet = nil
-            case .unauthorized:
-                sheet = .logIn
-            }
-        }
-        .observesApplicationFocus()
-        .frameAutosaveName("Main Window")
-        .onAppear {
-            windowModel.run()
-        }
-        .focusedValue(\.windowModel, windowModel)
     }
 
 }

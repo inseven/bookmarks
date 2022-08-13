@@ -30,10 +30,9 @@ struct ContentView: View {
     @Environment(\.applicationHasFocus) var applicationHasFocus
 
     @ObservedObject var selection: BookmarksSelection
-    @Binding var section: BookmarksSection?
+    @ObservedObject var windowModel: WindowModel
     @Binding var sheet: ApplicationState?
 
-    @State var underlyingSection: BookmarksSection?
     @StateObject var bookmarksView: BookmarksView
     @StateObject var selectionTracker: SelectionTracker<Bookmark>
     @State var firstResponder: Bool = false
@@ -45,11 +44,11 @@ struct ContentView: View {
     private var subscription: AnyCancellable?
 
     init(selection: BookmarksSelection,
-         section: Binding<BookmarksSection?>,
+         windowModel: WindowModel,
          database: Database,
          sheet: Binding<ApplicationState?>) {
         self.selection = selection
-        _section = section
+        self.windowModel = windowModel
         let bookmarksView = Deferred(BookmarksView(database: database, query: True().eraseToAnyQuery()))
         let selectionTracker = Deferred(SelectionTracker(items: bookmarksView.get().$bookmarks))
         _bookmarksView = StateObject(wrappedValue: bookmarksView.get())
@@ -76,7 +75,7 @@ struct ContentView: View {
                                     .trailingDivider()
                                 BookmarkShareCommands(selection: selection)
                                     .trailingDivider()
-                                BookmarkTagCommands(selection: selection, section: $section)
+                                BookmarkTagCommands(selection: selection)
                                 #if DEBUG
                                 BookmarkDebugCommands()
                                     .leadingDivider()
@@ -161,7 +160,7 @@ struct ContentView: View {
         }
         .onReceive(searchDebouncer.$debouncedValue) { search in
 
-            guard let section = section else {
+            guard let section = windowModel.section else {
                 return
             }
 
@@ -177,15 +176,12 @@ struct ContentView: View {
             let tags = self.tokens.map { Tag($0).eraseToAnyQuery() }
             bookmarksView.query = AnyQuery.and([section.query] + queries + tags)
         }
-        .onChange(of: section) { section in
+        .onChange(of: windowModel.section) { section in
 
-            guard underlyingSection != section,
-                  let section = section
-            else {
+            guard let section = section else {
                 return
             }
 
-            underlyingSection = section
             tokens = []
             searchDebouncer.value = ""
 
@@ -194,19 +190,9 @@ struct ContentView: View {
             bookmarksView.query = section.query.eraseToAnyQuery()
 
         }
-        .onChange(of: underlyingSection) { underlyingSection in
-
-            guard section != underlyingSection else {
-                return
-            }
-
-            // Bring the sidebar section in-line with the underlying section.
-            section = underlyingSection
-
-        }
         .onChange(of: selectionTracker.selection) { newSelection in
             selection.bookmarks = newSelection
         }
-        .navigationTitle(section?.navigationTitle ?? "Unknown")
+        .navigationTitle(windowModel.title)
     }
 }

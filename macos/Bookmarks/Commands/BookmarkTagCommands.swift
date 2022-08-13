@@ -25,10 +25,10 @@ import BookmarksCore
 struct BookmarkTagCommands: View {
 
     @Environment(\.manager) var manager
+    
+    @FocusedValue(\.windowModel) var windowModel
 
     @ObservedObject var selection: BookmarksSelection
-
-    @Binding var section: BookmarksSection?
 
     var body: some View {
         Menu("Tags") {
@@ -36,11 +36,13 @@ struct BookmarkTagCommands: View {
                 selection.addTags()
             }
             .contextAwareKeyboardShortcut("t", modifiers: .command)
+            .disabled(selection.isEmpty)
             Divider()
             ForEach(Array(selection.bookmarks.tags).sorted()) { tag in
                 Button(tag) {
-                    section = tag.section
+                    windowModel?.section = tag.section
                 }
+                .disabled(windowModel == nil)
             }
         }
     }

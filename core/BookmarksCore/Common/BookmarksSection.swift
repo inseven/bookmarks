@@ -26,7 +26,16 @@ public protocol Sectionable {
 
 }
 
-public enum BookmarksSection {
+public enum BookmarksSection: Equatable {
+
+    public static let defaultSections: [Self] = [
+        .all,
+        .shared(false),
+        .shared(true),
+        .today,
+        .unread,
+        .untagged,
+    ]
 
     case all
     case untagged

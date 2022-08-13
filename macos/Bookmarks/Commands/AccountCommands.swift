@@ -22,19 +22,16 @@ import SwiftUI
 
 import BookmarksCore
 
-struct SidebarLink: View {
+struct AccountCommands: Commands {
 
     @Environment(\.manager) var manager: BookmarksManager
 
-    var tag: BookmarksSection
-
-    var body: some View {
-        HStack {
-            Label(tag.navigationTitle, systemImage: tag.systemImage)
-            Spacer()
+    var body: some Commands {
+        CommandMenu("Account") {
+            Button("Log Out...") {
+                manager.logout { _ in }
+            }
         }
-        .tag(tag)  // We set a tag so the list view knows what's selected...
-        .id(tag)   // ... and an id so we can scroll to the items 🤦🏻‍♂️
     }
 
 }

@@ -126,37 +126,9 @@ struct ContentView: View {
         .searchable(text: $searchDebouncer.value, tokens: $tokens, suggestedTokens: $suggestedTokens) { token in
             Label(token, systemImage: "tag")
         }
-        .toolbar {
-            ToolbarItem {
-                Button {
-                    manager.refresh()
-                } label: {
-                    SwiftUI.Image(systemName: "arrow.clockwise")
-                }
-                .help("Refresh")
-            }
-
-            ToolbarItem {
-                Button {
-                    guard selectionTracker.selection.count > 0 else {
-                        return
-                    }
-                    selection.addTags()
-                } label: {
-                    SwiftUI.Image(systemName: "tag")
-                }
-                .help("Add Tags")
-                .disabled(selection.isEmpty)
-            }
-            ToolbarItem {
-                Button {
-                    selection.delete(manager: manager)
-                } label: {
-                    SwiftUI.Image(systemName: "trash")
-                }
-                .help("Delete")
-                .disabled(selection.isEmpty)
-            }
+        .toolbar(id: "main") {
+            AccountToolbar()
+            SelectionToolbar(selection: selection)
         }
         .onReceive(searchDebouncer.$debouncedValue) { search in
 

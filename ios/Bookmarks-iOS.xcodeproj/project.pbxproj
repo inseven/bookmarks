@@ -33,6 +33,7 @@
 		D8D3BC0F21C6AEBD00D6FB97 /* BookmarksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BC0E21C6AEBD00D6FB97 /* BookmarksTests.swift */; };
 		D8D3BC1A21C6AEBD00D6FB97 /* BookmarksUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BC1921C6AEBD00D6FB97 /* BookmarksUITests.swift */; };
 		D8F521382732EEF40031F0CC /* AddTagLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F521372732EEF40031F0CC /* AddTagLabel.swift */; };
+		D8FF9E9E28A76B520081E57A /* SQLite-swift in Resources */ = {isa = PBXBuildFile; fileRef = D8FF9E9D28A76B050081E57A /* SQLite-swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +103,7 @@
 		D8D3BC1921C6AEBD00D6FB97 /* BookmarksUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksUITests.swift; sourceTree = "<group>"; };
 		D8D3BC1B21C6AEBD00D6FB97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D8F521372732EEF40031F0CC /* AddTagLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTagLabel.swift; sourceTree = "<group>"; };
+		D8FF9E9D28A76B050081E57A /* SQLite-swift */ = {isa = PBXFileReference; lastKnownFileType = text; path = "SQLite-swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +177,7 @@
 				D8019A172731B1B0001736DE /* Binding+mappedToBool */,
 				D874390B273108DD00B676A5 /* Diligence */,
 				D874390D2731094000B676A5 /* Introspect */,
+				D8FF9E9D28A76B050081E57A /* SQLite-swift */,
 			);
 			path = Licenses;
 			sourceTree = "<group>";
@@ -360,6 +363,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8FF9E9E28A76B520081E57A /* SQLite-swift in Resources */,
 				D8019A192731B260001736DE /* Binding+mappedToBool in Resources */,
 				D8D3BC0421C6AEBD00D6FB97 /* LaunchScreen.storyboard in Resources */,
 				D874390E2731094000B676A5 /* Introspect in Resources */,

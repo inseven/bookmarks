@@ -54,6 +54,7 @@ struct AboutView: View {
                     License("Binding+mappedToBool", author: "Joseph Duffy", filename: "Binding+mappedToBool")
                     License("Diligence", author: "InSeven Limited", filename: "Diligence")
                     License("Introspect", author: "Timber Software", filename: "Introspect")
+                    License("SQLite.swift", author: "Stephen Celis", filename: "SQLite-swift")
                 }
             }
             .navigationBarItems(trailing: Button {

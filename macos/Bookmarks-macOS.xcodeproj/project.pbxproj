@@ -45,6 +45,8 @@
 		D8FF9E9728A75E800081E57A /* Binding+mappedToBool in Resources */ = {isa = PBXBuildFile; fileRef = D8FF9E9428A75E800081E57A /* Binding+mappedToBool */; };
 		D8FF9E9828A75E800081E57A /* Diligence in Resources */ = {isa = PBXBuildFile; fileRef = D8FF9E9528A75E800081E57A /* Diligence */; };
 		D8FF9E9928A75E800081E57A /* Introspect in Resources */ = {isa = PBXBuildFile; fileRef = D8FF9E9628A75E800081E57A /* Introspect */; };
+		D8FF9E9B28A766F30081E57A /* SQLite-swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FF9E9A28A766F30081E57A /* SQLite-swift */; };
+		D8FF9E9C28A767900081E57A /* SQLite-swift in Resources */ = {isa = PBXBuildFile; fileRef = D8FF9E9A28A766F30081E57A /* SQLite-swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -127,6 +129,7 @@
 		D8FF9E9428A75E800081E57A /* Binding+mappedToBool */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Binding+mappedToBool"; sourceTree = "<group>"; };
 		D8FF9E9528A75E800081E57A /* Diligence */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Diligence; sourceTree = "<group>"; };
 		D8FF9E9628A75E800081E57A /* Introspect */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Introspect; sourceTree = "<group>"; };
+		D8FF9E9A28A766F30081E57A /* SQLite-swift */ = {isa = PBXFileReference; lastKnownFileType = text; name = "SQLite-swift"; path = "../../../ios/Bookmarks/Licenses/SQLite-swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -311,6 +314,7 @@
 				D8FF9E9428A75E800081E57A /* Binding+mappedToBool */,
 				D8FF9E9528A75E800081E57A /* Diligence */,
 				D8FF9E9628A75E800081E57A /* Introspect */,
+				D8FF9E9A28A766F30081E57A /* SQLite-swift */,
 			);
 			path = Licenses;
 			sourceTree = "<group>";
@@ -423,6 +427,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8FF9E9C28A767900081E57A /* SQLite-swift in Resources */,
 				D8FF9E9728A75E800081E57A /* Binding+mappedToBool in Resources */,
 				D8FF9E9828A75E800081E57A /* Diligence in Resources */,
 				D8FF9E9928A75E800081E57A /* Introspect in Resources */,
@@ -453,6 +458,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D879448F26CB4A5400D97155 /* MenuType.swift in Sources */,
+				D8FF9E9B28A766F30081E57A /* SQLite-swift in Sources */,
 				D8B6E2C52620990400B2C239 /* Item.swift in Sources */,
 				D8A336FC26B56A4300436200 /* BookmarkShareCommands.swift in Sources */,
 				D8ACD7EF26BC81F7005F927A /* TokenField.swift in Sources */,

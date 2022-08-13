@@ -26,9 +26,12 @@ import Interact
 
 struct EditView: View {
 
+    private struct LayoutMetrics {
+        static let minimumButtonWidth = 80.0
+    }
+
     @Environment(\.manager) var manager
     @Environment(\.selection) var selection
-
     @Environment(\.presentationMode) var presentationMode
 
     var bookmarks: [Bookmark]
@@ -54,7 +57,7 @@ struct EditView: View {
         Form {
             Section() {
                 VStack(alignment: .leading, spacing: 16) {
-                    TokenField("Add tags...", tokens: $tokens) { string, editing in
+                    TokenField("Tags", tokens: $tokens) { string, editing in
                         let tag = string.lowercased()
                         return Token(tag)
                             .associatedValue(tag)
@@ -77,11 +80,15 @@ struct EditView: View {
                             .controlSize(.small)
                     }
                     HStack {
-                        Button("Cancel") {
+                        Button {
                             presentationMode.wrappedValue.dismiss()
+                        } label: {
+                            Text("Cancel")
+                                .horizontalSpace(.both)
                         }
+                        .frame(minWidth: LayoutMetrics.minimumButtonWidth, maxWidth: .infinity)
                         .keyboardShortcut(.cancelAction)
-                        Button("OK") {
+                        Button {
                             isBusy = true
                             let tags = tokens.compactMap { $0.associatedValue }
                             let updatedBookmarks = bookmarks.map { item in
@@ -94,15 +101,19 @@ struct EditView: View {
                                     presentationMode.wrappedValue.dismiss()
                                 }
                             }
+                        } label: {
+                            Text("OK")
+                                .horizontalSpace(.both)
                         }
+                        .frame(minWidth: LayoutMetrics.minimumButtonWidth, maxWidth: .infinity)
                         .keyboardShortcut(.defaultAction)
                     }
+                    .fixedSize(horizontal: true, vertical: false)
                 }
             }
         }
         .frame(minWidth: 200)
         .padding()
-        .background(.ultraThinMaterial)
         .disabled(isBusy)
     }
 

@@ -21,6 +21,7 @@
 		D879449326CB5E1900D97155 /* MainMenuItemCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D879449226CB5E1900D97155 /* MainMenuItemCondition.swift */; };
 		D879449526CB5E3D00D97155 /* Countable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D879449426CB5E3D00D97155 /* Countable.swift */; };
 		D87FBF5028A7B4EA00A8753D /* TFHpple in Resources */ = {isa = PBXBuildFile; fileRef = D87FBF4F28A7B4EA00A8753D /* TFHpple */; };
+		D87FBF5428A7B7BE00A8753D /* interact-license in Resources */ = {isa = PBXBuildFile; fileRef = D87FBF5328A7B7BE00A8753D /* interact-license */; };
 		D891C454261E32F90024E1A6 /* BookmarksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D891C453261E32F90024E1A6 /* BookmarksApp.swift */; };
 		D891C456261E32F90024E1A6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D891C455261E32F90024E1A6 /* ContentView.swift */; };
 		D891C458261E32FB0024E1A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D891C457261E32FB0024E1A6 /* Assets.xcassets */; };
@@ -96,6 +97,7 @@
 		D879449226CB5E1900D97155 /* MainMenuItemCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuItemCondition.swift; sourceTree = "<group>"; };
 		D879449426CB5E3D00D97155 /* Countable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Countable.swift; sourceTree = "<group>"; };
 		D87FBF4F28A7B4EA00A8753D /* TFHpple */ = {isa = PBXFileReference; lastKnownFileType = text; name = TFHpple; path = ../../../ios/Bookmarks/Licenses/TFHpple; sourceTree = "<group>"; };
+		D87FBF5328A7B7BE00A8753D /* interact-license */ = {isa = PBXFileReference; lastKnownFileType = text; name = "interact-license"; path = "../../../ios/Bookmarks/Licenses/interact-license"; sourceTree = "<group>"; };
 		D891C450261E32F90024E1A6 /* Bookmarks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bookmarks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D891C453261E32F90024E1A6 /* BookmarksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksApp.swift; sourceTree = "<group>"; };
 		D891C455261E32F90024E1A6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -315,6 +317,7 @@
 			children = (
 				D8FF9E9428A75E800081E57A /* Binding+mappedToBool */,
 				D8FF9E9528A75E800081E57A /* Diligence */,
+				D87FBF5328A7B7BE00A8753D /* interact-license */,
 				D8FF9E9628A75E800081E57A /* Introspect */,
 				D8FF9E9A28A766F30081E57A /* SQLite-swift */,
 				D87FBF4F28A7B4EA00A8753D /* TFHpple */,
@@ -432,6 +435,7 @@
 			files = (
 				D8FF9E9C28A767900081E57A /* SQLite-swift in Resources */,
 				D8FF9E9728A75E800081E57A /* Binding+mappedToBool in Resources */,
+				D87FBF5428A7B7BE00A8753D /* interact-license in Resources */,
 				D8FF9E9828A75E800081E57A /* Diligence in Resources */,
 				D87FBF5028A7B4EA00A8753D /* TFHpple in Resources */,
 				D8FF9E9928A75E800081E57A /* Introspect in Resources */,

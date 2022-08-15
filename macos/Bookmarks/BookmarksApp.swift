@@ -71,13 +71,12 @@ struct BookmarksApp: App {
                 BookmarkTagCommands(selection: selection)
             }
             AccountCommands()
-            AboutCommands()
         }
         SwiftUI.Settings {
             SettingsView()
         }
 
-        AboutWindowGroup {
+        About {
             Action("InSeven Limited", url: URL(string: "https://inseven.co.uk")!)
             Action("Support", url: URL(address: "support@inseven.co.uk", subject: "Bookmarks Support")!)
         } acknowledgements: {

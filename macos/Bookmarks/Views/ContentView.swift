@@ -23,148 +23,192 @@ import SwiftUI
 
 import BookmarksCore
 import Interact
+import SelectableCollectionView
+
+enum LayoutMode: CaseIterable, Identifiable {
+
+    var id: Self { self }
+
+    case grid
+    case table
+
+    var systemImage: String {
+        switch self {
+        case .grid:
+            return "square.grid.2x2"
+        case .table:
+            return "list.bullet"
+        }
+    }
+
+    var help: String {
+        return "THIS IS NEVER USED"
+    }
+}
+
+
+struct LayoutToolbar: CustomizableToolbarContent {
+
+    @Binding var layoutMode: LayoutMode
+
+    var body: some CustomizableToolbarContent {
+
+        ToolbarItem(id: "layout-mode") {
+            Picker(selection: $layoutMode) {
+                ForEach(LayoutMode.allCases) { mode in
+                    Image(systemName: mode.systemImage)
+                        .help(mode.help)
+                        .tag(mode)
+                }
+            } label: {
+            }
+            .pickerStyle(.inline)
+        }
+
+    }
+
+}
 
 struct ContentView: View {
 
     @Environment(\.manager) var manager
     @Environment(\.applicationHasFocus) var applicationHasFocus
 
-    @ObservedObject var selection: BookmarksSelection
-    @ObservedObject var windowModel: WindowModel
-    @Binding var sheet: ApplicationState?
-
+    // TODO: Rename bookmarksView to ContentModel
     @StateObject var bookmarksView: BookmarksView
-    @StateObject var selectionTracker: SelectionTracker<Bookmark>
-    @State var firstResponder: Bool = false
-    @StateObject var searchDebouncer = Debouncer<String>(initialValue: "", delay: .seconds(0.2))
+    // TODO: Rename to selection model?
+    @StateObject var selection: BookmarksSelection = BookmarksSelection()
+    @State var layoutMode: LayoutMode = .grid
 
-    @State var tokens: [String] = []
-    @State var suggestedTokens: [String] = []
+    let layout = ColumnLayout(spacing: 2.0,
+                              columns: 5,
+                              edgeInsets: NSEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0))
 
-    private var subscription: AnyCancellable?
+    init(section: BookmarksSection) {
+        _bookmarksView = StateObject(wrappedValue: BookmarksView(section: section))
+    }
 
-    init(selection: BookmarksSelection,
-         windowModel: WindowModel,
-         database: Database,
-         sheet: Binding<ApplicationState?>) {
-        self.selection = selection
-        self.windowModel = windowModel
-        let bookmarksView = Deferred(BookmarksView(database: database, query: True().eraseToAnyQuery()))
-        let selectionTracker = Deferred(SelectionTracker(items: bookmarksView.get().$bookmarks))
-        _bookmarksView = StateObject(wrappedValue: bookmarksView.get())
-        _selectionTracker = StateObject(wrappedValue: selectionTracker.get())
-        _sheet = sheet
+    @MenuItemBuilder private func contextMenu(_ selection: Set<Bookmark.ID>) -> [MenuItem] {
+        MenuItem("Open") {
+            manager.open(await bookmarksView.bookmarks(for: selection))
+        }
+        MenuItem("Open on Internet Archive") {
+            manager.open(await bookmarksView.bookmarks(for: selection), location: .internetArchive)
+        }
+        Separator()
+        MenuItem("Delete") {
+            do {
+                try await manager.deleteBookmarks(await bookmarksView.bookmarks(for: selection))
+            } catch {
+                print("Failed to delete bookmarks with error \(error)")
+            }
+        }
     }
 
     var body: some View {
         VStack {
-            ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 8)], spacing: 8) {
-                    ForEach(bookmarksView.bookmarks) { bookmark in
-                        BookmarkCell(bookmark: bookmark)
-                            .shadow(color: .shadow, radius: 8)
-                            .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: bookmark),
-                                                        firstResponder: firstResponder))
-                            .help(bookmark.url.absoluteString)
-                            .contextMenuFocusable {
-                                BookmarkOpenCommands(selection: selection)
-                                    .trailingDivider()
-                                BookmarkDesctructiveCommands(selection: selection)
-                                    .trailingDivider()
-                                BookmarkEditCommands(selection: selection)
-                                    .trailingDivider()
-                                BookmarkShareCommands(selection: selection)
-                                    .trailingDivider()
-                                BookmarkTagCommands(selection: selection)
-                                #if DEBUG
-                                BookmarkDebugCommands()
-                                    .leadingDivider()
-                                #endif
-                            } onContextMenuChange: { focused in
-                                guard focused == true else {
-                                    return
-                                }
-                                firstResponder = true
-                                if !selectionTracker.isSelected(item: bookmark) {
-                                    selectionTracker.handleClick(item: bookmark)
-                                }
-                            }
-                            .menuType(.context)
-                            .onDrag {
-                                NSItemProvider(object: bookmark.url as NSURL)
-                            }
-                            .handleMouse {
-                                if firstResponder || !selectionTracker.isSelected(item: bookmark) {
-                                    selectionTracker.handleClick(item: bookmark)
-                                }
-                                firstResponder = true
-                            } doubleClick: {
-                                NSWorkspace.shared.open(bookmark.url)
-                            } shiftClick: {
-                                selectionTracker.handleShiftClick(item: bookmark)
-                            } commandClick: {
-                                selectionTracker.handleCommandClick(item: bookmark)
-                            }
+            switch layoutMode {
+            case .grid:
+                SelectableCollectionView(bookmarksView.bookmarks,
+                                         selection: $selection.selection,
+                                         layout: layout) { bookmark in
+
+                    BookmarkCell(bookmark: bookmark)
+                        .modifier(BorderedSelection())
+                        .padding(4.0)
+                        .shadow(color: .shadow, radius: 4.0)
+
+                } contextMenu: { selection in
+                    contextMenu(selection)
+                } primaryAction: { selection in
+                    bookmarksView.open(ids: selection)
+                }
+            case .table:
+                Table(bookmarksView.bookmarks, selection: $selection.selection) {
+                    TableColumn("Title", value: \.title)
+                    TableColumn("URL", value: \.url.absoluteString)
+                    TableColumn("Tags") { bookmark in
+                        Text(bookmark.tags.joined(separator: " "))
                     }
                 }
-                .padding()
+                .contextMenu(forSelectionType: Bookmark.ID.self) { selection in
+                    contextMenu(selection)
+                } primaryAction: { selection in
+                    bookmarksView.open(ids: selection)
+                }
+
             }
-            .acceptsFirstResponder(isFirstResponder: $firstResponder)
-            .handleMouse {
-                firstResponder = true
-                selectionTracker.clear()
-            }
-            .background(Color(NSColor.textBackgroundColor))
-            .overlay(bookmarksView.state == .loading ? LoadingView() : nil)
+
+//            ScrollView {
+//                LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 8)], spacing: 8) {
+//                    ForEach(bookmarksView.bookmarks) { bookmark in
+//                        BookmarkCell(bookmark: bookmark)
+//                            .shadow(color: .shadow, radius: 8)
+//                            .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: bookmark),
+//                                                        firstResponder: firstResponder))
+//                            .help(bookmark.url.absoluteString)
+//                            .contextMenuFocusable {
+//                                BookmarkOpenCommands(selection: selection)
+//                                    .trailingDivider()
+//                                BookmarkDesctructiveCommands(selection: selection)
+//                                    .trailingDivider()
+//                                BookmarkEditCommands(selection: selection)
+//                                    .trailingDivider()
+//                                BookmarkShareCommands(selection: selection)
+//                                    .trailingDivider()
+//                                BookmarkTagCommands(selection: selection)
+//                                #if DEBUG
+//                                BookmarkDebugCommands()
+//                                    .leadingDivider()
+//                                #endif
+//                            } onContextMenuChange: { focused in
+//                                guard focused == true else {
+//                                    return
+//                                }
+//                                firstResponder = true
+//                                if !selectionTracker.isSelected(item: bookmark) {
+//                                    selectionTracker.handleClick(item: bookmark)
+//                                }
+//                            }
+//                            .menuType(.context)
+//                            .onDrag {
+//                                NSItemProvider(object: bookmark.url as NSURL)
+//                            }
+//                            .handleMouse {
+//                                if firstResponder || !selectionTracker.isSelected(item: bookmark) {
+//                                    selectionTracker.handleClick(item: bookmark)
+//                                }
+//                                firstResponder = true
+//                            } doubleClick: {
+//                                NSWorkspace.shared.open(bookmark.url)
+//                            } shiftClick: {
+//                                selectionTracker.handleShiftClick(item: bookmark)
+//                            } commandClick: {
+//                                selectionTracker.handleCommandClick(item: bookmark)
+//                            }
+//                    }
+//                }
+//                .padding()
+//            }
         }
+        .overlay(bookmarksView.state == .loading ? LoadingView() : nil)
         .onAppear {
             bookmarksView.start()
         }
         .onDisappear {
             bookmarksView.stop()
         }
-        .searchable(text: $searchDebouncer.value, tokens: $tokens, suggestedTokens: $suggestedTokens) { token in
+        .searchable(text: $bookmarksView.filter,
+                    tokens: $bookmarksView.tokens,
+                    suggestedTokens: $bookmarksView.suggestedTokens) { token in
             Label(token, systemImage: "tag")
         }
         .toolbar(id: "main") {
+            LayoutToolbar(layoutMode: $layoutMode)
             AccountToolbar()
-            SelectionToolbar(selection: selection)
+//            SelectionToolbar(selection: selection)
         }
-        .onReceive(searchDebouncer.$debouncedValue) { search in
-
-            guard let section = windowModel.section else {
-                return
-            }
-
-            // Update the suggestions.
-            if search.count > 0 {
-                self.suggestedTokens = manager.tagsView.tags(prefix: search)
-            } else {
-                self.suggestedTokens = []
-            }
-
-            // Update the view.
-            let queries = AnyQuery.queries(for: search)
-            let tags = self.tokens.map { Tag($0).eraseToAnyQuery() }
-            bookmarksView.query = AnyQuery.and([section.query] + queries + tags)
-        }
-        .onChange(of: windowModel.section) { section in
-
-            guard let section = section else {
-                return
-            }
-
-            tokens = []
-            searchDebouncer.value = ""
-
-            selectionTracker.clear()
-            bookmarksView.clear()
-            bookmarksView.query = section.query.eraseToAnyQuery()
-
-        }
-        .onChange(of: selectionTracker.selection) { newSelection in
-            selection.bookmarks = newSelection
-        }
-        .navigationTitle(windowModel.title)
+        .navigationTitle(bookmarksView.title)
+        .navigationSubtitle(bookmarksView.subtitle)
     }
 }

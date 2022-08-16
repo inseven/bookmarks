@@ -28,15 +28,25 @@ struct MainWindow: View {
     @Environment(\.selection) var selection
 
     @ObservedObject var manager: BookmarksManager
-
-    @StateObject var windowModel = WindowModel()
+    @StateObject var windowModel: WindowModel
+    
     @State var sheet: ApplicationState? = nil
+
+    init(manager: BookmarksManager) {
+        _manager = ObservedObject(wrappedValue: manager)
+        _windowModel = StateObject(wrappedValue: WindowModel(manager: manager))
+    }
 
     var body: some View {
         NavigationSplitView {
             Sidebar(tagsView: manager.tagsView, settings: manager.settings, windowModel: windowModel)
         } detail: {
-            ContentView(selection: selection, windowModel: windowModel, database: manager.database, sheet: $sheet)
+            if let section = windowModel.section {
+                ContentView(section: section)
+                    .id(section)
+            } else {
+                Text("Nothing Selected")
+            }
         }
         .handlesSelectionSheets(selection)
         .sheet(item: $sheet) { sheet in
@@ -52,11 +62,6 @@ struct MainWindow: View {
             case .unauthorized:
                 sheet = .logIn
             }
-        }
-        .observesApplicationFocus()
-        .frameAutosaveName("Main Window")
-        .onAppear {
-            windowModel.run()
         }
         .focusedValue(\.windowModel, windowModel)
     }

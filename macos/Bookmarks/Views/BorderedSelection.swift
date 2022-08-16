@@ -22,26 +22,19 @@ import SwiftUI
 
 struct BorderedSelection: ViewModifier {
 
-    @Environment(\.applicationHasFocus) var applicationHasFocus
-
-    var selected: Bool
-    var firstResponder: Bool
+    @Environment(\.isSelected) var isSelected
+    @Environment(\.highlightState) var highlightState
 
     var color: Color {
-        applicationHasFocus && firstResponder ? Color.accentColor : Color.unemphasizedSelectedContentBackgroundColor
+        return isSelected || highlightState == .forSelection ? Color.accentColor : Color.clear
     }
 
     func body(content: Content) -> some View {
-        if selected {
-            content
-                .padding(4)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 13)
-                        .stroke(color, lineWidth: 3))
-        } else {
-            content
-                .padding(4)
-        }
+        content
+            .padding(4)
+            .overlay(
+                RoundedRectangle(cornerRadius: 13)
+                    .stroke(color, lineWidth: 3))
     }
 
 }

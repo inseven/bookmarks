@@ -24,11 +24,11 @@ import Foundation
 public class TagsView: ObservableObject {
 
     var database: Database
-    var updateCancellable: AnyCancellable? = nil
+    var cancellables: Set<AnyCancellable> = []
 
-    public var tags: [String] = []
+    @Published public var tags: [String] = []
     public var fastTags: Set<String> = Set()
-    var trie = Trie()
+    @Published var trie = Trie()
 
     fileprivate var filter = ""
 
@@ -61,21 +61,19 @@ public class TagsView: ObservableObject {
     }
 
     public func start() {
-        print("start observing tags...")
         dispatchPrecondition(condition: .onQueue(.main))
-        self.updateCancellable = DatabasePublisher(database: database)
+        database.$update
             .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
             .sink { _ in
                 self.update()
             }
+            .store(in: &cancellables)
         self.update()
     }
 
     public func stop() {
-        print("stop observing tags...")
         dispatchPrecondition(condition: .onQueue(.main))
-        self.updateCancellable?.cancel()
-        self.updateCancellable = nil
+        cancellables.removeAll()
         self.tags = []
     }
 

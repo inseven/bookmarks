@@ -19,48 +19,33 @@
 // SOFTWARE.
 
 import Combine
-import Foundation
 
-class DatabaseSubscription<Target: Subscriber>: Subscription, DatabaseObserver where Target.Input == Void {
+extension Publisher {
 
-    var id = UUID()
-
-    fileprivate var database: Database
-    fileprivate var target: Target?
-
-    init(database: Database) {
-        self.database = database
-        self.database.add(observer: self)
+    func asyncMap<T>(_ transform: @escaping (Output) async -> T) -> Publishers.FlatMap<Future<T, Never>, Self> {
+        flatMap { value in
+            Future { promise in
+                Task {
+                    let output = await transform(value)
+                    promise(.success(output))
+                }
+            }
+        }
     }
 
-    func request(_ demand: Subscribers.Demand) {}
-
-    func cancel() {
-        target = nil
-        self.database.remove(observer: self)
+    func asyncMap<T>(_ transform: @escaping (Output) async throws -> T) -> Publishers.FlatMap<Future<T, Error>, Self> {
+        flatMap { value in
+            Future { promise in
+                Task {
+                    do {
+                        let output = try await transform(value)
+                        promise(.success(output))
+                    } catch {
+                        promise(.failure(error))
+                    }
+                }
+            }
+        }
     }
 
-    func databaseDidUpdate(database: Database) {
-        _ = target?.receive()
-    }
-
-}
-
-struct DatabasePublisher: Publisher {
-
-    typealias Output = Void
-    typealias Failure = Never
-
-    fileprivate var database: Database
-
-    init(database: Database) {
-        self.database = database
-    }
-
-    func receive<S: Subscriber>(subscriber: S) where S.Input == Output, S.Failure == Failure {
-        let subscription = DatabaseSubscription<S>(database: database)
-        subscription.target = subscriber
-        subscriber.receive(subscription: subscription)
-    }
-    
 }

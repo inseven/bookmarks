@@ -30,7 +30,8 @@ public class BookmarksSelection: ObservableObject {
 
     @Published var sheet: SheetType? = nil
     @Published var lastError: Error? = nil
-    @Published var bookmarks: Set<Bookmark> = []
+    @Published var bookmarks: Set<Bookmark> = []  // TODO: Remove this?
+    @Published var selection: Set<Bookmark.ID> = []
 
     var count: Int { bookmarks.count }
     var isEmpty: Bool { bookmarks.isEmpty }
@@ -51,8 +52,8 @@ public class BookmarksSelection: ObservableObject {
         }
     }
 
-    public func open(manager: BookmarksManager, location: Bookmark.Location = .web) {
-        manager.openBookmarks(bookmarks, location: location, completion: errorHandler())
+    @MainActor public func open(manager: BookmarksManager, location: Bookmark.Location = .web) {
+        manager.open(bookmarks, location: location)
     }
 
     public func update(manager: BookmarksManager, toRead: Bool) {

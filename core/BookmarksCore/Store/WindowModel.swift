@@ -21,23 +21,16 @@
 import Combine
 import SwiftUI
 
-import BookmarksCore
+public class WindowModel: ObservableObject {
 
-class WindowModel: ObservableObject {
-
-    @Published var section: BookmarksSection? = .all
-    @Published var title: String = ""
+    @Published public var section: BookmarksSection? = .all
+    @Published public var selection: Set<Bookmark.ID> = []
 
     private var cancellables: Set<AnyCancellable> = []
+    private var manager: BookmarksManager
 
-    func run() {
-        $section
-            .map { $0?.navigationTitle ?? "Unknown" }
-            .receive(on: DispatchQueue.main)
-            .sink { title in
-                self.title = title
-            }
-            .store(in: &cancellables)
+    public init(manager: BookmarksManager) {
+        self.manager = manager
     }
 
 }

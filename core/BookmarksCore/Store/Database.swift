@@ -194,6 +194,8 @@ public class Database {
     var db: Connection  // Synchronized on syncQueue
     var observers: [DatabaseObserver] = []  // Synchronized on syncQueue
 
+    @Published var update: Int = 0
+
     public init(path: URL) throws {
         self.path = path
         self.db = try Connection(path.path)
@@ -248,6 +250,7 @@ public class Database {
         DispatchQueue.global(qos: .background).async {
             for observer in observers {
                 observer.databaseDidUpdate(database: self)
+                self.update = Int.random(in: 0..<256)
             }
         }
     }
@@ -482,6 +485,7 @@ public class Database {
 
     public func syncQueue_bookmarks(where whereClause: String) throws -> [Bookmark] {
         dispatchPrecondition(condition: .onQueue(syncQueue))
+        print("syncQueue_bookmarks whereClause = \(whereClause)")
 
         let selectQuery = """
             SELECT
@@ -528,16 +532,20 @@ public class Database {
                             notes: try row.string(7))
         }
 
+        print("syncQueue_bookmarks \(bookmarks.count) items")
+
         return bookmarks
     }
 
-    public func bookmarks<T: QueryDescription>(query: T, completion: @escaping (Swift.Result<[Bookmark], Error>) -> Void) {
-        let completion = DispatchQueue.global().asyncClosure(completion)
-        syncQueue.async {
-            let result = Swift.Result<[Bookmark], Error> {
-                try self.syncQueue_bookmarks(where: query.sql)
+    public func bookmarks<T: QueryDescription>(query: T) async throws -> [Bookmark] {
+        print("bookmarks async")
+        return try await withCheckedThrowingContinuation { continuation in
+            syncQueue.async {
+                let result = Swift.Result<[Bookmark], Error> {
+                    try self.syncQueue_bookmarks(where: query.sql)
+                }
+                continuation.resume(with: result)
             }
-            completion(result)
         }
     }
 
@@ -580,10 +588,6 @@ public extension Database {
 
     func deleteBookmark(identifier: String) throws {
         try AsyncOperation { self.deleteBookmark(identifier: identifier, completion: $0) }.wait()
-    }
-
-    func bookmarks<T: QueryDescription>(query: T) throws -> [Bookmark] {
-        try AsyncOperation({ self.bookmarks(query: query, completion: $0) }).wait()
     }
 
     func tags() throws -> [String] {

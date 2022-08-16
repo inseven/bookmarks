@@ -39,6 +39,8 @@ public class BookmarksManager: ObservableObject {
         case unauthorized
     }
 
+    @Environment(\.openURL) private var openURL
+
     @Published public var state: State = .idle
 
     // TODO: Explore whether it's possible make some of the BookmarksManager properties private #266
@@ -67,7 +69,7 @@ public class BookmarksManager: ObservableObject {
         tagsView = TagsView(database: database)
 
         updater.delegate = self
-        updater.start()
+//        updater.start()
         tagsView.start()
 
         #if os(macOS)
@@ -126,7 +128,8 @@ public class BookmarksManager: ObservableObject {
     public func deleteBookmarks(_ bookmarks: Set<Bookmark>, completion: @escaping (Result<Void, Error>) -> Void) {
         updater.deleteBookmarks(Array(bookmarks), completion: completion)
     }
-    
+
+    // TODO: Swallow these errors!
     public func deleteBookmarks(_ bookmarks: [Bookmark]) async throws {
         return try await withCheckedThrowingContinuation { continuation in
             updater.deleteBookmarks(bookmarks) { result in
@@ -169,60 +172,19 @@ public class BookmarksManager: ObservableObject {
         updater.deleteTag(tag, completion: completion)
     }
 
-    public func openBookmarks(_ bookmarks: Set<Bookmark>,
-                              location: Bookmark.Location = .web,
-                              completion: @escaping (Result<Void, Error>) -> Void) {
-        openBookmarks(Array(bookmarks), location: location, completion: completion)
+    @MainActor public func open(_ bookmarks: Set<Bookmark>,
+                                location: Bookmark.Location = .web) {
+        open(Array(bookmarks), location: location)
     }
 
-    public func openBookmarks(_ bookmarks: [Bookmark],
-                              location: Bookmark.Location = .web,
-                              completion: @escaping (Result<Void, Error>) -> Void) {
-        let completion = DispatchQueue.main.asyncClosure(completion)
+    @MainActor public func open(_ bookmarks: [Bookmark], location: Bookmark.Location = .web) {
         do {
-            let many = open(urls: try bookmarks.map { try $0.url(location) })
-            _ = many.sink { result in
-                switch result {
-                case .finished:
-                    completion(.success(()))
-                case .failure(let error):
-                    completion(.failure(error))
-                }
-            } receiveValue: { _ in }
-        } catch {
-            completion(.failure(error))
-        }
-    }
-
-    fileprivate func open(urls: [URL]) -> Publishers.MergeMany<Future<Void, Error>> {
-        let openers = urls.map { self.open(url: $0) }
-        let many = Publishers.MergeMany(openers)
-        return many
-    }
-
-    fileprivate func open(url: URL) -> Future<Void, Error> {
-        return Future() { promise in
-            self.open(url: url) { success in
-                if success {
-                    promise(.success(()))
-                } else {
-                    promise(.failure(BookmarksError.openFailure))
-                }
+            for url in try bookmarks.map({ try $0.url(location) }) {
+                openURL(url)
             }
+        } catch {
+            print("Failed to open bookmarks with error \(error)")
         }
-    }
-
-    public func open(url: URL, completion: ((Bool) -> Void)? = nil) {
-        let completion = DispatchQueue.main.asyncClosure(completion)
-        #if os(macOS)
-        NSWorkspace.shared.open(url)
-        guard let completion = completion else {
-            return
-        }
-        completion(true)
-        #else
-        UIApplication.shared.open(url, options: [:], completionHandler: completion)
-        #endif
     }
 
     @objc func nsApplicationDidBecomeActive() {

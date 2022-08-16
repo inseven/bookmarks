@@ -170,18 +170,18 @@ public extension BookmarksSection {
     var systemImage: String {
         switch self {
         case .all:
-            return "bookmark"
+            return "bookmark.fill"
         case .untagged:
-            return "tag"
+            return "tag.fill"
         case .today:
-            return "sun.max"
+            return "sun.max.fill"
         case .unread:
             return "circle.inset.filled"
         case .shared(let shared):
             if shared {
                 return "globe"
             } else {
-                return "lock"
+                return "lock.fill"
             }
 
         case .tag:

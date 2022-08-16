@@ -16,3 +16,6 @@
 [submodule "diligence"]
 	path = diligence
 	url = git@github.com:inseven/diligence.git
+[submodule "SelectableCollectionView"]
+	path = SelectableCollectionView
+	url = git@github.com:jbmorley/SelectableCollectionView.git

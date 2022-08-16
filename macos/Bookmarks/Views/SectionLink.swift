@@ -32,7 +32,7 @@ struct SectionLink: View {
 
     var body: some View {
         NavigationLink(value: section) {
-            Label(section.navigationTitle, systemImage: section.systemImage)
+            Label(section.sidebarTitle, systemImage: section.systemImage)
         }
     }
 

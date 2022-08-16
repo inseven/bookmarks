@@ -19,6 +19,7 @@
 // SOFTWARE.
 
 import AppKit
+import Combine
 import SwiftUI
 
 import BookmarksCore
@@ -46,6 +47,81 @@ extension FocusedValues {
     }
 }
 
+protocol Runnable {
+
+    func start()
+    func stop()
+
+}
+
+extension View {
+
+    func run(_ runnable: Runnable) -> some View {
+        self
+            .onAppear {
+                runnable.start()
+            }
+            .onDisappear {
+                runnable.stop()
+            }
+    }
+
+}
+
+class TagEditorModel: ObservableObject, Runnable {
+
+    @Published var tags: [String] = []
+    @Published var filter = ""
+    @Published var filteredTags: [String] = []
+    @Published var selection: Set<String> = []
+
+    var tagsView: TagsView
+    var cancellables: Set<AnyCancellable> = []
+
+    init(tagsView: TagsView) {
+        self.tagsView = tagsView
+    }
+
+    @MainActor func start() {
+        tagsView.$tags
+            .combineLatest($filter)
+            .receive(on: DispatchQueue.global())
+            .map { tags, filter in
+                guard !filter.isEmpty else {
+                    return tags
+                }
+                return tags.filter { $0.localizedCaseInsensitiveContains(filter) }
+            }
+            .receive(on: DispatchQueue.main)
+            .sink { filteredTags in
+                self.filteredTags = filteredTags
+            }
+            .store(in: &cancellables)
+    }
+
+    @MainActor func stop() {
+        cancellables.removeAll()
+    }
+
+}
+
+struct TagsContentView: View {
+
+    @ObservedObject var model: TagEditorModel
+
+    init(tagsView: TagsView) {
+        _model = ObservedObject(initialValue: TagEditorModel(tagsView: tagsView))
+    }
+
+    var body: some View {
+        Table(model.filteredTags, selection: $model.selection) {
+            TableColumn("Tag", value: \.self)
+        }
+        .searchable(text: $model.filter)
+        .run(model)
+    }
+
+}
 
 @main
 struct BookmarksApp: App {
@@ -85,6 +161,10 @@ struct BookmarksApp: App {
         }
         SwiftUI.Settings {
             SettingsView()
+        }
+
+        Window("Tags", id: "tags") {
+            TagsContentView(tagsView: manager.tagsView)
         }
 
         About {

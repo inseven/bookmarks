@@ -149,7 +149,12 @@ public class BookmarksView: ObservableObject {
     }
 
     @MainActor public func start() {
-        print("(\(Unmanaged.passUnretained(self).toOpaque())) BookmarksView.start()")
+
+        // Set up the initial state (in case we are being reused).
+        bookmarks = []
+        state = .loading
+
+        // Start the various observers.
         updateBookmarks()
         updateQuery()
         updateSuggestedTokens()
@@ -158,10 +163,7 @@ public class BookmarksView: ObservableObject {
     }
 
     @MainActor public func stop() {
-        print("(\(Unmanaged.passUnretained(self).toOpaque())) BookmarksView.stop()")
         cancellables.removeAll()
-        bookmarks = []
-        state = .loading
     }
 
     @MainActor public func bookmarks(for ids: Set<Bookmark.ID>) async -> [Bookmark] {

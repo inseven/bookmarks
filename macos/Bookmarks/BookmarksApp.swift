@@ -24,14 +24,25 @@ import SwiftUI
 import BookmarksCore
 import Diligence
 
-struct FocusedNoteValue: FocusedValueKey {
+struct FocusedWindowModel: FocusedValueKey {
     typealias Value = WindowModel
 }
 
 extension FocusedValues {
-    var windowModel: FocusedNoteValue.Value? {
-        get { self[FocusedNoteValue.self] }
-        set { self[FocusedNoteValue.self] = newValue }
+    var windowModel: FocusedWindowModel.Value? {
+        get { self[FocusedWindowModel.self] }
+        set { self[FocusedWindowModel.self] = newValue }
+    }
+}
+
+struct FocusedSelection: FocusedValueKey {
+    typealias Value = BookmarksSelection
+}
+
+extension FocusedValues {
+    var selection: FocusedSelection.Value? {
+        get { self[FocusedSelection.self] }
+        set { self[FocusedSelection.self] = newValue }
     }
 }
 
@@ -60,7 +71,7 @@ struct BookmarksApp: App {
                 .keyboardShortcut("r", modifiers: .command)
             }
             CommandMenu("Bookmark") {
-                BookmarkOpenCommands(selection: selection)
+                BookmarkOpenCommands()
                     .trailingDivider()
                 BookmarkDesctructiveCommands(selection: selection)
                     .trailingDivider()

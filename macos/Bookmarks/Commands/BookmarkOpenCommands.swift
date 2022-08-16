@@ -25,21 +25,30 @@ import BookmarksCore
 struct BookmarkOpenCommands: View {
 
     @Environment(\.manager) var manager
-    @Environment(\.menuType) var menuType
+    @FocusedValue(\.selection) var selection
 
-    @ObservedObject var selection: BookmarksSelection
+    var isEmpty: Bool {
+        guard let selection = selection else {
+            return true
+        }
+        return selection.isEmpty
+    }
 
     var body: some View {
         Button("Open") {
-            selection.open(manager: manager)
+            guard let selection = selection?.selection else {
+                return
+            }
+            print(selection)
+//            selection?.open(manager: manager)
         }
-        .contextAwareKeyboardShortcut(.return, modifiers: [.command])
-        .mainMenuItemCondition(.nonEmpty, selection)
+        .keyboardShortcut(.return, modifiers: [.command])  // TODO: Don't use this modifier?
+        .disabled(isEmpty)
         Button("Open on Internet Archive") {
-            selection.open(manager: manager, location: .internetArchive)
+//            selection?.open(manager: manager, location: .internetArchive)
         }
-        .contextAwareKeyboardShortcut(.return, modifiers: [.command, .shift])
-        .mainMenuItemCondition(.nonEmpty, selection)
+        .keyboardShortcut(.return, modifiers: [.shift])
+        .disabled(isEmpty)
     }
 
 }

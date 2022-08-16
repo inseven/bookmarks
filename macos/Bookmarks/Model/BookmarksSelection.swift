@@ -34,7 +34,7 @@ public class BookmarksSelection: ObservableObject {
     @Published var selection: Set<Bookmark.ID> = []
 
     var count: Int { bookmarks.count }
-    var isEmpty: Bool { bookmarks.isEmpty }
+    var isEmpty: Bool { selection.isEmpty }
     var containsUnreadBookmark: Bool { bookmarks.containsUnreadBookmark }
     var containsPublicBookmark: Bool { bookmarks.containsPublicBookmark }
 

@@ -103,6 +103,23 @@ struct ContentView: View {
                 print("Failed to delete bookmarks with error \(error)")
             }
         }
+//        BookmarkOpenCommands(selection: selection)
+//            .trailingDivider()
+//        BookmarkDesctructiveCommands(selection: selection)
+//            .trailingDivider()
+//        BookmarkEditCommands(selection: selection)
+//            .trailingDivider()
+//        BookmarkShareCommands(selection: selection)
+//            .trailingDivider()
+//        BookmarkTagCommands(selection: selection)
+//        #if DEBUG
+//        BookmarkDebugCommands()
+//            .leadingDivider()
+//        #endif
+    }
+
+    @MainActor func primaryAction(_ selection: Set<Bookmark.ID>) {
+        bookmarksView.open(ids: selection)
     }
 
     var body: some View {
@@ -117,11 +134,12 @@ struct ContentView: View {
                         .modifier(BorderedSelection())
                         .padding(4.0)
                         .shadow(color: .shadow, radius: 4.0)
+                        .help(bookmark.url.absoluteString)
 
                 } contextMenu: { selection in
                     contextMenu(selection)
                 } primaryAction: { selection in
-                    bookmarksView.open(ids: selection)
+                    primaryAction(selection)
                 }
             case .table:
                 Table(bookmarksView.bookmarks, selection: $selection.selection) {
@@ -134,62 +152,9 @@ struct ContentView: View {
                 .contextMenu(forSelectionType: Bookmark.ID.self) { selection in
                     contextMenu(selection)
                 } primaryAction: { selection in
-                    bookmarksView.open(ids: selection)
+                    primaryAction(selection)
                 }
-
             }
-
-//            ScrollView {
-//                LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 8)], spacing: 8) {
-//                    ForEach(bookmarksView.bookmarks) { bookmark in
-//                        BookmarkCell(bookmark: bookmark)
-//                            .shadow(color: .shadow, radius: 8)
-//                            .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: bookmark),
-//                                                        firstResponder: firstResponder))
-//                            .help(bookmark.url.absoluteString)
-//                            .contextMenuFocusable {
-//                                BookmarkOpenCommands(selection: selection)
-//                                    .trailingDivider()
-//                                BookmarkDesctructiveCommands(selection: selection)
-//                                    .trailingDivider()
-//                                BookmarkEditCommands(selection: selection)
-//                                    .trailingDivider()
-//                                BookmarkShareCommands(selection: selection)
-//                                    .trailingDivider()
-//                                BookmarkTagCommands(selection: selection)
-//                                #if DEBUG
-//                                BookmarkDebugCommands()
-//                                    .leadingDivider()
-//                                #endif
-//                            } onContextMenuChange: { focused in
-//                                guard focused == true else {
-//                                    return
-//                                }
-//                                firstResponder = true
-//                                if !selectionTracker.isSelected(item: bookmark) {
-//                                    selectionTracker.handleClick(item: bookmark)
-//                                }
-//                            }
-//                            .menuType(.context)
-//                            .onDrag {
-//                                NSItemProvider(object: bookmark.url as NSURL)
-//                            }
-//                            .handleMouse {
-//                                if firstResponder || !selectionTracker.isSelected(item: bookmark) {
-//                                    selectionTracker.handleClick(item: bookmark)
-//                                }
-//                                firstResponder = true
-//                            } doubleClick: {
-//                                NSWorkspace.shared.open(bookmark.url)
-//                            } shiftClick: {
-//                                selectionTracker.handleShiftClick(item: bookmark)
-//                            } commandClick: {
-//                                selectionTracker.handleCommandClick(item: bookmark)
-//                            }
-//                    }
-//                }
-//                .padding()
-//            }
         }
         .overlay(bookmarksView.state == .loading ? LoadingView() : nil)
         .onAppear {
@@ -210,5 +175,6 @@ struct ContentView: View {
         }
         .navigationTitle(bookmarksView.title)
         .navigationSubtitle(bookmarksView.subtitle)
+        .focusedValue(\.selection, selection)
     }
 }

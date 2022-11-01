@@ -28,7 +28,6 @@ jobs:
 
     - name: Build, test, and release
       env:
-
         APPLE_DISTRIBUTION_CERTIFICATE_BASE64: ${{ secrets.APPLE_DISTRIBUTION_CERTIFICATE_BASE64 }}
         APPLE_DISTRIBUTION_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_DISTRIBUTION_CERTIFICATE_PASSWORD }}
         MACOS_DEVELOPER_INSTALLER_CERTIFICATE: ${{ secrets.MACOS_DEVELOPER_INSTALLER_CERTIFICATE }}
@@ -44,9 +43,8 @@ jobs:
       run: |
         scripts/build.sh
 
-    - name: Archive the build directory
-      uses: actions/upload-artifact@v2
-      if: always()
+    - name: Archive the binary
+      uses: actions/upload-artifact@v3
       with:
-        name: Build
-        path: build
+        path: build/build-*.zip
+        if-no-files-found: error

@@ -23,7 +23,6 @@ import Combine
 import SwiftUI
 
 import Diligence
-import Interact
 
 import BookmarksCore
 
@@ -47,43 +46,6 @@ extension FocusedValues {
         get { self[FocusedSelection.self] }
         set { self[FocusedSelection.self] = newValue }
     }
-}
-
-class TagEditorModel: ObservableObject, Runnable {
-
-    @Published var tags: [String] = []
-    @Published var filter = ""
-    @Published var filteredTags: [String] = []
-    @Published var selection: Set<String> = []
-
-    var tagsView: TagsView
-    var cancellables: Set<AnyCancellable> = []
-
-    init(tagsView: TagsView) {
-        self.tagsView = tagsView
-    }
-
-    @MainActor func start() {
-        tagsView.$tags
-            .combineLatest($filter)
-            .receive(on: DispatchQueue.global())
-            .map { tags, filter in
-                guard !filter.isEmpty else {
-                    return tags
-                }
-                return tags.filter { $0.localizedCaseInsensitiveContains(filter) }
-            }
-            .receive(on: DispatchQueue.main)
-            .sink { filteredTags in
-                self.filteredTags = filteredTags
-            }
-            .store(in: &cancellables)
-    }
-
-    @MainActor func stop() {
-        cancellables.removeAll()
-    }
-
 }
 
 @main

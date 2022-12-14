@@ -12,6 +12,7 @@
 		D8164D6626C08DD500756D43 /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D6526C08DD500756D43 /* EditView.swift */; };
 		D8164D6826C08EEC00756D43 /* BorderedSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D6726C08EEC00756D43 /* BorderedSelection.swift */; };
 		D8350728294A0C260044ADE0 /* TagsContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8350727294A0C260044ADE0 /* TagsContentView.swift */; };
+		D835072A294A0DB40044ADE0 /* TagEditorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8350729294A0DB40044ADE0 /* TagEditorModel.swift */; };
 		D840B00A2621042B001E95D1 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840B0092621042B001E95D1 /* SettingsView.swift */; };
 		D840B01226210AF6001E95D1 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */; };
 		D861257326A60DF200EB5FEF /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D861257226A60DF200EB5FEF /* Sidebar.swift */; };
@@ -94,6 +95,7 @@
 		D8164D6526C08DD500756D43 /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
 		D8164D6726C08EEC00756D43 /* BorderedSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderedSelection.swift; sourceTree = "<group>"; };
 		D8350727294A0C260044ADE0 /* TagsContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsContentView.swift; sourceTree = "<group>"; };
+		D8350729294A0DB40044ADE0 /* TagEditorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagEditorModel.swift; sourceTree = "<group>"; };
 		D840B0092621042B001E95D1 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		D861257226A60DF200EB5FEF /* Sidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 				D8931F6026C5E12E00A8021E /* BookmarksSelection.swift */,
 				D879449426CB5E3D00D97155 /* Countable.swift */,
 				D879448E26CB4A5400D97155 /* MenuType.swift */,
+				D8350729294A0DB40044ADE0 /* TagEditorModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -508,6 +511,7 @@
 				D8A06F1F28A7E85B0002A56D /* SectionLink.swift in Sources */,
 				D8164D6826C08EEC00756D43 /* BorderedSelection.swift in Sources */,
 				D891C456261E32F90024E1A6 /* ContentView.swift in Sources */,
+				D835072A294A0DB40044ADE0 /* TagEditorModel.swift in Sources */,
 				D861257526AA048E00EB5FEF /* RenameTagView.swift in Sources */,
 				D80710EB26C4847D007272C0 /* BookmarkDebugCommands.swift in Sources */,
 				D8A336FE26B56AF700436200 /* BookmarkDestructiveCommands.swift in Sources */,

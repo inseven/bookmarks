@@ -105,24 +105,6 @@ class TagEditorModel: ObservableObject, Runnable {
 
 }
 
-struct TagsContentView: View {
-
-    @ObservedObject var model: TagEditorModel
-
-    init(tagsView: TagsView) {
-        _model = ObservedObject(initialValue: TagEditorModel(tagsView: tagsView))
-    }
-
-    var body: some View {
-        Table(model.filteredTags, selection: $model.selection) {
-            TableColumn("Tag", value: \.self)
-        }
-        .searchable(text: $model.filter)
-        .run(model)
-    }
-
-}
-
 @main
 struct BookmarksApp: App {
 

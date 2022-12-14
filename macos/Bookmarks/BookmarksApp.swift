@@ -22,8 +22,10 @@ import AppKit
 import Combine
 import SwiftUI
 
-import BookmarksCore
 import Diligence
+import Interact
+
+import BookmarksCore
 
 struct FocusedWindowModel: FocusedValueKey {
     typealias Value = WindowModel
@@ -45,27 +47,6 @@ extension FocusedValues {
         get { self[FocusedSelection.self] }
         set { self[FocusedSelection.self] = newValue }
     }
-}
-
-protocol Runnable {
-
-    func start()
-    func stop()
-
-}
-
-extension View {
-
-    func run(_ runnable: Runnable) -> some View {
-        self
-            .onAppear {
-                runnable.start()
-            }
-            .onDisappear {
-                runnable.stop()
-            }
-    }
-
 }
 
 class TagEditorModel: ObservableObject, Runnable {

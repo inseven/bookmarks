@@ -20,6 +20,8 @@
 
 import SwiftUI
 
+import Interact
+
 import BookmarksCore
 
 struct TagsContentView: View {
@@ -35,7 +37,7 @@ struct TagsContentView: View {
             TableColumn("Tag", value: \.self)
         }
         .searchable(text: $model.filter)
-        .run(model)
+        .runs(model)
     }
 
 }

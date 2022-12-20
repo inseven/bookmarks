@@ -74,39 +74,6 @@ struct Sidebar: View {
                 }
             }
 
-//            Section("Tags") {
-//                ForEach(tags, id: \.section) { tag in
-//                    SectionLink(tag.section)
-//                        .contextMenu(ContextMenu(menuItems: {
-//                            Button("Rename") {
-//                                self.sheet = .rename(tag: tag)
-//                            }
-//                            Button("Delete") {
-//                                self.manager.deleteTag(tag) { _ in }
-//                            }
-//                            Divider()
-//                            Button("Add to Favorites") {
-//                                var favoriteTags = settings.favoriteTags
-//                                favoriteTags.append(tag)
-//                                settings.favoriteTags = favoriteTags
-//                            }
-//                            Divider()
-//                            Button("Edit on Pinboard") {
-//                                do {
-//                                    guard let user = manager.user else {
-//                                        return
-//                                    }
-//                                    NSWorkspace.shared.open(try tag.pinboardTagUrl(for: user))
-//                                } catch {
-//                                    print("Failed to open on Pinboard error \(error)")
-//                                }
-//                            }
-//                        }))
-//
-//                }
-//            }
-//            .accentColor(.secondary)
-
         }
         .sheet(item: $sheet) { sheet in
             switch sheet {

@@ -135,7 +135,7 @@ public struct TokenField<T>: NSViewRepresentable {
         fileprivate func token(for representedObject: Any) -> Token? { representedObject as? Token }
 
         func tokenField(_ tokenField: TokenFieldWithMenuCallback, didClickMenuItem menuItem: NSMenuItem) {
-            guard let callback = menuItem.representedObject as? MenuItem<T>.Callback else {
+            guard let callback = menuItem.representedObject as? TokenMenuItem<T>.Callback else {
                 print("not a menu item callback")
                 return
             }
@@ -311,7 +311,7 @@ public class Token<T>: Identifiable, Equatable {
               associatedValue: associatedValue)
     }
 
-    public func menu(@MenuBuilder<T> _ content: () -> [MenuItem<T>]) -> Token {
+    public func menu(@MenuBuilder<T> _ content: () -> [TokenMenuItem<T>]) -> Token {
         menu(TokenMenu<T>(content))
     }
 
@@ -335,7 +335,7 @@ public class Token<T>: Identifiable, Equatable {
 
 }
 
-public struct MenuItem<T> {
+public struct TokenMenuItem<T> {
 
     typealias Callback = () -> Void
 
@@ -360,14 +360,14 @@ public struct MenuItem<T> {
 
 @resultBuilder struct MenuBuilder<T> {
 
-    static func buildBlock() -> [MenuItem<T>] { [] }
+    static func buildBlock() -> [TokenMenuItem<T>] { [] }
 
 }
 
 
 extension MenuBuilder {
 
-    static func buildBlock(_ settings: MenuItem<T>...) -> [MenuItem<T>] {
+    static func buildBlock(_ settings: TokenMenuItem<T>...) -> [TokenMenuItem<T>] {
         settings
     }
 
@@ -375,9 +375,9 @@ extension MenuBuilder {
 
 public class TokenMenu<T>: NSObject {
 
-    var items: [MenuItem<T>]
+    var items: [TokenMenuItem<T>]
 
-    public init(@MenuBuilder<T> _ content: () -> [MenuItem<T>]) {
+    public init(@MenuBuilder<T> _ content: () -> [TokenMenuItem<T>]) {
         items = content()
     }
 

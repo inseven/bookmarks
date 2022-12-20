@@ -13,6 +13,8 @@
 		D8164D6826C08EEC00756D43 /* BorderedSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D6726C08EEC00756D43 /* BorderedSelection.swift */; };
 		D8350728294A0C260044ADE0 /* TagsContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8350727294A0C260044ADE0 /* TagsContentView.swift */; };
 		D835072A294A0DB40044ADE0 /* TagEditorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8350729294A0DB40044ADE0 /* TagEditorModel.swift */; };
+		D83CFEA52951B26D005031EA /* LayoutToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83CFEA42951B26D005031EA /* LayoutToolbar.swift */; };
+		D83CFEA72951B2AA005031EA /* LayoutMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83CFEA62951B2AA005031EA /* LayoutMode.swift */; };
 		D840B00A2621042B001E95D1 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840B0092621042B001E95D1 /* SettingsView.swift */; };
 		D840B01226210AF6001E95D1 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */; };
 		D861257326A60DF200EB5FEF /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D861257226A60DF200EB5FEF /* Sidebar.swift */; };
@@ -96,6 +98,8 @@
 		D8164D6726C08EEC00756D43 /* BorderedSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderedSelection.swift; sourceTree = "<group>"; };
 		D8350727294A0C260044ADE0 /* TagsContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsContentView.swift; sourceTree = "<group>"; };
 		D8350729294A0DB40044ADE0 /* TagEditorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagEditorModel.swift; sourceTree = "<group>"; };
+		D83CFEA42951B26D005031EA /* LayoutToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutToolbar.swift; sourceTree = "<group>"; };
+		D83CFEA62951B2AA005031EA /* LayoutMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutMode.swift; sourceTree = "<group>"; };
 		D840B0092621042B001E95D1 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		D861257226A60DF200EB5FEF /* Sidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
@@ -258,6 +262,7 @@
 				D879449426CB5E3D00D97155 /* Countable.swift */,
 				D879448E26CB4A5400D97155 /* MenuType.swift */,
 				D8350729294A0DB40044ADE0 /* TagEditorModel.swift */,
+				D83CFEA62951B2AA005031EA /* LayoutMode.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -276,6 +281,7 @@
 			isa = PBXGroup;
 			children = (
 				D8A06F2728A7EFD40002A56D /* AccountToolbar.swift */,
+				D83CFEA42951B26D005031EA /* LayoutToolbar.swift */,
 				D8A06F2528A7EE9A0002A56D /* SelectionToolbar.swift */,
 			);
 			path = Toolbars;
@@ -515,6 +521,7 @@
 				D861257526AA048E00EB5FEF /* RenameTagView.swift in Sources */,
 				D80710EB26C4847D007272C0 /* BookmarkDebugCommands.swift in Sources */,
 				D8A336FE26B56AF700436200 /* BookmarkDestructiveCommands.swift in Sources */,
+				D83CFEA52951B26D005031EA /* LayoutToolbar.swift in Sources */,
 				D8931F6426C5E16200A8021E /* SelectionSheetHandler.swift in Sources */,
 				D8A336FA26B569C200436200 /* BookmarkTagCommands.swift in Sources */,
 				D80710F326C4B855007272C0 /* MainWindow.swift in Sources */,
@@ -529,6 +536,7 @@
 				D8164D6626C08DD500756D43 /* EditView.swift in Sources */,
 				D8F3F28F26EE776900BFA43B /* LogInView.swift in Sources */,
 				D879449326CB5E1900D97155 /* MainMenuItemCondition.swift in Sources */,
+				D83CFEA72951B2AA005031EA /* LayoutMode.swift in Sources */,
 				D879449126CB57BE00D97155 /* ContextAwareKeyboardShortcut.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

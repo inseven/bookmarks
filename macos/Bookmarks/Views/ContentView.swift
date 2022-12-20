@@ -25,50 +25,6 @@ import BookmarksCore
 import Interact
 import SelectableCollectionView
 
-enum LayoutMode: CaseIterable, Identifiable {
-
-    var id: Self { self }
-
-    case grid
-    case table
-
-    var systemImage: String {
-        switch self {
-        case .grid:
-            return "square.grid.2x2"
-        case .table:
-            return "list.bullet"
-        }
-    }
-
-    var help: String {
-        return "THIS IS NEVER USED"
-    }
-}
-
-
-struct LayoutToolbar: CustomizableToolbarContent {
-
-    @Binding var layoutMode: LayoutMode
-
-    var body: some CustomizableToolbarContent {
-
-        ToolbarItem(id: "layout-mode") {
-            Picker(selection: $layoutMode) {
-                ForEach(LayoutMode.allCases) { mode in
-                    Image(systemName: mode.systemImage)
-                        .help(mode.help)
-                        .tag(mode)
-                }
-            } label: {
-            }
-            .pickerStyle(.inline)
-        }
-
-    }
-
-}
-
 struct ContentView: View {
 
     @Environment(\.manager) var manager

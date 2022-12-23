@@ -1,5 +1,5 @@
 [submodule "ios/hpple"]
-	path = ios/hpple
+	path = hpple
         url = git@github.com:jbmorley/hpple.git
 [submodule "interact"]
 	path = interact

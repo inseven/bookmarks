@@ -26,9 +26,9 @@ public class TagsView: ObservableObject {
     var database: Database
     var updateCancellable: AnyCancellable? = nil
 
-    public var tags: [String] = []
+    @Published public var tags: [String] = []
     public var fastTags: Set<String> = Set()
-    var trie = Trie()
+    @Published var trie = Trie()
 
     fileprivate var filter = ""
 

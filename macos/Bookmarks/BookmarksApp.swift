@@ -78,6 +78,10 @@ struct BookmarksApp: App {
             SettingsView()
         }
 
+        Window("Tags", id: "tags") {
+            TagsContentView(tagsView: manager.tagsView)
+        }
+
         About(Legal.contents)
 
     }

@@ -234,6 +234,7 @@
 				D879448E26CB4A5400D97155 /* MenuType.swift */,
 				D8350729294A0DB40044ADE0 /* TagEditorModel.swift */,
 				D83CFEA62951B2AA005031EA /* LayoutMode.swift */,
+				D8350729294A0DB40044ADE0 /* TagEditorModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";

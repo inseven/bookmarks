@@ -103,20 +103,24 @@ cd "$ROOT_DIRECTORY"
 sudo xcode-select --switch "$IOS_XCODE_PATH"
 xcode_project -list
 
+# Build and test BookmarksCore.
+pushd "core"
+sudo xcode-select --switch "$MACOS_XCODE_PATH"
+xcodebuild -scheme BookmarksCore -destination "platform=macOS" clean build test
+sudo xcode-select --switch "$IOS_XCODE_PATH"
+xcodebuild -scheme BookmarksCore -destination "$IPHONE_DESTINATION" clean build test
+popd
+
 # Test iOS and macOS.
 
 # iOS
 sudo xcode-select --switch "$IOS_XCODE_PATH"
-build_scheme "BookmarksCore iOS" clean build build-for-testing test \
-    -sdk iphonesimulator \
-    -destination "$IPHONE_DESTINATION"
 build_scheme "Bookmarks iOS" clean build build-for-testing test \
     -sdk iphonesimulator \
     -destination "$IPHONE_DESTINATION"
 
 # macOS
 sudo xcode-select --switch "$MACOS_XCODE_PATH"
-build_scheme "BookmarksCore macOS" clean build build-for-testing test
 build_scheme "Bookmarks macOS" clean build build-for-testing
 
 # Clean up the build directory.

@@ -9,6 +9,7 @@ xcuserdata/
 .env
 build
 temp
+.build
 
 # Editors
 .nova

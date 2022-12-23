@@ -14,17 +14,17 @@ let package = Package(
             targets: ["BookmarksCore"]),
     ],
     dependencies: [
-        .package(path: "./../SQLite.swift"),
-        .package(path: "./../ios/hpple"),
         .package(path: "./../diligence"),
+        .package(path: "./../hpple"),
+        .package(path: "./../SQLite.swift"),
     ],
     targets: [
         .target(
             name: "BookmarksCore",
             dependencies: [
+                .product(name: "Diligence", package: "Diligence"),
                 .product(name: "SQLite", package: "SQLite.swift"),
                 .product(name: "TFHpple", package: "hpple"),
-                .product(name: "Diligence", package: "Diligence"),
             ],
             resources: [
                 .process("Licenses"),

@@ -23,8 +23,6 @@
 		D879449126CB57BE00D97155 /* ContextAwareKeyboardShortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = D879449026CB57BE00D97155 /* ContextAwareKeyboardShortcut.swift */; };
 		D879449326CB5E1900D97155 /* MainMenuItemCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D879449226CB5E1900D97155 /* MainMenuItemCondition.swift */; };
 		D879449526CB5E3D00D97155 /* Countable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D879449426CB5E3D00D97155 /* Countable.swift */; };
-		D87FBF5028A7B4EA00A8753D /* TFHpple in Resources */ = {isa = PBXBuildFile; fileRef = D87FBF4F28A7B4EA00A8753D /* TFHpple */; };
-		D87FBF5428A7B7BE00A8753D /* interact-license in Resources */ = {isa = PBXBuildFile; fileRef = D87FBF5328A7B7BE00A8753D /* interact-license */; };
 		D891C454261E32F90024E1A6 /* BookmarksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D891C453261E32F90024E1A6 /* BookmarksApp.swift */; };
 		D891C456261E32F90024E1A6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D891C455261E32F90024E1A6 /* ContentView.swift */; };
 		D891C458261E32FB0024E1A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D891C457261E32FB0024E1A6 /* Assets.xcassets */; };
@@ -52,11 +50,6 @@
 		D8EB6E4526C3357F00C23B19 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EB6E4426C3357F00C23B19 /* ErrorHandler.swift */; };
 		D8F3F28F26EE776900BFA43B /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F3F28E26EE776900BFA43B /* LogInView.swift */; };
 		D8FF9E9228A75D400081E57A /* Diligence in Frameworks */ = {isa = PBXBuildFile; productRef = D8FF9E9128A75D400081E57A /* Diligence */; };
-		D8FF9E9728A75E800081E57A /* Binding+mappedToBool in Resources */ = {isa = PBXBuildFile; fileRef = D8FF9E9428A75E800081E57A /* Binding+mappedToBool */; };
-		D8FF9E9828A75E800081E57A /* Diligence in Resources */ = {isa = PBXBuildFile; fileRef = D8FF9E9528A75E800081E57A /* Diligence */; };
-		D8FF9E9928A75E800081E57A /* Introspect in Resources */ = {isa = PBXBuildFile; fileRef = D8FF9E9628A75E800081E57A /* Introspect */; };
-		D8FF9E9B28A766F30081E57A /* SQLite-swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FF9E9A28A766F30081E57A /* SQLite-swift */; };
-		D8FF9E9C28A767900081E57A /* SQLite-swift in Resources */ = {isa = PBXBuildFile; fileRef = D8FF9E9A28A766F30081E57A /* SQLite-swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,8 +86,6 @@
 		D879449026CB57BE00D97155 /* ContextAwareKeyboardShortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextAwareKeyboardShortcut.swift; sourceTree = "<group>"; };
 		D879449226CB5E1900D97155 /* MainMenuItemCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuItemCondition.swift; sourceTree = "<group>"; };
 		D879449426CB5E3D00D97155 /* Countable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Countable.swift; sourceTree = "<group>"; };
-		D87FBF4F28A7B4EA00A8753D /* TFHpple */ = {isa = PBXFileReference; lastKnownFileType = text; name = TFHpple; path = ../../../ios/Bookmarks/Licenses/TFHpple; sourceTree = "<group>"; };
-		D87FBF5328A7B7BE00A8753D /* interact-license */ = {isa = PBXFileReference; lastKnownFileType = text; name = "interact-license"; path = "../../../ios/Bookmarks/Licenses/interact-license"; sourceTree = "<group>"; };
 		D891C450261E32F90024E1A6 /* Bookmarks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bookmarks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D891C453261E32F90024E1A6 /* BookmarksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksApp.swift; sourceTree = "<group>"; };
 		D891C455261E32F90024E1A6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -133,10 +124,6 @@
 		D8ECA5E02640583900947EEC /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		D8F3F28E26EE776900BFA43B /* LogInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
 		D8FF9E9028A75CD70081E57A /* diligence */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = diligence; path = ../diligence; sourceTree = "<group>"; };
-		D8FF9E9428A75E800081E57A /* Binding+mappedToBool */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Binding+mappedToBool"; sourceTree = "<group>"; };
-		D8FF9E9528A75E800081E57A /* Diligence */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Diligence; sourceTree = "<group>"; };
-		D8FF9E9628A75E800081E57A /* Introspect */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Introspect; sourceTree = "<group>"; };
-		D8FF9E9A28A766F30081E57A /* SQLite-swift */ = {isa = PBXFileReference; lastKnownFileType = text; name = "SQLite-swift"; path = "../../../ios/Bookmarks/Licenses/SQLite-swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -204,7 +191,6 @@
 				D8EB6E4426C3357F00C23B19 /* ErrorHandler.swift */,
 				D8B6E2C3262098FB00B2C239 /* Extensions */,
 				D891C45C261E32FB0024E1A6 /* Info.plist */,
-				D8FF9E9328A75E1E0081E57A /* Licenses */,
 				D8931F5F26C5E11200A8021E /* Model */,
 				D8931F6226C5E15300A8021E /* Modifiers */,
 				D891C459261E32FB0024E1A6 /* Preview Content */,
@@ -333,19 +319,6 @@
 			name = Packages;
 			sourceTree = "<group>";
 		};
-		D8FF9E9328A75E1E0081E57A /* Licenses */ = {
-			isa = PBXGroup;
-			children = (
-				D8FF9E9428A75E800081E57A /* Binding+mappedToBool */,
-				D8FF9E9528A75E800081E57A /* Diligence */,
-				D87FBF5328A7B7BE00A8753D /* interact-license */,
-				D8FF9E9628A75E800081E57A /* Introspect */,
-				D8FF9E9A28A766F30081E57A /* SQLite-swift */,
-				D87FBF4F28A7B4EA00A8753D /* TFHpple */,
-			);
-			path = Licenses;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -455,12 +428,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8FF9E9C28A767900081E57A /* SQLite-swift in Resources */,
-				D8FF9E9728A75E800081E57A /* Binding+mappedToBool in Resources */,
-				D87FBF5428A7B7BE00A8753D /* interact-license in Resources */,
-				D8FF9E9828A75E800081E57A /* Diligence in Resources */,
-				D87FBF5028A7B4EA00A8753D /* TFHpple in Resources */,
-				D8FF9E9928A75E800081E57A /* Introspect in Resources */,
 				D891C45B261E32FB0024E1A6 /* Preview Assets.xcassets in Resources */,
 				D891C458261E32FB0024E1A6 /* Assets.xcassets in Resources */,
 			);
@@ -488,7 +455,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D879448F26CB4A5400D97155 /* MenuType.swift in Sources */,
-				D8FF9E9B28A766F30081E57A /* SQLite-swift in Sources */,
 				D8B6E2C52620990400B2C239 /* Item.swift in Sources */,
 				D8A06F2128A7E92F0002A56D /* AccountCommands.swift in Sources */,
 				D8350728294A0C260044ADE0 /* TagsContentView.swift in Sources */,

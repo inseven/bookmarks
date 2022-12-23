@@ -16,6 +16,7 @@ let package = Package(
     dependencies: [
         .package(path: "./../SQLite.swift"),
         .package(path: "./../ios/hpple"),
+        .package(path: "./../diligence"),
     ],
     targets: [
         .target(
@@ -23,6 +24,7 @@ let package = Package(
             dependencies: [
                 .product(name: "SQLite", package: "SQLite.swift"),
                 .product(name: "TFHpple", package: "hpple"),
+                .product(name: "Diligence", package: "Diligence"),
             ],
             resources: [
                 .process("Licenses"),

@@ -27,46 +27,29 @@ struct AboutView: View {
     @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
-        NavigationView {
-            Form {
-                HeaderSection {
-                    Icon("Icon")
-                    ApplicationNameTitle()
-                }
-                BuildSection("inseven/bookmarks")
-                ActionSection {
-                    Action("InSeven Limited", url: URL(string: "https://inseven.co.uk")!)
-                    Action("Support", url: URL(address: "support@inseven.co.uk", subject: "Bookmarks Support")!)
-                }
-                CreditSection("Developers") {
-                    Credit("Jason Morley", url: URL(string: "https://jbmorley.co.uk"))
-                }
-                CreditSection("Thanks") {
-                    Credit("Blake Merryman")
-                    Credit("Joanne Wong")
-                    Credit("Lukas Fittl")
-                    Credit("Pavlos Vinieratos")
-                    Credit("Sara Frederixon")
-                    Credit("Sarah Barbour")
-                    Credit("Terrence Talbot")
-                }
-                LicenseSection("Licenses") {
-                    License("Binding+mappedToBool", author: "Joseph Duffy", filename: "Binding+mappedToBool")
-                    License("Diligence", author: "InSeven Limited", filename: "Diligence")
-                    License("Interact", author: "InSeven Limited", filename: "interact-license")
-                    License("Introspect", author: "Timber Software", filename: "Introspect")
-                    License("SQLite.swift", author: "Stephen Celis", filename: "SQLite-swift")
-                    License("TFHpple", author: "Topfunky Corporation", filename: "TFHpple")
-                }
+        Diligence.AboutView(repository: "inseven/bookmarks", copyright: "Copyright © 2020-2022 InSeven Limited") {
+            Action("InSeven Limited", url: URL(string: "https://inseven.co.uk")!)
+            Action("Support", url: URL(address: "support@inseven.co.uk", subject: "Bookmarks Support")!)
+        } acknowledgements: {
+            Acknowledgements("Developers") {
+                Credit("Jason Morley", url: URL(string: "https://jbmorley.co.uk"))
             }
-            .navigationBarItems(trailing: Button {
-                presentationMode.wrappedValue.dismiss()
-            } label: {
-                Text("Done")
-                    .bold()
-            })
+            Acknowledgements("Thanks") {
+                Credit("Blake Merryman")
+                Credit("Joanne Wong")
+                Credit("Lukas Fittl")
+                Credit("Pavlos Vinieratos")
+                Credit("Sara Frederixon")
+                Credit("Sarah Barbour")
+                Credit("Terrence Talbot")
+            }
+        } licenses: {
+            License("Binding+mappedToBool", author: "Joseph Duffy", filename: "Binding+mappedToBool")
+            License("Interact", author: "InSeven Limited", filename: "interact-license")
+            License("Introspect", author: "Timber Software", filename: "Introspect")
+            License("SQLite.swift", author: "Stephen Celis", filename: "SQLite-swift")
+            License("TFHpple", author: "Topfunky Corporation", filename: "TFHpple")
         }
-        .navigationViewStyle(StackNavigationViewStyle())
     }
 
 }

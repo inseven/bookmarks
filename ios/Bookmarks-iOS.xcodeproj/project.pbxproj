@@ -7,10 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D8019A192731B260001736DE /* Binding+mappedToBool in Resources */ = {isa = PBXBuildFile; fileRef = D8019A172731B1B0001736DE /* Binding+mappedToBool */; };
 		D8019A1B273210F2001736DE /* ShareController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8019A1A273210F2001736DE /* ShareController.swift */; };
 		D81E7484254A0D1B002336DC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81E7483254A0D1B002336DC /* ContentView.swift */; };
-		D81FBAC426B99E26004AC4A4 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81FBAC326B99E26004AC4A4 /* AboutView.swift */; };
 		D822159B2955C35C0087FBAC /* BookmarksCore in Frameworks */ = {isa = PBXBuildFile; productRef = D822159A2955C35C0087FBAC /* BookmarksCore */; };
 		D82BF61E273090FE004978AD /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82BF61D273090FE004978AD /* LogInView.swift */; };
 		D82BF6272730A0D0004978AD /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82BF6262730A0D0004978AD /* DebugView.swift */; };
@@ -22,10 +20,6 @@
 		D864E47121C93FD200EAB9AD /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D864E47021C93FD200EAB9AD /* libxml2.2.tbd */; };
 		D871B4E5273242ED00712182 /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D871B4E4273242ED00712182 /* EditView.swift */; };
 		D8743909273106C000B676A5 /* Diligence in Frameworks */ = {isa = PBXBuildFile; productRef = D8743908273106C000B676A5 /* Diligence */; };
-		D874390C273108DD00B676A5 /* Diligence in Resources */ = {isa = PBXBuildFile; fileRef = D874390B273108DD00B676A5 /* Diligence */; };
-		D874390E2731094000B676A5 /* Introspect in Resources */ = {isa = PBXBuildFile; fileRef = D874390D2731094000B676A5 /* Introspect */; };
-		D87FBF5228A7B62500A8753D /* TFHpple in Resources */ = {isa = PBXBuildFile; fileRef = D87FBF5128A7B5A700A8753D /* TFHpple */; };
-		D87FBF5628A7B87E00A8753D /* interact-license in Resources */ = {isa = PBXBuildFile; fileRef = D87FBF5528A7B86400A8753D /* interact-license */; };
 		D89956D727DE41150023FC84 /* ButtonLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89956D627DE41150023FC84 /* ButtonLabelStyle.swift */; };
 		D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BDE1172551C56100C95945 /* BookmarksApp.swift */; };
 		D8BDE1472554782000C95945 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = D8BDE1462554782000C95945 /* Introspect */; };
@@ -34,7 +28,6 @@
 		D8D3BC0F21C6AEBD00D6FB97 /* BookmarksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BC0E21C6AEBD00D6FB97 /* BookmarksTests.swift */; };
 		D8D3BC1A21C6AEBD00D6FB97 /* BookmarksUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BC1921C6AEBD00D6FB97 /* BookmarksUITests.swift */; };
 		D8F521382732EEF40031F0CC /* AddTagLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F521372732EEF40031F0CC /* AddTagLabel.swift */; };
-		D8FF9E9E28A76B520081E57A /* SQLite-swift in Resources */ = {isa = PBXBuildFile; fileRef = D8FF9E9D28A76B050081E57A /* SQLite-swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,7 +51,6 @@
 		D8019A172731B1B0001736DE /* Binding+mappedToBool */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Binding+mappedToBool"; sourceTree = "<group>"; };
 		D8019A1A273210F2001736DE /* ShareController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareController.swift; sourceTree = "<group>"; };
 		D81E7483254A0D1B002336DC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		D81FBAC326B99E26004AC4A4 /* AboutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		D82215992955C26E0087FBAC /* core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = core; path = ../core; sourceTree = "<group>"; };
 		D82BF61D273090FE004978AD /* LogInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
 		D82BF6262730A0D0004978AD /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
@@ -128,7 +120,6 @@
 		D8578479254FF56E00AE241C /* Interface */ = {
 			isa = PBXGroup;
 			children = (
-				D81FBAC326B99E26004AC4A4 /* AboutView.swift */,
 				D8F521372732EEF40031F0CC /* AddTagLabel.swift */,
 				D859CE012733A9CD00E9B466 /* AddTagView.swift */,
 				D8478553261539AA00B2318B /* Bookmarks.swift */,
@@ -356,14 +347,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D87FBF5628A7B87E00A8753D /* interact-license in Resources */,
-				D87FBF5228A7B62500A8753D /* TFHpple in Resources */,
-				D8FF9E9E28A76B520081E57A /* SQLite-swift in Resources */,
-				D8019A192731B260001736DE /* Binding+mappedToBool in Resources */,
 				D8D3BC0421C6AEBD00D6FB97 /* LaunchScreen.storyboard in Resources */,
-				D874390E2731094000B676A5 /* Introspect in Resources */,
 				D8D3BC0121C6AEBD00D6FB97 /* Assets.xcassets in Resources */,
-				D874390C273108DD00B676A5 /* Diligence in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -394,7 +379,6 @@
 				D82BF6272730A0D0004978AD /* DebugView.swift in Sources */,
 				D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */,
 				D840327A2732E148004CD998 /* SidebarLink.swift in Sources */,
-				D81FBAC426B99E26004AC4A4 /* AboutView.swift in Sources */,
 				D8478554261539AA00B2318B /* Bookmarks.swift in Sources */,
 				D859CE022733A9CD00E9B466 /* AddTagView.swift in Sources */,
 				D82BF61E273090FE004978AD /* LogInView.swift in Sources */,

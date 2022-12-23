@@ -20,6 +20,8 @@
 
 import Foundation
 
+import TFHpple
+
 #if os(iOS)
 import UIKit
 #endif

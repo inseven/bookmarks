@@ -1,6 +1,6 @@
 [submodule "ios/hpple"]
 	path = ios/hpple
-	url = git@github.com:topfunky/hpple.git
+        url = git@github.com:jbmorley/hpple.git
 [submodule "interact"]
 	path = interact
 	url = git@github.com:jbmorley/interact.git
@@ -10,12 +10,12 @@
 [submodule "scripts/build-tools"]
 	path = scripts/build-tools
 	url = git@github.com:jbmorley/build-tools.git
-[submodule "core/swift-algorithm-club"]
-	path = core/swift-algorithm-club
-	url = git@github.com:jbmorley/swift-algorithm-club.git
 [submodule "diligence"]
 	path = diligence
 	url = git@github.com:inseven/diligence.git
+[submodule "SQLite.swift"]
+	path = SQLite.swift
+	url = git@github.com:jbmorley/SQLite.swift.git
 [submodule "SelectableCollectionView"]
 	path = SelectableCollectionView
 	url = git@github.com:jbmorley/SelectableCollectionView.git

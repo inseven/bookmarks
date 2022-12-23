@@ -36,7 +36,7 @@ struct SidebarLink: View {
         NavigationLink(tag: section, selection: $selection) {
             Bookmarks(section: section, bookmarksView: BookmarksView(database: manager.database, query: section.query))
         } label: {
-            Label(section.navigationTitle, systemImage: section.systemImage)
+            Label(section.sidebarTitle, systemImage: section.systemImage)
         }
     }
     

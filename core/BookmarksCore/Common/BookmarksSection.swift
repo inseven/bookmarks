@@ -163,6 +163,28 @@ public extension BookmarksSection {
             }
 
         case .tag(tag: let tag):
+            return "Bookmarks tagged \"\(tag)\""
+        }
+    }
+
+    var sidebarTitle: String {
+        switch self {
+        case .all:
+            return "All Bookmarks"
+        case .untagged:
+            return "Untagged"
+        case .today:
+            return "Today"
+        case .unread:
+            return "Unread"
+        case .shared(let shared):
+            if shared {
+                return "Public"
+            } else {
+                return "Private"
+            }
+
+        case .tag(tag: let tag):
             return tag
         }
     }

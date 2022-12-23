@@ -20,6 +20,8 @@
 
 import SwiftUI
 
+import Diligence
+
 import BookmarksCore
 
 struct SettingsView: View {
@@ -85,7 +87,7 @@ struct SettingsView: View {
         .sheet(item: $sheet) { sheet in
             switch sheet {
             case .about:
-                AboutView()
+                AboutView(Legal.contents)
             }
         }
         .alert(item: $alert) { alert in

@@ -92,7 +92,7 @@ struct BookmarksApp: App {
             TagsContentView(tagsView: manager.tagsView)
         }
 
-        About {
+        About(copyright: "Copyright © 2020-2022 InSeven Limited") {
             Action("InSeven Limited", url: URL(string: "https://inseven.co.uk")!)
             Action("Support", url: URL(address: "support@inseven.co.uk", subject: "Bookmarks Support")!)
         } acknowledgements: {
@@ -110,7 +110,6 @@ struct BookmarksApp: App {
             }
         } licenses: {
             License("Binding+mappedToBool", author: "Joseph Duffy", filename: "Binding+mappedToBool")
-            License("Diligence", author: "InSeven Limited", filename: "Diligence")
             License("Interact", author: "InSeven Limited", filename: "interact-license")
             License("Introspect", author: "Timber Software", filename: "Introspect")
             License("SQLite.swift", author: "Stephen Celis", filename: "SQLite-swift")

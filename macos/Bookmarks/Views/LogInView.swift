@@ -46,7 +46,6 @@ struct LogInView: View {
     }
 
     func createAccount() {
-        // TODO: Make this a manager function?
         dispatchPrecondition(condition: .onQueue(.main))
         guard let url = URL(string: "https://pinboard.in/signup/") else {
             return

@@ -122,7 +122,6 @@ struct Bookmarks: View {
                     suggestedTokens: $bookmarksView.suggestedTokens) { token in
             Label(token, systemImage: "tag")
         }
-        .sharing(items: $sharedItems)
         .sheet(item: $sheet) { sheet in
             switch sheet {
             case .tags(let bookmark):

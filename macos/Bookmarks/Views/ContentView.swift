@@ -27,7 +27,7 @@ import SelectableCollectionView
 
 struct ContentView: View {
 
-    @Environment(\.manager) var manager
+    let manager: BookmarksManager
     @Environment(\.applicationHasFocus) var applicationHasFocus
 
     // TODO: Rename bookmarksView to ContentModel
@@ -40,8 +40,9 @@ struct ContentView: View {
                               columns: 5,
                               edgeInsets: NSEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0))
 
-    init(section: BookmarksSection) {
-        _bookmarksView = StateObject(wrappedValue: BookmarksView(section: section))
+    init(manager: BookmarksManager, section: BookmarksSection) {
+        self.manager = manager
+        _bookmarksView = StateObject(wrappedValue: BookmarksView(manager: manager, section: section))
     }
 
     @MenuItemBuilder private func contextMenu(_ selection: Set<Bookmark.ID>) -> [MenuItem] {
@@ -86,7 +87,7 @@ struct ContentView: View {
                                          selection: $selection.selection,
                                          layout: layout) { bookmark in
 
-                    BookmarkCell(bookmark: bookmark)
+                    BookmarkCell(manager: manager, bookmark: bookmark)
                         .modifier(BorderedSelection())
                         .padding(4.0)
                         .shadow(color: .shadow, radius: 4.0)

@@ -28,12 +28,13 @@ public struct BookmarkCell: View {
     }
 
     var bookmark: Bookmark
+    let manager: BookmarksManager
 
-    @Environment(\.manager) var manager: BookmarksManager
     @State var image: SafeImage?
     @State var publisher: AnyCancellable?
 
-    public init(bookmark: Bookmark) {
+    public init(manager: BookmarksManager, bookmark: Bookmark) {
+        self.manager = manager
         self.bookmark = bookmark
         _image = State(wrappedValue: manager.cache.object(forKey: bookmark.url.absoluteString as NSString))
     }

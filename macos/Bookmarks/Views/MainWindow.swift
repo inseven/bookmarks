@@ -42,7 +42,7 @@ struct MainWindow: View {
             Sidebar(tagsView: manager.tagsView, settings: manager.settings, windowModel: windowModel)
         } detail: {
             if let section = windowModel.section {
-                ContentView(section: section)
+                ContentView(manager: manager, section: section)
                     .id(section)
             } else {
                 Text("Nothing Selected")

@@ -61,7 +61,7 @@ struct ContentView: View {
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 8)], spacing: 8) {
                     ForEach(bookmarksView.bookmarks) { bookmark in
-                        BookmarkCell(bookmark: bookmark)
+                        BookmarkCell(manager: manager, bookmark: bookmark)
                             .shadow(color: .shadow, radius: 8)
                             .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: bookmark),
                                                         firstResponder: firstResponder))

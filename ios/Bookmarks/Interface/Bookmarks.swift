@@ -48,7 +48,6 @@ struct Bookmarks: View {
     @State var suggestedTokens: [String] = []
 
     @State var search: String = ""
-    @State var sharedItems: [Any]?
     @State var error: Error?
     
     func perform(action: @escaping () async throws -> Void) {
@@ -72,11 +71,7 @@ struct Bookmarks: View {
                             UIApplication.shared.open(bookmark.url)
                         }
                         .contextMenu(ContextMenu {
-                            Button {
-                                sharedItems = [bookmark.url]
-                            } label: {
-                                Label("Share", systemImage: "square.and.arrow.up")
-                            }
+                            ShareLink("Share", item: bookmark.url)
                             Button {
                                 sheet = .tags(bookmark)
                             } label: {
@@ -131,7 +126,6 @@ struct Bookmarks: View {
         .searchable(text: $searchDebouncer.value, tokens: $tokens, suggestedTokens: $suggestedTokens) { token in
             Label(token, systemImage: "tag")
         }
-        .sharing(items: $sharedItems)
         .sheet(item: $sheet) { sheet in
             switch sheet {
             case .tags(let bookmark):

@@ -67,7 +67,6 @@ public struct BookmarkCell: View {
             }
         }
         .clipped()
-//        .aspectRatio(4/3, contentMode: .fit)
     }
 
     public var body: some View {

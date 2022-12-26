@@ -128,8 +128,7 @@ public class BookmarksManager: ObservableObject {
     public func deleteBookmarks(_ bookmarks: Set<Bookmark>, completion: @escaping (Result<Void, Error>) -> Void) {
         updater.deleteBookmarks(Array(bookmarks), completion: completion)
     }
-
-    // TODO: Swallow these errors!
+    
     public func deleteBookmarks(_ bookmarks: [Bookmark]) async throws {
         return try await withCheckedThrowingContinuation { continuation in
             updater.deleteBookmarks(bookmarks) { result in

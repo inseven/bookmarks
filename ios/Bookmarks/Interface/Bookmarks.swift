@@ -39,16 +39,9 @@ struct Bookmarks: View {
     @Environment(\.manager) var manager: BookmarksManager
     
     var section: BookmarksSection
+
     @StateObject var bookmarksView: BookmarksView
-
-    @StateObject var searchDebouncer = Debouncer<String>(initialValue: "", delay: .seconds(0.2))
     @State var sheet: SheetType?
-
-    @State var tokens: [String] = []
-    @State var suggestedTokens: [String] = []
-
-    @State var search: String = ""
-    @State var sharedItems: [Any]?
     @State var error: Error?
     
     func perform(action: @escaping () async throws -> Void) {
@@ -72,11 +65,7 @@ struct Bookmarks: View {
                             UIApplication.shared.open(bookmark.url)
                         }
                         .contextMenu(ContextMenu {
-                            Button {
-                                sharedItems = [bookmark.url]
-                            } label: {
-                                Label("Share", systemImage: "square.and.arrow.up")
-                            }
+                            ShareLink("Share", item: bookmark.url)
                             Button {
                                 sheet = .tags(bookmark)
                             } label: {
@@ -128,7 +117,9 @@ struct Bookmarks: View {
             }
             .padding()
         }
-        .searchable(text: $searchDebouncer.value, tokens: $tokens, suggestedTokens: $suggestedTokens) { token in
+        .searchable(text: $bookmarksView.filter,
+                    tokens: $bookmarksView.tokens,
+                    suggestedTokens: $bookmarksView.suggestedTokens) { token in
             Label(token, systemImage: "tag")
         }
         .sharing(items: $sharedItems)
@@ -148,19 +139,6 @@ struct Bookmarks: View {
         }
         .onDisappear {
             bookmarksView.stop()
-        }
-        .onReceive(searchDebouncer.$debouncedValue) { search in
-
-            // Suggest tags.
-            if search.count > 0 {
-                self.suggestedTokens = manager.tagsView.tags(prefix: search)
-            } else {
-                self.suggestedTokens = []
-            }
-
-            // Update the view.
-            let tags = self.tokens.map { Tag($0).eraseToAnyQuery() }
-            bookmarksView.query = AnyQuery.and([section.query, AnyQuery.parse(filter: search)] + tags)
         }
     }
 

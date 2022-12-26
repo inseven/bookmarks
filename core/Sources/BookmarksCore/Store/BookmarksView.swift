@@ -24,7 +24,7 @@ import SwiftUI
 
 public class BookmarksView: ObservableObject {
 
-    @Environment(\.manager) var manager: BookmarksManager
+    let manager: BookmarksManager
 
     public enum State {
         case loading
@@ -47,7 +47,8 @@ public class BookmarksView: ObservableObject {
     private let queryQueue = DispatchQueue(label: "queryQueue")
 
     // TODO: Don't inject the query
-    public init(section: BookmarksSection) {
+    public init(manager: BookmarksManager, section: BookmarksSection) {
+        self.manager = manager
         self.section = section
         self.query = section.query
         self.title = section.navigationTitle

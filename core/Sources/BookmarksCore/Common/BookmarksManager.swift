@@ -21,6 +21,8 @@
 import Combine
 import SwiftUI
 
+import Interact
+
 public struct ManagerEnvironmentKey: EnvironmentKey {
     public static var defaultValue = BookmarksManager()
 }
@@ -38,8 +40,6 @@ public class BookmarksManager: ObservableObject {
         case idle
         case unauthorized
     }
-
-    @Environment(\.openURL) private var openURL
 
     @Published public var state: State = .idle
 
@@ -180,7 +180,7 @@ public class BookmarksManager: ObservableObject {
     @MainActor public func open(_ bookmarks: [Bookmark], location: Bookmark.Location = .web) {
         do {
             for url in try bookmarks.map({ try $0.url(location) }) {
-                openURL(url)
+                Application.open(url)
             }
         } catch {
             print("Failed to open bookmarks with error \(error)")

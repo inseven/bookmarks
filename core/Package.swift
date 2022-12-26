@@ -15,6 +15,7 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "./../diligence"),
+        .package(path: "./../interact"),
         .package(path: "./../hpple"),
         .package(path: "./../SQLite.swift"),
     ],
@@ -23,6 +24,7 @@ let package = Package(
             name: "BookmarksCore",
             dependencies: [
                 .product(name: "Diligence", package: "Diligence"),
+                .product(name: "Interact", package: "Interact"),
                 .product(name: "SQLite", package: "SQLite.swift"),
                 .product(name: "TFHpple", package: "hpple"),
             ],

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D8019A1B273210F2001736DE /* ShareController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8019A1A273210F2001736DE /* ShareController.swift */; };
 		D81E7484254A0D1B002336DC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81E7483254A0D1B002336DC /* ContentView.swift */; };
 		D822159B2955C35C0087FBAC /* BookmarksCore in Frameworks */ = {isa = PBXBuildFile; productRef = D822159A2955C35C0087FBAC /* BookmarksCore */; };
 		D82BF61E273090FE004978AD /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82BF61D273090FE004978AD /* LogInView.swift */; };
@@ -49,7 +48,6 @@
 
 /* Begin PBXFileReference section */
 		D8019A172731B1B0001736DE /* Binding+mappedToBool */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Binding+mappedToBool"; sourceTree = "<group>"; };
-		D8019A1A273210F2001736DE /* ShareController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareController.swift; sourceTree = "<group>"; };
 		D81E7483254A0D1B002336DC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D82215992955C26E0087FBAC /* core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = core; path = ../core; sourceTree = "<group>"; };
 		D82BF61D273090FE004978AD /* LogInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
@@ -128,7 +126,6 @@
 				D871B4E4273242ED00712182 /* EditView.swift */,
 				D82BF61D273090FE004978AD /* LogInView.swift */,
 				D832EEC624816901004C64E3 /* SettingsView.swift */,
-				D8019A1A273210F2001736DE /* ShareController.swift */,
 				D840327B2732E41D004CD998 /* Sidebar.swift */,
 				D84032792732E148004CD998 /* SidebarLink.swift */,
 			);
@@ -383,7 +380,6 @@
 				D859CE022733A9CD00E9B466 /* AddTagView.swift in Sources */,
 				D82BF61E273090FE004978AD /* LogInView.swift in Sources */,
 				D840327C2732E41D004CD998 /* Sidebar.swift in Sources */,
-				D8019A1B273210F2001736DE /* ShareController.swift in Sources */,
 				D89956D727DE41150023FC84 /* ButtonLabelStyle.swift in Sources */,
 				D871B4E5273242ED00712182 /* EditView.swift in Sources */,
 			);

@@ -24,6 +24,7 @@ import BookmarksCore
 
 struct LogInView: View {
 
+    @Environment(\.openURL) var openURL
     @Environment(\.manager) var manager
 
     @State var username: String = ""
@@ -49,7 +50,7 @@ struct LogInView: View {
         guard let url = URL(string: "https://pinboard.in/signup/") else {
             return
         }
-        manager.open(url: url)
+        openURL(url)
     }
 
     var body: some View {

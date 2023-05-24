@@ -26,28 +26,6 @@ import Diligence
 
 import BookmarksCore
 
-struct FocusedWindowModel: FocusedValueKey {
-    typealias Value = WindowModel
-}
-
-extension FocusedValues {
-    var windowModel: FocusedWindowModel.Value? {
-        get { self[FocusedWindowModel.self] }
-        set { self[FocusedWindowModel.self] = newValue }
-    }
-}
-
-struct FocusedSelection: FocusedValueKey {
-    typealias Value = BookmarksSelection
-}
-
-extension FocusedValues {
-    var selection: FocusedSelection.Value? {
-        get { self[FocusedSelection.self] }
-        set { self[FocusedSelection.self] = newValue }
-    }
-}
-
 @main
 struct BookmarksApp: App {
 

@@ -21,6 +21,8 @@
 import Combine
 import SwiftUI
 
+import Interact
+
 import BookmarksCore
 
 struct MainWindow: View {
@@ -36,7 +38,17 @@ struct MainWindow: View {
         NavigationSplitView {
             Sidebar(tagsView: manager.tagsView, settings: manager.settings, windowModel: windowModel)
         } detail: {
-            ContentView(selection: selection, windowModel: windowModel, database: manager.database, sheet: $sheet)
+            if let section = windowModel.section {
+                ContentView(selection: selection, manager: manager, section: section)
+                    .id(section)
+            } else {
+                PlaceholderView("Nothing Selected")
+                    .searchable()
+            }
+        }
+        .toolbar(id: "main") {
+            AccountToolbar()
+            SelectionToolbar(selection: selection)
         }
         .handlesSelectionSheets(selection)
         .sheet(item: $sheet) { sheet in

@@ -18,26 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Combine
 import SwiftUI
 
-import BookmarksCore
+extension View {
 
-struct SidebarLink: View {
-    
-    @Environment(\.manager) var manager: BookmarksManager
-    
-    @Binding var selection: BookmarksSection?
-    var section: BookmarksSection
-
-    var body: some View {
-        // TODO: Migrate to the new NavigationLink and re-enable warnings as errors #397
-        //       https://github.com/inseven/bookmarks/issues/397
-        NavigationLink(tag: section, selection: $selection) {
-            Bookmarks(section: section, bookmarksView: BookmarksView(manager: manager, section: section))
-        } label: {
-            Label(section.sidebarTitle, systemImage: section.systemImage)
-        }
+    public func searchable() -> some View {
+        return self
+            .searchable(text: Binding.constant(""))
+            .disabled(true)
     }
-    
+
 }

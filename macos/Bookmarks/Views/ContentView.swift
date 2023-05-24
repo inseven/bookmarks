@@ -26,17 +26,13 @@ import Interact
 
 struct ContentView: View {
 
-    @Environment(\.manager) var manager
-    @Environment(\.applicationHasFocus) var applicationHasFocus
+    let manager: BookmarksManager
 
     @ObservedObject var selection: BookmarksSelection
-    @ObservedObject var windowModel: WindowModel
-    @Binding var sheet: ApplicationState?
 
     @StateObject var bookmarksView: BookmarksView
     @StateObject var selectionTracker: SelectionTracker<Bookmark>
     @State var firstResponder: Bool = false
-    @StateObject var searchDebouncer = Debouncer<String>(initialValue: "", delay: .seconds(0.2))
 
     @State var tokens: [String] = []
     @State var suggestedTokens: [String] = []
@@ -44,16 +40,14 @@ struct ContentView: View {
     private var subscription: AnyCancellable?
 
     init(selection: BookmarksSelection,
-         windowModel: WindowModel,
-         database: Database,
-         sheet: Binding<ApplicationState?>) {
+         manager: BookmarksManager,
+         section: BookmarksSection) {
+        self.manager = manager
         self.selection = selection
-        self.windowModel = windowModel
-        let bookmarksView = Deferred(BookmarksView(database: database, query: True().eraseToAnyQuery()))
+        let bookmarksView = Deferred(BookmarksView(manager: manager, section: section))
         let selectionTracker = Deferred(SelectionTracker(items: bookmarksView.get().$bookmarks))
         _bookmarksView = StateObject(wrappedValue: bookmarksView.get())
         _selectionTracker = StateObject(wrappedValue: selectionTracker.get())
-        _sheet = sheet
     }
 
     var body: some View {
@@ -123,49 +117,15 @@ struct ContentView: View {
         .onDisappear {
             bookmarksView.stop()
         }
-        .searchable(text: $searchDebouncer.value, tokens: $tokens, suggestedTokens: $suggestedTokens) { token in
+        .searchable(text: $bookmarksView.filter,
+                    tokens: $bookmarksView.tokens,
+                    suggestedTokens: $bookmarksView.suggestedTokens) { token in
             Label(token, systemImage: "tag")
-        }
-        .toolbar(id: "main") {
-            AccountToolbar()
-            SelectionToolbar(selection: selection)
-        }
-        .onReceive(searchDebouncer.$debouncedValue) { search in
-
-            guard let section = windowModel.section else {
-                return
-            }
-
-            // Update the suggestions.
-            if search.count > 0 {
-                self.suggestedTokens = manager.tagsView.tags(prefix: search)
-            } else {
-                self.suggestedTokens = []
-            }
-
-            // Update the view.
-            let queries = AnyQuery.queries(for: search)
-            let tags = self.tokens.map { Tag($0).eraseToAnyQuery() }
-            bookmarksView.query = AnyQuery.and([section.query] + queries + tags)
-        }
-        .onChange(of: windowModel.section) { section in
-
-            guard let section = section else {
-                return
-            }
-
-            tokens = []
-            searchDebouncer.value = ""
-
-            selectionTracker.clear()
-            bookmarksView.clear()
-            bookmarksView.query = section.query.eraseToAnyQuery()
-
         }
         .onChange(of: selectionTracker.selection) { newSelection in
             selection.bookmarks = newSelection
         }
-        .navigationTitle(windowModel.title)
+        .navigationTitle(bookmarksView.title)
         .navigationSubtitle(bookmarksView.subtitle)
     }
 }

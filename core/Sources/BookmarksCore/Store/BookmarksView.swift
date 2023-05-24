@@ -42,14 +42,13 @@ public class BookmarksView: ObservableObject {
         self.query = query
     }
 
-    func update() {
+    func update(query: AnyQuery) {
         dispatchPrecondition(condition: .onQueue(.main))
         print("fetching bookmarks...")
 
-        let activeQuery = self.query
-        database.bookmarks(query: activeQuery) { result in
+        database.bookmarks(query: query) { result in
             DispatchQueue.main.async {
-                guard self.query == activeQuery else {
+                guard self.query == query else {
                     print("ignoring out-of-date results...")
                     return
                 }
@@ -67,20 +66,14 @@ public class BookmarksView: ObservableObject {
 
     @MainActor public func start() {
         dispatchPrecondition(condition: .onQueue(.main))
-        print("start observing...")
 
+        // Query the database whenever a change occurs or the query changes.
         DatabasePublisher(database: database)
+            .prepend(())
+            .combineLatest($query)
             .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
-            .sink { _ in
-                self.update()
-            }
-            .store(in: &cancellables)
-        
-        $query
-            .receive(on: DispatchQueue.main)
-            .sink { query in
-                print("searching for '\(query.filter)'...")
-                self.update()
+            .sink { _, query in
+                self.update(query: query)
             }
             .store(in: &cancellables)
 
@@ -98,7 +91,6 @@ public class BookmarksView: ObservableObject {
             }
             .store(in: &cancellables)
 
-        self.update()
     }
 
     @MainActor public func clear() {

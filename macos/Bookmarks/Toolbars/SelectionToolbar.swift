@@ -31,11 +31,12 @@ struct SelectionToolbar: CustomizableToolbarContent {
 
         ToolbarItem(id: "open") {
             Button {
-                print("OPEN!")
+                selection.open(manager: manager)
             } label: {
                 Label("Open", systemImage: "safari")
             }
             .keyboardShortcut(.return, modifiers: [])
+            .disabled(selection.isEmpty)
         }
 
         ToolbarItem(id: "tag") {

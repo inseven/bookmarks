@@ -99,8 +99,8 @@ public class BookmarksView: ObservableObject {
             .store(in: &cancellables)
 
         // Update the suggested tokens.
-        // TODO: Debounce?
         manager.tagsView.$trie
+            .debounce(for: 0.2, scheduler: DispatchQueue.main)
             .combineLatest($filter)
             .receive(on: DispatchQueue.global())
             .map { trie, filter in

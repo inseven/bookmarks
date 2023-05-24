@@ -30,6 +30,7 @@ public class BookmarksView: ObservableObject {
 
     let database: Database
 
+    @Published public var subtitle: String = ""
     @Published public var bookmarks: [Bookmark] = []
     @Published public var state: State = .loading
     @Published public var query: AnyQuery
@@ -74,6 +75,7 @@ public class BookmarksView: ObservableObject {
                 self.update()
             }
             .store(in: &cancellables)
+        
         $query
             .receive(on: DispatchQueue.main)
             .sink { query in
@@ -81,6 +83,21 @@ public class BookmarksView: ObservableObject {
                 self.update()
             }
             .store(in: &cancellables)
+
+        // Update the subtitle.
+        $bookmarks
+            .combineLatest($state)
+            .receive(on: DispatchQueue.main)
+            .sink { bookmarks, state in
+                switch state {
+                case .loading:
+                    self.subtitle = ""
+                case .ready:
+                    self.subtitle = "\(bookmarks.count) items"
+                }
+            }
+            .store(in: &cancellables)
+
         self.update()
     }
 

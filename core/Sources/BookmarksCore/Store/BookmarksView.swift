@@ -57,7 +57,8 @@ public class BookmarksView: ObservableObject {
     @MainActor private func updateBookmarks() {
 
         // Query the database whenever a change occurs or the query changes.
-        manager.database.$update
+        DatabasePublisher(database: manager.database)
+            .prepend(())
             .combineLatest($query)
             .debounce(for: .seconds(0.2), scheduler: queryQueue)
             .receive(on: DispatchQueue.global())

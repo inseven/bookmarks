@@ -194,8 +194,6 @@ public class Database {
     var db: Connection  // Synchronized on syncQueue
     var observers: [DatabaseObserver] = []  // Synchronized on syncQueue
 
-    @Published var update: Int = 0
-
     public init(path: URL) throws {
         self.path = path
         self.db = try Connection(path.path)
@@ -250,7 +248,6 @@ public class Database {
         DispatchQueue.global(qos: .background).async {
             for observer in observers {
                 observer.databaseDidUpdate(database: self)
-                self.update = Int.random(in: 0..<256)
             }
         }
     }
@@ -485,7 +482,6 @@ public class Database {
 
     public func syncQueue_bookmarks(where whereClause: String) throws -> [Bookmark] {
         dispatchPrecondition(condition: .onQueue(syncQueue))
-        print("syncQueue_bookmarks whereClause = \(whereClause)")
 
         let selectQuery = """
             SELECT
@@ -531,8 +527,6 @@ public class Database {
                             shared: try row.bool(6),
                             notes: try row.string(7))
         }
-
-        print("syncQueue_bookmarks \(bookmarks.count) items")
 
         return bookmarks
     }

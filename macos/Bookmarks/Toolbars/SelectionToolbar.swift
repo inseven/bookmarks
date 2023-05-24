@@ -29,6 +29,16 @@ struct SelectionToolbar: CustomizableToolbarContent {
 
     var body: some CustomizableToolbarContent {
 
+        ToolbarItem(id: "open") {
+            Button {
+                selection.open(manager: manager)
+            } label: {
+                Label("Open", systemImage: "safari")
+            }
+            .keyboardShortcut(.return, modifiers: [])
+            .disabled(selection.isEmpty)
+        }
+
         ToolbarItem(id: "tag") {
             Button {
                 guard selection.count > 0 else {

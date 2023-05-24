@@ -62,7 +62,8 @@ public class TagsView: ObservableObject {
 
     public func start() {
         dispatchPrecondition(condition: .onQueue(.main))
-        database.$update
+        DatabasePublisher(database: database)
+            .prepend(())
             .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
             .sink { _ in
                 self.update()

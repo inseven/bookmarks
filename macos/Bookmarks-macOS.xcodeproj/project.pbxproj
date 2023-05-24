@@ -17,6 +17,7 @@
 		D840B01226210AF6001E95D1 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */; };
 		D861257326A60DF200EB5FEF /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D861257226A60DF200EB5FEF /* Sidebar.swift */; };
 		D861257526AA048E00EB5FEF /* RenameTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D861257426AA048E00EB5FEF /* RenameTagView.swift */; };
+		D8687BFC2A1E822700C51946 /* FocusedWindowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8687BFB2A1E822700C51946 /* FocusedWindowModel.swift */; };
 		D879448F26CB4A5400D97155 /* MenuType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D879448E26CB4A5400D97155 /* MenuType.swift */; };
 		D879449126CB57BE00D97155 /* ContextAwareKeyboardShortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = D879449026CB57BE00D97155 /* ContextAwareKeyboardShortcut.swift */; };
 		D879449326CB5E1900D97155 /* MainMenuItemCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D879449226CB5E1900D97155 /* MainMenuItemCondition.swift */; };
@@ -43,6 +44,7 @@
 		D8A3370326B56C7400436200 /* BookmarkEditCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A3370226B56C7400436200 /* BookmarkEditCommands.swift */; };
 		D8ACD7EF26BC81F7005F927A /* TokenField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8ACD7EE26BC81F7005F927A /* TokenField.swift */; };
 		D8B6E2C52620990400B2C239 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B6E2C42620990400B2C239 /* Item.swift */; };
+		D8C8584429560700004EB23E /* SelectableCollectionView in Frameworks */ = {isa = PBXBuildFile; productRef = D8C8584329560700004EB23E /* SelectableCollectionView */; };
 		D8D356D32955F06D0020C81C /* BookmarksCore in Frameworks */ = {isa = PBXBuildFile; productRef = D8D356D22955F06D0020C81C /* BookmarksCore */; };
 		D8E0202C26C2E1CC00910833 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0202B26C2E1CC00910833 /* LoadingView.swift */; };
 		D8EB6E4526C3357F00C23B19 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EB6E4426C3357F00C23B19 /* ErrorHandler.swift */; };
@@ -78,6 +80,7 @@
 		D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		D861257226A60DF200EB5FEF /* Sidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
 		D861257426AA048E00EB5FEF /* RenameTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenameTagView.swift; sourceTree = "<group>"; };
+		D8687BFB2A1E822700C51946 /* FocusedWindowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusedWindowModel.swift; sourceTree = "<group>"; };
 		D879448E26CB4A5400D97155 /* MenuType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuType.swift; sourceTree = "<group>"; };
 		D879449026CB57BE00D97155 /* ContextAwareKeyboardShortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextAwareKeyboardShortcut.swift; sourceTree = "<group>"; };
 		D879449226CB5E1900D97155 /* MainMenuItemCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuItemCondition.swift; sourceTree = "<group>"; };
@@ -131,6 +134,7 @@
 				D8D356D32955F06D0020C81C /* BookmarksCore in Frameworks */,
 				D8A0D7662620165D00C9F190 /* Interact in Frameworks */,
 				D8FF9E9228A75D400081E57A /* Diligence in Frameworks */,
+				D8C8584429560700004EB23E /* SelectableCollectionView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,6 +231,7 @@
 			children = (
 				D8931F6026C5E12E00A8021E /* BookmarksSelection.swift */,
 				D879449426CB5E3D00D97155 /* Countable.swift */,
+				D8687BFB2A1E822700C51946 /* FocusedWindowModel.swift */,
 				D879448E26CB4A5400D97155 /* MenuType.swift */,
 				D8A06F2228A7EA170002A56D /* WindowModel.swift */,
 				D8350729294A0DB40044ADE0 /* TagEditorModel.swift */,
@@ -334,6 +339,7 @@
 				D8A0D7652620165D00C9F190 /* Interact */,
 				D8FF9E9128A75D400081E57A /* Diligence */,
 				D8D356D22955F06D0020C81C /* BookmarksCore */,
+				D8C8584329560700004EB23E /* SelectableCollectionView */,
 			);
 			productName = Bookmarks;
 			productReference = D891C450261E32F90024E1A6 /* Bookmarks.app */;
@@ -449,6 +455,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D879448F26CB4A5400D97155 /* MenuType.swift in Sources */,
+				D8687BFC2A1E822700C51946 /* FocusedWindowModel.swift in Sources */,
 				D8B6E2C52620990400B2C239 /* Item.swift in Sources */,
 				D8A06F2128A7E92F0002A56D /* AccountCommands.swift in Sources */,
 				D8350728294A0C260044ADE0 /* TagsContentView.swift in Sources */,
@@ -819,6 +826,10 @@
 		D8A0D7652620165D00C9F190 /* Interact */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Interact;
+		};
+		D8C8584329560700004EB23E /* SelectableCollectionView */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SelectableCollectionView;
 		};
 		D8D356D22955F06D0020C81C /* BookmarksCore */ = {
 			isa = XCSwiftPackageProductDependency;

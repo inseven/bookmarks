@@ -24,18 +24,6 @@ import SwiftUI
 import BookmarksCore
 import Diligence
 
-struct FocusedNoteValue: FocusedValueKey {
-    typealias Value = WindowModel
-}
-
-extension FocusedValues {
-    var windowModel: FocusedNoteValue.Value? {
-        get { self[FocusedNoteValue.self] }
-        set { self[FocusedNoteValue.self] = newValue }
-    }
-}
-
-
 @main
 struct BookmarksApp: App {
 

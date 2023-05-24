@@ -29,12 +29,12 @@ public class BookmarksView: ObservableObject {
     }
 
     let database: Database
-    var updateCancellable: AnyCancellable? = nil
-    var searchCancellable: AnyCancellable? = nil
 
-    @Published public var query: AnyQuery
     @Published public var bookmarks: [Bookmark] = []
     @Published public var state: State = .loading
+    @Published public var query: AnyQuery
+
+    private var cancellables: Set<AnyCancellable> = []
 
     public init(database: Database, query: AnyQuery) {
         self.database = database
@@ -64,32 +64,35 @@ public class BookmarksView: ObservableObject {
         }
     }
 
-    public func start() {
+    @MainActor public func start() {
         dispatchPrecondition(condition: .onQueue(.main))
         print("start observing...")
-        self.updateCancellable = DatabasePublisher(database: database).debounce(for: .seconds(1), scheduler: DispatchQueue.main).sink { _ in
-            self.update()
-        }
-        self.searchCancellable = $query.receive(on: DispatchQueue.main).sink { query in
-            print("searching for '\(query.filter)'...")
-            self.update()
-        }
+
+        DatabasePublisher(database: database)
+            .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
+            .sink { _ in
+                self.update()
+            }
+            .store(in: &cancellables)
+        $query
+            .receive(on: DispatchQueue.main)
+            .sink { query in
+                print("searching for '\(query.filter)'...")
+                self.update()
+            }
+            .store(in: &cancellables)
         self.update()
     }
 
-    public func clear() {
+    @MainActor public func clear() {
         dispatchPrecondition(condition: .onQueue(.main))
         self.bookmarks = []
         self.state = .loading
     }
 
-    public func stop() {
+    @MainActor public func stop() {
         dispatchPrecondition(condition: .onQueue(.main))
-        print("stop observing...")
-        self.updateCancellable?.cancel()
-        self.updateCancellable = nil
-        self.searchCancellable?.cancel()
-        self.searchCancellable = nil
+        cancellables.removeAll()
         self.bookmarks = []
     }
 

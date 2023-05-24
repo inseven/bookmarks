@@ -24,8 +24,6 @@ import SwiftUI
 
 public class BookmarksView: ObservableObject {
 
-    let manager: BookmarksManager
-
     public enum State {
         case loading
         case ready
@@ -42,6 +40,7 @@ public class BookmarksView: ObservableObject {
     @Published public var suggestedTokens: [String] = []
     @Published private var query: AnyQuery
 
+    private let manager: BookmarksManager
     private let section: BookmarksSection
     private var cancellables: Set<AnyCancellable> = []
     private let queryQueue = DispatchQueue(label: "queryQueue")

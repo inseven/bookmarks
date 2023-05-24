@@ -166,5 +166,6 @@ struct ContentView: View {
             selection.bookmarks = newSelection
         }
         .navigationTitle(windowModel.title)
+        .navigationSubtitle(bookmarksView.subtitle)
     }
 }

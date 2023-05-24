@@ -582,10 +582,6 @@ public extension Database {
         try AsyncOperation { self.deleteBookmark(identifier: identifier, completion: $0) }.wait()
     }
 
-    func bookmarks<T: QueryDescription>(query: T) throws -> [Bookmark] {
-        try AsyncOperation({ self.bookmarks(query: query, completion: $0) }).wait()
-    }
-
     func tags() throws -> [String] {
         try AsyncOperation { self.tags(completion: $0) }.wait()
     }

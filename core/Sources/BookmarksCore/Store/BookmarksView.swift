@@ -54,7 +54,11 @@ public class BookmarksView: ObservableObject {
         self.title = section.navigationTitle
     }
 
-    @MainActor private func updateBookmarks() {
+    @MainActor public func start() {
+
+        // Set up the initial state (in case we are being reused).
+        bookmarks = []
+        state = .loading
 
         // Query the database whenever a change occurs or the query changes.
         DatabasePublisher(database: manager.database)
@@ -80,9 +84,6 @@ public class BookmarksView: ObservableObject {
                 self.state = .ready
             }
             .store(in: &cancellables)
-    }
-
-    @MainActor private func updateQuery() {
 
         // Update the active query when the section, filter, or tokens change.
         $filter
@@ -98,9 +99,6 @@ public class BookmarksView: ObservableObject {
             }
             .store(in: &cancellables)
 
-    }
-
-    @MainActor private func updateSuggestedTokens() {
         // Update the suggested tokens.
         // TODO: Debounce?
         manager.tagsView.$trie
@@ -118,9 +116,8 @@ public class BookmarksView: ObservableObject {
                 self.suggestedTokens = tags
             }
             .store(in: &cancellables)
-    }
 
-    @MainActor private func updateTitle() {
+        // Update the title.
         $filter
             .combineLatest($tokens)
             .receive(on: DispatchQueue.main)
@@ -133,9 +130,8 @@ public class BookmarksView: ObservableObject {
                 }
             }
             .store(in: &cancellables)
-    }
 
-    @MainActor private func updateSubtitle() {
+        // Update the subtitle.
         $bookmarks
             .combineLatest($state)
             .receive(on: DispatchQueue.main)
@@ -148,20 +144,6 @@ public class BookmarksView: ObservableObject {
                 }
             }
             .store(in: &cancellables)
-    }
-
-    @MainActor public func start() {
-
-        // Set up the initial state (in case we are being reused).
-        bookmarks = []
-        state = .loading
-
-        // Start the various observers.
-        updateBookmarks()
-        updateQuery()
-        updateSuggestedTokens()
-        updateTitle()
-        updateSubtitle()
     }
 
     @MainActor public func stop() {

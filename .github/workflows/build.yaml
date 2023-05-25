@@ -38,8 +38,7 @@ jobs:
         APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
 
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # RELEASE: ${{ github.ref == 'refs/heads/main' }}
-        RELEASE: true
+        RELEASE: ${{ github.ref == 'refs/heads/main' }}
 
       run: |
         scripts/build.sh

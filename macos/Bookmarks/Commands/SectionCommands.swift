@@ -24,7 +24,7 @@ import BookmarksCore
 
 struct SectionCommands: Commands {
 
-    @FocusedValue(\.windowModel) var windowModel
+    @FocusedObject var windowModel: WindowModel?
 
     static func keyEquivalent(_ value: Int) -> KeyEquivalent {
         return KeyEquivalent(String(value).first!)

@@ -26,18 +26,7 @@ import BookmarksCore
 class WindowModel: ObservableObject {
 
     @Published var section: BookmarksSection? = .all
-    @Published var title: String = ""
 
     private var cancellables: Set<AnyCancellable> = []
-
-    func run() {
-        $section
-            .map { $0?.navigationTitle ?? "Unknown" }
-            .receive(on: DispatchQueue.main)
-            .sink { title in
-                self.title = title
-            }
-            .store(in: &cancellables)
-    }
 
 }

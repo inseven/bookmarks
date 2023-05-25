@@ -130,51 +130,6 @@ public class BookmarksView: ObservableObject {
                 }
             }
             .store(in: &cancellables)
-        
-        $filter
-            .combineLatest($tokens)
-            .map { (filter, tokens) in
-                let tokensQuery = tokens.map { Tag($0).eraseToAnyQuery() }
-                let filterQuery = AnyQuery.queries(for: filter)
-                return AnyQuery.and([self.section.query] + tokensQuery + filterQuery)
-            }
-            .receive(on: DispatchQueue.main)
-            .sink { query in
-                self.query = query
-            }
-            .store(in: &cancellables)
-
-        // Update the suggested tokens.
-        manager.tagsView.$trie
-            .debounce(for: 0.2, scheduler: DispatchQueue.main)
-            .combineLatest($filter)
-            .receive(on: DispatchQueue.global())
-            .map { trie, filter in
-                guard !filter.isEmpty else {
-                    return []
-                }
-                // SwiftUI gets quite upset if we return too many token suggestions, so we limit this to 10.
-                return Array(trie.findWordsWithPrefix(prefix: filter).prefix(10))
-            }
-            .receive(on: DispatchQueue.main)
-            .sink { tags in
-                self.suggestedTokens = tags
-            }
-            .store(in: &cancellables)
-
-        // Update the title.
-        $filter
-            .combineLatest($tokens)
-            .receive(on: DispatchQueue.main)
-            .sink { filter, tokens in
-                print(filter)
-                if filter.isEmpty && tokens.isEmpty {
-                    self.title = self.section.navigationTitle
-                } else {
-                    self.title = "Searching \"\(self.section.navigationTitle)\""
-                }
-            }
-            .store(in: &cancellables)
 
         // Update the subtitle.
         $bookmarks

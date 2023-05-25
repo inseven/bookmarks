@@ -20,22 +20,34 @@
 
 import SwiftUI
 
+import BookmarksCore
+
 struct LayoutToolbar: CustomizableToolbarContent {
 
-    @Binding var layoutMode: LayoutMode
+    @FocusedObject var bookmarksView: BookmarksView?
+
+    var layoutMode: Binding<LayoutMode> {
+        guard let bookmarksView else {
+            return Binding.constant(LayoutMode.grid)
+        }
+        return Binding {
+            return bookmarksView.layoutMode
+        } set: { layoutMode in
+            bookmarksView.layoutMode = layoutMode
+        }
+    }
 
     var body: some CustomizableToolbarContent {
-
         ToolbarItem(id: "layout-mode") {
-            Picker(selection: $layoutMode) {
+            Picker(selection: layoutMode) {
                 ForEach(LayoutMode.allCases) { mode in
                     Image(systemName: mode.systemImage)
-                        .help(mode.help)
                         .tag(mode)
                 }
             } label: {
             }
             .pickerStyle(.inline)
+            .disabled(bookmarksView == nil)
         }
 
     }

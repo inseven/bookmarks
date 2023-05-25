@@ -28,13 +28,11 @@ import SelectableCollectionView
 struct ContentView: View {
 
     let manager: BookmarksManager
-    @Environment(\.applicationHasFocus) var applicationHasFocus
 
     // TODO: Rename bookmarksView to ContentModel
     @StateObject var bookmarksView: BookmarksView
     // TODO: Rename to selection model?
     @StateObject var selection: BookmarksSelection = BookmarksSelection()
-    @State var layoutMode: LayoutMode = .grid
 
     let layout = ColumnLayout(spacing: 2.0,
                               columns: 5,
@@ -81,7 +79,7 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
-            switch layoutMode {
+            switch bookmarksView.layoutMode {
             case .grid:
                 SelectableCollectionView(bookmarksView.bookmarks,
                                          selection: $selection.selection,
@@ -125,13 +123,9 @@ struct ContentView: View {
                     suggestedTokens: $bookmarksView.suggestedTokens) { token in
             Label(token, systemImage: "tag")
         }
-        .toolbar(id: "main") {
-            LayoutToolbar(layoutMode: $layoutMode)
-            AccountToolbar()
-//            SelectionToolbar(selection: selection)
-        }
         .navigationTitle(bookmarksView.title)
         .navigationSubtitle(bookmarksView.subtitle)
         .focusedValue(\.selection, selection)
+        .focusedSceneObject(bookmarksView)
     }
 }

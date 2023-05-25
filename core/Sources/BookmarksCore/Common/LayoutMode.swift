@@ -20,24 +20,20 @@
 
 import Foundation
 
-enum LayoutMode: CaseIterable, Identifiable {
+public enum LayoutMode: CaseIterable, Identifiable {
 
-    var id: Self { self }
+    public var id: Self { self }
 
     case grid
     case table
 
-    var systemImage: String {
+    public var systemImage: String {
         switch self {
         case .grid:
             return "square.grid.2x2"
         case .table:
             return "list.bullet"
         }
-    }
-
-    var help: String {
-        return "THIS IS NEVER USED"
     }
     
 }

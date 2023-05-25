@@ -25,8 +25,8 @@ import BookmarksCore
 struct BookmarkTagCommands: View {
 
     @Environment(\.manager) var manager
-    
-    @FocusedValue(\.windowModel) var windowModel
+
+    @FocusedObject var windowModel: WindowModel?
 
     @ObservedObject var selection: BookmarksSelection
 

@@ -71,7 +71,7 @@ struct MainWindow: View {
                 sheet = .logIn
             }
         }
-        .focusedValue(\.windowModel, windowModel)
+        .focusedSceneObject(windowModel)
     }
 
 }

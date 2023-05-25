@@ -67,10 +67,7 @@ struct MainWindow: View {
         }
         .observesApplicationFocus()
         .frameAutosaveName("Main Window")
-        .onAppear {
-            windowModel.run()
-        }
-        .focusedValue(\.windowModel, windowModel)
+        .focusedSceneObject(windowModel)
     }
 
 }

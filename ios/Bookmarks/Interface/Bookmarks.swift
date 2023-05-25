@@ -39,10 +39,9 @@ struct Bookmarks: View {
     @Environment(\.manager) var manager: BookmarksManager
     
     var section: BookmarksSection
+
     @StateObject var bookmarksView: BookmarksView
-
     @State var sheet: SheetType?
-
     @State var error: Error?
     
     func perform(action: @escaping () async throws -> Void) {

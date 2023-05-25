@@ -28,25 +28,31 @@ public class BookmarksView: ObservableObject {
         case ready
     }
 
-    let database: Database
-
+    @Published public var title: String
     @Published public var subtitle: String = ""
     @Published public var bookmarks: [Bookmark] = []
     @Published public var state: State = .loading
+    @Published public var filter: String = ""
+    @Published public var tokens: [String] = []
+    @Published public var suggestedTokens: [String] = []
     @Published public var query: AnyQuery
 
+    private let manager: BookmarksManager
+    private let section: BookmarksSection
     private var cancellables: Set<AnyCancellable> = []
 
-    public init(database: Database, query: AnyQuery) {
-        self.database = database
-        self.query = query
+    public init(manager: BookmarksManager, section: BookmarksSection) {
+        self.manager = manager
+        self.section = section
+        self.query = section.query
+        self.title = section.navigationTitle
     }
 
     func update(query: AnyQuery) {
         dispatchPrecondition(condition: .onQueue(.main))
         print("fetching bookmarks...")
 
-        database.bookmarks(query: query) { result in
+        manager.database.bookmarks(query: query) { result in
             DispatchQueue.main.async {
                 guard self.query == query else {
                     print("ignoring out-of-date results...")
@@ -68,12 +74,58 @@ public class BookmarksView: ObservableObject {
         dispatchPrecondition(condition: .onQueue(.main))
 
         // Query the database whenever a change occurs or the query changes.
-        DatabasePublisher(database: database)
+        DatabasePublisher(database: manager.database)
             .prepend(())
             .combineLatest($query)
             .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
             .sink { _, query in
                 self.update(query: query)
+            }
+            .store(in: &cancellables)
+
+        // Update the active query when the section, filter, or tokens change.
+        $filter
+            .combineLatest($tokens)
+            .map { (filter, tokens) in
+                let tokensQuery = tokens.map { Tag($0).eraseToAnyQuery() }
+                let filterQuery = AnyQuery.queries(for: filter)
+                return AnyQuery.and([self.section.query] + tokensQuery + filterQuery)
+            }
+            .receive(on: DispatchQueue.main)
+            .sink { query in
+                self.query = query
+            }
+            .store(in: &cancellables)
+
+        // Update the suggested tokens.
+        manager.tagsView.$trie
+            .debounce(for: 0.2, scheduler: DispatchQueue.main)
+            .combineLatest($filter)
+            .receive(on: DispatchQueue.global())
+            .map { trie, filter in
+                guard !filter.isEmpty else {
+                    return []
+                }
+                // SwiftUI gets quite upset if we return too many token suggestions, so we limit this to 10.
+                return Array(trie.findWordsWithPrefix(prefix: filter).prefix(10))
+            }
+            .receive(on: DispatchQueue.main)
+            .sink { tags in
+                self.suggestedTokens = tags
+            }
+            .store(in: &cancellables)
+
+        // Update the title.
+        $filter
+            .combineLatest($tokens)
+            .receive(on: DispatchQueue.main)
+            .sink { filter, tokens in
+                print(filter)
+                if filter.isEmpty && tokens.isEmpty {
+                    self.title = self.section.navigationTitle
+                } else {
+                    self.title = "Searching \"\(self.section.navigationTitle)\""
+                }
             }
             .store(in: &cancellables)
 

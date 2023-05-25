@@ -18,25 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Combine
 import SwiftUI
 
-public class Debouncer<T> : ObservableObject {
+extension View {
 
-    @Published public var debouncedValue: T
-    @Published public var value: T
-
-    fileprivate var subscriptions = Set<AnyCancellable>()
-
-    public init(initialValue: T, delay: DispatchQueue.SchedulerTimeType.Stride) {
-        self.debouncedValue = initialValue
-        self.value = initialValue
-        $value
-            .debounce(for: delay, scheduler: DispatchQueue.main)
-            .sink { value in
-                self.debouncedValue = value
-            }
-            .store(in: &subscriptions)
+    public func searchable() -> some View {
+        return self
+            .searchable(text: Binding.constant(""))
+            .disabled(true)
     }
-    
+
 }

@@ -21,12 +21,12 @@
 import Combine
 import SwiftUI
 
-import BookmarksCore
+public class WindowModel: ObservableObject {
 
-class WindowModel: ObservableObject {
+    @Published public var section: BookmarksSection? = .all
+    @Published public var selection: Set<Bookmark.ID> = []
 
-    @Published var section: BookmarksSection? = .all
-
-    private var cancellables: Set<AnyCancellable> = []
+    public init() {
+    }
 
 }

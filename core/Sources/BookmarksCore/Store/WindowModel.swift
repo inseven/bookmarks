@@ -26,11 +26,7 @@ public class WindowModel: ObservableObject {
     @Published public var section: BookmarksSection? = .all
     @Published public var selection: Set<Bookmark.ID> = []
 
-    private var cancellables: Set<AnyCancellable> = []
-    private var manager: BookmarksManager
-
-    public init(manager: BookmarksManager) {
-        self.manager = manager
+    public init() {
     }
 
 }

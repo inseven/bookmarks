@@ -30,14 +30,9 @@ struct MainWindow: View {
     @Environment(\.selection) var selection
 
     @ObservedObject var manager: BookmarksManager
-    @StateObject var windowModel: WindowModel
-    
-    @State var sheet: ApplicationState? = nil
 
-    init(manager: BookmarksManager) {
-        _manager = ObservedObject(wrappedValue: manager)
-        _windowModel = StateObject(wrappedValue: WindowModel(manager: manager))
-    }
+    @StateObject var windowModel = WindowModel()
+    @State var sheet: ApplicationState? = nil
 
     var body: some View {
         NavigationSplitView {

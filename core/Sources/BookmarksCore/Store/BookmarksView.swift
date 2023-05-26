@@ -38,8 +38,6 @@ public class BookmarksView: ObservableObject {
         case ready
     }
 
-    @Environment(\.openURL) private var openURL
-
     @Published public var title: String
     @Published public var subtitle: String = ""
     @Published public var bookmarks: [Bookmark] = []
@@ -68,6 +66,7 @@ public class BookmarksView: ObservableObject {
     }
 
     @MainActor public func start() {
+        dispatchPrecondition(condition: .onQueue(.main))
         guard let manager else {
             return
         }
@@ -160,10 +159,13 @@ public class BookmarksView: ObservableObject {
                 }
             }
             .store(in: &cancellables)
+
     }
 
     @MainActor public func stop() {
+        dispatchPrecondition(condition: .onQueue(.main))
         cancellables.removeAll()
+        self.bookmarks = []
     }
 
     @MainActor public func addTags() {

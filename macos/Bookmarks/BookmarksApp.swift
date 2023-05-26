@@ -19,12 +19,12 @@
 // SOFTWARE.
 
 import AppKit
-import Combine
 import SwiftUI
 
 import Diligence
 
 import BookmarksCore
+
 @main
 struct BookmarksApp: App {
 

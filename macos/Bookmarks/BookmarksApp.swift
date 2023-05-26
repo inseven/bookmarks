@@ -21,8 +21,9 @@
 import AppKit
 import SwiftUI
 
-import BookmarksCore
 import Diligence
+
+import BookmarksCore
 
 @main
 struct BookmarksApp: App {

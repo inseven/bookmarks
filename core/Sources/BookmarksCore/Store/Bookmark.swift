@@ -211,7 +211,7 @@ extension Bookmark {
 
 }
 
-extension Set where Element == Bookmark {
+extension Array where Element == Bookmark {
 
     public var containsUnreadBookmark: Bool {
         self.first { $0.toRead } != nil

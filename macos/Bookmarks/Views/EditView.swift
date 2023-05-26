@@ -24,6 +24,7 @@ import SwiftUI
 import BookmarksCore
 import Interact
 
+// TODO: Rename this QuickTagView or perhaps simply AddTagsView?
 struct EditView: View {
 
     private struct LayoutMetrics {
@@ -31,21 +32,19 @@ struct EditView: View {
     }
 
     @Environment(\.manager) var manager
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
 
-    @FocusedObject var selection: BookmarksSelection?
-
-    var bookmarks: [Bookmark]
     @State var isBusy = false
     @AppStorage(SettingsKey.addTagsMarkAsRead.rawValue) var markAsRead: Bool = false
 
     @State var tokens: [Token<String>] = []
 
     @ObservedObject var tagsView: TagsView
+    @ObservedObject var bookmarksView: BookmarksView
 
-    init(tagsView: TagsView, bookmarks: [Bookmark]) {
+    init(tagsView: TagsView, bookmarksView: BookmarksView) {
         self.tagsView = tagsView
-        self.bookmarks = bookmarks
+        self.bookmarksView = bookmarksView
     }
 
     var characterSet: CharacterSet {
@@ -82,7 +81,7 @@ struct EditView: View {
                     }
                     HStack {
                         Button {
-                            presentationMode.wrappedValue.dismiss()
+                            dismiss()
                         } label: {
                             Text("Cancel")
                                 .horizontalSpace(.both)
@@ -90,22 +89,11 @@ struct EditView: View {
                         .frame(minWidth: LayoutMetrics.minimumButtonWidth, maxWidth: .infinity)
                         .keyboardShortcut(.cancelAction)
                         Button {
-                            guard let selection else {
-                                print("No selection!")
-                                return
-                            }
-                            isBusy = true
                             let tags = tokens.compactMap { $0.associatedValue }
-                            let updatedBookmarks = bookmarks.map { item in
-                                item
-                                    .adding(tags: Set(tags))
-                                    .setting(toRead: markAsRead ? false : item.toRead)
+                            Task {
+                                await bookmarksView.addTags(tags: Set(tags), markAsRead: markAsRead)
                             }
-                            selection.update(manager: manager, bookmarks: updatedBookmarks) { result in
-                                DispatchQueue.main.async {
-                                    presentationMode.wrappedValue.dismiss()
-                                }
-                            }
+                            dismiss()
                         } label: {
                             Text("OK")
                                 .horizontalSpace(.both)

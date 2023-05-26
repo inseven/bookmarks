@@ -30,7 +30,8 @@ struct BookmarksApp: App {
 
     @Environment(\.manager) var manager
 
-    @FocusedObject var selection: BookmarksSelection?
+    @FocusedObject var windowModel: WindowModel?
+    @FocusedObject var bookmarksView: BookmarksView?
 
     var body: some Scene {
 
@@ -49,15 +50,15 @@ struct BookmarksApp: App {
                 .keyboardShortcut("r", modifiers: .command)
             }
             CommandMenu("Bookmark") {
-                BookmarkOpenCommands(selection: selection ?? BookmarksSelection())
+                BookmarkOpenCommands(bookmarksView: bookmarksView ?? BookmarksView())
                     .trailingDivider()
-                BookmarkDesctructiveCommands(selection: selection ?? BookmarksSelection())
+                BookmarkDesctructiveCommands(bookmarksView: bookmarksView ?? BookmarksView())
                     .trailingDivider()
-                BookmarkEditCommands(selection: selection ?? BookmarksSelection())
+                BookmarkEditCommands(bookmarksView: bookmarksView ?? BookmarksView())
                     .trailingDivider()
-                BookmarkShareCommands(selection: selection ?? BookmarksSelection())
+                BookmarkShareCommands(bookmarksView: bookmarksView ?? BookmarksView())
                     .trailingDivider()
-                BookmarkTagCommands(selection: selection ?? BookmarksSelection())
+                BookmarkTagCommands(windowModel: windowModel, bookmarksView: bookmarksView ?? BookmarksView())
             }
             AccountCommands()
         }

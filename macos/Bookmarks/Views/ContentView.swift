@@ -28,13 +28,11 @@ struct ContentView: View {
 
     let manager: BookmarksManager
 
+    @EnvironmentObject var windowModel: WindowModel
+
     @StateObject var bookmarksView: BookmarksView
-    @StateObject var selection = BookmarksSelection()
     @StateObject var selectionTracker: SelectionTracker<Bookmark>
     @State var firstResponder: Bool = false
-
-    @State var tokens: [String] = []
-    @State var suggestedTokens: [String] = []
 
     private var subscription: AnyCancellable?
 
@@ -58,15 +56,15 @@ struct ContentView: View {
                                                         firstResponder: firstResponder))
                             .help(bookmark.url.absoluteString)
                             .contextMenuFocusable {
-                                BookmarkOpenCommands(selection: selection)
+                                BookmarkOpenCommands(bookmarksView: bookmarksView)
                                     .trailingDivider()
-                                BookmarkDesctructiveCommands(selection: selection)
+                                BookmarkDesctructiveCommands(bookmarksView: bookmarksView)
                                     .trailingDivider()
-                                BookmarkEditCommands(selection: selection)
+                                BookmarkEditCommands(bookmarksView: bookmarksView)
                                     .trailingDivider()
-                                BookmarkShareCommands(selection: selection)
+                                BookmarkShareCommands(bookmarksView: bookmarksView)
                                     .trailingDivider()
-                                BookmarkTagCommands(selection: selection)
+                                BookmarkTagCommands(windowModel: windowModel, bookmarksView: bookmarksView)
                             } onContextMenuChange: { focused in
                                 guard focused == true else {
                                     return
@@ -116,10 +114,17 @@ struct ContentView: View {
             Label(token, systemImage: "tag")
         }
         .onChange(of: selectionTracker.selection) { newSelection in
-            selection.bookmarks = newSelection
+            bookmarksView.selection = Set(newSelection.map { $0.id })
         }
         .navigationTitle(bookmarksView.title)
         .navigationSubtitle(bookmarksView.subtitle)
-        .focusedSceneObject(selection)
+        .sheet(item: $bookmarksView.sheet) { sheet in
+            switch sheet {
+            case .addTags:
+                EditView(tagsView: manager.tagsView, bookmarksView: bookmarksView)
+            }
+        }
+        .presents($bookmarksView.lastError)
+        .focusedSceneObject(bookmarksView)
     }
 }

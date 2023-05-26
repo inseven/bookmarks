@@ -26,24 +26,28 @@ struct BookmarkTagCommands: View {
 
     @Environment(\.manager) var manager
 
-    @FocusedObject var windowModel: WindowModel?
+    var windowModel: WindowModel?
 
-    @ObservedObject var selection: BookmarksSelection
+    @ObservedObject var bookmarksView: BookmarksView
 
     var body: some View {
         Menu("Tags") {
+
             Button("Add...") {
-                selection.addTags()
+                bookmarksView.addTags()
             }
             .contextAwareKeyboardShortcut("t", modifiers: .command)
-            .disabled(selection.isEmpty)
+            .disabled(bookmarksView.selection.isEmpty)
+
             Divider()
-            ForEach(Array(selection.bookmarks.tags).sorted()) { tag in
+
+            ForEach(Array(bookmarksView.selectionTags).sorted()) { tag in
                 Button(tag) {
                     windowModel?.section = tag.section
                 }
                 .disabled(windowModel == nil)
             }
+
         }
     }
 }

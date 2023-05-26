@@ -27,19 +27,25 @@ struct BookmarkShareCommands: View {
     @Environment(\.manager) var manager: BookmarksManager
     @Environment(\.menuType) var menuType
 
-    @ObservedObject var selection: BookmarksSelection
+    @ObservedObject var bookmarksView: BookmarksView
 
     var body: some View {
         Button("Copy") {
-            selection.copy()
+            Task {
+                await bookmarksView.copy()
+            }
         }
         .contextAwareKeyboardShortcut("c", modifiers: [.command])
-        .disabled(menuType == .main && selection.isEmpty)
+        .disabled(menuType == .main && bookmarksView.selection.isEmpty)
+
         Button("Copy Tags") {
-            selection.copyTags()
+            Task {
+                await bookmarksView.copyTags()
+            }
         }
         .contextAwareKeyboardShortcut("c", modifiers: [.command, .shift])
-        .disabled(menuType == .main && selection.isEmpty)
+        .disabled(menuType == .main && bookmarksView.selection.isEmpty)
+
     }
 
 }

@@ -27,19 +27,22 @@ struct BookmarkOpenCommands: View {
     @Environment(\.manager) var manager
     @Environment(\.menuType) var menuType
 
-    @ObservedObject var selection: BookmarksSelection
+    @ObservedObject var bookmarksView: BookmarksView
 
     var body: some View {
+
         Button("Open") {
-            selection.open(manager: manager)
+            bookmarksView.open()
         }
         .contextAwareKeyboardShortcut(.return, modifiers: [.command])
-        .disabled(menuType == .main && selection.isEmpty)
+        .disabled(menuType == .main && bookmarksView.selection.isEmpty)
+
         Button("Open on Internet Archive") {
-            selection.open(manager: manager, location: .internetArchive)
+            bookmarksView.open(location: .internetArchive)
         }
         .contextAwareKeyboardShortcut(.return, modifiers: [.command, .shift])
-        .disabled(menuType == .main && selection.isEmpty)
+        .disabled(menuType == .main && bookmarksView.selection.isEmpty)
+
     }
 
 }

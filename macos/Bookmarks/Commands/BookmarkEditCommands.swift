@@ -27,22 +27,33 @@ struct BookmarkEditCommands: View {
     @Environment(\.manager) var manager: BookmarksManager
     @Environment(\.menuType) var menuType
 
-    @ObservedObject var selection: BookmarksSelection
+    @ObservedObject var bookmarksView: BookmarksView
 
     var body: some View {
-        Button(selection.containsUnreadBookmark ? "Mark as Read" : "Mark as Unread") {
-            selection.update(manager: manager, toRead: !selection.containsUnreadBookmark)
+
+        Button(bookmarksView.selectionContainsUnreadBookmarks ? "Mark as Read" : "Mark as Unread") {
+            Task {
+                await bookmarksView.update(toRead: !bookmarksView.selectionContainsUnreadBookmarks)
+            }
         }
         .contextAwareKeyboardShortcut("U", modifiers: [.command, .shift])
-        .disabled(menuType == .main && selection.isEmpty)
-        Button(selection.containsPublicBookmark ? "Make Private" : "Make Public") {
-            selection.update(manager: manager, shared: !selection.containsPublicBookmark)
+        .disabled(menuType == .main && bookmarksView.selection.isEmpty)
+
+        Button(bookmarksView.selectionContainsPublicBookmark ? "Make Private" : "Make Public") {
+            Task {
+                await bookmarksView.update(shared: !bookmarksView.selectionContainsPublicBookmark)
+            }
         }
-        .disabled(menuType == .main && selection.isEmpty)
+        .disabled(menuType == .main && bookmarksView.selection.isEmpty)
+
         Divider()
+
         Button("Edit on Pinboard") {
-            selection.open(manager: manager, location: .pinboard)
+            bookmarksView.open(location: .pinboard)
         }
-        .disabled(menuType == .main && selection.isEmpty)
+        .disabled(menuType == .main && bookmarksView.selection.isEmpty)
+        .contextAwareKeyboardShortcut("e", modifiers: [.command, .shift])
+
     }
+
 }

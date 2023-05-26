@@ -27,14 +27,16 @@ struct BookmarkDesctructiveCommands: View {
     @Environment(\.manager) var manager: BookmarksManager
     @Environment(\.menuType) var menuType
 
-    @ObservedObject var selection: BookmarksSelection
+    @ObservedObject var bookmarksView: BookmarksView
 
     var body: some View {
         Button("Delete") {
-            selection.delete(manager: manager)
+            Task {
+                await bookmarksView.delete()
+            }
         }
         .contextAwareKeyboardShortcut(.delete, modifiers: [.command])
-        .disabled(menuType == .main && selection.isEmpty)
+        .disabled(menuType == .main && bookmarksView.selection.isEmpty)
     }
 
 }

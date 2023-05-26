@@ -18,40 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import SwiftUI
+import Foundation
 
-import BookmarksCore
-
-struct LayoutToolbar: CustomizableToolbarContent {
-
-    @FocusedObject var bookmarksView: BookmarksView?
-
-    var layoutMode: Binding<LayoutMode> {
-        guard let bookmarksView else {
-            return Binding.constant(LayoutMode.grid)
-        }
-        return Binding {
-            return bookmarksView.layoutMode
-        } set: { layoutMode in
-            bookmarksView.layoutMode = layoutMode
-        }
+public func Localized(_ layoutMode: LayoutMode) -> String {
+    switch layoutMode {
+    case .grid:
+        return "Grid"
+    case .table:
+        return "List"
     }
-
-    var body: some CustomizableToolbarContent {
-        ToolbarItem(id: "layout-mode") {
-            Picker(selection: layoutMode) {
-                ForEach(LayoutMode.allCases) { layoutMode in
-                    Label(Localized(layoutMode), systemImage: layoutMode.systemImage)
-                        .help(Localized(layoutMode))
-                        .tag(layoutMode)
-                }
-            } label: {
-                Text("Layout")
-            }
-            .pickerStyle(.inline)
-            .disabled(bookmarksView == nil)
-        }
-
-    }
-
 }

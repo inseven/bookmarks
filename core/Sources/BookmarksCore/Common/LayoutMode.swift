@@ -20,7 +20,7 @@
 
 import Foundation
 
-public enum LayoutMode: CaseIterable, Identifiable {
+public enum LayoutMode: String, CaseIterable, Identifiable {
 
     public var id: Self { self }
 
@@ -35,5 +35,5 @@ public enum LayoutMode: CaseIterable, Identifiable {
             return "list.bullet"
         }
     }
-    
+
 }

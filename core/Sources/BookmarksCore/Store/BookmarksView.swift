@@ -45,7 +45,7 @@ public class BookmarksView: ObservableObject {
     @Published public var filter: String = ""
     @Published public var tokens: [String] = []
     @Published public var suggestedTokens: [String] = []
-    @Published public var layoutMode: LayoutMode = .grid
+    @Published public var layoutMode: LayoutMode
     @Published public var selection: Set<Bookmark.ID> = []
 
     @Published public var sheet: SheetType? = nil
@@ -57,11 +57,16 @@ public class BookmarksView: ObservableObject {
     private let section: BookmarksSection
     private var cancellables: Set<AnyCancellable> = []
 
+    public var isPlaceholder: Bool {
+        return manager == nil
+    }
+
     public init(manager: BookmarksManager? = nil, section: BookmarksSection = .all) {
         self.manager = manager
         self.section = section
         self.query = section.query
         self.title = section.navigationTitle
+        self.layoutMode = manager?.settings.layoutMode(for: section) ?? .grid
     }
 
     @MainActor public func start() {
@@ -156,6 +161,15 @@ public class BookmarksView: ObservableObject {
                 case .ready:
                     self.subtitle = "\(bookmarks.count) items"
                 }
+            }
+            .store(in: &cancellables)
+
+        // Save the layout mode.
+        $layoutMode
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] layoutMode in
+                guard let self else { return }
+                manager.settings.setLayoutMode(layoutMode, for: section)
             }
             .store(in: &cancellables)
 

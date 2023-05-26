@@ -229,25 +229,6 @@ extension Array where Element == Bookmark {
 
 }
 
-// TODO: Remvoe this?
-extension Set where Element == Bookmark {
-
-    public var containsUnreadBookmark: Bool {
-        self.first { $0.toRead } != nil
-    }
-
-    public var containsPublicBookmark: Bool {
-        self.first { $0.shared } != nil
-    }
-
-    public var tags: Set<String> {
-        reduce(Set<String>()) { result, bookmark in
-            result.union(bookmark.tags)
-        }
-    }
-
-}
-
 extension Pinboard.Post {
 
     // TODO: Review the nullability of the properties on the Pinboard.Post struct #216

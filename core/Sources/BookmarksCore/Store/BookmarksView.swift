@@ -55,12 +55,12 @@ public class BookmarksView: ObservableObject {
 
     @Published private var query: AnyQuery
 
-    private let manager: BookmarksManager
+    private let manager: BookmarksManager?
     private let section: BookmarksSection
     private var cancellables: Set<AnyCancellable> = []
     private let queryQueue = DispatchQueue(label: "queryQueue")
 
-    public init(manager: BookmarksManager, section: BookmarksSection) {
+    public init(manager: BookmarksManager? = nil, section: BookmarksSection = .all) {
         self.manager = manager
         self.section = section
         self.query = section.query
@@ -68,6 +68,9 @@ public class BookmarksView: ObservableObject {
     }
 
     @MainActor public func start() {
+        guard let manager else {
+            return
+        }
 
         // Set up the initial state (in case we are being reused).
         bookmarks = []
@@ -81,7 +84,7 @@ public class BookmarksView: ObservableObject {
             .receive(on: DispatchQueue.global())
             .asyncMap { (_, query) in
                 do {
-                    return (query, try await self.manager.database.bookmarks(query: query))
+                    return (query, try await manager.database.bookmarks(query: query))
                 } catch {
                     return (query, [])
                 }
@@ -194,18 +197,27 @@ public class BookmarksView: ObservableObject {
     }
 
     @MainActor public func update(ids: Set<Bookmark.ID>? = nil, toRead: Bool) async {
+        guard let manager else {
+            return
+        }
         let bookmarks = await bookmarks(for: ids)
             .map { $0.setting(toRead: toRead) }
         manager.updateBookmarks(bookmarks, completion: errorHandler())
     }
 
     @MainActor public func update(ids: Set<Bookmark.ID>? = nil, shared: Bool) async {
+        guard let manager else {
+            return
+        }
         let bookmarks = await bookmarks(for: ids)
             .map { $0.setting(shared: shared) }
         manager.updateBookmarks(bookmarks, completion: errorHandler())
     }
 
     @MainActor public func delete(ids: Set<Bookmark.ID>? = nil) async {
+        guard let manager else {
+            return
+        }
         let bookmarks = await bookmarks(for: ids)
         manager.deleteBookmarks(bookmarks, completion: errorHandler())
     }
@@ -240,6 +252,9 @@ public class BookmarksView: ObservableObject {
 
     // TODO: Consider whether we should pull this down into the manager.
     @MainActor public func addTags(ids: Set<Bookmark.ID>? = nil, tags: Set<String>, markAsRead: Bool) async {
+        guard let manager else {
+            return
+        }
         let bookmarks = await bookmarks(for: ids)
             .map { item in
                 item
@@ -259,6 +274,12 @@ public class BookmarksView: ObservableObject {
     @MainActor public var selectionContainsPublicBookmark: Bool {
         let bookmarks = bookmarks.filter { selection.contains($0.id) }
         return bookmarks.containsPublicBookmark
+    }
+
+    // TODO: Set this asynchronously using combine.
+    @MainActor public var selectionTags: Set<String> {
+        let bookmarks = bookmarks.filter { selection.contains($0.id) }
+        return Set(bookmarks.map { $0.tags }.reduce([], +))
     }
 
     private func errorHandler<T>(_ completion: @escaping (Result<T, Error>) -> Void = { _ in }) -> (Result<T, Error>) -> Void {

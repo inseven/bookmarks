@@ -41,6 +41,7 @@ struct MainWindow: View {
             if let section = windowModel.section {
                 ContentView(manager: manager, section: section)
                     .id(section)
+                    .environmentObject(windowModel)
             } else {
                 PlaceholderView("Nothing Selected")
                     .searchable()
@@ -49,7 +50,7 @@ struct MainWindow: View {
         .toolbar(id: "main") {
             AccountToolbar()
             LayoutToolbar()
-            SelectionToolbar(bookmarksView: bookmarksView ?? BookmarksView(manager: manager, section: .all))
+            SelectionToolbar(bookmarksView: bookmarksView ?? BookmarksView())
         }
         .sheet(item: $sheet) { sheet in
             switch sheet {

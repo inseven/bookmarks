@@ -26,7 +26,7 @@ struct BookmarkTagCommands: View {
 
     @Environment(\.manager) var manager
 
-    @FocusedObject var windowModel: WindowModel?
+    var windowModel: WindowModel?
 
     @ObservedObject var bookmarksView: BookmarksView
 
@@ -39,14 +39,14 @@ struct BookmarkTagCommands: View {
             .contextAwareKeyboardShortcut("t", modifiers: .command)
             .disabled(bookmarksView.selection.isEmpty)
 
-//            Divider()
-//
-//            ForEach(Array(bookmarksView.selection.tags).sorted()) { tag in
-//                Button(tag) {
-//                    windowModel?.section = tag.section
-//                }
-//                .disabled(windowModel == nil)
-//            }
+            Divider()
+
+            ForEach(Array(bookmarksView.selectionTags).sorted()) { tag in
+                Button(tag) {
+                    windowModel?.section = tag.section
+                }
+                .disabled(windowModel == nil)
+            }
 
         }
     }

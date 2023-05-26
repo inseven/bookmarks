@@ -29,6 +29,8 @@ struct ContentView: View {
 
     let manager: BookmarksManager
 
+    @EnvironmentObject var windowModel: WindowModel
+
     // TODO: Rename bookmarksView to ContentModel
     @StateObject var bookmarksView: BookmarksView
 
@@ -129,7 +131,7 @@ struct ContentView: View {
                 EditView(tagsView: manager.tagsView, bookmarksView: bookmarksView)
             }
         }
-        // TODO: Present bookmarksView.error
+        .presents($bookmarksView.lastError)
         .focusedSceneObject(bookmarksView)
     }
 }

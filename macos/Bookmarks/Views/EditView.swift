@@ -31,8 +31,9 @@ struct EditView: View {
     }
 
     @Environment(\.manager) var manager
-    @Environment(\.selection) var selection
     @Environment(\.presentationMode) var presentationMode
+
+    @FocusedObject var selection: BookmarksSelection?
 
     var bookmarks: [Bookmark]
     @State var isBusy = false
@@ -89,6 +90,10 @@ struct EditView: View {
                         .frame(minWidth: LayoutMetrics.minimumButtonWidth, maxWidth: .infinity)
                         .keyboardShortcut(.cancelAction)
                         Button {
+                            guard let selection else {
+                                print("No selection!")
+                                return
+                            }
                             isBusy = true
                             let tags = tokens.compactMap { $0.associatedValue }
                             let updatedBookmarks = bookmarks.map { item in

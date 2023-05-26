@@ -29,13 +29,12 @@ struct BookmarksApp: App {
 
     @Environment(\.manager) var manager
 
-    @StateObject var selection = BookmarksSelection()
+    @FocusedObject var selection: BookmarksSelection?
 
     var body: some Scene {
 
         WindowGroup {
             MainWindow(manager: manager)
-                .environment(\.selection, selection)
         }
         .commands {
             SidebarCommands()
@@ -49,15 +48,15 @@ struct BookmarksApp: App {
                 .keyboardShortcut("r", modifiers: .command)
             }
             CommandMenu("Bookmark") {
-                BookmarkOpenCommands(selection: selection)
+                BookmarkOpenCommands(selection: selection ?? BookmarksSelection())
                     .trailingDivider()
-                BookmarkDesctructiveCommands(selection: selection)
+                BookmarkDesctructiveCommands(selection: selection ?? BookmarksSelection())
                     .trailingDivider()
-                BookmarkEditCommands(selection: selection)
+                BookmarkEditCommands(selection: selection ?? BookmarksSelection())
                     .trailingDivider()
-                BookmarkShareCommands(selection: selection)
+                BookmarkShareCommands(selection: selection ?? BookmarksSelection())
                     .trailingDivider()
-                BookmarkTagCommands(selection: selection)
+                BookmarkTagCommands(selection: selection ?? BookmarksSelection())
             }
             AccountCommands()
         }

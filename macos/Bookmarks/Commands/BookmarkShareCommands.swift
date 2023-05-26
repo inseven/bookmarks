@@ -25,6 +25,7 @@ import BookmarksCore
 struct BookmarkShareCommands: View {
 
     @Environment(\.manager) var manager: BookmarksManager
+    @Environment(\.menuType) var menuType
 
     @ObservedObject var selection: BookmarksSelection
 
@@ -33,12 +34,12 @@ struct BookmarkShareCommands: View {
             selection.copy()
         }
         .contextAwareKeyboardShortcut("c", modifiers: [.command])
-        .mainMenuItemCondition(.nonEmpty, selection)
+        .disabled(menuType == .main && selection.isEmpty)
         Button("Copy Tags") {
             selection.copyTags()
         }
         .contextAwareKeyboardShortcut("c", modifiers: [.command, .shift])
-        .mainMenuItemCondition(.nonEmpty, selection)
+        .disabled(menuType == .main && selection.isEmpty)
     }
 
 }

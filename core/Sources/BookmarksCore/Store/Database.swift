@@ -531,13 +531,14 @@ public class Database {
         return bookmarks
     }
 
-    public func bookmarks<T: QueryDescription>(query: T, completion: @escaping (Swift.Result<[Bookmark], Error>) -> Void) {
-        let completion = DispatchQueue.global().asyncClosure(completion)
-        syncQueue.async {
-            let result = Swift.Result<[Bookmark], Error> {
-                try self.syncQueue_bookmarks(where: query.sql)
+    public func bookmarks<T: QueryDescription>(query: T) async throws -> [Bookmark] {
+        return try await withCheckedThrowingContinuation { continuation in
+            syncQueue.async {
+                let result = Swift.Result<[Bookmark], Error> {
+                    try self.syncQueue_bookmarks(where: query.sql)
+                }
+                continuation.resume(with: result)
             }
-            completion(result)
         }
     }
 
@@ -580,10 +581,6 @@ public extension Database {
 
     func deleteBookmark(identifier: String) throws {
         try AsyncOperation { self.deleteBookmark(identifier: identifier, completion: $0) }.wait()
-    }
-
-    func bookmarks<T: QueryDescription>(query: T) throws -> [Bookmark] {
-        try AsyncOperation({ self.bookmarks(query: query, completion: $0) }).wait()
     }
 
     func tags() throws -> [String] {

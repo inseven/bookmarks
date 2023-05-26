@@ -35,7 +35,8 @@ public class BookmarksView: ObservableObject {
     @Published public var filter: String = ""
     @Published public var tokens: [String] = []
     @Published public var suggestedTokens: [String] = []
-    @Published public var query: AnyQuery
+
+    @Published private var query: AnyQuery
 
     private let manager: BookmarksManager
     private let section: BookmarksSection
@@ -48,38 +49,35 @@ public class BookmarksView: ObservableObject {
         self.title = section.navigationTitle
     }
 
-    func update(query: AnyQuery) {
-        dispatchPrecondition(condition: .onQueue(.main))
-        print("fetching bookmarks...")
-
-        manager.database.bookmarks(query: query) { result in
-            DispatchQueue.main.async {
-                guard self.query == query else {
-                    print("ignoring out-of-date results...")
-                    return
-                }
-                switch result {
-                case .success(let bookmarks):
-                    print("received \(bookmarks.count) bookmarks")
-                    self.bookmarks = bookmarks
-                    self.state = .ready
-                case .failure(let error):
-                    print("Failed to load data with error \(error)")
-                }
-            }
-        }
-    }
-
     @MainActor public func start() {
         dispatchPrecondition(condition: .onQueue(.main))
+
+        // Set up the initial state (in case we are being reused).
+        bookmarks = []
+        state = .loading
 
         // Query the database whenever a change occurs or the query changes.
         DatabasePublisher(database: manager.database)
             .prepend(())
             .combineLatest($query)
-            .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
-            .sink { _, query in
-                self.update(query: query)
+            .debounce(for: .seconds(0.2), scheduler: DispatchQueue.main)
+            .receive(on: DispatchQueue.global())
+            .asyncMap { (_, query) in
+                do {
+                    return (query, try await self.manager.database.bookmarks(query: query))
+                } catch {
+                    return (query, [])
+                }
+            }
+            .receive(on: DispatchQueue.main)
+            .sink { query, bookmarks in
+                // Guard against updating the bookmarks with results from an old query.
+                guard self.query == query else {
+                    print("Discarding query")
+                    return
+                }
+                self.bookmarks = bookmarks
+                self.state = .ready
             }
             .store(in: &cancellables)
 
@@ -143,12 +141,6 @@ public class BookmarksView: ObservableObject {
             }
             .store(in: &cancellables)
 
-    }
-
-    @MainActor public func clear() {
-        dispatchPrecondition(condition: .onQueue(.main))
-        self.bookmarks = []
-        self.state = .loading
     }
 
     @MainActor public func stop() {

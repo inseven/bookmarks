@@ -532,7 +532,6 @@ public class Database {
     }
 
     public func bookmarks<T: QueryDescription>(query: T) async throws -> [Bookmark] {
-        print("bookmarks async")
         return try await withCheckedThrowingContinuation { continuation in
             syncQueue.async {
                 let result = Swift.Result<[Bookmark], Error> {

@@ -39,6 +39,7 @@ public class BookmarksView: ObservableObject {
     @Published public var tokens: [String] = []
     @Published public var suggestedTokens: [String] = []
     @Published public var layoutMode: LayoutMode = .grid
+
     @Published private var query: AnyQuery
 
     private let manager: BookmarksManager
@@ -63,7 +64,7 @@ public class BookmarksView: ObservableObject {
         DatabasePublisher(database: manager.database)
             .prepend(())
             .combineLatest($query)
-            .debounce(for: .seconds(0.2), scheduler: queryQueue)
+            .debounce(for: .seconds(0.2), scheduler: DispatchQueue.main)
             .receive(on: DispatchQueue.global())
             .asyncMap { (_, query) in
                 do {

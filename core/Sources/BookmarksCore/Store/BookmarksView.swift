@@ -46,7 +46,6 @@ public class BookmarksView: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
     private let queryQueue = DispatchQueue(label: "queryQueue")
 
-    // TODO: Don't inject the query
     public init(manager: BookmarksManager, section: BookmarksSection) {
         self.manager = manager
         self.section = section

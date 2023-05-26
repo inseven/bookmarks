@@ -25,41 +25,41 @@ import BookmarksCore
 struct SelectionToolbar: CustomizableToolbarContent {
 
     @Environment(\.manager) var manager: BookmarksManager
-    @ObservedObject var selection: BookmarksSelection
+    
+    @ObservedObject var bookmarksView: BookmarksView
 
     var body: some CustomizableToolbarContent {
 
         ToolbarItem(id: "open") {
             Button {
-                selection.open(manager: manager)
+                bookmarksView.open(ids: bookmarksView.selection)
             } label: {
                 Label("Open", systemImage: "safari")
             }
             .keyboardShortcut(.return, modifiers: [])
-            .disabled(selection.isEmpty)
+            .disabled(bookmarksView.selection.isEmpty)
         }
 
         ToolbarItem(id: "tag") {
             Button {
-                guard selection.count > 0 else {
-                    return
-                }
-                selection.addTags()
+                bookmarksView.addTags()
             } label: {
                 Label("Add Tags", systemImage: "tag")
             }
             .help("Add Tags")
-            .disabled(selection.isEmpty)
+            .disabled(bookmarksView.selection.isEmpty)
         }
 
         ToolbarItem(id: "delete") {
             Button {
-                selection.delete(manager: manager)
+                Task {
+                    await bookmarksView.delete()
+                }
             } label: {
                 Label("Delete", systemImage: "trash")
             }
             .help("Delete")
-            .disabled(selection.isEmpty)
+            .disabled(bookmarksView.selection.isEmpty)
         }
 
     }

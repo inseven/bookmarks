@@ -27,7 +27,7 @@ import BookmarksCore
 
 struct MainWindow: View {
 
-    @FocusedObject var selection: BookmarksSelection?
+    @FocusedObject var bookmarksView: BookmarksView?
 
     @ObservedObject var manager: BookmarksManager
 
@@ -49,9 +49,8 @@ struct MainWindow: View {
         .toolbar(id: "main") {
             AccountToolbar()
             LayoutToolbar()
-            SelectionToolbar(selection: selection ?? BookmarksSelection())
+            SelectionToolbar(bookmarksView: bookmarksView ?? BookmarksView(manager: manager, section: .all))
         }
-        .handlesSelectionSheets(selection ?? BookmarksSelection())  // TODO: The sheet should be at the scene model level?
         .sheet(item: $sheet) { sheet in
             switch sheet {
             case .logIn:

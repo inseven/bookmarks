@@ -211,6 +211,25 @@ extension Bookmark {
 
 }
 
+extension Array where Element == Bookmark {
+
+    public var containsUnreadBookmark: Bool {
+        self.first { $0.toRead } != nil
+    }
+
+    public var containsPublicBookmark: Bool {
+        self.first { $0.shared } != nil
+    }
+
+    public var tags: Set<String> {
+        reduce(Set<String>()) { result, bookmark in
+            result.union(bookmark.tags)
+        }
+    }
+
+}
+
+// TODO: Remvoe this?
 extension Set where Element == Bookmark {
 
     public var containsUnreadBookmark: Bool {

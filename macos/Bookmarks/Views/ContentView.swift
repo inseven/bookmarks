@@ -31,14 +31,12 @@ struct ContentView: View {
 
     // TODO: Rename bookmarksView to ContentModel
     @StateObject var bookmarksView: BookmarksView
-    @StateObject var selection = BookmarksSelection()
 
     let layout = ColumnLayout(spacing: 2.0,
                               columns: 5,
                               edgeInsets: NSEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0))
 
-    init(manager: BookmarksManager,
-         section: BookmarksSection) {
+    init(manager: BookmarksManager, section: BookmarksSection) {
         self.manager = manager
         _bookmarksView = StateObject(wrappedValue: BookmarksView(manager: manager, section: section))
     }
@@ -82,7 +80,7 @@ struct ContentView: View {
             switch bookmarksView.layoutMode {
             case .grid:
                 SelectableCollectionView(bookmarksView.bookmarks,
-                                         selection: $selection.selection,
+                                         selection: $bookmarksView.selection,
                                          layout: layout) { bookmark in
 
                     BookmarkCell(manager: manager, bookmark: bookmark)
@@ -97,7 +95,7 @@ struct ContentView: View {
                     primaryAction(selection)
                 }
             case .table:
-                Table(bookmarksView.bookmarks, selection: $selection.selection) {
+                Table(bookmarksView.bookmarks, selection: $bookmarksView.selection) {
                     TableColumn("Title", value: \.title)
                     TableColumn("URL", value: \.url.absoluteString)
                     TableColumn("Tags") { bookmark in
@@ -125,7 +123,13 @@ struct ContentView: View {
         }
         .navigationTitle(bookmarksView.title)
         .navigationSubtitle(bookmarksView.subtitle)
-        .focusedSceneObject(selection)
+        .sheet(item: $bookmarksView.sheet) { sheet in
+            switch sheet {
+            case .addTags:
+                EditView(tagsView: manager.tagsView, bookmarksView: bookmarksView)
+            }
+        }
+        // TODO: Present bookmarksView.error
         .focusedSceneObject(bookmarksView)
     }
 }

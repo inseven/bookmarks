@@ -22,7 +22,16 @@ import Combine
 import Foundation
 import SwiftUI
 
+import Interact
+
 public class BookmarksView: ObservableObject {
+
+    public enum SheetType: Identifiable {
+
+        public var id: Self { self }
+
+        case addTags
+    }
 
     public enum State {
         case loading
@@ -39,6 +48,10 @@ public class BookmarksView: ObservableObject {
     @Published public var tokens: [String] = []
     @Published public var suggestedTokens: [String] = []
     @Published public var layoutMode: LayoutMode = .grid
+    @Published public var selection: Set<Bookmark.ID> = []
+
+    @Published public var sheet: SheetType? = nil
+    @Published public var lastError: Error? = nil
 
     @Published private var query: AnyQuery
 
@@ -150,7 +163,12 @@ public class BookmarksView: ObservableObject {
         cancellables.removeAll()
     }
 
-    @MainActor public func bookmarks(for ids: Set<Bookmark.ID>) async -> [Bookmark] {
+    @MainActor public func addTags() {
+        sheet = .addTags
+    }
+
+    @MainActor public func bookmarks(for ids: Set<Bookmark.ID>? = nil) async -> [Bookmark] {
+        let ids = ids ?? self.selection
         let bookmarks = bookmarks
         return await withCheckedContinuation { continuation in
             DispatchQueue.global().async {
@@ -159,15 +177,92 @@ public class BookmarksView: ObservableObject {
         }
     }
 
-    @MainActor public func open(ids: Set<Bookmark.ID>) {
+    @MainActor public func open(ids: Set<Bookmark.ID>? = nil, location: Bookmark.Location = .web) {
+        let ids = ids ?? self.selection
         let bookmarks = bookmarks
         DispatchQueue.global(qos: .userInitiated).async {
             let selectedBookmarks = bookmarks.filter { ids.contains($0.id) }
             DispatchQueue.main.async {
                 for bookmark in selectedBookmarks {
-                    self.openURL(bookmark.url)
+                    guard let url = try? bookmark.url(location) else {
+                        continue
+                    }
+                    Application.open(url)
                 }
             }
+        }
+    }
+
+    @MainActor public func update(ids: Set<Bookmark.ID>? = nil, toRead: Bool) async {
+        let bookmarks = await bookmarks(for: ids)
+            .map { $0.setting(toRead: toRead) }
+        manager.updateBookmarks(bookmarks, completion: errorHandler())
+    }
+
+    @MainActor public func update(ids: Set<Bookmark.ID>? = nil, shared: Bool) async {
+        let bookmarks = await bookmarks(for: ids)
+            .map { $0.setting(shared: shared) }
+        manager.updateBookmarks(bookmarks, completion: errorHandler())
+    }
+
+    @MainActor public func delete(ids: Set<Bookmark.ID>? = nil) async {
+        let bookmarks = await bookmarks(for: ids)
+        manager.deleteBookmarks(bookmarks, completion: errorHandler())
+    }
+
+    // TODO: Rethink the threading here.
+    @MainActor public func copy(ids: Set<Bookmark.ID>? = nil) async {
+        let bookmarks = await bookmarks(for: ids)
+        DispatchQueue.main.async {
+            NSPasteboard.general.clearContents()
+            NSPasteboard.general.writeObjects(bookmarks.map { $0.url.absoluteString as NSString })
+            NSPasteboard.general.writeObjects(bookmarks.map { $0.url as NSURL })
+        }
+    }
+
+    // TODO: Rethink the threading here.
+    @MainActor public func copyTags(ids: Set<Bookmark.ID>? = nil) async {
+        let bookmarks = await bookmarks(for: ids)
+        let tags = bookmarks.tags.sorted().joined(separator: " ")
+        DispatchQueue.main.async {
+            NSPasteboard.general.clearContents()
+            NSPasteboard.general.writeObjects([tags as NSString])
+        }
+    }
+
+    // TODO: Consider whether we should pull this down into the manager.
+    @MainActor public func addTags(ids: Set<Bookmark.ID>? = nil, tags: Set<String>, markAsRead: Bool) async {
+        let bookmarks = await bookmarks(for: ids)
+            .map { item in
+                item
+                    .adding(tags: tags)
+                    .setting(toRead: markAsRead ? false : item.toRead)
+            }
+        manager.updateBookmarks(bookmarks, completion: errorHandler({ _ in }))
+    }
+
+    // TODO: Set this asynchronously using combine.
+    @MainActor public var selectionContainsUnreadBookmarks: Bool {
+        let bookmarks = bookmarks.filter { selection.contains($0.id) }
+        return bookmarks.containsUnreadBookmark
+    }
+
+    // TODO: Set this asynchronously using combine.
+    @MainActor public var selectionContainsPublicBookmark: Bool {
+        let bookmarks = bookmarks.filter { selection.contains($0.id) }
+        return bookmarks.containsPublicBookmark
+    }
+
+    private func errorHandler<T>(_ completion: @escaping (Result<T, Error>) -> Void = { _ in }) -> (Result<T, Error>) -> Void {
+        let completion = DispatchQueue.global().asyncClosure(completion)
+        return { result in
+            if case .failure(let error) = result {
+                print("Failed to perform operation with error \(error).")
+                DispatchQueue.main.async {
+                    self.lastError = error
+                }
+            }
+            completion(result)
         }
     }
 

@@ -65,8 +65,6 @@ struct MainWindow: View {
                 sheet = .logIn
             }
         }
-        .observesApplicationFocus()
-        .frameAutosaveName("Main Window")
         .focusedSceneObject(windowModel)
     }
 

@@ -22,13 +22,11 @@ import SwiftUI
 
 struct BorderedSelection: ViewModifier {
 
-    @Environment(\.applicationHasFocus) var applicationHasFocus
-
     var selected: Bool
     var firstResponder: Bool
 
     var color: Color {
-        applicationHasFocus && firstResponder ? Color.accentColor : Color.unemphasizedSelectedContentBackgroundColor
+        firstResponder ? Color.accentColor : Color.unemphasizedSelectedContentBackgroundColor
     }
 
     func body(content: Content) -> some View {

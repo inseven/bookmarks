@@ -212,22 +212,30 @@ public class BookmarksView: ObservableObject {
 
     // TODO: Rethink the threading here.
     @MainActor public func copy(ids: Set<Bookmark.ID>? = nil) async {
+#if os(macOS)
         let bookmarks = await bookmarks(for: ids)
         DispatchQueue.main.async {
             NSPasteboard.general.clearContents()
             NSPasteboard.general.writeObjects(bookmarks.map { $0.url.absoluteString as NSString })
             NSPasteboard.general.writeObjects(bookmarks.map { $0.url as NSURL })
         }
+#else
+        assertionFailure("Unsupported")
+#endif
     }
 
     // TODO: Rethink the threading here.
     @MainActor public func copyTags(ids: Set<Bookmark.ID>? = nil) async {
+#if os(macOS)
         let bookmarks = await bookmarks(for: ids)
         let tags = bookmarks.tags.sorted().joined(separator: " ")
         DispatchQueue.main.async {
             NSPasteboard.general.clearContents()
             NSPasteboard.general.writeObjects([tags as NSString])
         }
+#else
+        assertionFailure("Unsupported")
+#endif
     }
 
     // TODO: Consider whether we should pull this down into the manager.

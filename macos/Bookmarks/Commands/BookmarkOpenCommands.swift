@@ -34,12 +34,12 @@ struct BookmarkOpenCommands: View {
             selection.open(manager: manager)
         }
         .contextAwareKeyboardShortcut(.return, modifiers: [.command])
-        .mainMenuItemCondition(.nonEmpty, selection)
+        .disabled(menuType == .main && selection.isEmpty)
         Button("Open on Internet Archive") {
             selection.open(manager: manager, location: .internetArchive)
         }
         .contextAwareKeyboardShortcut(.return, modifiers: [.command, .shift])
-        .mainMenuItemCondition(.nonEmpty, selection)
+        .disabled(menuType == .main && selection.isEmpty)
     }
 
 }

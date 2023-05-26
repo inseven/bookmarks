@@ -25,6 +25,7 @@ import BookmarksCore
 struct BookmarkDesctructiveCommands: View {
 
     @Environment(\.manager) var manager: BookmarksManager
+    @Environment(\.menuType) var menuType
 
     @ObservedObject var selection: BookmarksSelection
 
@@ -33,7 +34,7 @@ struct BookmarkDesctructiveCommands: View {
             selection.delete(manager: manager)
         }
         .contextAwareKeyboardShortcut(.delete, modifiers: [.command])
-        .mainMenuItemCondition(.nonEmpty, selection)
+        .disabled(menuType == .main && selection.isEmpty)
     }
 
 }

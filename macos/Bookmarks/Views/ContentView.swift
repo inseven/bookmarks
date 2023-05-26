@@ -28,9 +28,8 @@ struct ContentView: View {
 
     let manager: BookmarksManager
 
-    @ObservedObject var selection: BookmarksSelection
-
     @StateObject var bookmarksView: BookmarksView
+    @StateObject var selection = BookmarksSelection()
     @StateObject var selectionTracker: SelectionTracker<Bookmark>
     @State var firstResponder: Bool = false
 
@@ -39,11 +38,9 @@ struct ContentView: View {
 
     private var subscription: AnyCancellable?
 
-    init(selection: BookmarksSelection,
-         manager: BookmarksManager,
+    init(manager: BookmarksManager,
          section: BookmarksSection) {
         self.manager = manager
-        self.selection = selection
         let bookmarksView = Deferred(BookmarksView(manager: manager, section: section))
         let selectionTracker = Deferred(SelectionTracker(items: bookmarksView.get().$bookmarks))
         _bookmarksView = StateObject(wrappedValue: bookmarksView.get())
@@ -70,10 +67,6 @@ struct ContentView: View {
                                 BookmarkShareCommands(selection: selection)
                                     .trailingDivider()
                                 BookmarkTagCommands(selection: selection)
-                                #if DEBUG
-                                BookmarkDebugCommands()
-                                    .leadingDivider()
-                                #endif
                             } onContextMenuChange: { focused in
                                 guard focused == true else {
                                     return
@@ -127,5 +120,6 @@ struct ContentView: View {
         }
         .navigationTitle(bookmarksView.title)
         .navigationSubtitle(bookmarksView.subtitle)
+        .focusedSceneObject(selection)
     }
 }

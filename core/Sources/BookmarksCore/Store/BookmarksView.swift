@@ -56,7 +56,6 @@ public class BookmarksView: ObservableObject {
     private let manager: BookmarksManager?
     private let section: BookmarksSection
     private var cancellables: Set<AnyCancellable> = []
-    private let queryQueue = DispatchQueue(label: "queryQueue")
 
     public init(manager: BookmarksManager? = nil, section: BookmarksSection = .all) {
         self.manager = manager

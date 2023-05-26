@@ -69,7 +69,7 @@ public class BookmarksManager: ObservableObject {
         tagsView = TagsView(database: database)
 
         updater.delegate = self
-//        updater.start()
+        updater.start()
         tagsView.start()
 
         #if os(macOS)

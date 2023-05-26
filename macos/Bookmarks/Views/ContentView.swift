@@ -79,6 +79,7 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
+
             switch bookmarksView.layoutMode {
             case .grid:
                 SelectableCollectionView(bookmarksView.bookmarks,
@@ -97,6 +98,7 @@ struct ContentView: View {
                     primaryAction(selection)
                 }
             case .table:
+
                 Table(bookmarksView.bookmarks, selection: $bookmarksView.selection) {
                     TableColumn("Title", value: \.title)
                     TableColumn("URL", value: \.url.absoluteString)
@@ -110,6 +112,7 @@ struct ContentView: View {
                     primaryAction(selection)
                 }
             }
+
         }
         .overlay(bookmarksView.state == .loading ? LoadingView() : nil)
         .onAppear {

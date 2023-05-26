@@ -31,14 +31,14 @@ struct ContentView: View {
 
     // TODO: Rename bookmarksView to ContentModel
     @StateObject var bookmarksView: BookmarksView
-    // TODO: Rename to selection model?
-    @StateObject var selection: BookmarksSelection = BookmarksSelection()
+    @StateObject var selection = BookmarksSelection()
 
     let layout = ColumnLayout(spacing: 2.0,
                               columns: 5,
                               edgeInsets: NSEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0))
 
-    init(manager: BookmarksManager, section: BookmarksSection) {
+    init(manager: BookmarksManager,
+         section: BookmarksSection) {
         self.manager = manager
         _bookmarksView = StateObject(wrappedValue: BookmarksView(manager: manager, section: section))
     }
@@ -125,7 +125,7 @@ struct ContentView: View {
         }
         .navigationTitle(bookmarksView.title)
         .navigationSubtitle(bookmarksView.subtitle)
-        .focusedValue(\.selection, selection)
+        .focusedSceneObject(selection)
         .focusedSceneObject(bookmarksView)
     }
 }

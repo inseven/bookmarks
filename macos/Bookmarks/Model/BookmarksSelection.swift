@@ -109,22 +109,3 @@ extension BookmarksSelection.SheetType: Identifiable {
     }
 
 }
-
-public struct SelectionEnvironmentKey: EnvironmentKey {
-
-    public static var defaultValue = BookmarksSelection()
-
-}
-
-public extension EnvironmentValues {
-
-    var selection: BookmarksSelection {
-        get { self[SelectionEnvironmentKey.self] }
-        set { self[SelectionEnvironmentKey.self] = newValue }
-    }
-
-}
-
-extension BookmarksSelection: Countable {
-
-}

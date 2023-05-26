@@ -20,47 +20,108 @@
 
 import Foundation
 
-public enum SettingsKey: String {
-    case pinboardApiKey = "pinboard-api-key"
-    case useInAppBrowser = "use-in-app-browser"
-    case maximumConcurrentThumbnailDownloads = "maximum-concurrent-thumbnail-downloads"
-    case favoriteTags = "favorite-tags"
-    case addTagsMarkAsRead = "add-tags-mark-as-read"
+import Interact
+
+public enum SettingsKey: RawRepresentable {
+
+    case pinboardApiKey
+    case useInAppBrowser
+    case maximumConcurrentThumbnailDownloads
+    case favoriteTags
+    case addTagsMarkAsRead
+    case layoutMode(BookmarksSection)
+
+    static let layoutModePrefix = "layout-mode-"
+
+    public init?(rawValue: String) {
+        switch rawValue {
+        case "pinboard-api-key":
+            self = .pinboardApiKey
+        case "use-in-app-browser":
+            self = .useInAppBrowser
+        case "maximum-concurrent-thumbnail-downloads":
+            self = .maximumConcurrentThumbnailDownloads
+        case "favorite-tags":
+            self = .favoriteTags
+        case "add-tags-mark-as-read":
+            self = .addTagsMarkAsRead
+        case _ where rawValue.starts(with: Self.layoutModePrefix):
+            let rawSection = String(rawValue.dropFirst(Self.layoutModePrefix.count))
+            guard let section = BookmarksSection(rawValue: rawSection) else {
+                return nil
+            }
+            self = .layoutMode(section)
+        default:
+            return nil
+        }
+    }
+
+    public var rawValue: String {
+        switch self {
+        case .pinboardApiKey:
+            return "pinboard-api-key"
+        case .useInAppBrowser:
+            return "use-in-app-browser"
+        case .maximumConcurrentThumbnailDownloads:
+            return "maximum-concurrent-thumbnail-downloads"
+        case .favoriteTags:
+            return "favorite-tags"
+        case .addTagsMarkAsRead:
+            return "add-tags-mark-as-read"
+        case .layoutMode(let section):
+            return "\(Self.layoutModePrefix)\(section.rawValue)"
+        }
+    }
 }
 
 final public class Settings: ObservableObject {
 
-    var defaults: UserDefaults {
-        UserDefaults.standard
-    }
+    let defaults = KeyedDefaults<SettingsKey>()
 
     @Published public var pinboardApiKey: String? {
-        didSet { defaults.set(pinboardApiKey, forKey: SettingsKey.pinboardApiKey.rawValue) }
+        didSet {
+            defaults.set(pinboardApiKey, forKey: .pinboardApiKey)
+        }
     }
 
     @Published public var useInAppBrowser: Bool {
-        didSet { defaults.set(useInAppBrowser, forKey: SettingsKey.useInAppBrowser.rawValue) }
+        didSet {
+            defaults.set(useInAppBrowser, forKey: .useInAppBrowser)
+        }
     }
 
     @Published public var maximumConcurrentThumbnailDownloads: Int {
-        didSet { defaults.set(maximumConcurrentThumbnailDownloads,
-                              forKey: SettingsKey.maximumConcurrentThumbnailDownloads.rawValue) }
+        didSet {
+            defaults.set(maximumConcurrentThumbnailDownloads, forKey: .maximumConcurrentThumbnailDownloads)
+        }
     }
 
     @Published public var favoriteTags: [String] {
-        didSet { defaults.set(favoriteTags,
-                              forKey: SettingsKey.favoriteTags.rawValue) }
+        didSet {
+            defaults.set(favoriteTags, forKey: .favoriteTags)
+        }
     }
 
     public init() {
-        let defaults = UserDefaults.standard
-        pinboardApiKey = defaults.string(forKey: SettingsKey.pinboardApiKey.rawValue) ?? ""
-        useInAppBrowser = defaults.bool(forKey: SettingsKey.useInAppBrowser.rawValue)
-        maximumConcurrentThumbnailDownloads = defaults.integer(forKey: SettingsKey.maximumConcurrentThumbnailDownloads.rawValue)
-        favoriteTags = defaults.object(forKey: SettingsKey.favoriteTags.rawValue) as? [String] ?? []
+        pinboardApiKey = defaults.string(forKey: .pinboardApiKey) ?? ""
+        useInAppBrowser = defaults.bool(forKey: .useInAppBrowser)
+        maximumConcurrentThumbnailDownloads = defaults.integer(forKey: .maximumConcurrentThumbnailDownloads)
+        favoriteTags = defaults.object(forKey: .favoriteTags) as? [String] ?? []
         if maximumConcurrentThumbnailDownloads == 0 {
             maximumConcurrentThumbnailDownloads = 3
         }
+    }
+
+    public func layoutMode(for section: BookmarksSection) -> LayoutMode {
+        guard let rawLayoutMode = defaults.string(forKey: .layoutMode(section)),
+              let layoutMode = LayoutMode(rawValue: rawLayoutMode) else {
+            return .grid
+        }
+        return layoutMode
+    }
+
+    public func setLayoutMode(_ layoutMode: LayoutMode, for section: BookmarksSection) {
+        defaults.set(layoutMode.rawValue, forKey: .layoutMode(section))
     }
 
 }

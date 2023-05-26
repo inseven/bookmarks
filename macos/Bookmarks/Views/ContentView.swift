@@ -45,63 +45,92 @@ struct ContentView: View {
         _selectionTracker = StateObject(wrappedValue: selectionTracker.get())
     }
 
+    @MainActor @ViewBuilder func contextMenu() -> some View {
+        BookmarkOpenCommands(bookmarksView: bookmarksView)
+            .trailingDivider()
+        BookmarkDesctructiveCommands(bookmarksView: bookmarksView)
+            .trailingDivider()
+        BookmarkEditCommands(bookmarksView: bookmarksView)
+            .trailingDivider()
+        BookmarkShareCommands(bookmarksView: bookmarksView)
+            .trailingDivider()
+        BookmarkTagCommands(windowModel: windowModel, bookmarksView: bookmarksView)
+    }
+
+    @MainActor func primaryAction(_ selection: Set<Bookmark.ID>) {
+        bookmarksView.open(ids: selection)
+    }
+
     var body: some View {
         VStack {
-            ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 8)], spacing: 8) {
-                    ForEach(bookmarksView.bookmarks) { bookmark in
-                        BookmarkCell(manager: manager, bookmark: bookmark)
-                            .shadow(color: .shadow, radius: 8)
-                            .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: bookmark),
-                                                        firstResponder: firstResponder))
-                            .help(bookmark.url.absoluteString)
-                            .contextMenuFocusable {
-                                BookmarkOpenCommands(bookmarksView: bookmarksView)
-                                    .trailingDivider()
-                                BookmarkDesctructiveCommands(bookmarksView: bookmarksView)
-                                    .trailingDivider()
-                                BookmarkEditCommands(bookmarksView: bookmarksView)
-                                    .trailingDivider()
-                                BookmarkShareCommands(bookmarksView: bookmarksView)
-                                    .trailingDivider()
-                                BookmarkTagCommands(windowModel: windowModel, bookmarksView: bookmarksView)
-                            } onContextMenuChange: { focused in
-                                guard focused == true else {
-                                    return
+
+            switch bookmarksView.layoutMode {
+            case .grid:
+
+                ScrollView {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 8)], spacing: 8) {
+                        ForEach(bookmarksView.bookmarks) { bookmark in
+                            BookmarkCell(manager: manager, bookmark: bookmark)
+                                .shadow(color: .shadow, radius: 8)
+                                .modifier(BorderedSelection(selected: selectionTracker.isSelected(item: bookmark),
+                                                            firstResponder: firstResponder))
+                                .help(bookmark.url.absoluteString)
+                                .contextMenuFocusable {
+                                    contextMenu()
+                                } onContextMenuChange: { focused in
+                                    guard focused == true else {
+                                        return
+                                    }
+                                    firstResponder = true
+                                    if !selectionTracker.isSelected(item: bookmark) {
+                                        selectionTracker.handleClick(item: bookmark)
+                                    }
                                 }
-                                firstResponder = true
-                                if !selectionTracker.isSelected(item: bookmark) {
-                                    selectionTracker.handleClick(item: bookmark)
+                                .menuType(.context)
+                                .onDrag {
+                                    NSItemProvider(object: bookmark.url as NSURL)
                                 }
-                            }
-                            .menuType(.context)
-                            .onDrag {
-                                NSItemProvider(object: bookmark.url as NSURL)
-                            }
-                            .handleMouse {
-                                if firstResponder || !selectionTracker.isSelected(item: bookmark) {
-                                    selectionTracker.handleClick(item: bookmark)
+                                .handleMouse {
+                                    if firstResponder || !selectionTracker.isSelected(item: bookmark) {
+                                        selectionTracker.handleClick(item: bookmark)
+                                    }
+                                    firstResponder = true
+                                } doubleClick: {
+                                    primaryAction(Set([bookmark.id]))
+                                } shiftClick: {
+                                    selectionTracker.handleShiftClick(item: bookmark)
+                                } commandClick: {
+                                    selectionTracker.handleCommandClick(item: bookmark)
                                 }
-                                firstResponder = true
-                            } doubleClick: {
-                                NSWorkspace.shared.open(bookmark.url)
-                            } shiftClick: {
-                                selectionTracker.handleShiftClick(item: bookmark)
-                            } commandClick: {
-                                selectionTracker.handleCommandClick(item: bookmark)
-                            }
+                        }
+                    }
+                    .padding()
+                }
+                .acceptsFirstResponder(isFirstResponder: $firstResponder)
+                .handleMouse {
+                    firstResponder = true
+                    selectionTracker.clear()
+                }
+                .background(Color(NSColor.textBackgroundColor))
+
+            case .table:
+
+                Table(bookmarksView.bookmarks, selection: $bookmarksView.selection) {
+                    TableColumn("Title", value: \.title)
+                    TableColumn("URL", value: \.url.absoluteString)
+                    TableColumn("Tags") { bookmark in
+                        Text(bookmark.tags.joined(separator: " "))
                     }
                 }
-                .padding()
+                .contextMenu(forSelectionType: Bookmark.ID.self) { selection in
+                    contextMenu()
+                } primaryAction: { selection in
+                    primaryAction(selection)
+                }
             }
-            .acceptsFirstResponder(isFirstResponder: $firstResponder)
-            .handleMouse {
-                firstResponder = true
-                selectionTracker.clear()
-            }
-            .background(Color(NSColor.textBackgroundColor))
-            .overlay(bookmarksView.state == .loading ? LoadingView() : nil)
+
         }
+        .overlay(bookmarksView.state == .loading ? LoadingView() : nil)
         .onAppear {
             bookmarksView.start()
         }

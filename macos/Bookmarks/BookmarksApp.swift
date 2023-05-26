@@ -42,6 +42,7 @@ struct BookmarksApp: App {
             SidebarCommands()
             ToolbarCommands()
             SectionCommands()
+            ViewCommands(bookmarksView: bookmarksView ?? BookmarksView())
             CommandGroup(after: .newItem) {
                 Divider()
                 Button("Refresh") {

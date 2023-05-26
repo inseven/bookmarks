@@ -18,55 +18,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Combine
 import SwiftUI
-
-import Interact
 
 import BookmarksCore
 
-struct MainWindow: View {
+struct LayoutToolbar: CustomizableToolbarContent {
 
     @FocusedObject var bookmarksView: BookmarksView?
 
-    @ObservedObject var manager: BookmarksManager
+    var layoutMode: Binding<LayoutMode> {
+        guard let bookmarksView else {
+            return Binding.constant(LayoutMode.grid)
+        }
+        return Binding {
+            return bookmarksView.layoutMode
+        } set: { layoutMode in
+            bookmarksView.layoutMode = layoutMode
+        }
+    }
 
-    @StateObject var windowModel = WindowModel()
-    @State var sheet: ApplicationState? = nil
+    var body: some CustomizableToolbarContent {
+        ToolbarItem(id: "layout-mode") {
+            Picker(selection: layoutMode) {
+                ForEach(LayoutMode.allCases) { layoutMode in
+                    Label(Localized(layoutMode), systemImage: layoutMode.systemImage)
+                        .help(Localized(layoutMode))
+                        .tag(layoutMode)
+                }
+            } label: {
+                Text("Layout")
+            }
+            .pickerStyle(.inline)
+            .disabled(bookmarksView == nil)
+        }
 
-    var body: some View {
-        NavigationSplitView {
-            Sidebar(tagsView: manager.tagsView, settings: manager.settings, windowModel: windowModel)
-        } detail: {
-            if let section = windowModel.section {
-                ContentView(manager: manager, section: section)
-                    .id(section)
-                    .environmentObject(windowModel)
-            } else {
-                PlaceholderView("Nothing Selected")
-                    .searchable()
-            }
-        }
-        .toolbar(id: "main") {
-            AccountToolbar()
-            LayoutToolbar()
-            SelectionToolbar(bookmarksView: bookmarksView ?? BookmarksView())
-        }
-        .sheet(item: $sheet) { sheet in
-            switch sheet {
-            case .logIn:
-                LogInView()
-            }
-        }
-        .onChange(of: manager.state) { newValue in
-            switch newValue {
-            case .idle:
-                sheet = nil
-            case .unauthorized:
-                sheet = .logIn
-            }
-        }
-        .focusedSceneObject(windowModel)
     }
 
 }

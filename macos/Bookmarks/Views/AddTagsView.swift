@@ -89,9 +89,7 @@ struct AddTagsView: View {
                         .keyboardShortcut(.cancelAction)
                         Button {
                             let tags = tokens.compactMap { $0.associatedValue }
-                            Task {
-                                await bookmarksView.addTags(tags: Set(tags), markAsRead: markAsRead)
-                            }
+                            bookmarksView.addTags(tags: Set(tags), markAsRead: markAsRead)
                             dismiss()
                         } label: {
                             Text("OK")

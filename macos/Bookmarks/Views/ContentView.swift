@@ -18,7 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import Carbon
 import Combine
+import QuickLook
 import SwiftUI
 
 import BookmarksCore
@@ -52,14 +54,14 @@ struct ContentView: View {
         }
         Separator()
         MenuItem("Delete") {
-            await bookmarksView.delete(ids: selection)
+            bookmarksView.delete(ids: selection)
         }
         Separator()
         MenuItem(bookmarksView.selectionContainsUnreadBookmarks ? "Mark as Read" : "Mark as Unread") {
-            await bookmarksView.update(toRead: !bookmarksView.selectionContainsUnreadBookmarks)
+            bookmarksView.update(toRead: !bookmarksView.selectionContainsUnreadBookmarks)
         }
         MenuItem(bookmarksView.selectionContainsPublicBookmark ? "Make Private" : "Make Public") {
-            await bookmarksView.update(shared: !bookmarksView.selectionContainsPublicBookmark)
+            bookmarksView.update(shared: !bookmarksView.selectionContainsPublicBookmark)
         }
         Separator()
         MenuItem("Edit on Pinboard") {
@@ -67,10 +69,10 @@ struct ContentView: View {
         }
         Separator()
         MenuItem("Copy") {
-            await bookmarksView.copy(ids: selection)
+            bookmarksView.copy(ids: selection)
         }
         MenuItem("Copy Tags") {
-            await bookmarksView.copyTags(ids: selection)
+            bookmarksView.copyTags(ids: selection)
         }
     }
 
@@ -83,6 +85,7 @@ struct ContentView: View {
 
             switch bookmarksView.layoutMode {
             case .grid:
+
                 SelectableCollectionView(bookmarksView.bookmarks,
                                          selection: $bookmarksView.selection,
                                          layout: layout) { bookmark in
@@ -97,7 +100,19 @@ struct ContentView: View {
                     contextMenu(selection)
                 } primaryAction: { selection in
                     primaryAction(selection)
+                } keyDown: { event in
+                    if event.keyCode == kVK_Space {
+                        bookmarksView.showPreview()
+                        return true
+                    }
+                    return false
+                } keyUp: { event in
+                    if event.keyCode == kVK_Space {
+                        return true
+                    }
+                    return false
                 }
+
             case .table:
 
                 Table(bookmarksView.bookmarks, selection: $bookmarksView.selection) {
@@ -116,6 +131,7 @@ struct ContentView: View {
 
         }
         .overlay(bookmarksView.state == .loading ? LoadingView() : nil)
+        .quickLookPreview($bookmarksView.previewURL, in: bookmarksView.urls)
         .runs(bookmarksView)
         .searchable(text: $bookmarksView.filter,
                     tokens: $bookmarksView.tokens,

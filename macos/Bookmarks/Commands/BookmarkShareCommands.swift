@@ -30,17 +30,13 @@ struct BookmarkShareCommands: View {
 
     var body: some View {
         Button("Copy") {
-            Task {
-                await bookmarksView.copy()
-            }
+            bookmarksView.copy()
         }
         .keyboardShortcut("c", modifiers: [.command])
         .disabled(bookmarksView.selection.isEmpty)
 
         Button("Copy Tags") {
-            Task {
-                await bookmarksView.copyTags()
-            }
+            bookmarksView.copyTags()
         }
         .keyboardShortcut("c", modifiers: [.command, .shift])
         .disabled(bookmarksView.selection.isEmpty)

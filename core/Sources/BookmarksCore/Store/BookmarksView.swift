@@ -41,17 +41,20 @@ public class BookmarksView: ObservableObject, Runnable {
     @Published public var title: String
     @Published public var subtitle: String = ""
     @Published public var bookmarks: [Bookmark] = []
+    @Published public var urls: [URL] = []
     @Published public var state: State = .loading
     @Published public var filter: String = ""
     @Published public var tokens: [String] = []
     @Published public var suggestedTokens: [String] = []
     @Published public var layoutMode: LayoutMode
     @Published public var selection: Set<Bookmark.ID> = []
+    @Published public var previewURL: URL? = nil
 
     @Published public var sheet: SheetType? = nil
     @Published public var lastError: Error? = nil
 
     @Published private var query: AnyQuery
+    @Published private var bookmarksLookup: [Bookmark.ID: Bookmark] = [:]
 
     private let manager: BookmarksManager?
     private let section: BookmarksSection
@@ -87,19 +90,24 @@ public class BookmarksView: ObservableObject, Runnable {
             .receive(on: DispatchQueue.global())
             .asyncMap { (_, query) in
                 do {
-                    return (query, try await manager.database.bookmarks(query: query))
+                    let bookmarks = try await manager.database.bookmarks(query: query)
+                    let bookmarksLookup = bookmarks.reduce(into: [Bookmark.ID: Bookmark]()) { $0[$1.id] = $1 }
+                    let urls = bookmarks.map { $0.url }
+                    return (query, bookmarks, bookmarksLookup, urls)
                 } catch {
-                    return (query, [])
+                    return (query, [], [:], [])
                 }
             }
             .receive(on: DispatchQueue.main)
-            .sink { query, bookmarks in
+            .sink { query, bookmarks, bookmarksLookup, urls in
                 // Guard against updating the bookmarks with results from an old query.
                 guard self.query == query else {
                     print("Discarding query")
                     return
                 }
                 self.bookmarks = bookmarks
+                self.bookmarksLookup = bookmarksLookup
+                self.urls = urls
                 self.state = .ready
             }
             .store(in: &cancellables)
@@ -173,6 +181,19 @@ public class BookmarksView: ObservableObject, Runnable {
             }
             .store(in: &cancellables)
 
+        // Update the selection if the preview URL changes.
+        $previewURL
+            .compactMap { $0 }
+            .debounce(for: 0.2, scheduler: DispatchQueue.global(qos: .userInteractive))
+            .combineLatest($bookmarks)
+            .compactMap { url, bookmarks in
+                bookmarks.first { $0.url == url }?.id
+            }
+            .map { Set([$0]) }
+            .receive(on: DispatchQueue.main)
+            .assign(to: \.selection, on: self)
+            .store(in: &cancellables)
+
     }
 
     @MainActor public func stop() {
@@ -185,14 +206,9 @@ public class BookmarksView: ObservableObject, Runnable {
         sheet = .addTags
     }
 
-    @MainActor public func bookmarks(for ids: Set<Bookmark.ID>? = nil) async -> [Bookmark] {
+    @MainActor public func bookmarks(for ids: Set<Bookmark.ID>? = nil) -> [Bookmark] {
         let ids = ids ?? self.selection
-        let bookmarks = bookmarks
-        return await withCheckedContinuation { continuation in
-            DispatchQueue.global().async {
-                continuation.resume(returning: bookmarks.filter { ids.contains($0.id) })
-            }
-        }
+        return ids.compactMap { bookmarksLookup[$0] }
     }
 
     @MainActor public func open(ids: Set<Bookmark.ID>? = nil, location: Bookmark.Location = .web) {
@@ -211,72 +227,73 @@ public class BookmarksView: ObservableObject, Runnable {
         }
     }
 
-    @MainActor public func update(ids: Set<Bookmark.ID>? = nil, toRead: Bool) async {
+    @MainActor public func update(ids: Set<Bookmark.ID>? = nil, toRead: Bool) {
         guard let manager else {
             return
         }
-        let bookmarks = await bookmarks(for: ids)
+        let bookmarks = bookmarks(for: ids)
             .map { $0.setting(toRead: toRead) }
         manager.updateBookmarks(bookmarks, completion: errorHandler())
     }
 
-    @MainActor public func update(ids: Set<Bookmark.ID>? = nil, shared: Bool) async {
+    @MainActor public func update(ids: Set<Bookmark.ID>? = nil, shared: Bool) {
         guard let manager else {
             return
         }
-        let bookmarks = await bookmarks(for: ids)
+        let bookmarks = bookmarks(for: ids)
             .map { $0.setting(shared: shared) }
         manager.updateBookmarks(bookmarks, completion: errorHandler())
     }
 
-    @MainActor public func delete(ids: Set<Bookmark.ID>? = nil) async {
+    @MainActor public func delete(ids: Set<Bookmark.ID>? = nil) {
         guard let manager else {
             return
         }
-        let bookmarks = await bookmarks(for: ids)
+        let bookmarks = bookmarks(for: ids)
         manager.deleteBookmarks(bookmarks, completion: errorHandler())
     }
 
     // TODO: Rethink the threading here.
-    @MainActor public func copy(ids: Set<Bookmark.ID>? = nil) async {
+    @MainActor public func copy(ids: Set<Bookmark.ID>? = nil) {
 #if os(macOS)
-        let bookmarks = await bookmarks(for: ids)
-        DispatchQueue.main.async {
-            NSPasteboard.general.clearContents()
-            NSPasteboard.general.writeObjects(bookmarks.map { $0.url.absoluteString as NSString })
-            NSPasteboard.general.writeObjects(bookmarks.map { $0.url as NSURL })
-        }
+        let bookmarks = bookmarks(for: ids)
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.writeObjects(bookmarks.map { $0.url.absoluteString as NSString })
+        NSPasteboard.general.writeObjects(bookmarks.map { $0.url as NSURL })
 #else
-        assertionFailure("Unsupported")
+        fatalError("Unsupported")
 #endif
     }
 
     // TODO: Rethink the threading here.
-    @MainActor public func copyTags(ids: Set<Bookmark.ID>? = nil) async {
+    @MainActor public func copyTags(ids: Set<Bookmark.ID>? = nil) {
 #if os(macOS)
-        let bookmarks = await bookmarks(for: ids)
+        let bookmarks = bookmarks(for: ids)
         let tags = bookmarks.tags.sorted().joined(separator: " ")
-        DispatchQueue.main.async {
-            NSPasteboard.general.clearContents()
-            NSPasteboard.general.writeObjects([tags as NSString])
-        }
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.writeObjects([tags as NSString])
 #else
-        assertionFailure("Unsupported")
+        fatalError("Unsupported")
 #endif
     }
 
     // TODO: Consider whether we should pull this down into the manager.
-    @MainActor public func addTags(ids: Set<Bookmark.ID>? = nil, tags: Set<String>, markAsRead: Bool) async {
+    @MainActor public func addTags(ids: Set<Bookmark.ID>? = nil, tags: Set<String>, markAsRead: Bool) {
         guard let manager else {
             return
         }
-        let bookmarks = await bookmarks(for: ids)
+        let bookmarks = bookmarks(for: ids)
             .map { item in
                 item
                     .adding(tags: tags)
                     .setting(toRead: markAsRead ? false : item.toRead)
             }
         manager.updateBookmarks(bookmarks, completion: errorHandler({ _ in }))
+    }
+
+    @MainActor public func showPreview() {
+        let bookmarks = bookmarks()
+        previewURL = bookmarks.first?.url
     }
 
     // TODO: Set this asynchronously using combine.

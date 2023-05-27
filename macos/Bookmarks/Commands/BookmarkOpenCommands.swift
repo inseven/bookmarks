@@ -30,6 +30,14 @@ struct BookmarkOpenCommands: View {
 
     var body: some View {
 
+        Button("Preview") {
+            bookmarksView.showPreview()
+        }
+        .keyboardShortcut(.space, modifiers: [])
+        .disabled(bookmarksView.selection.isEmpty)
+
+        Divider()
+
         Button("Open") {
             bookmarksView.open()
         }

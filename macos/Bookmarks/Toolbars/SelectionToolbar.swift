@@ -30,6 +30,17 @@ struct SelectionToolbar: CustomizableToolbarContent {
 
     var body: some CustomizableToolbarContent {
 
+        ToolbarItem(id: "preview") {
+            Button {
+                bookmarksView.showPreview()
+            } label: {
+                Label("Preview", systemImage: "eye")
+            }
+            .help("Preview with Quick Look")
+            .keyboardShortcut(.space, modifiers: [])
+            .disabled(bookmarksView.selection.count != 1)
+        }
+
         ToolbarItem(id: "open") {
             Button {
                 bookmarksView.open(ids: bookmarksView.selection)
@@ -52,9 +63,7 @@ struct SelectionToolbar: CustomizableToolbarContent {
 
         ToolbarItem(id: "delete") {
             Button {
-                Task {
-                    await bookmarksView.delete()
-                }
+                bookmarksView.delete()
             } label: {
                 Label("Delete", systemImage: "trash")
             }

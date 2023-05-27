@@ -24,8 +24,7 @@ import SwiftUI
 import BookmarksCore
 import Interact
 
-// TODO: Rename this QuickTagView or perhaps simply AddTagsView?
-struct EditView: View {
+struct AddTagsView: View {
 
     private struct LayoutMetrics {
         static let minimumButtonWidth = 80.0

@@ -25,7 +25,6 @@ import BookmarksCore
 struct BookmarkEditCommands: View {
 
     @Environment(\.manager) var manager: BookmarksManager
-    @Environment(\.menuType) var menuType
 
     @ObservedObject var bookmarksView: BookmarksView
 
@@ -36,23 +35,23 @@ struct BookmarkEditCommands: View {
                 await bookmarksView.update(toRead: !bookmarksView.selectionContainsUnreadBookmarks)
             }
         }
-        .contextAwareKeyboardShortcut("U", modifiers: [.command, .shift])
-        .disabled(menuType == .main && bookmarksView.selection.isEmpty)
+        .keyboardShortcut("U", modifiers: [.command, .shift])
+        .disabled(bookmarksView.selection.isEmpty)
 
         Button(bookmarksView.selectionContainsPublicBookmark ? "Make Private" : "Make Public") {
             Task {
                 await bookmarksView.update(shared: !bookmarksView.selectionContainsPublicBookmark)
             }
         }
-        .disabled(menuType == .main && bookmarksView.selection.isEmpty)
+        .disabled(bookmarksView.selection.isEmpty)
 
         Divider()
 
         Button("Edit on Pinboard") {
             bookmarksView.open(location: .pinboard)
         }
-        .disabled(menuType == .main && bookmarksView.selection.isEmpty)
-        .contextAwareKeyboardShortcut("e", modifiers: [.command, .shift])
+        .disabled(bookmarksView.selection.isEmpty)
+        .keyboardShortcut("e", modifiers: [.command, .shift])
 
     }
 

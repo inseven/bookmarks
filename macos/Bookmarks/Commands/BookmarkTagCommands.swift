@@ -36,7 +36,7 @@ struct BookmarkTagCommands: View {
             Button("Add...") {
                 bookmarksView.addTags()
             }
-            .contextAwareKeyboardShortcut("t", modifiers: .command)
+            .keyboardShortcut("t", modifiers: .command)
             .disabled(bookmarksView.selection.isEmpty)
 
             Divider()

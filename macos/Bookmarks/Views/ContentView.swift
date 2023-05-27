@@ -45,32 +45,38 @@ struct ContentView: View {
 
     @MenuItemBuilder private func contextMenu(_ selection: Set<Bookmark.ID>) -> [MenuItem] {
         MenuItem("Open") {
-            manager.open(await bookmarksView.bookmarks(for: selection))
+            bookmarksView.open(ids: selection)
         }
         MenuItem("Open on Internet Archive") {
-            manager.open(await bookmarksView.bookmarks(for: selection), location: .internetArchive)
+            bookmarksView.open(ids: selection, location: .internetArchive)
         }
         Separator()
         MenuItem("Delete") {
-            do {
-                try await manager.deleteBookmarks(await bookmarksView.bookmarks(for: selection))
-            } catch {
-                print("Failed to delete bookmarks with error \(error)")
-            }
+            await bookmarksView.delete(ids: selection)
         }
-//        BookmarkOpenCommands(selection: selection)
-//            .trailingDivider()
-//        BookmarkDesctructiveCommands(selection: selection)
-//            .trailingDivider()
-//        BookmarkEditCommands(selection: selection)
-//            .trailingDivider()
-//        BookmarkShareCommands(selection: selection)
-//            .trailingDivider()
+        Separator()
+        // TODO: Update for injecteed selection
+        MenuItem(bookmarksView.selectionContainsUnreadBookmarks ? "Mark as Read" : "Mark as Unread") {
+            await bookmarksView.update(toRead: !bookmarksView.selectionContainsUnreadBookmarks)
+        }
+        // TODO: Update for injected selection
+        MenuItem(bookmarksView.selectionContainsPublicBookmark ? "Make Private" : "Make Public") {
+            await bookmarksView.update(shared: !bookmarksView.selectionContainsPublicBookmark)
+        }
+        Separator()
+        MenuItem("Edit on Pinboard") {
+            bookmarksView.open(ids: selection, location: .pinboard)
+        }
+        Separator()
+        MenuItem("Copy") {
+            await bookmarksView.copy(ids: selection)
+        }
+        MenuItem("Copy Tags") {
+            await bookmarksView.copyTags(ids: selection)
+        }
+        Separator()
+
 //        BookmarkTagCommands(selection: selection)
-//        #if DEBUG
-//        BookmarkDebugCommands()
-//            .leadingDivider()
-//        #endif
     }
 
     @MainActor func primaryAction(_ selection: Set<Bookmark.ID>) {

@@ -31,17 +31,13 @@ struct BookmarkEditCommands: View {
     var body: some View {
 
         Button(bookmarksView.selectionContainsUnreadBookmarks ? "Mark as Read" : "Mark as Unread") {
-            Task {
-                await bookmarksView.update(toRead: !bookmarksView.selectionContainsUnreadBookmarks)
-            }
+            bookmarksView.update(toRead: !bookmarksView.selectionContainsUnreadBookmarks)
         }
         .keyboardShortcut("U", modifiers: [.command, .shift])
         .disabled(bookmarksView.selection.isEmpty)
 
         Button(bookmarksView.selectionContainsPublicBookmark ? "Make Private" : "Make Public") {
-            Task {
-                await bookmarksView.update(shared: !bookmarksView.selectionContainsPublicBookmark)
-            }
+            bookmarksView.update(shared: !bookmarksView.selectionContainsPublicBookmark)
         }
         .disabled(bookmarksView.selection.isEmpty)
 

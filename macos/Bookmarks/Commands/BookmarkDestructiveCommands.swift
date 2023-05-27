@@ -31,7 +31,7 @@ struct BookmarkDesctructiveCommands: View {
     var body: some View {
         Button("Delete") {
             Task {
-                await bookmarksView.delete()
+                bookmarksView.delete()
             }
         }
         .keyboardShortcut(.delete, modifiers: [.command])

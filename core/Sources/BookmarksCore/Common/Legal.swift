@@ -1,4 +1,4 @@
-// Copyright (c) 2020-2022 InSeven Limited
+// Copyright (c) 2020-2023 InSeven Limited
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@ import Diligence
 public struct Legal {
 
     public static let contents = Contents(repository: "inseven/bookmarks",
-                                          copyright: "Copyright © 2020-2022 InSeven Limited") {
+                                          copyright: "Copyright © 2020-2023 InSeven Limited") {
         Action("Support", url: URL(address: "support@inseven.co.uk", subject: "Bookmarks Support")!)
         Action("GitHub", url: URL(string: "https://github.com/inseven/bookmarks")!)
         Action("InSeven Limited", url: URL(string: "https://inseven.co.uk")!)

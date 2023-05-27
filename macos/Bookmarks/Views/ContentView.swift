@@ -55,11 +55,9 @@ struct ContentView: View {
             await bookmarksView.delete(ids: selection)
         }
         Separator()
-        // TODO: Update for injecteed selection
         MenuItem(bookmarksView.selectionContainsUnreadBookmarks ? "Mark as Read" : "Mark as Unread") {
             await bookmarksView.update(toRead: !bookmarksView.selectionContainsUnreadBookmarks)
         }
-        // TODO: Update for injected selection
         MenuItem(bookmarksView.selectionContainsPublicBookmark ? "Make Private" : "Make Public") {
             await bookmarksView.update(shared: !bookmarksView.selectionContainsPublicBookmark)
         }
@@ -74,9 +72,6 @@ struct ContentView: View {
         MenuItem("Copy Tags") {
             await bookmarksView.copyTags(ids: selection)
         }
-        Separator()
-
-//        BookmarkTagCommands(selection: selection)
     }
 
     @MainActor func primaryAction(_ selection: Set<Bookmark.ID>) {

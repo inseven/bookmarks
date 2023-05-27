@@ -61,6 +61,7 @@ struct Bookmarks: View {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
                 ForEach(bookmarksView.bookmarks) { bookmark in
                     BookmarkCell(manager: manager, bookmark: bookmark)
+                        .aspectRatio(8/9, contentMode: .fit)
                         .onTapGesture {
                             UIApplication.shared.open(bookmark.url)
                         }

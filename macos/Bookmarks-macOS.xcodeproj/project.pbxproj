@@ -41,6 +41,7 @@
 		D8A8001D2A1F76200042C03B /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A8001C2A1F76200042C03B /* View.swift */; };
 		D8ACD7EF26BC81F7005F927A /* TokenField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8ACD7EE26BC81F7005F927A /* TokenField.swift */; };
 		D8B6E2C52620990400B2C239 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B6E2C42620990400B2C239 /* Item.swift */; };
+		D8C8584429560700004EB23E /* SelectableCollectionView in Frameworks */ = {isa = PBXBuildFile; productRef = D8C8584329560700004EB23E /* SelectableCollectionView */; };
 		D8D356D32955F06D0020C81C /* BookmarksCore in Frameworks */ = {isa = PBXBuildFile; productRef = D8D356D22955F06D0020C81C /* BookmarksCore */; };
 		D8E0202C26C2E1CC00910833 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0202B26C2E1CC00910833 /* LoadingView.swift */; };
 		D8EB6E4526C3357F00C23B19 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EB6E4426C3357F00C23B19 /* ErrorHandler.swift */; };
@@ -127,6 +128,7 @@
 				D8D356D32955F06D0020C81C /* BookmarksCore in Frameworks */,
 				D8A0D7662620165D00C9F190 /* Interact in Frameworks */,
 				D8FF9E9228A75D400081E57A /* Diligence in Frameworks */,
+				D8C8584429560700004EB23E /* SelectableCollectionView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -328,6 +330,7 @@
 				D8A0D7652620165D00C9F190 /* Interact */,
 				D8FF9E9128A75D400081E57A /* Diligence */,
 				D8D356D22955F06D0020C81C /* BookmarksCore */,
+				D8C8584329560700004EB23E /* SelectableCollectionView */,
 			);
 			productName = Bookmarks;
 			productReference = D891C450261E32F90024E1A6 /* Bookmarks.app */;
@@ -811,6 +814,10 @@
 		D8A0D7652620165D00C9F190 /* Interact */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Interact;
+		};
+		D8C8584329560700004EB23E /* SelectableCollectionView */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SelectableCollectionView;
 		};
 		D8D356D22955F06D0020C81C /* BookmarksCore */ = {
 			isa = XCSwiftPackageProductDependency;

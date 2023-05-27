@@ -16,3 +16,6 @@
 [submodule "SQLite.swift"]
 	path = SQLite.swift
 	url = git@github.com:jbmorley/SQLite.swift.git
+[submodule "SelectableCollectionView"]
+	path = SelectableCollectionView
+	url = git@github.com:jbmorley/SelectableCollectionView.git

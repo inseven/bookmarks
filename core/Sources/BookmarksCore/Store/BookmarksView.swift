@@ -24,7 +24,7 @@ import SwiftUI
 
 import Interact
 
-public class BookmarksView: ObservableObject {
+public class BookmarksView: ObservableObject, Runnable {
 
     public enum SheetType: Identifiable {
 

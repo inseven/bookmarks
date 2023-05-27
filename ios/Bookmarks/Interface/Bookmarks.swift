@@ -134,12 +134,7 @@ struct Bookmarks: View {
         }
         .navigationTitle(section.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
-        .onAppear {
-            bookmarksView.start()
-        }
-        .onDisappear {
-            bookmarksView.stop()
-        }
+        .runs(bookmarksView)
     }
 
 }

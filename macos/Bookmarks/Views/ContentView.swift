@@ -116,12 +116,7 @@ struct ContentView: View {
 
         }
         .overlay(bookmarksView.state == .loading ? LoadingView() : nil)
-        .onAppear {
-            bookmarksView.start()
-        }
-        .onDisappear {
-            bookmarksView.stop()
-        }
+        .runs(bookmarksView)
         .searchable(text: $bookmarksView.filter,
                     tokens: $bookmarksView.tokens,
                     suggestedTokens: $bookmarksView.suggestedTokens) { token in

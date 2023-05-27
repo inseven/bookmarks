@@ -25,7 +25,6 @@ import BookmarksCore
 struct BookmarkShareCommands: View {
 
     @Environment(\.manager) var manager: BookmarksManager
-    @Environment(\.menuType) var menuType
 
     @ObservedObject var bookmarksView: BookmarksView
 
@@ -35,16 +34,16 @@ struct BookmarkShareCommands: View {
                 await bookmarksView.copy()
             }
         }
-        .contextAwareKeyboardShortcut("c", modifiers: [.command])
-        .disabled(menuType == .main && bookmarksView.selection.isEmpty)
+        .keyboardShortcut("c", modifiers: [.command])
+        .disabled(bookmarksView.selection.isEmpty)
 
         Button("Copy Tags") {
             Task {
                 await bookmarksView.copyTags()
             }
         }
-        .contextAwareKeyboardShortcut("c", modifiers: [.command, .shift])
-        .disabled(menuType == .main && bookmarksView.selection.isEmpty)
+        .keyboardShortcut("c", modifiers: [.command, .shift])
+        .disabled(bookmarksView.selection.isEmpty)
 
     }
 

@@ -127,7 +127,7 @@ struct ContentView: View {
         .sheet(item: $bookmarksView.sheet) { sheet in
             switch sheet {
             case .addTags:
-                EditView(tagsView: manager.tagsView, bookmarksView: bookmarksView)
+                AddTagsView(tagsView: manager.tagsView, bookmarksView: bookmarksView)
             }
         }
         .presents($bookmarksView.lastError)

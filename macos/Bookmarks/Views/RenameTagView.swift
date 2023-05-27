@@ -25,13 +25,13 @@ import BookmarksCore
 struct RenameTagView: View {
 
     @Environment(\.manager) var manager: BookmarksManager
-    @Environment(\.errorHandler) var errorHandler
     @Environment(\.presentationMode) var presentationMode
 
     @State var tag: String
     @State var isBusy = false
 
     @State var newTag: String = ""
+    @State var error: Error? = nil
 
     init(tag: String) {
         _tag = State(initialValue: tag)
@@ -56,7 +56,7 @@ struct RenameTagView: View {
                                 switch result {
                                 case .failure(let error):
                                     DispatchQueue.main.async {
-                                        errorHandler(error)
+                                        self.error = error
                                     }
                                 case .success:
                                     print("Successfully renamed tag")
@@ -72,6 +72,7 @@ struct RenameTagView: View {
         .frame(minWidth: 200)
         .padding()
         .disabled(isBusy)
+        .presents($error)
     }
 
 }

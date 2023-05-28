@@ -31,8 +31,7 @@ struct SectionView: View {
 
     let manager: BookmarksManager
 
-    // TODO: Rename bookmarksView to ContentModel
-    @StateObject var bookmarksView: BookmarksView
+    @StateObject var sectionViewModel: SectionViewModel
 
     let layout = ColumnLayout(spacing: 2.0,
                               columns: 5,
@@ -40,52 +39,52 @@ struct SectionView: View {
 
     init(manager: BookmarksManager, section: BookmarksSection) {
         self.manager = manager
-        _bookmarksView = StateObject(wrappedValue: BookmarksView(manager: manager, section: section))
+        _sectionViewModel = StateObject(wrappedValue: SectionViewModel(manager: manager, section: section))
     }
 
     @MenuItemBuilder private func contextMenu(_ selection: Set<Bookmark.ID>) -> [MenuItem] {
         MenuItem("Open") {
-            bookmarksView.open(ids: selection)
+            sectionViewModel.open(ids: selection)
         }
         MenuItem("Open on Internet Archive") {
-            bookmarksView.open(ids: selection, location: .internetArchive)
+            sectionViewModel.open(ids: selection, location: .internetArchive)
         }
         Separator()
         MenuItem("Delete") {
-            bookmarksView.delete(ids: selection)
+            sectionViewModel.delete(ids: selection)
         }
         Separator()
-        MenuItem(bookmarksView.selectionContainsUnreadBookmarks ? "Mark as Read" : "Mark as Unread") {
-            bookmarksView.update(toRead: !bookmarksView.selectionContainsUnreadBookmarks)
+        MenuItem(sectionViewModel.selectionContainsUnreadBookmarks ? "Mark as Read" : "Mark as Unread") {
+            sectionViewModel.update(toRead: !sectionViewModel.selectionContainsUnreadBookmarks)
         }
-        MenuItem(bookmarksView.selectionContainsPublicBookmark ? "Make Private" : "Make Public") {
-            bookmarksView.update(shared: !bookmarksView.selectionContainsPublicBookmark)
+        MenuItem(sectionViewModel.selectionContainsPublicBookmark ? "Make Private" : "Make Public") {
+            sectionViewModel.update(shared: !sectionViewModel.selectionContainsPublicBookmark)
         }
         Separator()
         MenuItem("Edit on Pinboard") {
-            bookmarksView.open(ids: selection, location: .pinboard)
+            sectionViewModel.open(ids: selection, location: .pinboard)
         }
         Separator()
         MenuItem("Copy") {
-            bookmarksView.copy(ids: selection)
+            sectionViewModel.copy(ids: selection)
         }
         MenuItem("Copy Tags") {
-            bookmarksView.copyTags(ids: selection)
+            sectionViewModel.copyTags(ids: selection)
         }
     }
 
     @MainActor func primaryAction(_ selection: Set<Bookmark.ID>) {
-        bookmarksView.open(ids: selection)
+        sectionViewModel.open(ids: selection)
     }
 
     var body: some View {
         VStack {
 
-            switch bookmarksView.layoutMode {
+            switch sectionViewModel.layoutMode {
             case .grid:
 
-                SelectableCollectionView(bookmarksView.bookmarks,
-                                         selection: $bookmarksView.selection,
+                SelectableCollectionView(sectionViewModel.bookmarks,
+                                         selection: $sectionViewModel.selection,
                                          layout: layout) { bookmark in
 
                     BookmarkCell(manager: manager, bookmark: bookmark)
@@ -99,7 +98,7 @@ struct SectionView: View {
                     primaryAction(selection)
                 } keyDown: { event in
                     if event.keyCode == kVK_Space {
-                        bookmarksView.showPreview()
+                        sectionViewModel.showPreview()
                         return true
                     }
                     return false
@@ -112,7 +111,7 @@ struct SectionView: View {
 
             case .table:
 
-                Table(bookmarksView.bookmarks, selection: $bookmarksView.selection) {
+                Table(sectionViewModel.bookmarks, selection: $sectionViewModel.selection) {
                     TableColumn("Title", value: \.title)
                     TableColumn("URL", value: \.url.absoluteString)
                     TableColumn("Tags") { bookmark in
@@ -127,23 +126,23 @@ struct SectionView: View {
             }
 
         }
-        .overlay(bookmarksView.state == .loading ? LoadingView() : nil)
-        .quickLookPreview($bookmarksView.previewURL, in: bookmarksView.urls)
-        .runs(bookmarksView)
-        .searchable(text: $bookmarksView.filter,
-                    tokens: $bookmarksView.tokens,
-                    suggestedTokens: $bookmarksView.suggestedTokens) { token in
+        .overlay(sectionViewModel.state == .loading ? LoadingView() : nil)
+        .quickLookPreview($sectionViewModel.previewURL, in: sectionViewModel.urls)
+        .runs(sectionViewModel)
+        .searchable(text: $sectionViewModel.filter,
+                    tokens: $sectionViewModel.tokens,
+                    suggestedTokens: $sectionViewModel.suggestedTokens) { token in
             Label(token, systemImage: "tag")
         }
-        .navigationTitle(bookmarksView.title)
-        .navigationSubtitle(bookmarksView.subtitle)
-        .sheet(item: $bookmarksView.sheet) { sheet in
+        .navigationTitle(sectionViewModel.title)
+        .navigationSubtitle(sectionViewModel.subtitle)
+        .sheet(item: $sectionViewModel.sheet) { sheet in
             switch sheet {
             case .addTags:
-                AddTagsView(tagsView: manager.tagsView, bookmarksView: bookmarksView)
+                AddTagsView(tagsView: manager.tagsView, sectionViewModel: sectionViewModel)
             }
         }
-        .presents($bookmarksView.lastError)
-        .focusedSceneObject(bookmarksView)
+        .presents($sectionViewModel.lastError)
+        .focusedSceneObject(sectionViewModel)
     }
 }

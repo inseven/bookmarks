@@ -23,22 +23,22 @@ import SwiftUI
 public struct BookmarkCommands: Commands {
 
     @FocusedObject var sceneModel: SceneModel?
-    @FocusedObject var bookmarksView: BookmarksView?
+    @FocusedObject var sectionViewModel: SectionViewModel?
 
     public init() {
     }
 
     public var body: some Commands {
         CommandMenu("Bookmark") {
-            BookmarkOpenCommands(bookmarksView: bookmarksView ?? BookmarksView())
+            BookmarkOpenCommands(sectionViewModel: sectionViewModel ?? SectionViewModel())
                 .trailingDivider()
-            BookmarkDesctructiveCommands(bookmarksView: bookmarksView ?? BookmarksView())
+            BookmarkDesctructiveCommands(sectionViewModel: sectionViewModel ?? SectionViewModel())
                 .trailingDivider()
-            BookmarkEditCommands(bookmarksView: bookmarksView ?? BookmarksView())
+            BookmarkEditCommands(sectionViewModel: sectionViewModel ?? SectionViewModel())
                 .trailingDivider()
-            BookmarkShareCommands(bookmarksView: bookmarksView ?? BookmarksView())
+            BookmarkShareCommands(sectionViewModel: sectionViewModel ?? SectionViewModel())
                 .trailingDivider()
-            BookmarkTagCommands(sceneModel: sceneModel, bookmarksView: bookmarksView ?? BookmarksView())
+            BookmarkTagCommands(sceneModel: sceneModel, sectionViewModel: sectionViewModel ?? SectionViewModel())
         }
     }
 

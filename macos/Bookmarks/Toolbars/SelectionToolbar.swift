@@ -26,49 +26,49 @@ struct SelectionToolbar: CustomizableToolbarContent {
 
     @Environment(\.manager) var manager: BookmarksManager
     
-    @ObservedObject var bookmarksView: BookmarksView
+    @ObservedObject var sectionViewModel: SectionViewModel
 
     var body: some CustomizableToolbarContent {
 
         ToolbarItem(id: "preview") {
             Button {
-                bookmarksView.showPreview()
+                sectionViewModel.showPreview()
             } label: {
                 Label("Preview", systemImage: "eye")
             }
             .help("Preview with Quick Look")
             .keyboardShortcut(.space, modifiers: [])
-            .disabled(bookmarksView.selection.count != 1)
+            .disabled(sectionViewModel.selection.count != 1)
         }
 
         ToolbarItem(id: "open") {
             Button {
-                bookmarksView.open(ids: bookmarksView.selection)
+                sectionViewModel.open(ids: sectionViewModel.selection)
             } label: {
                 Label("Open", systemImage: "safari")
             }
             .keyboardShortcut(.return, modifiers: [])
-            .disabled(bookmarksView.selection.isEmpty)
+            .disabled(sectionViewModel.selection.isEmpty)
         }
 
         ToolbarItem(id: "tag") {
             Button {
-                bookmarksView.addTags()
+                sectionViewModel.addTags()
             } label: {
                 Label("Add Tags", systemImage: "tag")
             }
             .help("Add Tags")
-            .disabled(bookmarksView.selection.isEmpty)
+            .disabled(sectionViewModel.selection.isEmpty)
         }
 
         ToolbarItem(id: "delete") {
             Button {
-                bookmarksView.delete()
+                sectionViewModel.delete()
             } label: {
                 Label("Delete", systemImage: "trash")
             }
             .help("Delete")
-            .disabled(bookmarksView.selection.isEmpty)
+            .disabled(sectionViewModel.selection.isEmpty)
         }
 
     }

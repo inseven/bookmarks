@@ -24,28 +24,28 @@ struct BookmarkEditCommands: View {
 
     @Environment(\.manager) var manager: BookmarksManager
 
-    @ObservedObject var bookmarksView: BookmarksView
+    @ObservedObject var sectionViewModel: SectionViewModel
 
     var body: some View {
 
-        Button(bookmarksView.selectionContainsUnreadBookmarks ? "Mark as Read" : "Mark as Unread") {
-            bookmarksView.update(toRead: !bookmarksView.selectionContainsUnreadBookmarks)
+        Button(sectionViewModel.selectionContainsUnreadBookmarks ? "Mark as Read" : "Mark as Unread") {
+            sectionViewModel.update(toRead: !sectionViewModel.selectionContainsUnreadBookmarks)
         }
         .keyboardShortcut("U", modifiers: [.command, .shift])
-        .disabled(bookmarksView.selection.isEmpty)
+        .disabled(sectionViewModel.selection.isEmpty)
 
-        Button(bookmarksView.selectionContainsPublicBookmark ? "Make Private" : "Make Public") {
-            bookmarksView.update(shared: !bookmarksView.selectionContainsPublicBookmark)
+        Button(sectionViewModel.selectionContainsPublicBookmark ? "Make Private" : "Make Public") {
+            sectionViewModel.update(shared: !sectionViewModel.selectionContainsPublicBookmark)
         }
         .keyboardShortcut("p", modifiers: [.command, .shift])
-        .disabled(bookmarksView.selection.isEmpty)
+        .disabled(sectionViewModel.selection.isEmpty)
 
         Divider()
 
         Button("Edit on Pinboard") {
-            bookmarksView.open(location: .pinboard)
+            sectionViewModel.open(location: .pinboard)
         }
-        .disabled(bookmarksView.selection.isEmpty)
+        .disabled(sectionViewModel.selection.isEmpty)
         .keyboardShortcut("e", modifiers: [.command, .shift])
 
     }

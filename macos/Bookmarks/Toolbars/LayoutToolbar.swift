@@ -24,16 +24,16 @@ import BookmarksCore
 
 struct LayoutToolbar: CustomizableToolbarContent {
 
-    @FocusedObject var bookmarksView: BookmarksView?
+    @FocusedObject var sectionViewModel: SectionViewModel?
 
     var layoutMode: Binding<LayoutMode> {
-        guard let bookmarksView else {
+        guard let sectionViewModel else {
             return Binding.constant(LayoutMode.grid)
         }
         return Binding {
-            return bookmarksView.layoutMode
+            return sectionViewModel.layoutMode
         } set: { layoutMode in
-            bookmarksView.layoutMode = layoutMode
+            sectionViewModel.layoutMode = layoutMode
         }
     }
 
@@ -49,7 +49,7 @@ struct LayoutToolbar: CustomizableToolbarContent {
                 Text("Layout")
             }
             .pickerStyle(.inline)
-            .disabled(bookmarksView == nil)
+            .disabled(sectionViewModel == nil)
         }
 
     }

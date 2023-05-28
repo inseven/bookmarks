@@ -35,7 +35,7 @@ struct BookmarksApp: App {
     }
 
     @FocusedObject var sceneModel: SceneModel?
-    @FocusedObject var bookmarksView: BookmarksView?
+    @FocusedObject var sectionViewModel: SectionViewModel?
 
     var body: some Scene {
 
@@ -46,7 +46,7 @@ struct BookmarksApp: App {
             SidebarCommands()
             ToolbarCommands()
             SectionCommands()
-            ViewCommands(bookmarksView: bookmarksView)
+            ViewCommands(sectionViewModel: sectionViewModel)
             BookmarkCommands()
             AccountCommands()
         }

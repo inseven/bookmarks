@@ -21,6 +21,8 @@
 import Combine
 import SwiftUI
 
+import Interact
+
 import BookmarksCore
 
 struct ContentView: View {
@@ -31,8 +33,17 @@ struct ContentView: View {
     @State var sheet: ApplicationState? = nil
 
     var body: some View {
-        NavigationView {
-            Sidebar()
+        NavigationSplitView {
+            Sidebar(sceneModel: sceneModel)
+        } detail: {
+            if let section = sceneModel.section {
+                SectionView(manager: manager, section: section)
+                    .id(section)
+                    .environmentObject(sceneModel)
+            } else {
+                PlaceholderView("Nothing Selected")
+                    .searchable()
+            }
         }
         .sheet(item: $sheet) { sheet in
             switch sheet {

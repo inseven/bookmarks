@@ -28,21 +28,25 @@ struct SectionView: View {
 
         public var id: String {
             switch self {
-            case .tags(let bookmark):
-                return "tags-\(bookmark.id)"
+            case .edit(let bookmark):
+                return "edit-\(bookmark.id)"
             }
         }
 
-        case tags(Bookmark)
+        case edit(Bookmark)
     }
 
-    @Environment(\.manager) var manager: BookmarksManager
-    
-    var section: BookmarksSection
+    let manager: BookmarksManager
 
     @StateObject var sectionViewModel: SectionViewModel
-    @State var sheet: SheetType?
-    @State var error: Error?
+
+    @State var sheet: SheetType? = nil
+    @State var error: Error? = nil
+
+    init(manager: BookmarksManager, section: BookmarksSection) {
+        self.manager = manager
+        _sectionViewModel = StateObject(wrappedValue: SectionViewModel(manager: manager, section: section))
+    }
     
     func perform(action: @escaping () async throws -> Void) {
         Task(priority: .high) {
@@ -68,7 +72,7 @@ struct SectionView: View {
                         .contextMenu(ContextMenu {
                             ShareLink("Share", item: bookmark.url)
                             Button {
-                                sheet = .tags(bookmark)
+                                sheet = .edit(bookmark)
                             } label: {
                                 Label("Edit", systemImage: "square.and.pencil")
                             }
@@ -125,14 +129,14 @@ struct SectionView: View {
         }
         .sheet(item: $sheet) { sheet in
             switch sheet {
-            case .tags(let bookmark):
+            case .edit(let bookmark):
                 EditView(tagsView: manager.tagsView, bookmark: bookmark)
             }
         }
         .alert(isPresented: $error.mappedToBool()) {
             Alert(error: error)
         }
-        .navigationTitle(section.navigationTitle)
+        .navigationTitle(sectionViewModel.title)
         .navigationBarTitleDisplayMode(.inline)
         .runs(sectionViewModel)
     }

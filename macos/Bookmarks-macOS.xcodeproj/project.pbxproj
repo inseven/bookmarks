@@ -26,7 +26,7 @@
 		D8A0D7662620165D00C9F190 /* Interact in Frameworks */ = {isa = PBXBuildFile; productRef = D8A0D7652620165D00C9F190 /* Interact */; };
 		D8A8001D2A1F76200042C03B /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A8001C2A1F76200042C03B /* View.swift */; };
 		D8ACD7EF26BC81F7005F927A /* TokenField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8ACD7EE26BC81F7005F927A /* TokenField.swift */; };
-		D8B6E2C52620990400B2C239 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B6E2C42620990400B2C239 /* Item.swift */; };
+		D8B6E2C52620990400B2C239 /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B6E2C42620990400B2C239 /* Bookmark.swift */; };
 		D8C8584429560700004EB23E /* SelectableCollectionView in Frameworks */ = {isa = PBXBuildFile; productRef = D8C8584329560700004EB23E /* SelectableCollectionView */; };
 		D8D356D32955F06D0020C81C /* BookmarksCore in Frameworks */ = {isa = PBXBuildFile; productRef = D8D356D22955F06D0020C81C /* BookmarksCore */; };
 		D8E0202C26C2E1CC00910833 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0202B26C2E1CC00910833 /* LoadingView.swift */; };
@@ -78,7 +78,7 @@
 		D8A0D75A262015E700C9F190 /* interact */ = {isa = PBXFileReference; lastKnownFileType = folder; name = interact; path = ../interact; sourceTree = "<group>"; };
 		D8A8001C2A1F76200042C03B /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		D8ACD7EE26BC81F7005F927A /* TokenField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenField.swift; sourceTree = "<group>"; };
-		D8B6E2C42620990400B2C239 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		D8B6E2C42620990400B2C239 /* Bookmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
 		D8CD4A6828AB8DB800D57F34 /* SelectableCollectionView */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SelectableCollectionView; path = ../SelectableCollectionView; sourceTree = "<group>"; };
 		D8CF8C6D261E34A300E52E85 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8CF8CC1261E369D00E52E85 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -148,12 +148,11 @@
 		D891C452261E32F90024E1A6 /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
-				D891C457261E32FB0024E1A6 /* Assets.xcassets */,
 				D891C45D261E32FB0024E1A6 /* Bookmarks.entitlements */,
-				D891C453261E32F90024E1A6 /* BookmarksApp.swift */,
-				D8B6E2C3262098FB00B2C239 /* Extensions */,
 				D891C45C261E32FB0024E1A6 /* Info.plist */,
-				D8931F5F26C5E11200A8021E /* Model */,
+				D891C453261E32F90024E1A6 /* BookmarksApp.swift */,
+				D891C457261E32FB0024E1A6 /* Assets.xcassets */,
+				D8B6E2C3262098FB00B2C239 /* Extensions */,
 				D891C459261E32FB0024E1A6 /* Preview Content */,
 				D8A06F2428A7EE7C0002A56D /* Toolbars */,
 				D8B04B43261F4A1200376ADD /* Views */,
@@ -187,13 +186,6 @@
 			path = BookmarksUITests;
 			sourceTree = "<group>";
 		};
-		D8931F5F26C5E11200A8021E /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
 		D8A06F2428A7EE7C0002A56D /* Toolbars */ = {
 			isa = PBXGroup;
 			children = (
@@ -225,7 +217,7 @@
 		D8B6E2C3262098FB00B2C239 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				D8B6E2C42620990400B2C239 /* Item.swift */,
+				D8B6E2C42620990400B2C239 /* Bookmark.swift */,
 				D8A8001C2A1F76200042C03B /* View.swift */,
 			);
 			path = Extensions;
@@ -384,7 +376,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8B6E2C52620990400B2C239 /* Item.swift in Sources */,
+				D8B6E2C52620990400B2C239 /* Bookmark.swift in Sources */,
 				D8ACD7EF26BC81F7005F927A /* TokenField.swift in Sources */,
 				D8E0202C26C2E1CC00910833 /* LoadingView.swift in Sources */,
 				D861257326A60DF200EB5FEF /* Sidebar.swift in Sources */,

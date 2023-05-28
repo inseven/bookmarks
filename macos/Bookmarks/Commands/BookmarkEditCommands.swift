@@ -39,6 +39,7 @@ struct BookmarkEditCommands: View {
         Button(bookmarksView.selectionContainsPublicBookmark ? "Make Private" : "Make Public") {
             bookmarksView.update(shared: !bookmarksView.selectionContainsPublicBookmark)
         }
+        .keyboardShortcut("p", modifiers: [.command, .shift])
         .disabled(bookmarksView.selection.isEmpty)
 
         Divider()

@@ -71,6 +71,29 @@ public class Updater {
         self.settings = settings
     }
 
+    func performUpdate(update: @escaping (Pinboard) throws -> Void) {
+        syncQueue.async {
+            self.targetQueue.async {
+                self.delegate?.updaterDidStart(self)
+            }
+            do {
+                guard let token = self.syncQueue_token() else {
+                    throw BookmarksError.unauthorized
+                }
+                let pinboard = Pinboard(token: token)
+                try update(pinboard)
+                self.targetQueue.async {
+                    self.delegate?.updaterDidFinish(self)
+                }
+            } catch {
+                print("Failed to update post with error \(error).")
+                self.targetQueue.async {
+                    self.delegate?.updater(self, didFailWithError: BookmarksError.unauthorized)
+                }
+            }
+        }
+    }
+
     fileprivate func syncQueue_update(force: Bool) {
         dispatchPrecondition(condition: .onQueue(syncQueue))
 
@@ -95,6 +118,9 @@ public class Updater {
                lastUpdate >= update.updateTime,
                !force {
                 print("skipping empty update")
+                targetQueue.async {
+                    self.delegate?.updaterDidFinish(self)
+                }
                 return
             }
 
@@ -214,22 +240,21 @@ public class Updater {
     }
 
     public func updateBookmarks(_ bookmarks: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
+        dispatchPrecondition(condition: .notOnQueue(syncQueue))
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        syncQueue.async {
-            guard let token = self.syncQueue_token() else {
-                completion(.failure(BookmarksError.unauthorized))
-                return
-            }
-            let pinboard = Pinboard(token: token)
-            let result = Result { () -> Void in
-                for bookmark in bookmarks {
-                    _ = try self.database.insertOrUpdateBookmark(bookmark)
+        for bookmark in bookmarks {
+            do {
+                _ = try self.database.insertOrUpdateBookmark(bookmark)
+                performUpdate { pinboard in
                     let post = Pinboard.Post(bookmark)
                     try pinboard.postsAdd(post: post, replace: true)
                 }
+            } catch {
+                completion(.failure(error))
+                return
             }
-            completion(result)
         }
+        completion(.success(()))
     }
 
     public func renameTag(_ old: String, to new: String, completion: @escaping (Result<Void, Error>) -> Void) {

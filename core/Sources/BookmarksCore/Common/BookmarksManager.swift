@@ -42,6 +42,8 @@ public class BookmarksManager: ObservableObject {
     }
 
     @Published public var state: State = .idle
+    @Published public var isUpdating: Bool = false
+    @Published private var isUpdaterRunning: Bool = false
 
     // TODO: Explore whether it's possible make some of the BookmarksManager properties private #266
     //       https://github.com/inseven/bookmarks/issues/266
@@ -55,6 +57,7 @@ public class BookmarksManager: ObservableObject {
     private var documentsUrl: URL
     private var downloadManager: DownloadManager
     private var updater: Updater
+    private var cancellables: Set<AnyCancellable> = []
 
     public init() {
         documentsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -82,6 +85,15 @@ public class BookmarksManager: ObservableObject {
 
     public var user: String? {
         return updater.user
+    }
+
+    public func start() {
+
+        $isUpdaterRunning
+            .debounce(for: 0.1, scheduler: DispatchQueue.main)
+            .assign(to: \.isUpdating, on: self)
+            .store(in: &cancellables)
+
     }
 
     public func authenticate(username: String,
@@ -195,9 +207,15 @@ public class BookmarksManager: ObservableObject {
 extension BookmarksManager: UpdaterDelegate {
 
     func updaterDidStart(_ updater: Updater) {
+        DispatchQueue.main.async {
+            self.isUpdaterRunning = true
+        }
     }
 
     func updaterDidFinish(_ updater: Updater) {
+        DispatchQueue.main.async {
+            self.isUpdaterRunning = false
+        }
     }
 
     func updater(_ updater: Updater, didFailWithError error: Error) {

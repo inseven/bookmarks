@@ -157,7 +157,6 @@
 				D891C457261E32FB0024E1A6 /* Assets.xcassets */,
 				D891C45D261E32FB0024E1A6 /* Bookmarks.entitlements */,
 				D891C453261E32F90024E1A6 /* BookmarksApp.swift */,
-				D8A336F826B5685800436200 /* Commands */,
 				D8B6E2C3262098FB00B2C239 /* Extensions */,
 				D891C45C261E32FB0024E1A6 /* Info.plist */,
 				D8931F5F26C5E11200A8021E /* Model */,
@@ -210,13 +209,6 @@
 				D8A06F2528A7EE9A0002A56D /* SelectionToolbar.swift */,
 			);
 			path = Toolbars;
-			sourceTree = "<group>";
-		};
-		D8A336F826B5685800436200 /* Commands */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Commands;
 			sourceTree = "<group>";
 		};
 		D8B04B43261F4A1200376ADD /* Views */ = {

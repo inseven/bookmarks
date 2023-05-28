@@ -127,7 +127,7 @@ public class SectionViewModel: ObservableObject, Runnable {
             .store(in: &cancellables)
 
         // Update the suggested tokens.
-        manager.tagsView.$trie
+        manager.tagsModel.$trie
             .debounce(for: 0.2, scheduler: DispatchQueue.main)
             .combineLatest($filter)
             .receive(on: DispatchQueue.global())

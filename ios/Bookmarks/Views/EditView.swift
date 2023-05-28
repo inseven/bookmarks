@@ -31,7 +31,7 @@ struct EditView: View {
     @Environment(\.manager) var manager: BookmarksManager
     @Environment(\.presentationMode) var presentationMode
     
-    @ObservedObject var tagsView: TagsView
+    @ObservedObject var tagsModel: TagsModel
     var bookmark: Bookmark
     @State var search: String = ""
     @State var title: String
@@ -42,8 +42,8 @@ struct EditView: View {
     
     @State var sheet: SheetType?
         
-    init(tagsView: TagsView, bookmark: Bookmark) {
-        self.tagsView = tagsView
+    init(tagsModel: TagsModel, bookmark: Bookmark) {
+        self.tagsModel = tagsModel
         self.bookmark = bookmark
         _title = State(initialValue: bookmark.title)
         _tags = State(initialValue: Array(bookmark.tags))
@@ -137,7 +137,7 @@ struct EditView: View {
             .sheet(item: $sheet) { sheet in
                 switch sheet {
                 case .addTag:
-                    AddTagView(tagsView: tagsView, tags: $tags)
+                    AddTagView(tagsModel: tagsModel, tags: $tags)
                 }
             }
         }

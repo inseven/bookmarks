@@ -130,7 +130,7 @@ struct SectionView: View {
         .sheet(item: $sheet) { sheet in
             switch sheet {
             case .edit(let bookmark):
-                EditView(tagsView: manager.tagsView, bookmark: bookmark)
+                EditView(tagsModel: manager.tagsModel, bookmark: bookmark)
             }
         }
         .alert(isPresented: $error.mappedToBool()) {

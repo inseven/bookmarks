@@ -45,19 +45,19 @@ struct AddTagView: View {
     @Environment(\.manager) var manager: BookmarksManager
     @Environment(\.presentationMode) var presentationMode
     
-    @ObservedObject var tagsView: TagsView
+    @ObservedObject var tagsModel: TagsModel
     @Binding var tags: [String]
     @State var search: String = ""
     @FocusState private var isFocused: Bool
     
     var available: [String] {
         // TODO: Make this async.
-        return tagsView.suggestions(prefix: "", existing: tags)
+        return tagsModel.suggestions(prefix: "", existing: tags)
     }
     
     var filteredTags: [String] {
         // TODO: Make this async.
-        return tagsView.suggestions(prefix: search, existing: tags)
+        return tagsModel.suggestions(prefix: search, existing: tags)
     }
     
     var body: some View {

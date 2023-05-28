@@ -20,17 +20,15 @@
 
 import SwiftUI
 
-import BookmarksCore
-
-struct SectionLink: View {
+public struct SectionLink: View {
 
     var section: BookmarksSection
 
-    init(_ section: BookmarksSection) {
+    public init(_ section: BookmarksSection) {
         self.section = section
     }
 
-    var body: some View {
+    public var body: some View {
         Label(section.sidebarTitle, systemImage: section.systemImage)
             .tag(section)
     }

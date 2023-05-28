@@ -23,7 +23,6 @@
 		D891C45B261E32FB0024E1A6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D891C45A261E32FB0024E1A6 /* Preview Assets.xcassets */; };
 		D891C467261E32FB0024E1A6 /* BookmarksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D891C466261E32FB0024E1A6 /* BookmarksTests.swift */; };
 		D891C472261E32FB0024E1A6 /* BookmarksUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D891C471261E32FB0024E1A6 /* BookmarksUITests.swift */; };
-		D8A06F1F28A7E85B0002A56D /* SectionLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A06F1E28A7E85B0002A56D /* SectionLink.swift */; };
 		D8A06F2628A7EE9A0002A56D /* SelectionToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A06F2528A7EE9A0002A56D /* SelectionToolbar.swift */; };
 		D8A06F2828A7EFD40002A56D /* AccountToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A06F2728A7EFD40002A56D /* AccountToolbar.swift */; };
 		D8A0D7662620165D00C9F190 /* Interact in Frameworks */ = {isa = PBXBuildFile; productRef = D8A0D7652620165D00C9F190 /* Interact */; };
@@ -78,7 +77,6 @@
 		D891C46D261E32FB0024E1A6 /* BookmarksUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookmarksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D891C471261E32FB0024E1A6 /* BookmarksUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksUITests.swift; sourceTree = "<group>"; };
 		D891C473261E32FB0024E1A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D8A06F1E28A7E85B0002A56D /* SectionLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionLink.swift; sourceTree = "<group>"; };
 		D8A06F2528A7EE9A0002A56D /* SelectionToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionToolbar.swift; sourceTree = "<group>"; };
 		D8A06F2728A7EFD40002A56D /* AccountToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountToolbar.swift; sourceTree = "<group>"; };
 		D8A0D75A262015E700C9F190 /* interact */ = {isa = PBXFileReference; lastKnownFileType = folder; name = interact; path = ../interact; sourceTree = "<group>"; };
@@ -221,7 +219,6 @@
 				D8E0202B26C2E1CC00910833 /* LoadingView.swift */,
 				D8F3F28E26EE776900BFA43B /* LogInView.swift */,
 				D861257426AA048E00EB5FEF /* RenameTagView.swift */,
-				D8A06F1E28A7E85B0002A56D /* SectionLink.swift */,
 				D891C455261E32F90024E1A6 /* SectionView.swift */,
 				D840B0092621042B001E95D1 /* SettingsView.swift */,
 				D861257226A60DF200EB5FEF /* Sidebar.swift */,
@@ -399,7 +396,6 @@
 				D8E0202C26C2E1CC00910833 /* LoadingView.swift in Sources */,
 				D861257326A60DF200EB5FEF /* Sidebar.swift in Sources */,
 				D8A06F2828A7EFD40002A56D /* AccountToolbar.swift in Sources */,
-				D8A06F1F28A7E85B0002A56D /* SectionLink.swift in Sources */,
 				D8164D6826C08EEC00756D43 /* BorderedSelection.swift in Sources */,
 				D891C456261E32F90024E1A6 /* SectionView.swift in Sources */,
 				D835072A294A0DB40044ADE0 /* TagEditorModel.swift in Sources */,
@@ -496,6 +492,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -509,6 +506,7 @@
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
 			name = Debug;
 		};
@@ -554,6 +552,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -566,6 +565,7 @@
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
 			name = Release;
 		};

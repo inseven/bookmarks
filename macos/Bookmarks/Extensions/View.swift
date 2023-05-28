@@ -22,12 +22,6 @@ import SwiftUI
 
 extension View {
 
-    public func searchable() -> some View {
-        return self
-            .searchable(text: Binding.constant(""))
-            .disabled(true)
-    }
-
     func presents(_ error: Binding<Error?>) -> some View {
         return alert(isPresented: error.mappedToBool()) {
             Alert(error: error.wrappedValue)

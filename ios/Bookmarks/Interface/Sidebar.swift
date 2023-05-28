@@ -32,18 +32,20 @@ struct Sidebar: View {
     }
 
     @Environment(\.manager) var manager: BookmarksManager
-    @State var section: BookmarksSection? = .all
+
+    @ObservedObject var sceneModel: SceneModel
+    
     @State var sheet: Sheet?
     
     var body: some View {
-        List {
+        List(selection: $sceneModel.section) {
             Section("Smart Filters") {
-                SidebarLink(selection: $section, section: .all)
-                SidebarLink(selection: $section, section: .shared(false))
-                SidebarLink(selection: $section, section: .shared(true))
-                SidebarLink(selection: $section, section: .today)
-                SidebarLink(selection: $section, section: .unread)
-                SidebarLink(selection: $section, section: .untagged)
+                SectionLink(.all)
+                SectionLink(.shared(false))
+                SectionLink(.shared(true))
+                SectionLink(.today)
+                SectionLink(.unread)
+                SectionLink(.untagged)
             }
         }
         .sheet(item: $sheet) { sheet in

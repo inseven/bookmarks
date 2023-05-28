@@ -12,7 +12,6 @@
 		D82BF61E273090FE004978AD /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82BF61D273090FE004978AD /* LogInView.swift */; };
 		D82BF6272730A0D0004978AD /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82BF6262730A0D0004978AD /* DebugView.swift */; };
 		D832EEC724816901004C64E3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D832EEC624816901004C64E3 /* SettingsView.swift */; };
-		D840327A2732E148004CD998 /* SidebarLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84032792732E148004CD998 /* SidebarLink.swift */; };
 		D840327C2732E41D004CD998 /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840327B2732E41D004CD998 /* Sidebar.swift */; };
 		D8478554261539AA00B2318B /* SectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8478553261539AA00B2318B /* SectionView.swift */; };
 		D859CE022733A9CD00E9B466 /* AddTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D859CE012733A9CD00E9B466 /* AddTagView.swift */; };
@@ -54,7 +53,6 @@
 		D82BF6262730A0D0004978AD /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		D832EEC624816901004C64E3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D832EECA2481B6D1004C64E3 /* Bookmarks.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Bookmarks.entitlements; sourceTree = "<group>"; };
-		D84032792732E148004CD998 /* SidebarLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarLink.swift; sourceTree = "<group>"; };
 		D840327B2732E41D004CD998 /* Sidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
 		D8478553261539AA00B2318B /* SectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionView.swift; sourceTree = "<group>"; };
 		D84CE47D261E2A1400AF1901 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -127,7 +125,6 @@
 				D8478553261539AA00B2318B /* SectionView.swift */,
 				D832EEC624816901004C64E3 /* SettingsView.swift */,
 				D840327B2732E41D004CD998 /* Sidebar.swift */,
-				D84032792732E148004CD998 /* SidebarLink.swift */,
 			);
 			path = Interface;
 			sourceTree = "<group>";
@@ -375,7 +372,6 @@
 				D81E7484254A0D1B002336DC /* ContentView.swift in Sources */,
 				D82BF6272730A0D0004978AD /* DebugView.swift in Sources */,
 				D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */,
-				D840327A2732E148004CD998 /* SidebarLink.swift in Sources */,
 				D8478554261539AA00B2318B /* SectionView.swift in Sources */,
 				D859CE022733A9CD00E9B466 /* AddTagView.swift in Sources */,
 				D82BF61E273090FE004978AD /* LogInView.swift in Sources */,
@@ -475,7 +471,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -490,7 +486,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
 			name = Debug;
 		};
@@ -535,7 +531,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -549,7 +545,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

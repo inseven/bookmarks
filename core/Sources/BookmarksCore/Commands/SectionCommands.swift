@@ -20,34 +20,28 @@
 
 import SwiftUI
 
-import BookmarksCore
+public struct SectionCommands: Commands {
 
-struct BookmarkTagCommands: View {
+    @FocusedObject var sceneModel: SceneModel?
 
-    @Environment(\.manager) var manager
+    static func keyEquivalent(_ value: Int) -> KeyEquivalent {
+        return KeyEquivalent(String(value).first!)
+    }
 
-    var sceneModel: SceneModel?
+    public init() {
+        
+    }
 
-    @ObservedObject var bookmarksView: BookmarksView
-
-    var body: some View {
-        Menu("Tags") {
-
-            Button("Add...") {
-                bookmarksView.addTags()
-            }
-            .keyboardShortcut("t", modifiers: .command)
-            .disabled(bookmarksView.selection.isEmpty)
-
-            Divider()
-
-            ForEach(Array(bookmarksView.selectionTags).sorted()) { tag in
-                Button(tag) {
-                    sceneModel?.section = tag.section
+    public var body: some Commands {
+        CommandMenu("Go") {
+            ForEach(Array(BookmarksSection.defaultSections.enumerated()), id: \.element.id) { index, section in
+                Button(section.navigationTitle) {
+                    sceneModel?.section = section
                 }
+                .keyboardShortcut(Self.keyEquivalent(index + 1), modifiers: .command)
                 .disabled(sceneModel == nil)
             }
-
         }
     }
+
 }

@@ -18,48 +18,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import AppKit
 import SwiftUI
 
-import Diligence
-
-import BookmarksCore
-
-@main
-struct BookmarksApp: App {
+struct BookmarkTagCommands: View {
 
     @Environment(\.manager) var manager
 
-    init() {
-        manager.start()
-    }
+    var sceneModel: SceneModel?
 
-    @FocusedObject var sceneModel: SceneModel?
-    @FocusedObject var bookmarksView: BookmarksView?
+    @ObservedObject var bookmarksView: BookmarksView
 
-    var body: some Scene {
+    var body: some View {
+        Menu("Tags") {
 
-        WindowGroup {
-            MainWindow(manager: manager)
+            Button("Add...") {
+                bookmarksView.addTags()
+            }
+            .keyboardShortcut("t", modifiers: .command)
+            .disabled(bookmarksView.selection.isEmpty)
+
+            Divider()
+
+            ForEach(Array(bookmarksView.selectionTags).sorted()) { tag in
+                Button(tag) {
+                    sceneModel?.section = tag.section
+                }
+                .disabled(sceneModel == nil)
+            }
+
         }
-        .commands {
-            SidebarCommands()
-            ToolbarCommands()
-            SectionCommands()
-            ViewCommands(bookmarksView: bookmarksView)
-            BookmarkCommands()
-            AccountCommands()
-        }
-
-        SwiftUI.Settings {
-            SettingsView()
-        }
-
-        Window("Tags", id: "tags") {
-            TagsContentView(tagsView: manager.tagsView)
-        }
-
-        About(Legal.contents)
-
     }
 }

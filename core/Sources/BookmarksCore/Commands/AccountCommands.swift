@@ -20,13 +20,15 @@
 
 import SwiftUI
 
-import BookmarksCore
-
-struct AccountCommands: Commands {
+public struct AccountCommands: Commands {
 
     @Environment(\.manager) var manager: BookmarksManager
 
-    var body: some Commands {
+    public init() {
+
+    }
+
+    public var body: some Commands {
         CommandMenu("Account") {
             Button("Log Out...") {
                 manager.logout { _ in }

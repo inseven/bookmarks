@@ -20,25 +20,25 @@
 
 import SwiftUI
 
-import BookmarksCore
-
-struct SectionCommands: Commands {
+public struct BookmarkCommands: Commands {
 
     @FocusedObject var sceneModel: SceneModel?
+    @FocusedObject var bookmarksView: BookmarksView?
 
-    static func keyEquivalent(_ value: Int) -> KeyEquivalent {
-        return KeyEquivalent(String(value).first!)
+    public init() {
     }
 
-    var body: some Commands {
-        CommandMenu("Go") {
-            ForEach(Array(BookmarksSection.defaultSections.enumerated()), id: \.element.id) { index, section in
-                Button(section.navigationTitle) {
-                    sceneModel?.section = section
-                }
-                .keyboardShortcut(Self.keyEquivalent(index + 1), modifiers: .command)
-                .disabled(sceneModel == nil)
-            }
+    public var body: some Commands {
+        CommandMenu("Bookmark") {
+            BookmarkOpenCommands(bookmarksView: bookmarksView ?? BookmarksView())
+                .trailingDivider()
+            BookmarkDesctructiveCommands(bookmarksView: bookmarksView ?? BookmarksView())
+                .trailingDivider()
+            BookmarkEditCommands(bookmarksView: bookmarksView ?? BookmarksView())
+                .trailingDivider()
+            BookmarkShareCommands(bookmarksView: bookmarksView ?? BookmarksView())
+                .trailingDivider()
+            BookmarkTagCommands(sceneModel: sceneModel, bookmarksView: bookmarksView ?? BookmarksView())
         }
     }
 

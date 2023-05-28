@@ -20,8 +20,6 @@
 
 import SwiftUI
 
-import BookmarksCore
-
 struct BookmarkOpenCommands: View {
 
     @Environment(\.manager) var manager

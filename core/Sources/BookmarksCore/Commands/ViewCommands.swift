@@ -20,13 +20,15 @@
 
 import SwiftUI
 
-import BookmarksCore
-
-struct ViewCommands: Commands {
+public struct ViewCommands: Commands {
 
     @ObservedObject var bookmarksView: BookmarksView
 
-    var body: some Commands {
+    public init(bookmarksView: BookmarksView? = nil) {
+        self.bookmarksView = bookmarksView ?? BookmarksView()
+    }
+
+    public var body: some Commands {
         CommandGroup(before: .sidebar) {
             Picker(selection: $bookmarksView.layoutMode) {
                 ForEach(LayoutMode.allCases) { layoutMode in

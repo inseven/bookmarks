@@ -29,9 +29,11 @@ struct Sidebar: View {
         var id: Self { self }
 
         case settings
+        case tags
     }
 
     @Environment(\.manager) var manager: BookmarksManager
+    @EnvironmentObject var settings: Settings
 
     @ObservedObject var sceneModel: SceneModel
     
@@ -47,6 +49,24 @@ struct Sidebar: View {
                 SectionLink(.unread)
                 SectionLink(.untagged)
             }
+
+            if settings.favoriteTags.count > 0 {
+
+                Section("Favorites") {
+                    ForEach(settings.favoriteTags.sorted(), id: \.section) { tag in
+                        SectionLink(tag.section)
+                            .contextMenu {
+                                Button(role: .destructive) {
+                                    settings.favoriteTags = settings.favoriteTags.filter { $0 != tag }
+                                } label: {
+                                    Label("Remove from Favorites", systemImage: "star.slash")
+                                }
+                            }
+                    }
+                }
+
+            }
+
         }
         .sheet(item: $sheet) { sheet in
             switch sheet {
@@ -54,14 +74,30 @@ struct Sidebar: View {
                 NavigationView {
                     SettingsView(settings: manager.settings)
                 }
+            case .tags:
+                TagsEditorView()
             }
         }
         .navigationTitle("Filters")
-        .navigationBarItems(leading: Button {
-            sheet = .settings
-        } label: {
-            Image(systemName: "gear")
-        })
+        .toolbar {
+
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    sheet = .settings
+                } label: {
+                    Image(systemName: "gear")
+                }
+            }
+
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    sheet = .tags
+                } label: {
+                    Image(systemName: "tag")
+                }
+            }
+
+        }
     }
     
 }

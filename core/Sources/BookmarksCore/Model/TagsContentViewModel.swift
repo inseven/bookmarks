@@ -23,9 +23,7 @@ import SwiftUI
 
 import Interact
 
-import BookmarksCore
-
-class TagEditorModel: ObservableObject, Runnable {
+class TagsContentViewModel: ObservableObject, Runnable {
 
     @MainActor @Published var tags: [String] = []
     @MainActor @Published var filter = ""

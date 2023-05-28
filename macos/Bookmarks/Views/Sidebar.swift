@@ -54,7 +54,7 @@ struct Sidebar: View {
                 Section("Favorites") {
                     ForEach(settings.favoriteTags.sorted(), id: \.section) { tag in
                         SectionLink(tag.section)
-                            .contextMenu(ContextMenu(menuItems: {
+                            .contextMenu {
                                 Button("Remove from Favorites") {
                                     settings.favoriteTags = settings.favoriteTags.filter { $0 != tag }
                                 }
@@ -69,7 +69,7 @@ struct Sidebar: View {
                                         print("Failed to open on Pinboard error \(error)")
                                     }
                                 }
-                            }))
+                            }
                     }
                 }
             }

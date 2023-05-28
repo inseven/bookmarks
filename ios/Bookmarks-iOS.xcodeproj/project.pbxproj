@@ -47,7 +47,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D8019A172731B1B0001736DE /* Binding+mappedToBool */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Binding+mappedToBool"; sourceTree = "<group>"; };
 		D81E7483254A0D1B002336DC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D82215992955C26E0087FBAC /* core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = core; path = ../core; sourceTree = "<group>"; };
 		D82BF61D273090FE004978AD /* LogInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
@@ -63,10 +62,6 @@
 		D864E47221C9417F00EAB9AD /* Bookmarks-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bookmarks-Bridging-Header.h"; sourceTree = "<group>"; };
 		D871B4E4273242ED00712182 /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
 		D87439072731068C00B676A5 /* diligence */ = {isa = PBXFileReference; lastKnownFileType = folder; name = diligence; path = ../diligence; sourceTree = "<group>"; };
-		D874390B273108DD00B676A5 /* Diligence */ = {isa = PBXFileReference; lastKnownFileType = text; path = Diligence; sourceTree = "<group>"; };
-		D874390D2731094000B676A5 /* Introspect */ = {isa = PBXFileReference; lastKnownFileType = text; path = Introspect; sourceTree = "<group>"; };
-		D87FBF5128A7B5A700A8753D /* TFHpple */ = {isa = PBXFileReference; lastKnownFileType = text; path = TFHpple; sourceTree = "<group>"; };
-		D87FBF5528A7B86400A8753D /* interact-license */ = {isa = PBXFileReference; lastKnownFileType = text; path = "interact-license"; sourceTree = "<group>"; };
 		D89956D627DE41150023FC84 /* ButtonLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonLabelStyle.swift; sourceTree = "<group>"; };
 		D89C65E326AF5A8E00D49D11 /* Common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		D89C65E426AF5A8E00D49D11 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
@@ -83,7 +78,6 @@
 		D8D3BC1921C6AEBD00D6FB97 /* BookmarksUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksUITests.swift; sourceTree = "<group>"; };
 		D8D3BC1B21C6AEBD00D6FB97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D8F521372732EEF40031F0CC /* AddTagLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTagLabel.swift; sourceTree = "<group>"; };
-		D8FF9E9D28A76B050081E57A /* SQLite-swift */ = {isa = PBXFileReference; lastKnownFileType = text; path = "SQLite-swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,7 +109,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		D8578479254FF56E00AE241C /* Interface */ = {
+		D8578479254FF56E00AE241C /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				D8F521372732EEF40031F0CC /* AddTagLabel.swift */,
@@ -129,7 +123,7 @@
 				D840327B2732E41D004CD998 /* Sidebar.swift */,
 				D82DB35E2A23F2750014161E /* TagsView.swift */,
 			);
-			path = Interface;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		D864E46F21C93FD200EAB9AD /* Frameworks */ = {
@@ -148,19 +142,6 @@
 				D82215992955C26E0087FBAC /* core */,
 			);
 			name = Packages;
-			sourceTree = "<group>";
-		};
-		D874390A273108CC00B676A5 /* Licenses */ = {
-			isa = PBXGroup;
-			children = (
-				D8019A172731B1B0001736DE /* Binding+mappedToBool */,
-				D874390B273108DD00B676A5 /* Diligence */,
-				D87FBF5528A7B86400A8753D /* interact-license */,
-				D874390D2731094000B676A5 /* Introspect */,
-				D8FF9E9D28A76B050081E57A /* SQLite-swift */,
-				D87FBF5128A7B5A700A8753D /* TFHpple */,
-			);
-			path = Licenses;
 			sourceTree = "<group>";
 		};
 		D89956D527DE41030023FC84 /* Styles */ = {
@@ -204,10 +185,9 @@
 				D8D3BC0521C6AEBD00D6FB97 /* Info.plist */,
 				D8BDE1172551C56100C95945 /* BookmarksApp.swift */,
 				D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */,
-				D8578479254FF56E00AE241C /* Interface */,
 				D8D3BC0221C6AEBD00D6FB97 /* LaunchScreen.storyboard */,
-				D874390A273108CC00B676A5 /* Licenses */,
 				D89956D527DE41030023FC84 /* Styles */,
+				D8578479254FF56E00AE241C /* Views */,
 			);
 			path = Bookmarks;
 			sourceTree = "<group>";

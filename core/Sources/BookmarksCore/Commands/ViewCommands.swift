@@ -22,15 +22,15 @@ import SwiftUI
 
 public struct ViewCommands: Commands {
 
-    @ObservedObject var bookmarksView: BookmarksView
+    @ObservedObject var sectionViewModel: SectionViewModel
 
-    public init(bookmarksView: BookmarksView? = nil) {
-        self.bookmarksView = bookmarksView ?? BookmarksView()
+    public init(sectionViewModel: SectionViewModel? = nil) {
+        self.sectionViewModel = sectionViewModel ?? SectionViewModel()
     }
 
     public var body: some Commands {
         CommandGroup(before: .sidebar) {
-            Picker(selection: $bookmarksView.layoutMode) {
+            Picker(selection: $sectionViewModel.layoutMode) {
                 ForEach(LayoutMode.allCases) { layoutMode in
                     Label(Localized(layoutMode), systemImage: layoutMode.systemImage)
                         .tag(layoutMode)
@@ -38,7 +38,7 @@ public struct ViewCommands: Commands {
             } label: {
             }
             .pickerStyle(.inline)
-            .disabled(bookmarksView.isPlaceholder)
+            .disabled(sectionViewModel.isPlaceholder)
         }
     }
 

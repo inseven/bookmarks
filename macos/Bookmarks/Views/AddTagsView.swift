@@ -39,11 +39,11 @@ struct AddTagsView: View {
     @State var tokens: [Token<String>] = []
 
     @ObservedObject var tagsView: TagsView
-    @ObservedObject var bookmarksView: BookmarksView
+    @ObservedObject var sectionViewModel: SectionViewModel
 
-    init(tagsView: TagsView, bookmarksView: BookmarksView) {
+    init(tagsView: TagsView, sectionViewModel: SectionViewModel) {
         self.tagsView = tagsView
-        self.bookmarksView = bookmarksView
+        self.sectionViewModel = sectionViewModel
     }
 
     var characterSet: CharacterSet {
@@ -89,7 +89,7 @@ struct AddTagsView: View {
                         .keyboardShortcut(.cancelAction)
                         Button {
                             let tags = tokens.compactMap { $0.associatedValue }
-                            bookmarksView.addTags(tags: Set(tags), markAsRead: markAsRead)
+                            sectionViewModel.addTags(tags: Set(tags), markAsRead: markAsRead)
                             dismiss()
                         } label: {
                             Text("OK")

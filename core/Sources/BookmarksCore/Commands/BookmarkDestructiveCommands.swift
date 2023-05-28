@@ -24,16 +24,16 @@ struct BookmarkDesctructiveCommands: View {
 
     @Environment(\.manager) var manager: BookmarksManager
 
-    @ObservedObject var bookmarksView: BookmarksView
+    @ObservedObject var sectionViewModel: SectionViewModel
 
     var body: some View {
         Button("Delete") {
             Task {
-                bookmarksView.delete()
+                sectionViewModel.delete()
             }
         }
         .keyboardShortcut(.delete, modifiers: [.command])
-        .disabled(bookmarksView.selection.isEmpty)
+        .disabled(sectionViewModel.selection.isEmpty)
     }
 
 }

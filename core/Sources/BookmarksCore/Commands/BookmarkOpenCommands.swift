@@ -24,29 +24,29 @@ struct BookmarkOpenCommands: View {
 
     @Environment(\.manager) var manager
 
-    @ObservedObject var bookmarksView: BookmarksView
+    @ObservedObject var sectionViewModel: SectionViewModel
 
     var body: some View {
 
         Button("Preview") {
-            bookmarksView.showPreview()
+            sectionViewModel.showPreview()
         }
         .keyboardShortcut(.space, modifiers: [])
-        .disabled(bookmarksView.selection.isEmpty)
+        .disabled(sectionViewModel.selection.isEmpty)
 
         Divider()
 
         Button("Open") {
-            bookmarksView.open()
+            sectionViewModel.open()
         }
         .keyboardShortcut(.return, modifiers: [.command])
-        .disabled(bookmarksView.selection.isEmpty)
+        .disabled(sectionViewModel.selection.isEmpty)
 
         Button("Open on Internet Archive") {
-            bookmarksView.open(location: .internetArchive)
+            sectionViewModel.open(location: .internetArchive)
         }
         .keyboardShortcut(.return, modifiers: [.command, .shift])
-        .disabled(bookmarksView.selection.isEmpty)
+        .disabled(sectionViewModel.selection.isEmpty)
 
     }
 

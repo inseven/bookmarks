@@ -26,20 +26,20 @@ struct BookmarkTagCommands: View {
 
     var sceneModel: SceneModel?
 
-    @ObservedObject var bookmarksView: BookmarksView
+    @ObservedObject var sectionViewModel: SectionViewModel
 
     var body: some View {
         Menu("Tags") {
 
             Button("Add...") {
-                bookmarksView.addTags()
+                sectionViewModel.addTags()
             }
             .keyboardShortcut("t", modifiers: .command)
-            .disabled(bookmarksView.selection.isEmpty)
+            .disabled(sectionViewModel.selection.isEmpty)
 
             Divider()
 
-            ForEach(Array(bookmarksView.selectionTags).sorted()) { tag in
+            ForEach(Array(sectionViewModel.selectionTags).sorted()) { tag in
                 Button(tag) {
                     sceneModel?.section = tag.section
                 }

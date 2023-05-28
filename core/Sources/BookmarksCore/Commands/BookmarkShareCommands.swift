@@ -24,20 +24,20 @@ struct BookmarkShareCommands: View {
 
     @Environment(\.manager) var manager: BookmarksManager
 
-    @ObservedObject var bookmarksView: BookmarksView
+    @ObservedObject var sectionViewModel: SectionViewModel
 
     var body: some View {
         Button("Copy") {
-            bookmarksView.copy()
+            sectionViewModel.copy()
         }
         .keyboardShortcut("c", modifiers: [.command])
-        .disabled(bookmarksView.selection.isEmpty)
+        .disabled(sectionViewModel.selection.isEmpty)
 
         Button("Copy Tags") {
-            bookmarksView.copyTags()
+            sectionViewModel.copyTags()
         }
         .keyboardShortcut("c", modifiers: [.command, .shift])
-        .disabled(bookmarksView.selection.isEmpty)
+        .disabled(sectionViewModel.selection.isEmpty)
 
     }
 

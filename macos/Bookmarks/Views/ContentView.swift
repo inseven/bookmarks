@@ -27,7 +27,7 @@ import BookmarksCore
 
 struct ContentView: View {
 
-    @FocusedObject var bookmarksView: BookmarksView?
+    @FocusedObject var sectionViewModel: SectionViewModel?
 
     @ObservedObject var manager: BookmarksManager
 
@@ -50,7 +50,7 @@ struct ContentView: View {
         .toolbar(id: "main") {
             AccountToolbar()
             LayoutToolbar()
-            SelectionToolbar(bookmarksView: bookmarksView ?? BookmarksView())
+            SelectionToolbar(sectionViewModel: sectionViewModel ?? SectionViewModel())
         }
         .sheet(item: $sheet) { sheet in
             switch sheet {

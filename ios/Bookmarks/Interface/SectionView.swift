@@ -40,7 +40,7 @@ struct SectionView: View {
     
     var section: BookmarksSection
 
-    @StateObject var bookmarksView: BookmarksView
+    @StateObject var sectionViewModel: SectionViewModel
     @State var sheet: SheetType?
     @State var error: Error?
     
@@ -59,7 +59,7 @@ struct SectionView: View {
     var body: some View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
-                ForEach(bookmarksView.bookmarks) { bookmark in
+                ForEach(sectionViewModel.bookmarks) { bookmark in
                     BookmarkCell(manager: manager, bookmark: bookmark)
                         .aspectRatio(8/9, contentMode: .fit)
                         .onTapGesture {
@@ -118,9 +118,9 @@ struct SectionView: View {
             }
             .padding()
         }
-        .searchable(text: $bookmarksView.filter,
-                    tokens: $bookmarksView.tokens,
-                    suggestedTokens: $bookmarksView.suggestedTokens) { token in
+        .searchable(text: $sectionViewModel.filter,
+                    tokens: $sectionViewModel.tokens,
+                    suggestedTokens: $sectionViewModel.suggestedTokens) { token in
             Label(token, systemImage: "tag")
         }
         .sheet(item: $sheet) { sheet in
@@ -134,7 +134,7 @@ struct SectionView: View {
         }
         .navigationTitle(section.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
-        .runs(bookmarksView)
+        .runs(sectionViewModel)
     }
 
 }

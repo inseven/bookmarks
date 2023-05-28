@@ -33,7 +33,7 @@ struct Sidebar: View {
     @ObservedObject var manager: BookmarksManager
     @StateObject var tagsView: TagsView
     @ObservedObject var settings: BookmarksCore.Settings
-    @ObservedObject var windowModel: WindowModel
+    @ObservedObject var sceneModel: SceneModel
 
     @State var sheet: SheetType? = nil
 
@@ -42,7 +42,7 @@ struct Sidebar: View {
     }
 
     var body: some View {
-        List(selection: $windowModel.section) {
+        List(selection: $sceneModel.section) {
             Section {
                 ForEach(BookmarksSection.defaultSections) { section in
                     SectionLink(section)

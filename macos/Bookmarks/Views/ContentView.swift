@@ -31,8 +31,6 @@ struct ContentView: View {
 
     let manager: BookmarksManager
 
-    @EnvironmentObject var windowModel: WindowModel
-
     // TODO: Rename bookmarksView to ContentModel
     @StateObject var bookmarksView: BookmarksView
 

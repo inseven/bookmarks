@@ -34,7 +34,7 @@ struct BookmarksApp: App {
         manager.start()
     }
 
-    @FocusedObject var windowModel: WindowModel?
+    @FocusedObject var sceneModel: SceneModel?
     @FocusedObject var bookmarksView: BookmarksView?
 
     var body: some Scene {
@@ -63,7 +63,7 @@ struct BookmarksApp: App {
                     .trailingDivider()
                 BookmarkShareCommands(bookmarksView: bookmarksView ?? BookmarksView())
                     .trailingDivider()
-                BookmarkTagCommands(windowModel: windowModel, bookmarksView: bookmarksView ?? BookmarksView())
+                BookmarkTagCommands(sceneModel: sceneModel, bookmarksView: bookmarksView ?? BookmarksView())
             }
             AccountCommands()
         }

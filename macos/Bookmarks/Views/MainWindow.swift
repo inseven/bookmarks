@@ -36,7 +36,7 @@ struct MainWindow: View {
 
     var body: some View {
         NavigationSplitView {
-            Sidebar(tagsView: manager.tagsView, settings: manager.settings, windowModel: windowModel)
+            Sidebar(manager: manager, tagsView: manager.tagsView, settings: manager.settings, windowModel: windowModel)
         } detail: {
             if let section = windowModel.section {
                 ContentView(manager: manager, section: section)

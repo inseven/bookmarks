@@ -30,6 +30,10 @@ struct BookmarksApp: App {
 
     @Environment(\.manager) var manager
 
+    init() {
+        manager.start()
+    }
+
     @FocusedObject var windowModel: WindowModel?
     @FocusedObject var bookmarksView: BookmarksView?
 

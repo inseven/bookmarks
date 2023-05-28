@@ -30,7 +30,7 @@ struct Sidebar: View {
         case rename(tag: String)
     }
 
-    @Environment(\.manager) var manager: BookmarksManager
+    @ObservedObject var manager: BookmarksManager
     @StateObject var tagsView: TagsView
     @ObservedObject var settings: BookmarksCore.Settings
     @ObservedObject var windowModel: WindowModel
@@ -71,6 +71,18 @@ struct Sidebar: View {
                                 }
                             }))
                     }
+                }
+            }
+
+        }
+        .safeAreaInset(edge: .bottom) {
+
+            if manager.isUpdating {
+                VStack(spacing: 0) {
+                    Divider()
+                    Text("Updating...")
+                        .foregroundColor(.secondary)
+                        .padding()
                 }
             }
 

@@ -389,14 +389,10 @@ public class Database {
                     // compare.
                     if let existingBookmark = try? self.syncQueue_bookmark(identifier: bookmark.identifier) {
                         if existingBookmark != bookmark {
-                            print("updating \(bookmark)...")
-                            print("existing tags \(existingBookmark.tags)")
-                            print("bookmark tags \(bookmark.tags)")
                             try self.syncQueue_insertOrReplaceBookmark(bookmark)
                             self.syncQueue_notifyObservers()
                         }
                     } else {
-                        print("inserting \(bookmark)...")
                         try self.syncQueue_insertOrReplaceBookmark(bookmark)
                         self.syncQueue_notifyObservers()
                     }

@@ -124,7 +124,6 @@ public class Pinboard {
             "shared": post.shared ? "yes" : "no",
             "toread": post.toRead ? "yes" : "no"
         ]
-        print(parameters)
         self.fetch(path: .postsAdd, parameters: parameters, completion: completion) { _ in }
     }
 

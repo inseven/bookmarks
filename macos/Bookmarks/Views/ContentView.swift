@@ -94,7 +94,6 @@ struct ContentView: View {
                         .modifier(BorderedSelection())
                         .padding(4.0)
                         .shadow(color: .shadow, radius: 4.0)
-                        .help(bookmark.url.absoluteString)
 
                 } contextMenu: { selection in
                     contextMenu(selection)

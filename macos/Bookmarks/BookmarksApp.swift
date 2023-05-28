@@ -40,7 +40,7 @@ struct BookmarksApp: App {
     var body: some Scene {
 
         WindowGroup {
-            MainWindow(manager: manager)
+            ContentView(manager: manager)
         }
         .commands {
             SidebarCommands()

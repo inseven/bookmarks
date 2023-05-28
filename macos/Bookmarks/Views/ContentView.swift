@@ -25,7 +25,7 @@ import Interact
 
 import BookmarksCore
 
-struct MainWindow: View {
+struct ContentView: View {
 
     @FocusedObject var bookmarksView: BookmarksView?
 

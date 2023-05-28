@@ -47,7 +47,7 @@ struct BookmarksApp: App {
             ToolbarCommands()
             SectionCommands()
             ViewCommands(bookmarksView: bookmarksView)
-            BookmarkCommands(sceneModel: sceneModel, bookmarksView: bookmarksView)
+            BookmarkCommands()
             AccountCommands()
         }
 

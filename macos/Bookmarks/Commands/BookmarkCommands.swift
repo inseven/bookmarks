@@ -24,25 +24,23 @@ import BookmarksCore
 
 struct BookmarkCommands: Commands {
 
-     var sceneModel: SceneModel?
-    @ObservedObject var bookmarksView: BookmarksView
+    @FocusedObject var sceneModel: SceneModel?
+    @FocusedObject var bookmarksView: BookmarksView?
 
-    init(sceneModel: SceneModel?, bookmarksView: BookmarksView? = nil) {
-        self.sceneModel = sceneModel
-        self.bookmarksView = bookmarksView ?? BookmarksView()
+    init() {
     }
 
     var body: some Commands {
         CommandMenu("Bookmark") {
-            BookmarkOpenCommands(bookmarksView: bookmarksView)
+            BookmarkOpenCommands(bookmarksView: bookmarksView ?? BookmarksView())
                 .trailingDivider()
-            BookmarkDesctructiveCommands(bookmarksView: bookmarksView)
+            BookmarkDesctructiveCommands(bookmarksView: bookmarksView ?? BookmarksView())
                 .trailingDivider()
-            BookmarkEditCommands(bookmarksView: bookmarksView)
+            BookmarkEditCommands(bookmarksView: bookmarksView ?? BookmarksView())
                 .trailingDivider()
-            BookmarkShareCommands(bookmarksView: bookmarksView)
+            BookmarkShareCommands(bookmarksView: bookmarksView ?? BookmarksView())
                 .trailingDivider()
-            BookmarkTagCommands(sceneModel: sceneModel, bookmarksView: bookmarksView)
+            BookmarkTagCommands(sceneModel: sceneModel, bookmarksView: bookmarksView ?? BookmarksView())
         }
     }
 

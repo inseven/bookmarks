@@ -27,7 +27,7 @@ import BookmarksCore
 import Interact
 import SelectableCollectionView
 
-struct ContentView: View {
+struct SectionView: View {
 
     let manager: BookmarksManager
 

@@ -39,7 +39,7 @@ struct MainWindow: View {
             Sidebar(manager: manager, tagsView: manager.tagsView, settings: manager.settings, sceneModel: sceneModel)
         } detail: {
             if let section = sceneModel.section {
-                ContentView(manager: manager, section: section)
+                SectionView(manager: manager, section: section)
                     .id(section)
                     .environmentObject(sceneModel)
             } else {

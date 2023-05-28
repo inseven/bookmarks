@@ -34,7 +34,7 @@ struct SidebarLink: View {
         // TODO: Migrate to the new NavigationLink and re-enable warnings as errors #397
         //       https://github.com/inseven/bookmarks/issues/397
         NavigationLink(tag: section, selection: $selection) {
-            Bookmarks(section: section, bookmarksView: BookmarksView(manager: manager, section: section))
+            SectionView(section: section, bookmarksView: BookmarksView(manager: manager, section: section))
         } label: {
             Label(section.sidebarTitle, systemImage: section.systemImage)
         }

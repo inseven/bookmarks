@@ -56,7 +56,7 @@ struct BookmarksApp: App {
         }
 
         Window("Tags", id: "tags") {
-            TagsContentView(tagsView: manager.tagsView)
+            TagEditor(tagsView: manager.tagsView)
         }
 
         About(Legal.contents)

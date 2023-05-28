@@ -22,7 +22,7 @@ import SwiftUI
 
 import BookmarksCore
 
-struct Bookmarks: View {
+struct SectionView: View {
 
     enum SheetType: Identifiable {
 

@@ -24,12 +24,12 @@ import Interact
 
 import BookmarksCore
 
-struct TagsContentView: View {
+struct TagEditor: View {
 
-    @ObservedObject var model: TagEditorModel
+    @StateObject var model: TagEditorModel
 
     init(tagsView: TagsView) {
-        _model = ObservedObject(initialValue: TagEditorModel(tagsView: tagsView))
+        _model = StateObject(wrappedValue: TagEditorModel(tagsView: tagsView))
     }
 
     var body: some View {

@@ -10,8 +10,6 @@
 		D80710F326C4B855007272C0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80710F226C4B855007272C0 /* ContentView.swift */; };
 		D8164D6626C08DD500756D43 /* AddTagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D6526C08DD500756D43 /* AddTagsView.swift */; };
 		D8164D6826C08EEC00756D43 /* BorderedSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D6726C08EEC00756D43 /* BorderedSelection.swift */; };
-		D8350728294A0C260044ADE0 /* TagEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8350727294A0C260044ADE0 /* TagEditor.swift */; };
-		D835072A294A0DB40044ADE0 /* TagEditorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8350729294A0DB40044ADE0 /* TagEditorModel.swift */; };
 		D83CFEA52951B26D005031EA /* LayoutToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83CFEA42951B26D005031EA /* LayoutToolbar.swift */; };
 		D840B00A2621042B001E95D1 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840B0092621042B001E95D1 /* SettingsView.swift */; };
 		D840B01226210AF6001E95D1 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */; };
@@ -57,8 +55,6 @@
 		D80710F226C4B855007272C0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D8164D6526C08DD500756D43 /* AddTagsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTagsView.swift; sourceTree = "<group>"; };
 		D8164D6726C08EEC00756D43 /* BorderedSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderedSelection.swift; sourceTree = "<group>"; };
-		D8350727294A0C260044ADE0 /* TagEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagEditor.swift; sourceTree = "<group>"; };
-		D8350729294A0DB40044ADE0 /* TagEditorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagEditorModel.swift; sourceTree = "<group>"; };
 		D83CFEA42951B26D005031EA /* LayoutToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutToolbar.swift; sourceTree = "<group>"; };
 		D840B0092621042B001E95D1 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
@@ -194,7 +190,6 @@
 		D8931F5F26C5E11200A8021E /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				D8350729294A0DB40044ADE0 /* TagEditorModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -222,7 +217,6 @@
 				D891C455261E32F90024E1A6 /* SectionView.swift */,
 				D840B0092621042B001E95D1 /* SettingsView.swift */,
 				D861257226A60DF200EB5FEF /* Sidebar.swift */,
-				D8350727294A0C260044ADE0 /* TagEditor.swift */,
 				D8ACD7EE26BC81F7005F927A /* TokenField.swift */,
 			);
 			path = Views;
@@ -391,14 +385,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8B6E2C52620990400B2C239 /* Item.swift in Sources */,
-				D8350728294A0C260044ADE0 /* TagEditor.swift in Sources */,
 				D8ACD7EF26BC81F7005F927A /* TokenField.swift in Sources */,
 				D8E0202C26C2E1CC00910833 /* LoadingView.swift in Sources */,
 				D861257326A60DF200EB5FEF /* Sidebar.swift in Sources */,
 				D8A06F2828A7EFD40002A56D /* AccountToolbar.swift in Sources */,
 				D8164D6826C08EEC00756D43 /* BorderedSelection.swift in Sources */,
 				D891C456261E32F90024E1A6 /* SectionView.swift in Sources */,
-				D835072A294A0DB40044ADE0 /* TagEditorModel.swift in Sources */,
 				D861257526AA048E00EB5FEF /* RenameTagView.swift in Sources */,
 				D83CFEA52951B26D005031EA /* LayoutToolbar.swift in Sources */,
 				D80710F326C4B855007272C0 /* ContentView.swift in Sources */,

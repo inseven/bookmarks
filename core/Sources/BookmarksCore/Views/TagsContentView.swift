@@ -22,23 +22,21 @@ import SwiftUI
 
 import Interact
 
-import BookmarksCore
+public struct TagsContentView: View {
 
-struct TagEditor: View {
-
-    @StateObject var model: TagEditorModel
+    @StateObject var model: TagsContentViewModel
     @EnvironmentObject var manager: BookmarksManager
 
-    init(tagsView: TagsView) {
-        _model = StateObject(wrappedValue: TagEditorModel(tagsView: tagsView))
+    public init(tagsView: TagsView) {
+        _model = StateObject(wrappedValue: TagsContentViewModel(tagsView: tagsView))
     }
 
-    var body: some View {
+    public var body: some View {
         Table(model.filteredTags, selection: $model.selection) {
             TableColumn("Tag", value: \.self)
         }
         .contextMenu(forSelectionType: String.ID.self) { selection in
-            Button("Add to Favorites") {
+            Button {
                 print(selection)
                 for tag in selection {
                     guard !manager.settings.favoriteTags.contains(tag) else {
@@ -46,6 +44,8 @@ struct TagEditor: View {
                     }
                     manager.settings.favoriteTags.append(tag)
                 }
+            } label: {
+                Label("Add to Favorites", systemImage: "star")
             }
         }
         .searchable(text: $model.filter)

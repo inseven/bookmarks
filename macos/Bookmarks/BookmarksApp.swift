@@ -56,7 +56,7 @@ struct BookmarksApp: App {
         }
 
         Window("Tags", id: "tags") {
-            TagEditor(tagsView: manager.tagsView)
+            TagsContentView(tagsView: manager.tagsView)
                 .environmentObject(manager)
         }
 

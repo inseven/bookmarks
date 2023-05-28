@@ -22,29 +22,26 @@ import SwiftUI
 
 import BookmarksCore
 
-@main
-struct BookmarksApp: App {
+struct TagsEditorView: View {
 
-    @Environment(\.manager) var manager: BookmarksManager
-    @Environment(\.scenePhase) private var phase
+    @EnvironmentObject var manager: BookmarksManager
 
-    var body: some Scene {
-        WindowGroup {
-            ContentView(manager: manager)
-                .environmentObject(manager)
-                .environmentObject(manager.settings)
-        }
-        .onChange(of: phase) { phase in
-            switch phase {
-            case .active:
-                manager.refresh()
-            case .background:
-                break
-            case .inactive:
-                break
-            @unknown default:
-                break
-            }
+    @Environment(\.dismiss) var dismiss
+
+    var body: some View {
+        NavigationView {
+            TagsContentView(tagsView: manager.tagsView)
+                .navigationBarTitle("Tags", displayMode: .inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Text("Done")
+                                .fontWeight(.bold)
+                        }
+                    }
+                }
         }
     }
 

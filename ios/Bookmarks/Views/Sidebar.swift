@@ -75,7 +75,7 @@ struct Sidebar: View {
                     SettingsView(settings: manager.settings)
                 }
             case .tags:
-                TagsEditorView()
+                TagsView()
             }
         }
         .navigationTitle("Filters")

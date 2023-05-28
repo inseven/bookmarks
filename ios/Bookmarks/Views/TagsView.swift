@@ -22,7 +22,7 @@ import SwiftUI
 
 import BookmarksCore
 
-struct TagsEditorView: View {
+struct TagsView: View {
 
     @EnvironmentObject var manager: BookmarksManager
 

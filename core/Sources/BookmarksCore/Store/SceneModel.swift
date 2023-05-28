@@ -21,7 +21,7 @@
 import Combine
 import SwiftUI
 
-public class WindowModel: ObservableObject {
+public class SceneModel: ObservableObject {
 
     @Published public var section: BookmarksSection? = .all
     @Published public var selection: Set<Bookmark.ID> = []

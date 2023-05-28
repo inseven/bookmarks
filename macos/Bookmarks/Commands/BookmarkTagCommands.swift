@@ -26,7 +26,7 @@ struct BookmarkTagCommands: View {
 
     @Environment(\.manager) var manager
 
-    var windowModel: WindowModel?
+    var sceneModel: SceneModel?
 
     @ObservedObject var bookmarksView: BookmarksView
 
@@ -43,9 +43,9 @@ struct BookmarkTagCommands: View {
 
             ForEach(Array(bookmarksView.selectionTags).sorted()) { tag in
                 Button(tag) {
-                    windowModel?.section = tag.section
+                    sceneModel?.section = tag.section
                 }
-                .disabled(windowModel == nil)
+                .disabled(sceneModel == nil)
             }
 
         }

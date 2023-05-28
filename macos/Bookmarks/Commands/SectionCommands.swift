@@ -24,7 +24,7 @@ import BookmarksCore
 
 struct SectionCommands: Commands {
 
-    @FocusedObject var windowModel: WindowModel?
+    @FocusedObject var sceneModel: SceneModel?
 
     static func keyEquivalent(_ value: Int) -> KeyEquivalent {
         return KeyEquivalent(String(value).first!)
@@ -34,10 +34,10 @@ struct SectionCommands: Commands {
         CommandMenu("Go") {
             ForEach(Array(BookmarksSection.defaultSections.enumerated()), id: \.element.id) { index, section in
                 Button(section.navigationTitle) {
-                    windowModel?.section = section
+                    sceneModel?.section = section
                 }
                 .keyboardShortcut(Self.keyEquivalent(index + 1), modifiers: .command)
-                .disabled(windowModel == nil)
+                .disabled(sceneModel == nil)
             }
         }
     }

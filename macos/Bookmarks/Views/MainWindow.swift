@@ -31,17 +31,17 @@ struct MainWindow: View {
 
     @ObservedObject var manager: BookmarksManager
 
-    @StateObject var windowModel = WindowModel()
+    @StateObject var sceneModel = SceneModel()
     @State var sheet: ApplicationState? = nil
 
     var body: some View {
         NavigationSplitView {
-            Sidebar(manager: manager, tagsView: manager.tagsView, settings: manager.settings, windowModel: windowModel)
+            Sidebar(manager: manager, tagsView: manager.tagsView, settings: manager.settings, sceneModel: sceneModel)
         } detail: {
-            if let section = windowModel.section {
+            if let section = sceneModel.section {
                 ContentView(manager: manager, section: section)
                     .id(section)
-                    .environmentObject(windowModel)
+                    .environmentObject(sceneModel)
             } else {
                 PlaceholderView("Nothing Selected")
                     .searchable()
@@ -66,7 +66,7 @@ struct MainWindow: View {
                 sheet = .logIn
             }
         }
-        .focusedSceneObject(windowModel)
+        .focusedSceneObject(sceneModel)
     }
 
 }

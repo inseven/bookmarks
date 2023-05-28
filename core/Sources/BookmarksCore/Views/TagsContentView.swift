@@ -27,8 +27,8 @@ public struct TagsContentView: View {
     @StateObject var model: TagsContentViewModel
     @EnvironmentObject var manager: BookmarksManager
 
-    public init(tagsView: TagsView) {
-        _model = StateObject(wrappedValue: TagsContentViewModel(tagsView: tagsView))
+    public init(tagsModel: TagsModel) {
+        _model = StateObject(wrappedValue: TagsContentViewModel(tagsModel: tagsModel))
     }
 
     public var body: some View {

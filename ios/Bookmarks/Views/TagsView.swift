@@ -30,7 +30,7 @@ struct TagsEditorView: View {
 
     var body: some View {
         NavigationView {
-            TagsContentView(tagsView: manager.tagsView)
+            TagsContentView(tagsModel: manager.tagsModel)
                 .navigationBarTitle("Tags", displayMode: .inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {

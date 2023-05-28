@@ -38,11 +38,11 @@ struct AddTagsView: View {
 
     @State var tokens: [Token<String>] = []
 
-    @ObservedObject var tagsView: TagsView
+    @ObservedObject var tagsModel: TagsModel
     @ObservedObject var sectionViewModel: SectionViewModel
 
-    init(tagsView: TagsView, sectionViewModel: SectionViewModel) {
-        self.tagsView = tagsView
+    init(tagsModel: TagsModel, sectionViewModel: SectionViewModel) {
+        self.tagsModel = tagsModel
         self.sectionViewModel = sectionViewModel
     }
 
@@ -61,10 +61,10 @@ struct AddTagsView: View {
                         return Token(tag)
                             .associatedValue(tag)
                     } completions: { substring in
-                        tagsView.suggestions(prefix: substring,
-                                             existing: tokens
-                                                .filter { !$0.isPartial }
-                                                .compactMap { $0.associatedValue })
+                        tagsModel.suggestions(prefix: substring,
+                                              existing: tokens
+                            .filter { !$0.isPartial }
+                            .compactMap { $0.associatedValue })
                     }
                     .tokenizingCharacterSet(characterSet)
                     .font(.title)

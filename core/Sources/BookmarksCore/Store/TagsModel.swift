@@ -21,7 +21,7 @@
 import Combine
 import Foundation
 
-public class TagsView: ObservableObject {
+public class TagsModel: ObservableObject {
 
     var database: Database
     var cancellables: Set<AnyCancellable> = []

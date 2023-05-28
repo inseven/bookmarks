@@ -31,14 +31,14 @@ struct Sidebar: View {
     }
 
     @ObservedObject var manager: BookmarksManager
-    @StateObject var tagsView: TagsView
+    @StateObject var tagsModel: TagsModel
     @ObservedObject var settings: BookmarksCore.Settings
     @ObservedObject var sceneModel: SceneModel
 
     @State var sheet: SheetType? = nil
 
     var tags: [String] {
-        tagsView.tags.filter { !settings.favoriteTags.contains($0) }
+        tagsModel.tags.filter { !settings.favoriteTags.contains($0) }
     }
 
     var body: some View {

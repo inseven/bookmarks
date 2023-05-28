@@ -139,7 +139,7 @@ struct SectionView: View {
         .sheet(item: $sectionViewModel.sheet) { sheet in
             switch sheet {
             case .addTags:
-                AddTagsView(tagsView: manager.tagsView, sectionViewModel: sectionViewModel)
+                AddTagsView(tagsModel: manager.tagsModel, sectionViewModel: sectionViewModel)
             }
         }
         .presents($sectionViewModel.lastError)

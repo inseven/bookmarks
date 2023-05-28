@@ -50,7 +50,7 @@ public class BookmarksManager: ObservableObject {
     public var imageCache: ImageCache!
     public var thumbnailManager: ThumbnailManager
     public var settings = Settings()
-    public var tagsView: TagsView
+    public var tagsModel: TagsModel
     public var cache: NSCache = NSCache<NSString, SafeImage>()
     public var database: Database
 
@@ -69,11 +69,11 @@ public class BookmarksManager: ObservableObject {
         downloadManager = DownloadManager(limit: settings.maximumConcurrentThumbnailDownloads)
         thumbnailManager = ThumbnailManager(imageCache: imageCache, downloadManager: downloadManager)
         updater = Updater(database: database, settings: settings)
-        tagsView = TagsView(database: database)
+        tagsModel = TagsModel(database: database)
 
         updater.delegate = self
         updater.start()
-        tagsView.start()
+        tagsModel.start()
 
         #if os(macOS)
         let notificationCenter = NotificationCenter.default

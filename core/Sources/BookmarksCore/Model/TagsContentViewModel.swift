@@ -30,15 +30,15 @@ class TagsContentViewModel: ObservableObject, Runnable {
     @MainActor @Published var filteredTags: [String] = []
     @MainActor @Published var selection: Set<String> = []
 
-    @MainActor var tagsView: TagsView
+    @MainActor var tagsModel: TagsModel
     @MainActor var cancellables: Set<AnyCancellable> = []
 
-    init(tagsView: TagsView) {
-        self.tagsView = tagsView
+    init(tagsModel: TagsModel) {
+        self.tagsModel = tagsModel
     }
 
     @MainActor func start() {
-        tagsView.$tags
+        tagsModel.$tags
             .combineLatest($filter)
             .receive(on: DispatchQueue.global())
             .map { tags, filter in

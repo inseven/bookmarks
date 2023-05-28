@@ -48,13 +48,11 @@ struct SettingsView: View {
                 Section("Viewing") {
                     Toggle("Use In-App Browser", isOn: $settings.useInAppBrowser)
                 }
-#if DEBUG
                 Section {
                     NavigationLink("Debug") {
-                        DebugView(settings: settings)
+                        DebugSettingsView(settings: settings)
                     }
                 }
-#endif
                 Section {
                     Button {
                         sheet = .about
@@ -68,11 +66,7 @@ struct SettingsView: View {
                         presentationMode.wrappedValue.dismiss()
                         manager.logout { _ in }
                     } label: {
-                        HStack {
-                            Spacer()
-                            Text("Log Out")
-                            Spacer()
-                        }
+                        Text("Log Out")
                     }
                 }
             }

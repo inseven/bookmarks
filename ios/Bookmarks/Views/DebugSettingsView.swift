@@ -22,7 +22,7 @@ import SwiftUI
 
 import BookmarksCore
 
-struct DebugView: View {
+struct DebugSettingsView: View {
 
     @Environment(\.manager) var manager: BookmarksManager
 
@@ -52,8 +52,7 @@ struct DebugView: View {
                         }
                     }
                 } label: {
-                    Label("Clear Thumbnail Cache", systemImage: "trash")
-                        .labelStyle(ButtonLabelStyle())
+                    Text("Clear Thumbnail Cache")
                 }
             }
         }

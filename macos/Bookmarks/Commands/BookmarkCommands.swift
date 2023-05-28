@@ -18,48 +18,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import AppKit
 import SwiftUI
-
-import Diligence
 
 import BookmarksCore
 
-@main
-struct BookmarksApp: App {
+struct BookmarkCommands: Commands {
 
-    @Environment(\.manager) var manager
+     var sceneModel: SceneModel?
+    @ObservedObject var bookmarksView: BookmarksView
 
-    init() {
-        manager.start()
+    init(sceneModel: SceneModel?, bookmarksView: BookmarksView? = nil) {
+        self.sceneModel = sceneModel
+        self.bookmarksView = bookmarksView ?? BookmarksView()
     }
 
-    @FocusedObject var sceneModel: SceneModel?
-    @FocusedObject var bookmarksView: BookmarksView?
-
-    var body: some Scene {
-
-        WindowGroup {
-            MainWindow(manager: manager)
+    var body: some Commands {
+        CommandMenu("Bookmark") {
+            BookmarkOpenCommands(bookmarksView: bookmarksView)
+                .trailingDivider()
+            BookmarkDesctructiveCommands(bookmarksView: bookmarksView)
+                .trailingDivider()
+            BookmarkEditCommands(bookmarksView: bookmarksView)
+                .trailingDivider()
+            BookmarkShareCommands(bookmarksView: bookmarksView)
+                .trailingDivider()
+            BookmarkTagCommands(sceneModel: sceneModel, bookmarksView: bookmarksView)
         }
-        .commands {
-            SidebarCommands()
-            ToolbarCommands()
-            SectionCommands()
-            ViewCommands(bookmarksView: bookmarksView)
-            BookmarkCommands(sceneModel: sceneModel, bookmarksView: bookmarksView)
-            AccountCommands()
-        }
-
-        SwiftUI.Settings {
-            SettingsView()
-        }
-
-        Window("Tags", id: "tags") {
-            TagsContentView(tagsView: manager.tagsView)
-        }
-
-        About(Legal.contents)
-
     }
+
 }

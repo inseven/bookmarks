@@ -41,6 +41,7 @@
 		D8C8584429560700004EB23E /* SelectableCollectionView in Frameworks */ = {isa = PBXBuildFile; productRef = D8C8584329560700004EB23E /* SelectableCollectionView */; };
 		D8D356D32955F06D0020C81C /* BookmarksCore in Frameworks */ = {isa = PBXBuildFile; productRef = D8D356D22955F06D0020C81C /* BookmarksCore */; };
 		D8E0202C26C2E1CC00910833 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0202B26C2E1CC00910833 /* LoadingView.swift */; };
+		D8E3402E2A23970F004737A6 /* BookmarkCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E3402D2A23970F004737A6 /* BookmarkCommands.swift */; };
 		D8F3F28F26EE776900BFA43B /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F3F28E26EE776900BFA43B /* LogInView.swift */; };
 		D8FF9E9228A75D400081E57A /* Diligence in Frameworks */ = {isa = PBXBuildFile; productRef = D8FF9E9128A75D400081E57A /* Diligence */; };
 /* End PBXBuildFile section */
@@ -105,6 +106,7 @@
 		D8CF8C6D261E34A300E52E85 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8CF8CC1261E369D00E52E85 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8E0202B26C2E1CC00910833 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		D8E3402D2A23970F004737A6 /* BookmarkCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkCommands.swift; sourceTree = "<group>"; };
 		D8ECA5DE2640580E00947EEC /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		D8ECA5DF2640582200947EEC /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		D8ECA5E02640583900947EEC /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
@@ -232,6 +234,7 @@
 			isa = PBXGroup;
 			children = (
 				D8A06F2028A7E92F0002A56D /* AccountCommands.swift */,
+				D8E3402D2A23970F004737A6 /* BookmarkCommands.swift */,
 				D8A336FD26B56AF700436200 /* BookmarkDestructiveCommands.swift */,
 				D8A3370226B56C7400436200 /* BookmarkEditCommands.swift */,
 				D8A336FF26B56C1B00436200 /* BookmarkOpenCommands.swift */,
@@ -448,6 +451,7 @@
 				D891C454261E32F90024E1A6 /* BookmarksApp.swift in Sources */,
 				D8A06F1D28A7E2120002A56D /* SectionCommands.swift in Sources */,
 				D8A06F2628A7EE9A0002A56D /* SelectionToolbar.swift in Sources */,
+				D8E3402E2A23970F004737A6 /* BookmarkCommands.swift in Sources */,
 				D8A3370326B56C7400436200 /* BookmarkEditCommands.swift in Sources */,
 				D872733F2A214FF200B1EA8C /* ViewCommands.swift in Sources */,
 				D8164D6626C08DD500756D43 /* AddTagsView.swift in Sources */,

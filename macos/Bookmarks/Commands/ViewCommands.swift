@@ -26,6 +26,10 @@ struct ViewCommands: Commands {
 
     @ObservedObject var bookmarksView: BookmarksView
 
+    init(bookmarksView: BookmarksView? = nil) {
+        self.bookmarksView = bookmarksView ?? BookmarksView()
+    }
+
     var body: some Commands {
         CommandGroup(before: .sidebar) {
             Picker(selection: $bookmarksView.layoutMode) {

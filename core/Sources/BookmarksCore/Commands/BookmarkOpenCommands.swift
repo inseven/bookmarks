@@ -20,26 +20,34 @@
 
 import SwiftUI
 
-import BookmarksCore
+struct BookmarkOpenCommands: View {
 
-struct SectionCommands: Commands {
+    @Environment(\.manager) var manager
 
-    @FocusedObject var sceneModel: SceneModel?
+    @ObservedObject var bookmarksView: BookmarksView
 
-    static func keyEquivalent(_ value: Int) -> KeyEquivalent {
-        return KeyEquivalent(String(value).first!)
-    }
+    var body: some View {
 
-    var body: some Commands {
-        CommandMenu("Go") {
-            ForEach(Array(BookmarksSection.defaultSections.enumerated()), id: \.element.id) { index, section in
-                Button(section.navigationTitle) {
-                    sceneModel?.section = section
-                }
-                .keyboardShortcut(Self.keyEquivalent(index + 1), modifiers: .command)
-                .disabled(sceneModel == nil)
-            }
+        Button("Preview") {
+            bookmarksView.showPreview()
         }
+        .keyboardShortcut(.space, modifiers: [])
+        .disabled(bookmarksView.selection.isEmpty)
+
+        Divider()
+
+        Button("Open") {
+            bookmarksView.open()
+        }
+        .keyboardShortcut(.return, modifiers: [.command])
+        .disabled(bookmarksView.selection.isEmpty)
+
+        Button("Open on Internet Archive") {
+            bookmarksView.open(location: .internetArchive)
+        }
+        .keyboardShortcut(.return, modifiers: [.command, .shift])
+        .disabled(bookmarksView.selection.isEmpty)
+
     }
 
 }

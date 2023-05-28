@@ -20,35 +20,33 @@
 
 import SwiftUI
 
-import BookmarksCore
+struct BookmarkEditCommands: View {
 
-struct BookmarkOpenCommands: View {
-
-    @Environment(\.manager) var manager
+    @Environment(\.manager) var manager: BookmarksManager
 
     @ObservedObject var bookmarksView: BookmarksView
 
     var body: some View {
 
-        Button("Preview") {
-            bookmarksView.showPreview()
+        Button(bookmarksView.selectionContainsUnreadBookmarks ? "Mark as Read" : "Mark as Unread") {
+            bookmarksView.update(toRead: !bookmarksView.selectionContainsUnreadBookmarks)
         }
-        .keyboardShortcut(.space, modifiers: [])
+        .keyboardShortcut("U", modifiers: [.command, .shift])
+        .disabled(bookmarksView.selection.isEmpty)
+
+        Button(bookmarksView.selectionContainsPublicBookmark ? "Make Private" : "Make Public") {
+            bookmarksView.update(shared: !bookmarksView.selectionContainsPublicBookmark)
+        }
+        .keyboardShortcut("p", modifiers: [.command, .shift])
         .disabled(bookmarksView.selection.isEmpty)
 
         Divider()
 
-        Button("Open") {
-            bookmarksView.open()
+        Button("Edit on Pinboard") {
+            bookmarksView.open(location: .pinboard)
         }
-        .keyboardShortcut(.return, modifiers: [.command])
         .disabled(bookmarksView.selection.isEmpty)
-
-        Button("Open on Internet Archive") {
-            bookmarksView.open(location: .internetArchive)
-        }
-        .keyboardShortcut(.return, modifiers: [.command, .shift])
-        .disabled(bookmarksView.selection.isEmpty)
+        .keyboardShortcut("e", modifiers: [.command, .shift])
 
     }
 

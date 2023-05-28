@@ -20,27 +20,25 @@
 
 import SwiftUI
 
-import BookmarksCore
+public struct ViewCommands: Commands {
 
-struct BookmarkCommands: Commands {
+    @ObservedObject var bookmarksView: BookmarksView
 
-    @FocusedObject var sceneModel: SceneModel?
-    @FocusedObject var bookmarksView: BookmarksView?
-
-    init() {
+    public init(bookmarksView: BookmarksView? = nil) {
+        self.bookmarksView = bookmarksView ?? BookmarksView()
     }
 
-    var body: some Commands {
-        CommandMenu("Bookmark") {
-            BookmarkOpenCommands(bookmarksView: bookmarksView ?? BookmarksView())
-                .trailingDivider()
-            BookmarkDesctructiveCommands(bookmarksView: bookmarksView ?? BookmarksView())
-                .trailingDivider()
-            BookmarkEditCommands(bookmarksView: bookmarksView ?? BookmarksView())
-                .trailingDivider()
-            BookmarkShareCommands(bookmarksView: bookmarksView ?? BookmarksView())
-                .trailingDivider()
-            BookmarkTagCommands(sceneModel: sceneModel, bookmarksView: bookmarksView ?? BookmarksView())
+    public var body: some Commands {
+        CommandGroup(before: .sidebar) {
+            Picker(selection: $bookmarksView.layoutMode) {
+                ForEach(LayoutMode.allCases) { layoutMode in
+                    Label(Localized(layoutMode), systemImage: layoutMode.systemImage)
+                        .tag(layoutMode)
+                }
+            } label: {
+            }
+            .pickerStyle(.inline)
+            .disabled(bookmarksView.isPlaceholder)
         }
     }
 

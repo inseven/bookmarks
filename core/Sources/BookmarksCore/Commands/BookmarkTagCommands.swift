@@ -20,36 +20,32 @@
 
 import SwiftUI
 
-import BookmarksCore
+struct BookmarkTagCommands: View {
 
-struct BookmarkEditCommands: View {
+    @Environment(\.manager) var manager
 
-    @Environment(\.manager) var manager: BookmarksManager
+    var sceneModel: SceneModel?
 
     @ObservedObject var bookmarksView: BookmarksView
 
     var body: some View {
+        Menu("Tags") {
 
-        Button(bookmarksView.selectionContainsUnreadBookmarks ? "Mark as Read" : "Mark as Unread") {
-            bookmarksView.update(toRead: !bookmarksView.selectionContainsUnreadBookmarks)
+            Button("Add...") {
+                bookmarksView.addTags()
+            }
+            .keyboardShortcut("t", modifiers: .command)
+            .disabled(bookmarksView.selection.isEmpty)
+
+            Divider()
+
+            ForEach(Array(bookmarksView.selectionTags).sorted()) { tag in
+                Button(tag) {
+                    sceneModel?.section = tag.section
+                }
+                .disabled(sceneModel == nil)
+            }
+
         }
-        .keyboardShortcut("U", modifiers: [.command, .shift])
-        .disabled(bookmarksView.selection.isEmpty)
-
-        Button(bookmarksView.selectionContainsPublicBookmark ? "Make Private" : "Make Public") {
-            bookmarksView.update(shared: !bookmarksView.selectionContainsPublicBookmark)
-        }
-        .keyboardShortcut("p", modifiers: [.command, .shift])
-        .disabled(bookmarksView.selection.isEmpty)
-
-        Divider()
-
-        Button("Edit on Pinboard") {
-            bookmarksView.open(location: .pinboard)
-        }
-        .disabled(bookmarksView.selection.isEmpty)
-        .keyboardShortcut("e", modifiers: [.command, .shift])
-
     }
-
 }

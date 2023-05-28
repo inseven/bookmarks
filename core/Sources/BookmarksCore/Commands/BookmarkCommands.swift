@@ -20,17 +20,25 @@
 
 import SwiftUI
 
-import BookmarksCore
+public struct BookmarkCommands: Commands {
 
-struct AccountCommands: Commands {
+    @FocusedObject var sceneModel: SceneModel?
+    @FocusedObject var bookmarksView: BookmarksView?
 
-    @Environment(\.manager) var manager: BookmarksManager
+    public init() {
+    }
 
-    var body: some Commands {
-        CommandMenu("Account") {
-            Button("Log Out...") {
-                manager.logout { _ in }
-            }
+    public var body: some Commands {
+        CommandMenu("Bookmark") {
+            BookmarkOpenCommands(bookmarksView: bookmarksView ?? BookmarksView())
+                .trailingDivider()
+            BookmarkDesctructiveCommands(bookmarksView: bookmarksView ?? BookmarksView())
+                .trailingDivider()
+            BookmarkEditCommands(bookmarksView: bookmarksView ?? BookmarksView())
+                .trailingDivider()
+            BookmarkShareCommands(bookmarksView: bookmarksView ?? BookmarksView())
+                .trailingDivider()
+            BookmarkTagCommands(sceneModel: sceneModel, bookmarksView: bookmarksView ?? BookmarksView())
         }
     }
 

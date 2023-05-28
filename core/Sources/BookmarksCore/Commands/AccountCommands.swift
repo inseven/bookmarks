@@ -20,27 +20,19 @@
 
 import SwiftUI
 
-import BookmarksCore
+public struct AccountCommands: Commands {
 
-struct ViewCommands: Commands {
+    @Environment(\.manager) var manager: BookmarksManager
 
-    @ObservedObject var bookmarksView: BookmarksView
+    public init() {
 
-    init(bookmarksView: BookmarksView? = nil) {
-        self.bookmarksView = bookmarksView ?? BookmarksView()
     }
 
-    var body: some Commands {
-        CommandGroup(before: .sidebar) {
-            Picker(selection: $bookmarksView.layoutMode) {
-                ForEach(LayoutMode.allCases) { layoutMode in
-                    Label(Localized(layoutMode), systemImage: layoutMode.systemImage)
-                        .tag(layoutMode)
-                }
-            } label: {
+    public var body: some Commands {
+        CommandMenu("Account") {
+            Button("Log Out...") {
+                manager.logout { _ in }
             }
-            .pickerStyle(.inline)
-            .disabled(bookmarksView.isPlaceholder)
         }
     }
 

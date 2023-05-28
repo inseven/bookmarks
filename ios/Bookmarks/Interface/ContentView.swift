@@ -26,6 +26,8 @@ import BookmarksCore
 struct ContentView: View {
 
     @ObservedObject var manager: BookmarksManager
+
+    @StateObject var sceneModel = SceneModel()
     @State var sheet: ApplicationState? = nil
 
     var body: some View {
@@ -46,5 +48,6 @@ struct ContentView: View {
                 sheet = .logIn
             }
         }
+        .focusedSceneObject(sceneModel)
     }
 }

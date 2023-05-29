@@ -20,25 +20,19 @@
 
 import SwiftUI
 
-import BookmarksCore
+extension Array where Element == Color {
 
-struct AddTagLabel: View {
-    
-    private var tag: String
-    
-    init(_ tag: String) {
-        self.tag = tag
-    }
-    
-    var body: some View {
-        HStack {
-            Text(tag)
-                .foregroundColor(.primary)
-            Spacer()
-            Image(systemName: "plus.circle")
-                .imageScale(.medium)
-                .foregroundColor(.accentColor)
-        }
-    }
-    
+    static let system: [Color] = [
+        .pink,
+        .purple,
+        .orange,
+        .green,
+        .mint,
+        .yellow,
+        .teal,
+        .red,
+        .indigo,
+        .cyan,
+    ]
+
 }

@@ -18,7 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
+import SwiftUI
+
+import HashRainbow
 
 extension String: Identifiable {
 
@@ -44,8 +46,30 @@ extension String: Identifiable {
         components(separatedBy: .whitespacesAndNewlines).filter { !$0.isEmpty }
     }
 
+    public func color() -> Color {
+        return HashRainbow.colorForString(self, colors: .system)
+    }
+
+    public func containsWhitespaceAndNewlines() -> Bool {
+        return rangeOfCharacter(from: .whitespacesAndNewlines) != nil
+    }
+
     public func pinboardTagUrl(for user: String) throws -> URL {
         return try "https://pinboard.in/u:\(user)/t:\(self)/".url
     }
+
+    public func replacingCharacters(in characterSet: CharacterSet, with replacement: String) -> String {
+         components(separatedBy: characterSet)
+             .filter { !$0.isEmpty }
+             .joined(separator: replacement)
+     }
+
+    public var safeKeyword: String {
+         lowercased()
+             .replacingOccurrences(of: ".", with: "")
+             .replacingCharacters(in: CharacterSet.letters.inverted, with: " ")
+             .trimmingCharacters(in: CharacterSet.whitespaces)
+             .replacingCharacters(in: CharacterSet.whitespaces, with: "-")
+     }
 
 }

@@ -42,7 +42,7 @@ extension Color {
         #if os(iOS)
         Color(UIColor.secondarySystemBackground)
         #else
-        let bundle = Bundle(for: BookmarksManager.self)
+        let bundle = Bundle(for: ApplicationModel.self)
         return Color("ControlSecondaryBackground", bundle: bundle)
         #endif
     }

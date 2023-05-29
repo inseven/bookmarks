@@ -25,7 +25,7 @@ import Interact
 
 public struct SidebarContentView: View {
 
-    @EnvironmentObject var manager: BookmarksManager
+    @EnvironmentObject var applicationModel: ApplicationModel
     @EnvironmentObject var sceneModel: SceneModel
     @EnvironmentObject var settings: Settings
 
@@ -47,7 +47,7 @@ public struct SidebarContentView: View {
                             .contextMenu {
                                 Button {
                                     do {
-                                        guard let user = manager.user else {
+                                        guard let user = applicationModel.user else {
                                             return
                                         }
                                         Application.open(try tag.pinboardTagUrl(for: user))

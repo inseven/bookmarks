@@ -29,7 +29,7 @@ import SelectableCollectionView
 
 struct SectionView: View {
 
-    let manager: BookmarksManager
+    let applicationModel: ApplicationModel
 
     @StateObject var sectionViewModel: SectionViewModel
 
@@ -37,9 +37,9 @@ struct SectionView: View {
                               columns: 5,
                               edgeInsets: NSEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0))
 
-    init(manager: BookmarksManager, section: BookmarksSection) {
-        self.manager = manager
-        _sectionViewModel = StateObject(wrappedValue: SectionViewModel(manager: manager, section: section))
+    init(applicationModel: ApplicationModel, section: BookmarksSection) {
+        self.applicationModel = applicationModel
+        _sectionViewModel = StateObject(wrappedValue: SectionViewModel(applicationModel: applicationModel, section: section))
     }
 
     @MenuItemBuilder private func contextMenu(_ selection: Set<Bookmark.ID>) -> [MenuItem] {
@@ -87,7 +87,7 @@ struct SectionView: View {
                                          selection: $sectionViewModel.selection,
                                          layout: layout) { bookmark in
 
-                    BookmarkCell(manager: manager, bookmark: bookmark)
+                    BookmarkCell(applicationModel: applicationModel, bookmark: bookmark)
                         .modifier(BorderedSelection())
                         .padding(4.0)
                         .shadow(color: .shadow, radius: 4.0)
@@ -139,7 +139,7 @@ struct SectionView: View {
         .sheet(item: $sectionViewModel.sheet) { sheet in
             switch sheet {
             case .addTags:
-                AddTagsView(tagsModel: manager.tagsModel, sectionViewModel: sectionViewModel)
+                AddTagsView(tagsModel: applicationModel.tagsModel, sectionViewModel: sectionViewModel)
             }
         }
         .presents($sectionViewModel.lastError)

@@ -35,7 +35,7 @@ struct SettingsView: View {
         case success(message: String)
     }
 
-    @Environment(\.manager) var manager: BookmarksManager
+    @Environment(\.applicationModel) var applicationModel: ApplicationModel
     @Environment(\.presentationMode) var presentationMode
 
     @ObservedObject var settings: Settings
@@ -64,7 +64,7 @@ struct SettingsView: View {
                 Section {
                     Button {
                         presentationMode.wrappedValue.dismiss()
-                        manager.logout { _ in }
+                        applicationModel.logout { _ in }
                     } label: {
                         Text("Log Out")
                     }

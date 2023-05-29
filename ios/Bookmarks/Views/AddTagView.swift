@@ -42,7 +42,6 @@ extension String {
 
 struct AddTagView: View {
     
-    @Environment(\.manager) var manager: BookmarksManager
     @Environment(\.presentationMode) var presentationMode
     
     @ObservedObject var tagsModel: TagsModel

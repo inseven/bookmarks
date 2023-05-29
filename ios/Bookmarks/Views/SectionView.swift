@@ -36,16 +36,16 @@ struct SectionView: View {
         case edit(Bookmark)
     }
 
-    let manager: BookmarksManager
+    let applicationModel: ApplicationModel
 
     @StateObject var sectionViewModel: SectionViewModel
 
     @State var sheet: SheetType? = nil
     @State var error: Error? = nil
 
-    init(manager: BookmarksManager, section: BookmarksSection) {
-        self.manager = manager
-        _sectionViewModel = StateObject(wrappedValue: SectionViewModel(manager: manager, section: section))
+    init(applicationModel: ApplicationModel, section: BookmarksSection) {
+        self.applicationModel = applicationModel
+        _sectionViewModel = StateObject(wrappedValue: SectionViewModel(applicationModel: applicationModel, section: section))
     }
     
     func perform(action: @escaping () async throws -> Void) {
@@ -64,7 +64,7 @@ struct SectionView: View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
                 ForEach(sectionViewModel.bookmarks) { bookmark in
-                    BookmarkCell(manager: manager, bookmark: bookmark)
+                    BookmarkCell(applicationModel: applicationModel, bookmark: bookmark)
                         .aspectRatio(8/9, contentMode: .fit)
                         .onTapGesture {
                             UIApplication.shared.open(bookmark.url)
@@ -79,7 +79,7 @@ struct SectionView: View {
                             if bookmark.toRead {
                                 Button {
                                     perform {
-                                        try await manager.updateBookmarks([bookmark.setting(toRead: false)])
+                                        try await applicationModel.updateBookmarks([bookmark.setting(toRead: false)])
                                     }
                                 } label: {
                                     Label("Mark as Read", systemImage: "circle")
@@ -87,7 +87,7 @@ struct SectionView: View {
                             } else {
                                 Button {
                                     perform {
-                                        try await manager.updateBookmarks([bookmark.setting(toRead: true)])
+                                        try await applicationModel.updateBookmarks([bookmark.setting(toRead: true)])
                                     }
                                 } label: {
                                     Label("Mark as Unread", systemImage: "circle.inset.filled")
@@ -96,7 +96,7 @@ struct SectionView: View {
                             if bookmark.shared {
                                 Button {
                                     perform {
-                                        try await manager.updateBookmarks([bookmark.setting(shared: false)])
+                                        try await applicationModel.updateBookmarks([bookmark.setting(shared: false)])
                                     }
                                 } label: {
                                     Label("Make Private", systemImage: "lock")
@@ -104,7 +104,7 @@ struct SectionView: View {
                             } else {
                                 Button {
                                     perform {
-                                        try await manager.updateBookmarks([bookmark.setting(shared: true)])
+                                        try await applicationModel.updateBookmarks([bookmark.setting(shared: true)])
                                     }
                                 } label: {
                                     Label("Make Public", systemImage: "globe")
@@ -112,7 +112,7 @@ struct SectionView: View {
                             }
                             Button(role: .destructive) {
                                 perform {
-                                    try await manager.deleteBookmarks([bookmark])
+                                    try await applicationModel.deleteBookmarks([bookmark])
                                 }
                             } label: {
                                 Label("Delete", systemImage: "trash")
@@ -130,7 +130,7 @@ struct SectionView: View {
         .sheet(item: $sheet) { sheet in
             switch sheet {
             case .edit(let bookmark):
-                EditView(tagsModel: manager.tagsModel, bookmark: bookmark)
+                EditView(tagsModel: applicationModel.tagsModel, bookmark: bookmark)
             }
         }
         .alert(isPresented: $error.mappedToBool()) {

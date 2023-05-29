@@ -24,8 +24,6 @@ import BookmarksCore
 
 struct SelectionToolbar: CustomizableToolbarContent {
 
-    @Environment(\.manager) var manager: BookmarksManager
-    
     @ObservedObject var sectionViewModel: SectionViewModel
 
     var body: some CustomizableToolbarContent {

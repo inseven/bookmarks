@@ -38,14 +38,14 @@ struct Sidebar: View {
         case rename(tag: String)
     }
 
-    @Environment(\.manager) var manager
+    @Environment(\.applicationModel) var applicationModel
 
     @State var sheet: SheetType? = nil
 
     var body: some View {
         SidebarContentView()
             .safeAreaInset(edge: .bottom) {
-                if manager.isUpdating {
+                if applicationModel.isUpdating {
                     VStack(spacing: 0) {
                         Divider()
                         Text("Updating...")

@@ -29,7 +29,7 @@ struct ContentView: View {
 
     @FocusedObject var sectionViewModel: SectionViewModel?
 
-    @ObservedObject var manager: BookmarksManager
+    @ObservedObject var applicationModel: ApplicationModel
 
     @StateObject var sceneModel = SceneModel()
     @State var sheet: ApplicationState? = nil
@@ -39,7 +39,7 @@ struct ContentView: View {
             Sidebar()
         } detail: {
             if let section = sceneModel.section {
-                SectionView(manager: manager, section: section)
+                SectionView(applicationModel: applicationModel, section: section)
                     .id(section)
                     .environmentObject(sceneModel)
             } else {
@@ -58,7 +58,7 @@ struct ContentView: View {
                 LogInView()
             }
         }
-        .onChange(of: manager.state) { newValue in
+        .onChange(of: applicationModel.state) { newValue in
             switch newValue {
             case .idle:
                 sheet = nil

@@ -31,7 +31,7 @@ struct LogInView: View {
         case password
     }
 
-    @Environment(\.manager) var manager
+    @Environment(\.applicationModel) var applicationModel
     @Environment(\.presentationMode) var presentationMode
 
     @FocusState private var focus: Field?
@@ -43,7 +43,7 @@ struct LogInView: View {
     func submit() {
         dispatchPrecondition(condition: .onQueue(.main))
         authenticating = true
-        manager.authenticate(username: username, password: password) { result in
+        applicationModel.authenticate(username: username, password: password) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success:

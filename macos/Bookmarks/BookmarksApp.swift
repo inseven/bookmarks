@@ -28,10 +28,10 @@ import BookmarksCore
 @main
 struct BookmarksApp: App {
 
-    @Environment(\.manager) var manager
+    @Environment(\.applicationModel) var applicationModel
 
     init() {
-        manager.start()
+        applicationModel.start()
     }
 
     @FocusedObject var sceneModel: SceneModel?
@@ -40,9 +40,9 @@ struct BookmarksApp: App {
     var body: some Scene {
 
         WindowGroup {
-            ContentView(manager: manager)
-                .environmentObject(manager)
-                .environmentObject(manager.settings)
+            ContentView(applicationModel: applicationModel)
+                .environmentObject(applicationModel)
+                .environmentObject(applicationModel.settings)
         }
         .commands {
             SidebarCommands()
@@ -58,8 +58,8 @@ struct BookmarksApp: App {
         }
 
         Window("Tags", id: "tags") {
-            TagsContentView(tagsModel: manager.tagsModel)
-                .environmentObject(manager)
+            TagsContentView(tagsModel: applicationModel.tagsModel)
+                .environmentObject(applicationModel)
         }
 
         About(Legal.contents)

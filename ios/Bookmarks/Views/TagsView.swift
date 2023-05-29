@@ -24,13 +24,13 @@ import BookmarksCore
 
 struct TagsView: View {
 
-    @EnvironmentObject var manager: BookmarksManager
+    @EnvironmentObject var applicationModel: ApplicationModel
 
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
         NavigationView {
-            TagsContentView(tagsModel: manager.tagsModel)
+            TagsContentView(tagsModel: applicationModel.tagsModel)
                 .navigationBarTitle("Tags", displayMode: .inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {

@@ -22,8 +22,6 @@ import SwiftUI
 
 struct BookmarkOpenCommands: View {
 
-    @Environment(\.manager) var manager
-
     @ObservedObject var sectionViewModel: SectionViewModel
 
     var body: some View {

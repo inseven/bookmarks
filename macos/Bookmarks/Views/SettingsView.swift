@@ -29,12 +29,12 @@ struct SettingsView: View {
         case account
     }
 
-    @Environment(\.manager) var manager: BookmarksManager
+    @Environment(\.applicationModel) var applicationModel: ApplicationModel
 
     var body: some View {
         EmptyView()
         TabView {
-            GeneralSettingsView(settings: manager.settings)
+            GeneralSettingsView(settings: applicationModel.settings)
                 .tabItem {
                     Label("General", systemImage: "gear")
                 }

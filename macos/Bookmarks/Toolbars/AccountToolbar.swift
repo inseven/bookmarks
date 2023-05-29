@@ -24,13 +24,13 @@ import BookmarksCore
 
 struct AccountToolbar: CustomizableToolbarContent {
 
-    @Environment(\.manager) var manager: BookmarksManager
+    @Environment(\.applicationModel) var applicationModel: ApplicationModel
 
     var body: some CustomizableToolbarContent {
 
         ToolbarItem(id: "refresh") {
             Button {
-                manager.refresh()
+                applicationModel.refresh()
             } label: {
                 Label("Refresh", systemImage: "arrow.clockwise")
             }

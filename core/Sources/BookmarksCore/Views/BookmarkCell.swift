@@ -28,15 +28,15 @@ public struct BookmarkCell: View {
     }
 
     var bookmark: Bookmark
-    let manager: BookmarksManager
+    let applicationModel: ApplicationModel
 
     @State var image: SafeImage?
     @State var publisher: AnyCancellable?
 
-    public init(manager: BookmarksManager, bookmark: Bookmark) {
-        self.manager = manager
+    public init(applicationModel: ApplicationModel, bookmark: Bookmark) {
+        self.applicationModel = applicationModel
         self.bookmark = bookmark
-        _image = State(wrappedValue: manager.cache.object(forKey: bookmark.url.absoluteString as NSString))
+        _image = State(wrappedValue: applicationModel.cache.object(forKey: bookmark.url.absoluteString as NSString))
     }
 
     var title: String {
@@ -95,7 +95,7 @@ public struct BookmarkCell: View {
                 return
             }
             // TODO: Determine the appropriate default size for thumbnails.
-            publisher = manager.thumbnailManager.thumbnail(for: bookmark, scale: 2)
+            publisher = applicationModel.thumbnailManager.thumbnail(for: bookmark, scale: 2)
                 .receive(on: DispatchQueue.main)
                 .sink(receiveCompletion: { (completion) in
                     if case .failure(let error) = completion {
@@ -103,7 +103,7 @@ public struct BookmarkCell: View {
                     }
                 }, receiveValue: { image in
                     self.image = image
-                    self.manager.cache.setObject(image, forKey: bookmark.url.absoluteString as NSString)
+                    self.applicationModel.cache.setObject(image, forKey: bookmark.url.absoluteString as NSString)
                 })
         }
         .onDisappear {

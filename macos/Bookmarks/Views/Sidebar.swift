@@ -26,83 +26,39 @@ import Interact
 
 struct Sidebar: View {
 
-    enum SheetType {
+    enum SheetType: Identifiable {
+
+        var id: String {
+            switch self {
+            case .rename(let tag):
+                return "rename:\(tag)"
+            }
+        }
+
         case rename(tag: String)
     }
 
-    @ObservedObject var manager: BookmarksManager
-    @StateObject var tagsModel: TagsModel
-    @ObservedObject var settings: BookmarksCore.Settings
-    @ObservedObject var sceneModel: SceneModel
+    @Environment(\.manager) var manager
 
     @State var sheet: SheetType? = nil
 
-    var tags: [String] {
-        tagsModel.tags.filter { !settings.favoriteTags.contains($0) }
-    }
-
     var body: some View {
-        List(selection: $sceneModel.section) {
-            Section {
-                ForEach(BookmarksSection.defaultSections) { section in
-                    SectionLink(section)
-                }
-            }
-
-            if settings.favoriteTags.count > 0 {
-
-                Section("Favorites") {
-                    ForEach(settings.favoriteTags.sorted(), id: \.section) { tag in
-                        SectionLink(tag.section)
-                            .contextMenu {
-                                Button("Remove from Favorites") {
-                                    settings.favoriteTags = settings.favoriteTags.filter { $0 != tag }
-                                }
-                                Divider()
-                                Button("Edit on Pinboard") {
-                                    do {
-                                        guard let user = manager.user else {
-                                            return
-                                        }
-                                        NSWorkspace.shared.open(try tag.pinboardTagUrl(for: user))
-                                    } catch {
-                                        print("Failed to open on Pinboard error \(error)")
-                                    }
-                                }
-                            }
+        SidebarContentView()
+            .safeAreaInset(edge: .bottom) {
+                if manager.isUpdating {
+                    VStack(spacing: 0) {
+                        Divider()
+                        Text("Updating...")
+                            .foregroundColor(.secondary)
+                            .padding()
                     }
                 }
             }
-
-        }
-        .safeAreaInset(edge: .bottom) {
-
-            if manager.isUpdating {
-                VStack(spacing: 0) {
-                    Divider()
-                    Text("Updating...")
-                        .foregroundColor(.secondary)
-                        .padding()
+            .sheet(item: $sheet) { sheet in
+                switch sheet {
+                case .rename(let tag):
+                    RenameTagView(tag: tag)
                 }
             }
-
-        }
-        .sheet(item: $sheet) { sheet in
-            switch sheet {
-            case .rename(let tag):
-                RenameTagView(tag: tag)
-            }
-        }
     }
-}
-
-extension Sidebar.SheetType: Identifiable {
-
-    var id: String {
-        switch self {
-        case .rename(let tag):
-            return "rename:\(tag)"
-        }
-    }
-
 }

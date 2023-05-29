@@ -41,6 +41,8 @@ struct BookmarksApp: App {
 
         WindowGroup {
             ContentView(manager: manager)
+                .environmentObject(manager)
+                .environmentObject(manager.settings)
         }
         .commands {
             SidebarCommands()

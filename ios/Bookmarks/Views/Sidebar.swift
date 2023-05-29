@@ -32,72 +32,42 @@ struct Sidebar: View {
         case tags
     }
 
-    @Environment(\.manager) var manager: BookmarksManager
     @EnvironmentObject var settings: Settings
-
-    @ObservedObject var sceneModel: SceneModel
     
     @State var sheet: Sheet?
     
     var body: some View {
-        List(selection: $sceneModel.section) {
-            Section("Smart Filters") {
-                SectionLink(.all)
-                SectionLink(.shared(false))
-                SectionLink(.shared(true))
-                SectionLink(.today)
-                SectionLink(.unread)
-                SectionLink(.untagged)
+        SidebarContentView()
+            .sheet(item: $sheet) { sheet in
+                switch sheet {
+                case .settings:
+                    NavigationView {
+                        SettingsView(settings: settings)
+                    }
+                case .tags:
+                    TagsView()
+                }
             }
+            .navigationTitle("Bookmarks")
+            .toolbar {
 
-            if settings.favoriteTags.count > 0 {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        sheet = .settings
+                    } label: {
+                        Image(systemName: "gear")
+                    }
+                }
 
-                Section("Favorites") {
-                    ForEach(settings.favoriteTags.sorted(), id: \.section) { tag in
-                        SectionLink(tag.section)
-                            .contextMenu {
-                                Button(role: .destructive) {
-                                    settings.favoriteTags = settings.favoriteTags.filter { $0 != tag }
-                                } label: {
-                                    Label("Remove from Favorites", systemImage: "star.slash")
-                                }
-                            }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        sheet = .tags
+                    } label: {
+                        Image(systemName: "tag")
                     }
                 }
 
             }
-
-        }
-        .sheet(item: $sheet) { sheet in
-            switch sheet {
-            case .settings:
-                NavigationView {
-                    SettingsView(settings: manager.settings)
-                }
-            case .tags:
-                TagsView()
-            }
-        }
-        .navigationTitle("Filters")
-        .toolbar {
-
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button {
-                    sheet = .settings
-                } label: {
-                    Image(systemName: "gear")
-                }
-            }
-
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    sheet = .tags
-                } label: {
-                    Image(systemName: "tag")
-                }
-            }
-
-        }
     }
     
 }

@@ -20,7 +20,10 @@
 
 import SwiftUI
 
+import WrappingHStack
+
 import BookmarksCore
+
 
 struct EditView: View {
     
@@ -81,39 +84,24 @@ struct EditView: View {
                     Toggle("Unread", isOn: $toRead)
                     Toggle("Public", isOn: $shared)
                 }
-                Section {
-                    if tags.isEmpty {
-                        Text("None")
-                            .foregroundColor(.secondary)
-                    } else {
-                        ForEach(tags) { tag in
-                            Button {
-                                tags.removeAll { $0 == tag }
-                            } label: {
-                                HStack {
-                                    Text(tag)
-                                    Spacer()
-                                    Image(systemName: "xmark.circle.fill")
-                                        .imageScale(.medium)
-                                        .foregroundColor(.secondary)
+                Section("Tags") {
+                    Button {
+                        sheet = .addTag
+                    } label: {
+                        if tags.isEmpty {
+                            Text("Add Tags...")
+                        } else {
+                            WrappingHStack(alignment: .leading) {
+                                ForEach(tags.sorted()) { tag in
+                                    TagView(tag, color: tag.color())
                                 }
                             }
                         }
-                        .foregroundColor(.primary)
-                    }
-                } header: {
-                    HStack {
-                        Text("Tags")
-                        Spacer()
-                        Button {
-                            sheet = .addTag
-                        } label: {
-                            Text("Add...")
-                        }
                     }
                 }
-                Section {
+                Section("URL") {
                     Text(bookmark.url.absoluteString)
+                        .foregroundColor(.secondary)
                 }
             }
             .listStyle(.grouped)
@@ -137,7 +125,7 @@ struct EditView: View {
             .sheet(item: $sheet) { sheet in
                 switch sheet {
                 case .addTag:
-                    AddTagView(tagsModel: tagsModel, tags: $tags)
+                    EditTagsView(tagsModel: tagsModel, tags: $tags)
                 }
             }
         }

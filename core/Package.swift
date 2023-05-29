@@ -18,6 +18,8 @@ let package = Package(
         .package(path: "./../interact"),
         .package(path: "./../hpple"),
         .package(path: "./../SQLite.swift"),
+        .package(url: "https://github.com/ksemianov/WrappingHStack.git", branch: "main"),
+        .package(url: "https://github.com/saramah/HashRainbow.git", branch: "main"),
     ],
     targets: [
         .target(
@@ -27,6 +29,8 @@ let package = Package(
                 .product(name: "Interact", package: "Interact"),
                 .product(name: "SQLite", package: "SQLite.swift"),
                 .product(name: "TFHpple", package: "hpple"),
+                .product(name: "WrappingHStack", package: "WrappingHStack"),
+                .product(name: "HashRainbow", package: "HashRainbow"),
             ],
             resources: [
                 .process("Licenses"),

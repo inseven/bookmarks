@@ -45,11 +45,13 @@ public struct Legal {
     } licenses: {
         License("Binding+mappedToBool", author: "Joseph Duffy", filename: "binding-mappedtobool-license", bundle: .module)
         License("Bookmarks", author: "InSeven Limited", filename: "bookmarks-license", bundle: .module)
+        License("HashRainbow", author: "Sarah Barbour", filename: "hashrainbow-license", bundle: .module)
         License("Interact", author: "InSeven Limited", filename: "interact-license", bundle: .module)
         License("Introspect", author: "Timber Software", filename: "introspect-license", bundle: .module)
         License("SelectableCollectionView", author: "Jason Morley", filename: "selectablecollectionview-license", bundle: .module)
         License("SQLite.swift", author: "Stephen Celis", filename: "sqlite-swift-license", bundle: .module)
         License("TFHpple", author: "Topfunky Corporation", filename: "tfhpple-license", bundle: .module)
+        License("WrappingHStack", author: "Konstantin Semianov", filename: "wrappinghstack-license", bundle: .module)
     }
 
 }

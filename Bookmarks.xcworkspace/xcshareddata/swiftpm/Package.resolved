@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "HashRainbow",
+        "repositoryURL": "https://github.com/saramah/HashRainbow.git",
+        "state": {
+          "branch": "main",
+          "revision": "3eb3d2ce3b3fce35bcde312ed074a9c237d714ab",
+          "version": null
+        }
+      },
+      {
         "package": "SwiftDocCPlugin",
         "repositoryURL": "https://github.com/apple/swift-docc-plugin",
         "state": {
@@ -26,6 +35,15 @@
           "branch": null,
           "revision": "2e09be8af614401bc9f87d40093ec19ce56ccaf2",
           "version": "0.1.3"
+        }
+      },
+      {
+        "package": "WrappingHStack",
+        "repositoryURL": "https://github.com/ksemianov/WrappingHStack.git",
+        "state": {
+          "branch": "main",
+          "revision": "7b48e1f19d337cf934d725bff54cac9519e285d8",
+          "version": null
         }
       }
     ]

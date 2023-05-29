@@ -22,32 +22,13 @@ import SwiftUI
 
 import BookmarksCore
 
-extension String {
-    
-    func replacingCharacters(in characterSet: CharacterSet, with replacement: String) -> String {
-         components(separatedBy: characterSet)
-             .filter { !$0.isEmpty }
-             .joined(separator: replacement)
-     }
-    
-    var safeKeyword: String {
-         lowercased()
-             .replacingOccurrences(of: ".", with: "")
-             .replacingCharacters(in: CharacterSet.letters.inverted, with: " ")
-             .trimmingCharacters(in: CharacterSet.whitespaces)
-             .replacingCharacters(in: CharacterSet.whitespaces, with: "-")
-     }
-    
-}
+struct EditTagsView: View {
 
-struct AddTagView: View {
-    
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
     
     @ObservedObject var tagsModel: TagsModel
     @Binding var tags: [String]
     @State var search: String = ""
-    @FocusState private var isFocused: Bool
     
     var available: [String] {
         // TODO: Make this async.
@@ -62,47 +43,61 @@ struct AddTagView: View {
     var body: some View {
         NavigationView {
             List {
-                Section {
-                    TextField("Tag", text: $search)
-                        .focused($isFocused)
-                }
-                if !search.isEmpty && !tags.contains(search.safeKeyword) {
-                    Section("Suggested") {
-                        Button {
-                            tags.append(search.safeKeyword)
-                            presentationMode.wrappedValue.dismiss()
-                        } label: {
-                            AddTagLabel(search.safeKeyword)
+                if search.isEmpty {
+                    Section {
+                        if tags.isEmpty {
+                            Text("None")
+                                .foregroundColor(.secondary)
+                        } else {
+                            ForEach(tags.sorted()) { tag in
+                                TagActionButton(tag, role: .destructive) {
+                                    withAnimation {
+                                        tags.removeAll { $0 == tag }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
-                Section(search.isEmpty ? "Tags" : "Matching Tags") {
-                    ForEach(filteredTags) { tag in
-                        Button {
-                            tags.append(tag)
-                            presentationMode.wrappedValue.dismiss()
-                        } label: {
-                            AddTagLabel(tag)
+                if !search.isEmpty && !tags.contains(search.safeKeyword) {
+                    Section("Suggested") {
+                        TagActionButton(search.safeKeyword) {
+                            withAnimation {
+                                tags.append(search.safeKeyword)
+                                search = ""
+                            }
+                        }
+                    }
+                }
+                if !filteredTags.isEmpty {
+                    Section(search.isEmpty ? "All Tags" : "Matching Tags") {
+                        ForEach(filteredTags) { tag in
+                            TagActionButton(tag) {
+                                withAnimation {
+                                    tags.append(tag)
+                                }
+                            }
                         }
                     }
                 }
             }
             .listStyle(.insetGrouped)
-            .navigationTitle("Add Tag")
+            .searchable(text: $search)
+            .navigationTitle("Edit Tags")
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(leading: Button {
-                presentationMode.wrappedValue.dismiss()
-            } label: {
-                Text("Cancel")
-            })
-        }
-        .navigationViewStyle(.stack)
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                self.isFocused = true
+            .toolbar {
+
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Text("Close")
+                    }
+                }
+
             }
         }
-
+        .navigationViewStyle(.stack)
     }
     
 }

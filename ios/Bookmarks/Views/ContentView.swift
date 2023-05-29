@@ -34,7 +34,7 @@ struct ContentView: View {
 
     var body: some View {
         NavigationSplitView {
-            Sidebar(sceneModel: sceneModel)
+            Sidebar()
         } detail: {
             if let section = sceneModel.section {
                 SectionView(manager: manager, section: section)
@@ -59,6 +59,7 @@ struct ContentView: View {
                 sheet = .logIn
             }
         }
+        .environmentObject(sceneModel)
         .focusedSceneObject(sceneModel)
     }
 }

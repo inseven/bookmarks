@@ -89,8 +89,7 @@ struct EditView: View {
                         sheet = .addTag
                     } label: {
                         if tags.isEmpty {
-                            Text("None")
-                                .foregroundColor(.secondary)
+                            Text("Add Tags...")
                         } else {
                             WrappingHStack(alignment: .leading) {
                                 ForEach(tags.sorted()) { tag in

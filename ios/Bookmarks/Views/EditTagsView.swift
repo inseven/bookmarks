@@ -44,11 +44,16 @@ struct EditTagsView: View {
         NavigationView {
             List {
                 if search.isEmpty {
-                    Section("Selected") {
-                        ForEach(tags.sorted()) { tag in
-                            TagActionButton(tag, role: .destructive) {
-                                withAnimation {
-                                    tags.removeAll { $0 == tag }
+                    Section {
+                        if tags.isEmpty {
+                            Text("None")
+                                .foregroundColor(.secondary)
+                        } else {
+                            ForEach(tags.sorted()) { tag in
+                                TagActionButton(tag, role: .destructive) {
+                                    withAnimation {
+                                        tags.removeAll { $0 == tag }
+                                    }
                                 }
                             }
                         }

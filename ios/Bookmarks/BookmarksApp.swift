@@ -25,19 +25,19 @@ import BookmarksCore
 @main
 struct BookmarksApp: App {
 
-    @Environment(\.manager) var manager: BookmarksManager
+    @Environment(\.applicationModel) var applicationModel: ApplicationModel
     @Environment(\.scenePhase) private var phase
 
     var body: some Scene {
         WindowGroup {
-            ContentView(manager: manager)
-                .environmentObject(manager)
-                .environmentObject(manager.settings)
+            ContentView(applicationModel: applicationModel)
+                .environmentObject(applicationModel)
+                .environmentObject(applicationModel.settings)
         }
         .onChange(of: phase) { phase in
             switch phase {
             case .active:
-                manager.refresh()
+                applicationModel.refresh()
             case .background:
                 break
             case .inactive:

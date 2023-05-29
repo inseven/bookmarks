@@ -30,7 +30,6 @@ struct AddTagsView: View {
         static let minimumButtonWidth = 80.0
     }
 
-    @Environment(\.manager) var manager
     @Environment(\.dismiss) var dismiss
 
     @State var isBusy = false

@@ -56,25 +56,25 @@ public class SectionViewModel: ObservableObject, Runnable {
     @Published private var query: AnyQuery
     @Published private var bookmarksLookup: [Bookmark.ID: Bookmark] = [:]
 
-    private let manager: BookmarksManager?
+    private let applicationModel: ApplicationModel?
     private let section: BookmarksSection
     private var cancellables: Set<AnyCancellable> = []
 
     public var isPlaceholder: Bool {
-        return manager == nil
+        return applicationModel == nil
     }
 
-    public init(manager: BookmarksManager? = nil, section: BookmarksSection = .all) {
-        self.manager = manager
+    public init(applicationModel: ApplicationModel? = nil, section: BookmarksSection = .all) {
+        self.applicationModel = applicationModel
         self.section = section
         self.query = section.query
         self.title = section.navigationTitle
-        self.layoutMode = manager?.settings.layoutMode(for: section) ?? .grid
+        self.layoutMode = applicationModel?.settings.layoutMode(for: section) ?? .grid
     }
 
     @MainActor public func start() {
         dispatchPrecondition(condition: .onQueue(.main))
-        guard let manager else {
+        guard let applicationModel else {
             return
         }
 
@@ -83,14 +83,14 @@ public class SectionViewModel: ObservableObject, Runnable {
         state = .loading
 
         // Query the database whenever a change occurs or the query changes.
-        DatabasePublisher(database: manager.database)
+        DatabasePublisher(database: applicationModel.database)
             .prepend(())
             .combineLatest($query)
             .debounce(for: .seconds(0.2), scheduler: DispatchQueue.main)
             .receive(on: DispatchQueue.global())
             .asyncMap { (_, query) in
                 do {
-                    let bookmarks = try await manager.database.bookmarks(query: query)
+                    let bookmarks = try await applicationModel.database.bookmarks(query: query)
                     let bookmarksLookup = bookmarks.reduce(into: [Bookmark.ID: Bookmark]()) { $0[$1.id] = $1 }
                     let urls = bookmarks.map { $0.url }
                     return (query, bookmarks, bookmarksLookup, urls)
@@ -127,7 +127,7 @@ public class SectionViewModel: ObservableObject, Runnable {
             .store(in: &cancellables)
 
         // Update the suggested tokens.
-        manager.tagsModel.$trie
+        applicationModel.tagsModel.$trie
             .debounce(for: 0.2, scheduler: DispatchQueue.main)
             .combineLatest($filter)
             .receive(on: DispatchQueue.global())
@@ -177,7 +177,7 @@ public class SectionViewModel: ObservableObject, Runnable {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] layoutMode in
                 guard let self else { return }
-                manager.settings.setLayoutMode(layoutMode, for: section)
+                applicationModel.settings.setLayoutMode(layoutMode, for: section)
             }
             .store(in: &cancellables)
 
@@ -228,29 +228,29 @@ public class SectionViewModel: ObservableObject, Runnable {
     }
 
     @MainActor public func update(ids: Set<Bookmark.ID>? = nil, toRead: Bool) {
-        guard let manager else {
+        guard let applicationModel else {
             return
         }
         let bookmarks = bookmarks(for: ids)
             .map { $0.setting(toRead: toRead) }
-        manager.updateBookmarks(bookmarks, completion: errorHandler())
+        applicationModel.updateBookmarks(bookmarks, completion: errorHandler())
     }
 
     @MainActor public func update(ids: Set<Bookmark.ID>? = nil, shared: Bool) {
-        guard let manager else {
+        guard let applicationModel else {
             return
         }
         let bookmarks = bookmarks(for: ids)
             .map { $0.setting(shared: shared) }
-        manager.updateBookmarks(bookmarks, completion: errorHandler())
+        applicationModel.updateBookmarks(bookmarks, completion: errorHandler())
     }
 
     @MainActor public func delete(ids: Set<Bookmark.ID>? = nil) {
-        guard let manager else {
+        guard let applicationModel else {
             return
         }
         let bookmarks = bookmarks(for: ids)
-        manager.deleteBookmarks(bookmarks, completion: errorHandler())
+        applicationModel.deleteBookmarks(bookmarks, completion: errorHandler())
     }
 
     // TODO: Rethink the threading here.
@@ -277,9 +277,9 @@ public class SectionViewModel: ObservableObject, Runnable {
 #endif
     }
 
-    // TODO: Consider whether we should pull this down into the manager.
+    // TODO: Consider whether we should pull this down into the applicationModel.
     @MainActor public func addTags(ids: Set<Bookmark.ID>? = nil, tags: Set<String>, markAsRead: Bool) {
-        guard let manager else {
+        guard let applicationModel else {
             return
         }
         let bookmarks = bookmarks(for: ids)
@@ -288,7 +288,7 @@ public class SectionViewModel: ObservableObject, Runnable {
                     .adding(tags: tags)
                     .setting(toRead: markAsRead ? false : item.toRead)
             }
-        manager.updateBookmarks(bookmarks, completion: errorHandler({ _ in }))
+        applicationModel.updateBookmarks(bookmarks, completion: errorHandler({ _ in }))
     }
 
     @MainActor public func showPreview() {

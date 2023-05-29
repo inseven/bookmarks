@@ -24,8 +24,6 @@ import BookmarksCore
 
 struct GeneralSettingsView: View {
 
-    @Environment(\.manager) var manager: BookmarksManager
-
     @ObservedObject var settings: BookmarksCore.Settings
 
     var body: some View {

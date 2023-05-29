@@ -24,7 +24,7 @@ import BookmarksCore
 
 struct DebugSettingsView: View {
 
-    @Environment(\.manager) var manager: BookmarksManager
+    @Environment(\.applicationModel) var applicationModel: ApplicationModel
 
     @ObservedObject var settings: Settings
 
@@ -41,7 +41,7 @@ struct DebugSettingsView: View {
             }
             Section {
                 Button(role: .destructive) {
-                    manager.imageCache.clear { result in
+                    applicationModel.imageCache.clear { result in
                         DispatchQueue.main.async {
                             switch result {
                             case .success:

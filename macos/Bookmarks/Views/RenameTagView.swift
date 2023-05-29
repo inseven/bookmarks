@@ -24,7 +24,7 @@ import BookmarksCore
 
 struct RenameTagView: View {
 
-    @Environment(\.manager) var manager: BookmarksManager
+    @Environment(\.applicationModel) var applicationModel: ApplicationModel
     @Environment(\.presentationMode) var presentationMode
 
     @State var tag: String
@@ -51,7 +51,7 @@ struct RenameTagView: View {
                     .keyboardShortcut(.cancelAction)
                     Button("OK") {
                         isBusy = true
-                        manager.renameTag(tag, to: newTag) { result in
+                        applicationModel.renameTag(tag, to: newTag) { result in
                             DispatchQueue.main.async {
                                 switch result {
                                 case .failure(let error):

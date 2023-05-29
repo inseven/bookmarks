@@ -22,8 +22,6 @@ import SwiftUI
 
 struct BookmarkTagCommands: View {
 
-    @Environment(\.manager) var manager
-
     var sceneModel: SceneModel?
 
     @ObservedObject var sectionViewModel: SectionViewModel

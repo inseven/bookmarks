@@ -23,18 +23,18 @@ import SwiftUI
 
 import Interact
 
-public struct ManagerEnvironmentKey: EnvironmentKey {
-    public static var defaultValue = BookmarksManager()
+public struct ApplicationModelEnvironmentKey: EnvironmentKey {
+    public static var defaultValue = ApplicationModel()
 }
 
 public extension EnvironmentValues {
-    var manager: BookmarksManager {
-        get { self[ManagerEnvironmentKey.self] }
-        set { self[ManagerEnvironmentKey.self] = newValue }
+    var applicationModel: ApplicationModel {
+        get { self[ApplicationModelEnvironmentKey.self] }
+        set { self[ApplicationModelEnvironmentKey.self] = newValue }
     }
 }
 
-public class BookmarksManager: ObservableObject {
+public class ApplicationModel: ObservableObject {
 
     public enum State {
         case idle
@@ -204,7 +204,7 @@ public class BookmarksManager: ObservableObject {
 
 }
 
-extension BookmarksManager: UpdaterDelegate {
+extension ApplicationModel: UpdaterDelegate {
 
     func updaterDidStart(_ updater: Updater) {
         DispatchQueue.main.async {

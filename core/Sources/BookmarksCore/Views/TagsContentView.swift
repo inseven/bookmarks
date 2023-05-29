@@ -25,7 +25,7 @@ import Interact
 public struct TagsContentView: View {
 
     @StateObject var model: TagsContentViewModel
-    @EnvironmentObject var manager: BookmarksManager
+    @EnvironmentObject var applicationModel: ApplicationModel
 
     public init(tagsModel: TagsModel) {
         _model = StateObject(wrappedValue: TagsContentViewModel(tagsModel: tagsModel))
@@ -39,10 +39,10 @@ public struct TagsContentView: View {
             Button {
                 print(selection)
                 for tag in selection {
-                    guard !manager.settings.favoriteTags.contains(tag) else {
+                    guard !applicationModel.settings.favoriteTags.contains(tag) else {
                         continue
                     }
-                    manager.settings.favoriteTags.append(tag)
+                    applicationModel.settings.favoriteTags.append(tag)
                 }
             } label: {
                 Label("Add to Favorites", systemImage: "star")

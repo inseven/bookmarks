@@ -28,7 +28,7 @@ struct EditView: View {
         case addTag
     }
     
-    @Environment(\.manager) var manager: BookmarksManager
+    @Environment(\.applicationModel) var applicationModel: ApplicationModel
     @Environment(\.presentationMode) var presentationMode
     
     @ObservedObject var tagsModel: TagsModel
@@ -58,7 +58,7 @@ struct EditView: View {
             .setting(tags: Set(tags))
             .setting(shared: shared)
             .setting(toRead: toRead)
-        manager.updateBookmarks([bookmark]) { result in
+        applicationModel.updateBookmarks([bookmark]) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success():

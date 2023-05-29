@@ -25,14 +25,14 @@ import BookmarksCore
 struct LogInView: View {
 
     @Environment(\.openURL) var openURL
-    @Environment(\.manager) var manager
+    @Environment(\.applicationModel) var applicationModel
 
     @State var username: String = ""
     @State var password: String = ""
 
     func submit() {
         dispatchPrecondition(condition: .onQueue(.main))
-        manager.authenticate(username: username, password: password) { result in
+        applicationModel.authenticate(username: username, password: password) { result in
             switch result {
             case .success:
                 break

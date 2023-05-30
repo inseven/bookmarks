@@ -76,7 +76,7 @@ public enum SettingsKey: RawRepresentable {
 
 final public class Settings: ObservableObject {
 
-    let defaults = KeyedDefaults<SettingsKey>()
+    let defaults = KeyedDefaults<SettingsKey>(defaults: UserDefaults(suiteName: "group.uk.co.inseven.bookmarks")!)
 
     @Published public var pinboardApiKey: String? {
         didSet {

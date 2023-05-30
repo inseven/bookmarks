@@ -25,13 +25,28 @@ import SwiftUI
 
 public class SafariExtensionModel: ObservableObject, Store {
 
-    public let pinboard = Pinboard(token: "jbmorley:931E0847B4A5FD76ABE3")
+    let settings = Settings()
 
     @Published public var tabs: [Tab] = []
 
     var tags = Trie()
 
+    public var pinboard: Pinboard? {
+        guard let apiKey = settings.pinboardApiKey else {
+            return nil
+        }
+        return Pinboard(token: apiKey)
+    }
+
     public init() {
+
+    }
+
+    public func update() {
+        // TODO: Show the authentication state to the user.
+        guard let pinboard = pinboard else {
+            return
+        }
         Task {
             do {
                 let tags = try await pinboard.tagsGet()

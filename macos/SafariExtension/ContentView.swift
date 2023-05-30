@@ -32,9 +32,13 @@ struct ContentView: View {
 
     var body: some View {
         List {
-            ForEach(Array(extensionModel.tabs)) { tab in
-                ItemView(store: extensionModel, pinboard: extensionModel.pinboard, tab: tab)
-                Divider()
+            if let pinboard = extensionModel.pinboard {
+                ForEach(Array(extensionModel.tabs)) { tab in
+                    ItemView(store: extensionModel, pinboard: pinboard, tab: tab)
+                    Divider()
+                }
+            } else {
+                Text("Unauthorized")
             }
         }
         .safeAreaInset(edge: .top) {

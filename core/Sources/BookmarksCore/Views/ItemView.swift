@@ -18,6 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#if os(macOS)
+
 import SwiftUI
 
 import WrappingHStack
@@ -39,18 +41,12 @@ public struct ItemView: View {
         static let thumbnailCornerRadius = 8.0
     }
 
-    let characterSet: CharacterSet = {
-        let characterSet = NSTokenField.defaultTokenizingCharacterSet
-        let spaceCharacterSet = CharacterSet(charactersIn: " \n")
-        return characterSet.union(spaceCharacterSet)
-    }()
-
     public var body: some View {
         HStack(alignment: .top) {
             Button {
                 model.activate()
             } label: {
-                Image(nsImage: model.tab.image)
+                model.tab.image
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 200)
@@ -114,3 +110,5 @@ public struct ItemView: View {
     }
 
 }
+
+#endif

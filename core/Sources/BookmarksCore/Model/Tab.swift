@@ -26,9 +26,9 @@ public struct Tab: Identifiable {
 
     public let url: URL
     public let title: String
-    public let image: NSImage
+    public let image: Image
 
-    public init(url: URL, title: String, image: NSImage) {
+    public init(url: URL, title: String, image: Image) {
         self.url = url
         self.title = title
         self.image = image

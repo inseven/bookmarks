@@ -25,7 +25,7 @@ import BookmarksCore
 
 struct ContentView: View {
 
-    @EnvironmentObject var extensionModel: ExtensionModel
+    @EnvironmentObject var extensionModel: SafariExtensionModel
 
     @Environment(\.openURL) var openURL
     @Environment(\.dismiss) var dismiss

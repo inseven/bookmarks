@@ -18,12 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#if os(macOS)
+
 import Foundation
 import SafariServices
+import SwiftUI
 
-import BookmarksCore
-
-extension SFSafariWindow {
+public extension SFSafariWindow {
 
     func urls() async -> [URL] {
         var urls: [URL] = []
@@ -54,7 +55,7 @@ extension SFSafariWindow {
             }
             tabs.append(Tab(url: url,
                             title: properties.title ?? url.absoluteString,
-                            image: image))
+                            image: Image(nsImage: image)))
         }
         return tabs
     }
@@ -82,3 +83,5 @@ extension SFSafariWindow {
     }
 
 }
+
+#endif

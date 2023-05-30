@@ -23,7 +23,7 @@ import SwiftUI
 
 import BookmarksCore
 
-class ExtensionModel: ObservableObject, Store {
+class SafariExtensionModel: ObservableObject, Store {
 
     let pinboard = Pinboard(token: "jbmorley:931E0847B4A5FD76ABE3")
 
@@ -47,11 +47,6 @@ class ExtensionModel: ObservableObject, Store {
 
     func suggestions(prefix: String, existing: [String], count: Int) -> [String] {
         tags.suggestions(for: prefix, count: count)
-//
-//        let currentTags = Set(existing)
-//        let tags = Set(tags.findWordsWithPrefix(prefix: prefix))
-//        let suggestions = Array(tags.subtracting(currentTags))
-//        return suggestions.sorted()
     }
 
     func close(_ tab: Tab) {

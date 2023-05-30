@@ -22,7 +22,7 @@ import SwiftUI
 
 class HostedContentView: NSView {
 
-    let extensionModel = ExtensionModel()
+    let extensionModel = SafariExtensionModel()
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)

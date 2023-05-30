@@ -553,6 +553,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = $BUILD_NUMBER;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = S4WXAUZQEV;
 				INFOPLIST_FILE = Bookmarks/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -562,6 +563,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks.new;
 				PRODUCT_NAME = Bookmarks;
 				PROVISIONING_PROFILE_SPECIFIER = "Bookmarks App Store Profile";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Bookmarks App Store Profile";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Bookmarks/Bookmarks-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

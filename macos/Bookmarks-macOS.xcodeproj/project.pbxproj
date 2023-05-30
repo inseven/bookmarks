@@ -800,11 +800,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Bookmarks/Bookmarks.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "3rd Party Mac Developer Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = $BUILD_NUMBER;
 				DEVELOPMENT_ASSET_PATHS = "\"Bookmarks/Preview Content\"";
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = S4WXAUZQEV;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Bookmarks/Info.plist;
@@ -816,6 +818,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks.new;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Bookmarks macOS App Store Profile";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "Bookmarks Mac App Store Profile";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

@@ -21,17 +21,15 @@
 import SafariServices
 import SwiftUI
 
-import BookmarksCore
+public class SafariExtensionModel: ObservableObject, Store {
 
-class SafariExtensionModel: ObservableObject, Store {
+    public let pinboard = Pinboard(token: "jbmorley:931E0847B4A5FD76ABE3")
 
-    let pinboard = Pinboard(token: "jbmorley:931E0847B4A5FD76ABE3")
-
-    @Published var tabs: [Tab] = []
+    @Published public var tabs: [Tab] = []
 
     var tags = Trie()
 
-    init() {
+    public init() {
         Task {
             do {
                 let tags = try await pinboard.tagsGet()
@@ -45,11 +43,11 @@ class SafariExtensionModel: ObservableObject, Store {
         }
     }
 
-    func suggestions(prefix: String, existing: [String], count: Int) -> [String] {
+    public func suggestions(prefix: String, existing: [String], count: Int) -> [String] {
         tags.suggestions(for: prefix, count: count)
     }
 
-    func close(_ tab: Tab) {
+    public func close(_ tab: Tab) {
         Task {
             await SFSafariApplication.activeWindow()?.close(tab.url)
             DispatchQueue.main.async {
@@ -60,14 +58,14 @@ class SafariExtensionModel: ObservableObject, Store {
         }
     }
 
-    func activate(_ tab: Tab) {
+    public func activate(_ tab: Tab) {
         Task {
             await SFSafariApplication.activeWindow()?.activate(tab.url)
         }
 
     }
 
-    func refresh() {
+    public func refresh() {
         dispatchPrecondition(condition: .onQueue(.main))
         self.tabs = []
 

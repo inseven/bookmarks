@@ -20,6 +20,8 @@
 
 import SwiftUI
 
+import BookmarksCore
+
 class HostedContentView: NSView {
 
     let extensionModel = SafariExtensionModel()

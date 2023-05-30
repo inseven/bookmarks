@@ -18,7 +18,6 @@
 		D83D155D2A267533000B70BF /* SafariExtensionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D83D155B2A267533000B70BF /* SafariExtensionViewController.xib */; };
 		D83D15622A267533000B70BF /* Bookmarks for Safari.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D83D15502A267533000B70BF /* Bookmarks for Safari.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D83D15682A26782F000B70BF /* BookmarksCore in Frameworks */ = {isa = PBXBuildFile; productRef = D83D15672A26782F000B70BF /* BookmarksCore */; };
-		D83D156C2A267A0D000B70BF /* SafariExtensionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83D156A2A26793F000B70BF /* SafariExtensionModel.swift */; };
 		D83D156D2A267A0F000B70BF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83D15692A26793F000B70BF /* ContentView.swift */; };
 		D83D156E2A267A12000B70BF /* HostedContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83D156B2A267940000B70BF /* HostedContentView.swift */; };
 		D840B00A2621042B001E95D1 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840B0092621042B001E95D1 /* SettingsView.swift */; };
@@ -96,7 +95,6 @@
 		D83D155E2A267533000B70BF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D83D155F2A267533000B70BF /* SafariExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SafariExtension.entitlements; sourceTree = "<group>"; };
 		D83D15692A26793F000B70BF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		D83D156A2A26793F000B70BF /* SafariExtensionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariExtensionModel.swift; sourceTree = "<group>"; };
 		D83D156B2A267940000B70BF /* HostedContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostedContentView.swift; sourceTree = "<group>"; };
 		D840B0092621042B001E95D1 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
@@ -175,7 +173,6 @@
 				D83D155F2A267533000B70BF /* SafariExtension.entitlements */,
 				D83D155E2A267533000B70BF /* Info.plist */,
 				D83D15692A26793F000B70BF /* ContentView.swift */,
-				D83D156A2A26793F000B70BF /* SafariExtensionModel.swift */,
 				D83D156B2A267940000B70BF /* HostedContentView.swift */,
 				D83D15522A267533000B70BF /* SafariExtensionHandler.swift */,
 				D83D15542A267533000B70BF /* SafariExtensionViewController.swift */,
@@ -499,7 +496,6 @@
 			files = (
 				D83D156E2A267A12000B70BF /* HostedContentView.swift in Sources */,
 				D83D15552A267533000B70BF /* SafariExtensionViewController.swift in Sources */,
-				D83D156C2A267A0D000B70BF /* SafariExtensionModel.swift in Sources */,
 				D83D156D2A267A0F000B70BF /* ContentView.swift in Sources */,
 				D83D15532A267533000B70BF /* SafariExtensionHandler.swift in Sources */,
 			);
@@ -601,7 +597,7 @@
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks.new.SafariExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks.SafariExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;

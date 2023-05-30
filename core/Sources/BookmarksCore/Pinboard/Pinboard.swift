@@ -22,46 +22,60 @@ import Foundation
 
 public class Pinboard {
 
-    fileprivate enum Path: String {
-
+    private enum Path: String {
         case postsUpdate = "posts/update"
-
         case postsAdd = "posts/add"
         case postsAll = "posts/all"
         case postsDelete = "posts/delete"
-
+        case postsGet = "posts/get"
         case tagsDelete = "tags/delete"
+        case tagsGet = "tags/get"
         case tagsRename = "tags/rename"
-
     }
 
-    fileprivate let baseUrl = "https://api.pinboard.in/v1/"
-    fileprivate let token: String
+    private let baseUrl = URL(string: "https://api.pinboard.in/v1/")!
+    private let token: String
 
     public init(token: String) {
         self.token = token
     }
 
-    fileprivate func serviceUrl(_ path: Path, parameters: [String:String] = [:]) throws -> URL {
-        let baseUrl = try self.baseUrl.url
-        let url = baseUrl.appendingPathComponent(path.rawValue)
-        var components = try url.components
-        var queryItems: [URLQueryItem] = [
-            URLQueryItem(name: "auth_token", value: token),
-            URLQueryItem(name: "format", value: "json"),
-        ]
-        parameters.forEach { name, value in
-            queryItems.append(URLQueryItem(name: name, value: value))
-        }
-        components.queryItems = queryItems
-        return try components.safeUrl
+    private func endpoint(for path: Path) -> URL {
+        return baseUrl
+            .appendingPathComponent(path.rawValue)
+            .appending(queryItems: [
+                URLQueryItem(name: "auth_token", value: token),
+                URLQueryItem(name: "format", value: "json")
+            ])
     }
 
-    // TODO: Consider using a promise for this?
-    fileprivate func fetch<T>(path: Path,
-                              parameters: [String: String] = [:],
-                              completion: @escaping (Result<T, Error>) -> Void,
-                              transform: @escaping (Data) throws -> T) {
+    private func serviceUrl(_ path: Path, parameters: [String:String] = [:]) throws -> URL {
+        return endpoint(for: path)
+            .appending(queryItems: parameters.map { URLQueryItem(name: $0, value: $1) })
+    }
+
+    private func fetch<T: Decodable>(url: URL) async throws -> T {
+        let (data, response) = try await URLSession.shared.data(from: url)
+        guard let response = response as? HTTPURLResponse else {
+            throw BookmarksError.inconsistentState
+        }
+        guard 200 ..< 300 ~= response.statusCode else {
+            guard let code = HTTPStatus(rawValue: response.statusCode) else {
+                throw BookmarksError.unknownResponse
+            }
+            throw BookmarksError.httpError(code)
+        }
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let result = try decoder.decode(T.self, from: data)
+        return result
+    }
+
+    // TODO: Replace this.
+    private func fetch<T>(path: Path,
+                          parameters: [String: String] = [:],
+                          completion: @escaping (Swift.Result<T, Error>) -> Void,
+                          transform: @escaping (Data) throws -> T) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         do {
             let url = try serviceUrl(path, parameters: parameters)
@@ -96,13 +110,37 @@ public class Pinboard {
         }
     }
 
-    public func postsUpdate(completion: @escaping (Result<Update, Error>) -> Void) {
+    public func postsUpdate(completion: @escaping (Swift.Result<Update, Error>) -> Void) {
         self.fetch(path: .postsUpdate, completion: completion) { data in
             try JSONDecoder().decode(Update.self, from: data)
         }
     }
 
-    public func postsAdd(post: Post, replace: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
+    func postsAdd(_ post: Post) async throws -> Result {
+        guard let url = post.href?.absoluteString else {
+            throw BookmarksError.malformedBookmark
+        }
+        let dateFormatter = ISO8601DateFormatter()
+        let dt = dateFormatter.string(from: post.time ?? Date())
+        let requestURL = endpoint(for: .postsAdd)
+            .appending(queryItems: [
+                URLQueryItem(name: "url", value: url),
+                URLQueryItem(name: "description", value: post.description),
+                URLQueryItem(name: "extended", value: post.extended),
+                URLQueryItem(name: "tags", value: post.tags.joined(separator: " ")),
+                URLQueryItem(name: "dt", value: dt),
+                URLQueryItem(name: "shared", value: post.shared ? "yes" : "no"),
+                URLQueryItem(name: "toread", value: post.toRead ? "yes" : "no"),
+            ])
+        let result: Result = try await fetch(url: requestURL)
+        if result.resultCode != "done" {
+            throw BookmarksError.inconsistentState
+        }
+        return result
+    }
+
+    // TODO: Replace this.
+    public func postsAdd(post: Post, replace: Bool, completion: @escaping (Swift.Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         guard let url = post.href?.absoluteString,
               let description = post.description,
@@ -127,27 +165,45 @@ public class Pinboard {
         self.fetch(path: .postsAdd, parameters: parameters, completion: completion) { _ in }
     }
 
-    public func postsAll(completion: @escaping (Result<[Post], Error>) -> Void) {
+    public func postsAll(completion: @escaping (Swift.Result<[Post], Error>) -> Void) {
         self.fetch(path: .postsAll, completion: completion) { data in
             return try JSONDecoder().decode([Post].self, from: data)
         }
     }
 
-    public func postsDelete(url: URL, completion: @escaping (Result<Void, Swift.Error>) -> Void) {
+    public func postsDelete(url: URL, completion: @escaping (Swift.Result<Void, Swift.Error>) -> Void) {
         let parameters = [
             "url": url.absoluteString,
         ]
         self.fetch(path: .postsDelete, parameters: parameters, completion: completion) { _ in }
     }
 
-    public func tagsDelete(_ tag: String, completion: @escaping (Result<Void, Swift.Error>) -> Void) {
+    func postsGet(url: URL) async throws -> Posts {
+        let requestURL = endpoint(for: .postsGet)
+            .appending(queryItems: [
+                URLQueryItem(name: "url", value: url.absoluteString)
+            ])
+        return try await fetch(url: requestURL)
+    }
+
+    public func tagsDelete(_ tag: String, completion: @escaping (Swift.Result<Void, Swift.Error>) -> Void) {
         let parameters = [
             "tag": tag,
         ]
         self.fetch(path: .tagsDelete, parameters: parameters, completion: completion) { _ in }
     }
 
-    public func tagsRename(_ old: String, to new: String, completion: @escaping (Result<Void, Swift.Error>) -> Void) {
+    public func tagsGet() async throws -> [String:Int] {
+        let (data, _) = try await URLSession.shared.data(from: endpoint(for: .tagsGet))
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let result = try decoder.decode([String:Int].self, from: data)
+        return result
+    }
+
+    public func tagsRename(_ old: String,
+                           to new: String,
+                           completion: @escaping (Swift.Result<Void, Swift.Error>) -> Void) {
         let parameters = [
             "old": old,
             "new": new,
@@ -155,7 +211,9 @@ public class Pinboard {
         self.fetch(path: .tagsRename, parameters: parameters, completion: completion) { _ in }
     }
 
-    public static func apiToken(username: String, password: String, completion: @escaping (Result<String, Error>) -> Void) {
+    public static func apiToken(username: String,
+                                password: String,
+                                completion: @escaping (Swift.Result<String, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         do {
             let url = try "https://api.pinboard.in/v1/user/api_token/".url.settingQueryItems([
@@ -197,11 +255,6 @@ public class Pinboard {
                     completion(.failure(error))
                 }
             }
-
-
-
-
-
             task.resume()
         } catch {
             completion(.failure(error))

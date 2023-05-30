@@ -11,6 +11,17 @@
 		D8164D6626C08DD500756D43 /* AddTagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D6526C08DD500756D43 /* AddTagsView.swift */; };
 		D8164D6826C08EEC00756D43 /* BorderedSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D6726C08EEC00756D43 /* BorderedSelection.swift */; };
 		D83CFEA52951B26D005031EA /* LayoutToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83CFEA42951B26D005031EA /* LayoutToolbar.swift */; };
+		D83D15532A267533000B70BF /* SafariExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83D15522A267533000B70BF /* SafariExtensionHandler.swift */; };
+		D83D15552A267533000B70BF /* SafariExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83D15542A267533000B70BF /* SafariExtensionViewController.swift */; };
+		D83D15582A267533000B70BF /* script.js in Resources */ = {isa = PBXBuildFile; fileRef = D83D15572A267533000B70BF /* script.js */; };
+		D83D155A2A267533000B70BF /* ToolbarItemIcon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D83D15592A267533000B70BF /* ToolbarItemIcon.pdf */; };
+		D83D155D2A267533000B70BF /* SafariExtensionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D83D155B2A267533000B70BF /* SafariExtensionViewController.xib */; };
+		D83D15622A267533000B70BF /* Bookmarks for Safari.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D83D15502A267533000B70BF /* Bookmarks for Safari.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D83D15682A26782F000B70BF /* BookmarksCore in Frameworks */ = {isa = PBXBuildFile; productRef = D83D15672A26782F000B70BF /* BookmarksCore */; };
+		D83D156C2A267A0D000B70BF /* ExtensionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83D156A2A26793F000B70BF /* ExtensionModel.swift */; };
+		D83D156D2A267A0F000B70BF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83D15692A26793F000B70BF /* ContentView.swift */; };
+		D83D156E2A267A12000B70BF /* HostedContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83D156B2A267940000B70BF /* HostedContentView.swift */; };
+		D83D15732A267B66000B70BF /* SFSafariWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83D15722A267B66000B70BF /* SFSafariWindow.swift */; };
 		D840B00A2621042B001E95D1 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840B0092621042B001E95D1 /* SettingsView.swift */; };
 		D840B01226210AF6001E95D1 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */; };
 		D861257326A60DF200EB5FEF /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D861257226A60DF200EB5FEF /* Sidebar.swift */; };
@@ -35,6 +46,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		D83D15602A267533000B70BF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D891C448261E32F90024E1A6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D83D154F2A267533000B70BF;
+			remoteInfo = SafariExtension;
+		};
 		D891C463261E32FB0024E1A6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D891C448261E32F90024E1A6 /* Project object */;
@@ -51,11 +69,37 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		D83D15632A267533000B70BF /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				D83D15622A267533000B70BF /* Bookmarks for Safari.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		D80710F226C4B855007272C0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D8164D6526C08DD500756D43 /* AddTagsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTagsView.swift; sourceTree = "<group>"; };
 		D8164D6726C08EEC00756D43 /* BorderedSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderedSelection.swift; sourceTree = "<group>"; };
 		D83CFEA42951B26D005031EA /* LayoutToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutToolbar.swift; sourceTree = "<group>"; };
+		D83D15502A267533000B70BF /* Bookmarks for Safari.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Bookmarks for Safari.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D83D15522A267533000B70BF /* SafariExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariExtensionHandler.swift; sourceTree = "<group>"; };
+		D83D15542A267533000B70BF /* SafariExtensionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariExtensionViewController.swift; sourceTree = "<group>"; };
+		D83D15572A267533000B70BF /* script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = script.js; sourceTree = "<group>"; };
+		D83D15592A267533000B70BF /* ToolbarItemIcon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = ToolbarItemIcon.pdf; sourceTree = "<group>"; };
+		D83D155C2A267533000B70BF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/SafariExtensionViewController.xib; sourceTree = "<group>"; };
+		D83D155E2A267533000B70BF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D83D155F2A267533000B70BF /* SafariExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SafariExtension.entitlements; sourceTree = "<group>"; };
+		D83D15692A26793F000B70BF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D83D156A2A26793F000B70BF /* ExtensionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionModel.swift; sourceTree = "<group>"; };
+		D83D156B2A267940000B70BF /* HostedContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostedContentView.swift; sourceTree = "<group>"; };
+		D83D15722A267B66000B70BF /* SFSafariWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SFSafariWindow.swift; sourceTree = "<group>"; };
 		D840B0092621042B001E95D1 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		D861257226A60DF200EB5FEF /* Sidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
@@ -91,6 +135,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		D83D154D2A267533000B70BF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D83D15682A26782F000B70BF /* BookmarksCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D891C44D261E32F90024E1A6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -119,6 +171,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D83D15512A267533000B70BF /* SafariExtension */ = {
+			isa = PBXGroup;
+			children = (
+				D83D155F2A267533000B70BF /* SafariExtension.entitlements */,
+				D83D155E2A267533000B70BF /* Info.plist */,
+				D83D15692A26793F000B70BF /* ContentView.swift */,
+				D83D156A2A26793F000B70BF /* ExtensionModel.swift */,
+				D83D156B2A267940000B70BF /* HostedContentView.swift */,
+				D83D15522A267533000B70BF /* SafariExtensionHandler.swift */,
+				D83D15542A267533000B70BF /* SafariExtensionViewController.swift */,
+				D83D15712A267B22000B70BF /* Extensions */,
+				D83D15562A267533000B70BF /* Resources */,
+				D83D155B2A267533000B70BF /* SafariExtensionViewController.xib */,
+			);
+			path = SafariExtension;
+			sourceTree = "<group>";
+		};
+		D83D15562A267533000B70BF /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D83D15572A267533000B70BF /* script.js */,
+				D83D15592A267533000B70BF /* ToolbarItemIcon.pdf */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		D83D15712A267B22000B70BF /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				D83D15722A267B66000B70BF /* SFSafariWindow.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		D891C447261E32F90024E1A6 = {
 			isa = PBXGroup;
 			children = (
@@ -130,6 +216,7 @@
 				D891C452261E32F90024E1A6 /* Bookmarks */,
 				D891C465261E32FB0024E1A6 /* BookmarksTests */,
 				D891C470261E32FB0024E1A6 /* BookmarksUITests */,
+				D83D15512A267533000B70BF /* SafariExtension */,
 				D891C451261E32F90024E1A6 /* Products */,
 				D8CF8C6C261E34A300E52E85 /* Frameworks */,
 			);
@@ -141,6 +228,7 @@
 				D891C450261E32F90024E1A6 /* Bookmarks.app */,
 				D891C462261E32FB0024E1A6 /* BookmarksTests.xctest */,
 				D891C46D261E32FB0024E1A6 /* BookmarksUITests.xctest */,
+				D83D15502A267533000B70BF /* Bookmarks for Safari.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -244,6 +332,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		D83D154F2A267533000B70BF /* Bookmarks for Safari */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D83D15662A267533000B70BF /* Build configuration list for PBXNativeTarget "Bookmarks for Safari" */;
+			buildPhases = (
+				D83D154C2A267533000B70BF /* Sources */,
+				D83D154D2A267533000B70BF /* Frameworks */,
+				D83D154E2A267533000B70BF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Bookmarks for Safari";
+			packageProductDependencies = (
+				D83D15672A26782F000B70BF /* BookmarksCore */,
+			);
+			productName = SafariExtension;
+			productReference = D83D15502A267533000B70BF /* Bookmarks for Safari.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		D891C44F261E32F90024E1A6 /* Bookmarks */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D891C476261E32FB0024E1A6 /* Build configuration list for PBXNativeTarget "Bookmarks" */;
@@ -251,10 +359,12 @@
 				D891C44C261E32F90024E1A6 /* Sources */,
 				D891C44D261E32F90024E1A6 /* Frameworks */,
 				D891C44E261E32F90024E1A6 /* Resources */,
+				D83D15632A267533000B70BF /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				D83D15612A267533000B70BF /* PBXTargetDependency */,
 			);
 			name = Bookmarks;
 			packageProductDependencies = (
@@ -309,9 +419,12 @@
 		D891C448261E32F90024E1A6 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1240;
+				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1310;
 				TargetAttributes = {
+					D83D154F2A267533000B70BF = {
+						CreatedOnToolsVersion = 14.3;
+					};
 					D891C44F261E32F90024E1A6 = {
 						CreatedOnToolsVersion = 12.4;
 					};
@@ -341,11 +454,22 @@
 				D891C44F261E32F90024E1A6 /* Bookmarks */,
 				D891C461261E32FB0024E1A6 /* BookmarksTests */,
 				D891C46C261E32FB0024E1A6 /* BookmarksUITests */,
+				D83D154F2A267533000B70BF /* Bookmarks for Safari */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		D83D154E2A267533000B70BF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D83D155D2A267533000B70BF /* SafariExtensionViewController.xib in Resources */,
+				D83D155A2A267533000B70BF /* ToolbarItemIcon.pdf in Resources */,
+				D83D15582A267533000B70BF /* script.js in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D891C44E261E32F90024E1A6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -372,6 +496,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		D83D154C2A267533000B70BF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D83D15732A267B66000B70BF /* SFSafariWindow.swift in Sources */,
+				D83D156E2A267A12000B70BF /* HostedContentView.swift in Sources */,
+				D83D15552A267533000B70BF /* SafariExtensionViewController.swift in Sources */,
+				D83D156C2A267A0D000B70BF /* ExtensionModel.swift in Sources */,
+				D83D156D2A267A0F000B70BF /* ContentView.swift in Sources */,
+				D83D15532A267533000B70BF /* SafariExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D891C44C261E32F90024E1A6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -415,6 +552,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		D83D15612A267533000B70BF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D83D154F2A267533000B70BF /* Bookmarks for Safari */;
+			targetProxy = D83D15602A267533000B70BF /* PBXContainerItemProxy */;
+		};
 		D891C464261E32FB0024E1A6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D891C44F261E32F90024E1A6 /* Bookmarks */;
@@ -427,7 +569,82 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		D83D155B2A267533000B70BF /* SafariExtensionViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D83D155C2A267533000B70BF /* Base */,
+			);
+			name = SafariExtensionViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
+		D83D15642A267533000B70BF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = SafariExtension/SafariExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = $BUILD_NUMBER;
+				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SafariExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Bookmarks for Safari";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks.new.SafariExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		D83D15652A267533000B70BF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = SafariExtension/SafariExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = $BUILD_NUMBER;
+				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SafariExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Bookmarks for Safari";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks.new.SafariExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		D891C474261E32FB0024E1A6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D8ECA5E02640583900947EEC /* Debug.xcconfig */;
@@ -556,6 +773,7 @@
 		D891C477261E32FB0024E1A6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Bookmarks/Bookmarks.entitlements;
@@ -582,6 +800,7 @@
 		D891C478261E32FB0024E1A6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Bookmarks/Bookmarks.entitlements;
@@ -692,6 +911,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		D83D15662A267533000B70BF /* Build configuration list for PBXNativeTarget "Bookmarks for Safari" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D83D15642A267533000B70BF /* Debug */,
+				D83D15652A267533000B70BF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		D891C44B261E32F90024E1A6 /* Build configuration list for PBXProject "Bookmarks-macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -731,6 +959,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D83D15672A26782F000B70BF /* BookmarksCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = BookmarksCore;
+		};
 		D8A0D7652620165D00C9F190 /* Interact */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Interact;

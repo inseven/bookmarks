@@ -42,7 +42,7 @@ class TrieNode<T: Hashable> {
 
 /// A trie data structure containing words.  Each node is a single
 /// character of a word.
-class Trie: NSObject, NSCoding {
+public class Trie: NSObject, NSCoding {
   typealias Node = TrieNode<Character>
   /// The number of words in the trie
   public var count: Int {
@@ -60,7 +60,7 @@ class Trie: NSObject, NSCoding {
   fileprivate var wordCount: Int
 
   /// Creates an empty trie.
-  override init() {
+  public override init() {
     root = Node()
     wordCount = 0
     super.init()
@@ -71,7 +71,7 @@ class Trie: NSObject, NSCoding {
   /// Initializes the trie with words from an archive
   ///
   /// - Parameter decoder: Decodes the archive
-  required convenience init?(coder decoder: NSCoder) {
+  public required convenience init?(coder decoder: NSCoder) {
     self.init()
     let words = decoder.decodeObject(forKey: "words") as? [String]
     for word in words! {
@@ -83,7 +83,7 @@ class Trie: NSObject, NSCoding {
   /// the array.
   ///
   /// - Parameter coder: The object that will encode the array
-  func encode(with coder: NSCoder) {
+  public func encode(with coder: NSCoder) {
     coder.encode(self.words, forKey: "words")
   }
 }

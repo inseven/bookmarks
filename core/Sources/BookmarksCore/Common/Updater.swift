@@ -41,15 +41,6 @@ public class Updater {
     private var lastUpdate: Date? = nil  // Synchronized on syncQueue
     weak var delegate: UpdaterDelegate?
 
-    public var user: String? {
-        dispatchPrecondition(condition: .notOnQueue(syncQueue))
-        var user: String? = nil
-        syncQueue.sync {
-            user = self.settings.pinboardApiKey?.components(separatedBy: ":").first
-        }
-        return user
-    }
-
     private func syncQueue_token() -> String? {
         dispatchPrecondition(condition: .onQueue(syncQueue))
         var token: String? = nil

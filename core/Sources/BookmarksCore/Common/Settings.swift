@@ -102,6 +102,10 @@ final public class Settings: ObservableObject {
         }
     }
 
+    public var user: String? {
+        return pinboardApiKey?.components(separatedBy: ":").first
+    }
+
     public init() {
         pinboardApiKey = defaults.string(forKey: .pinboardApiKey) ?? ""
         useInAppBrowser = defaults.bool(forKey: .useInAppBrowser)

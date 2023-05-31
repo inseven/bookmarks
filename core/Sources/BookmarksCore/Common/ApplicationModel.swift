@@ -73,7 +73,7 @@ public class ApplicationModel: ObservableObject {
     }
 
     public var user: String? {
-        return updater.user
+        return settings.user
     }
 
     public func start() {

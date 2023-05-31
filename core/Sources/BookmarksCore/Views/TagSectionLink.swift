@@ -21,38 +21,50 @@
 import Combine
 import SwiftUI
 
-public struct SidebarContentView: View {
+import Interact
+
+struct TagSectionLink: View {
+
+    @Environment(\.openURL) var openURL
 
     @EnvironmentObject var applicationModel: ApplicationModel
-    @EnvironmentObject var sceneModel: SceneModel
     @EnvironmentObject var settings: Settings
 
-    public init() {
+    let tag: String
 
-    }
+    var body: some View {
+        SectionLink(tag.section, color: tag.color())
+            .contextMenu {
+                Button {
+                    do {
+                        guard let user = applicationModel.user else {
+                            return
+                        }
+                        openURL(try tag.pinboardTagUrl(for: user))
+                    } catch {
+                        print("Failed to open on Pinboard error \(error)")
+                    }
+                } label: {
+                    Label("View on Pinboard", systemImage: "pin")
 
-    public var body: some View {
-        List(selection: $sceneModel.section) {
-            if case let .tag(tag) = sceneModel.section,
-               !settings.favoriteTags.contains(tag) {
-                Section("Search") {
-                    TagSectionLink(tag: tag)
                 }
-            }
-            Section("Smart Filters") {
-                ForEach(BookmarksSection.defaultSections) { section in
-                    SectionLink(section)
-                }
-            }
-            if settings.favoriteTags.count > 0 {
-                Section("Favorite Tags") {
-                    ForEach(settings.favoriteTags.sorted(), id: \.section) { tag in
-                        TagSectionLink(tag: tag)
+#if os(macOS)
+                Divider()
+#endif
+                if settings.favoriteTags.contains(tag) {
+                    Button(role: .destructive) {
+                        settings.favoriteTags = settings.favoriteTags.filter { $0 != tag }
+                    } label: {
+                        Label("Remove from Favorites", systemImage: "star.slash")
+                    }
+                } else {
+                    Button {
+                        settings.favoriteTags.append(tag)
+                    } label: {
+                        Label("Add to Favorites", systemImage: "star")
                     }
                 }
             }
-
-        }
     }
 
 }

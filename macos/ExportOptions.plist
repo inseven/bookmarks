@@ -13,7 +13,9 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>uk.co.inseven.bookmarks.new</key>
-		<string>Bookmarks macOS App Store Profile</string>
+		<string>Bookmarks Mac App Store Profile</string>
+		<key>uk.co.inseven.bookmarks.new.SafariExtension</key>
+		<string>Bookmarks for Safari Mac App Store Profile</string>
 	</dict>
 	<key>signingCertificate</key>
 	<string>Apple Distribution</string>

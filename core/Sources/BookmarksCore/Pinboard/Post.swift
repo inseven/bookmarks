@@ -26,15 +26,15 @@ extension Pinboard {
     //       https://github.com/inseven/bookmarks/issues/216
     public struct Post: Codable {
 
-        public let description: String?
-        public let extended: String
-        public let hash: String
-        public let href: URL?
-        public let meta: String
-        public let shared: Bool
-        public let tags: [String]
-        public let time: Date?
-        public let toRead: Bool
+        public var description: String?
+        public var extended: String
+        public var hash: String
+        public var href: URL?
+        public var meta: String
+        public var shared: Bool
+        public var tags: [String]
+        public var time: Date?
+        public var toRead: Bool
 
         public enum CodingKeys: String, CodingKey {
             case description = "description"
@@ -49,14 +49,14 @@ extension Pinboard {
         }
 
         init(href: URL,
-             description: String,
-             extended: String,
-             hash: String,
-             meta: String,
-             shared: Bool,
-             tags: [String],
-             time: Date,
-             toRead: Bool) {
+             description: String = "",
+             extended: String = "",
+             hash: String = "",
+             meta: String = "",
+             shared: Bool = true,
+             tags: [String] = [],
+             time: Date = Date(),
+             toRead: Bool = false) {
             self.href = href
             self.description = description
             self.extended = extended

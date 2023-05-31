@@ -35,7 +35,7 @@ struct AddTagsView: View {
     @State var isBusy = false
     @AppStorage(SettingsKey.addTagsMarkAsRead.rawValue) var markAsRead: Bool = false
 
-    @State var tokens: [Token<String>] = []
+    @State var tokens: [String] = []
 
     @ObservedObject var tagsModel: TagsModel
     @ObservedObject var sectionViewModel: SectionViewModel
@@ -55,19 +55,14 @@ struct AddTagsView: View {
         Form {
             Section() {
                 VStack(alignment: .leading, spacing: 16) {
-                    TokenField("Tags", tokens: $tokens) { string, editing in
-                        let tag = string.lowercased()
-                        return Token(tag)
-                            .associatedValue(tag)
-                    } completions: { substring in
-                        tagsModel.suggestions(prefix: substring,
-                                              existing: tokens
-                            .filter { !$0.isPartial }
-                            .compactMap { $0.associatedValue })
+                    TokenView("Add tags...", tokens: $tokens) { candidate in
+                        return tagsModel.suggestions(prefix: candidate, existing: tokens)
+                            .sorted()
+                            .prefix(1)
+                            .sorted()
                     }
-                    .tokenizingCharacterSet(characterSet)
-                    .font(.title)
-                    .frame(minWidth: 400)
+                    .frame(minWidth: 400, minHeight: 100)
+                    Divider()
                     Toggle("Mark as read", isOn: $markAsRead)
                 }
                 HStack(spacing: 8) {
@@ -87,8 +82,7 @@ struct AddTagsView: View {
                         .frame(minWidth: LayoutMetrics.minimumButtonWidth, maxWidth: .infinity)
                         .keyboardShortcut(.cancelAction)
                         Button {
-                            let tags = tokens.compactMap { $0.associatedValue }
-                            sectionViewModel.addTags(tags: Set(tags), markAsRead: markAsRead)
+                            sectionViewModel.addTags(tags: Set(tokens), markAsRead: markAsRead)
                             dismiss()
                         } label: {
                             Text("OK")

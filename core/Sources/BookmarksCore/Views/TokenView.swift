@@ -20,191 +20,10 @@
 
 #if os(macOS)
 
-import Carbon
 import Combine
 import SwiftUI
-import WebKit
 
 import WrappingHStack
-
-struct PickerTextField: NSViewRepresentable {
-
-    class Coordinator: NSObject, NSTextFieldDelegate, NSControlTextEditingDelegate {
-
-        var isDeleting = false
-
-        let parent: PickerTextField
-
-        var lastUserInput = ""
-        var lastSuggestion = ""
-
-        init(_ parent: PickerTextField) {
-            self.parent = parent
-        }
-
-        func control(_ control: NSControl, textView: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
-            guard let event = textView.window?.currentEvent else {
-                return false
-            }
-
-            if event.keyCode == kVK_Delete {
-
-                isDeleting = true
-
-                // We're only intereseted in delete events when the cursor is at the beginning of the text.
-                guard textView.selectedRanges.count == 1,
-                      let range = textView.selectedRanges.first as? NSRange,
-                      range.location == 0,
-                      range.length == 0
-                else {
-                    return false
-                }
-                parent.onDelete()
-            } else if event.keyCode == kVK_Return || event.keyCode == kVK_Tab {
-                parent.onCommit()
-            }
-
-            return false
-        }
-
-        func controlTextDidChange(_ notification: Notification) {
-            guard let textField = notification.object as? NSTextField else {
-                print("unexpected control in update notification")
-                return
-            }
-
-            self.parent.text = textField.stringValue
-
-            guard let textView = textField.currentEditor() as? NSTextView else {
-                return
-            }
-
-            guard !textField.stringValue.isEmpty,
-                  !isDeleting,
-                  let suggestion = parent.suggestion(textField.stringValue).first,
-                  suggestion.starts(with: textField.stringValue)
-            else {
-                isDeleting = false
-                return
-            }
-            lastSuggestion = suggestion
-            textView.insertCompletion(suggestion,
-                                      forPartialWordRange: NSRange(location: 0, length: textField.stringValue.count),
-                                      movement: 0,
-                                      isFinal: false)
-        }
-
-    }
-
-    let prompt: String
-
-    @Binding var text: String
-
-    var onDelete: () -> Void
-    var onCommit: () -> Void
-    var suggestion: (String) -> [String]
-
-    init(_ prompt: String,
-         text: Binding<String>,
-         onCommit: @escaping () -> Void,
-         onDelete: @escaping () -> Void,
-         suggestion: @escaping (String) -> [String]) {
-        self.prompt = prompt
-        _text = text
-        self.onCommit = onCommit
-        self.onDelete = onDelete
-        self.suggestion = suggestion
-    }
-
-    func makeNSView(context: Context) -> NSTextField {
-        let textField = NSTextField()
-        textField.delegate = context.coordinator
-        textField.isBordered = false
-        textField.isBezeled = false
-        textField.focusRingType = .none
-        textField.placeholderString = prompt
-        textField.backgroundColor = .clear
-        textField.font = NSFont.preferredFont(forTextStyle: .body)
-        return textField
-    }
-
-    func updateNSView(_ textField: NSTextField, context: Context) {
-        if textField.stringValue != text {
-            textField.stringValue = text
-        }
-
-    }
-
-    func makeCoordinator() -> Coordinator {
-        return Coordinator(self)
-    }
-
-}
-
-class TokenFieldModel: ObservableObject {
-
-    struct Token: Identifiable {
-
-        let id = UUID()
-        let text: String
-
-        init(_ text: String) {
-            self.text = text
-        }
-
-    }
-
-    @Binding var tokens: [String]
-
-    @Published var items: [Token] = []
-    @Published var input: String = ""
-
-    var cancellables: [AnyCancellable] = []
-
-    init(tokens: Binding<[String]>) {
-        _tokens = tokens
-    }
-
-    func start() {
-
-        $input
-            .receive(on: DispatchQueue.main)
-            .filter { $0.containsWhitespaceAndNewlines() }
-            .sink { [weak self] tags in
-                guard let self else { return }
-                self.commit()
-            }
-            .store(in: &cancellables)
-
-        $items
-            .receive(on: DispatchQueue.main)
-            .map { $0.map { $0.text } }
-            .assign(to: \.tokens, on: self)
-            .store(in: &cancellables)
-    }
-
-    func stop() {
-        cancellables = []
-    }
-
-    func commit() {
-        let tags = input
-            .components(separatedBy: .whitespacesAndNewlines)
-            .filter { !$0.isEmpty }
-        for tag in tags {
-            self.items.append(Token(tag))
-        }
-        input = ""
-    }
-
-    func deleteBackwards() {
-        guard !items.isEmpty else {
-            return
-        }
-        items.removeLast()
-    }
-
-}
 
 public struct TokenView: View {
 
@@ -214,7 +33,7 @@ public struct TokenView: View {
 
     let suggestion: (String) -> [String]
 
-    @StateObject var model: TokenFieldModel
+    @StateObject var model: TokenViewModel
 
     public init(_ prompt: String,
                 tokens: Binding<[String]>,
@@ -222,7 +41,7 @@ public struct TokenView: View {
         self.prompt = prompt
         _tokens = tokens
         self.suggestion = suggestion
-        _model = StateObject(wrappedValue: TokenFieldModel(tokens: tokens))
+        _model = StateObject(wrappedValue: TokenViewModel(tokens: tokens))
     }
 
     public var body: some View {
@@ -241,6 +60,7 @@ public struct TokenView: View {
                 .frame(maxWidth: 100)
                 .padding([.top, .bottom], 4)
             }
+            Spacer()
         }
         .onAppear {
             model.start()
@@ -253,7 +73,7 @@ public struct TokenView: View {
             guard model.items.map({ $0.text }) != tokens else {
                 return
             }
-            model.items = tokens.map({ TokenFieldModel.Token($0) })
+            model.items = tokens.map({ TokenViewModel.Token($0) })
         }
     }
 

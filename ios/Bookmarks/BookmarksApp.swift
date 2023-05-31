@@ -27,6 +27,9 @@ struct BookmarksApp: App {
 
     @Environment(\.scenePhase) private var phase
 
+    @FocusedObject var sceneModel: SceneModel?
+    @FocusedObject var sectionViewModel: SectionViewModel?
+
     var applicationModel: ApplicationModel
 
     init() {

@@ -20,13 +20,15 @@
 
 import SwiftUI
 
-import BookmarksCore
-
-struct SelectionToolbar: CustomizableToolbarContent {
+public struct SelectionToolbar: CustomizableToolbarContent {
 
     @ObservedObject var sectionViewModel: SectionViewModel
 
-    var body: some CustomizableToolbarContent {
+    public init(sectionViewModel: SectionViewModel) {
+        self.sectionViewModel = sectionViewModel
+    }
+
+    public var body: some CustomizableToolbarContent {
 
         ToolbarItem(id: "preview") {
             Button {

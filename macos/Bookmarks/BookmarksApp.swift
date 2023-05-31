@@ -28,9 +28,10 @@ import BookmarksCore
 @main
 struct BookmarksApp: App {
 
-    @Environment(\.applicationModel) var applicationModel
+    var applicationModel: ApplicationModel
 
     init() {
+        applicationModel = ApplicationModel()
         applicationModel.start()
     }
 
@@ -50,16 +51,19 @@ struct BookmarksApp: App {
             SectionCommands()
             ViewCommands(sectionViewModel: sectionViewModel)
             BookmarkCommands()
-            AccountCommands()
+            AccountCommands(applicationModel: applicationModel)
         }
 
         SwiftUI.Settings {
             SettingsView()
+                .environmentObject(applicationModel)
+                .environmentObject(applicationModel.settings)
         }
 
         Window("Tags", id: "tags") {
             TagsContentView(tagsModel: applicationModel.tagsModel)
                 .environmentObject(applicationModel)
+                .environmentObject(applicationModel.settings)
         }
 
         About(Legal.contents)

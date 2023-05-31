@@ -29,7 +29,7 @@ struct SettingsView: View {
         case account
     }
 
-    @Environment(\.applicationModel) var applicationModel: ApplicationModel
+    @EnvironmentObject var applicationModel: ApplicationModel
 
     var body: some View {
         EmptyView()

@@ -30,9 +30,10 @@ struct EditView: View {
     enum SheetType {
         case addTag
     }
-    
-    @Environment(\.applicationModel) var applicationModel: ApplicationModel
-    @Environment(\.presentationMode) var presentationMode
+
+    @Environment(\.dismiss) var dismiss
+
+    @EnvironmentObject var applicationModel: ApplicationModel
     
     @ObservedObject var tagsModel: TagsModel
     var bookmark: Bookmark
@@ -65,7 +66,7 @@ struct EditView: View {
             DispatchQueue.main.async {
                 switch result {
                 case .success():
-                    presentationMode.wrappedValue.dismiss()
+                    dismiss()
                 case .failure(let error):
                     print("Failed to save with error \(error)")
                 }
@@ -110,7 +111,7 @@ struct EditView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     } label: {
                         Text("Cancel")
                     }

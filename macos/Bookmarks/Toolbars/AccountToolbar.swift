@@ -24,7 +24,7 @@ import BookmarksCore
 
 struct AccountToolbar: CustomizableToolbarContent {
 
-    @Environment(\.applicationModel) var applicationModel: ApplicationModel
+    @EnvironmentObject var applicationModel: ApplicationModel
 
     var body: some CustomizableToolbarContent {
 

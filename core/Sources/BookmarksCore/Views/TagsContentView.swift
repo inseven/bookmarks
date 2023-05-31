@@ -24,8 +24,9 @@ import Interact
 
 public struct TagsContentView: View {
 
-    @StateObject var model: TagsContentViewModel
     @EnvironmentObject var applicationModel: ApplicationModel
+
+    @StateObject var model: TagsContentViewModel
 
     public init(tagsModel: TagsModel) {
         _model = StateObject(wrappedValue: TagsContentViewModel(tagsModel: tagsModel))

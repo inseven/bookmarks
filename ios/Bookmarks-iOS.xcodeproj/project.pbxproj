@@ -20,7 +20,6 @@
 		D871B4E5273242ED00712182 /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D871B4E4273242ED00712182 /* EditView.swift */; };
 		D8743909273106C000B676A5 /* Diligence in Frameworks */ = {isa = PBXBuildFile; productRef = D8743908273106C000B676A5 /* Diligence */; };
 		D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BDE1172551C56100C95945 /* BookmarksApp.swift */; };
-		D8BDE1472554782000C95945 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = D8BDE1462554782000C95945 /* Introspect */; };
 		D8D3BC0121C6AEBD00D6FB97 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */; };
 		D8D3BC0421C6AEBD00D6FB97 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8D3BC0221C6AEBD00D6FB97 /* LaunchScreen.storyboard */; };
 		D8D3BC0F21C6AEBD00D6FB97 /* BookmarksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BC0E21C6AEBD00D6FB97 /* BookmarksTests.swift */; };
@@ -86,7 +85,6 @@
 				D864E47121C93FD200EAB9AD /* libxml2.2.tbd in Frameworks */,
 				D8743909273106C000B676A5 /* Diligence in Frameworks */,
 				D822159B2955C35C0087FBAC /* BookmarksCore in Frameworks */,
-				D8BDE1472554782000C95945 /* Introspect in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,7 +214,6 @@
 			);
 			name = Bookmarks;
 			packageProductDependencies = (
-				D8BDE1462554782000C95945 /* Introspect */,
 				D8743908273106C000B676A5 /* Diligence */,
 				D822159A2955C35C0087FBAC /* BookmarksCore */,
 			);
@@ -295,7 +292,6 @@
 			);
 			mainGroup = D8D3BBED21C6AEBC00D6FB97;
 			packageReferences = (
-				D8BDE1452554782000C95945 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 			);
 			productRefGroup = D8D3BBF721C6AEBC00D6FB97 /* Products */;
 			projectDirPath = "";
@@ -695,17 +691,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		D8BDE1452554782000C95945 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.1;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
 /* Begin XCSwiftPackageProductDependency section */
 		D822159A2955C35C0087FBAC /* BookmarksCore */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -714,11 +699,6 @@
 		D8743908273106C000B676A5 /* Diligence */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Diligence;
-		};
-		D8BDE1462554782000C95945 /* Introspect */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D8BDE1452554782000C95945 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
-			productName = Introspect;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

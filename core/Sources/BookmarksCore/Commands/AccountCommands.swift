@@ -22,10 +22,10 @@ import SwiftUI
 
 public struct AccountCommands: Commands {
 
-    @Environment(\.applicationModel) var applicationModel: ApplicationModel
+    var applicationModel: ApplicationModel
 
-    public init() {
-
+    public init(applicationModel: ApplicationModel) {
+        self.applicationModel = applicationModel
     }
 
     public var body: some Commands {

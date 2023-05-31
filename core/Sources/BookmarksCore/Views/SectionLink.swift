@@ -23,9 +23,9 @@ import SwiftUI
 public struct SectionLink: View {
 
     var section: BookmarksSection
-    var color: Color
+    var color: Color?
 
-    public init(_ section: BookmarksSection, color: Color = .accentColor) {
+    public init(_ section: BookmarksSection, color: Color? = nil) {
         self.section = section
         self.color = color
     }

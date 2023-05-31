@@ -18,40 +18,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import SwiftUI
+import Foundation
 
-import Interact
+extension Database {
 
-public struct TagsContentView: View {
+    public struct Tag: Identifiable {
 
-    @EnvironmentObject var applicationModel: ApplicationModel
-    @EnvironmentObject var settings: Settings
+        public var id: String { name }
 
-    @StateObject var model: TagsContentViewModel
+        public let name: String
+        public let count: Int
 
-    public init(tagsModel: TagsModel) {
-        _model = StateObject(wrappedValue: TagsContentViewModel(tagsModel: tagsModel))
-    }
-
-    public var body: some View {
-        Table(model.filteredTags, selection: $model.selection) {
-            TableColumn("Tag") { tag in
-                TagView(tag.name, color: tag.name.color())
-            }
-            TableColumn("Count") { tag in
-                Text(String(describing: tag.count))
-            }
-            TableColumn("Favorite") { tag in
-                Toggle(isOn: $settings.favoriteTags.contains(tag.name))
-            }
-        }
-        .contextMenu(forSelectionType: String.ID.self) { selection in
-
-        } primaryAction: { selection in
-            print(selection)
-        }
-        .searchable(text: $model.filter)
-        .runs(model)
     }
 
 }

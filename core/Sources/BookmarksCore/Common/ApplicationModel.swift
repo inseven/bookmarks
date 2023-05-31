@@ -53,7 +53,9 @@ public class ApplicationModel: ObservableObject {
         try! FileManager.default.createDirectory(at: documentsUrl, withIntermediateDirectories: true, attributes: nil)
         // TODO: Handle database initialisation errors #143
         //       https://github.com/inseven/bookmarks/issues/143
-        database = try! Database(path: documentsUrl.appendingPathComponent("store.db"))
+        let storeURL = documentsUrl.appendingPathComponent("store.db")
+        print("Opening database at '\(storeURL.absoluteString)'...")
+        database = try! Database(path: storeURL)
         imageCache = FileImageCache(path: documentsUrl.appendingPathComponent("thumbnails"))
         downloadManager = DownloadManager(limit: settings.maximumConcurrentThumbnailDownloads)
         thumbnailManager = ThumbnailManager(imageCache: imageCache, downloadManager: downloadManager)

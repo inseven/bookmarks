@@ -25,9 +25,9 @@ import Interact
 
 class TagsContentViewModel: ObservableObject, Runnable {
 
-    @MainActor @Published var tags: [String] = []
+    @MainActor @Published var tags: [Database.Tag] = []
     @MainActor @Published var filter = ""
-    @MainActor @Published var filteredTags: [String] = []
+    @MainActor @Published var filteredTags: [Database.Tag] = []
     @MainActor @Published var selection: Set<String> = []
 
     @MainActor var tagsModel: TagsModel
@@ -45,7 +45,7 @@ class TagsContentViewModel: ObservableObject, Runnable {
                 guard !filter.isEmpty else {
                     return tags
                 }
-                return tags.filter { $0.localizedCaseInsensitiveContains(filter) }
+                return tags.filter { $0.name.localizedCaseInsensitiveContains(filter) }
             }
             .receive(on: DispatchQueue.main)
             .sink { filteredTags in

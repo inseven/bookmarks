@@ -26,7 +26,7 @@ public class TagsModel: ObservableObject {
     var database: Database
     var cancellables: Set<AnyCancellable> = []
 
-    @Published public var tags: [String] = []
+    @Published public var tags: [Database.Tag] = []
     public var fastTags: Set<String> = Set()
     @Published var trie = Trie()
 
@@ -46,10 +46,10 @@ public class TagsModel: ObservableObject {
 
             let trie = Trie()
             for tag in tags {
-                trie.insert(word: tag)
+                trie.insert(word: tag.name)
             }
 
-            let fastTags = Set(tags)
+            let fastTags = Set(tags.map { $0.name })
 
             DispatchQueue.main.async {
                 self.objectWillChange.send()

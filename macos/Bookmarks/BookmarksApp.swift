@@ -28,15 +28,15 @@ import BookmarksCore
 @main
 struct BookmarksApp: App {
 
+    @FocusedObject var sceneModel: SceneModel?
+    @FocusedObject var sectionViewModel: SectionViewModel?
+
     var applicationModel: ApplicationModel
 
     init() {
         applicationModel = ApplicationModel()
         applicationModel.start()
     }
-
-    @FocusedObject var sceneModel: SceneModel?
-    @FocusedObject var sectionViewModel: SectionViewModel?
 
     var body: some Scene {
 

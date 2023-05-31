@@ -20,9 +20,7 @@
 
 import SwiftUI
 
-import BookmarksCore
-
-struct LayoutToolbar: CustomizableToolbarContent {
+public struct LayoutToolbar: CustomizableToolbarContent {
 
     @FocusedObject var sectionViewModel: SectionViewModel?
 
@@ -37,7 +35,11 @@ struct LayoutToolbar: CustomizableToolbarContent {
         }
     }
 
-    var body: some CustomizableToolbarContent {
+    public init() {
+        
+    }
+
+    public var body: some CustomizableToolbarContent {
         ToolbarItem(id: "layout-mode") {
             Picker(selection: layoutMode) {
                 ForEach(LayoutMode.allCases) { layoutMode in

@@ -20,13 +20,15 @@
 
 import SwiftUI
 
-import BookmarksCore
-
-struct AccountToolbar: CustomizableToolbarContent {
+public struct AccountToolbar: CustomizableToolbarContent {
 
     @EnvironmentObject var applicationModel: ApplicationModel
 
-    var body: some CustomizableToolbarContent {
+    public init() {
+
+    }
+
+    public var body: some CustomizableToolbarContent {
 
         ToolbarItem(id: "refresh") {
             Button {

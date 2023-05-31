@@ -43,7 +43,7 @@ public struct SidebarContentView: View {
             if settings.favoriteTags.count > 0 {
                 Section("Favorite Tags") {
                     ForEach(settings.favoriteTags.sorted(), id: \.section) { tag in
-                        SectionLink(tag.section)
+                        SectionLink(tag.section, color: tag.color())
                             .contextMenu {
                                 Button {
                                     do {

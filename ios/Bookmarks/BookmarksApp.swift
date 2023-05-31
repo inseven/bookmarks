@@ -25,8 +25,14 @@ import BookmarksCore
 @main
 struct BookmarksApp: App {
 
-    @Environment(\.applicationModel) var applicationModel: ApplicationModel
     @Environment(\.scenePhase) private var phase
+
+    var applicationModel: ApplicationModel
+
+    init() {
+        applicationModel = ApplicationModel()
+        applicationModel.start()
+    }
 
     var body: some Scene {
         WindowGroup {

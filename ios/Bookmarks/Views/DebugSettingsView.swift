@@ -24,7 +24,7 @@ import BookmarksCore
 
 struct DebugSettingsView: View {
 
-    @Environment(\.applicationModel) var applicationModel: ApplicationModel
+    @EnvironmentObject var applicationModel: ApplicationModel
 
     @ObservedObject var settings: Settings
 

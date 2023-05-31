@@ -38,7 +38,7 @@ struct Sidebar: View {
         case rename(tag: String)
     }
 
-    @Environment(\.applicationModel) var applicationModel
+    @EnvironmentObject var applicationModel: ApplicationModel
 
     @State var sheet: SheetType? = nil
 

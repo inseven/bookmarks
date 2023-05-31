@@ -23,17 +23,6 @@ import SwiftUI
 
 import Interact
 
-public struct ApplicationModelEnvironmentKey: EnvironmentKey {
-    public static var defaultValue = ApplicationModel()
-}
-
-public extension EnvironmentValues {
-    var applicationModel: ApplicationModel {
-        get { self[ApplicationModelEnvironmentKey.self] }
-        set { self[ApplicationModelEnvironmentKey.self] = newValue }
-    }
-}
-
 public class ApplicationModel: ObservableObject {
 
     public enum State {

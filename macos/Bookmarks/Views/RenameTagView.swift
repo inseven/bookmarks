@@ -24,8 +24,9 @@ import BookmarksCore
 
 struct RenameTagView: View {
 
-    @Environment(\.applicationModel) var applicationModel: ApplicationModel
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
+
+    @EnvironmentObject var applicationModel: ApplicationModel
 
     @State var tag: String
     @State var isBusy = false
@@ -46,7 +47,7 @@ struct RenameTagView: View {
                 HStack {
                     Spacer()
                     Button("Cancel") {
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     }
                     .keyboardShortcut(.cancelAction)
                     Button("OK") {
@@ -60,7 +61,7 @@ struct RenameTagView: View {
                                     }
                                 case .success:
                                     print("Successfully renamed tag")
-                                    presentationMode.wrappedValue.dismiss()
+                                    dismiss()
                                 }
                             }
                         }

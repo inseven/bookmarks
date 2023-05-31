@@ -22,7 +22,6 @@ import Combine
 import SwiftUI
 
 import BookmarksCore
-import Introspect
 
 struct LogInView: View {
     
@@ -31,8 +30,7 @@ struct LogInView: View {
         case password
     }
 
-    @Environment(\.applicationModel) var applicationModel
-    @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var applicationModel: ApplicationModel
 
     @FocusState private var focus: Field?
     @State private var username: String = ""
@@ -97,9 +95,7 @@ struct LogInView: View {
             Alert(error: error)
         }
         .navigationViewStyle(.stack)
-        .introspectViewController { navigationController in
-            navigationController.isModalInPresentation = true
-        }
+        .interactiveDismissDisabled(true)
     }
 
 }

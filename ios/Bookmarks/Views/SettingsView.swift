@@ -35,8 +35,9 @@ struct SettingsView: View {
         case success(message: String)
     }
 
-    @Environment(\.applicationModel) var applicationModel: ApplicationModel
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
+
+    @EnvironmentObject var applicationModel: ApplicationModel
 
     @ObservedObject var settings: Settings
     @State var sheet: SheetType?
@@ -63,7 +64,7 @@ struct SettingsView: View {
                 }
                 Section {
                     Button {
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                         applicationModel.logout { _ in }
                     } label: {
                         Text("Log Out")
@@ -72,12 +73,18 @@ struct SettingsView: View {
             }
         }
         .navigationBarTitle("Settings", displayMode: .inline)
-        .navigationBarItems(trailing: Button {
-            presentationMode.wrappedValue.dismiss()
-        } label: {
-            Text("Done")
-                .bold()
-        })
+        .toolbar {
+
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    dismiss()
+                } label: {
+                    Text("Done")
+                        .bold()
+                }
+            }
+
+        }
         .sheet(item: $sheet) { sheet in
             switch sheet {
             case .about:

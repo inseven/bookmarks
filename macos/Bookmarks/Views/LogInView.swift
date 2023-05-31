@@ -25,7 +25,8 @@ import BookmarksCore
 struct LogInView: View {
 
     @Environment(\.openURL) var openURL
-    @Environment(\.applicationModel) var applicationModel
+
+    @EnvironmentObject var applicationModel: ApplicationModel
 
     @State var username: String = ""
     @State var password: String = ""

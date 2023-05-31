@@ -24,9 +24,9 @@ import BookmarksCore
 
 struct TagsView: View {
 
-    @EnvironmentObject var applicationModel: ApplicationModel
-
     @Environment(\.dismiss) var dismiss
+
+    @EnvironmentObject var applicationModel: ApplicationModel
 
     var body: some View {
         NavigationView {

@@ -35,7 +35,9 @@ public struct TagsContentView: View {
 
     public var body: some View {
         Table(model.filteredTags, selection: $model.selection) {
-            TableColumn("Tag", value: \.self)
+            TableColumn("Tag") { tag in
+                TagView(tag, color: tag.color())
+            }
             TableColumn("Favorite") { tag in
                 Toggle(isOn: $settings.favoriteTags.contains(tag))
             }

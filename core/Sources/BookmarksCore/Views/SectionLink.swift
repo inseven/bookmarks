@@ -23,14 +23,21 @@ import SwiftUI
 public struct SectionLink: View {
 
     var section: BookmarksSection
+    var color: Color
 
-    public init(_ section: BookmarksSection) {
+    public init(_ section: BookmarksSection, color: Color = .accentColor) {
         self.section = section
+        self.color = color
     }
 
     public var body: some View {
-        Label(section.sidebarTitle, systemImage: section.systemImage)
-            .tag(section)
+        Label {
+            Text(section.sidebarTitle)
+        } icon: {
+            Image(systemName: section.systemImage)
+                .foregroundColor(color)
+        }
+        .tag(section)
     }
 
 }

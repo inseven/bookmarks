@@ -207,7 +207,7 @@ public extension BookmarksSection {
             }
 
         case .tag:
-            return "tag"
+            return "tag.fill"
         }
     }
 

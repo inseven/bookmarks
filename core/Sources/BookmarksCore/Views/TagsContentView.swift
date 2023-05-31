@@ -25,6 +25,7 @@ import Interact
 public struct TagsContentView: View {
 
     @EnvironmentObject var applicationModel: ApplicationModel
+    @EnvironmentObject var settings: Settings
 
     @StateObject var model: TagsContentViewModel
 
@@ -35,6 +36,9 @@ public struct TagsContentView: View {
     public var body: some View {
         Table(model.filteredTags, selection: $model.selection) {
             TableColumn("Tag", value: \.self)
+            TableColumn("Favorite") { tag in
+                Toggle(isOn: $settings.favoriteTags.contains(tag))
+            }
         }
         .contextMenu(forSelectionType: String.ID.self) { selection in
             Button {

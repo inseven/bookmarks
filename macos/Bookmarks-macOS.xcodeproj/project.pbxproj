@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -393,8 +393,9 @@
 		D891C448261E32F90024E1A6 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1310;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					D83D154F2A267533000B70BF = {
 						CreatedOnToolsVersion = 14.3;
@@ -556,6 +557,7 @@
 				CODE_SIGN_ENTITLEMENTS = SafariExtension/SafariExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = $BUILD_NUMBER;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -589,6 +591,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "3rd Party Mac Developer Application";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = $BUILD_NUMBER;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = S4WXAUZQEV;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -653,6 +656,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -719,6 +723,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Apple Distribution";
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -752,6 +757,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = $BUILD_NUMBER;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Bookmarks/Preview Content\"";
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -780,6 +786,7 @@
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = $BUILD_NUMBER;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Bookmarks/Preview Content\"";
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = S4WXAUZQEV;
@@ -806,6 +813,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
 				INFOPLIST_FILE = BookmarksTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -827,6 +835,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
 				INFOPLIST_FILE = BookmarksTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -848,6 +857,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
 				INFOPLIST_FILE = BookmarksUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -869,6 +879,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
 				INFOPLIST_FILE = BookmarksUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

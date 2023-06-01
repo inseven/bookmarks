@@ -48,6 +48,7 @@ public struct Legal {
         License("HashRainbow", author: "Sarah Barbour", filename: "hashrainbow-license", bundle: .module)
         License("Interact", author: "InSeven Limited", filename: "interact-license", bundle: .module)
         License("SelectableCollectionView", author: "Jason Morley", filename: "selectablecollectionview-license", bundle: .module)
+        License("Swift Algorithm Club", author: "Matthijs Hollemans and Contributors", filename: "swift-algorithm-club-license", bundle: .module)
         License("SQLite.swift", author: "Stephen Celis", filename: "sqlite-swift-license", bundle: .module)
         License("TFHpple", author: "Topfunky Corporation", filename: "tfhpple-license", bundle: .module)
         License("WrappingHStack", author: "Konstantin Semianov", filename: "wrappinghstack-license", bundle: .module)

@@ -18,40 +18,49 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import SwiftUI
+import Foundation
 
-import Interact
+import SQLite
 
-public struct TagsContentView: View {
+extension Statement.Element {
 
-    @EnvironmentObject var applicationModel: ApplicationModel
-    @EnvironmentObject var settings: Settings
-
-    @StateObject var model: TagsContentViewModel
-
-    public init(tagsModel: TagsModel) {
-        _model = StateObject(wrappedValue: TagsContentViewModel(tagsModel: tagsModel))
+    func string(_ index: Int) throws -> String {
+        guard let value = self[index] as? String else {
+            throw BookmarksError.corrupt
+        }
+        return value
     }
 
-    public var body: some View {
-        Table(model.filteredTags, selection: $model.selection) {
-            TableColumn("Tag") { tag in
-                TagView(tag.name, color: tag.name.color())
-            }
-            TableColumn("Count") { tag in
-                Text(String(describing: tag.count))
-            }
-            TableColumn("Favorite") { tag in
-                Toggle(isOn: $settings.favoriteTags.contains(tag.name))
-            }
-        }
-        .contextMenu(forSelectionType: String.ID.self) { selection in
+    func url(_ index: Int) throws -> URL {
+        try string(index).url
+    }
 
-        } primaryAction: { selection in
-            print(selection)
+    func set(_ index: Int) throws -> Set<String> {
+        guard let value = self[index] as? String? else {
+            throw BookmarksError.corrupt
         }
-        .searchable(text: $model.filter)
-        .runs(model)
+        guard let safeValue = value else {
+            return Set()
+        }
+        return Set(safeValue.components(separatedBy: ","))
+    }
+
+    func date(_ index: Int) throws -> Date {
+        Date.fromDatatypeValue(try string(index))
+    }
+
+    func bool(_ index: Int) throws -> Bool {
+        guard let value = self[index] as? Int64 else {
+            throw BookmarksError.corrupt
+        }
+        return value > 0
+    }
+
+    func integer(_ index: Int) throws -> Int {
+        guard let value = self[index] as? Int64 else {
+            throw BookmarksError.corrupt
+        }
+        return Int(value)
     }
 
 }

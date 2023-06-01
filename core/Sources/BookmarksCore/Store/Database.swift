@@ -52,42 +52,6 @@ extension Connection {
 
 }
 
-extension Statement.Element {
-
-    func string(_ index: Int) throws -> String {
-        guard let value = self[index] as? String else {
-            throw BookmarksError.corrupt
-        }
-        return value
-    }
-
-    func url(_ index: Int) throws -> URL {
-        try string(index).url
-    }
-
-    func set(_ index: Int) throws -> Set<String> {
-        guard let value = self[index] as? String? else {
-            throw BookmarksError.corrupt
-        }
-        guard let safeValue = value else {
-            return Set()
-        }
-        return Set(safeValue.components(separatedBy: ","))
-    }
-
-    func date(_ index: Int) throws -> Date {
-        Date.fromDatatypeValue(try string(index))
-    }
-
-    func bool(_ index: Int) throws -> Bool {
-        guard let value = self[index] as? Int64 else {
-            throw BookmarksError.corrupt
-        }
-        return value > 0
-    }
-
-}
-
 extension String {
 
     func and(_ statement: String) -> String {
@@ -314,16 +278,11 @@ public class Database {
                 })
     }
 
-    public func tags(completion: @escaping (Swift.Result<[String], Error>) -> Void) {
+    public func tags(completion: @escaping (Swift.Result<[Tag], Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
-            let lowercaseName = Schema.name.lowercaseString
             let result = Swift.Result {
-                try self.db.prepare(Schema.tags
-                                        .select(lowercaseName)
-                                        .order(lowercaseName)).map { row in
-                    try row.get(lowercaseName)
-                }
+                try self.syncQueue_tags()
             }
             completion(result)
         }
@@ -476,6 +435,32 @@ public class Database {
         }
     }
 
+    public func syncQueue_tags() throws -> [Tag] {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
+
+        let selectQuery = """
+            SELECT
+                LOWER(name),
+                COUNT(name)
+            FROM
+                items_to_tags
+            JOIN
+                tags
+            ON
+                tags.id == items_to_tags.tag_id
+            GROUP BY
+                LOWER(name)
+            """
+
+        let statement = try db.prepare(selectQuery)
+        let tags = try statement.map { row in
+            return Tag(name: try row.string(0),
+                       count: try row.integer(1))
+        }
+
+        return tags
+    }
+
     public func syncQueue_bookmarks(where whereClause: String) throws -> [Bookmark] {
         dispatchPrecondition(condition: .onQueue(syncQueue))
 
@@ -579,7 +564,7 @@ public extension Database {
         try AsyncOperation { self.deleteBookmark(identifier: identifier, completion: $0) }.wait()
     }
 
-    func tags() throws -> [String] {
+    func tags() throws -> [Tag] {
         try AsyncOperation { self.tags(completion: $0) }.wait()
     }
 

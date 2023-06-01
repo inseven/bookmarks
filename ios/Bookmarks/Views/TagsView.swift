@@ -33,12 +33,11 @@ struct TagsView: View {
             TagsContentView(tagsModel: applicationModel.tagsModel)
                 .navigationBarTitle("Tags", displayMode: .inline)
                 .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
+                    ToolbarItem(placement: .navigationBarLeading) {
                         Button {
                             dismiss()
                         } label: {
-                            Text("Done")
-                                .fontWeight(.bold)
+                            Text("Close")
                         }
                     }
                 }

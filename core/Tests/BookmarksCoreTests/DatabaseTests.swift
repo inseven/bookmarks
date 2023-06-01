@@ -55,6 +55,16 @@ extension Bookmark {
 
 }
 
+extension Array where Element == Database.Tag {
+
+    func names() -> [String] {
+        return map { tag in
+            return tag.name
+        }
+    }
+
+}
+
 class DatabaseTests: XCTestCase {
 
     var temporaryDatabaseUrl: URL {
@@ -97,7 +107,7 @@ class DatabaseTests: XCTestCase {
         try database.insertOrUpdateBookmarks([item1, item2])
 
         let tags = try database.tags()
-        XCTAssertEqual(tags, ["cheese", "example", "website"])
+        XCTAssertEqual(tags.names(), ["cheese", "example", "website"])
 
         let fetchedItem1 = try database.bookmark(identifier: item1.identifier)
         XCTAssertEqual(fetchedItem1, item1)
@@ -119,7 +129,7 @@ class DatabaseTests: XCTestCase {
 
         try database.insertOrUpdateBookmarks([item1, item2])
 
-        XCTAssertEqual(try database.tags(), ["cheese", "example", "website"])
+        XCTAssertEqual(try database.tags().names(), ["cheese", "example", "website"])
         try await asyncAssertEqual(try await database.bookmarks(query: True()), [item2, item1])
     }
 
@@ -137,7 +147,7 @@ class DatabaseTests: XCTestCase {
         try database.insertOrUpdateBookmarks([item1, item2])
         try database.deleteBookmarks([item1])
 
-        XCTAssertEqual(try database.tags(), ["cheese", "website"])
+        XCTAssertEqual(try database.tags().names(), ["cheese", "website"])
         try await asyncAssertEqual(try await database.bookmarks(query: True()), [item2])
     }
 
@@ -176,14 +186,14 @@ class DatabaseTests: XCTestCase {
                             tags: ["example", "website"],
                             date: Date(timeIntervalSince1970: 0))
         try database.insertOrUpdateBookmarks([item])
-        XCTAssertEqual(try database.tags(), ["example", "website"])
+        XCTAssertEqual(try database.tags().names(), ["example", "website"])
 
         let updatedItem = Bookmark(title: "Example",
                                    url: item.url,
                                    tags: ["website", "cheese"],
                                    date: item.date)
         try database.insertOrUpdateBookmarks([updatedItem])
-        XCTAssertEqual(try database.tags(), ["cheese", "website"])
+        XCTAssertEqual(try database.tags().names(), ["cheese", "website"])
     }
 
     func testItemFilter() async throws {
@@ -286,7 +296,7 @@ class DatabaseTests: XCTestCase {
 
         try database.insertOrUpdateBookmarks([item1, item2, item3])
 
-        XCTAssertEqual(try database.tags(), ["cheese", "example", "robert", "strawberries", "website"])
+        XCTAssertEqual(try database.tags().names(), ["cheese", "example", "robert", "strawberries", "website"])
     }
 
     func testDeleteTags() async throws {
@@ -307,10 +317,10 @@ class DatabaseTests: XCTestCase {
                              date: Date(timeIntervalSince1970: 20))
 
         try database.insertOrUpdateBookmarks([item1, item2, item3])
-        XCTAssertEqual(try database.tags(), ["cheese", "example", "robert", "strawberries", "website"])
+        XCTAssertEqual(try database.tags().names(), ["cheese", "example", "robert", "strawberries", "website"])
 
         try database.deleteTag(tag: "website")
-        XCTAssertEqual(try database.tags(), ["cheese", "example", "robert", "strawberries"])
+        XCTAssertEqual(try database.tags().names(), ["cheese", "example", "robert", "strawberries"])
         try await asyncAssertEqual(try await database.bookmarks(query: True()), [item3, item2, item1].map { item in
             var tags = item.tags
             tags.remove("website")

@@ -18,27 +18,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
+import SwiftUI
 
-public extension URL {
+public struct FaviconImage: View {
 
-    var components: URLComponents {
-        get throws {
-            guard let components = URLComponents(string: absoluteString) else {
-                throw BookmarksError.invalidURL(url: self)
+    public struct LayoutMetrics {
+        public static let size = CGSize(width: 16, height: 16)
+    }
+
+    private var url: URL
+
+    public init(url: URL) {
+        self.url = url
+    }
+
+    public var body: some View {
+        if let url = url.faviconURL {
+            AsyncImage(url: url) { image in
+                image
+                    .resizable()
+                    .frame(width: LayoutMetrics.size.width, height: LayoutMetrics.size.height)
+            } placeholder: {
+                Image(systemName: "globe")
+                    .resizable()
+                    .foregroundColor(.secondary)
+                    .frame(width: LayoutMetrics.size.width, height: LayoutMetrics.size.height)
             }
-            return components
+        } else {
+            Image(systemName: "globe")
+                .resizable()
+                .foregroundColor(.secondary)
+                .frame(width: LayoutMetrics.size.width, height: LayoutMetrics.size.height)
         }
-    }
-
-    var faviconURL: URL? {
-        return URL(string: "/favicon.ico", relativeTo: self)
-    }
-
-    func settingQueryItems(_ queryItems: [URLQueryItem]) throws -> URL {
-        var components = try components
-        components.queryItems = queryItems
-        return try components.safeUrl
     }
 
 }

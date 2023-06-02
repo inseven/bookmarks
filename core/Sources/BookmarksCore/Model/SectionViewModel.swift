@@ -227,6 +227,11 @@ public class SectionViewModel: ObservableObject, Runnable {
         }
     }
 
+    @MainActor public func urls(ids: Set<Bookmark.ID>? = nil) -> [URL] {
+        let bookmarks = bookmarks(for: ids)
+        return bookmarks.map { $0.url }
+    }
+
     @MainActor public func update(ids: Set<Bookmark.ID>? = nil, toRead: Bool) {
         guard let applicationModel else {
             return

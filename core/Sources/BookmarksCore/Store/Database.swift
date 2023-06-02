@@ -308,6 +308,17 @@ public class Database {
         }
     }
 
+    public func bookmark(identifier: String) async throws -> Bookmark {
+        return try await withCheckedThrowingContinuation { continuation in
+            syncQueue.async {
+                let result = Swift.Result<Bookmark, Error> {
+                    try self.syncQueue_bookmark(identifier: identifier)
+                }
+                continuation.resume(with: result)
+            }
+        }
+    }
+
     public func bookmark(url: URL, completion: @escaping (Swift.Result<Bookmark, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
@@ -621,7 +632,7 @@ public extension Database {
         try AsyncOperation { self.identifiers(completion: $0) }.wait()
     }
 
-    func bookmark(identifier: String) throws -> Bookmark {
+    func bookmarkSync(identifier: String) throws -> Bookmark {
         try AsyncOperation { self.bookmark(identifier: identifier, completion: $0) }.wait()
     }
 

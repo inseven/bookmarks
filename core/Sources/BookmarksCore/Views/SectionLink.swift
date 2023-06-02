@@ -18,14 +18,55 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import Combine
 import SwiftUI
+
+import Interact
+
+class SectionLinkModel: ObservableObject, Runnable {
+
+    @Published var count: Int = 0
+
+    private var applicationModel: ApplicationModel
+    private var section: BookmarksSection
+    private var cancellables: Set<AnyCancellable> = []
+
+    init(applicationModel: ApplicationModel, section: BookmarksSection) {
+        self.applicationModel = applicationModel
+        self.section = section
+    }
+
+    func start() {
+
+        let section = section
+
+        applicationModel.database
+            .updatePublisher
+            .debounce(for: 0.2, scheduler: DispatchQueue.global())
+            .asyncMap { database in
+                return (try? await database.count(query: section.query)) ?? 0
+            }
+            .receive(on: DispatchQueue.main)
+            .assign(to: \.count, on: self)
+            .store(in: &cancellables)
+
+    }
+
+    func stop() {
+        cancellables.removeAll()
+    }
+
+}
 
 public struct SectionLink: View {
 
-    var section: BookmarksSection
+    @StateObject var model: SectionLinkModel
 
-    public init(_ section: BookmarksSection) {
+    private var section: BookmarksSection
+
+    public init(applicationModel: ApplicationModel, section: BookmarksSection) {
         self.section = section
+        _model = StateObject(wrappedValue: SectionLinkModel(applicationModel: applicationModel, section: section))
     }
 
     public var body: some View {
@@ -34,6 +75,8 @@ public struct SectionLink: View {
         } icon: {
             Image(systemName: section.systemImage)
         }
+        .badge(model.count)
+        .runs(model)
         .tag(section)
     }
 

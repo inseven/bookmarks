@@ -23,11 +23,9 @@ import SwiftUI
 public struct SectionLink: View {
 
     var section: BookmarksSection
-    var color: Color?
 
-    public init(_ section: BookmarksSection, color: Color? = nil) {
+    public init(_ section: BookmarksSection) {
         self.section = section
-        self.color = color
     }
 
     public var body: some View {
@@ -35,7 +33,6 @@ public struct SectionLink: View {
             Text(section.sidebarTitle)
         } icon: {
             Image(systemName: section.systemImage)
-                .foregroundColor(color)
         }
         .tag(section)
     }

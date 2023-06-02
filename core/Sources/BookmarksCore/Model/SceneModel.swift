@@ -23,10 +23,17 @@ import SwiftUI
 
 public class SceneModel: ObservableObject {
 
+    var settings: Settings
+
     @Published public var section: BookmarksSection? = .all
     @Published public var selection: Set<Bookmark.ID> = []
 
-    public init() {
+    public init(settings: Settings) {
+        self.settings = settings
+    }
+
+    public func revealTag(_ tag: String) {
+        self.section = .tag(tag)
     }
 
 }

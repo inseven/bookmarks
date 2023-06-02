@@ -49,6 +49,7 @@ struct SettingsView: View {
                 Section("Viewing") {
                     Toggle("Use In-App Browser", isOn: $settings.useInAppBrowser)
                 }
+                SidebarSettingsSection(settings: settings)
                 Section {
                     NavigationLink("Debug") {
                         DebugSettingsView(settings: settings)

@@ -42,7 +42,7 @@ public enum BookmarksSection: Equatable {
     case today
     case unread
     case shared(_ shared: Bool)
-    case tag(_ tag: String)
+    case tag(String)
 
 }
 
@@ -56,7 +56,9 @@ extension BookmarksSection: CustomStringConvertible, Hashable, Identifiable {
 
 extension String: Sectionable {
 
-    public var section: BookmarksSection { .tag(self) }
+    public var section: BookmarksSection {
+        return .tag(self)
+    }
 
 }
 
@@ -161,7 +163,6 @@ public extension BookmarksSection {
             } else {
                 return "Private"
             }
-
         case .tag(tag: let tag):
             return "Bookmarks tagged \"\(tag)\""
         }
@@ -183,7 +184,6 @@ public extension BookmarksSection {
             } else {
                 return "Private"
             }
-
         case .tag(tag: let tag):
             return tag
         }
@@ -205,9 +205,8 @@ public extension BookmarksSection {
             } else {
                 return "lock"
             }
-
         case .tag:
-            return "tag.fill"
+            return "tag"
         }
     }
 

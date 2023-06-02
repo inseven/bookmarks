@@ -20,30 +20,26 @@
 
 import SwiftUI
 
-struct BookmarkTagCommands: View {
+public struct SidebarTagCommands: View {
 
-    var sceneModel: SceneModel?
+    @EnvironmentObject var applicationModel: ApplicationModel
 
-    @ObservedObject var sectionViewModel: SectionViewModel
+    let tag: String
 
-    var body: some View {
-        Menu("Tags") {
-
-            Button("Add...") {
-                sectionViewModel.addTags()
+    public var body: some View {
+        if applicationModel.isFavorite(tag) {
+            Button {
+                applicationModel.removeFavorite(tag)
+            } label: {
+                Label("Remove from Favorites", systemImage: "star.slash")
             }
-            .keyboardShortcut("t", modifiers: .command)
-            .disabled(sectionViewModel.selection.isEmpty)
-
-            Divider()
-
-            ForEach(Array(sectionViewModel.selectionTags).sorted()) { tag in
-                Button(tag) {
-                    sceneModel?.revealTag(tag)
-                }
-                .disabled(sceneModel == nil)
+        } else {
+            Button {
+                applicationModel.addFavorite(tag)
+            } label: {
+                Label("Add to Favorites", systemImage: "star")
             }
-
         }
     }
+    
 }

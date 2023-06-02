@@ -29,8 +29,13 @@ struct ContentView: View {
 
     @ObservedObject var applicationModel: ApplicationModel
 
-    @StateObject var sceneModel = SceneModel()
+    @StateObject var sceneModel: SceneModel
     @State var sheet: ApplicationState? = nil
+
+    init(applicationModel: ApplicationModel) {
+        self.applicationModel = applicationModel
+        _sceneModel = StateObject(wrappedValue: SceneModel(settings: applicationModel.settings))
+    }
 
     var body: some View {
         NavigationSplitView {

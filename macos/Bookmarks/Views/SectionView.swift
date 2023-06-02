@@ -23,9 +23,10 @@ import Combine
 import QuickLook
 import SwiftUI
 
-import BookmarksCore
 import Interact
 import SelectableCollectionView
+
+import BookmarksCore
 
 struct SectionView: View {
 
@@ -112,10 +113,14 @@ struct SectionView: View {
             case .table:
 
                 Table(sectionViewModel.bookmarks, selection: $sectionViewModel.selection) {
+                    TableColumn("") { bookmark in
+                        FaviconImage(url: bookmark.url)
+                    }
+                    .width(FaviconImage.LayoutMetrics.size.width)
                     TableColumn("Title", value: \.title)
                     TableColumn("URL", value: \.url.absoluteString)
                     TableColumn("Tags") { bookmark in
-                        Text(bookmark.tags.joined(separator: " "))
+                        Text(bookmark.tags.sorted().joined(separator: " "))
                     }
                 }
                 .contextMenu(forSelectionType: Bookmark.ID.self) { selection in

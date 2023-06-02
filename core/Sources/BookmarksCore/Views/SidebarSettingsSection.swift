@@ -20,30 +20,23 @@
 
 import SwiftUI
 
-struct BookmarkTagCommands: View {
+public struct SidebarSettingsSection: View {
 
-    var sceneModel: SceneModel?
+    @ObservedObject var settings: Settings
 
-    @ObservedObject var sectionViewModel: SectionViewModel
+    public init(settings: Settings) {
+        self.settings = settings
+    }
 
-    var body: some View {
-        Menu("Tags") {
-
-            Button("Add...") {
-                sectionViewModel.addTags()
-            }
-            .keyboardShortcut("t", modifiers: .command)
-            .disabled(sectionViewModel.selection.isEmpty)
-
-            Divider()
-
-            ForEach(Array(sectionViewModel.selectionTags).sorted()) { tag in
-                Button(tag) {
-                    sceneModel?.revealTag(tag)
+    public var body: some View {
+        Section("Sidebar") {
+            Picker("Top Tags", selection: $settings.topTagsCount) {
+                ForEach(Array(stride(from: 0, to: 25, by: 5))) { value in
+                    Text(value == 0 ? "Off" : "\(value)")
+                        .tag(value)
                 }
-                .disabled(sceneModel == nil)
             }
-
         }
     }
+
 }

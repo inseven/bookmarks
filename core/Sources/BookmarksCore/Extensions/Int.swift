@@ -20,30 +20,8 @@
 
 import SwiftUI
 
-struct BookmarkTagCommands: View {
+extension Int: Identifiable {
 
-    var sceneModel: SceneModel?
+    public var id: Self { self }
 
-    @ObservedObject var sectionViewModel: SectionViewModel
-
-    var body: some View {
-        Menu("Tags") {
-
-            Button("Add...") {
-                sectionViewModel.addTags()
-            }
-            .keyboardShortcut("t", modifiers: .command)
-            .disabled(sectionViewModel.selection.isEmpty)
-
-            Divider()
-
-            ForEach(Array(sectionViewModel.selectionTags).sorted()) { tag in
-                Button(tag) {
-                    sceneModel?.revealTag(tag)
-                }
-                .disabled(sceneModel == nil)
-            }
-
-        }
-    }
 }

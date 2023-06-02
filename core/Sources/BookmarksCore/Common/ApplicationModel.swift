@@ -32,6 +32,8 @@ public class ApplicationModel: ObservableObject {
 
     @Published public var state: State = .idle
     @Published public var isUpdating: Bool = false
+    @Published public var topTags: [String] = []
+
     @Published private var isUpdaterRunning: Bool = false
 
     // TODO: Explore whether it's possible make some of the BookmarksManager properties private #266
@@ -83,6 +85,25 @@ public class ApplicationModel: ObservableObject {
         $isUpdaterRunning
             .debounce(for: 0.1, scheduler: DispatchQueue.main)
             .assign(to: \.isUpdating, on: self)
+            .store(in: &cancellables)
+
+        // Fetch the top n tags.
+        tagsModel
+            .$tags
+            .combineLatest(settings.$favoriteTags, settings.$topTagsCount)
+            .receive(on: DispatchQueue.global())
+            .map { tags, favoriteTags, topTagsCount in
+                guard topTagsCount > 0 else {
+                    return []
+                }
+                return tags
+                    .filter { !favoriteTags.contains($0.name) }
+                    .sorted { $0.count > $1.count || $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+                    .prefix(topTagsCount)
+                    .map { $0.name }
+            }
+            .receive(on: DispatchQueue.main)
+            .assign(to: \.topTags, on: self)
             .store(in: &cancellables)
 
     }
@@ -187,6 +208,18 @@ public class ApplicationModel: ObservableObject {
         } catch {
             print("Failed to open bookmarks with error \(error)")
         }
+    }
+
+    @MainActor public func isFavorite(_ tag: String) -> Bool {
+        return settings.favoriteTags.contains(tag)
+    }
+
+    @MainActor public func removeFavorite(_ tag: String) {
+        settings.favoriteTags = settings.favoriteTags.filter { $0 != tag }
+    }
+
+    @MainActor public func addFavorite(_ tag: String) {
+        settings.favoriteTags.append(tag)
     }
 
     @objc func nsApplicationDidBecomeActive() {

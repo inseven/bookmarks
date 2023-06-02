@@ -18,6 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import Combine
 import Foundation
 import SwiftUI
 
@@ -157,6 +158,11 @@ public class Database {
     var syncQueue = DispatchQueue(label: "Database.syncQueue")
     var db: Connection  // Synchronized on syncQueue
     var observers: [DatabaseObserver] = []  // Synchronized on syncQueue
+
+    var updatePublisher: Publishers.Concatenate<Publishers.Sequence<Array<Database>, Never>, DatabasePublisher> {
+        return DatabasePublisher(database: self)
+            .prepend(self)
+    }
 
     public init(path: URL) throws {
         self.path = path
@@ -512,11 +518,54 @@ public class Database {
         return bookmarks
     }
 
+    public func syncQueue_count(where whereClause: String) throws -> Int {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
+
+        let selectQuery = """
+            SELECT
+                COUNT(*)
+            FROM
+                items
+            LEFT JOIN
+                (
+                    SELECT
+                        item_id,
+                        GROUP_CONCAT(tags.name) AS tags
+                    FROM
+                        items_to_tags
+                    INNER JOIN
+                        tags
+                    ON
+                        tags.id == items_to_tags.tag_id
+                    GROUP BY
+                        item_id
+                )
+            ON
+                items.id == item_id
+            WHERE \(whereClause)
+            ORDER BY
+                date DESC
+            """
+
+        return Int(try db.scalar(selectQuery) as! Int64)
+    }
+
     public func bookmarks<T: QueryDescription>(query: T) async throws -> [Bookmark] {
         return try await withCheckedThrowingContinuation { continuation in
             syncQueue.async {
                 let result = Swift.Result<[Bookmark], Error> {
                     try self.syncQueue_bookmarks(where: query.sql)
+                }
+                continuation.resume(with: result)
+            }
+        }
+    }
+
+    public func count<T: QueryDescription>(query: T) async throws -> Int {
+        return try await withCheckedThrowingContinuation { continuation in
+            syncQueue.async {
+                let result = Swift.Result<Int, Error> {
+                    try self.syncQueue_count(where: query.sql)
                 }
                 continuation.resume(with: result)
             }

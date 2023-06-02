@@ -32,7 +32,6 @@ struct SettingsView: View {
     @EnvironmentObject var applicationModel: ApplicationModel
 
     var body: some View {
-        EmptyView()
         TabView {
             GeneralSettingsView(settings: applicationModel.settings)
                 .tabItem {

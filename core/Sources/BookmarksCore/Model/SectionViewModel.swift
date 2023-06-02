@@ -83,8 +83,8 @@ public class SectionViewModel: ObservableObject, Runnable {
         state = .loading
 
         // Query the database whenever a change occurs or the query changes.
-        DatabasePublisher(database: applicationModel.database)
-            .prepend(())
+        applicationModel.database
+            .updatePublisher
             .combineLatest($query)
             .debounce(for: .seconds(0.2), scheduler: DispatchQueue.main)
             .receive(on: DispatchQueue.global())

@@ -30,6 +30,7 @@ public enum SettingsKey: RawRepresentable {
     case favoriteTags
     case addTagsMarkAsRead
     case layoutMode(BookmarksSection)
+    case topTagsCount
 
     static let layoutModePrefix = "layout-mode-"
 
@@ -45,6 +46,8 @@ public enum SettingsKey: RawRepresentable {
             self = .favoriteTags
         case "add-tags-mark-as-read":
             self = .addTagsMarkAsRead
+        case "top-tags-count":
+            self = .topTagsCount
         case _ where rawValue.starts(with: Self.layoutModePrefix):
             let rawSection = String(rawValue.dropFirst(Self.layoutModePrefix.count))
             guard let section = BookmarksSection(rawValue: rawSection) else {
@@ -68,6 +71,8 @@ public enum SettingsKey: RawRepresentable {
             return "favorite-tags"
         case .addTagsMarkAsRead:
             return "add-tags-mark-as-read"
+        case .topTagsCount:
+            return "top-tags-count"
         case .layoutMode(let section):
             return "\(Self.layoutModePrefix)\(section.rawValue)"
         }
@@ -102,6 +107,12 @@ final public class Settings: ObservableObject {
         }
     }
 
+    @Published public var topTagsCount: Int {
+        didSet {
+            defaults.set(topTagsCount, forKey: .topTagsCount)
+        }
+    }
+
     public var user: String? {
         return pinboardApiKey?.components(separatedBy: ":").first
     }
@@ -109,11 +120,9 @@ final public class Settings: ObservableObject {
     public init() {
         pinboardApiKey = defaults.string(forKey: .pinboardApiKey) ?? ""
         useInAppBrowser = defaults.bool(forKey: .useInAppBrowser)
-        maximumConcurrentThumbnailDownloads = defaults.integer(forKey: .maximumConcurrentThumbnailDownloads)
+        maximumConcurrentThumbnailDownloads = defaults.integer(forKey: .maximumConcurrentThumbnailDownloads, default: 3)
         favoriteTags = defaults.object(forKey: .favoriteTags) as? [String] ?? []
-        if maximumConcurrentThumbnailDownloads == 0 {
-            maximumConcurrentThumbnailDownloads = 3
-        }
+        topTagsCount = defaults.integer(forKey: .topTagsCount, default: 5)
     }
 
     public func layoutMode(for section: BookmarksSection) -> LayoutMode {

@@ -21,7 +21,7 @@
 import Combine
 import Foundation
 
-class DatabaseSubscription<Target: Subscriber>: Subscription, DatabaseObserver where Target.Input == Void {
+class DatabaseSubscription<Target: Subscriber>: Subscription, DatabaseObserver where Target.Input == Database {
 
     var id = UUID()
 
@@ -41,14 +41,14 @@ class DatabaseSubscription<Target: Subscriber>: Subscription, DatabaseObserver w
     }
 
     func databaseDidUpdate(database: Database) {
-        _ = target?.receive()
+        _ = target?.receive(database)
     }
 
 }
 
 struct DatabasePublisher: Publisher {
 
-    typealias Output = Void
+    typealias Output = Database
     typealias Failure = Never
 
     fileprivate var database: Database

@@ -34,9 +34,13 @@ public struct SidebarContentView: View {
     public var body: some View {
         List(selection: $sceneModel.section) {
             if case let .tag(tag) = sceneModel.section,
-               !settings.favoriteTags.contains(tag) {
+               !settings.favoriteTags.contains(tag),
+               !applicationModel.topTags.contains(tag)  {
                 Section("Search") {
-                    TagSectionLink(tag: tag)
+                    SectionLink(.tag(tag))
+                        .contextMenu {
+                            SidebarTagCommands(tag: tag)
+                        }
                 }
             }
             Section("Smart Filters") {
@@ -44,14 +48,26 @@ public struct SidebarContentView: View {
                     SectionLink(section)
                 }
             }
-            if settings.favoriteTags.count > 0 {
+            if !settings.favoriteTags.isEmpty {
                 Section("Favorite Tags") {
                     ForEach(settings.favoriteTags.sorted(), id: \.section) { tag in
-                        TagSectionLink(tag: tag)
+                        SectionLink(.tag(tag))
+                            .contextMenu {
+                                SidebarTagCommands(tag: tag)
+                            }
                     }
                 }
             }
-
+            if !applicationModel.topTags.isEmpty {
+                Section("Top Tags") {
+                    ForEach(applicationModel.topTags, id: \.section) { tag in
+                        SectionLink(.tag(tag))
+                            .contextMenu {
+                                SidebarTagCommands(tag: tag)
+                            }
+                    }
+                }
+            }
         }
     }
 

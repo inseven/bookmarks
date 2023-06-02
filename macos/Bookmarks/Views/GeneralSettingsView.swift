@@ -29,7 +29,9 @@ struct GeneralSettingsView: View {
     var body: some View {
         VStack {
             Form {
+                SidebarSettingsSection(settings: settings)
             }
+            .formStyle(.grouped)
             Spacer()
         }
     }

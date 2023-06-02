@@ -56,6 +56,16 @@ struct ContentView: View {
                 LogInView()
             }
         }
+        .sheet(item: $sceneModel.sheet) { sheet in
+            switch sheet {
+            case .tags:
+                TagsView()
+            case .settings:
+                NavigationView {
+                    SettingsView(settings: applicationModel.settings)
+                }
+            }
+        }
         .onChange(of: applicationModel.state) { newValue in
             switch newValue {
             case .idle:
@@ -64,6 +74,7 @@ struct ContentView: View {
                 sheet = .logIn
             }
         }
+        .handlesSceneActions()
         .environmentObject(sceneModel)
         .focusedSceneObject(sceneModel)
     }

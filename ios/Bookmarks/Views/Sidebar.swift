@@ -24,36 +24,18 @@ import BookmarksCore
 
 struct Sidebar: View {
 
-    enum Sheet: Identifiable {
-
-        var id: Self { self }
-
-        case settings
-        case tags
-    }
-
     @EnvironmentObject var settings: Settings
-    
-    @State var sheet: Sheet?
+
+    @FocusedObject var sceneModel: SceneModel?
     
     var body: some View {
         SidebarContentView()
-            .sheet(item: $sheet) { sheet in
-                switch sheet {
-                case .settings:
-                    NavigationView {
-                        SettingsView(settings: settings)
-                    }
-                case .tags:
-                    TagsView()
-                }
-            }
             .navigationTitle("Bookmarks")
             .toolbar {
 
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
-                        sheet = .settings
+                        sceneModel?.showSettings()
                     } label: {
                         Image(systemName: "gear")
                     }
@@ -61,7 +43,7 @@ struct Sidebar: View {
 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        sheet = .tags
+                        sceneModel?.showTags()
                     } label: {
                         Image(systemName: "tag")
                     }

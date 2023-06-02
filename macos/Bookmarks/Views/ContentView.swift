@@ -71,6 +71,7 @@ struct ContentView: View {
                 sheet = .logIn
             }
         }
+        .handlesSceneActions()
         .environmentObject(sceneModel)
         .focusedSceneObject(sceneModel)
     }

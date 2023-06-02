@@ -35,4 +35,10 @@ extension URLComponents {
         }
     }
 
+    func queryItem(_ name: String) -> String? {
+        return queryItems?
+            .first(where: { $0.name == name })?
+            .value
+    }
+
 }

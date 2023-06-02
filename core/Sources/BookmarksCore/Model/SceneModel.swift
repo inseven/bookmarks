@@ -23,17 +23,57 @@ import SwiftUI
 
 public class SceneModel: ObservableObject {
 
+    public enum SheetType: Identifiable {
+
+        public var id: Self {
+            return self
+        }
+
+        case tags
+        case settings
+    }
+
     var settings: Settings
 
     @Published public var section: BookmarksSection? = .all
-    @Published public var selection: Set<Bookmark.ID> = []
+    @Published public var selection: Set<Bookmark.ID> = []  // TODO: Remove this?
+    @Published public var sheet: SheetType? = nil
 
     public init(settings: Settings) {
         self.settings = settings
     }
 
-    public func revealTag(_ tag: String) {
-        self.section = .tag(tag)
+    @MainActor public func showTags() {
+        sheet = .tags
+    }
+
+    @MainActor public func showSettings() {
+        sheet = .settings
+    }
+
+    @MainActor public func revealTag(_ tag: String) {
+        sheet = nil
+        section = .tag(tag)
+    }
+
+    @MainActor public func handleURL(_ url: URL) {
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+            return
+        }
+        switch url.scheme {
+        case URL.actionScheme:
+            switch url.pathComponents {
+            case ["/", "show"]:
+                guard let tag = components.queryItem("tag") else {
+                    return
+                }
+                revealTag(tag)
+            default:
+                break
+            }
+        default:
+            print("Failed to open unsupported URL '\(url.absoluteString)'.")
+        }
     }
 
 }

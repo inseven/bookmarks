@@ -24,6 +24,8 @@ import Interact
 
 public struct TagsContentView: View {
 
+    @Environment(\.openURL) var openURL
+
     @EnvironmentObject var applicationModel: ApplicationModel
     @EnvironmentObject var settings: Settings
 
@@ -48,7 +50,13 @@ public struct TagsContentView: View {
         .contextMenu(forSelectionType: String.ID.self) { selection in
 
         } primaryAction: { selection in
-            print(selection)
+            guard selection.count == 1,
+                  let tag = selection.first,
+                  let actionURL = URL(forOpeningTag: tag) else {
+                return
+            }
+            print(actionURL.absoluteString)
+            openURL(actionURL)
         }
         .searchable(text: $model.filter)
         .runs(model)

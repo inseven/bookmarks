@@ -66,6 +66,17 @@ struct BookmarksApp: App {
                 .environmentObject(applicationModel.settings)
         }
 
+        WindowGroup("Bookmark", for: String.self) { $id in
+            HStack {
+                if let id = id {
+                    EditView(applicationModel: applicationModel, id: id)
+                } else {
+                    Text("Nothing Selected")
+                }
+            }
+        }
+        .defaultSize(CGSize(width: 400, height: 600))
+
         About(Legal.contents)
 
     }

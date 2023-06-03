@@ -47,6 +47,8 @@ class TokenViewModel: ObservableObject {
 
     init(tokens: Binding<[String]>) {
         _tokens = tokens
+        items = tokens.wrappedValue
+            .map { Token($0) }
     }
 
     func start() {
@@ -61,6 +63,7 @@ class TokenViewModel: ObservableObject {
             .store(in: &cancellables)
 
         $items
+            .dropFirst()
             .receive(on: DispatchQueue.main)
             .map { $0.map { $0.text } }
             .assign(to: \.tokens, on: self)

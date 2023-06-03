@@ -109,9 +109,9 @@ class DatabaseTests: XCTestCase {
         let tags = try database.tags()
         XCTAssertEqual(tags.names(), ["cheese", "example", "website"])
 
-        let fetchedItem1 = try database.bookmark(identifier: item1.identifier)
+        let fetchedItem1 = try database.bookmarkSync(identifier: item1.identifier)
         XCTAssertEqual(fetchedItem1, item1)
-        let fetchedItem2 = try database.bookmark(identifier: item2.identifier)
+        let fetchedItem2 = try database.bookmarkSync(identifier: item2.identifier)
         XCTAssertEqual(fetchedItem2, item2)
     }
 
@@ -159,13 +159,13 @@ class DatabaseTests: XCTestCase {
                             date: Date(timeIntervalSince1970: 0),
                             notes: notes)
         _ = try database.insertOrUpdateBookmark(item)
-        let fetchedItem = try database.bookmark(identifier: item.identifier)
+        let fetchedItem = try database.bookmarkSync(identifier: item.identifier)
         XCTAssertEqual(item, fetchedItem)
         XCTAssertEqual(fetchedItem.notes, notes)
 
         let update = item.setting(notes: "Cheese")
         _ = try database.insertOrUpdateBookmark(update)
-        let fetchedUpdate = try database.bookmark(identifier: item.identifier)
+        let fetchedUpdate = try database.bookmarkSync(identifier: item.identifier)
         XCTAssertNotEqual(item, update)
         XCTAssertEqual(update, fetchedUpdate)
         XCTAssertEqual(fetchedUpdate.notes, "Cheese")

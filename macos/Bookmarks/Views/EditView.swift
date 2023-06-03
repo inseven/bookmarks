@@ -18,38 +18,50 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import AppKit
 import SwiftUI
+
+import Diligence
+import Interact
+import WrappingHStack
 
 import BookmarksCore
 
-struct Sidebar: View {
+struct EditView: View {
 
-    @EnvironmentObject var settings: Settings
+    @StateObject var model: EditViewModel
 
-    @FocusedObject var sceneModel: SceneModel?
-    
-    var body: some View {
-        SidebarContentView()
-            .navigationTitle("Bookmarks")
-            .toolbar {
-
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        sceneModel?.showSettings()
-                    } label: {
-                        Image(systemName: "gear")
-                    }
-                }
-
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        sceneModel?.showTags()
-                    } label: {
-                        Image(systemName: "tag")
-                    }
-                }
-
-            }
+    init(applicationModel: ApplicationModel, id: String) {
+        _model = StateObject(wrappedValue: EditViewModel(applicationModel: applicationModel, id: id))
     }
-    
+
+    var body: some View {
+        HStack {
+            switch model.state {
+            case .uninitialized, .loading:
+                ProgressView()
+                    .controlSize(.small)
+            case .ready:
+                Form {
+                    Section {
+                        TextField("Title", text: $model.title)
+                    }
+                    Section {
+                        Toggle("Unread", isOn: $model.toRead)
+                        Toggle("Public", isOn: $model.shared)
+                    }
+                    Section("Tags") {
+                        TokenView("Add tags...", tokens: $model.tags) { candidate in
+                            return []
+                        }
+                    }
+                }
+                .formStyle(.grouped)
+            }
+        }
+        .navigationTitle(model.title)
+        .presents($model.error)
+        .runs(model)
+    }
+
 }

@@ -22,6 +22,8 @@ import SwiftUI
 
 struct BookmarkEditCommands: View {
 
+    @Environment(\.openWindow) var openWindow
+
     @ObservedObject var sectionViewModel: SectionViewModel
 
     var body: some View {
@@ -39,6 +41,14 @@ struct BookmarkEditCommands: View {
         .disabled(sectionViewModel.selection.isEmpty)
 
         Divider()
+
+        Button("Get Info") {
+            for id in sectionViewModel.selection {
+                openWindow(value: id)
+            }
+        }
+        .disabled(sectionViewModel.selection.isEmpty)
+        .keyboardShortcut("i", modifiers: [.command])
 
         Button("Edit on Pinboard") {
             sectionViewModel.open(location: .pinboard)

@@ -18,42 +18,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
+import SwiftUI
 
-public extension URL {
+struct SceneActionHandler: ViewModifier {
 
-    static let actionScheme = "bookmarks-action"
+    @EnvironmentObject var sceneModel: SceneModel
 
-    var components: URLComponents {
-        get throws {
-            guard let components = URLComponents(string: absoluteString) else {
-                throw BookmarksError.invalidURL(url: self)
+    func body(content: Content) -> some View {
+        content
+            .handlesExternalEvents(preferring: ["/open"], allowing: [])
+            .onOpenURL { url in
+                sceneModel.handleURL(url)
             }
-            return components
-        }
     }
 
-    var faviconURL: URL? {
-        return URL(string: "/favicon.ico", relativeTo: self)
-    }
+}
 
-    init?(forOpeningTag tag: String) {
-        var components = URLComponents()
-        components.scheme = Self.actionScheme
-        components.path = "/show"
-        components.queryItems = [
-            URLQueryItem(name: "tag", value: tag)
-        ]
-        guard let actionURL = components.url else {
-            return nil
-        }
-        self = actionURL
-    }
+extension View {
 
-    func settingQueryItems(_ queryItems: [URLQueryItem]) throws -> URL {
-        var components = try components
-        components.queryItems = queryItems
-        return try components.safeUrl
+    public func handlesSceneActions() -> some View {
+        return modifier(SceneActionHandler())
     }
 
 }

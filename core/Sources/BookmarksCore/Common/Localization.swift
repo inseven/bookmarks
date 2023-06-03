@@ -31,8 +31,8 @@ public func Localized(_ layoutMode: LayoutMode) -> String {
 
 public func Localized(_ showSectionCount: Settings.ShowSectionCount) -> String {
     switch showSectionCount {
-    case .never:
-        return "Never"
+    case .none:
+        return "None"
     case .unread:
         return "Unread"
     case .all:

@@ -46,7 +46,7 @@ class SectionLinkModel: ObservableObject, Runnable {
             .combineLatest(applicationModel.settings.$showSectionCounts)
             .asyncMap { database, showSectionCounts in
                 switch showSectionCounts {
-                case .never:
+                case .none:
                     return 0
                 case .unread:
                     return (try? await database.count(query: section.query && Unread())) ?? 0

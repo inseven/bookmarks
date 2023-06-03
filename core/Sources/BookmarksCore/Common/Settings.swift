@@ -30,7 +30,7 @@ final public class Settings: ObservableObject {
             return self
         }
 
-        case never
+        case none
         case unread
         case all
     }

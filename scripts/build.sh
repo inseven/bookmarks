@@ -121,7 +121,7 @@ build_scheme "Bookmarks iOS" clean build build-for-testing test \
 
 # macOS
 sudo xcode-select --switch "$MACOS_XCODE_PATH"
-build_scheme "Bookmarks macOS" clean build build-for-testing
+build_scheme "Bookmarks macOS" clean build build-for-testing test
 
 # Clean up the build directory.
 if [ -d "$BUILD_DIRECTORY" ] ; then

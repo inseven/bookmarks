@@ -28,3 +28,14 @@ public func Localized(_ layoutMode: LayoutMode) -> String {
         return "List"
     }
 }
+
+public func Localized(_ showSectionCount: Settings.ShowSectionCount) -> String {
+    switch showSectionCount {
+    case .never:
+        return "Never"
+    case .unread:
+        return "Unread"
+    case .all:
+        return "All"
+    }
+}

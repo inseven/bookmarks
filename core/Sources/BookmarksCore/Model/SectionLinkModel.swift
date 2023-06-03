@@ -43,8 +43,16 @@ class SectionLinkModel: ObservableObject, Runnable {
         applicationModel.database
             .updatePublisher
             .debounce(for: 0.2, scheduler: DispatchQueue.global())
-            .asyncMap { database in
-                return (try? await database.count(query: section.query && Unread())) ?? 0
+            .combineLatest(applicationModel.settings.$showSectionCounts)
+            .asyncMap { database, showSectionCounts in
+                switch showSectionCounts {
+                case .never:
+                    return 0
+                case .unread:
+                    return (try? await database.count(query: section.query && Unread())) ?? 0
+                case .all:
+                    return (try? await database.count(query: section.query)) ?? 0
+                }
             }
             .receive(on: DispatchQueue.main)
             .assign(to: \.count, on: self)

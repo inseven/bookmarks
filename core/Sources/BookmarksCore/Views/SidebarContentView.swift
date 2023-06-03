@@ -37,7 +37,7 @@ public struct SidebarContentView: View {
                !settings.favoriteTags.contains(tag),
                !applicationModel.topTags.contains(tag)  {
                 Section("Search") {
-                    SectionLink(.tag(tag))
+                    SectionLink(applicationModel: applicationModel, section: .tag(tag))
                         .contextMenu {
                             SidebarTagCommands(tag: tag)
                         }
@@ -45,13 +45,13 @@ public struct SidebarContentView: View {
             }
             Section("Smart Filters") {
                 ForEach(BookmarksSection.defaultSections) { section in
-                    SectionLink(section)
+                    SectionLink(applicationModel: applicationModel, section: section)
                 }
             }
             if !settings.favoriteTags.isEmpty {
                 Section("Favorite Tags") {
                     ForEach(settings.favoriteTags.sorted(), id: \.section) { tag in
-                        SectionLink(.tag(tag))
+                        SectionLink(applicationModel: applicationModel, section: .tag(tag))
                             .contextMenu {
                                 SidebarTagCommands(tag: tag)
                             }
@@ -61,7 +61,7 @@ public struct SidebarContentView: View {
             if !applicationModel.topTags.isEmpty {
                 Section("Top Tags") {
                     ForEach(applicationModel.topTags, id: \.section) { tag in
-                        SectionLink(.tag(tag))
+                        SectionLink(applicationModel: applicationModel, section: .tag(tag))
                             .contextMenu {
                                 SidebarTagCommands(tag: tag)
                             }

@@ -22,64 +22,18 @@ import Foundation
 
 import Interact
 
-public enum SettingsKey: RawRepresentable {
-
-    case pinboardApiKey
-    case useInAppBrowser
-    case maximumConcurrentThumbnailDownloads
-    case favoriteTags
-    case addTagsMarkAsRead
-    case layoutMode(BookmarksSection)
-    case topTagsCount
-
-    static let layoutModePrefix = "layout-mode-"
-
-    public init?(rawValue: String) {
-        switch rawValue {
-        case "pinboard-api-key":
-            self = .pinboardApiKey
-        case "use-in-app-browser":
-            self = .useInAppBrowser
-        case "maximum-concurrent-thumbnail-downloads":
-            self = .maximumConcurrentThumbnailDownloads
-        case "favorite-tags":
-            self = .favoriteTags
-        case "add-tags-mark-as-read":
-            self = .addTagsMarkAsRead
-        case "top-tags-count":
-            self = .topTagsCount
-        case _ where rawValue.starts(with: Self.layoutModePrefix):
-            let rawSection = String(rawValue.dropFirst(Self.layoutModePrefix.count))
-            guard let section = BookmarksSection(rawValue: rawSection) else {
-                return nil
-            }
-            self = .layoutMode(section)
-        default:
-            return nil
-        }
-    }
-
-    public var rawValue: String {
-        switch self {
-        case .pinboardApiKey:
-            return "pinboard-api-key"
-        case .useInAppBrowser:
-            return "use-in-app-browser"
-        case .maximumConcurrentThumbnailDownloads:
-            return "maximum-concurrent-thumbnail-downloads"
-        case .favoriteTags:
-            return "favorite-tags"
-        case .addTagsMarkAsRead:
-            return "add-tags-mark-as-read"
-        case .topTagsCount:
-            return "top-tags-count"
-        case .layoutMode(let section):
-            return "\(Self.layoutModePrefix)\(section.rawValue)"
-        }
-    }
-}
-
 final public class Settings: ObservableObject {
+
+    public enum ShowSectionCount: String, CaseIterable, Identifiable {
+
+        public var id: Self {
+            return self
+        }
+
+        case none
+        case unread
+        case all
+    }
 
     let defaults = KeyedDefaults<SettingsKey>(defaults: UserDefaults(suiteName: "group.uk.co.inseven.bookmarks")!)
 
@@ -113,6 +67,12 @@ final public class Settings: ObservableObject {
         }
     }
 
+    @Published public var showSectionCounts: ShowSectionCount {
+        didSet {
+            defaults.set(showSectionCounts, forKey: .showSectionCounts)
+        }
+    }
+
     public var user: String? {
         return pinboardApiKey?.components(separatedBy: ":").first
     }
@@ -123,6 +83,7 @@ final public class Settings: ObservableObject {
         maximumConcurrentThumbnailDownloads = defaults.integer(forKey: .maximumConcurrentThumbnailDownloads, default: 3)
         favoriteTags = defaults.object(forKey: .favoriteTags) as? [String] ?? []
         topTagsCount = defaults.integer(forKey: .topTagsCount, default: 5)
+        showSectionCounts = defaults.value(forKey: .showSectionCounts, default: .unread)
     }
 
     public func layoutMode(for section: BookmarksSection) -> LayoutMode {

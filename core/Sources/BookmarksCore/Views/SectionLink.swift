@@ -20,6 +20,8 @@
 
 import SwiftUI
 
+import Interact
+
 public struct SectionLink: View {
 
     @StateObject var model: SectionLinkModel
@@ -39,7 +41,7 @@ public struct SectionLink: View {
         }
         .badge(model.count)
         .runs(model)
-        .tag(section)
+        .safeNavigationLink(section)
     }
 
 }

@@ -37,7 +37,6 @@ struct EditView: View {
     
     @ObservedObject var tagsModel: TagsModel
     var bookmark: Bookmark
-    @State var search: String = ""
     @State var title: String
     @State var toRead: Bool
     @State var shared: Bool

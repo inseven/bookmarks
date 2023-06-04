@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		D80710F326C4B855007272C0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80710F226C4B855007272C0 /* ContentView.swift */; };
-		D8164D6626C08DD500756D43 /* AddTagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D6526C08DD500756D43 /* AddTagsView.swift */; };
 		D8164D6826C08EEC00756D43 /* BorderedSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8164D6726C08EEC00756D43 /* BorderedSelection.swift */; };
 		D83D15532A267533000B70BF /* SafariExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83D15522A267533000B70BF /* SafariExtensionHandler.swift */; };
 		D83D15552A267533000B70BF /* SafariExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83D15542A267533000B70BF /* SafariExtensionViewController.swift */; };
@@ -80,7 +79,6 @@
 
 /* Begin PBXFileReference section */
 		D80710F226C4B855007272C0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		D8164D6526C08DD500756D43 /* AddTagsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTagsView.swift; sourceTree = "<group>"; };
 		D8164D6726C08EEC00756D43 /* BorderedSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderedSelection.swift; sourceTree = "<group>"; };
 		D83D15502A267533000B70BF /* Bookmarks for Safari.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Bookmarks for Safari.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D83D15522A267533000B70BF /* SafariExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariExtensionHandler.swift; sourceTree = "<group>"; };
@@ -264,7 +262,6 @@
 		D8B04B43261F4A1200376ADD /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				D8164D6526C08DD500756D43 /* AddTagsView.swift */,
 				D8164D6726C08EEC00756D43 /* BorderedSelection.swift */,
 				D80710F226C4B855007272C0 /* ContentView.swift */,
 				D857BD6B2A2A8073007D82F0 /* EditView.swift */,
@@ -500,7 +497,6 @@
 				D840B01226210AF6001E95D1 /* GeneralSettingsView.swift in Sources */,
 				D840B00A2621042B001E95D1 /* SettingsView.swift in Sources */,
 				D891C454261E32F90024E1A6 /* BookmarksApp.swift in Sources */,
-				D8164D6626C08DD500756D43 /* AddTagsView.swift in Sources */,
 				D8A8001D2A1F76200042C03B /* View.swift in Sources */,
 				D8F3F28F26EE776900BFA43B /* LogInView.swift in Sources */,
 			);

@@ -51,16 +51,6 @@ public struct SelectionToolbar: CustomizableToolbarContent {
             .disabled(sectionViewModel.selection.isEmpty)
         }
 
-        ToolbarItem(id: "tag") {
-            Button {
-                sectionViewModel.addTags()
-            } label: {
-                Label("Add Tags", systemImage: "tag")
-            }
-            .help("Add Tags")
-            .disabled(sectionViewModel.selection.isEmpty)
-        }
-
         ToolbarItem(id: "delete") {
             Button {
                 sectionViewModel.delete()

@@ -26,13 +26,6 @@ import Interact
 
 public class SectionViewModel: ObservableObject, Runnable {
 
-    public enum SheetType: Identifiable {
-
-        public var id: Self { self }
-
-        case addTags
-    }
-
     public enum State {
         case loading
         case ready
@@ -50,7 +43,6 @@ public class SectionViewModel: ObservableObject, Runnable {
     @Published public var selection: Set<Bookmark.ID> = []
     @Published public var previewURL: URL? = nil
 
-    @Published public var sheet: SheetType? = nil
     @Published public var lastError: Error? = nil
 
     @Published private var query: AnyQuery
@@ -202,10 +194,6 @@ public class SectionViewModel: ObservableObject, Runnable {
         self.bookmarks = []
     }
 
-    @MainActor public func addTags() {
-        sheet = .addTags
-    }
-
     @MainActor public func bookmarks(for ids: Set<Bookmark.ID>? = nil) -> [Bookmark] {
         let ids = ids ?? self.selection
         return ids.compactMap { bookmarksLookup[$0] }
@@ -280,20 +268,6 @@ public class SectionViewModel: ObservableObject, Runnable {
 #else
         fatalError("Unsupported")
 #endif
-    }
-
-    // TODO: Consider whether we should pull this down into the applicationModel.
-    @MainActor public func addTags(ids: Set<Bookmark.ID>? = nil, tags: Set<String>, markAsRead: Bool) {
-        guard let applicationModel else {
-            return
-        }
-        let bookmarks = bookmarks(for: ids)
-            .map { item in
-                item
-                    .adding(tags: tags)
-                    .setting(toRead: markAsRead ? false : item.toRead)
-            }
-        applicationModel.updateBookmarks(bookmarks, completion: errorHandler({ _ in }))
     }
 
     @MainActor public func showPreview() {

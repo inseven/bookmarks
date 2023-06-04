@@ -29,14 +29,6 @@ struct BookmarkTagCommands: View {
     var body: some View {
         Menu("Tags") {
 
-            Button("Add...") {
-                sectionViewModel.addTags()
-            }
-            .keyboardShortcut("t", modifiers: .command)
-            .disabled(sectionViewModel.selection.isEmpty)
-
-            Divider()
-
             ForEach(Array(sectionViewModel.selectionTags).sorted()) { tag in
                 Button(tag) {
                     sceneModel?.revealTag(tag)

@@ -141,12 +141,6 @@ struct SectionView: View {
         }
         .navigationTitle(sectionViewModel.title)
         .navigationSubtitle(sectionViewModel.subtitle)
-        .sheet(item: $sectionViewModel.sheet) { sheet in
-            switch sheet {
-            case .addTags:
-                AddTagsView(tagsModel: applicationModel.tagsModel, sectionViewModel: sectionViewModel)
-            }
-        }
         .presents($sectionViewModel.lastError)
         .focusedSceneObject(sectionViewModel)
     }

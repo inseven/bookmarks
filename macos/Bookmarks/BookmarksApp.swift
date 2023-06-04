@@ -49,7 +49,7 @@ struct BookmarksApp: App {
             SidebarCommands()
             ToolbarCommands()
             SectionCommands()
-            ViewCommands(sectionViewModel: sectionViewModel)
+            ViewCommands()
             BookmarkCommands()
             AccountCommands(applicationModel: applicationModel)
         }

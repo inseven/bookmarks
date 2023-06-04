@@ -44,6 +44,11 @@ struct SectionView: View {
     }
 
     @MenuItemBuilder private func contextMenu(_ selection: Set<Bookmark.ID>) -> [MenuItem] {
+
+        let bookmarks = sectionViewModel.bookmarks(for: selection)
+        let containsUnreadBookmark = bookmarks.containsUnreadBookmark
+        let containsPublicBookmark = bookmarks.containsPublicBookmark
+
         MenuItem("Open") {
             sectionViewModel.open(ids: selection)
         }
@@ -55,11 +60,11 @@ struct SectionView: View {
             sectionViewModel.delete(ids: selection)
         }
         Separator()
-        MenuItem(sectionViewModel.selectionContainsUnreadBookmarks ? "Mark as Read" : "Mark as Unread") {
-            sectionViewModel.update(toRead: !sectionViewModel.selectionContainsUnreadBookmarks)
+        MenuItem(containsUnreadBookmark ? "Mark as Read" : "Mark as Unread") {
+            sectionViewModel.update(toRead: !containsUnreadBookmark)
         }
-        MenuItem(sectionViewModel.selectionContainsPublicBookmark ? "Make Private" : "Make Public") {
-            sectionViewModel.update(shared: !sectionViewModel.selectionContainsPublicBookmark)
+        MenuItem(containsPublicBookmark ? "Make Private" : "Make Public") {
+            sectionViewModel.update(shared: !containsPublicBookmark)
         }
         Separator()
         MenuItem("Edit on Pinboard") {
@@ -112,36 +117,28 @@ struct SectionView: View {
 
             case .table:
 
-                Table(sectionViewModel.bookmarks, selection: $sectionViewModel.selection) {
-                    TableColumn("") { bookmark in
-                        FaviconImage(url: bookmark.url)
+                SectionTableView()
+                    .contextMenu(forSelectionType: Bookmark.ID.self) { selection in
+                        contextMenu(selection)
+                    } primaryAction: { selection in
+                        primaryAction(selection)
                     }
-                    .width(FaviconImage.LayoutMetrics.size.width)
-                    TableColumn("Title", value: \.title)
-                    TableColumn("URL", value: \.url.absoluteString)
-                    TableColumn("Tags") { bookmark in
-                        Text(bookmark.tags.sorted().joined(separator: " "))
-                    }
-                }
-                .contextMenu(forSelectionType: Bookmark.ID.self) { selection in
-                    contextMenu(selection)
-                } primaryAction: { selection in
-                    primaryAction(selection)
-                }
+
             }
 
         }
         .overlay(sectionViewModel.state == .loading ? LoadingView() : nil)
         .quickLookPreview($sectionViewModel.previewURL, in: sectionViewModel.urls)
-        .runs(sectionViewModel)
+        .navigationTitle(sectionViewModel.title)
+        .navigationSubtitle(sectionViewModel.subtitle)
         .searchable(text: $sectionViewModel.filter,
                     tokens: $sectionViewModel.tokens,
                     suggestedTokens: $sectionViewModel.suggestedTokens) { token in
             Label(token, systemImage: "tag")
         }
-        .navigationTitle(sectionViewModel.title)
-        .navigationSubtitle(sectionViewModel.subtitle)
         .presents($sectionViewModel.lastError)
+        .environmentObject(sectionViewModel)
         .focusedSceneObject(sectionViewModel)
+        .runs(sectionViewModel)
     }
 }

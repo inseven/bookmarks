@@ -24,34 +24,14 @@ public struct LayoutToolbar: CustomizableToolbarContent {
 
     @FocusedObject var sectionViewModel: SectionViewModel?
 
-    var layoutMode: Binding<LayoutMode> {
-        guard let sectionViewModel else {
-            return Binding.constant(LayoutMode.grid)
-        }
-        return Binding {
-            return sectionViewModel.layoutMode
-        } set: { layoutMode in
-            sectionViewModel.layoutMode = layoutMode
-        }
-    }
-
     public init() {
         
     }
 
     public var body: some CustomizableToolbarContent {
         ToolbarItem(id: "layout-mode") {
-            Picker(selection: layoutMode) {
-                ForEach(LayoutMode.allCases) { layoutMode in
-                    Label(Localized(layoutMode), systemImage: layoutMode.systemImage)
-                        .help(Localized(layoutMode))
-                        .tag(layoutMode)
-                }
-            } label: {
-                Text("Layout")
-            }
-            .pickerStyle(.inline)
-            .disabled(sectionViewModel == nil)
+            LayoutPicker()
+                .environmentObject(sectionViewModel ?? SectionViewModel())
         }
 
     }

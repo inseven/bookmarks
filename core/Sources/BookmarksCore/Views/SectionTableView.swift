@@ -20,18 +20,25 @@
 
 import SwiftUI
 
-public struct ViewCommands: Commands {
+public struct SectionTableView: View {
 
-    @FocusedObject var sectionViewModel: SectionViewModel?
+    @EnvironmentObject var sectionViewModel: SectionViewModel
 
     public init() {
-        
+
     }
 
-    public var body: some Commands {
-        CommandGroup(before: .sidebar) {
-            LayoutPicker()
-                .environmentObject(sectionViewModel ?? SectionViewModel())
+    public var body: some View {
+        Table(sectionViewModel.bookmarks, selection: $sectionViewModel.selection) {
+            TableColumn("") { bookmark in
+                FaviconImage(url: bookmark.url)
+            }
+            .width(FaviconImage.LayoutMetrics.size.width)
+            TableColumn("Title", value: \.title)
+            TableColumn("URL", value: \.url.absoluteString)
+            TableColumn("Tags") { bookmark in
+                Text(bookmark.tags.sorted().joined(separator: " "))
+            }
         }
     }
 

@@ -20,19 +20,26 @@
 
 import SwiftUI
 
-public struct ViewCommands: Commands {
+public struct LayoutPicker: View {
 
-    @FocusedObject var sectionViewModel: SectionViewModel?
+    @EnvironmentObject var sectionViewModel: SectionViewModel
 
     public init() {
-        
+
     }
 
-    public var body: some Commands {
-        CommandGroup(before: .sidebar) {
-            LayoutPicker()
-                .environmentObject(sectionViewModel ?? SectionViewModel())
+    public var body: some View {
+        Picker(selection: $sectionViewModel.layoutMode) {
+            ForEach(LayoutMode.allCases) { layoutMode in
+                Label(Localized(layoutMode), systemImage: layoutMode.systemImage)
+                    .help(Localized(layoutMode))
+                    .tag(layoutMode)
+            }
+        } label: {
+            Text("Layout")
         }
+        .pickerStyle(.inline)
+        .disabled(sectionViewModel.isPlaceholder)
     }
 
 }

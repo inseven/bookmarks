@@ -20,6 +20,8 @@
 
 import SwiftUI
 
+import Interact
+
 import BookmarksCore
 
 struct SectionView: View {
@@ -59,68 +61,96 @@ struct SectionView: View {
             }
         }
     }
+
+    @ViewBuilder func contextMenu(for selection: Set<Bookmark.ID>) -> some View {
+
+        let bookmarks = sectionViewModel.bookmarks(for: selection)
+        let containsUnreadBookmark = bookmarks.containsUnreadBookmark
+        let containsPublicBookmark = bookmarks.containsPublicBookmark
+
+        ShareLink("Share", items: bookmarks.map({ $0.url }))
+
+        if bookmarks.count == 1,
+           let bookmark = bookmarks.first {
+
+            Button {
+                sheet = .edit(bookmark)
+            } label: {
+                Label("Edit", systemImage: "square.and.pencil")
+            }
+
+        }
+
+        Button {
+            sectionViewModel.update(ids: selection, toRead: !containsUnreadBookmark)
+        } label: {
+            if containsUnreadBookmark {
+                Label("Mark as Read", systemImage: "circle")
+            } else {
+                Label("Mark as Unread", systemImage: "circle.inset.filled")
+            }
+        }
+
+        Button {
+            sectionViewModel.update(ids: selection, shared: !containsPublicBookmark)
+        } label: {
+            if containsPublicBookmark {
+                Label("Make Private", systemImage: "lock")
+            } else {
+                Label("Make Public", systemImage: "globe")
+            }
+        }
+
+        Button(role: .destructive) {
+            sectionViewModel.delete(ids: selection)
+        } label: {
+            Label("Delete", systemImage: "trash")
+        }
+    }
+
+    @MainActor func primaryAction(_ selection: Set<Bookmark.ID>) {
+        sectionViewModel.open(ids: selection)
+    }
     
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
-                ForEach(sectionViewModel.bookmarks) { bookmark in
-                    BookmarkCell(applicationModel: applicationModel, bookmark: bookmark)
-                        .aspectRatio(8/9, contentMode: .fit)
-                        .onTapGesture {
-                            UIApplication.shared.open(bookmark.url)
+        VStack {
+            switch sectionViewModel.layoutMode {
+            case .grid:
+                ScrollView {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
+                        ForEach(sectionViewModel.bookmarks) { bookmark in
+                            BookmarkCell(applicationModel: applicationModel, bookmark: bookmark)
+                                .aspectRatio(8/9, contentMode: .fit)
+                                .onTapGesture {
+                                    primaryAction([bookmark.id])
+                                }
+                                .contextMenu(ContextMenu {
+                                    contextMenu(for: [bookmark.id])
+                                })
                         }
-                        .contextMenu(ContextMenu {
-                            ShareLink("Share", item: bookmark.url)
-                            Button {
-                                sheet = .edit(bookmark)
-                            } label: {
-                                Label("Edit", systemImage: "square.and.pencil")
-                            }
-                            if bookmark.toRead {
-                                Button {
-                                    perform {
-                                        try await applicationModel.updateBookmarks([bookmark.setting(toRead: false)])
-                                    }
-                                } label: {
-                                    Label("Mark as Read", systemImage: "circle")
-                                }
-                            } else {
-                                Button {
-                                    perform {
-                                        try await applicationModel.updateBookmarks([bookmark.setting(toRead: true)])
-                                    }
-                                } label: {
-                                    Label("Mark as Unread", systemImage: "circle.inset.filled")
-                                }
-                            }
-                            if bookmark.shared {
-                                Button {
-                                    perform {
-                                        try await applicationModel.updateBookmarks([bookmark.setting(shared: false)])
-                                    }
-                                } label: {
-                                    Label("Make Private", systemImage: "lock")
-                                }
-                            } else {
-                                Button {
-                                    perform {
-                                        try await applicationModel.updateBookmarks([bookmark.setting(shared: true)])
-                                    }
-                                } label: {
-                                    Label("Make Public", systemImage: "globe")
-                                }
-                            }
-                            Button(role: .destructive) {
-                                perform {
-                                    try await applicationModel.deleteBookmarks([bookmark])
-                                }
-                            } label: {
-                                Label("Delete", systemImage: "trash")
-                            }
-                        })
+                    }
+                    .padding()
+                }
+            case .table:
+                SectionTableView()
+                    .contextMenu(forSelectionType: Bookmark.ID.self) { selection in
+                        contextMenu(for: selection)
+                    } primaryAction: { selection in
+                        primaryAction(selection)
+                    }
+            }
+
+        }
+        .navigationTitle(sectionViewModel.title)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Menu {
+                    LayoutPicker()
+                } label: {
+                    Label("More", systemImage: "ellipsis.circle")
                 }
             }
-            .padding()
         }
         .searchable(text: $sectionViewModel.filter,
                     tokens: $sectionViewModel.tokens,
@@ -136,8 +166,8 @@ struct SectionView: View {
         .alert(isPresented: $error.mappedToBool()) {
             Alert(error: error)
         }
-        .navigationTitle(sectionViewModel.title)
-        .navigationBarTitleDisplayMode(.inline)
+        .environmentObject(sectionViewModel)
+        .focusedSceneObject(sectionViewModel)
         .runs(sectionViewModel)
     }
 

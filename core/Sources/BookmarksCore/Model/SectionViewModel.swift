@@ -276,18 +276,6 @@ public class SectionViewModel: ObservableObject, Runnable {
     }
 
     // TODO: Set this asynchronously using combine.
-    @MainActor public var selectionContainsUnreadBookmarks: Bool {
-        let bookmarks = bookmarks.filter { selection.contains($0.id) }
-        return bookmarks.containsUnreadBookmark
-    }
-
-    // TODO: Set this asynchronously using combine.
-    @MainActor public var selectionContainsPublicBookmark: Bool {
-        let bookmarks = bookmarks.filter { selection.contains($0.id) }
-        return bookmarks.containsPublicBookmark
-    }
-
-    // TODO: Set this asynchronously using combine.
     @MainActor public var selectionTags: Set<String> {
         let bookmarks = bookmarks.filter { selection.contains($0.id) }
         return Set(bookmarks.map { $0.tags }.reduce([], +))

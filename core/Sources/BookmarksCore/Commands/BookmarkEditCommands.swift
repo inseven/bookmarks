@@ -46,13 +46,13 @@ struct BookmarkEditCommands: View {
 
         Divider()
 
-        Button("Get Info") {
+        Button("Edit") {
             for id in sectionViewModel.selection {
                 openWindow(value: id)
             }
         }
         .disabled(sectionViewModel.selection.isEmpty)
-        .keyboardShortcut("i", modifiers: [.command])
+        .keyboardShortcut("e", modifiers: [.command])
 
         Button("Edit on Pinboard") {
             sectionViewModel.open(location: .pinboard)

@@ -26,90 +26,15 @@ import BookmarksCore
 
 struct SectionView: View {
 
-    enum SheetType: Identifiable {
-
-        public var id: String {
-            switch self {
-            case .edit(let bookmark):
-                return "edit-\(bookmark.id)"
-            }
-        }
-
-        case edit(Bookmark)
-    }
-
     let applicationModel: ApplicationModel
 
     @StateObject var sectionViewModel: SectionViewModel
 
-    @State var sheet: SheetType? = nil
-    @State var error: Error? = nil
-
-    init(applicationModel: ApplicationModel, section: BookmarksSection) {
+    init(applicationModel: ApplicationModel, sceneModel: SceneModel, section: BookmarksSection) {
         self.applicationModel = applicationModel
-        _sectionViewModel = StateObject(wrappedValue: SectionViewModel(applicationModel: applicationModel, section: section))
-    }
-    
-    func perform(action: @escaping () async throws -> Void) {
-        Task(priority: .high) {
-            do {
-                try await action()
-            } catch {
-                DispatchQueue.main.async {
-                    self.error = error
-                }
-            }
-        }
-    }
-
-    @ViewBuilder func contextMenu(for selection: Set<Bookmark.ID>) -> some View {
-
-        let bookmarks = sectionViewModel.bookmarks(for: selection)
-        let containsUnreadBookmark = bookmarks.containsUnreadBookmark
-        let containsPublicBookmark = bookmarks.containsPublicBookmark
-
-        ShareLink("Share", items: bookmarks.map({ $0.url }))
-
-        if bookmarks.count == 1,
-           let bookmark = bookmarks.first {
-
-            Button {
-                sheet = .edit(bookmark)
-            } label: {
-                Label("Edit", systemImage: "square.and.pencil")
-            }
-
-        }
-
-        Button {
-            sectionViewModel.update(ids: selection, toRead: !containsUnreadBookmark)
-        } label: {
-            if containsUnreadBookmark {
-                Label("Mark as Read", systemImage: "circle")
-            } else {
-                Label("Mark as Unread", systemImage: "circle.inset.filled")
-            }
-        }
-
-        Button {
-            sectionViewModel.update(ids: selection, shared: !containsPublicBookmark)
-        } label: {
-            if containsPublicBookmark {
-                Label("Make Private", systemImage: "lock")
-            } else {
-                Label("Make Public", systemImage: "globe")
-            }
-        }
-
-        Button(role: .destructive) {
-            sectionViewModel.delete(ids: selection)
-        } label: {
-            Label("Delete", systemImage: "trash")
-        }
-    }
-
-    @MainActor func primaryAction(_ selection: Set<Bookmark.ID>) {
-        sectionViewModel.open(ids: selection)
+        _sectionViewModel = StateObject(wrappedValue: SectionViewModel(applicationModel: applicationModel,
+                                                                       sceneModel: sceneModel,
+                                                                       section: section))
     }
     
     var body: some View {
@@ -122,22 +47,17 @@ struct SectionView: View {
                             BookmarkCell(applicationModel: applicationModel, bookmark: bookmark)
                                 .aspectRatio(8/9, contentMode: .fit)
                                 .onTapGesture {
-                                    primaryAction([bookmark.id])
+                                    sectionViewModel.open(ids: [bookmark.id])
                                 }
-                                .contextMenu(ContextMenu {
-                                    contextMenu(for: [bookmark.id])
-                                })
+                                .contextMenu {
+                                    sectionViewModel.contextMenu([bookmark.id])
+                                }
                         }
                     }
                     .padding()
                 }
             case .table:
                 SectionTableView()
-                    .contextMenu(forSelectionType: Bookmark.ID.self) { selection in
-                        contextMenu(for: selection)
-                    } primaryAction: { selection in
-                        primaryAction(selection)
-                    }
             }
 
         }
@@ -156,15 +76,6 @@ struct SectionView: View {
                     tokens: $sectionViewModel.tokens,
                     suggestedTokens: $sectionViewModel.suggestedTokens) { token in
             Label(token, systemImage: "tag")
-        }
-        .sheet(item: $sheet) { sheet in
-            switch sheet {
-            case .edit(let bookmark):
-                EditView(tagsModel: applicationModel.tagsModel, bookmark: bookmark)
-            }
-        }
-        .alert(isPresented: $error.mappedToBool()) {
-            Alert(error: error)
         }
         .environmentObject(sectionViewModel)
         .focusedSceneObject(sectionViewModel)

@@ -32,9 +32,11 @@ struct SectionView: View {
 
     let applicationModel: ApplicationModel
 
+    @Environment(\.openWindow) var openWindow
+
     @StateObject var sectionViewModel: SectionViewModel
 
-    let layout = ColumnLayout(spacing: 2.0,
+    let layout = ColumnLayout(spacing: 6.0,
                               columns: 5,
                               edgeInsets: NSEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0))
 
@@ -43,65 +45,23 @@ struct SectionView: View {
         _sectionViewModel = StateObject(wrappedValue: SectionViewModel(applicationModel: applicationModel, section: section))
     }
 
-    @MenuItemBuilder private func contextMenu(_ selection: Set<Bookmark.ID>) -> [MenuItem] {
-
-        let bookmarks = sectionViewModel.bookmarks(for: selection)
-        let containsUnreadBookmark = bookmarks.containsUnreadBookmark
-        let containsPublicBookmark = bookmarks.containsPublicBookmark
-
-        MenuItem("Open") {
-            sectionViewModel.open(ids: selection)
-        }
-        MenuItem("Open on Internet Archive") {
-            sectionViewModel.open(ids: selection, location: .internetArchive)
-        }
-        Separator()
-        MenuItem("Delete") {
-            sectionViewModel.delete(ids: selection)
-        }
-        Separator()
-        MenuItem(containsUnreadBookmark ? "Mark as Read" : "Mark as Unread") {
-            sectionViewModel.update(toRead: !containsUnreadBookmark)
-        }
-        MenuItem(containsPublicBookmark ? "Make Private" : "Make Public") {
-            sectionViewModel.update(shared: !containsPublicBookmark)
-        }
-        Separator()
-        MenuItem("Edit on Pinboard") {
-            sectionViewModel.open(ids: selection, location: .pinboard)
-        }
-        Separator()
-        MenuItem("Copy") {
-            sectionViewModel.copy(ids: selection)
-        }
-        MenuItem("Copy Tags") {
-            sectionViewModel.copyTags(ids: selection)
-        }
-    }
-
-    @MainActor func primaryAction(_ selection: Set<Bookmark.ID>) {
-        sectionViewModel.open(ids: selection)
-    }
-
     var body: some View {
         VStack {
-
             switch sectionViewModel.layoutMode {
             case .grid:
-
                 SelectableCollectionView(sectionViewModel.bookmarks,
                                          selection: $sectionViewModel.selection,
                                          layout: layout) { bookmark in
 
                     BookmarkCell(applicationModel: applicationModel, bookmark: bookmark)
                         .modifier(BorderedSelection())
-                        .padding(4.0)
-                        .shadow(color: .shadow, radius: 4.0)
+                        .padding(6.0)
+                        .shadow(color: .shadow, radius: 3.0)
 
                 } contextMenu: { selection in
-                    contextMenu(selection)
+                    sectionViewModel.contextMenu(selection, openWindow: openWindow)
                 } primaryAction: { selection in
-                    primaryAction(selection)
+                    sectionViewModel.open(ids: selection)
                 } keyDown: { event in
                     if event.keyCode == kVK_Space {
                         sectionViewModel.showPreview()
@@ -114,16 +74,8 @@ struct SectionView: View {
                     }
                     return false
                 }
-
             case .table:
-
                 SectionTableView()
-                    .contextMenu(forSelectionType: Bookmark.ID.self) { selection in
-                        contextMenu(selection)
-                    } primaryAction: { selection in
-                        primaryAction(selection)
-                    }
-
             }
 
         }

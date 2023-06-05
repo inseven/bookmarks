@@ -20,6 +20,8 @@
 
 import SwiftUI
 
+import SelectableCollectionView
+
 struct BorderedSelection: ViewModifier {
 
     @Environment(\.isSelected) var isSelected
@@ -31,10 +33,9 @@ struct BorderedSelection: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .padding(4)
             .overlay(
                 RoundedRectangle(cornerRadius: 13)
-                    .stroke(color, lineWidth: 3))
+                    .stroke(color, lineWidth: 4))
     }
 
 }

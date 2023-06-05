@@ -22,6 +22,13 @@ import SwiftUI
 
 public struct SectionTableView: View {
 
+#if os(iOS)
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    private var isCompact: Bool { horizontalSizeClass == .compact }
+#else
+    private let isCompact = false
+#endif
+
     @Environment(\.openWindow) var openWindow
 
     @EnvironmentObject var sectionViewModel: SectionViewModel
@@ -33,9 +40,21 @@ public struct SectionTableView: View {
     public var body: some View {
         Table(sectionViewModel.bookmarks, selection: $sectionViewModel.selection) {
             TableColumn("") { bookmark in
-                FaviconImage(url: bookmark.url)
+                if isCompact {
+                    HStack(spacing: 16.0) {
+                        FaviconImage(url: bookmark.url)
+                        VStack(alignment: .leading) {
+                            Text(bookmark.title)
+                            Text(bookmark.url.absoluteString)
+                                .foregroundColor(.secondary)
+                        }
+                        .lineLimit(1)
+                    }
+                } else {
+                    FaviconImage(url: bookmark.url)
+                }
             }
-            .width(FaviconImage.LayoutMetrics.size.width)
+            .width(isCompact ? .none : FaviconImage.LayoutMetrics.size.width)
             TableColumn("Title", value: \.title)
             TableColumn("URL", value: \.url.absoluteString)
             TableColumn("Tags") { bookmark in

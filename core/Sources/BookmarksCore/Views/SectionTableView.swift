@@ -22,6 +22,8 @@ import SwiftUI
 
 public struct SectionTableView: View {
 
+    @Environment(\.openWindow) var openWindow
+
     @EnvironmentObject var sectionViewModel: SectionViewModel
 
     public init() {
@@ -39,6 +41,11 @@ public struct SectionTableView: View {
             TableColumn("Tags") { bookmark in
                 Text(bookmark.tags.sorted().joined(separator: " "))
             }
+        }
+        .contextMenu(forSelectionType: Bookmark.ID.self) { selection in
+            sectionViewModel.contextMenu(selection, openWindow: openWindow)
+        } primaryAction: { selection in
+            sectionViewModel.open(ids: selection)
         }
     }
 

@@ -48,7 +48,7 @@ public struct TagsContentView: View {
             }
         }
         .contextMenu(forSelectionType: String.ID.self) { selection in
-
+            EmptyView()
         } primaryAction: { selection in
             guard selection.count == 1,
                   let tag = selection.first,

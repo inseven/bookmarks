@@ -49,6 +49,7 @@ public class SectionViewModel: ObservableObject, Runnable {
     @Published private var bookmarksLookup: [Bookmark.ID: Bookmark] = [:]
 
     private let applicationModel: ApplicationModel?
+    private let sceneModel: SceneModel?
     private let section: BookmarksSection
     private var cancellables: Set<AnyCancellable> = []
 
@@ -56,8 +57,11 @@ public class SectionViewModel: ObservableObject, Runnable {
         return applicationModel == nil
     }
 
-    public init(applicationModel: ApplicationModel? = nil, section: BookmarksSection = .all) {
+    public init(applicationModel: ApplicationModel? = nil,
+                sceneModel: SceneModel? = nil,
+                section: BookmarksSection = .all) {
         self.applicationModel = applicationModel
+        self.sceneModel = sceneModel
         self.section = section
         self.query = section.query
         self.title = section.navigationTitle
@@ -246,27 +250,25 @@ public class SectionViewModel: ObservableObject, Runnable {
         applicationModel.deleteBookmarks(bookmarks, completion: errorHandler())
     }
 
-    // TODO: Rethink the threading here.
     @MainActor public func copy(ids: Set<Bookmark.ID>? = nil) {
-#if os(macOS)
         let bookmarks = bookmarks(for: ids)
+#if os(macOS)
         NSPasteboard.general.clearContents()
         NSPasteboard.general.writeObjects(bookmarks.map { $0.url.absoluteString as NSString })
         NSPasteboard.general.writeObjects(bookmarks.map { $0.url as NSURL })
 #else
-        fatalError("Unsupported")
+        UIPasteboard.general.urls = bookmarks.map { $0.url }
 #endif
     }
 
-    // TODO: Rethink the threading here.
     @MainActor public func copyTags(ids: Set<Bookmark.ID>? = nil) {
-#if os(macOS)
         let bookmarks = bookmarks(for: ids)
         let tags = bookmarks.tags.sorted().joined(separator: " ")
+#if os(macOS)
         NSPasteboard.general.clearContents()
         NSPasteboard.general.writeObjects([tags as NSString])
 #else
-        fatalError("Unsupported")
+        UIPasteboard.general.string = tags
 #endif
     }
 
@@ -281,6 +283,59 @@ public class SectionViewModel: ObservableObject, Runnable {
         return Set(bookmarks.map { $0.tags }.reduce([], +))
     }
 
+    @MainActor @MenuItemBuilder public func contextMenu(_ selection: Set<Bookmark.ID>,
+                                                        openWindow: OpenWindowAction? = nil) -> [MenuItem] {
+
+        let bookmarks = bookmarks(for: selection)
+        let containsUnreadBookmark = bookmarks.containsUnreadBookmark
+        let containsPublicBookmark = bookmarks.containsPublicBookmark
+
+        MenuItem("Open", systemImage: "safari") {
+            self.open(ids: selection)
+        }
+        MenuItem("Open on Internet Archive", systemImage: "clock") {
+            self.open(ids: selection, location: .internetArchive)
+        }
+        Divider()
+#if os(iOS)
+        if bookmarks.count == 1, let bookmark = bookmarks.first {
+            MenuItem("Edit", systemImage: "square.and.pencil") {
+                self.sceneModel?.edit(bookmark)
+            }
+        }
+#else
+        MenuItem("Edit", systemImage: "square.and.pencil") {
+            for id in selection {
+                openWindow?(value: id)
+            }
+        }
+#endif
+        MenuItem("Edit on Pinboard", systemImage: "pin") {
+            self.open(ids: selection, location: .pinboard)
+        }
+        Divider()
+        MenuItem(containsUnreadBookmark ? "Mark as Read" : "Mark as Unread",
+                 systemImage: containsUnreadBookmark ? "circle" : "circle.inset.filled") {
+            self.update(toRead: !containsUnreadBookmark)
+        }
+        MenuItem(containsPublicBookmark ? "Make Private" : "Make Public",
+                 systemImage: containsPublicBookmark ? "lock": "globe") {
+            self.update(shared: !containsPublicBookmark)
+        }
+        Divider()
+        MenuItem("Copy", systemImage: "doc.on.doc") {
+            self.copy(ids: selection)
+        }
+        MenuItem("Copy Tags", systemImage: "doc.on.doc") {
+            self.copyTags(ids: selection)
+        }
+        Divider()
+        MenuItem("Delete", systemImage: "trash", role: .destructive) {
+            self.delete(ids: selection)
+        }
+    }
+
+    // TODO: Remove or simplify this if possible.
     private func errorHandler<T>(_ completion: @escaping (Result<T, Error>) -> Void = { _ in }) -> (Result<T, Error>) -> Void {
         let completion = DispatchQueue.global().asyncClosure(completion)
         return { result in

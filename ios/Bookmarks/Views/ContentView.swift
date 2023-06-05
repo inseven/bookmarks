@@ -42,7 +42,7 @@ struct ContentView: View {
             Sidebar()
         } detail: {
             if let section = sceneModel.section {
-                SectionView(applicationModel: applicationModel, section: section)
+                SectionView(applicationModel: applicationModel, sceneModel: sceneModel, section: section)
                     .id(section)
                     .environmentObject(sceneModel)
             } else {
@@ -64,6 +64,8 @@ struct ContentView: View {
                 NavigationView {
                     SettingsView(settings: applicationModel.settings)
                 }
+            case .edit(let bookmark):
+                EditView(tagsModel: applicationModel.tagsModel, bookmark: bookmark)
             }
         }
         .onChange(of: applicationModel.state) { newValue in

@@ -25,18 +25,25 @@ public class SceneModel: ObservableObject {
 
     public enum SheetType: Identifiable {
 
-        public var id: Self {
-            return self
+        public var id: String {
+            switch self {
+            case .tags:
+                return "tags"
+            case .settings:
+                return "settings"
+            case .edit(let bookmark):
+                return "edit-\(bookmark.id)"
+            }
         }
 
         case tags
         case settings
+        case edit(Bookmark)
     }
 
     var settings: Settings
 
     @Published public var section: BookmarksSection? = .all
-    @Published public var selection: Set<Bookmark.ID> = []  // TODO: Remove this?
     @Published public var sheet: SheetType? = nil
 
     public init(settings: Settings) {
@@ -49,6 +56,10 @@ public class SceneModel: ObservableObject {
 
     @MainActor public func showSettings() {
         sheet = .settings
+    }
+
+    @MainActor public func edit(_ bookmark: Bookmark) {
+        sheet = .edit(bookmark)
     }
 
     @MainActor public func revealTag(_ tag: String) {

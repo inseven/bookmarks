@@ -48,10 +48,11 @@ struct BookmarksApp: App {
         .commands {
             SidebarCommands()
             ToolbarCommands()
+            AccountCommands(applicationModel: applicationModel)
+            ApplicationCommands()
             SectionCommands()
             ViewCommands()
             BookmarkCommands()
-            AccountCommands(applicationModel: applicationModel)
         }
 
         SwiftUI.Settings {
@@ -60,11 +61,7 @@ struct BookmarksApp: App {
                 .environmentObject(applicationModel.settings)
         }
 
-        Window("Tags", id: "tags") {
-            TagsContentView(tagsModel: applicationModel.tagsModel)
-                .environmentObject(applicationModel)
-                .environmentObject(applicationModel.settings)
-        }
+        TagsWindow(applicationModel: applicationModel)
 
         WindowGroup("Bookmark", for: String.self) { $id in
             HStack {

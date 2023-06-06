@@ -39,6 +39,7 @@ public struct AccountToolbar: CustomizableToolbarContent {
                 Label("Refresh", systemImage: "arrow.clockwise")
             }
             .help("Refresh")
+            .disabled(applicationModel.isUpdating)
         }
 
     }

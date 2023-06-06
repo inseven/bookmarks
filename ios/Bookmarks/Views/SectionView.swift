@@ -74,6 +74,14 @@ struct SectionView: View {
                 }
             }
 
+            ToolbarItem {
+                Button {
+                    applicationModel.refresh()
+                } label: {
+                    Label("Refresh", systemImage: "arrow.clockwise")
+                }
+            }
+
         }
         .searchable(text: $sectionViewModel.filter,
                     tokens: $sectionViewModel.tokens,

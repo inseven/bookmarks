@@ -20,16 +20,20 @@
 
 import SwiftUI
 
-struct LoadingView: View {
+import Interact
 
-    var body: some View {
-        HStack {
+public struct LoadingView: View {
+
+    public init () {
+
+    }
+
+    public var body: some View {
+        PlaceholderView {
             ProgressView()
-                .progressViewStyle(CircularProgressViewStyle())
+                .progressViewStyle(.circular)
+                .controlSize(.large)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(NSColor.textBackgroundColor))
-        .ignoresSafeArea()
     }
 
 }

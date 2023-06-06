@@ -61,6 +61,7 @@ struct SectionView: View {
             }
 
         }
+        .overlay(sectionViewModel.state == .loading ? LoadingView() : nil)
         .navigationTitle(sectionViewModel.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

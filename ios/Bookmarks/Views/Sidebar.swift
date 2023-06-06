@@ -49,6 +49,10 @@ struct Sidebar: View {
                     }
                 }
 
+                ToolbarItem(placement: .status) {
+                    StatusView()
+                }
+                
             }
     }
     

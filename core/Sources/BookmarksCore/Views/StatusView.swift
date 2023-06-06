@@ -18,45 +18,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Combine
 import SwiftUI
 
-import BookmarksCore
-import Interact
-
-struct Sidebar: View {
-
-    enum SheetType: Identifiable {
-
-        var id: String {
-            switch self {
-            case .rename(let tag):
-                return "rename:\(tag)"
-            }
-        }
-
-        case rename(tag: String)
-    }
+public struct StatusView: View {
 
     @EnvironmentObject var applicationModel: ApplicationModel
 
-    @State var sheet: SheetType? = nil
+    public init() {
 
-    var body: some View {
-        SidebarContentView()
-            .safeAreaInset(edge: .bottom) {
-                VStack(spacing: 0) {
-                    Divider()
-                    StatusView()
-                        .foregroundColor(.secondary)
-                        .padding()
-                }
-            }
-            .sheet(item: $sheet) { sheet in
-                switch sheet {
-                case .rename(let tag):
-                    RenameTagView(tag: tag)
-                }
-            }
     }
+
+    public var body: some View {
+        VStack {
+            if applicationModel.isUpdating {
+                Text("Updating...")
+            } else if let lastUpdated = applicationModel.lastUpdated {
+                TimelineView(.periodic(from: .now, by: 60)) { timeline in
+                    Text("Updated \(lastUpdated.formatted(.relative(presentation: .named)))")
+                }
+            } else {
+                Text("Never updated")
+            }
+        }
+        .font(.footnote)
+    }
+
 }

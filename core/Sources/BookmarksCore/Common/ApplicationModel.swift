@@ -35,6 +35,7 @@ public class ApplicationModel: ObservableObject {
     @Published public var topTags: [String] = []
 
     @Published private var isUpdaterRunning: Bool = false
+    @Published public var lastUpdated: Date? = nil
 
     // TODO: Explore whether it's possible make some of the BookmarksManager properties private #266
     //       https://github.com/inseven/bookmarks/issues/266
@@ -239,6 +240,7 @@ extension ApplicationModel: UpdaterDelegate {
     func updaterDidFinish(_ updater: Updater) {
         DispatchQueue.main.async {
             self.isUpdaterRunning = false
+            self.lastUpdated = Date()
         }
     }
 

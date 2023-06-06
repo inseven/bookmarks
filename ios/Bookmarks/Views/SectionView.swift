@@ -65,6 +65,7 @@ struct SectionView: View {
         .navigationTitle(sectionViewModel.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {
                     LayoutPicker()
@@ -72,6 +73,7 @@ struct SectionView: View {
                     Label("More", systemImage: "ellipsis.circle")
                 }
             }
+
         }
         .searchable(text: $sectionViewModel.filter,
                     tokens: $sectionViewModel.tokens,

@@ -80,6 +80,9 @@ struct SectionView: View {
                     suggestedTokens: $sectionViewModel.suggestedTokens) { token in
             Label(token, systemImage: "tag")
         }
+        .refreshable {
+            await applicationModel.refresh()
+        }
         .environmentObject(sectionViewModel)
         .focusedSceneObject(sectionViewModel)
         .runs(sectionViewModel)

@@ -32,7 +32,9 @@ public struct AccountToolbar: CustomizableToolbarContent {
 
         ToolbarItem(id: "refresh") {
             Button {
-                applicationModel.refresh()
+                Task {
+                    await applicationModel.refresh()
+                }
             } label: {
                 Label("Refresh", systemImage: "arrow.clockwise")
             }

@@ -48,9 +48,13 @@ struct Sidebar: View {
                 if applicationModel.isUpdating {
                     VStack(spacing: 0) {
                         Divider()
-                        Text("Updating...")
-                            .foregroundColor(.secondary)
-                            .padding()
+                        HStack(spacing: 6) {
+                            ProgressView()
+                                .controlSize(.small)
+                            Text("Updating...")
+                                .foregroundColor(.secondary)
+                        }
+                        .padding()
                     }
                 }
             }

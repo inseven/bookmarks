@@ -54,6 +54,7 @@ struct ContentView: View {
         }
         .toolbar(id: "main") {
             AccountToolbar()
+            ApplicationToolbar()
             LayoutToolbar()
             SelectionToolbar(sectionViewModel: sectionViewModel ?? SectionViewModel())
         }

@@ -42,7 +42,12 @@ public struct SectionTableView: View {
             TableColumn("") { bookmark in
                 if isCompact {
                     HStack(spacing: 16.0) {
-                        FaviconImage(url: bookmark.url)
+                        VStack {
+                            FaviconImage(url: bookmark.url)
+                            if bookmark.toRead {
+                                UnreadMark(isOn: true)
+                            }
+                        }
                         VStack(alignment: .leading) {
                             Text(bookmark.title)
                             Text(bookmark.url.absoluteString)
@@ -51,10 +56,15 @@ public struct SectionTableView: View {
                         .lineLimit(1)
                     }
                 } else {
-                    FaviconImage(url: bookmark.url)
+                    UnreadMark(isOn: bookmark.toRead)
                 }
+
             }
-            .width(isCompact ? .none : FaviconImage.LayoutMetrics.size.width)
+            .width(isCompact ? .none : UnreadMark.LayoutMetrics.size)
+            TableColumn("") { bookmark in
+                FaviconImage(url: bookmark.url)
+            }
+            .width(FaviconImage.LayoutMetrics.size.width)
             TableColumn("Title", value: \.title)
             TableColumn("URL", value: \.url.absoluteString)
             TableColumn("Tags") { bookmark in

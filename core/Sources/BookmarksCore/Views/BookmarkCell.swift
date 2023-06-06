@@ -25,6 +25,7 @@ public struct BookmarkCell: View {
 
     private struct LayoutMetrics {
         static let cornerRadius = 10.0
+        static let horizontalSpacing = 8.0
     }
 
     var bookmark: Bookmark
@@ -72,14 +73,22 @@ public struct BookmarkCell: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             thumbnail
-            VStack(alignment: .leading) {
-                Text(title)
-                    .lineLimit(1)
-                Text(bookmark.url.host ?? "Unknown")
-                    .lineLimit(1)
-                    .foregroundColor(.secondary)
+            Grid(horizontalSpacing: LayoutMetrics.horizontalSpacing, verticalSpacing: 0) {
+                GridRow {
+                    UnreadMark(isOn: bookmark.toRead)
+                    Text(title)
+                        .lineLimit(1)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                GridRow {
+                    UnreadMark(isOn: false)  // ~ Spacer
+                    Text(bookmark.url.host ?? "Unknown")
+                        .lineLimit(1)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .foregroundColor(.secondary)
+                }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.trailing, UnreadMark.LayoutMetrics.size)
             .padding()
             .background(Color.controlSecondaryBackground)
         }

@@ -46,7 +46,9 @@ struct BookmarksApp: App {
         .onChange(of: phase) { phase in
             switch phase {
             case .active:
-                applicationModel.refresh()
+                Task {
+                    await applicationModel.refresh()
+                }
             case .background:
                 break
             case .inactive:

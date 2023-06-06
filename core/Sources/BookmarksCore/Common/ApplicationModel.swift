@@ -142,8 +142,13 @@ public class ApplicationModel: ObservableObject {
         }
     }
 
-    public func refresh() {
-        updater.update(force: true)
+    public func refresh() async {
+        return await withCheckedContinuation { continuation in
+            updater.update(force: true) { error in
+                // N.B. We ignore the error here as it is currently handled via the delegate callback mechanism.
+                continuation.resume()
+            }
+        }
     }
 
     public func deleteBookmarks(_ bookmarks: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {

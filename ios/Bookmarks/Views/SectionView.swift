@@ -74,19 +74,14 @@ struct SectionView: View {
                 }
             }
 
-            ToolbarItem {
-                Button {
-                    applicationModel.refresh()
-                } label: {
-                    Label("Refresh", systemImage: "arrow.clockwise")
-                }
-            }
-
         }
         .searchable(text: $sectionViewModel.filter,
                     tokens: $sectionViewModel.tokens,
                     suggestedTokens: $sectionViewModel.suggestedTokens) { token in
             Label(token, systemImage: "tag")
+        }
+        .refreshable {
+            await applicationModel.refresh()
         }
         .environmentObject(sectionViewModel)
         .focusedSceneObject(sectionViewModel)

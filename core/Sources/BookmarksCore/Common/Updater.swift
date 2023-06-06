@@ -85,7 +85,7 @@ public class Updater {
         }
     }
 
-    fileprivate func syncQueue_update(force: Bool) {
+    fileprivate func syncQueue_update(force: Bool, completion: @escaping (Error?) -> Void) {
         dispatchPrecondition(condition: .onQueue(syncQueue))
 
         print("updating...")
@@ -154,11 +154,13 @@ public class Updater {
 
             targetQueue.async {
                 self.delegate?.updaterDidFinish(self)
+                completion(nil)
             }
 
         } catch {
             targetQueue.async {
                 self.delegate?.updater(self, didFailWithError: error)
+                completion(error)
             }
         }
     }
@@ -172,7 +174,7 @@ public class Updater {
                     return
                 }
                 self.syncQueue.async {
-                    self.syncQueue_update(force: true)
+                    self.syncQueue_update(force: true, completion: { _ in })
                 }
             }
         }
@@ -187,7 +189,7 @@ public class Updater {
                 switch result {
                 case .success(let token):
                     self.syncQueue_setToken(token)
-                    self.update(force: true)  // Enqueue an initial update.
+                    self.update(force: true, completion: { _ in })  // Enqueue an initial update.
                     completion(.success(()))
                 case .failure(let error):
                     completion(.failure(error))
@@ -206,9 +208,9 @@ public class Updater {
         }
     }
 
-    public func update(force: Bool = false) {
+    public func update(force: Bool = false, completion: @escaping (Error?) -> Void = { _ in }) {
         syncQueue.async {
-            self.syncQueue_update(force: force)
+            self.syncQueue_update(force: force, completion: completion)
         }
     }
 

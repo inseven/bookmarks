@@ -316,11 +316,11 @@ public class SectionViewModel: ObservableObject, Runnable {
         Divider()
         MenuItem(containsUnreadBookmark ? "Mark as Read" : "Mark as Unread",
                  systemImage: containsUnreadBookmark ? "circle" : "circle.inset.filled") {
-            self.update(toRead: !containsUnreadBookmark)
+            self.update(ids: selection, toRead: !containsUnreadBookmark)
         }
         MenuItem(containsPublicBookmark ? "Make Private" : "Make Public",
                  systemImage: containsPublicBookmark ? "lock": "globe") {
-            self.update(shared: !containsPublicBookmark)
+            self.update(ids: selection, shared: !containsPublicBookmark)
         }
         Divider()
         MenuItem("Copy", systemImage: "doc.on.doc") {

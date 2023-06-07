@@ -38,9 +38,22 @@ public struct SidebarContentView: View {
                !applicationModel.topTags.contains(tag)  {
                 Section("Search") {
                     SectionLink(applicationModel: applicationModel, section: .tag(tag))
+#if os(macOS)
                         .contextMenu {
                             SidebarTagCommands(tag: tag)
                         }
+#else
+                        .swipeActions(edge: .trailing) {
+                            Button {
+                                withAnimation {
+                                    applicationModel.addFavorite(tag)
+                                }
+                            } label: {
+                                Label("Add to Favorites", systemImage: "star")
+                            }
+                            .tint(.accentColor)
+                        }
+#endif
                 }
             }
             Section("Smart Filters") {
@@ -52,9 +65,21 @@ public struct SidebarContentView: View {
                 Section("Favorite Tags") {
                     ForEach(settings.favoriteTags.sorted(), id: \.section) { tag in
                         SectionLink(applicationModel: applicationModel, section: .tag(tag))
+#if os(macOS)
                             .contextMenu {
                                 SidebarTagCommands(tag: tag)
                             }
+#else
+                            .swipeActions(edge: .trailing) {
+                                Button(role: .destructive) {
+                                    withAnimation {
+                                        applicationModel.removeFavorite(tag)
+                                    }
+                                } label: {
+                                    Label("Remove from Favorites", systemImage: "star.slash")
+                                }
+                            }
+#endif
                     }
                 }
             }
@@ -62,9 +87,22 @@ public struct SidebarContentView: View {
                 Section("Top Tags") {
                     ForEach(applicationModel.topTags, id: \.section) { tag in
                         SectionLink(applicationModel: applicationModel, section: .tag(tag))
+#if os(macOS)
                             .contextMenu {
                                 SidebarTagCommands(tag: tag)
                             }
+#else
+                            .swipeActions(edge: .trailing) {
+                                Button {
+                                    withAnimation {
+                                        applicationModel.addFavorite(tag)
+                                    }
+                                } label: {
+                                    Label("Add to Favorites", systemImage: "star")
+                                }
+                                .tint(.accentColor)
+                            }
+#endif
                     }
                 }
             }

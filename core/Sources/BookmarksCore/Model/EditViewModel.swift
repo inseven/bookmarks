@@ -34,9 +34,7 @@ public class EditViewModel: ObservableObject, Runnable {
     @MainActor @Published public var state: State = .uninitialized
     @MainActor @Published public var error: Error? = nil
 
-    @MainActor @Published public var title: String = ""
-    @MainActor @Published public var toRead: Bool = false
-    @MainActor @Published public var shared: Bool = false
+    @MainActor @Published public var update: Bookmark = .placeholder
     @MainActor @Published public var tags: [String] = []
 
     @MainActor @Published private var bookmark: Bookmark?
@@ -61,11 +59,9 @@ public class EditViewModel: ObservableObject, Runnable {
                     let bookmark = try await applicationModel.database.bookmark(identifier: id)
                     await MainActor.run {
                         self.bookmark = bookmark
+                        self.update = bookmark
+                        self.tags = Array(bookmark.tags)
                         self.state = .ready
-                        self.title = bookmark.title
-                        self.shared = bookmark.shared
-                        self.toRead = bookmark.toRead
-                        self.tags = Array(bookmark.tags.sorted())
                     }
                 } catch {
                     await MainActor.run {
@@ -77,29 +73,34 @@ public class EditViewModel: ObservableObject, Runnable {
 
         // Watch for changes and publish updates.
         // N.B. This drops the first values to ensure we don't update the bookmark with temporary values.
-        $title
-            .combineLatest($shared, $toRead, $tags)
+        $update
+            .combineLatest($tags)
             .dropFirst()
             .combineLatest($bookmark
                 .compactMap { $0 })
             .debounce(for: 1, scheduler: DispatchQueue.global())
-            .sink { [weak self] group, bookmark in
-                let (title, shared, toRead, tags) = group
+            .sink { [weak self] updates, bookmark in
+                let (update, tags) = updates
                 guard let self,
-                      bookmark.title != title || bookmark.shared != shared || bookmark.toRead != toRead || bookmark.tags != Set(tags)
+                      (update.title != bookmark.title ||
+                       update.notes != bookmark.notes ||
+                       update.shared != bookmark.shared ||
+                       update.toRead != bookmark.toRead ||
+                       Set(tags) != bookmark.tags)
                 else {
                     return
                 }
-                let update = bookmark
-                    .setting(title: title)
-                    .setting(shared: shared)
-                    .setting(toRead: toRead)
-                    .setting(tags: Set(tags))
-                self.applicationModel.updateBookmarks([update]) { result in
+                var bookmark = update
+                bookmark.tags = Set(tags)
+                self.applicationModel.updateBookmarks([bookmark]) { result in
                     DispatchQueue.main.async {
                         if case let .failure(error) = result {
                             self.error = error
                         }
+                        // Update our world-view so we can track other changes.
+                        // N.B. There is a race condition here; if the user makes changes too quickly it will get out
+                        // of sync.
+                        self.bookmark = bookmark
                     }
                 }
             }

@@ -20,7 +20,7 @@
 
 import Foundation
 
-public class Bookmark: Equatable {
+public struct Bookmark: Equatable {
 
     public enum Location {
         case web
@@ -28,15 +28,26 @@ public class Bookmark: Equatable {
         case pinboard
     }
 
+    static var placeholder: Self {
+        return Self(identifier: "",
+                    title: "",
+                    url: URL(string: "https://inseven.co.uk")!,
+                    tags: [],
+                    date: .now,
+                    toRead: false,
+                    shared: false,
+                    notes: "")
+    }
+
     public let identifier: String
-    public let title: String
-    public let url: URL
-    public let tags: Set<String>
-    public let date: Date
-    public let toRead: Bool
-    public let shared: Bool
-    public let notes: String
-    public let thumbnail: SafeImage?
+    public var title: String
+    public var url: URL
+    public var tags: Set<String>
+    public var date: Date
+    public var toRead: Bool
+    public var shared: Bool
+    public var notes: String
+    public var thumbnail: SafeImage?
 
     init(identifier: String,
          title: String,
@@ -85,39 +96,6 @@ public class Bookmark: Equatable {
         }
         return true
     }
-    
-    public func setting(title: String) -> Bookmark {
-        Bookmark(identifier: identifier,
-                 title: title,
-                 url: url,
-                 tags: tags,
-                 date: date,
-                 toRead: toRead,
-                 shared: shared,
-                 notes: notes)
-    }
-
-    public func setting(notes: String) -> Bookmark {
-        Bookmark(identifier: identifier,
-                 title: title,
-                 url: url,
-                 tags: tags,
-                 date: date,
-                 toRead: toRead,
-                 shared: shared,
-                 notes: notes)
-    }
-
-    public func setting(tags: Set<String>) -> Bookmark {
-        Bookmark(identifier: identifier,
-                 title: title,
-                 url: url,
-                 tags: tags,
-                 date: date,
-                 toRead: toRead,
-                 shared: shared,
-                 notes: notes)
-    }
 
     public func setting(toRead: Bool) -> Bookmark {
         Bookmark(identifier: identifier,
@@ -135,28 +113,6 @@ public class Bookmark: Equatable {
                  title: title,
                  url: url,
                  tags: tags,
-                 date: date,
-                 toRead: toRead,
-                 shared: shared,
-                 notes: notes)
-    }
-
-    public func adding(tag: String) -> Bookmark {
-        Bookmark(identifier: identifier,
-                 title: title,
-                 url: url,
-                 tags: Set(tags + [tag]),
-                 date: date,
-                 toRead: toRead,
-                 shared: shared,
-                 notes: notes)
-    }
-
-    public func adding(tags: Set<String>) -> Bookmark {
-        Bookmark(identifier: identifier,
-                 title: title,
-                 url: url,
-                 tags: self.tags.union(tags),
                  date: date,
                  toRead: toRead,
                  shared: shared,
@@ -196,17 +152,6 @@ extension Bookmark: CustomStringConvertible {
 
     public var description: String {
         "\(url.absoluteString) (title: \(title), tags: [\(tags.joined(separator: ", "))], date: \(date), toRead: \(toRead), notes: '\(self.notes)')"
-    }
-
-}
-
-extension Bookmark {
-
-    public var localDate: String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeStyle = .medium
-        dateFormatter.dateStyle = .long
-        return "Added \(dateFormatter.string(from: date))"
     }
 
 }

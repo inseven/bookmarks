@@ -31,7 +31,7 @@ public protocol DatabaseObserver {
 
 extension Bookmark {
 
-    convenience init(row: Row) throws {
+    init(row: Row) throws {
         self.init(identifier: try row.get(Database.Schema.identifier),
                   title: try row.get(Database.Schema.title),
                   url: try row.get(Database.Schema.url).url,

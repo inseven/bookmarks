@@ -34,7 +34,7 @@ extension XCTestCase {
 
 extension Bookmark {
 
-    convenience init(title: String,
+    init(title: String,
                      url: URL,
                      tags: Set<String>,
                      date: Date,
@@ -163,7 +163,8 @@ class DatabaseTests: XCTestCase {
         XCTAssertEqual(item, fetchedItem)
         XCTAssertEqual(fetchedItem.notes, notes)
 
-        let update = item.setting(notes: "Cheese")
+        var update = item
+        update.notes = "Cheese"
         _ = try database.insertOrUpdateBookmark(update)
         let fetchedUpdate = try database.bookmarkSync(identifier: item.identifier)
         XCTAssertNotEqual(item, update)

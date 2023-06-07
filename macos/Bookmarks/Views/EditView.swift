@@ -44,11 +44,13 @@ struct EditView: View {
             case .ready:
                 Form {
                     Section {
-                        TextField("Title", text: $model.title)
+                        TextField("Title", text: $model.update.title)
+                        TextField("Notes", text: $model.update.notes, axis: .vertical)
+                            .lineLimit(5...10)
                     }
                     Section {
-                        Toggle("Unread", isOn: $model.toRead)
-                        Toggle("Public", isOn: $model.shared)
+                        Toggle("Unread", isOn: $model.update.toRead)
+                        Toggle("Public", isOn: $model.update.shared)
                     }
                     Section("Tags") {
                         TokenView("Add tags...", tokens: $model.tags) { candidate in
@@ -59,7 +61,7 @@ struct EditView: View {
                 .formStyle(.grouped)
             }
         }
-        .navigationTitle(model.title)
+        .navigationTitle(model.update.title)
         .presents($model.error)
         .runs(model)
     }

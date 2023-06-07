@@ -38,6 +38,7 @@ struct EditView: View {
     @ObservedObject var tagsModel: TagsModel
     var bookmark: Bookmark
     @State var title: String
+    @State var notes: String
     @State var toRead: Bool
     @State var shared: Bool
     @State var tags: [String]
@@ -49,19 +50,21 @@ struct EditView: View {
         self.tagsModel = tagsModel
         self.bookmark = bookmark
         _title = State(initialValue: bookmark.title)
+        _notes = State(initialValue: bookmark.notes)
         _tags = State(initialValue: Array(bookmark.tags))
         _shared = State(initialValue: bookmark.shared)
         _toRead = State(initialValue: bookmark.toRead)
     }
     
-    func save() {
+    @MainActor func save() {
         saving = true
-        let bookmark = bookmark
-            .setting(title: title)
-            .setting(tags: Set(tags))
-            .setting(shared: shared)
-            .setting(toRead: toRead)
-        applicationModel.updateBookmarks([bookmark]) { result in
+        var update = bookmark
+        update.title = title
+        update.notes = notes
+        update.tags = Set(tags)
+        update.shared = shared
+        update.toRead = toRead
+        applicationModel.updateBookmarks([update]) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success():
@@ -79,6 +82,8 @@ struct EditView: View {
             Form {
                 Section {
                     TextField("Title", text: $title)
+                    TextField("Notes", text: $notes, axis: .vertical)
+                        .lineLimit(5...10)
                 }
                 Section {
                     Toggle("Unread", isOn: $toRead)
@@ -116,7 +121,9 @@ struct EditView: View {
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: save) {
+                    Button {
+                        save()
+                    } label: {
                         Text("Save")
                             .bold()
                     }

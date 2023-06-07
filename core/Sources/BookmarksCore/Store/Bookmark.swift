@@ -25,7 +25,6 @@ public struct Bookmark: Equatable {
     public enum Location {
         case web
         case internetArchive
-        case pinboard
     }
 
     static var placeholder: Self {
@@ -125,10 +124,6 @@ public struct Bookmark: Equatable {
             return url
         case .internetArchive:
             return try "https://web.archive.org/web/*/".url.appendingPathComponent(url.absoluteString)
-        case .pinboard:
-            return try "https://pinboard.in/add".url.settingQueryItems([
-                URLQueryItem(name: "url", value: url.absoluteString)
-            ])
         }
     }
 

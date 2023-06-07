@@ -24,6 +24,13 @@ import Interact
 
 public struct TagsContentView: View {
 
+#if os(iOS)
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    private var isCompact: Bool { horizontalSizeClass == .compact }
+#else
+    private let isCompact = false
+#endif
+
     @Environment(\.openURL) var openURL
 
     @EnvironmentObject var applicationModel: ApplicationModel
@@ -38,7 +45,20 @@ public struct TagsContentView: View {
     public var body: some View {
         Table(model.filteredTags, selection: $model.selection) {
             TableColumn("Tag") { tag in
-                TagView(tag.name, color: tag.name.color())
+                if isCompact {
+                    HStack {
+                        Image(systemName: "circle.fill")
+                            .foregroundColor(tag.name.color())
+                        Text(tag.name)
+                        Spacer()
+                        Text(tag.count.formatted())
+                        Toggle("Favorite", isOn: $settings.favoriteTags.contains(tag.name))
+                            .toggleStyle(.favorite)
+                    }
+
+                } else {
+                    TagView(tag.name, color: tag.name.color())
+                }
             }
             TableColumn("Count") { tag in
                 Text(String(describing: tag.count))

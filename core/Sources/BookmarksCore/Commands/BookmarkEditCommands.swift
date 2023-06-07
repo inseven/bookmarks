@@ -54,12 +54,6 @@ struct BookmarkEditCommands: View {
         .disabled(sectionViewModel.selection.isEmpty)
         .keyboardShortcut("e", modifiers: [.command])
 
-        Button("Edit on Pinboard") {
-            sectionViewModel.open(location: .pinboard)
-        }
-        .disabled(sectionViewModel.selection.isEmpty)
-        .keyboardShortcut("e", modifiers: [.command, .shift])
-
     }
 
 }

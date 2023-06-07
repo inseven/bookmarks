@@ -310,9 +310,6 @@ public class SectionViewModel: ObservableObject, Runnable {
             }
         }
 #endif
-        MenuItem("Edit on Pinboard", systemImage: "pin") {
-            self.open(ids: selection, location: .pinboard)
-        }
         Divider()
         MenuItem(containsUnreadBookmark ? "Mark as Read" : "Mark as Unread",
                  systemImage: containsUnreadBookmark ? "circle" : "circle.inset.filled") {

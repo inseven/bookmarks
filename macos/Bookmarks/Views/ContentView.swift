@@ -44,7 +44,7 @@ struct ContentView: View {
             Sidebar()
         } detail: {
             if let section = sceneModel.section {
-                SectionView(applicationModel: applicationModel, section: section)
+                SectionView(applicationModel: applicationModel, sceneModel: sceneModel, section: section)
                     .id(section)
                     .environmentObject(sceneModel)
             } else {

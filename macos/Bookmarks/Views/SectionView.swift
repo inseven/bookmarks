@@ -40,9 +40,11 @@ struct SectionView: View {
                               columns: 5,
                               edgeInsets: NSEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0))
 
-    init(applicationModel: ApplicationModel, section: BookmarksSection) {
+    init(applicationModel: ApplicationModel, sceneModel: SceneModel, section: BookmarksSection) {
         self.applicationModel = applicationModel
-        _sectionViewModel = StateObject(wrappedValue: SectionViewModel(applicationModel: applicationModel, section: section))
+        _sectionViewModel = StateObject(wrappedValue: SectionViewModel(applicationModel: applicationModel,
+                                                                       sceneModel: sceneModel,
+                                                                       section: section))
     }
 
     var body: some View {

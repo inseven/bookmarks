@@ -68,6 +68,10 @@ struct ContentView: View {
                 EditView(tagsModel: applicationModel.tagsModel, bookmark: bookmark)
             }
         }
+        .fullScreenCover(item: $sceneModel.previewURL) { url in
+            SafariView(url: url)
+                .edgesIgnoringSafeArea(.all)
+        }
         .onChange(of: applicationModel.state) { newValue in
             switch newValue {
             case .idle:

@@ -21,6 +21,8 @@
 import Combine
 import SwiftUI
 
+import Interact
+
 public class SceneModel: ObservableObject {
 
     public enum SheetType: Identifiable {
@@ -45,6 +47,7 @@ public class SceneModel: ObservableObject {
 
     @Published public var section: BookmarksSection? = .all
     @Published public var sheet: SheetType? = nil
+    @Published public var previewURL: URL? = nil
 
     public init(settings: Settings) {
         self.settings = settings
@@ -60,6 +63,14 @@ public class SceneModel: ObservableObject {
 
     @MainActor public func edit(_ bookmark: Bookmark) {
         sheet = .edit(bookmark)
+    }
+
+    @MainActor public func showURL(_ url: URL) {
+        if settings.useInAppBrowser {
+            previewURL = url
+        } else {
+            Application.open(url)
+        }
     }
 
     @MainActor public func revealTag(_ tag: String) {

@@ -79,7 +79,11 @@ final public class Settings: ObservableObject {
 
     public init() {
         pinboardApiKey = defaults.string(forKey: .pinboardApiKey) ?? ""
-        useInAppBrowser = defaults.bool(forKey: .useInAppBrowser)
+#if os(macOS)
+        useInAppBrowser = defaults.bool(forKey: .useInAppBrowser, default: false)
+#else
+        useInAppBrowser = defaults.bool(forKey: .useInAppBrowser, default: true)
+#endif
         maximumConcurrentThumbnailDownloads = defaults.integer(forKey: .maximumConcurrentThumbnailDownloads, default: 3)
         favoriteTags = defaults.object(forKey: .favoriteTags) as? [String] ?? []
         topTagsCount = defaults.integer(forKey: .topTagsCount, default: 5)

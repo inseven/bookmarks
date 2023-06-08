@@ -20,10 +20,9 @@
 
 import SwiftUI
 
-#if os(macOS)
-
 public struct ApplicationCommands: Commands {
 
+    @FocusedObject var sceneModel: SceneModel?
     @Environment(\.openWindow) var openWindow
 
     public init() {
@@ -33,7 +32,11 @@ public struct ApplicationCommands: Commands {
     public var body: some Commands {
         CommandGroup(before: .appSettings) {
             Button {
+#if os(macOS)
                 openWindow(id: TagsWindow.identifier)
+#else
+                sceneModel?.showTags()
+#endif
             } label: {
                 Text("Tags...")
             }
@@ -43,5 +46,3 @@ public struct ApplicationCommands: Commands {
     }
 
 }
-
-#endif

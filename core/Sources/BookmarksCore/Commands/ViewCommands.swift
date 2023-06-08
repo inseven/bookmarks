@@ -22,6 +22,25 @@ import SwiftUI
 
 public struct ViewCommands: Commands {
 
+    struct Content: Commands {
+
+        @ObservedObject var sectionViewModel: SectionViewModel
+
+        var body: some Commands {
+            CommandGroup(before: .sidebar) {
+                ForEach(LayoutMode.allCases) { layoutMode in
+                    Toggle(isOn: $sectionViewModel.layoutMode.equals(layoutMode)) {
+                        Label(Localized(layoutMode), systemImage: layoutMode.systemImage)
+                    }
+                    .help(Localized(layoutMode))
+                    .keyboardShortcut(layoutMode.keyboardShortcut, modifiers: .command)
+                }
+                .disabled(sectionViewModel.isPlaceholder)
+                Divider()
+            }
+        }
+    }
+
     @FocusedObject var sectionViewModel: SectionViewModel?
 
     public init() {
@@ -29,10 +48,7 @@ public struct ViewCommands: Commands {
     }
 
     public var body: some Commands {
-        CommandGroup(before: .sidebar) {
-            LayoutPicker()
-                .environmentObject(sectionViewModel ?? SectionViewModel())
-        }
+        Content(sectionViewModel: sectionViewModel ?? SectionViewModel())
     }
 
 }

@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
+import SwiftUI
 
 public enum LayoutMode: String, CaseIterable, Identifiable {
 
@@ -33,6 +33,15 @@ public enum LayoutMode: String, CaseIterable, Identifiable {
             return "square.grid.2x2"
         case .table:
             return "list.bullet"
+        }
+    }
+
+    var keyboardShortcut: KeyEquivalent {
+        switch self {
+        case .grid:
+            return "j"
+        case .table:
+            return "k"
         }
     }
 

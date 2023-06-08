@@ -45,15 +45,7 @@ struct BookmarksApp: App {
                 .environmentObject(applicationModel)
                 .environmentObject(applicationModel.settings)
         }
-        .commands {
-            SidebarCommands()
-            ToolbarCommands()
-            AccountCommands(applicationModel: applicationModel)
-            ApplicationCommands()
-            SectionCommands()
-            ViewCommands()
-            BookmarkCommands()
-        }
+        .commonCommands(applicationModel: applicationModel)
 
         SwiftUI.Settings {
             SettingsView()

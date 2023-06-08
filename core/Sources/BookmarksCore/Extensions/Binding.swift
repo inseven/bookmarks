@@ -34,12 +34,30 @@ extension Binding where Value == Bool {
         }
     }
 
+    init<T: Equatable>(_ binding: Binding<T>, equals value: T) {
+        self.init {
+            binding.wrappedValue == value
+        } set: { active in
+            if active {
+                binding.wrappedValue = value
+            }
+        }
+    }
+
 }
 
 extension Binding where Value == Array<String> {
 
     func contains(_ value: String) -> Binding<Bool> {
         return Binding<Bool>(self, contains: value)
+    }
+
+}
+
+extension Binding where Value: Equatable {
+
+    func equals(_ value: Value) -> Binding<Bool> {
+        return Binding<Bool>(self, equals: value)
     }
 
 }

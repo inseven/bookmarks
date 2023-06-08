@@ -43,6 +43,7 @@ struct BookmarksApp: App {
                 .environmentObject(applicationModel)
                 .environmentObject(applicationModel.settings)
         }
+        .commonCommands(applicationModel: applicationModel)
         .onChange(of: phase) { phase in
             switch phase {
             case .active:

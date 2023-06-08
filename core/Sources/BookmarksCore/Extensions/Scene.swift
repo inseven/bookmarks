@@ -20,32 +20,21 @@
 
 import SwiftUI
 
-public struct AccountCommands: Commands {
+extension Scene {
 
-    var applicationModel: ApplicationModel
+    public func commonCommands(applicationModel: ApplicationModel) -> some Scene {
+        commands {
 
-    public init(applicationModel: ApplicationModel) {
-        self.applicationModel = applicationModel
-    }
+            SidebarCommands()
+            ToolbarCommands()
 
-    public var body: some Commands {
+            AccountCommands(applicationModel: applicationModel)
+            ApplicationCommands()
+            SectionCommands()
+            ViewCommands()
+            BookmarkCommands()
 
-        CommandMenu("Account") {
-            Button("Log Out...") {
-                applicationModel.logout { _ in }
-            }
         }
-
-        CommandGroup(after: .newItem) {
-            Divider()
-            Button("Refresh") {
-                Task {
-                    await applicationModel.refresh()
-                }
-            }
-            .keyboardShortcut("r", modifiers: .command)
-        }
-        
     }
 
 }

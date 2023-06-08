@@ -20,6 +20,8 @@
 
 import SwiftUI
 
+import Interact
+
 public struct AccountCommands: Commands {
 
     var applicationModel: ApplicationModel
@@ -39,9 +41,7 @@ public struct AccountCommands: Commands {
         CommandGroup(after: .newItem) {
             Divider()
             Button("Refresh") {
-                Task {
-                    await applicationModel.refresh()
-                }
+                await applicationModel.refresh()
             }
             .keyboardShortcut("r", modifiers: .command)
         }

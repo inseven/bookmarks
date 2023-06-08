@@ -20,6 +20,8 @@
 
 import SwiftUI
 
+import Interact
+
 public struct AccountToolbar: CustomizableToolbarContent {
 
     @EnvironmentObject var applicationModel: ApplicationModel
@@ -32,9 +34,7 @@ public struct AccountToolbar: CustomizableToolbarContent {
 
         ToolbarItem(id: "refresh") {
             Button {
-                Task {
-                    await applicationModel.refresh()
-                }
+                await applicationModel.refresh()
             } label: {
                 Label("Refresh", systemImage: "arrow.clockwise")
             }

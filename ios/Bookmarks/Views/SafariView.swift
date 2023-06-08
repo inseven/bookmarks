@@ -18,44 +18,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
+import SafariServices
+import SwiftUI
 
-extension URL: Identifiable {
+struct SafariView: UIViewControllerRepresentable {
 
-    static let actionScheme = "bookmarks-action"
+    let url: URL
 
-    public var id: Self { self }
-
-    var components: URLComponents {
-        get throws {
-            guard let components = URLComponents(string: absoluteString) else {
-                throw BookmarksError.invalidURL(url: self)
-            }
-            return components
-        }
+    func makeUIViewController(context: Context) -> some UIViewController {
+        return SFSafariViewController(url: url)
     }
 
-    var faviconURL: URL? {
-        return URL(string: "/favicon.ico", relativeTo: self)
-    }
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
 
-    init?(forOpeningTag tag: String) {
-        var components = URLComponents()
-        components.scheme = Self.actionScheme
-        components.path = "/show"
-        components.queryItems = [
-            URLQueryItem(name: "tag", value: tag)
-        ]
-        guard let actionURL = components.url else {
-            return nil
-        }
-        self = actionURL
-    }
-
-    func settingQueryItems(_ queryItems: [URLQueryItem]) throws -> URL {
-        var components = try components
-        components.queryItems = queryItems
-        return try components.safeUrl
     }
 
 }

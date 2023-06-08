@@ -213,7 +213,7 @@ public class SectionViewModel: ObservableObject, Runnable {
                     guard let url = try? bookmark.url(location) else {
                         continue
                     }
-                    Application.open(url)
+                    self.sceneModel?.showURL(url)
                 }
             }
         }

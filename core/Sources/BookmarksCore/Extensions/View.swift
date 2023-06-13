@@ -23,7 +23,7 @@ import SwiftUI
 extension View {
 
     public func presents(_ error: Binding<Error?>) -> some View {
-        return alert(isPresented: error.mappedToBool()) {
+        return alert(isPresented: error.bool()) {
             Alert(error: error.wrappedValue)
         }
     }

@@ -91,9 +91,7 @@ struct LogInView: View {
                 }
             }
         }
-        .alert(isPresented: $error.mappedToBool()) {
-            Alert(error: error)
-        }
+        .presents($error)
         .navigationViewStyle(.stack)
         .interactiveDismissDisabled(true)
     }

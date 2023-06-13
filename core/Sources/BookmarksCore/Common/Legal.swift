@@ -43,7 +43,6 @@ public struct Legal {
             Credit("Terrence Talbot")
         }
     } licenses: {
-        License("Binding+mappedToBool", author: "Joseph Duffy", filename: "binding-mappedtobool-license", bundle: .module)
         License("Bookmarks", author: "InSeven Limited", filename: "bookmarks-license", bundle: .module)
         License("HashRainbow", author: "Sarah Barbour", filename: "hashrainbow-license", bundle: .module)
         License("Interact", author: "InSeven Limited", filename: "interact-license", bundle: .module)

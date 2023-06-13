@@ -18,10 +18,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#if os(macOS)
+
 import Carbon
 import SwiftUI
-
-import BookmarksCore
 
 import SelectableCollectionView
 
@@ -69,3 +69,5 @@ public struct MacSectionGridView: View {
     }
 
 }
+
+#endif

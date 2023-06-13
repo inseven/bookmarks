@@ -26,18 +26,25 @@ struct SettingsView: View {
 
     private enum Tabs: Hashable {
         case general
-        case account
+        case debug
     }
 
     @EnvironmentObject var applicationModel: ApplicationModel
 
     var body: some View {
         TabView {
-            GeneralSettingsView(settings: applicationModel.settings)
+            Form {
+                SidebarSettingsSection(settings: applicationModel.settings)
+            }
+            .tabItem {
+                Label("General", systemImage: "gear")
+            }
+            .tag(Tabs.general)
+            AdvancedSettingsView()
                 .tabItem {
-                    Label("General", systemImage: "gear")
+                    Label("Advanced", systemImage: "magnifyingglass")
                 }
-                .tag(Tabs.general)
+                .tag(Tabs.debug)
         }
         .padding()
         .frame(minWidth: 320, maxWidth: .infinity)

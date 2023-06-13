@@ -92,15 +92,12 @@ public class EditViewModel: ObservableObject, Runnable {
                 }
                 var bookmark = update
                 bookmark.tags = Set(tags)
-                self.applicationModel.updateBookmarks([bookmark]) { result in
-                    DispatchQueue.main.async {
-                        if case let .failure(error) = result {
-                            self.error = error
-                        }
-                        // Update our world-view so we can track other changes.
-                        // N.B. There is a race condition here; if the user makes changes too quickly it will get out
-                        // of sync.
+                Task {
+                    do {
+                        try await self.applicationModel.update(bookmarks: [bookmark])
                         self.bookmark = bookmark
+                    } catch {
+                        self.error = error
                     }
                 }
             }

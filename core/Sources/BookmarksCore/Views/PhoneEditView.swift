@@ -46,7 +46,8 @@ public struct PhoneEditView: View {
     @State var toRead: Bool
     @State var shared: Bool
     @State var tags: [String]
-    @State var saving = false
+    @MainActor @State var saving = false
+    @MainActor @State var error: Error? = nil
     
     @State var sheet: SheetType?
         
@@ -68,16 +69,15 @@ public struct PhoneEditView: View {
         update.tags = Set(tags)
         update.shared = shared
         update.toRead = toRead
-        applicationModel.updateBookmarks([update]) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success():
-                    dismiss()
-                case .failure(let error):
-                    print("Failed to save with error \(error)")
-                }
-                saving = false
+        Task {
+            do {
+                try await applicationModel.update(bookmarks: [update])
+                dismiss()
+            } catch {
+                print("Failed to save with error \(error).")
+                self.error = error
             }
+            saving = false
         }
     }
 
@@ -139,6 +139,7 @@ public struct PhoneEditView: View {
                     PhoneEditTagsView(tagsModel: tagsModel, tags: $tags)
                 }
             }
+            .presents($error)
         }
         .navigationViewStyle(.stack)
     }

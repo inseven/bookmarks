@@ -51,7 +51,7 @@ public struct SelectionToolbar: CustomizableToolbarContent {
 
             ToolbarItem(id: "delete") {
                 Button {
-                    sectionViewModel.delete()
+                    await sectionViewModel.delete()
                 } label: {
                     Label("Delete", systemImage: "trash")
                 }

@@ -142,53 +142,19 @@ public class ApplicationModel: ObservableObject {
 
     public func refresh() async {
         return await withCheckedContinuation { continuation in
-            updater.update(force: true) { error in
+            updater.refresh(force: true) { error in
                 // N.B. We ignore the error here as it is currently handled via the delegate callback mechanism.
                 continuation.resume()
             }
         }
     }
-
-    public func deleteBookmarks(_ bookmarks: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
-        updater.deleteBookmarks(bookmarks, completion: completion)
-    }
-
-    public func deleteBookmarks(_ bookmarks: Set<Bookmark>, completion: @escaping (Result<Void, Error>) -> Void) {
-        updater.deleteBookmarks(Array(bookmarks), completion: completion)
-    }
     
-    public func deleteBookmarks(_ bookmarks: [Bookmark]) async throws {
-        return try await withCheckedThrowingContinuation { continuation in
-            updater.deleteBookmarks(bookmarks) { result in
-                switch result {
-                case .success:
-                    continuation.resume()
-                case .failure(let error):
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
+    public func delete(bookmarks: [Bookmark]) async throws {
+        try await updater.delete(bookmarks: bookmarks)
     }
 
-    public func updateBookmarks(_ bookmarks: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
-        updater.updateBookmarks(bookmarks, completion: completion)
-    }
-
-    public func updateBookmarks(_ bookmarks: Set<Bookmark>, completion: @escaping (Result<Void, Error>) -> Void) {
-        updater.updateBookmarks(Array(bookmarks), completion: completion)
-    }
-    
-    public func updateBookmarks(_ bookmarks: [Bookmark]) async throws {
-        return try await withCheckedThrowingContinuation { continuation in
-            updater.updateBookmarks(bookmarks) { result in
-                switch result {
-                case .success:
-                    continuation.resume()
-                case .failure(let error):
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
+    public func update(bookmarks: [Bookmark]) async throws {
+        try await updater.update(bookmarks: bookmarks)
     }
 
     public func renameTag(_ old: String, to new: String, completion: @escaping (Result<Void, Error>) -> Void) {
@@ -227,7 +193,7 @@ public class ApplicationModel: ObservableObject {
     }
 
     @objc func nsApplicationDidBecomeActive() {
-        self.updater.update()
+        self.updater.refresh()
     }
 
 }

@@ -93,3 +93,23 @@ extension Pinboard {
     }
 
 }
+
+extension Bookmark {
+
+    init?(_ post: Pinboard.Post) {
+        guard
+            let url = post.href,
+            let date = post.time else {
+                return nil
+        }
+        self.init(identifier: post.hash,
+                  title: post.description ?? "",
+                  url: url,
+                  tags: Set(post.tags),
+                  date: date,
+                  toRead: post.toRead,
+                  shared: post.shared,
+                  notes: post.extended)
+    }
+
+}

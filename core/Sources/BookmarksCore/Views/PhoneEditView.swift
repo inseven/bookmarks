@@ -18,16 +18,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#if os(iOS)
+
 import SwiftUI
 
 import WrappingHStack
 
-import BookmarksCore
-
-
-struct EditView: View {
+public struct PhoneEditView: View {
     
-    enum SheetType {
+    enum SheetType: Identifiable {
+
+        public var id: Self {
+            return self
+        }
+
         case addTag
     }
 
@@ -46,7 +50,7 @@ struct EditView: View {
     
     @State var sheet: SheetType?
         
-    init(tagsModel: TagsModel, bookmark: Bookmark) {
+    public init(tagsModel: TagsModel, bookmark: Bookmark) {
         self.tagsModel = tagsModel
         self.bookmark = bookmark
         _title = State(initialValue: bookmark.title)
@@ -77,7 +81,7 @@ struct EditView: View {
         }
     }
 
-    var body: some View {
+    public var body: some View {
         NavigationView {
             Form {
                 Section {
@@ -132,7 +136,7 @@ struct EditView: View {
             .sheet(item: $sheet) { sheet in
                 switch sheet {
                 case .addTag:
-                    EditTagsView(tagsModel: tagsModel, tags: $tags)
+                    PhoneEditTagsView(tagsModel: tagsModel, tags: $tags)
                 }
             }
         }
@@ -140,8 +144,5 @@ struct EditView: View {
     }
     
 }
-extension EditView.SheetType: Identifiable {
-    
-    public var id: Self { self }
-    
-}
+
+#endif

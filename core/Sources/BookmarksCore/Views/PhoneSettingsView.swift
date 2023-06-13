@@ -18,13 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#if os(iOS)
+
 import SwiftUI
 
 import Diligence
 
-import BookmarksCore
-
-struct SettingsView: View {
+public struct PhoneSettingsView: View {
 
     enum SheetType: Identifiable {
 
@@ -42,54 +42,62 @@ struct SettingsView: View {
     @ObservedObject var settings: Settings
     @State var sheet: SheetType?
 
-    var body: some View {
-        VStack {
-            Form {
-                Section("Viewing") {
-                    Toggle("Use In-App Browser", isOn: $settings.useInAppBrowser)
-                }
-                SidebarSettingsSection(settings: settings)
-                Section {
-                    NavigationLink("Debug") {
-                        DebugSettingsView(settings: settings)
+    public init(settings: Settings) {
+        self.settings = settings
+    }
+
+    public var body: some View {
+        NavigationView {
+            VStack {
+                Form {
+                    Section("Viewing") {
+                        Toggle("Use In-App Browser", isOn: $settings.useInAppBrowser)
+                    }
+                    SidebarSettingsSection(settings: settings)
+                    Section {
+                        NavigationLink("Debug") {
+                            PhoneDebugSettingsView(settings: settings)
+                        }
+                    }
+                    Section {
+                        Button {
+                            sheet = .about
+                        } label: {
+                            Text("About Bookmarks...")
+                                .foregroundColor(.primary)
+                        }
+                    }
+                    Section {
+                        Button {
+                            dismiss()
+                            applicationModel.logout { _ in }
+                        } label: {
+                            Text("Log Out")
+                        }
                     }
                 }
-                Section {
-                    Button {
-                        sheet = .about
-                    } label: {
-                        Text("About Bookmarks...")
-                            .foregroundColor(.primary)
-                    }
-                }
-                Section {
+            }
+            .navigationBarTitle("Settings", displayMode: .inline)
+            .toolbar {
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         dismiss()
-                        applicationModel.logout { _ in }
                     } label: {
-                        Text("Log Out")
+                        Text("Done")
+                            .bold()
                     }
                 }
+                
             }
-        }
-        .navigationBarTitle("Settings", displayMode: .inline)
-        .toolbar {
-
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    dismiss()
-                } label: {
-                    Text("Done")
-                        .bold()
+            .sheet(item: $sheet) { sheet in
+                switch sheet {
+                case .about:
+                    AboutView(Legal.contents)
                 }
-            }
-
-        }
-        .sheet(item: $sheet) { sheet in
-            switch sheet {
-            case .about:
-                AboutView(Legal.contents)
             }
         }
     }
 }
+
+#endif

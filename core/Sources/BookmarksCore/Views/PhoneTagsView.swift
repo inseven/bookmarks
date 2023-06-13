@@ -18,17 +18,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#if os(iOS)
+
 import SwiftUI
 
-import BookmarksCore
-
-struct TagsView: View {
+public struct PhoneTagsView: View {
 
     @Environment(\.dismiss) var dismiss
 
     @EnvironmentObject var applicationModel: ApplicationModel
 
-    var body: some View {
+    public init() {
+
+    }
+
+    public var body: some View {
         NavigationView {
             TagsContentView(tagsModel: applicationModel.tagsModel)
                 .navigationBarTitle("Tags", displayMode: .inline)
@@ -45,3 +49,5 @@ struct TagsView: View {
     }
 
 }
+
+#endif

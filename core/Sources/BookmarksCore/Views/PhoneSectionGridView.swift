@@ -18,9 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import SwiftUI
+#if os(iOS)
 
-import BookmarksCore
+import SwiftUI
 
 public struct PhoneSectionGridView: View {
 
@@ -50,3 +50,5 @@ public struct PhoneSectionGridView: View {
     }
 
 }
+
+#endif

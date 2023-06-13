@@ -59,17 +59,15 @@ struct ContentView: View {
         .sheet(item: $sceneModel.sheet) { sheet in
             switch sheet {
             case .tags:
-                TagsView()
+                PhoneTagsView()
             case .settings:
-                NavigationView {
-                    SettingsView(settings: applicationModel.settings)
-                }
+                PhoneSettingsView(settings: applicationModel.settings)
             case .edit(let bookmark):
-                EditView(tagsModel: applicationModel.tagsModel, bookmark: bookmark)
+                PhoneEditView(tagsModel: applicationModel.tagsModel, bookmark: bookmark)
             }
         }
         .fullScreenCover(item: $sceneModel.previewURL) { url in
-            SafariView(url: url)
+            PhoneSafariView(url: url)
                 .edgesIgnoringSafeArea(.all)
         }
         .onChange(of: applicationModel.state) { newValue in
@@ -84,4 +82,5 @@ struct ContentView: View {
         .environmentObject(sceneModel)
         .focusedSceneObject(sceneModel)
     }
+
 }

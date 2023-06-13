@@ -18,19 +18,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#if os(iOS)
+
 import SafariServices
 import SwiftUI
 
-struct SafariView: UIViewControllerRepresentable {
+public struct PhoneSafariView: UIViewControllerRepresentable {
 
     let url: URL
 
-    func makeUIViewController(context: Context) -> some UIViewController {
+    public init(url: URL) {
+        self.url = url
+    }
+
+    public func makeUIViewController(context: Context) -> some UIViewController {
         return SFSafariViewController(url: url)
     }
 
-    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+    public func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
 
     }
 
 }
+
+#endif

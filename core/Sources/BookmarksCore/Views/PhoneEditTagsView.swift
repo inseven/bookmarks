@@ -18,11 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#if os(iOS)
+
 import SwiftUI
 
-import BookmarksCore
-
-struct EditTagsView: View {
+public struct PhoneEditTagsView: View {
 
     @Environment(\.dismiss) var dismiss
     
@@ -39,8 +39,13 @@ struct EditTagsView: View {
         // TODO: Make this async.
         return tagsModel.suggestions(prefix: search, existing: tags)
     }
+
+    public init(tagsModel: TagsModel, tags: Binding<[String]>) {
+        self.tagsModel = tagsModel
+        _tags = tags
+    }
     
-    var body: some View {
+    public var body: some View {
         NavigationView {
             List {
                 if search.isEmpty {
@@ -101,3 +106,5 @@ struct EditTagsView: View {
     }
     
 }
+
+#endif

@@ -18,11 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#if os(iOS)
+
 import SwiftUI
 
-import BookmarksCore
-
-struct DebugSettingsView: View {
+public struct PhoneDebugSettingsView: View {
 
     @EnvironmentObject var applicationModel: ApplicationModel
 
@@ -30,7 +30,11 @@ struct DebugSettingsView: View {
 
     @State var error: Error?
 
-    var body: some View {
+    public init(settings: Settings) {
+        self.settings = settings
+    }
+
+    public var body: some View {
         Form {
             Section {
                 Picker("Concurrent Downloads", selection: $settings.maximumConcurrentThumbnailDownloads) {
@@ -61,3 +65,5 @@ struct DebugSettingsView: View {
     }
 
 }
+
+#endif

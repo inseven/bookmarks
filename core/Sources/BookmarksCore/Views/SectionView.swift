@@ -18,41 +18,48 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import QuickLook
 import SwiftUI
 
 import Interact
 
-import BookmarksCore
-
-struct SectionView: View {
+public struct SectionView: View {
 
     let applicationModel: ApplicationModel
 
     @StateObject var sectionViewModel: SectionViewModel
 
-    init(applicationModel: ApplicationModel, sceneModel: SceneModel, section: BookmarksSection) {
+    public init(applicationModel: ApplicationModel, sceneModel: SceneModel, section: BookmarksSection) {
         self.applicationModel = applicationModel
         _sectionViewModel = StateObject(wrappedValue: SectionViewModel(applicationModel: applicationModel,
                                                                        sceneModel: sceneModel,
                                                                        section: section))
     }
-    
-    var body: some View {
+
+    public var body: some View {
         VStack {
             switch sectionViewModel.layoutMode {
             case .grid:
-                PhoneSectionGridView()
+                SectionGridView()
             case .table:
                 SectionTableView()
             }
-
         }
         .overlay(sectionViewModel.bookmarks.isEmpty ? PlaceholderView("No Bookmarks") : nil)
         .overlay(sectionViewModel.state == .loading ? LoadingView() : nil)
         .navigationTitle(sectionViewModel.title)
+#if os(macOS)
+        .navigationSubtitle(sectionViewModel.subtitle)
+        .quickLookPreview($sectionViewModel.previewURL, in: sectionViewModel.urls)
+#endif
+        .searchable(text: $sectionViewModel.filter,
+                    tokens: $sectionViewModel.tokens,
+                    suggestedTokens: $sectionViewModel.suggestedTokens) { token in
+            Label(token, systemImage: "tag")
+        }
+#if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {
                     LayoutPicker()
@@ -60,20 +67,14 @@ struct SectionView: View {
                     Label("More", systemImage: "ellipsis.circle")
                 }
             }
-
-        }
-        .searchable(text: $sectionViewModel.filter,
-                    tokens: $sectionViewModel.tokens,
-                    suggestedTokens: $sectionViewModel.suggestedTokens) { token in
-            Label(token, systemImage: "tag")
         }
         .refreshable {
             await applicationModel.refresh()
         }
+#endif
         .presents($sectionViewModel.lastError)
         .environmentObject(sectionViewModel)
         .focusedSceneObject(sectionViewModel)
         .runs(sectionViewModel)
     }
-
 }

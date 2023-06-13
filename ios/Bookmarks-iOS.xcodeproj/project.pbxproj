@@ -14,9 +14,7 @@
 		D82BF6272730A0D0004978AD /* DebugSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82BF6262730A0D0004978AD /* DebugSettingsView.swift */; };
 		D82DB35F2A23F2750014161E /* TagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82DB35E2A23F2750014161E /* TagsView.swift */; };
 		D832EEC724816901004C64E3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D832EEC624816901004C64E3 /* SettingsView.swift */; };
-		D8478554261539AA00B2318B /* SectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8478553261539AA00B2318B /* SectionView.swift */; };
 		D859CE022733A9CD00E9B466 /* EditTagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D859CE012733A9CD00E9B466 /* EditTagsView.swift */; };
-		D85B9FAA2A38B2BF001B126C /* PhoneSectionGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85B9FA92A38B2BF001B126C /* PhoneSectionGridView.swift */; };
 		D864E47121C93FD200EAB9AD /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D864E47021C93FD200EAB9AD /* libxml2.2.tbd */; };
 		D871B4E5273242ED00712182 /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D871B4E4273242ED00712182 /* EditView.swift */; };
 		D8743909273106C000B676A5 /* Diligence in Frameworks */ = {isa = PBXBuildFile; productRef = D8743908273106C000B676A5 /* Diligence */; };
@@ -54,10 +52,8 @@
 		D82DB35E2A23F2750014161E /* TagsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsView.swift; sourceTree = "<group>"; };
 		D832EEC624816901004C64E3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D832EECA2481B6D1004C64E3 /* Bookmarks.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Bookmarks.entitlements; sourceTree = "<group>"; };
-		D8478553261539AA00B2318B /* SectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionView.swift; sourceTree = "<group>"; };
 		D84CE47D261E2A1400AF1901 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D859CE012733A9CD00E9B466 /* EditTagsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTagsView.swift; sourceTree = "<group>"; };
-		D85B9FA92A38B2BF001B126C /* PhoneSectionGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneSectionGridView.swift; sourceTree = "<group>"; };
 		D864E47021C93FD200EAB9AD /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 		D864E47221C9417F00EAB9AD /* Bookmarks-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bookmarks-Bridging-Header.h"; sourceTree = "<group>"; };
 		D871B4E4273242ED00712182 /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
@@ -115,9 +111,7 @@
 				D859CE012733A9CD00E9B466 /* EditTagsView.swift */,
 				D871B4E4273242ED00712182 /* EditView.swift */,
 				D82BF61D273090FE004978AD /* LogInView.swift */,
-				D85B9FA92A38B2BF001B126C /* PhoneSectionGridView.swift */,
 				D80D362C2A31F9DE00C47DC4 /* SafariView.swift */,
-				D8478553261539AA00B2318B /* SectionView.swift */,
 				D832EEC624816901004C64E3 /* SettingsView.swift */,
 				D8F521372732EEF40031F0CC /* TagActionButton.swift */,
 				D82DB35E2A23F2750014161E /* TagsView.swift */,
@@ -341,12 +335,10 @@
 			files = (
 				D832EEC724816901004C64E3 /* SettingsView.swift in Sources */,
 				D8F521382732EEF40031F0CC /* TagActionButton.swift in Sources */,
-				D85B9FAA2A38B2BF001B126C /* PhoneSectionGridView.swift in Sources */,
 				D81E7484254A0D1B002336DC /* ContentView.swift in Sources */,
 				D82BF6272730A0D0004978AD /* DebugSettingsView.swift in Sources */,
 				D80D362D2A31F9DE00C47DC4 /* SafariView.swift in Sources */,
 				D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */,
-				D8478554261539AA00B2318B /* SectionView.swift in Sources */,
 				D859CE022733A9CD00E9B466 /* EditTagsView.swift in Sources */,
 				D82BF61E273090FE004978AD /* LogInView.swift in Sources */,
 				D871B4E5273242ED00712182 /* EditView.swift in Sources */,

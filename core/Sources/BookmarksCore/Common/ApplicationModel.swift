@@ -37,8 +37,6 @@ public class ApplicationModel: ObservableObject {
     @Published private var isUpdaterRunning: Bool = false
     @Published public var lastUpdated: Date? = nil
 
-    // TODO: Explore whether it's possible make some of the BookmarksManager properties private #266
-    //       https://github.com/inseven/bookmarks/issues/266
     public var imageCache: ImageCache!
     public var thumbnailManager: ThumbnailManager
     public var settings = Settings()

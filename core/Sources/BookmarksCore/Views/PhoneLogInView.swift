@@ -18,12 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#if os(iOS)
+
 import Combine
 import SwiftUI
 
-import BookmarksCore
-
-struct LogInView: View {
+struct PhoneLogInView: View {
     
     enum Field: Hashable {
         case username
@@ -97,3 +97,5 @@ struct LogInView: View {
     }
 
 }
+
+#endif

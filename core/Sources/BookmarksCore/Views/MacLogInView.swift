@@ -18,11 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#if os(macOS)
+
 import SwiftUI
 
-import BookmarksCore
-
-struct LogInView: View {
+struct MacLogInView: View {
 
     @Environment(\.openURL) var openURL
 
@@ -94,3 +94,5 @@ struct LogInView: View {
     }
 
 }
+
+#endif

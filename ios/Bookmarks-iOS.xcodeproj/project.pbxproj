@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D81E7484254A0D1B002336DC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81E7483254A0D1B002336DC /* ContentView.swift */; };
 		D822159B2955C35C0087FBAC /* BookmarksCore in Frameworks */ = {isa = PBXBuildFile; productRef = D822159A2955C35C0087FBAC /* BookmarksCore */; };
-		D82BF61E273090FE004978AD /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82BF61D273090FE004978AD /* LogInView.swift */; };
 		D864E47121C93FD200EAB9AD /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D864E47021C93FD200EAB9AD /* libxml2.2.tbd */; };
 		D8743909273106C000B676A5 /* Diligence in Frameworks */ = {isa = PBXBuildFile; productRef = D8743908273106C000B676A5 /* Diligence */; };
 		D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BDE1172551C56100C95945 /* BookmarksApp.swift */; };
@@ -37,9 +35,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D81E7483254A0D1B002336DC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D82215992955C26E0087FBAC /* core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = core; path = ../core; sourceTree = "<group>"; };
-		D82BF61D273090FE004978AD /* LogInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
 		D832EECA2481B6D1004C64E3 /* Bookmarks.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Bookmarks.entitlements; sourceTree = "<group>"; };
 		D84CE47D261E2A1400AF1901 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D864E47021C93FD200EAB9AD /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
@@ -92,8 +88,6 @@
 		D8578479254FF56E00AE241C /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				D81E7483254A0D1B002336DC /* ContentView.swift */,
-				D82BF61D273090FE004978AD /* LogInView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -312,9 +306,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D81E7484254A0D1B002336DC /* ContentView.swift in Sources */,
 				D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */,
-				D82BF61E273090FE004978AD /* LogInView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

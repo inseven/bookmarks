@@ -18,26 +18,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Combine
 import SwiftUI
 
 import Interact
 
-import BookmarksCore
-
-struct ContentView: View {
+public struct ContentView: View {
 
     @ObservedObject var applicationModel: ApplicationModel
 
     @StateObject var sceneModel: SceneModel
     @State var sheet: ApplicationState? = nil
 
-    init(applicationModel: ApplicationModel) {
+    public init(applicationModel: ApplicationModel) {
         self.applicationModel = applicationModel
         _sceneModel = StateObject(wrappedValue: SceneModel(settings: applicationModel.settings))
     }
 
-    var body: some View {
+    public var body: some View {
         NavigationSplitView {
             Sidebar()
         } detail: {
@@ -50,18 +47,36 @@ struct ContentView: View {
                     .searchable()
             }
         }
+#if os(macOS)
         .toolbar(id: "main") {
             AccountToolbar()
             ApplicationToolbar()
             LayoutToolbar()
             SelectionToolbar()
         }
+#endif
         .sheet(item: $sheet) { sheet in
             switch sheet {
             case .logIn:
                 LogInView()
             }
         }
+#if os(iOS)
+        .sheet(item: $sceneModel.sheet) { sheet in
+            switch sheet {
+            case .tags:
+                PhoneTagsView()
+            case .settings:
+                PhoneSettingsView(settings: applicationModel.settings)
+            case .edit(let bookmark):
+                PhoneEditView(tagsModel: applicationModel.tagsModel, bookmark: bookmark)
+            }
+        }
+        .fullScreenCover(item: $sceneModel.previewURL) { url in
+            PhoneSafariView(url: url)
+                .edgesIgnoringSafeArea(.all)
+        }
+#endif
         .onChange(of: applicationModel.state) { newValue in
             switch newValue {
             case .idle:

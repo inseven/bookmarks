@@ -351,18 +351,4 @@ public class SectionViewModel: ObservableObject, Runnable {
         }
     }
 
-    // TODO: Remove or simplify this if possible.
-    private func errorHandler<T>(_ completion: @escaping (Result<T, Error>) -> Void = { _ in }) -> (Result<T, Error>) -> Void {
-        let completion = DispatchQueue.global().asyncClosure(completion)
-        return { result in
-            if case .failure(let error) = result {
-                print("Failed to perform operation with error \(error).")
-                DispatchQueue.main.async {
-                    self.lastError = error
-                }
-            }
-            completion(result)
-        }
-    }
-
 }

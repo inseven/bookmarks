@@ -18,20 +18,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#if os(iOS)
-
 import SwiftUI
 
-public struct PhoneDebugSettingsView: View {
+public struct AdvancedSettingsView: View {
 
     @EnvironmentObject var applicationModel: ApplicationModel
-
-    @ObservedObject var settings: Settings
+    @EnvironmentObject var settings: Settings
 
     @State var error: Error?
 
-    public init(settings: Settings) {
-        self.settings = settings
+    public init() {
+        
     }
 
     public var body: some View {
@@ -60,10 +57,8 @@ public struct PhoneDebugSettingsView: View {
                 }
             }
         }
-        .navigationBarTitle("Debug")
+        .navigationTitle("Advanced")
         .presents($error)
     }
 
 }
-
-#endif

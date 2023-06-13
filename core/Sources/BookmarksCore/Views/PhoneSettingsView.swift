@@ -55,8 +55,8 @@ public struct PhoneSettingsView: View {
                     }
                     SidebarSettingsSection(settings: settings)
                     Section {
-                        NavigationLink("Debug") {
-                            PhoneDebugSettingsView(settings: settings)
+                        NavigationLink("Advanced") {
+                            AdvancedSettingsView()
                         }
                     }
                     Section {

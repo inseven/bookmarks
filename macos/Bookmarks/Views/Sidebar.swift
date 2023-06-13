@@ -26,21 +26,7 @@ import Interact
 
 struct Sidebar: View {
 
-    enum SheetType: Identifiable {
-
-        var id: String {
-            switch self {
-            case .rename(let tag):
-                return "rename:\(tag)"
-            }
-        }
-
-        case rename(tag: String)
-    }
-
     @EnvironmentObject var applicationModel: ApplicationModel
-
-    @State var sheet: SheetType? = nil
 
     var body: some View {
         SidebarContentView()
@@ -50,12 +36,6 @@ struct Sidebar: View {
                     StatusView()
                         .foregroundColor(.secondary)
                         .padding()
-                }
-            }
-            .sheet(item: $sheet) { sheet in
-                switch sheet {
-                case .rename(let tag):
-                    RenameTagView(tag: tag)
                 }
             }
     }

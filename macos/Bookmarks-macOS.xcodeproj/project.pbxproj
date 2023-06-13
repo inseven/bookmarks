@@ -20,6 +20,7 @@
 		D840B00A2621042B001E95D1 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840B0092621042B001E95D1 /* SettingsView.swift */; };
 		D840B01226210AF6001E95D1 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */; };
 		D857BD6C2A2A8073007D82F0 /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D857BD6B2A2A8073007D82F0 /* EditView.swift */; };
+		D85B9FA82A38B0B2001B126C /* MacSectionGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85B9FA72A38B0B2001B126C /* MacSectionGridView.swift */; };
 		D891C454261E32F90024E1A6 /* BookmarksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D891C453261E32F90024E1A6 /* BookmarksApp.swift */; };
 		D891C456261E32F90024E1A6 /* SectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D891C455261E32F90024E1A6 /* SectionView.swift */; };
 		D891C458261E32FB0024E1A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D891C457261E32FB0024E1A6 /* Assets.xcassets */; };
@@ -86,6 +87,7 @@
 		D840B0092621042B001E95D1 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		D857BD6B2A2A8073007D82F0 /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
+		D85B9FA72A38B0B2001B126C /* MacSectionGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacSectionGridView.swift; sourceTree = "<group>"; };
 		D891C450261E32F90024E1A6 /* Bookmarks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bookmarks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D891C453261E32F90024E1A6 /* BookmarksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksApp.swift; sourceTree = "<group>"; };
 		D891C455261E32F90024E1A6 /* SectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionView.swift; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 				D857BD6B2A2A8073007D82F0 /* EditView.swift */,
 				D840B01126210AF6001E95D1 /* GeneralSettingsView.swift */,
 				D8F3F28E26EE776900BFA43B /* LogInView.swift */,
+				D85B9FA72A38B0B2001B126C /* MacSectionGridView.swift */,
 				D891C455261E32F90024E1A6 /* SectionView.swift */,
 				D840B0092621042B001E95D1 /* SettingsView.swift */,
 			);
@@ -465,6 +468,7 @@
 				D80710F326C4B855007272C0 /* ContentView.swift in Sources */,
 				D840B01226210AF6001E95D1 /* GeneralSettingsView.swift in Sources */,
 				D840B00A2621042B001E95D1 /* SettingsView.swift in Sources */,
+				D85B9FA82A38B0B2001B126C /* MacSectionGridView.swift in Sources */,
 				D891C454261E32F90024E1A6 /* BookmarksApp.swift in Sources */,
 				D8F3F28F26EE776900BFA43B /* LogInView.swift in Sources */,
 			);

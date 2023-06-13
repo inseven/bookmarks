@@ -18,13 +18,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Carbon
-import Combine
 import QuickLook
 import SwiftUI
 
 import Interact
-import SelectableCollectionView
 
 import BookmarksCore
 
@@ -32,13 +29,7 @@ struct SectionView: View {
 
     let applicationModel: ApplicationModel
 
-    @Environment(\.openWindow) var openWindow
-
     @StateObject var sectionViewModel: SectionViewModel
-
-    let layout = ColumnLayout(spacing: 6.0,
-                              columns: 5,
-                              edgeInsets: NSEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0))
 
     init(applicationModel: ApplicationModel, sceneModel: SceneModel, section: BookmarksSection) {
         self.applicationModel = applicationModel
@@ -51,31 +42,7 @@ struct SectionView: View {
         VStack {
             switch sectionViewModel.layoutMode {
             case .grid:
-                SelectableCollectionView(sectionViewModel.bookmarks,
-                                         selection: $sectionViewModel.selection,
-                                         layout: layout) { bookmark in
-
-                    BookmarkCell(applicationModel: applicationModel, bookmark: bookmark)
-                        .modifier(BorderedSelection())
-                        .padding(6.0)
-                        .shadow(color: .shadow, radius: 3.0)
-
-                } contextMenu: { selection in
-                    sectionViewModel.contextMenu(selection, openWindow: openWindow)
-                } primaryAction: { selection in
-                    sectionViewModel.open(ids: selection)
-                } keyDown: { event in
-                    if event.keyCode == kVK_Space {
-                        sectionViewModel.showPreview()
-                        return true
-                    }
-                    return false
-                } keyUp: { event in
-                    if event.keyCode == kVK_Space {
-                        return true
-                    }
-                    return false
-                }
+                MacSectionGridView()
             case .table:
                 SectionTableView()
             }

@@ -22,45 +22,56 @@ import SwiftUI
 
 public struct SelectionToolbar: CustomizableToolbarContent {
 
-    @ObservedObject var sectionViewModel: SectionViewModel
+    struct Content: CustomizableToolbarContent {
 
-    public init(sectionViewModel: SectionViewModel) {
-        self.sectionViewModel = sectionViewModel
+        @ObservedObject var sectionViewModel: SectionViewModel
+
+        var body: some CustomizableToolbarContent {
+
+            ToolbarItem(id: "preview") {
+                Button {
+                    sectionViewModel.showPreview()
+                } label: {
+                    Label("Preview", systemImage: "eye")
+                }
+                .help("Preview with Quick Look")
+                .keyboardShortcut(.space, modifiers: [])
+                .disabled(sectionViewModel.selection.count != 1)
+            }
+
+            ToolbarItem(id: "open") {
+                Button {
+                    sectionViewModel.open(ids: sectionViewModel.selection)
+                } label: {
+                    Label("Open", systemImage: "safari")
+                }
+                .keyboardShortcut(.return, modifiers: [])
+                .disabled(sectionViewModel.selection.isEmpty)
+            }
+
+            ToolbarItem(id: "delete") {
+                Button {
+                    sectionViewModel.delete()
+                } label: {
+                    Label("Delete", systemImage: "trash")
+                }
+                .help("Delete")
+                .disabled(sectionViewModel.selection.isEmpty)
+            }
+
+        }
+
+
+    }
+
+    @FocusedObject var sectionViewModel: SectionViewModel?
+
+    public init() {
+
     }
 
     public var body: some CustomizableToolbarContent {
-
-        ToolbarItem(id: "preview") {
-            Button {
-                sectionViewModel.showPreview()
-            } label: {
-                Label("Preview", systemImage: "eye")
-            }
-            .help("Preview with Quick Look")
-            .keyboardShortcut(.space, modifiers: [])
-            .disabled(sectionViewModel.selection.count != 1)
-        }
-
-        ToolbarItem(id: "open") {
-            Button {
-                sectionViewModel.open(ids: sectionViewModel.selection)
-            } label: {
-                Label("Open", systemImage: "safari")
-            }
-            .keyboardShortcut(.return, modifiers: [])
-            .disabled(sectionViewModel.selection.isEmpty)
-        }
-
-        ToolbarItem(id: "delete") {
-            Button {
-                sectionViewModel.delete()
-            } label: {
-                Label("Delete", systemImage: "trash")
-            }
-            .help("Delete")
-            .disabled(sectionViewModel.selection.isEmpty)
-        }
-
+        Content(sectionViewModel: sectionViewModel ?? SectionViewModel())
     }
 
 }

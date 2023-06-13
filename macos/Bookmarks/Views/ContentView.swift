@@ -27,8 +27,6 @@ import BookmarksCore
 
 struct ContentView: View {
 
-    @FocusedObject var sectionViewModel: SectionViewModel?
-
     @ObservedObject var applicationModel: ApplicationModel
 
     @StateObject var sceneModel: SceneModel
@@ -56,7 +54,7 @@ struct ContentView: View {
             AccountToolbar()
             ApplicationToolbar()
             LayoutToolbar()
-            SelectionToolbar(sectionViewModel: sectionViewModel ?? SectionViewModel())
+            SelectionToolbar()
         }
         .sheet(item: $sheet) { sheet in
             switch sheet {

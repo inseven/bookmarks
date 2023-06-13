@@ -26,13 +26,13 @@ import BookmarksCore
 
 struct SettingsView: View {
 
-    enum SheetType {
-        case about
-    }
+    enum SheetType: Identifiable {
 
-    enum AlertType {
-        case error(error: Error)
-        case success(message: String)
+        var id: Self {
+            return self
+        }
+
+        case about
     }
 
     @Environment(\.dismiss) var dismiss
@@ -41,7 +41,6 @@ struct SettingsView: View {
 
     @ObservedObject var settings: Settings
     @State var sheet: SheetType?
-    @State var alert: AlertType?
 
     var body: some View {
         VStack {
@@ -91,34 +90,6 @@ struct SettingsView: View {
             case .about:
                 AboutView(Legal.contents)
             }
-        }
-        .alert(item: $alert) { alert in
-            switch alert {
-            case .error(let error):
-                return Alert(title: Text("Error"), message: Text(error.localizedDescription))
-            case .success(let message):
-                return Alert(title: Text("Success"), message: Text(message))
-            }
-        }
-    }
-}
-
-extension SettingsView.SheetType: Identifiable {
-    public var id: String {
-        switch self {
-        case .about:
-            return "about"
-        }
-    }
-}
-
-extension SettingsView.AlertType: Identifiable {
-    public var id: String {
-        switch self {
-        case .error:
-            return "error"
-        case .success:
-            return "success"
         }
     }
 }

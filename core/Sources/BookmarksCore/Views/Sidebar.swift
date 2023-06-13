@@ -18,18 +18,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Combine
 import SwiftUI
 
-import BookmarksCore
-import Interact
-
-struct Sidebar: View {
+public struct Sidebar: View {
 
     @EnvironmentObject var applicationModel: ApplicationModel
+    @EnvironmentObject var settings: Settings
 
-    var body: some View {
+    @FocusedObject var sceneModel: SceneModel?
+
+    public init() {
+
+    }
+
+    public var body: some View {
         SidebarContentView()
+#if os(iOS)
+            .navigationTitle("Bookmarks")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        sceneModel?.showSettings()
+                    } label: {
+                        Image(systemName: "gear")
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        sceneModel?.showTags()
+                    } label: {
+                        Image(systemName: "tag")
+                    }
+                }
+                ToolbarItem(placement: .status) {
+                    StatusView()
+                }
+            }
+#endif
+#if os(macOS)
             .safeAreaInset(edge: .bottom) {
                 VStack(spacing: 0) {
                     Divider()
@@ -38,5 +64,7 @@ struct Sidebar: View {
                         .padding()
                 }
             }
+#endif
     }
+
 }

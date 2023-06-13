@@ -18,11 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#if os(macOS)
+
 import SwiftUI
 
 import SelectableCollectionView
 
-struct BorderedSelection: ViewModifier {
+public struct BorderedSelection: ViewModifier {
 
     @Environment(\.isSelected) var isSelected
     @Environment(\.highlightState) var highlightState
@@ -31,7 +33,11 @@ struct BorderedSelection: ViewModifier {
         return isSelected || highlightState == .forSelection ? Color.accentColor : Color.clear
     }
 
-    func body(content: Content) -> some View {
+    public init() {
+        
+    }
+
+    public func body(content: Content) -> some View {
         content
             .overlay(
                 RoundedRectangle(cornerRadius: 13)
@@ -39,3 +45,5 @@ struct BorderedSelection: ViewModifier {
     }
 
 }
+
+#endif

@@ -39,7 +39,7 @@ struct BookmarkEditCommands: View {
         .disabled(sectionViewModel.selection.isEmpty)
 
         Button(containsPublicBookmark ? "Make Private" : "Make Public") {
-            sectionViewModel.update(shared: !containsPublicBookmark)
+            await sectionViewModel.update(shared: !containsPublicBookmark)
         }
         .keyboardShortcut("p", modifiers: [.command, .shift])
         .disabled(sectionViewModel.selection.isEmpty)

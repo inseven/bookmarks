@@ -18,18 +18,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import Foundation
 import SwiftUI
 
-struct BookmarkDesctructiveCommands: View {
+import Interact
 
-    @ObservedObject var sectionViewModel: SectionViewModel
+extension MenuItem {
 
-    var body: some View {
-        Button("Delete") {
-            await sectionViewModel.delete()
+    init(_ title: String, systemImage: String? = nil, role: ButtonRole? = nil, action: @escaping () async -> Void) {
+        self.init(title, systemImage: systemImage, role: role) {
+            Task {
+                await action()
+            }
         }
-        .keyboardShortcut(.delete, modifiers: [.command])
-        .disabled(sectionViewModel.selection.isEmpty)
     }
 
 }

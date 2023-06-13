@@ -43,7 +43,7 @@ public class SectionViewModel: ObservableObject, Runnable {
     @Published public var selection: Set<Bookmark.ID> = []
     @Published public var previewURL: URL? = nil
 
-    @Published public var lastError: Error? = nil
+    @MainActor @Published public var lastError: Error? = nil
 
     @Published private var query: AnyQuery
     @Published private var bookmarksLookup: [Bookmark.ID: Bookmark] = [:]
@@ -224,30 +224,45 @@ public class SectionViewModel: ObservableObject, Runnable {
         return bookmarks.map { $0.url }
     }
 
+    // TODO: Make this async?
     @MainActor public func update(ids: Set<Bookmark.ID>? = nil, toRead: Bool) {
         guard let applicationModel else {
             return
         }
         let bookmarks = bookmarks(for: ids)
             .map { $0.setting(toRead: toRead) }
-        applicationModel.updateBookmarks(bookmarks, completion: errorHandler())
+        Task {
+            do {
+                try await applicationModel.update(bookmarks: bookmarks)
+            } catch {
+                self.lastError = error
+            }
+        }
     }
 
-    @MainActor public func update(ids: Set<Bookmark.ID>? = nil, shared: Bool) {
+    @MainActor public func update(ids: Set<Bookmark.ID>? = nil, shared: Bool) async {
         guard let applicationModel else {
             return
         }
         let bookmarks = bookmarks(for: ids)
             .map { $0.setting(shared: shared) }
-        applicationModel.updateBookmarks(bookmarks, completion: errorHandler())
+        do {
+            try await applicationModel.update(bookmarks: bookmarks)
+        } catch {
+            self.lastError = error
+        }
     }
 
-    @MainActor public func delete(ids: Set<Bookmark.ID>? = nil) {
+    @MainActor public func delete(ids: Set<Bookmark.ID>? = nil) async {
         guard let applicationModel else {
             return
         }
         let bookmarks = bookmarks(for: ids)
-        applicationModel.deleteBookmarks(bookmarks, completion: errorHandler())
+        do {
+            try await applicationModel.delete(bookmarks: bookmarks)
+        } catch {
+            self.lastError = error
+        }
     }
 
     @MainActor public func copy(ids: Set<Bookmark.ID>? = nil) {
@@ -317,7 +332,7 @@ public class SectionViewModel: ObservableObject, Runnable {
         }
         MenuItem(containsPublicBookmark ? "Make Private" : "Make Public",
                  systemImage: containsPublicBookmark ? "lock": "globe") {
-            self.update(ids: selection, shared: !containsPublicBookmark)
+            await self.update(ids: selection, shared: !containsPublicBookmark)
         }
         Divider()
         MenuItem("Copy", systemImage: "doc.on.doc") {
@@ -328,21 +343,7 @@ public class SectionViewModel: ObservableObject, Runnable {
         }
         Divider()
         MenuItem("Delete", systemImage: "trash", role: .destructive) {
-            self.delete(ids: selection)
-        }
-    }
-
-    // TODO: Remove or simplify this if possible.
-    private func errorHandler<T>(_ completion: @escaping (Result<T, Error>) -> Void = { _ in }) -> (Result<T, Error>) -> Void {
-        let completion = DispatchQueue.global().asyncClosure(completion)
-        return { result in
-            if case .failure(let error) = result {
-                print("Failed to perform operation with error \(error).")
-                DispatchQueue.main.async {
-                    self.lastError = error
-                }
-            }
-            completion(result)
+            await self.delete(ids: selection)
         }
     }
 

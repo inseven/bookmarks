@@ -30,6 +30,12 @@ protocol UpdaterDelegate: AnyObject {
 
 public class Updater {
 
+    // TODO: ServiceState should be serializable and stored with each service instance.
+    struct ServiceState {
+        var token: String
+        var lastUpdate: Date?
+    }
+
     static var updateTimeoutSeconds = 5 * 60.0
 
     private let syncQueue = DispatchQueue(label: "Updater.syncQueue")
@@ -85,14 +91,24 @@ public class Updater {
         }
     }
 
-    fileprivate func syncQueue_update(force: Bool, completion: @escaping (Error?) -> Void) {
+    fileprivate func schedule(operation: RemoteOperation) {
+        syncQueue.async { [weak self] in
+            guard let self else {
+                return
+            }
+            self.syncQueue_perform(operation: operation)
+        }
+    }
+
+    fileprivate func syncQueue_perform(operation: RemoteOperation) {
         dispatchPrecondition(condition: .onQueue(syncQueue))
 
-        print("updating...")
+        // Notify our delegate we're about to start.
         targetQueue.async {
             self.delegate?.updaterDidStart(self)
         }
 
+        // Ensure we can get a log in token.
         guard let token = syncQueue_token() else {
             targetQueue.async {
                 self.delegate?.updater(self, didFailWithError: BookmarksError.unauthorized)
@@ -100,67 +116,27 @@ public class Updater {
             return
         }
 
-        do {
+        // Run the operation.
+        // TODO: Work out how to make this cancellable.
+        print("Running '\(operation.title)'....")
+        let state = ServiceState(token: token, lastUpdate: lastUpdate)
+        let result = Synchronize { [database] in
+            try await operation.perform(database: database, state: state)
+        }
+        print("Finished '\(operation.title)'.")
 
-            // Check to see when the bookmarks were last updated and don't update if there are no new changes.
-            let pinboard = Pinboard(token: token)
-            let update = try pinboard.postsUpdate()
-            if let lastUpdate = self.lastUpdate,
-               lastUpdate >= update.updateTime,
-               !force {
-                print("skipping empty update")
-                targetQueue.async {
-                    self.delegate?.updaterDidFinish(self)
-                }
-                return
-            }
+        // Update the state in the case of success.
+        if case .success(let success) = result {
+            self.lastUpdate = success.lastUpdate
+        }
 
-            // Get the posts.
-            let posts = try pinboard.postsAll()
-
-            var identifiers = Set<String>()
-
-            // Insert or update bookmarks.
-            for post in posts {
-                guard
-                    let url = post.href,
-                    let date = post.time else {
-                        continue
-                }
-                let bookmark = Bookmark(identifier: post.hash,
-                                        title: post.description ?? "",
-                                        url: url,
-                                        tags: Set(post.tags),
-                                        date: date,
-                                        toRead: post.toRead,
-                                        shared: post.shared,
-                                        notes: post.extended)
-                identifiers.insert(bookmark.identifier)
-                _ = try self.database.insertOrUpdateBookmark(bookmark)
-            }
-
-            // Delete missing bookmarks.
-            let allIdentifiers = try self.database.identifiers()
-            let deletedIdentifiers = Set(allIdentifiers).subtracting(identifiers)
-            for identifier in deletedIdentifiers {
-                let bookmark = try self.database.bookmarkSync(identifier: identifier)
-                print("deleting \(bookmark)...")
-                _ = try self.database.deleteBookmark(identifier: identifier)
-            }
-            print("update complete")
-
-            // Update the last update date.
-            self.lastUpdate = update.updateTime
-
-            targetQueue.async {
+        // Notify our delegate.
+        targetQueue.async {
+            switch result {
+            case .success:
                 self.delegate?.updaterDidFinish(self)
-                completion(nil)
-            }
-
-        } catch {
-            targetQueue.async {
+            case .failure(let error):
                 self.delegate?.updater(self, didFailWithError: error)
-                completion(error)
             }
         }
     }
@@ -170,16 +146,17 @@ public class Updater {
         syncQueue.sync {
             timer = Timer.scheduledTimer(withTimeInterval: Self.updateTimeoutSeconds,
                                          repeats: true) { [weak self] timer in
-                guard let self = self else {
+                guard let self else {
                     return
                 }
-                self.syncQueue.async {
-                    self.syncQueue_update(force: true, completion: { _ in })
-                }
+                self.schedule(operation: RefreshOperation(force: true))  // TODO: Should this really be forced?
             }
         }
+
+        // TODO: Pull tasks off the queue.
     }
 
+    // TODO: I wonder how this should even work. It feels like this is probably at the wrong point in the stack.
     public func authenticate(username: String,
                              password: String,
                              completion: @escaping (Result<Void, Error>) -> Void) {
@@ -189,7 +166,7 @@ public class Updater {
                 switch result {
                 case .success(let token):
                     self.syncQueue_setToken(token)
-                    self.update(force: true, completion: { _ in })  // Enqueue an initial update.
+                    self.refresh(force: true, completion: { _ in })  // Enqueue an initial update.
                     completion(.success(()))
                 case .failure(let error):
                     completion(.failure(error))
@@ -208,46 +185,26 @@ public class Updater {
         }
     }
 
-    public func update(force: Bool = false, completion: @escaping (Error?) -> Void = { _ in }) {
-        syncQueue.async {
-            self.syncQueue_update(force: force, completion: completion)
+    public func refresh(force: Bool = false, completion: @escaping (Error?) -> Void = { _ in }) {
+        schedule(operation: RefreshOperation(force: force))
+        // TODO: Explore ways to ensure this completion corresponds with the requested update.
+        DispatchQueue.global().async {
+            completion(nil)
         }
     }
 
-    public func deleteBookmarks(_ bookmarks: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
-        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        syncQueue.async {
-            guard let token = self.syncQueue_token() else {
-                completion(.failure(BookmarksError.unauthorized))
-                return
-            }
-            let pinboard = Pinboard(token: token)
-            let result = Result {
-                for bookmark in bookmarks {
-                    try self.database.deleteBookmark(identifier: bookmark.identifier)
-                    try pinboard.postsDelete(url: bookmark.url)
-                }
-            }
-            completion(result)
-        }
-    }
-
-    public func updateBookmarks(_ bookmarks: [Bookmark], completion: @escaping (Result<Void, Error>) -> Void) {
-        dispatchPrecondition(condition: .notOnQueue(syncQueue))
-        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
+    public func delete(bookmarks: [Bookmark]) async throws {
         for bookmark in bookmarks {
-            do {
-                _ = try self.database.insertOrUpdateBookmark(bookmark)
-                performUpdate { pinboard in
-                    let post = Pinboard.Post(bookmark)
-                    try pinboard.postsAdd(post: post, replace: true)
-                }
-            } catch {
-                completion(.failure(error))
-                return
-            }
+            try self.database.deleteBookmark(identifier: bookmark.identifier)
+            schedule(operation: DeleteBookmark(bookmark: bookmark))
         }
-        completion(.success(()))
+    }
+
+    public func update(bookmarks: [Bookmark]) async throws {
+        for bookmark in bookmarks {
+            _ = try self.database.insertOrUpdateBookmark(bookmark)
+            schedule(operation: UpdateBookmark(bookmark: bookmark))
+        }
     }
 
     public func renameTag(_ old: String, to new: String, completion: @escaping (Result<Void, Error>) -> Void) {
@@ -261,7 +218,7 @@ public class Updater {
             let result = Result {
                 try pinboard.tagsRename(old, to: new)
                 // TODO: Perform the changes locally.
-                self.update(force: true)
+                self.refresh(force: true)
             }
             completion(result)
         }
@@ -279,11 +236,10 @@ public class Updater {
                 try self.database.deleteTag(tag: tag)
                 try pinboard.tagsDelete(tag)
                 // TODO: Perform the changes locally.
-                self.update(force: true)
+                self.refresh(force: true)
             }
             completion(result)
         }
     }
-
 
 }

@@ -18,18 +18,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import SwiftUI
+import Foundation
 
-struct BookmarkDesctructiveCommands: View {
+// TODO: It would be much more elegant to use a concurrent box here.
+fileprivate class Box<T> {
+    var contents: T
 
-    @ObservedObject var sectionViewModel: SectionViewModel
-
-    var body: some View {
-        Button("Delete") {
-            await sectionViewModel.delete()
-        }
-        .keyboardShortcut(.delete, modifiers: [.command])
-        .disabled(sectionViewModel.selection.isEmpty)
+    init(contents: T) {
+        self.contents = contents
     }
+}
 
+enum SynchronizeError: Error {
+    case unknown
+}
+
+func Synchronize<T>(perform: @escaping () async throws -> T) -> Result<T, Error> {
+    let sem = DispatchSemaphore(value: 0)
+    let box = Box<Result<T, Error>>(contents: .failure(SynchronizeError.unknown))
+    Task {
+        do {
+            let result = try await perform()
+            box.contents = .success(result)
+            sem.signal()
+        } catch {
+            box.contents = .failure(error)
+            sem.signal()
+        }
+    }
+    sem.wait()
+    return box.contents
 }

@@ -332,9 +332,7 @@ public class SectionViewModel: ObservableObject, Runnable {
         }
         MenuItem(containsPublicBookmark ? "Make Private" : "Make Public",
                  systemImage: containsPublicBookmark ? "lock": "globe") {
-            Task {
-                await self.update(ids: selection, shared: !containsPublicBookmark)
-            }
+            await self.update(ids: selection, shared: !containsPublicBookmark)
         }
         Divider()
         MenuItem("Copy", systemImage: "doc.on.doc") {
@@ -345,9 +343,7 @@ public class SectionViewModel: ObservableObject, Runnable {
         }
         Divider()
         MenuItem("Delete", systemImage: "trash", role: .destructive) {
-            Task {
-                await self.delete(ids: selection)
-            }
+            await self.delete(ids: selection)
         }
     }
 

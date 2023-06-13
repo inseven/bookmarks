@@ -18,6 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#if os(iOS)
+
 import SwiftUI
 
 import Diligence
@@ -54,7 +56,7 @@ public struct PhoneSettingsView: View {
                     SidebarSettingsSection(settings: settings)
                     Section {
                         NavigationLink("Debug") {
-                            DebugSettingsView(settings: settings)
+                            PhoneDebugSettingsView(settings: settings)
                         }
                     }
                     Section {
@@ -97,3 +99,5 @@ public struct PhoneSettingsView: View {
         }
     }
 }
+
+#endif

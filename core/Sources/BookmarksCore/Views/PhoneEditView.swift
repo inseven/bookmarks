@@ -18,6 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#if os(iOS)
+
 import SwiftUI
 
 import WrappingHStack
@@ -134,7 +136,7 @@ public struct PhoneEditView: View {
             .sheet(item: $sheet) { sheet in
                 switch sheet {
                 case .addTag:
-                    EditTagsView(tagsModel: tagsModel, tags: $tags)
+                    PhoneEditTagsView(tagsModel: tagsModel, tags: $tags)
                 }
             }
         }
@@ -142,3 +144,5 @@ public struct PhoneEditView: View {
     }
     
 }
+
+#endif

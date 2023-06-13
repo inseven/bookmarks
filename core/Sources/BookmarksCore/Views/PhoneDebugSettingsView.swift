@@ -18,9 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#if os(iOS)
+
 import SwiftUI
 
-public struct DebugSettingsView: View {
+public struct PhoneDebugSettingsView: View {
 
     @EnvironmentObject var applicationModel: ApplicationModel
 
@@ -63,3 +65,5 @@ public struct DebugSettingsView: View {
     }
 
 }
+
+#endif

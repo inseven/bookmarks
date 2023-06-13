@@ -18,7 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Combine
 import QuickLook
 import SwiftUI
 
@@ -29,8 +28,6 @@ import BookmarksCore
 struct SectionView: View {
 
     let applicationModel: ApplicationModel
-
-    @Environment(\.openWindow) var openWindow
 
     @StateObject var sectionViewModel: SectionViewModel
 

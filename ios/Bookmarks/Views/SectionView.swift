@@ -70,6 +70,7 @@ struct SectionView: View {
         .refreshable {
             await applicationModel.refresh()
         }
+        .presents($sectionViewModel.lastError)
         .environmentObject(sectionViewModel)
         .focusedSceneObject(sectionViewModel)
         .runs(sectionViewModel)

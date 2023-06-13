@@ -20,8 +20,6 @@
 
 import SwiftUI
 
-import BookmarksCore
-
 public struct PhoneSectionGridView: View {
 
     @EnvironmentObject var applicationModel: ApplicationModel

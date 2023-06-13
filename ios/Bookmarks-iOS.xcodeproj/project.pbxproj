@@ -7,23 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D80D362D2A31F9DE00C47DC4 /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D362C2A31F9DE00C47DC4 /* SafariView.swift */; };
 		D81E7484254A0D1B002336DC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81E7483254A0D1B002336DC /* ContentView.swift */; };
 		D822159B2955C35C0087FBAC /* BookmarksCore in Frameworks */ = {isa = PBXBuildFile; productRef = D822159A2955C35C0087FBAC /* BookmarksCore */; };
 		D82BF61E273090FE004978AD /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82BF61D273090FE004978AD /* LogInView.swift */; };
-		D82BF6272730A0D0004978AD /* DebugSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82BF6262730A0D0004978AD /* DebugSettingsView.swift */; };
-		D82DB35F2A23F2750014161E /* TagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82DB35E2A23F2750014161E /* TagsView.swift */; };
-		D832EEC724816901004C64E3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D832EEC624816901004C64E3 /* SettingsView.swift */; };
-		D859CE022733A9CD00E9B466 /* EditTagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D859CE012733A9CD00E9B466 /* EditTagsView.swift */; };
 		D864E47121C93FD200EAB9AD /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D864E47021C93FD200EAB9AD /* libxml2.2.tbd */; };
-		D871B4E5273242ED00712182 /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D871B4E4273242ED00712182 /* EditView.swift */; };
 		D8743909273106C000B676A5 /* Diligence in Frameworks */ = {isa = PBXBuildFile; productRef = D8743908273106C000B676A5 /* Diligence */; };
 		D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BDE1172551C56100C95945 /* BookmarksApp.swift */; };
 		D8D3BC0121C6AEBD00D6FB97 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */; };
 		D8D3BC0421C6AEBD00D6FB97 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8D3BC0221C6AEBD00D6FB97 /* LaunchScreen.storyboard */; };
 		D8D3BC0F21C6AEBD00D6FB97 /* BookmarksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BC0E21C6AEBD00D6FB97 /* BookmarksTests.swift */; };
 		D8D3BC1A21C6AEBD00D6FB97 /* BookmarksUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BC1921C6AEBD00D6FB97 /* BookmarksUITests.swift */; };
-		D8F521382732EEF40031F0CC /* TagActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F521372732EEF40031F0CC /* TagActionButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,19 +37,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D80D362C2A31F9DE00C47DC4 /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 		D81E7483254A0D1B002336DC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D82215992955C26E0087FBAC /* core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = core; path = ../core; sourceTree = "<group>"; };
 		D82BF61D273090FE004978AD /* LogInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
-		D82BF6262730A0D0004978AD /* DebugSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSettingsView.swift; sourceTree = "<group>"; };
-		D82DB35E2A23F2750014161E /* TagsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsView.swift; sourceTree = "<group>"; };
-		D832EEC624816901004C64E3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D832EECA2481B6D1004C64E3 /* Bookmarks.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Bookmarks.entitlements; sourceTree = "<group>"; };
 		D84CE47D261E2A1400AF1901 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D859CE012733A9CD00E9B466 /* EditTagsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTagsView.swift; sourceTree = "<group>"; };
 		D864E47021C93FD200EAB9AD /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 		D864E47221C9417F00EAB9AD /* Bookmarks-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bookmarks-Bridging-Header.h"; sourceTree = "<group>"; };
-		D871B4E4273242ED00712182 /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
 		D87439072731068C00B676A5 /* diligence */ = {isa = PBXFileReference; lastKnownFileType = folder; name = diligence; path = ../diligence; sourceTree = "<group>"; };
 		D89C65E326AF5A8E00D49D11 /* Common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		D89C65E426AF5A8E00D49D11 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
@@ -72,7 +59,6 @@
 		D8D3BC1521C6AEBD00D6FB97 /* BookmarksUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookmarksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8D3BC1921C6AEBD00D6FB97 /* BookmarksUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksUITests.swift; sourceTree = "<group>"; };
 		D8D3BC1B21C6AEBD00D6FB97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D8F521372732EEF40031F0CC /* TagActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagActionButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,14 +93,7 @@
 			isa = PBXGroup;
 			children = (
 				D81E7483254A0D1B002336DC /* ContentView.swift */,
-				D82BF6262730A0D0004978AD /* DebugSettingsView.swift */,
-				D859CE012733A9CD00E9B466 /* EditTagsView.swift */,
-				D871B4E4273242ED00712182 /* EditView.swift */,
 				D82BF61D273090FE004978AD /* LogInView.swift */,
-				D80D362C2A31F9DE00C47DC4 /* SafariView.swift */,
-				D832EEC624816901004C64E3 /* SettingsView.swift */,
-				D8F521372732EEF40031F0CC /* TagActionButton.swift */,
-				D82DB35E2A23F2750014161E /* TagsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -333,16 +312,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D832EEC724816901004C64E3 /* SettingsView.swift in Sources */,
-				D8F521382732EEF40031F0CC /* TagActionButton.swift in Sources */,
 				D81E7484254A0D1B002336DC /* ContentView.swift in Sources */,
-				D82BF6272730A0D0004978AD /* DebugSettingsView.swift in Sources */,
-				D80D362D2A31F9DE00C47DC4 /* SafariView.swift in Sources */,
 				D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */,
-				D859CE022733A9CD00E9B466 /* EditTagsView.swift in Sources */,
 				D82BF61E273090FE004978AD /* LogInView.swift in Sources */,
-				D871B4E5273242ED00712182 /* EditView.swift in Sources */,
-				D82DB35F2A23F2750014161E /* TagsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -20,8 +20,6 @@
 
 import SwiftUI
 
-import BookmarksCore
-
 struct TagActionButton: View {
 
     enum Role {

@@ -20,28 +20,46 @@
 
 import SwiftUI
 
-import BookmarksCore
-
-struct TagsView: View {
-
-    @Environment(\.dismiss) var dismiss
+public struct DebugSettingsView: View {
 
     @EnvironmentObject var applicationModel: ApplicationModel
 
-    var body: some View {
-        NavigationView {
-            TagsContentView(tagsModel: applicationModel.tagsModel)
-                .navigationBarTitle("Tags", displayMode: .inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button {
-                            dismiss()
-                        } label: {
-                            Text("Close")
-                        }
+    @ObservedObject var settings: Settings
+
+    @State var error: Error?
+
+    public init(settings: Settings) {
+        self.settings = settings
+    }
+
+    public var body: some View {
+        Form {
+            Section {
+                Picker("Concurrent Downloads", selection: $settings.maximumConcurrentThumbnailDownloads) {
+                    ForEach(1 ..< 4) {
+                        Text("\($0)").tag($0)
                     }
                 }
+            }
+            Section {
+                Button(role: .destructive) {
+                    applicationModel.imageCache.clear { result in
+                        DispatchQueue.main.async {
+                            switch result {
+                            case .success:
+                                break
+                            case .failure(let error):
+                                self.error = error
+                            }
+                        }
+                    }
+                } label: {
+                    Text("Clear Thumbnail Cache")
+                }
+            }
         }
+        .navigationBarTitle("Debug")
+        .presents($error)
     }
 
 }

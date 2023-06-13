@@ -57,9 +57,7 @@ struct DebugSettingsView: View {
             }
         }
         .navigationBarTitle("Debug")
-        .alert(isPresented: $error.mappedToBool()) {
-            Alert(error: error)
-        }
+        .presents($error)
     }
 
 }

@@ -41,21 +41,7 @@ struct SectionView: View {
         VStack {
             switch sectionViewModel.layoutMode {
             case .grid:
-                ScrollView {
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
-                        ForEach(sectionViewModel.bookmarks) { bookmark in
-                            BookmarkCell(applicationModel: applicationModel, bookmark: bookmark)
-                                .aspectRatio(8/9, contentMode: .fit)
-                                .onTapGesture {
-                                    sectionViewModel.open(ids: [bookmark.id])
-                                }
-                                .contextMenu {
-                                    sectionViewModel.contextMenu([bookmark.id])
-                                }
-                        }
-                    }
-                    .padding()
-                }
+                PhoneSectionGridView()
             case .table:
                 SectionTableView()
             }

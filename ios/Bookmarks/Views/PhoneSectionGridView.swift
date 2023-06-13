@@ -18,53 +18,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Carbon
 import SwiftUI
 
 import BookmarksCore
 
-import SelectableCollectionView
-
-public struct MacSectionCollectionView: View {
-
-    @Environment(\.openWindow) var openWindow
+public struct PhoneSectionGridView: View {
 
     @EnvironmentObject var applicationModel: ApplicationModel
     @EnvironmentObject var sectionViewModel: SectionViewModel
-
-    let layout = ColumnLayout(spacing: 6.0,
-                              columns: 5,
-                              edgeInsets: NSEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0))
 
     public init() {
 
     }
 
     public var body: some View {
-        SelectableCollectionView(sectionViewModel.bookmarks,
-                                 selection: $sectionViewModel.selection,
-                                 layout: layout) { bookmark in
-
-            BookmarkCell(applicationModel: applicationModel, bookmark: bookmark)
-                .modifier(BorderedSelection())
-                .padding(6.0)
-                .shadow(color: .shadow, radius: 3.0)
-
-        } contextMenu: { selection in
-            sectionViewModel.contextMenu(selection, openWindow: openWindow)
-        } primaryAction: { selection in
-            sectionViewModel.open(ids: selection)
-        } keyDown: { event in
-            if event.keyCode == kVK_Space {
-                sectionViewModel.showPreview()
-                return true
+        ScrollView {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
+                ForEach(sectionViewModel.bookmarks) { bookmark in
+                    BookmarkCell(applicationModel: applicationModel, bookmark: bookmark)
+                        .aspectRatio(8/9, contentMode: .fit)
+                        .onTapGesture {
+                            sectionViewModel.open(ids: [bookmark.id])
+                        }
+                        .contextMenu {
+                            sectionViewModel.contextMenu([bookmark.id])
+                        }
+                }
             }
-            return false
-        } keyUp: { event in
-            if event.keyCode == kVK_Space {
-                return true
-            }
-            return false
+            .padding()
         }
     }
 

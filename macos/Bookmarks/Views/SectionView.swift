@@ -45,7 +45,7 @@ struct SectionView: View {
         VStack {
             switch sectionViewModel.layoutMode {
             case .grid:
-                MacSectionCollectionView()
+                MacSectionGridView()
             case .table:
                 SectionTableView()
             }

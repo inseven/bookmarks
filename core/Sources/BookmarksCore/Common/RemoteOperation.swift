@@ -27,7 +27,9 @@ protocol RemoteOperation {
 
     var title: String { get }
 
-    func perform(database: Database, state: Updater.ServiceState) async throws -> Updater.ServiceState
+    func perform(database: Database,
+                 state: Updater.ServiceState,
+                 progress: @escaping (Progress) -> Void) async throws -> Updater.ServiceState
 
 }
 
@@ -37,7 +39,10 @@ struct RefreshOperation: RemoteOperation {
 
     let force: Bool
 
-    func perform(database: Database, state: Updater.ServiceState) async throws -> Updater.ServiceState {
+    func perform(database: Database,
+                 state: Updater.ServiceState,
+                 progress: @escaping (Progress) -> Void) async throws -> Updater.ServiceState {
+        progress(.active)
         let pinboard = Pinboard(token: state.token)
         let update = try pinboard.postsUpdate()
         if let lastUpdate = state.lastUpdate,
@@ -53,7 +58,8 @@ struct RefreshOperation: RemoteOperation {
         var identifiers = Set<String>()
 
         // Insert or update bookmarks.
-        for post in posts {
+        for (index, post) in posts.enumerated() {
+            progress(.value((Float(index + 1) / Float(posts.count))))
             guard let bookmark = Bookmark(post) else {
                 continue
             }
@@ -84,7 +90,9 @@ struct UpdateBookmark: RemoteOperation {
     let title = "Update bookmark"
     let bookmark: Bookmark
 
-    func perform(database: Database, state: Updater.ServiceState) async throws -> Updater.ServiceState {
+    func perform(database: Database,
+                 state: Updater.ServiceState,
+                 progress: @escaping (Progress) -> Void) async throws -> Updater.ServiceState {
         let pinboard = Pinboard(token: state.token)
         let post = Pinboard.Post(bookmark)
         try pinboard.postsAdd(post: post, replace: true)
@@ -98,7 +106,9 @@ struct DeleteBookmark: RemoteOperation {
     let title = "Delete bookmark"
     let bookmark: Bookmark
 
-    func perform(database: Database, state: Updater.ServiceState) async throws -> Updater.ServiceState {
+    func perform(database: Database,
+                 state: Updater.ServiceState,
+                 progress: @escaping (Progress) -> Void) async throws -> Updater.ServiceState {
         let pinboard = Pinboard(token: state.token)
         try pinboard.postsDelete(url: bookmark.url)
         return state

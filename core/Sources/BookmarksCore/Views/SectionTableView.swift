@@ -49,7 +49,13 @@ public struct SectionTableView: View {
                             }
                         }
                         VStack(alignment: .leading) {
-                            Text(bookmark.title)
+                            HStack {
+                                Text(bookmark.title)
+                                Spacer()
+                                Text(bookmark.date.formatted(date: .abbreviated, time: .omitted))
+                                    .foregroundColor(.secondary)
+                                    .font(.footnote)
+                            }
                             Text(bookmark.url.absoluteString)
                                 .foregroundColor(.secondary)
                         }
@@ -67,6 +73,9 @@ public struct SectionTableView: View {
             .width(FaviconImage.LayoutMetrics.size.width)
             TableColumn("Title", value: \.title)
             TableColumn("URL", value: \.url.absoluteString)
+            TableColumn("Date") { bookmark in
+                Text(bookmark.date.formatted(date: .long, time: .standard))
+            }
             TableColumn("Tags") { bookmark in
                 Text(bookmark.tags.sorted().joined(separator: " "))
             }

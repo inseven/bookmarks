@@ -42,7 +42,7 @@ public struct StatusView: View {
                     Text("Updated \(date.formatted(.relative(presentation: .named)))")
                 }
             case .failure(let error):
-                Text(error.localizedDescription)
+                Label(error.localizedDescription, systemImage: "exclamationmark.triangle.fill")
             }
         }
         .font(.footnote)

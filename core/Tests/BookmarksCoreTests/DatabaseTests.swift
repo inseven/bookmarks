@@ -175,7 +175,7 @@ class DatabaseTests: XCTestCase {
     func testDeleteItemFailsOnMissingItem() throws {
         let identifier = UUID().uuidString
         XCTAssertThrowsError(try database.deleteBookmark(identifier: identifier)) { error in
-            XCTAssertEqual(error as! BookmarksError, BookmarksError.bookmarkNotFound(identifier: identifier))
+            XCTAssertEqual(error as! BookmarksError, BookmarksError.bookmarkNotFoundByIdentifier(identifier))
         }
 
     }

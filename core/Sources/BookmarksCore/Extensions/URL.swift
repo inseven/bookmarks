@@ -29,7 +29,7 @@ extension URL: Identifiable {
     var components: URLComponents {
         get throws {
             guard let components = URLComponents(string: absoluteString) else {
-                throw BookmarksError.invalidURL(url: self)
+                throw BookmarksError.invalidURL(self)
             }
             return components
         }

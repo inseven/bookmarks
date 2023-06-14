@@ -314,12 +314,12 @@ public class SectionViewModel: ObservableObject, Runnable {
         Divider()
 #if os(iOS)
         if bookmarks.count == 1, let bookmark = bookmarks.first {
-            MenuItem("Edit", systemImage: "square.and.pencil") {
+            MenuItem("Get Info", systemImage: "square.and.pencil") {
                 self.sceneModel?.edit(bookmark)
             }
         }
 #else
-        MenuItem("Edit", systemImage: "square.and.pencil") {
+        MenuItem("Get Info", systemImage: "square.and.pencil") {
             for id in selection {
                 openWindow?(value: id)
             }

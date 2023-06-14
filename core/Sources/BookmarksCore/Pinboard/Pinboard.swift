@@ -251,8 +251,12 @@ public class Pinboard {
         self.fetch(path: .tagsRename, parameters: parameters, completion: completion) { _ in }
     }
 
-    public func tagsRename(_ old: String, to new: String) throws {
-        try AsyncOperation({ self.tagsRename(old, to: new, completion: $0) }).wait()
+    public func tagsRename(_ old: String, to new: String) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            tagsRename(old, to: new) { result in
+                continuation.resume(with: result)
+            }
+        }
     }
 
     public static func apiToken(username: String,

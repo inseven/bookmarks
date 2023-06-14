@@ -183,21 +183,10 @@ public class Updater {
         }
     }
 
-    public func renameTag(_ old: String, to new: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        syncQueue.async {
-            guard let token = self.syncQueue_token() else {
-                completion(.failure(BookmarksError.unauthorized))
-                return
-            }
-            let pinboard = Pinboard(token: token)
-            let result = Result {
-                try pinboard.tagsRename(old, to: new)
-                // TODO: Perform the changes locally.
-                self.refresh(force: true)
-            }
-            completion(result)
-        }
+    public func rename(tag: String, to newTag: String) async throws {
+        // TODO: Perform the rename locally first.
+        schedule(operation: RenameTag(tag: tag, newTag: newTag))
+        schedule(operation: RefreshOperation(force: true))
     }
 
     public func delete(tags: [String]) async throws {

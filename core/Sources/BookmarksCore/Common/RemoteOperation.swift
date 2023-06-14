@@ -44,7 +44,7 @@ struct RefreshOperation: RemoteOperation {
                  progress: @escaping (Progress) -> Void) async throws -> Updater.ServiceState {
         progress(.active)
         let pinboard = Pinboard(token: state.token)
-        let update = try pinboard.postsUpdate()
+        let update = try await pinboard.postsUpdate()
         if let lastUpdate = state.lastUpdate,
            lastUpdate >= update.updateTime,
            !force {
@@ -53,7 +53,7 @@ struct RefreshOperation: RemoteOperation {
         }
 
         // Get the posts.
-        let posts = try pinboard.postsAll()
+        let posts = try await pinboard.postsAll()
 
         var identifiers = Set<String>()
 
@@ -95,7 +95,7 @@ struct UpdateBookmark: RemoteOperation {
                  progress: @escaping (Progress) -> Void) async throws -> Updater.ServiceState {
         let pinboard = Pinboard(token: state.token)
         let post = Pinboard.Post(bookmark)
-        try pinboard.postsAdd(post: post, replace: true)
+        try await pinboard.postsAdd(post: post, replace: true)
         return state
     }
 
@@ -110,7 +110,7 @@ struct DeleteBookmark: RemoteOperation {
                  state: Updater.ServiceState,
                  progress: @escaping (Progress) -> Void) async throws -> Updater.ServiceState {
         let pinboard = Pinboard(token: state.token)
-        try pinboard.postsDelete(url: bookmark.url)
+        try await pinboard.postsDelete(url: bookmark.url)
         return state
     }
 
@@ -125,7 +125,7 @@ struct DeleteTag: RemoteOperation {
                  state: Updater.ServiceState,
                  progress: @escaping (Progress) -> Void) async throws -> Updater.ServiceState {
         let pinboard = Pinboard(token: state.token)
-        try pinboard.tagsDelete(tag)
+        try await pinboard.tagsDelete(tag)
         return state
     }
 

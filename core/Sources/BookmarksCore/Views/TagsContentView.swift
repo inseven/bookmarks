@@ -52,8 +52,7 @@ public struct TagsContentView: View {
                         Text(tag.name)
                         Spacer()
                         Text(tag.count.formatted())
-                        Toggle("Favorite", isOn: $settings.favoriteTags.contains(tag.name))
-                            .toggleStyle(.favorite)
+                        Toggle(isOn: $settings.favoriteTags.contains(tag.name))
                     }
 
                 } else {
@@ -90,6 +89,7 @@ public struct TagsContentView: View {
             model.delete(tags: .selection)
         }
         .searchable(text: $model.filter)
+        .toggleStyle(.favorite)
         .presents($model.confirmation)
         .presents($model.error)
         .runs(model)

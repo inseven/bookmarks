@@ -30,12 +30,9 @@ public class ApplicationModel: ObservableObject {
         case unauthorized
     }
 
-    @Published public var state: State = .idle
-    @Published public var isUpdating: Bool = false
-    @Published public var topTags: [String] = []
-
-    @Published private var isUpdaterRunning: Bool = false
-    @Published public var lastUpdated: Date? = nil
+    @MainActor @Published public var state: State = .idle
+    @MainActor @Published public var topTags: [String] = []
+    @MainActor @Published public var progress: Progress = .idle
 
     public var imageCache: ImageCache!
     public var thumbnailManager: ThumbnailManager
@@ -80,11 +77,6 @@ public class ApplicationModel: ObservableObject {
     }
 
     public func start() {
-
-        $isUpdaterRunning
-            .debounce(for: 0.1, scheduler: DispatchQueue.main)
-            .assign(to: \.isUpdating, on: self)
-            .store(in: &cancellables)
 
         // Fetch the top n tags.
         tagsModel
@@ -200,28 +192,22 @@ public class ApplicationModel: ObservableObject {
 
 extension ApplicationModel: UpdaterDelegate {
 
-    func updaterDidStart(_ updater: Updater) {
-        DispatchQueue.main.async {
-            self.isUpdaterRunning = true
-        }
-    }
-
-    func updaterDidFinish(_ updater: Updater) {
-        DispatchQueue.main.async {
-            self.isUpdaterRunning = false
-            self.lastUpdated = Date()
-        }
-    }
-
-    func updater(_ updater: Updater, didFailWithError error: Error) {
-        print("Failed to update bookmarks with error \(error)")
-        switch error {
-        case BookmarksError.httpError(.unauthorized), BookmarksError.unauthorized:
-            DispatchQueue.main.async {
-                self.state = .unauthorized
+    func updater(_ updater: Updater, didProgress progress: Progress) {
+        Task { @MainActor in
+            self.progress = progress
+            switch progress {
+            case .idle, .active, .value:
+                break
+            case .done(let date):
+                print("Completed at \(date).")
+            case .failure(let error):
+                switch error {
+                case BookmarksError.httpError(.unauthorized), BookmarksError.unauthorized:
+                    self.state = .unauthorized
+                default:
+                    break
+                }
             }
-        default:
-            print("Ignoring error \(error)...")
         }
     }
 

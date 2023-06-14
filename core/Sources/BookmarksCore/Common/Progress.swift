@@ -18,30 +18,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import SwiftUI
+import Foundation
 
-import Interact
+public enum Progress {
 
-public struct AccountToolbar: CustomizableToolbarContent {
+    case idle
+    case active
+    case value(Float)
+    case done(Date)
+    case failure(Error)
 
-    @EnvironmentObject var applicationModel: ApplicationModel
-
-    public init() {
-
-    }
-
-    public var body: some CustomizableToolbarContent {
-
-        ToolbarItem(id: "refresh") {
-            Button {
-                await applicationModel.refresh()
-            } label: {
-                Label("Refresh", systemImage: "arrow.clockwise")
-            }
-            .help("Refresh")
-            .disabled(applicationModel.progress.isRunning)
+    var isRunning: Bool {
+        switch self {
+        case .idle, .done, .failure:
+            return false
+        case .active, .value:
+            return true
         }
-
     }
 
 }

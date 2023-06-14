@@ -30,14 +30,19 @@ public struct StatusView: View {
 
     public var body: some View {
         VStack {
-            if applicationModel.isUpdating {
-                Text("Updating...")
-            } else if let lastUpdated = applicationModel.lastUpdated {
-                TimelineView(.periodic(from: .now, by: 60)) { timeline in
-                    Text("Updated \(lastUpdated.formatted(.relative(presentation: .named)))")
-                }
-            } else {
+            switch applicationModel.progress {
+            case .idle:
                 Text("Never updated")
+            case .active:
+                Text("Updating...")
+            case .value(let progress):
+                ProgressView(value: progress)
+            case .done(let date):
+                TimelineView(.periodic(from: .now, by: 60)) { timeline in
+                    Text("Updated \(date.formatted(.relative(presentation: .named)))")
+                }
+            case .failure(let error):
+                Text(error.localizedDescription)
             }
         }
         .font(.footnote)

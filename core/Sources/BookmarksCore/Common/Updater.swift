@@ -22,9 +22,7 @@ import Foundation
 
 protocol UpdaterDelegate: AnyObject {
 
-    func updaterDidStart(_ updater: Updater)
-    func updaterDidFinish(_ updater: Updater)
-    func updater(_ updater: Updater, didFailWithError error: Error)
+    func updater(_ updater: Updater, didProgress progress: Progress)
 
 }
 
@@ -68,29 +66,6 @@ public class Updater {
         self.settings = settings
     }
 
-    func performUpdate(update: @escaping (Pinboard) throws -> Void) {
-        syncQueue.async {
-            self.targetQueue.async {
-                self.delegate?.updaterDidStart(self)
-            }
-            do {
-                guard let token = self.syncQueue_token() else {
-                    throw BookmarksError.unauthorized
-                }
-                let pinboard = Pinboard(token: token)
-                try update(pinboard)
-                self.targetQueue.async {
-                    self.delegate?.updaterDidFinish(self)
-                }
-            } catch {
-                print("Failed to update post with error \(error).")
-                self.targetQueue.async {
-                    self.delegate?.updater(self, didFailWithError: BookmarksError.unauthorized)
-                }
-            }
-        }
-    }
-
     fileprivate func schedule(operation: RemoteOperation) {
         syncQueue.async { [weak self] in
             guard let self else {
@@ -103,16 +78,18 @@ public class Updater {
     fileprivate func syncQueue_perform(operation: RemoteOperation) {
         dispatchPrecondition(condition: .onQueue(syncQueue))
 
-        // Notify our delegate we're about to start.
-        targetQueue.async {
-            self.delegate?.updaterDidStart(self)
+        let progress = { (progress: Progress) in
+            self.targetQueue.async {
+                self.delegate?.updater(self, didProgress: progress)
+            }
         }
+
+        // Notify our delegate we're about to start.
+        progress(.active)
 
         // Ensure we can get a log in token.
         guard let token = syncQueue_token() else {
-            targetQueue.async {
-                self.delegate?.updater(self, didFailWithError: BookmarksError.unauthorized)
-            }
+            progress(.failure(BookmarksError.unauthorized))
             return
         }
 
@@ -121,7 +98,7 @@ public class Updater {
         print("Running '\(operation.title)'....")
         let state = ServiceState(token: token, lastUpdate: lastUpdate)
         let result = Synchronize { [database] in
-            try await operation.perform(database: database, state: state)
+            try await operation.perform(database: database, state: state, progress: progress)
         }
         print("Finished '\(operation.title)'.")
 
@@ -130,15 +107,14 @@ public class Updater {
             self.lastUpdate = success.lastUpdate
         }
 
-        // Notify our delegate.
-        targetQueue.async {
-            switch result {
-            case .success:
-                self.delegate?.updaterDidFinish(self)
-            case .failure(let error):
-                self.delegate?.updater(self, didFailWithError: error)
-            }
+        switch result {
+        case .success(let success):
+            self.lastUpdate = success.lastUpdate
+            progress(.done(.now))
+        case .failure(let error):
+            progress(.failure(error))
         }
+
     }
 
     public func start() {

@@ -294,6 +294,14 @@ public class Database {
         }
     }
 
+    public func tags() async throws -> [Tag] {
+        try await withCheckedThrowingContinuation { continuation in
+            tags { result in
+                continuation.resume(with: result)
+            }
+        }
+    }
+
     public func bookmark(identifier: String, completion: @escaping (Swift.Result<Bookmark, Error>) -> Void) {
         let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
         syncQueue.async {
@@ -387,6 +395,12 @@ public class Database {
         }
     }
 
+    public func insertOrUpdateBookmarks(_ bookmarks: [Bookmark]) async throws {
+        for bookmark in bookmarks {
+            _ = try await insertOrUpdateBookmark(bookmark)
+        }
+    }
+
     fileprivate func syncQueue_pruneTags() throws {
         dispatchPrecondition(condition: .onQueue(syncQueue))
         try self.db.run("""
@@ -448,6 +462,12 @@ public class Database {
             deleteBookmark(identifier: identifier) { result in
                 continuation.resume(with: result)
             }
+        }
+    }
+
+    public func deleteBookmarks(_ bookmarks: [Bookmark]) async throws {
+        for bookmark in bookmarks {
+            try await deleteBookmark(identifier: bookmark.identifier)
         }
     }
 

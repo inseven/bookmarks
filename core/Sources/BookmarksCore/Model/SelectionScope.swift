@@ -18,28 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import SwiftUI
+import Foundation
 
-#if os(macOS)
+enum SelectionScope<T: Hashable> {
 
-public struct TagsWindow: Scene {
-
-    static let identifier = "tags"
-
-    private let applicationModel: ApplicationModel
-
-    public init(applicationModel: ApplicationModel) {
-        self.applicationModel = applicationModel
-    }
-
-    public var body: some Scene {
-        Window("Tags", id: TagsWindow.identifier) {
-            TagsContentView(applicationModel: applicationModel)
-                .environmentObject(applicationModel)
-                .environmentObject(applicationModel.settings)
-        }
-    }
+    case selection
+    case items(Set<T>)
 
 }
-
-#endif

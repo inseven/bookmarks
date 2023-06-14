@@ -20,26 +20,14 @@
 
 import SwiftUI
 
-#if os(macOS)
+extension View {
 
-public struct TagsWindow: Scene {
+#if os(iOS)
 
-    static let identifier = "tags"
-
-    private let applicationModel: ApplicationModel
-
-    public init(applicationModel: ApplicationModel) {
-        self.applicationModel = applicationModel
+    func onDeleteCommand(perform: @escaping () -> Void) -> some View {
+        return self
     }
-
-    public var body: some Scene {
-        Window("Tags", id: TagsWindow.identifier) {
-            TagsContentView(applicationModel: applicationModel)
-                .environmentObject(applicationModel)
-                .environmentObject(applicationModel.settings)
-        }
-    }
-
-}
 
 #endif
+
+}

@@ -34,7 +34,7 @@ public struct PhoneTagsView: View {
 
     public var body: some View {
         NavigationView {
-            TagsContentView(tagsModel: applicationModel.tagsModel)
+            TagsContentView(applicationModel: applicationModel)
                 .navigationBarTitle("Tags", displayMode: .inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {

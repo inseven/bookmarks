@@ -38,12 +38,12 @@ public struct TagsContentView: View {
 
     @StateObject var model: TagsContentViewModel
 
-    public init(tagsModel: TagsModel) {
-        _model = StateObject(wrappedValue: TagsContentViewModel(tagsModel: tagsModel))
+    public init(applicationModel: ApplicationModel) {
+        _model = StateObject(wrappedValue: TagsContentViewModel(applicationModel: applicationModel))
     }
 
     public var body: some View {
-        Table(model.filteredTags, selection: $model.selection) {
+        Table(of: Database.Tag.self, selection: $model.selection) {
             TableColumn("Tag") { tag in
                 if isCompact {
                     HStack {
@@ -66,9 +66,17 @@ public struct TagsContentView: View {
             TableColumn("Favorite") { tag in
                 Toggle(isOn: $settings.favoriteTags.contains(tag.name))
             }
+        } rows: {
+            ForEach(model.filteredTags) { tag in
+                TableRow(tag)
+            }
         }
         .contextMenu(forSelectionType: String.ID.self) { selection in
-            EmptyView()
+            Button(role: .destructive) {
+                model.delete(tags: .items(selection))
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
         } primaryAction: { selection in
             guard selection.count == 1,
                   let tag = selection.first,
@@ -78,7 +86,12 @@ public struct TagsContentView: View {
             print(actionURL.absoluteString)
             openURL(actionURL)
         }
+        .onDeleteCommand {
+            model.delete(tags: .selection)
+        }
         .searchable(text: $model.filter)
+        .presents($model.confirmation)
+        .presents($model.error)
         .runs(model)
     }
 

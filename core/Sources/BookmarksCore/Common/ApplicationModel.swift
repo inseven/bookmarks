@@ -149,8 +149,8 @@ public class ApplicationModel: ObservableObject {
         try await updater.update(bookmarks: bookmarks)
     }
 
-    public func renameTag(_ old: String, to new: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        updater.renameTag(old, to: new, completion: completion)
+    public func rename(tag: String, to newTag: String) async throws {
+        try await updater.rename(tag: tag, to: newTag)
     }
 
     public func delete(tags: [String]) async throws {

@@ -130,3 +130,19 @@ struct DeleteTag: RemoteOperation {
     }
 
 }
+
+struct RenameTag: RemoteOperation {
+
+    let title = "Rename tag"
+    let tag: String
+    let newTag: String
+
+    func perform(database: Database,
+                 state: Updater.ServiceState,
+                 progress: @escaping (Progress) -> Void) async throws -> Updater.ServiceState {
+        let pinboard = Pinboard(token: state.token)
+        try await pinboard.tagsRename(tag, to: newTag)
+        return state
+    }
+
+}

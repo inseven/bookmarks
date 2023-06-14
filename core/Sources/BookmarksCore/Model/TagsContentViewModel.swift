@@ -25,16 +25,21 @@ import Interact
 
 class TagsContentViewModel: ObservableObject, Runnable {
 
+    var applicationModel: ApplicationModel
+
     @MainActor @Published var tags: [Database.Tag] = []
     @MainActor @Published var filter = ""
     @MainActor @Published var filteredTags: [Database.Tag] = []
     @MainActor @Published var selection: Set<String> = []
+    @MainActor @Published var confirmation: Confirmation? = nil
+    @MainActor @Published var error: Error? = nil
 
     @MainActor var tagsModel: TagsModel
     @MainActor var cancellables: Set<AnyCancellable> = []
 
-    init(tagsModel: TagsModel) {
-        self.tagsModel = tagsModel
+    init(applicationModel: ApplicationModel) {
+        self.applicationModel = applicationModel
+        self.tagsModel = applicationModel.tagsModel
     }
 
     @MainActor func start() {
@@ -56,6 +61,44 @@ class TagsContentViewModel: ObservableObject, Runnable {
 
     @MainActor func stop() {
         cancellables.removeAll()
+    }
+
+    @MainActor func delete(tags scope: SelectionScope<String>)  {
+
+        let tags: Set<String>
+        switch scope {
+        case .items(let items):
+            tags = items
+        case .selection:
+            // Counter-intuitively, we need to generate the intersection of our tags and the current visible filtered
+            // tags as SwiftUI doesn't update the selection set as the items in the list change when filtering. It might
+            // be cleaner to update the selection ourselves as the list is filtered, but doing it here we avoid thinking
+            // too hard about race conditions and only do work when we need the selection updated.
+            let visibleTags = Set(filteredTags.map { $0.name })
+            tags = selection
+                .filter { visibleTags.contains($0) }
+        }
+
+        let title: String
+        if tags.count < 5 {
+            let summary = tags
+                .sorted()
+                .map { "'\($0)'" }
+                .formatted(.list(type: .and))
+            title = "Delete \(summary)?"
+        } else {
+            title = "Delete \(tags.count) Tags?"
+        }
+        confirmation = Confirmation(title,
+                                    role: .destructive,
+                                    actionTitle: "Delete",
+                                    message: "No bookmarks will be deleted as part of this operation.") {
+            do {
+                try await self.applicationModel.delete(tags: Array(tags))
+            } catch {
+                self.error = error
+            }
+        }
     }
 
 }

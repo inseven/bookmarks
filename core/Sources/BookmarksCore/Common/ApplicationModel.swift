@@ -153,8 +153,8 @@ public class ApplicationModel: ObservableObject {
         updater.renameTag(old, to: new, completion: completion)
     }
 
-    public func deleteTag(_ tag: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        updater.deleteTag(tag, completion: completion)
+    public func delete(tags: [String]) async throws {
+        try await updater.delete(tags: tags)
     }
 
     @MainActor public func open(_ bookmarks: Set<Bookmark>,

@@ -115,3 +115,18 @@ struct DeleteBookmark: RemoteOperation {
     }
 
 }
+
+struct DeleteTag: RemoteOperation {
+
+    let title = "Delete tag"
+    let tag: String
+
+    func perform(database: Database,
+                 state: Updater.ServiceState,
+                 progress: @escaping (Progress) -> Void) async throws -> Updater.ServiceState {
+        let pinboard = Pinboard(token: state.token)
+        try pinboard.tagsDelete(tag)
+        return state
+    }
+
+}

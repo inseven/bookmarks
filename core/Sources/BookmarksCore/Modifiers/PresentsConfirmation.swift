@@ -20,26 +20,35 @@
 
 import SwiftUI
 
-#if os(macOS)
+struct PresentsConfirmation: ViewModifier {
 
-public struct TagsWindow: Scene {
+    @Binding var confirmation: Confirmation?
 
-    static let identifier = "tags"
-
-    private let applicationModel: ApplicationModel
-
-    public init(applicationModel: ApplicationModel) {
-        self.applicationModel = applicationModel
+    init(_ confirmation: Binding<Confirmation?>) {
+        _confirmation = confirmation
     }
 
-    public var body: some Scene {
-        Window("Tags", id: TagsWindow.identifier) {
-            TagsContentView(applicationModel: applicationModel)
-                .environmentObject(applicationModel)
-                .environmentObject(applicationModel.settings)
-        }
+    func body(content: Content) -> some View {
+        content
+            .confirmationDialog(confirmation?.title ?? "Confirm",
+                                isPresented: $confirmation.bool(),
+                                titleVisibility: .visible) {
+                Button(confirmation?.actionTitle ?? "OK", role: confirmation?.role) {
+                    confirmation?.action()
+                }
+            } message: {
+                if let message = confirmation?.message {
+                    Text(message)
+                }
+            }
     }
 
 }
 
-#endif
+extension View {
+
+    func presents(_ confirmation: Binding<Confirmation?>) -> some View {
+        modifier(PresentsConfirmation(confirmation))
+    }
+
+}

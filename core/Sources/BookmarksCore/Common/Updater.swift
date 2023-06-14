@@ -200,21 +200,10 @@ public class Updater {
         }
     }
 
-    public func deleteTag(_ tag: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        syncQueue.async {
-            guard let token = self.syncQueue_token() else {
-                completion(.failure(BookmarksError.unauthorized))
-                return
-            }
-            let pinboard = Pinboard(token: token)
-            let result = Result {
-                try self.database.deleteTag(tag: tag)
-                try pinboard.tagsDelete(tag)
-                // TODO: Perform the changes locally.
-                self.refresh(force: true)
-            }
-            completion(result)
+    public func delete(tags: [String]) async throws {
+        for tag in tags {
+            try self.database.deleteTag(tag: tag)
+            schedule(operation: DeleteTag(tag: tag))
         }
     }
 

@@ -20,26 +20,36 @@
 
 import SwiftUI
 
-#if os(macOS)
+struct Confirmation {
 
-public struct TagsWindow: Scene {
+    let title: String
+    let role: ButtonRole?
+    let actionTitle: String?
+    let message: String?
+    let action: () -> Void
 
-    static let identifier = "tags"
-
-    private let applicationModel: ApplicationModel
-
-    public init(applicationModel: ApplicationModel) {
-        self.applicationModel = applicationModel
+    init(_ title: String,
+         role: ButtonRole? = nil,
+         actionTitle: String = "OK",
+         message: String? = nil,
+         action: @escaping () -> Void) {
+        self.title = title
+        self.role = role
+        self.actionTitle = actionTitle
+        self.message = message
+        self.action = action
     }
 
-    public var body: some Scene {
-        Window("Tags", id: TagsWindow.identifier) {
-            TagsContentView(applicationModel: applicationModel)
-                .environmentObject(applicationModel)
-                .environmentObject(applicationModel.settings)
+    init(_ title: String,
+         role: ButtonRole? = nil,
+         actionTitle: String = "OK",
+         message: String? = nil,
+         action: @escaping () async -> Void) {
+        self.init(title, role: role, actionTitle: actionTitle, message: message) {
+            Task {
+                await action()
+            }
         }
     }
 
 }
-
-#endif

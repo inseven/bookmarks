@@ -171,14 +171,14 @@ public class Updater {
 
     public func delete(bookmarks: [Bookmark]) async throws {
         for bookmark in bookmarks {
-            try self.database.deleteBookmark(identifier: bookmark.identifier)
+            try await self.database.deleteBookmark(identifier: bookmark.identifier)
             schedule(operation: DeleteBookmark(bookmark: bookmark))
         }
     }
 
     public func update(bookmarks: [Bookmark]) async throws {
         for bookmark in bookmarks {
-            _ = try self.database.insertOrUpdateBookmark(bookmark)
+            _ = try await self.database.insertOrUpdateBookmark(bookmark)
             schedule(operation: UpdateBookmark(bookmark: bookmark))
         }
     }
@@ -202,7 +202,7 @@ public class Updater {
 
     public func delete(tags: [String]) async throws {
         for tag in tags {
-            try self.database.deleteTag(tag: tag)
+            try await self.database.deleteTag(tag: tag)
             schedule(operation: DeleteTag(tag: tag))
         }
     }

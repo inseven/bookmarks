@@ -64,16 +64,16 @@ struct RefreshOperation: RemoteOperation {
                 continue
             }
             identifiers.insert(bookmark.identifier)
-            _ = try database.insertOrUpdateBookmark(bookmark)
+            _ = try await database.insertOrUpdateBookmark(bookmark)
         }
 
         // Delete missing bookmarks.
-        let allIdentifiers = try database.identifiers()
+        let allIdentifiers = try await database.identifiers()
         let deletedIdentifiers = Set(allIdentifiers).subtracting(identifiers)
         for identifier in deletedIdentifiers {
-            let bookmark = try database.bookmarkSync(identifier: identifier)
+            let bookmark = try await database.bookmark(identifier: identifier)
             print("deleting \(bookmark)...")
-            _ = try database.deleteBookmark(identifier: identifier)
+            _ = try await database.deleteBookmark(identifier: identifier)
         }
         print("update complete")
 

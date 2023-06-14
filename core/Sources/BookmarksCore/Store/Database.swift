@@ -355,7 +355,7 @@ public class Database {
         try syncQueue_pruneTags()
     }
 
-    public func insertOrUpdateBookmark(_ bookmark: Bookmark, completion: @escaping (Swift.Result<Bookmark, Error>) -> Void) {
+    private func insertOrUpdateBookmark(_ bookmark: Bookmark, completion: @escaping (Swift.Result<Bookmark, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             let result = Swift.Result<Bookmark, Error> {
@@ -376,6 +376,14 @@ public class Database {
                 return bookmark
             }
             completion(result)
+        }
+    }
+
+    public func insertOrUpdateBookmark(_ bookmark: Bookmark) async throws -> Bookmark {
+        try await withCheckedThrowingContinuation { continuation in
+            self.insertOrUpdateBookmark(bookmark) { result in
+                continuation.resume(with: result)
+            }
         }
     }
 
@@ -414,7 +422,7 @@ public class Database {
         }
     }
 
-    public func deleteBookmark(identifier: String, completion: @escaping (Swift.Result<Void, Error>) -> Void) {
+    private func deleteBookmark(identifier: String, completion: @escaping (Swift.Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             do {
@@ -435,7 +443,15 @@ public class Database {
         }
     }
 
-    public func deleteTag(tag: String, completion: @escaping (Swift.Result<Int, Error>) -> Void) {
+    public func deleteBookmark(identifier: String) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            deleteBookmark(identifier: identifier) { result in
+                continuation.resume(with: result)
+            }
+        }
+    }
+
+    private func deleteTag(tag: String, completion: @escaping (Swift.Result<Int, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             do {
@@ -448,6 +464,14 @@ public class Database {
                 }
             } catch {
                 completion(.failure(error))
+            }
+        }
+    }
+
+    public func deleteTag(tag: String) async throws {
+        _ = try await withCheckedThrowingContinuation { continuation in
+            deleteTag(tag: tag) { result in
+                continuation.resume(with: result)
             }
         }
     }
@@ -583,7 +607,7 @@ public class Database {
         }
     }
 
-    public func identifiers(completion: @escaping (Swift.Result<[String], Error>) -> Void) {
+    private func identifiers(completion: @escaping (Swift.Result<[String], Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         syncQueue.async {
             let result = Swift.Result {
@@ -595,51 +619,12 @@ public class Database {
         }
     }
 
-}
-
-
-public extension Database {
-
-    func insertOrUpdateBookmark(_ bookmark: Bookmark) throws -> Bookmark {
-        try AsyncOperation { self.insertOrUpdateBookmark(bookmark, completion: $0) }.wait()
-    }
-
-    func insertOrUpdateBookmarks(_ bookmarks: [Bookmark]) throws {
-        for bookmark in bookmarks {
-            _ = try self.insertOrUpdateBookmark(bookmark)
+    public func identifiers() async throws -> [String] {
+        try await withCheckedThrowingContinuation { continuation in
+            identifiers { result in
+                continuation.resume(with: result)
+            }
         }
-    }
-
-    func deleteBookmarks(_ bookmarks: [Bookmark]) throws {
-        for bookmark in bookmarks {
-            try deleteBookmark(identifier: bookmark.identifier)
-        }
-    }
-
-    func deleteTag(tag: String) throws {
-        _ = try AsyncOperation({ self.deleteTag(tag: tag, completion: $0) }).wait()
-    }
-
-    func deleteBookmark(identifier: String) throws {
-        try AsyncOperation { self.deleteBookmark(identifier: identifier, completion: $0) }.wait()
-    }
-
-    func tags() throws -> [Tag] {
-        try AsyncOperation { self.tags(completion: $0) }.wait()
-    }
-
-    func identifiers() throws -> [String] {
-        try AsyncOperation { self.identifiers(completion: $0) }.wait()
-    }
-
-    func bookmarkSync(identifier: String) throws -> Bookmark {
-        try AsyncOperation { self.bookmark(identifier: identifier, completion: $0) }.wait()
-    }
-
-    // TODO: Test the Database APIs for fetching items by URL #217
-    //       https://github.com/inseven/bookmarks/issues/217
-    func bookmark(url: URL) throws -> Bookmark {
-        try AsyncOperation { self.bookmark(url: url, completion: $0) }.wait()
     }
 
 }

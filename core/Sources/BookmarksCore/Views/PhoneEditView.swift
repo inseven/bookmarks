@@ -114,7 +114,7 @@ public struct PhoneEditView: View {
                 }
             }
             .listStyle(.grouped)
-            .navigationTitle(bookmark.url.absoluteString)
+            .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

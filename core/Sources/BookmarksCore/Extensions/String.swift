@@ -36,7 +36,7 @@ extension String: Identifiable {
     public var url: URL {
         get throws {
             guard let url = URL(string: self) else {
-                throw BookmarksError.invalidURL(string: self)
+                throw BookmarksError.invalidURLString(self)
             }
             return url
         }

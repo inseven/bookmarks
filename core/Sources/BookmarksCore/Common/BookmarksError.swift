@@ -24,14 +24,14 @@ public enum BookmarksError: Error, Equatable {
 
     case resizeFailure
 
-    case invalidURL(string: String)
-    case invalidURL(url: URL)
-    case invalidURL(components: URLComponents)
+    case invalidURLString(String)
+    case invalidURL(URL)
+    case invalidURLComponents(URLComponents)
 
     case unknownMigration(version: Int32)
 
-    case bookmarkNotFound(identifier: String)
-    case bookmarkNotFound(url: URL)
+    case bookmarkNotFoundByIdentifier(String)
+    case bookmarkNotFoundByURL(URL)
     case tagNotFound(name: String)
     
     case inconsistentState
@@ -43,7 +43,47 @@ public enum BookmarksError: Error, Equatable {
     case unknownResponse
     case invalidResponse
     case httpError(HTTPStatus)
-
-    case openFailure
     
 }
+
+extension BookmarksError: LocalizedError {
+
+    public var errorDescription: String? {
+        switch self {
+        case .resizeFailure:
+            return "Failed to resize image."
+        case .invalidURLString:
+            return "Invalid URL string."
+        case .invalidURL:
+            return "Invalid URL."
+        case .invalidURLComponents:
+            return "Invalid URL components."
+        case .unknownMigration(let version):
+            return "Unknown database migration version \(version)."
+        case .bookmarkNotFoundByIdentifier:
+            return "Bookmark not found by identifier."
+        case .bookmarkNotFoundByURL:
+            return "Bookmark not found by URL."
+        case .tagNotFound:
+            return "Tag not found."
+        case .inconsistentState:
+            return "Inconsistent state."
+        case .unauthorized:
+            return "Unauthorized."
+        case .corrupt:
+            return "Corrupt."
+        case .timeout:
+            return "Timeout."
+        case .malformedBookmark:
+            return "Malformed bookmark."
+        case .unknownResponse:
+            return "Unknown response."
+        case .invalidResponse:
+            return "Invalid response."
+        case .httpError(let status):
+            return "HTTP error \(status)."
+        }
+    }
+
+}
+

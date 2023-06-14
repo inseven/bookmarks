@@ -29,7 +29,7 @@ extension URLComponents {
     public var safeUrl: URL {
         get throws {
             guard let url = self.url else {
-                throw BookmarksError.invalidURL(components: self)
+                throw BookmarksError.invalidURLComponents(self)
             }
             return url
         }

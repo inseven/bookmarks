@@ -18,12 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import AppKit
 import SwiftUI
-
-import Diligence
-import Interact
-import WrappingHStack
 
 import BookmarksCore
 
@@ -56,6 +51,9 @@ struct EditView: View {
                         TokenView("Add tags...", tokens: $model.tags) { candidate in
                             return []
                         }
+                    }
+                    Section("URL") {
+                        Link(model.update.url.absoluteString, destination: model.update.url)
                     }
                 }
                 .formStyle(.grouped)

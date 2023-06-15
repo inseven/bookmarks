@@ -109,8 +109,7 @@ public struct PhoneEditView: View {
                     }
                 }
                 Section("URL") {
-                    Text(bookmark.url.absoluteString)
-                        .foregroundColor(.secondary)
+                    Link(bookmark.url.absoluteString, destination: bookmark.url)
                 }
             }
             .listStyle(.grouped)

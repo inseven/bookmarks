@@ -22,6 +22,7 @@ import AppKit
 import SwiftUI
 
 import Diligence
+import Interact
 
 import BookmarksCore
 
@@ -58,13 +59,15 @@ struct BookmarksApp: App {
         WindowGroup("Bookmark", for: String.self) { $id in
             HStack {
                 if let id = id {
-                    EditView(applicationModel: applicationModel, id: id)
+                    InfoContentView(applicationModel: applicationModel, id: id)
+                        .environmentObject(applicationModel)
+                        .environmentObject(applicationModel.settings)
                 } else {
-                    Text("Nothing Selected")
+                    PlaceholderView("Nothing Selected")
                 }
             }
         }
-        .defaultSize(CGSize(width: 400, height: 600))
+        .defaultSize(CGSize(width: 300, height: 600))
 
         About(Legal.contents)
 

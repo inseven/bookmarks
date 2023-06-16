@@ -23,39 +23,35 @@ import Foundation
 
 public class TagsModel: ObservableObject {
 
-    var database: Database
-    var cancellables: Set<AnyCancellable> = []
+    @MainActor @Published public var tags: [Database.Tag] = []
+    @MainActor @Published public var counts: [String: Int] = [:]
+    @MainActor @Published public var trie = Trie()
+    @MainActor @Published public var error: Error? = nil
 
-    @Published public var tags: [Database.Tag] = []
-    public var fastTags: Set<String> = Set()
-    @Published var trie = Trie()
-
-    fileprivate var filter = ""
+    private var database: Database
+    private var cancellables: Set<AnyCancellable> = []
 
     public init(database: Database) {
         self.database = database
     }
 
     func update() {
-        database.tags { result in
-
-            guard case .success(let tags) = result else {
-                print("failed to load tags")
-                return
-            }
-
-            let trie = Trie()
-            for tag in tags {
-                trie.insert(word: tag.name)
-            }
-
-            let fastTags = Set(tags.map { $0.name })
-
-            DispatchQueue.main.async {
-                self.objectWillChange.send()
-                self.tags = tags
-                self.fastTags = fastTags
-                self.trie = trie
+        Task {
+            do {
+                let tags = try await database.tags()
+                let trie = Trie(words: tags.map { $0.name })
+                let counts = tags.reduce(into: [String: Int]()) { partialResult, tag in
+                    partialResult[tag.name] = tag.count
+                }
+                await MainActor.run {
+                    self.tags = tags
+                    self.counts = counts
+                    self.trie = trie
+                }
+            } catch {
+                await MainActor.run {
+                    self.error = error
+                }
             }
         }
     }
@@ -69,31 +65,29 @@ public class TagsModel: ObservableObject {
                 self.update()
             }
             .store(in: &cancellables)
-        self.update()
     }
 
-    public func stop() {
-        dispatchPrecondition(condition: .onQueue(.main))
+    @MainActor public func stop() {
         cancellables.removeAll()
         self.tags = []
     }
 
-    public func tags(prefix: String) -> [String] {
-        dispatchPrecondition(condition: .onQueue(.main))
+    @MainActor public func tags(prefix: String) -> [Database.Tag] {
         return trie.findWordsWithPrefix(prefix: prefix)
+            .compactMap { name in
+                guard let count = counts[name] else {
+                    return nil
+                }
+                return Database.Tag(name: name, count: count)
+            }
     }
 
-    public func contains(tag: String) -> Bool {
-        dispatchPrecondition(condition: .onQueue(.main))
-        return self.fastTags.contains(tag)
-    }
-
-    public func suggestions(prefix: String, existing: [String]) -> [String] {
-        let currentTags = Set(existing)
-        let tags = Set(tags(prefix: prefix))
-        let suggestions = Array(tags.subtracting(currentTags))
-        return suggestions.sorted()
-    }
+    @MainActor public func suggestions(prefix: String, existing: [String]) -> [String] {
+         let currentTags = Set(existing)
+         let tags = Set(trie.findWordsWithPrefix(prefix: prefix))
+         let suggestions = Array(tags.subtracting(currentTags))
+         return suggestions.sorted()
+     }
 
 }
 

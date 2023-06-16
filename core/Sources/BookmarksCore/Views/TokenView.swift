@@ -18,8 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#if os(macOS)
-
 import Combine
 import SwiftUI
 
@@ -45,6 +43,7 @@ public struct TokenView: View {
     }
 
     public var body: some View {
+#if os(macOS)
         VStack {
             WrappingHStack(alignment: .leading) {
                 ForEach(model.items) { item in
@@ -75,8 +74,17 @@ public struct TokenView: View {
             }
             model.items = tokens.map({ TokenViewModel.Token($0) })
         }
+#else
+        if tokens.isEmpty {
+            Text("Add Tags...")
+        } else {
+            WrappingHStack(alignment: .leading) {
+                ForEach(tokens.sorted()) { tag in
+                    TagView(tag, color: tag.color())
+                }
+            }
+        }
+#endif
     }
 
 }
-
-#endif

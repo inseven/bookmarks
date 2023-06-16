@@ -44,19 +44,26 @@ struct EditView: View {
                             .lineLimit(5...10)
                     }
                     Section {
-                        Toggle("Unread", isOn: $model.update.toRead)
-                        Toggle("Public", isOn: $model.update.shared)
+                        HStack {
+                            Toggle("Unread", isOn: $model.update.toRead)
+                            Divider()
+                            Toggle("Public", isOn: $model.update.shared)
+                        }
                     }
-                    Section("Tags") {
+                    Section {
                         TokenView("Add tags...", tokens: $model.tags) { candidate in
                             return []
                         }
                     }
-                    Section("URL") {
+                    Section {
                         Link(destination: model.update.url) {
                             Text(model.update.url.absoluteString)
                                 .multilineTextAlignment(.leading)
                         }
+                    } header: {
+                        
+                    } footer: {
+                        Text("Saved \(model.update.date.formatted())")
                     }
                 }
                 .formStyle(.grouped)

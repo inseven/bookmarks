@@ -38,7 +38,7 @@ public struct PhoneSectionGridView: View {
                     BookmarkCell(applicationModel: applicationModel, bookmark: bookmark)
                         .aspectRatio(8/9, contentMode: .fit)
                         .onTapGesture {
-                            sectionViewModel.open(ids: [bookmark.id])
+                            sectionViewModel.open(.items([bookmark.id]))
                         }
                         .contextMenu {
                             sectionViewModel.contextMenu([bookmark.id])

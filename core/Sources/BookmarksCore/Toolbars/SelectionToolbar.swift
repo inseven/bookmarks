@@ -59,8 +59,14 @@ public struct SelectionToolbar: CustomizableToolbarContent {
                 .disabled(sectionViewModel.selection.isEmpty)
             }
 
-        }
+            ToolbarItem(id: "share") {
+                ShareLink(items: sectionViewModel.selectionURLs) {
+                    Label("Share", systemImage: "square.and.arrow.up")
+                }
+                .disabled(sectionViewModel.selectionURLs.isEmpty)
+            }
 
+        }
 
     }
 

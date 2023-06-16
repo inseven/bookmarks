@@ -41,6 +41,7 @@ public class SectionViewModel: ObservableObject, Runnable {
     @Published public var suggestedTokens: [String] = []
     @Published public var layoutMode: LayoutMode
     @Published public var selection: Set<Bookmark.ID> = []
+    @Published public var selectionURLs: [URL] = []
     @Published public var previewURL: URL? = nil
 
     @MainActor @Published public var lastError: Error? = nil
@@ -188,6 +189,18 @@ public class SectionViewModel: ObservableObject, Runnable {
             .map { Set([$0]) }
             .receive(on: DispatchQueue.main)
             .assign(to: \.selection, on: self)
+            .store(in: &cancellables)
+
+        // Update the selected URLs.
+        $selection
+            .combineLatest($bookmarksLookup)
+            .receive(on: DispatchQueue.global())
+            .map { selection, bookmarksLookup in
+                return selection
+                    .compactMap { bookmarksLookup[$0]?.url }
+            }
+            .receive(on: DispatchQueue.main)
+            .assign(to: \.selectionURLs, on: self)
             .store(in: &cancellables)
 
     }

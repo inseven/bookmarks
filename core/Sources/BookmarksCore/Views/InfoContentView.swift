@@ -20,17 +20,15 @@
 
 import SwiftUI
 
-import BookmarksCore
-
-struct EditView: View {
+public struct InfoContentView: View {
 
     @StateObject var model: EditViewModel
 
-    init(applicationModel: ApplicationModel, id: String) {
+    public init(applicationModel: ApplicationModel, id: String) {
         _model = StateObject(wrappedValue: EditViewModel(applicationModel: applicationModel, id: id))
     }
 
-    var body: some View {
+    public var body: some View {
         HStack {
             switch model.state {
             case .uninitialized, .loading:
@@ -39,7 +37,7 @@ struct EditView: View {
             case .ready:
                 Form {
                     Section {
-                        TextField("Title", text: $model.update.title)
+                        TextField("Title", text: $model.update.title, axis: .vertical)
                         TextField("Notes", text: $model.update.notes, axis: .vertical)
                             .lineLimit(5...10)
                     }
@@ -52,7 +50,7 @@ struct EditView: View {
                     }
                     Section {
                         TokenView("Add tags...", tokens: $model.tags) { candidate in
-                            return []
+                            model.suggestions(candidate: candidate, count: 1)
                         }
                     }
                     Section {

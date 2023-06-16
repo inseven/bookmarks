@@ -27,7 +27,7 @@ public class TagsModel: ObservableObject {
     var cancellables: Set<AnyCancellable> = []
 
     @Published public var tags: [Database.Tag] = []
-    public var fastTags: Set<String> = Set()
+    @Published public var counts: [String: Int] = [:]
     @Published var trie = Trie()
 
     fileprivate var filter = ""
@@ -49,12 +49,14 @@ public class TagsModel: ObservableObject {
                 trie.insert(word: tag.name)
             }
 
-            let fastTags = Set(tags.map { $0.name })
+            let counts = tags.reduce(into: [String: Int]()) { partialResult, tag in
+                partialResult[tag.name] = tag.count
+            }
 
             DispatchQueue.main.async {
                 self.objectWillChange.send()
                 self.tags = tags
-                self.fastTags = fastTags
+                self.counts = counts
                 self.trie = trie
             }
         }
@@ -72,28 +74,27 @@ public class TagsModel: ObservableObject {
         self.update()
     }
 
-    public func stop() {
-        dispatchPrecondition(condition: .onQueue(.main))
+    @MainActor public func stop() {
         cancellables.removeAll()
         self.tags = []
     }
 
-    public func tags(prefix: String) -> [String] {
-        dispatchPrecondition(condition: .onQueue(.main))
+    @MainActor public func tags(prefix: String) -> [Database.Tag] {
         return trie.findWordsWithPrefix(prefix: prefix)
+            .compactMap { name in
+                guard let count = counts[name] else {
+                    return nil
+                }
+                return Database.Tag(name: name, count: count)
+            }
     }
 
-    public func contains(tag: String) -> Bool {
-        dispatchPrecondition(condition: .onQueue(.main))
-        return self.fastTags.contains(tag)
-    }
-
-    public func suggestions(prefix: String, existing: [String]) -> [String] {
-        let currentTags = Set(existing)
-        let tags = Set(tags(prefix: prefix))
-        let suggestions = Array(tags.subtracting(currentTags))
-        return suggestions.sorted()
-    }
+    @MainActor public func suggestions(prefix: String, existing: [String]) -> [String] {
+         let currentTags = Set(existing)
+         let tags = Set(trie.findWordsWithPrefix(prefix: prefix))
+         let suggestions = Array(tags.subtracting(currentTags))
+         return suggestions.sorted()
+     }
 
 }
 

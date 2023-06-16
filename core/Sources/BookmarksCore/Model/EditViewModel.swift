@@ -105,6 +105,15 @@ public class EditViewModel: ObservableObject, Runnable {
 
     }
 
+    @MainActor func suggestions(candidate: String, count: Int) -> [String] {
+        let existing = Set(tags)
+        return applicationModel.tagsModel.tags(prefix: candidate)
+            .sorted { $0.count > $1.count }
+            .prefix(count + existing.count)
+            .filter { !existing.contains($0.name) }
+            .map { $0.name }
+    }
+
     @MainActor public func stop() {
         cancellables.removeAll()
     }

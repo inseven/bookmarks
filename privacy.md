@@ -1,6 +1,6 @@
 # Privacy Policy
 
-InSeven Limited does not collect or store any personal data from Bookmarks unless you have opted into crash reporting through the App Store.
+InSeven Limited does not collect or store any personal data from Bookmarks unless you have opted into crash reporting with Apple.
 
 If you have opted into crash reporting with Apple, we may occasionally receive crash logs from Apple which ideally do not, but may contain personally identifiable information. Crash logs are stored privately and are kept confidential, and we will make all reasonable efforts to delete any crash logs found to contain personally identifiable information.
 

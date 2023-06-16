@@ -22,10 +22,10 @@ import SwiftUI
 
 public struct InfoContentView: View {
 
-    @StateObject var model: EditViewModel
+    @StateObject var model: InfoContentViewModel
 
     public init(applicationModel: ApplicationModel, id: String) {
-        _model = StateObject(wrappedValue: EditViewModel(applicationModel: applicationModel, id: id))
+        _model = StateObject(wrappedValue: InfoContentViewModel(applicationModel: applicationModel, id: id))
     }
 
     public var body: some View {

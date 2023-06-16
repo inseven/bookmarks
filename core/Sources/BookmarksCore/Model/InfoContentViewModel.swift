@@ -23,7 +23,7 @@ import SwiftUI
 
 import Interact
 
-public class EditViewModel: ObservableObject, Runnable {
+public class InfoContentViewModel: ObservableObject, Runnable {
 
     public enum State {
         case uninitialized

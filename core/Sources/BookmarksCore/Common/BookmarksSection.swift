@@ -156,7 +156,7 @@ public extension BookmarksSection {
         case .today:
             return "Today"
         case .unread:
-            return "Unread"
+            return "Read Later"
         case .shared(let shared):
             if shared {
                 return "Public"
@@ -177,7 +177,7 @@ public extension BookmarksSection {
         case .today:
             return "Today"
         case .unread:
-            return "Unread"
+            return "Read Later"
         case .shared(let shared):
             if shared {
                 return "Public"
@@ -198,7 +198,7 @@ public extension BookmarksSection {
         case .today:
             return "sun.max"
         case .unread:
-            return "circle.inset.filled"
+            return "book"
         case .shared(let shared):
             if shared {
                 return "globe"

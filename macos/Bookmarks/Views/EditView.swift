@@ -53,7 +53,10 @@ struct EditView: View {
                         }
                     }
                     Section("URL") {
-                        Link(model.update.url.absoluteString, destination: model.update.url)
+                        Link(destination: model.update.url) {
+                            Text(model.update.url.absoluteString)
+                                .multilineTextAlignment(.leading)
+                        }
                     }
                 }
                 .formStyle(.grouped)

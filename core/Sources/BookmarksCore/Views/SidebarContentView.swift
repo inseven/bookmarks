@@ -56,7 +56,7 @@ public struct SidebarContentView: View {
 #endif
                 }
             }
-            Section("Smart Filters") {
+            Section("Library") {
                 ForEach(BookmarksSection.defaultSections) { section in
                     SectionLink(section: section)
                 }

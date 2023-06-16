@@ -23,6 +23,10 @@ import SwiftUI
 public struct SidebarSettingsSection: View {
 
     @ObservedObject var settings: Settings
+
+    public init(settings: Settings) {
+        self.settings = settings
+    }
     
     public var body: some View {
         Section("Sidebar") {

@@ -25,6 +25,17 @@ import WrappingHStack
 
 public struct TokenView: View {
 
+#if os(iOS)
+    enum SheetType: Identifiable {
+        
+        public var id: Self {
+            return self
+        }
+        
+        case addTag
+    }
+#endif
+
     let prompt: String
 
     @Binding var tokens: [String]
@@ -32,6 +43,9 @@ public struct TokenView: View {
     let suggestion: (String) -> [String]
 
     @StateObject var model: TokenViewModel
+#if os(iOS)
+    @State var sheet: SheetType?
+#endif
 
     public init(_ prompt: String,
                 tokens: Binding<[String]>,
@@ -61,12 +75,7 @@ public struct TokenView: View {
             }
             Spacer()
         }
-        .onAppear {
-            model.start()
-        }
-        .onDisappear {
-            model.stop()
-        }
+        .runs(model)
         .onChange(of: tokens) { tokens in
             // I find it really hard to believe that this is the idiomatic way of bidirectional binding.
             guard model.items.map({ $0.text }) != tokens else {
@@ -75,14 +84,32 @@ public struct TokenView: View {
             model.items = tokens.map({ TokenViewModel.Token($0) })
         }
 #else
-        if tokens.isEmpty {
-            Text("Add Tags...")
-        } else {
-            WrappingHStack(alignment: .leading) {
-                ForEach(tokens.sorted()) { tag in
-                    TagView(tag, color: tag.color())
+        Button {
+            sheet = .addTag
+        } label: {
+            if tokens.isEmpty {
+                Text("Add Tags...")
+            } else {
+                WrappingHStack(alignment: .leading) {
+                    ForEach(tokens.sorted()) { tag in
+                        TagView(tag, color: tag.color())
+                    }
                 }
             }
+        }
+        .sheet(item: $sheet) { sheet in
+            switch sheet {
+            case .addTag:
+                PhoneEditTagsView(tags: $tokens)
+            }
+        }
+        .runs(model)
+        .onChange(of: tokens) { tokens in
+            // I find it really hard to believe that this is the idiomatic way of bidirectional binding.
+            guard model.items.map({ $0.text }) != tokens else {
+                return
+            }
+            model.items = tokens.map({ TokenViewModel.Token($0) })
         }
 #endif
     }

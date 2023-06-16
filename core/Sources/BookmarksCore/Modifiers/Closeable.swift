@@ -18,24 +18,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#if os(iOS)
-
 import SwiftUI
 
-public struct PhoneTagsView: View {
+struct Closeable: ViewModifier {
 
     @Environment(\.dismiss) var dismiss
 
-    @EnvironmentObject var applicationModel: ApplicationModel
-
-    public var body: some View {
-        NavigationView {
-            TagsContentView(applicationModel: applicationModel)
-                .navigationBarTitle("Tags", displayMode: .inline)
-                .closeable()
-        }
+    func body(content: Content) -> some View {
+        content
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Text("Close")
+                    }
+                }
+            }
     }
 
 }
 
-#endif
+extension View {
+
+    func closeable() -> some View {
+        return modifier(Closeable())
+    }
+
+}

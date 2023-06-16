@@ -22,20 +22,22 @@
 
 import SwiftUI
 
-public struct PhoneTagsView: View {
+public struct PhoneInfoView: View {
 
     @Environment(\.dismiss) var dismiss
-
     @EnvironmentObject var applicationModel: ApplicationModel
 
+    let id: Bookmark.ID
+
     public var body: some View {
-        NavigationView {
-            TagsContentView(applicationModel: applicationModel)
-                .navigationBarTitle("Tags", displayMode: .inline)
+        NavigationStack {
+            InfoContentView(applicationModel: applicationModel, id: id)
+                .environmentObject(applicationModel.tagsModel)
+                .navigationBarTitleDisplayMode(.inline)
                 .closeable()
         }
     }
-
+    
 }
 
 #endif

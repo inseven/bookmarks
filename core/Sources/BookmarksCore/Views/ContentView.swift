@@ -68,8 +68,8 @@ public struct ContentView: View {
                 PhoneTagsView()
             case .settings:
                 PhoneSettingsView(settings: applicationModel.settings)
-            case .edit(let bookmark):
-                PhoneEditView(tagsModel: applicationModel.tagsModel, bookmark: bookmark)
+            case .edit(let id):
+                PhoneInfoView(id: id)
             }
         }
         .fullScreenCover(item: $sceneModel.previewURL) { url in

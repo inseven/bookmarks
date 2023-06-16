@@ -26,13 +26,13 @@ struct BookmarkShareCommands: View {
 
     var body: some View {
         Button("Copy") {
-            sectionViewModel.copy()
+            sectionViewModel.copy(.selection)
         }
         .keyboardShortcut("c", modifiers: [.command])
         .disabled(sectionViewModel.selection.isEmpty)
 
         Button("Copy Tags") {
-            sectionViewModel.copyTags()
+            sectionViewModel.copyTags(.selection)
         }
         .keyboardShortcut("c", modifiers: [.command, .shift])
         .disabled(sectionViewModel.selection.isEmpty)

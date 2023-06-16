@@ -53,7 +53,7 @@ public struct MacSectionGridView: View {
         } contextMenu: { selection in
             sectionViewModel.contextMenu(selection, openWindow: openWindow)
         } primaryAction: { selection in
-            sectionViewModel.open(ids: selection)
+            sectionViewModel.open(.items(selection))
         } keyDown: { event in
             if event.keyCode == kVK_Space {
                 sectionViewModel.showPreview()

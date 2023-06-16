@@ -35,13 +35,13 @@ struct BookmarkOpenCommands: View {
         Divider()
 
         Button("Open") {
-            sectionViewModel.open()
+            sectionViewModel.open(.selection)
         }
         .keyboardShortcut(.return, modifiers: [.command])
         .disabled(sectionViewModel.selection.isEmpty)
 
         Button("Open on Internet Archive") {
-            sectionViewModel.open(location: .internetArchive)
+            sectionViewModel.open(.selection, location: .internetArchive)
         }
         .keyboardShortcut(.return, modifiers: [.command, .shift])
         .disabled(sectionViewModel.selection.isEmpty)

@@ -67,7 +67,7 @@ struct BookmarksApp: App {
                 }
             }
         }
-        .defaultSize(CGSize(width: 400, height: 600))
+        .defaultSize(CGSize(width: 300, height: 600))
 
         About(Legal.contents)
 

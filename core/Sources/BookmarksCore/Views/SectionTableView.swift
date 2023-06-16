@@ -22,6 +22,10 @@ import SwiftUI
 
 public struct SectionTableView: View {
 
+    struct LayoutMetrics {
+        static let horizontalSpacing = 16.0
+    }
+
 #if os(iOS)
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     private var isCompact: Bool { horizontalSizeClass == .compact }
@@ -41,13 +45,8 @@ public struct SectionTableView: View {
         Table(sectionViewModel.bookmarks, selection: $sectionViewModel.selection) {
             TableColumn("") { bookmark in
                 if isCompact {
-                    HStack(spacing: 16.0) {
-                        VStack {
-                            FaviconImage(url: bookmark.url)
-                            if bookmark.toRead {
-                                UnreadMark(isOn: true)
-                            }
-                        }
+                    HStack(spacing: LayoutMetrics.horizontalSpacing) {
+                        FaviconImage(url: bookmark.url)
                         VStack(alignment: .leading) {
                             HStack {
                                 Text(bookmark.title)
@@ -62,15 +61,10 @@ public struct SectionTableView: View {
                         .lineLimit(1)
                     }
                 } else {
-                    UnreadMark(isOn: bookmark.toRead)
+                    FaviconImage(url: bookmark.url)
                 }
-
             }
-            .width(isCompact ? .none : UnreadMark.LayoutMetrics.size)
-            TableColumn("") { bookmark in
-                FaviconImage(url: bookmark.url)
-            }
-            .width(FaviconImage.LayoutMetrics.size.width)
+            .width(isCompact ? .none : FaviconImage.LayoutMetrics.size.width)
             TableColumn("Title", value: \.title)
             TableColumn("URL", value: \.url.absoluteString)
             TableColumn("Date") { bookmark in

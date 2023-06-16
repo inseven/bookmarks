@@ -61,7 +61,7 @@ public struct InfoContentView: View {
                     } header: {
                         
                     } footer: {
-                        Text("Saved \(model.update.date.formatted())")
+                        Text("Created \(model.update.date.formatted())")
                     }
                 }
                 .formStyle(.grouped)

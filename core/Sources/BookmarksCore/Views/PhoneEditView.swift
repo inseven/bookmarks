@@ -90,10 +90,13 @@ public struct PhoneEditView: View {
                         .lineLimit(5...10)
                 }
                 Section {
-                    Toggle("Unread", isOn: $toRead)
-                    Toggle("Public", isOn: $shared)
+                    HStack {
+                        Toggle("Unread", isOn: $toRead)
+                        Divider()
+                        Toggle("Public", isOn: $shared)
+                    }
                 }
-                Section("Tags") {
+                Section {
                     Button {
                         sheet = .addTag
                     } label: {
@@ -108,8 +111,14 @@ public struct PhoneEditView: View {
                         }
                     }
                 }
-                Section("URL") {
-                    Link(bookmark.url.absoluteString, destination: bookmark.url)
+                Section {
+                    Link(destination: bookmark.url) {
+                        Text(bookmark.url.absoluteString)
+                    }
+                } header: {
+
+                } footer: {
+                    Text("Saved \(bookmark.date.formatted())")
                 }
             }
             .listStyle(.grouped)

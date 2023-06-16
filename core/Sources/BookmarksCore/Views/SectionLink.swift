@@ -24,14 +24,7 @@ import Interact
 
 public struct SectionLink: View {
 
-    @StateObject var model: SectionLinkModel
-
-    private var section: BookmarksSection
-
-    public init(applicationModel: ApplicationModel, section: BookmarksSection) {
-        self.section = section
-        _model = StateObject(wrappedValue: SectionLinkModel(applicationModel: applicationModel, section: section))
-    }
+    let section: BookmarksSection
 
     public var body: some View {
         Label {
@@ -39,8 +32,6 @@ public struct SectionLink: View {
         } icon: {
             Image(systemName: section.systemImage)
         }
-        .badge(model.count)
-        .runs(model)
         .safeNavigationLink(section)
     }
 

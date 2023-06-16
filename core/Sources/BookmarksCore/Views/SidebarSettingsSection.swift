@@ -36,12 +36,6 @@ public struct SidebarSettingsSection: View {
                         .tag(value)
                 }
             }
-            Picker("Show Bookmark Counts", selection: $settings.showSectionCounts) {
-                ForEach(Settings.ShowSectionCount.allCases) { showSectionCount in
-                    Text(Localized(showSectionCount))
-                        .tag(showSectionCount)
-                }
-            }
         }
     }
 

@@ -24,17 +24,6 @@ import Interact
 
 final public class Settings: ObservableObject {
 
-    public enum ShowSectionCount: String, CaseIterable, Identifiable {
-
-        public var id: Self {
-            return self
-        }
-
-        case none
-        case unread
-        case all
-    }
-
     let defaults = KeyedDefaults<SettingsKey>(defaults: UserDefaults(suiteName: "group.uk.co.inseven.bookmarks")!)
 
     @Published public var pinboardApiKey: String? {
@@ -67,12 +56,6 @@ final public class Settings: ObservableObject {
         }
     }
 
-    @Published public var showSectionCounts: ShowSectionCount {
-        didSet {
-            defaults.set(showSectionCounts, forKey: .showSectionCounts)
-        }
-    }
-
     public var user: String? {
         return pinboardApiKey?.components(separatedBy: ":").first
     }
@@ -87,7 +70,6 @@ final public class Settings: ObservableObject {
         maximumConcurrentThumbnailDownloads = defaults.integer(forKey: .maximumConcurrentThumbnailDownloads, default: 3)
         favoriteTags = defaults.object(forKey: .favoriteTags) as? [String] ?? []
         topTagsCount = defaults.integer(forKey: .topTagsCount, default: 5)
-        showSectionCounts = defaults.value(forKey: .showSectionCounts, default: .unread)
     }
 
     public func layoutMode(for section: BookmarksSection) -> LayoutMode {

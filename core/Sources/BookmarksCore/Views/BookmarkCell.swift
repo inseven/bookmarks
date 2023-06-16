@@ -73,22 +73,15 @@ public struct BookmarkCell: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             thumbnail
-            Grid(horizontalSpacing: LayoutMetrics.horizontalSpacing, verticalSpacing: 0) {
-                GridRow {
-                    UnreadMark(isOn: bookmark.toRead)
-                    Text(title)
-                        .lineLimit(1)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                GridRow {
-                    UnreadMark(isOn: false)  // ~ Spacer
-                    Text(bookmark.url.host ?? "Unknown")
-                        .lineLimit(1)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .foregroundColor(.secondary)
-                }
+            VStack {
+                Text(title)
+                    .lineLimit(1)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text(bookmark.url.host ?? "Unknown")
+                    .lineLimit(1)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .foregroundColor(.secondary)
             }
-            .padding(.trailing, UnreadMark.LayoutMetrics.size)
             .padding()
             .background(Color.controlSecondaryBackground)
         }

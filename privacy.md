@@ -6,7 +6,7 @@ Should the policies outlined in this document change, we will make all reasonabl
 
 ## Crash Reporting
 
-If you have opted into crash reporting with Apple, we may occasionally receive crash logs from Apple which, ideally do not, but may contain personally identifiable information. Crash logs are stored privately and are kept confidential, and we will make all reasonable efforts to delete any crash logs found to contain personally identifiable information.
+If you have opted into crash reporting with Apple, we will occasionally receive crash logs from Apple which, ideally do not, but may contain personally identifiable information. Crash logs are stored privately and are kept confidential, and we will make all reasonable efforts to delete any found to contain personally identifiable information.
 
 ## Pinboard
 
@@ -14,11 +14,11 @@ As a client for the Pinboard bookmarking service (https://pinboard.in), Bookmark
 
 InSeven Limited is not affiliated with Pinboard or Nine Fives Software and has no control over their Privacy Policy, or access to any information collected or stored as part of their service provision.
 
-## Metadata Extraction
+## Third-Party Websites
 
-Data processing necessary to select website thumbnails, index content, and enable other functionality, is  performed entirely device-local within Bookmarks on iOS and macOS. Although Bookmarks does not utilise first- or third-party services when fetching this content, it is fetched from the URLs stored in your Pinboard account. Some of the authors of these websites may themselves employ tracking and analytics. Please refer to the privacy policies of these individual sites for more information.
+Data processing necessary to select website thumbnails, index content for search, and enable other functionality, is performed entirely device-local within Bookmarks on iOS and macOS. Although Bookmarks does not utilise first- or third-party services when fetching this content, it is fetched from the URLs stored in your Pinboard account. Some of the authors of these websites may themselves employ tracking and analytics. Please refer to the privacy policies of these individual sites for more information.
 
-## Application Preferences
+## iCloud
 
-If you have enabled Apple iCloud services on the devices on which you run Bookmarks, application preferences and state may be stored in iCloud to facilitate synchronisation of application state across your devices. Data stored in iCloud is subject to Apple's Privacy Policy and can be managed directly through iOS, iPadOS, macOS, and iCloud.
+If you have enabled Apple iCloud services on the devices on which you run Bookmarks, application preferences and state may be stored in iCloud to facilitate a consistent experience across your devices. Data stored by Apple is subject to their Privacy Policy (https://www.apple.com/legal/privacy/).
 

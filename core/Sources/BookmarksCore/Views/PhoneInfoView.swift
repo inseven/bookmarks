@@ -18,31 +18,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#if os(iOS)
+
 import SwiftUI
 
-public struct SidebarSettingsSection: View {
+public struct PhoneInfoView: View {
 
-    @ObservedObject var settings: Settings
+    @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var applicationModel: ApplicationModel
 
-    public init(settings: Settings) {
-        self.settings = settings
-    }
-    
+    let id: Bookmark.ID
+
     public var body: some View {
-        Section("Sidebar") {
-            Picker("Top Tags", selection: $settings.topTagsCount) {
-                ForEach(Array(stride(from: 0, to: 25, by: 5))) { value in
-                    Text(value == 0 ? "Off" : "\(value)")
-                        .tag(value)
-                }
-            }
-            Picker("Show Bookmark Counts", selection: $settings.showSectionCounts) {
-                ForEach(Settings.ShowSectionCount.allCases) { showSectionCount in
-                    Text(Localized(showSectionCount))
-                        .tag(showSectionCount)
-                }
-            }
+        NavigationStack {
+            InfoContentView(applicationModel: applicationModel, id: id)
+                .environmentObject(applicationModel.tagsModel)
+                .navigationBarTitleDisplayMode(.inline)
+                .closeable()
         }
     }
-
+    
 }
+
+#endif

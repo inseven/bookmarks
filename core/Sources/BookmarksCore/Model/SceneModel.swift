@@ -33,14 +33,14 @@ public class SceneModel: ObservableObject {
                 return "tags"
             case .settings:
                 return "settings"
-            case .edit(let bookmark):
-                return "edit-\(bookmark.id)"
+            case .edit(let id):
+                return "edit-\(id)"
             }
         }
 
         case tags
         case settings
-        case edit(Bookmark)
+        case edit(Bookmark.ID)
     }
 
     var settings: Settings
@@ -62,7 +62,7 @@ public class SceneModel: ObservableObject {
     }
 
     @MainActor public func edit(_ bookmark: Bookmark) {
-        sheet = .edit(bookmark)
+        sheet = .edit(bookmark.id)
     }
 
     @MainActor public func showURL(_ url: URL) {

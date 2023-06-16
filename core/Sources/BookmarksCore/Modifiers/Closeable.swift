@@ -20,29 +20,29 @@
 
 import SwiftUI
 
-public struct SidebarSettingsSection: View {
+struct Closeable: ViewModifier {
 
-    @ObservedObject var settings: Settings
+    @Environment(\.dismiss) var dismiss
 
-    public init(settings: Settings) {
-        self.settings = settings
+    func body(content: Content) -> some View {
+        content
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Text("Close")
+                    }
+                }
+            }
     }
-    
-    public var body: some View {
-        Section("Sidebar") {
-            Picker("Top Tags", selection: $settings.topTagsCount) {
-                ForEach(Array(stride(from: 0, to: 25, by: 5))) { value in
-                    Text(value == 0 ? "Off" : "\(value)")
-                        .tag(value)
-                }
-            }
-            Picker("Show Bookmark Counts", selection: $settings.showSectionCounts) {
-                ForEach(Settings.ShowSectionCount.allCases) { showSectionCount in
-                    Text(Localized(showSectionCount))
-                        .tag(showSectionCount)
-                }
-            }
-        }
+
+}
+
+extension View {
+
+    func closeable() -> some View {
+        return modifier(Closeable())
     }
 
 }

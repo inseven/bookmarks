@@ -28,23 +28,11 @@ public struct PhoneTagsView: View {
 
     @EnvironmentObject var applicationModel: ApplicationModel
 
-    public init() {
-
-    }
-
     public var body: some View {
         NavigationView {
             TagsContentView(applicationModel: applicationModel)
                 .navigationBarTitle("Tags", displayMode: .inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button {
-                            dismiss()
-                        } label: {
-                            Text("Close")
-                        }
-                    }
-                }
+                .closeable()
         }
     }
 

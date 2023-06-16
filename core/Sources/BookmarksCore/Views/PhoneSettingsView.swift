@@ -78,18 +78,7 @@ public struct PhoneSettingsView: View {
                 }
             }
             .navigationBarTitle("Settings", displayMode: .inline)
-            .toolbar {
-                
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Text("Done")
-                            .bold()
-                    }
-                }
-                
-            }
+            .closeable()
             .sheet(item: $sheet) { sheet in
                 switch sheet {
                 case .about:

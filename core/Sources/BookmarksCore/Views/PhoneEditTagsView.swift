@@ -24,9 +24,7 @@ import SwiftUI
 
 public struct PhoneEditTagsView: View {
 
-    @Environment(\.dismiss) var dismiss
-    
-    @ObservedObject var tagsModel: TagsModel
+    @EnvironmentObject var tagsModel: TagsModel
     @Binding var tags: [String]
     @State var search: String = ""
     
@@ -40,11 +38,6 @@ public struct PhoneEditTagsView: View {
         return tagsModel.suggestions(prefix: search, existing: tags)
     }
 
-    public init(tagsModel: TagsModel, tags: Binding<[String]>) {
-        self.tagsModel = tagsModel
-        _tags = tags
-    }
-    
     public var body: some View {
         NavigationView {
             List {
@@ -90,17 +83,7 @@ public struct PhoneEditTagsView: View {
             .searchable(text: $search)
             .navigationTitle("Edit Tags")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Text("Close")
-                    }
-                }
-
-            }
+            .closeable()
         }
         .navigationViewStyle(.stack)
     }

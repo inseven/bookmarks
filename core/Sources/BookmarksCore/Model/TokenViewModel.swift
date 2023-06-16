@@ -21,9 +21,10 @@
 import Combine
 import SwiftUI
 
+import Interact
 import WrappingHStack
 
-class TokenViewModel: ObservableObject {
+class TokenViewModel: ObservableObject, Runnable {
 
     struct Token: Identifiable {
 

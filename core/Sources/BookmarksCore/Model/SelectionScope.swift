@@ -20,7 +20,7 @@
 
 import Foundation
 
-enum SelectionScope<T: Hashable> {
+public enum SelectionScope<T: Hashable> {
 
     case selection
     case items(Set<T>)

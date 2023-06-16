@@ -41,7 +41,7 @@ public struct SelectionToolbar: CustomizableToolbarContent {
 
             ToolbarItem(id: "open") {
                 Button {
-                    sectionViewModel.open(ids: sectionViewModel.selection)
+                    sectionViewModel.open(.selection)
                 } label: {
                     Label("Open", systemImage: "safari")
                 }
@@ -51,7 +51,7 @@ public struct SelectionToolbar: CustomizableToolbarContent {
 
             ToolbarItem(id: "delete") {
                 Button {
-                    await sectionViewModel.delete()
+                    await sectionViewModel.delete(.selection)
                 } label: {
                     Label("Delete", systemImage: "trash")
                 }

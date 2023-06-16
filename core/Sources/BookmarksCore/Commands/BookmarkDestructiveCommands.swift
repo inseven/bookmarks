@@ -26,7 +26,7 @@ struct BookmarkDesctructiveCommands: View {
 
     var body: some View {
         Button("Delete") {
-            await sectionViewModel.delete()
+            await sectionViewModel.delete(.selection)
         }
         .keyboardShortcut(.delete, modifiers: [.command])
         .disabled(sectionViewModel.selection.isEmpty)

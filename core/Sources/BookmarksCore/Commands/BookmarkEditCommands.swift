@@ -28,18 +28,18 @@ struct BookmarkEditCommands: View {
 
     var body: some View {
 
-        let bookmarks = sectionViewModel.bookmarks()
+        let bookmarks = sectionViewModel.bookmarks(.selection)
         let containsUnreadBookmark = bookmarks.containsUnreadBookmark
         let containsPublicBookmark = bookmarks.containsPublicBookmark
 
         Button(containsUnreadBookmark ? "Mark as Read" : "Mark as Unread") {
-            sectionViewModel.update(toRead: !containsUnreadBookmark)
+            await sectionViewModel.update(.selection, toRead: !containsUnreadBookmark)
         }
         .keyboardShortcut("u", modifiers: [.command, .shift])
         .disabled(sectionViewModel.selection.isEmpty)
 
         Button(containsPublicBookmark ? "Make Private" : "Make Public") {
-            await sectionViewModel.update(shared: !containsPublicBookmark)
+            await sectionViewModel.update(.selection, shared: !containsPublicBookmark)
         }
         .keyboardShortcut("p", modifiers: [.command, .shift])
         .disabled(sectionViewModel.selection.isEmpty)

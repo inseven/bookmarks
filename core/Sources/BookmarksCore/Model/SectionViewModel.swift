@@ -211,53 +211,44 @@ public class SectionViewModel: ObservableObject, Runnable {
         self.bookmarks = []
     }
 
-    @MainActor public func bookmarks(for ids: Set<Bookmark.ID>? = nil) -> [Bookmark] {
-        let ids = ids ?? self.selection
+    @MainActor public func bookmarks(_ scope: SelectionScope<Bookmark.ID>) -> [Bookmark] {
+        let ids: Set<Bookmark.ID>
+        switch scope {
+        case .selection:
+            ids = selection
+        case .items(let scopeIDs):
+            ids = scopeIDs
+        }
         return ids.compactMap { bookmarksLookup[$0] }
     }
 
-    @MainActor public func open(ids: Set<Bookmark.ID>? = nil, location: Bookmark.Location = .web) {
-        let ids = ids ?? self.selection
-        let bookmarks = bookmarks
-        DispatchQueue.global(qos: .userInitiated).async {
-            let selectedBookmarks = bookmarks.filter { ids.contains($0.id) }
-            DispatchQueue.main.async {
-                for bookmark in selectedBookmarks {
-                    guard let url = try? bookmark.url(location) else {
-                        continue
-                    }
-                    self.sceneModel?.showURL(url)
-                }
+    @MainActor public func open(_ scope: SelectionScope<Bookmark.ID>, location: Bookmark.Location = .web) {
+        for bookmark in bookmarks(scope) {
+            guard let url = try? bookmark.url(location) else {
+                continue
             }
+            sceneModel?.showURL(url)
         }
     }
 
-    @MainActor public func urls(ids: Set<Bookmark.ID>? = nil) -> [URL] {
-        let bookmarks = bookmarks(for: ids)
-        return bookmarks.map { $0.url }
-    }
-
-    // TODO: Make this async?
-    @MainActor public func update(ids: Set<Bookmark.ID>? = nil, toRead: Bool) {
+    @MainActor public func update(_ scope: SelectionScope<Bookmark.ID>, toRead: Bool) async {
         guard let applicationModel else {
             return
         }
-        let bookmarks = bookmarks(for: ids)
+        let bookmarks = bookmarks(scope)
             .map { $0.setting(toRead: toRead) }
-        Task {
-            do {
-                try await applicationModel.update(bookmarks: bookmarks)
-            } catch {
-                self.lastError = error
-            }
+        do {
+            try await applicationModel.update(bookmarks: bookmarks)
+        } catch {
+            self.lastError = error
         }
     }
 
-    @MainActor public func update(ids: Set<Bookmark.ID>? = nil, shared: Bool) async {
+    @MainActor public func update(_ scope: SelectionScope<Bookmark.ID>, shared: Bool) async {
         guard let applicationModel else {
             return
         }
-        let bookmarks = bookmarks(for: ids)
+        let bookmarks = bookmarks(scope)
             .map { $0.setting(shared: shared) }
         do {
             try await applicationModel.update(bookmarks: bookmarks)
@@ -266,11 +257,11 @@ public class SectionViewModel: ObservableObject, Runnable {
         }
     }
 
-    @MainActor public func delete(ids: Set<Bookmark.ID>? = nil) async {
+    @MainActor public func delete(_ scope: SelectionScope<Bookmark.ID>) async {
         guard let applicationModel else {
             return
         }
-        let bookmarks = bookmarks(for: ids)
+        let bookmarks = bookmarks(scope)
         do {
             try await applicationModel.delete(bookmarks: bookmarks)
         } catch {
@@ -278,8 +269,8 @@ public class SectionViewModel: ObservableObject, Runnable {
         }
     }
 
-    @MainActor public func copy(ids: Set<Bookmark.ID>? = nil) {
-        let bookmarks = bookmarks(for: ids)
+    @MainActor public func copy(_ scope: SelectionScope<Bookmark.ID>) {
+        let bookmarks = bookmarks(scope)
 #if os(macOS)
         NSPasteboard.general.clearContents()
         NSPasteboard.general.writeObjects(bookmarks.map { $0.url.absoluteString as NSString })
@@ -289,8 +280,8 @@ public class SectionViewModel: ObservableObject, Runnable {
 #endif
     }
 
-    @MainActor public func copyTags(ids: Set<Bookmark.ID>? = nil) {
-        let bookmarks = bookmarks(for: ids)
+    @MainActor public func copyTags(_ scope: SelectionScope<Bookmark.ID>) {
+        let bookmarks = bookmarks(scope)
         let tags = bookmarks.tags.sorted().joined(separator: " ")
 #if os(macOS)
         NSPasteboard.general.clearContents()
@@ -301,7 +292,7 @@ public class SectionViewModel: ObservableObject, Runnable {
     }
 
     @MainActor public func showPreview() {
-        let bookmarks = bookmarks()
+        let bookmarks = bookmarks(.selection)
         previewURL = bookmarks.first?.url
     }
 
@@ -314,15 +305,15 @@ public class SectionViewModel: ObservableObject, Runnable {
     @MainActor @MenuItemBuilder public func contextMenu(_ selection: Set<Bookmark.ID>,
                                                         openWindow: OpenWindowAction? = nil) -> [MenuItem] {
 
-        let bookmarks = bookmarks(for: selection)
+        let bookmarks = bookmarks(.items(selection))
         let containsUnreadBookmark = bookmarks.containsUnreadBookmark
         let containsPublicBookmark = bookmarks.containsPublicBookmark
 
         MenuItem("Open", systemImage: "safari") {
-            self.open(ids: selection)
+            self.open(.items(selection))
         }
         MenuItem("Open on Internet Archive", systemImage: "clock") {
-            self.open(ids: selection, location: .internetArchive)
+            self.open(.items(selection), location: .internetArchive)
         }
         Divider()
 #if os(iOS)
@@ -341,22 +332,22 @@ public class SectionViewModel: ObservableObject, Runnable {
         Divider()
         MenuItem(containsUnreadBookmark ? "Mark as Read" : "Mark as Unread",
                  systemImage: containsUnreadBookmark ? "circle" : "circle.inset.filled") {
-            self.update(ids: selection, toRead: !containsUnreadBookmark)
+            await self.update(.items(selection), toRead: !containsUnreadBookmark)
         }
         MenuItem(containsPublicBookmark ? "Make Private" : "Make Public",
                  systemImage: containsPublicBookmark ? "lock": "globe") {
-            await self.update(ids: selection, shared: !containsPublicBookmark)
+            await self.update(.items(selection), shared: !containsPublicBookmark)
         }
         Divider()
         MenuItem("Copy", systemImage: "doc.on.doc") {
-            self.copy(ids: selection)
+            self.copy(.items(selection))
         }
         MenuItem("Copy Tags", systemImage: "doc.on.doc") {
-            self.copyTags(ids: selection)
+            self.copyTags(.items(selection))
         }
         Divider()
         MenuItem("Delete", systemImage: "trash", role: .destructive) {
-            await self.delete(ids: selection)
+            await self.delete(.items(selection))
         }
     }
 

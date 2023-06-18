@@ -77,7 +77,7 @@ public struct BookmarkCell: View {
                 Text(title)
                     .lineLimit(1)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                Text(bookmark.url.host ?? "Unknown")
+                Text(bookmark.url.formatted(.short))
                     .lineLimit(1)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(.secondary)

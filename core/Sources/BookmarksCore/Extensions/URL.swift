@@ -20,6 +20,10 @@
 
 import Foundation
 
+enum URLFormat {
+    case short
+}
+
 extension URL: Identifiable {
 
     static let actionScheme = "bookmarks-action"
@@ -56,6 +60,13 @@ extension URL: Identifiable {
         var components = try components
         components.queryItems = queryItems
         return try components.safeUrl
+    }
+
+    func formatted(_ format: URLFormat) -> String {
+        switch format {
+        case .short:
+            return host ?? absoluteString
+        }
     }
 
 }

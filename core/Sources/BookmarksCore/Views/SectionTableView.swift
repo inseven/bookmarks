@@ -55,8 +55,9 @@ public struct SectionTableView: View {
                                     .foregroundColor(.secondary)
                                     .font(.footnote)
                             }
-                            Text(bookmark.url.absoluteString)
+                            Text(bookmark.url.formatted(.short))
                                 .foregroundColor(.secondary)
+                                .font(.footnote)
                         }
                         .lineLimit(1)
                     }

@@ -18,33 +18,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#if os(iOS)
-
 import SwiftUI
 
-struct PhoneSectionGridView: View {
+import WrappingHStack
 
-    @EnvironmentObject var applicationModel: ApplicationModel
-    @EnvironmentObject var sectionViewModel: SectionViewModel
+struct TagsView: View {
+
+    let tags: [String]
+
+    init(tags: Set<String>) {
+        self.tags = tags.sorted()
+    }
 
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
-                ForEach(sectionViewModel.bookmarks) { bookmark in
-                    BookmarkCell(applicationModel: applicationModel, bookmark: bookmark)
-                        .aspectRatio(8/9, contentMode: .fit)
-                        .onTapGesture {
-                            sectionViewModel.open(.items([bookmark.id]))
-                        }
-                        .contextMenu {
-                            sectionViewModel.contextMenu([bookmark.id])
-                        }
+        HStack {
+            if !tags.isEmpty {
+                WrappingHStack(alignment: .leading) {
+                    ForEach(tags) { tag in
+                        TagView(tag, color: tag.color())
+                    }
                 }
+            } else {
+                EmptyView()
             }
-            .padding()
         }
+        .font(.footnote)
     }
 
 }
-
-#endif

@@ -47,6 +47,7 @@ public struct TagView: View {
             .opacity(0.3)
             .background(.background))
         .clipShape(RoundedRectangle(cornerRadius: LayoutMetrics.cornerRadius))
+        .fixedSize(horizontal: true, vertical: true)
     }
 
 }

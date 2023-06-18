@@ -20,7 +20,7 @@
 
 import SwiftUI
 
-public struct SectionTableView: View {
+struct SectionTableView: View {
 
     struct LayoutMetrics {
         static let horizontalSpacing = 16.0
@@ -37,11 +37,7 @@ public struct SectionTableView: View {
 
     @EnvironmentObject var sectionViewModel: SectionViewModel
 
-    public init() {
-
-    }
-
-    public var body: some View {
+    var body: some View {
         Table(sectionViewModel.bookmarks, selection: $sectionViewModel.selection) {
             TableColumn("") { bookmark in
                 if isCompact {
@@ -50,6 +46,7 @@ public struct SectionTableView: View {
                         VStack(alignment: .leading) {
                             HStack {
                                 Text(bookmark.title)
+                                    .lineLimit(2)
                                 Spacer()
                                 Text(bookmark.date.formatted(date: .abbreviated, time: .omitted))
                                     .foregroundColor(.secondary)
@@ -58,6 +55,7 @@ public struct SectionTableView: View {
                             Text(bookmark.url.formatted(.short))
                                 .foregroundColor(.secondary)
                                 .font(.footnote)
+                            TagsView(tags: bookmark.tags)
                         }
                         .lineLimit(1)
                     }
@@ -67,12 +65,14 @@ public struct SectionTableView: View {
             }
             .width(isCompact ? .none : FaviconImage.LayoutMetrics.size.width)
             TableColumn("Title", value: \.title)
-            TableColumn("URL", value: \.url.absoluteString)
+            TableColumn("Domain") { bookmark in
+                Text(bookmark.url.formatted(.short))
+            }
             TableColumn("Date") { bookmark in
                 Text(bookmark.date.formatted(date: .long, time: .standard))
             }
             TableColumn("Tags") { bookmark in
-                Text(bookmark.tags.sorted().joined(separator: " "))
+                TagsView(tags: bookmark.tags)
             }
         }
         .contextMenu(forSelectionType: Bookmark.ID.self) { selection in

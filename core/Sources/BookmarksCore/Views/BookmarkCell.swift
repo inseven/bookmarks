@@ -75,13 +75,13 @@ public struct BookmarkCell: View {
             thumbnail
             VStack {
                 Text(title)
-                    .lineLimit(1)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Text(bookmark.url.formatted(.short))
-                    .lineLimit(1)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(.secondary)
+                    .font(.footnote)
             }
+            .lineLimit(1)
             .padding()
             .background(Color.controlSecondaryBackground)
         }

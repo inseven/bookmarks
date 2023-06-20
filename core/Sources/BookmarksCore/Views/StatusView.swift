@@ -37,6 +37,7 @@ public struct StatusView: View {
                 Text("Updating...")
             case .value(let progress):
                 ProgressView(value: progress)
+                    .progressViewStyle(.linear)
             case .done(let date):
                 TimelineView(.periodic(from: .now, by: 60)) { timeline in
                     Text("Updated \(date.formatted(.relative(presentation: .named)))")

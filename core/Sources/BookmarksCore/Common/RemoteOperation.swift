@@ -42,7 +42,10 @@ struct RefreshOperation: RemoteOperation {
     func perform(database: Database,
                  state: Updater.ServiceState,
                  progress: @escaping (Progress) -> Void) async throws -> Updater.ServiceState {
-        progress(.active)
+
+        // Indicate that we're about to start.
+        progress(.value(0))
+
         let pinboard = Pinboard(token: state.token)
         let update = try await pinboard.postsUpdate()
         if let lastUpdate = state.lastUpdate,

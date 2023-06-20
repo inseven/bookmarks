@@ -26,9 +26,15 @@ import Interact
 
 public struct PhoneEditTagsView: View {
 
+    private enum Field {
+        case input
+    }
+
     @ObservedObject var tokenViewModel: TokenViewModel
 
     @Binding var tags: [String]
+
+    @FocusState private var focus: Field?
 
     public var body: some View {
         NavigationView {
@@ -62,6 +68,7 @@ public struct PhoneEditTagsView: View {
                         .onSubmit {
                             tokenViewModel.commit()
                         }
+                        .focused($focus, equals: .input)
                         .padding()
                 }
                 .background(.background)
@@ -84,6 +91,7 @@ public struct PhoneEditTagsView: View {
                 }
             }
             .closeable()
+            .defaultFocus($focus, .input)
         }
         .navigationViewStyle(.stack)
     }

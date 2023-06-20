@@ -40,7 +40,7 @@ public struct TokenView: View {
 
     @Binding var tokens: [String]
 
-    let suggestion: (String) -> [String]
+    let suggestion: (String, [String], Int) -> [String]
 
     @StateObject var model: TokenViewModel
 #if os(iOS)
@@ -49,11 +49,11 @@ public struct TokenView: View {
 
     public init(_ prompt: String,
                 tokens: Binding<[String]>,
-                suggestion: @escaping (String) -> [String]) {
+                suggestion: @escaping (String, [String], Int) -> [String]) {
         self.prompt = prompt
         _tokens = tokens
         self.suggestion = suggestion
-        _model = StateObject(wrappedValue: TokenViewModel(tokens: tokens))
+        _model = StateObject(wrappedValue: TokenViewModel(tokens: tokens, suggestion: suggestion))
     }
 
     public var body: some View {
@@ -61,14 +61,14 @@ public struct TokenView: View {
         VStack {
             WrappingHStack(alignment: .leading) {
                 ForEach(model.items) { item in
-                    TagView(item.text, color: item.text.color())
+                    TagView(item.text)
                 }
                 PickerTextField(prompt, text: $model.input) {
                     model.commit()
                 } onDelete: {
                     model.deleteBackwards()
                 } suggestion: { candidate in
-                    return suggestion(candidate)
+                    return suggestion(candidate, model.items.map({ $0.text }), 1)
                 }
                 .frame(maxWidth: 100)
                 .padding([.top, .bottom], 4)
@@ -84,23 +84,27 @@ public struct TokenView: View {
             model.items = tokens.map({ TokenViewModel.Token($0) })
         }
 #else
-        Button {
-            sheet = .addTag
-        } label: {
-            if tokens.isEmpty {
-                Text("Add Tags...")
-            } else {
-                WrappingHStack(alignment: .leading) {
-                    ForEach(tokens.sorted()) { tag in
-                        TagView(tag, color: tag.color())
+
+        VStack {
+            Button {
+                sheet = .addTag
+            } label: {
+                if !tokens.isEmpty {
+                    WrappingHStack(alignment: .leading) {
+                        ForEach(tokens.sorted()) { tag in
+                            TagView(tag)
+                        }
                     }
+                } else {
+                    Text("Tags")
+                        .foregroundColor(.secondary)
                 }
             }
         }
         .sheet(item: $sheet) { sheet in
             switch sheet {
             case .addTag:
-                PhoneEditTagsView(tags: $tokens)
+                PhoneEditTagsView(tokenViewModel: model, tags: $tokens)
             }
         }
         .runs(model)

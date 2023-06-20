@@ -29,9 +29,9 @@ public struct TagView: View {
     let text: String
     let color: Color
 
-    public init(_ text: String, color: Color = .primary) {
+    public init(_ text: String) {
         self.text = text
-        self.color = color
+        self.color = text.color()
     }
 
     public var body: some View {

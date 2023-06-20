@@ -22,7 +22,7 @@ import SwiftUI
 
 extension Array where Element == Color {
 
-    static let system: [Color] = [
+    static let html: [Color] = [
         .HTML.aliceBlue,
         .HTML.antiqueWhite,
         .HTML.aqua,
@@ -172,5 +172,17 @@ extension Array where Element == Color {
         .HTML.yellow,
         .HTML.yellowGreen,
     ]
+
+    static let tags: [Color] = {
+        return html.filter { color in
+            guard let gray = color.gray,
+                  gray < 0.9,
+                  gray > 0.1
+            else {
+                return false
+            }
+            return true
+        }
+    }()
 
 }

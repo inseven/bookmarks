@@ -47,7 +47,7 @@ extension String: Identifiable {
     }
 
     public func color() -> Color {
-        return HashRainbow.colorForString(self, colors: .system)
+        return HashRainbow.colorForString(self, colors: .tags)
     }
 
     public func containsWhitespaceAndNewlines() -> Bool {

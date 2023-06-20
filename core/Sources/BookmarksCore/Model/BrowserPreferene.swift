@@ -18,30 +18,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import SwiftUI
+import Foundation
 
-struct BookmarkEditCommands: View {
-
-    @ObservedObject var sectionViewModel: SectionViewModel
-
-    var body: some View {
-
-        let bookmarks = sectionViewModel.bookmarks(.selection)
-        let containsUnreadBookmark = bookmarks.containsUnreadBookmark
-        let containsPublicBookmark = bookmarks.containsPublicBookmark
-
-        Button(containsUnreadBookmark ? "Mark as Read" : "Mark as Unread") {
-            await sectionViewModel.update(.selection, toRead: !containsUnreadBookmark)
-        }
-        .keyboardShortcut("u", modifiers: [.command, .shift])
-        .disabled(sectionViewModel.selection.isEmpty)
-
-        Button(containsPublicBookmark ? "Make Private" : "Make Public") {
-            await sectionViewModel.update(.selection, shared: !containsPublicBookmark)
-        }
-        .keyboardShortcut("p", modifiers: [.command, .shift])
-        .disabled(sectionViewModel.selection.isEmpty)
-
-    }
-
+enum BrowserPreference {
+    case app
+    case system
+    case user
 }

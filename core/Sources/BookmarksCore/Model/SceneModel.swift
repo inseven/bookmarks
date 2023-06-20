@@ -65,8 +65,17 @@ public class SceneModel: ObservableObject {
         sheet = .edit(bookmark.id)
     }
 
-    @MainActor public func showURL(_ url: URL) {
-        if settings.useInAppBrowser {
+    @MainActor func showURL(_ url: URL, browser: BrowserPreference = .user) {
+        let useInAppBrowser: Bool
+        switch browser {
+        case .app:
+            useInAppBrowser = true
+        case .system:
+            useInAppBrowser = false
+        case .user:
+            useInAppBrowser = settings.useInAppBrowser
+        }
+        if useInAppBrowser {
             previewURL = url
         } else {
             Application.open(url)

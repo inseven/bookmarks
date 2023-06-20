@@ -26,7 +26,15 @@ struct BookmarkOpenCommands: View {
 
     var body: some View {
 
-        Button("Preview") {
+        Button(LocalizedString("BOOKMARK_MENU_TITLE_OPEN")) {
+            sectionViewModel.open(.selection)
+        }
+        .keyboardShortcut(.return, modifiers: [.command])
+        .disabled(sectionViewModel.selection.isEmpty)
+
+        Divider()
+
+        Button(LocalizedString("BOOKMARK_MENU_TITLE_PREVIEW")) {
             sectionViewModel.showPreview()
         }
         .keyboardShortcut(.space, modifiers: [])
@@ -34,13 +42,7 @@ struct BookmarkOpenCommands: View {
 
         Divider()
 
-        Button("Open") {
-            sectionViewModel.open(.selection)
-        }
-        .keyboardShortcut(.return, modifiers: [.command])
-        .disabled(sectionViewModel.selection.isEmpty)
-
-        Button("Open on Internet Archive") {
+        Button(LocalizedString("BOOKMARK_MENU_TITLE_VIEW_ON_INTERNET_ARCHIVE")) {
             sectionViewModel.open(.selection, location: .internetArchive)
         }
         .keyboardShortcut(.return, modifiers: [.command, .shift])

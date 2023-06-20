@@ -61,35 +61,35 @@ public struct PhoneEditTagsView: View {
             .safeAreaInset(edge: .bottom) {
                 VStack(spacing: 0) {
                     Divider()
-                    TextField("Add tag...", text: $tokenViewModel.input)
-                        .keyboardType(.alphabet)
-                        .autocapitalization(.none)
-                        .autocorrectionDisabled()
-                        .onSubmit {
-                            tokenViewModel.commit()
+                    VStack(spacing: 16) {
+                        TextField("Add tag...", text: $tokenViewModel.input)
+                            .keyboardType(.alphabet)
+                            .autocapitalization(.none)
+                            .autocorrectionDisabled()
+                            .onSubmit {
+                                tokenViewModel.commit()
+                            }
+                            .focused($focus, equals: .input)
+                            .padding(.horizontal)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                ForEach(tokenViewModel.suggestions) { suggestion in
+                                    Button {
+                                        tokenViewModel.acceptSuggestion(suggestion)
+                                    } label: {
+                                        TagView(suggestion)
+                                    }
+                                }
+                            }
+                            .padding(.horizontal)
                         }
-                        .focused($focus, equals: .input)
-                        .padding()
+                    }
+                    .padding(.vertical)
                 }
-                .background(.background)
+                .background(.thinMaterial)
             }
             .navigationTitle("Tags")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .keyboard) {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack {
-                            ForEach(tokenViewModel.suggestions) { suggestion in
-                                Button {
-                                    tokenViewModel.acceptSuggestion(suggestion)
-                                } label: {
-                                    TagView(suggestion)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
             .closeable()
             .defaultFocus($focus, .input)
         }

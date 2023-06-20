@@ -24,6 +24,8 @@ import Interact
 
 public struct ContentView: View {
 
+    @Environment(\.openWindow) var openWindow
+
     @ObservedObject var applicationModel: ApplicationModel
 
     @StateObject var sceneModel: SceneModel
@@ -39,7 +41,10 @@ public struct ContentView: View {
             Sidebar()
         } detail: {
             if let section = sceneModel.section {
-                SectionView(applicationModel: applicationModel, sceneModel: sceneModel, section: section)
+                SectionView(applicationModel: applicationModel,
+                            sceneModel: sceneModel,
+                            section: section,
+                            openWindow: openWindow)
                     .id(section)
                     .environmentObject(sceneModel)
             } else {

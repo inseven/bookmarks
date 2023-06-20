@@ -33,14 +33,12 @@ struct SectionTableView: View {
     private let isCompact = false
 #endif
 
-    @Environment(\.openWindow) var openWindow
-
     @EnvironmentObject var sectionViewModel: SectionViewModel
 
     var body: some View {
-        Table(sectionViewModel.bookmarks, selection: $sectionViewModel.selection) {
-            TableColumn("") { bookmark in
-                if isCompact {
+        if isCompact {
+            List(selection: $sectionViewModel.selection) {
+                ForEach(sectionViewModel.bookmarks) { bookmark in
                     HStack(spacing: LayoutMetrics.horizontalSpacing) {
                         FaviconImage(url: bookmark.url)
                         VStack(alignment: .leading) {
@@ -59,29 +57,54 @@ struct SectionTableView: View {
                         }
                         .lineLimit(1)
                     }
-                } else {
-                    FaviconImage(url: bookmark.url)
+                    .swipeActions {
+                        Button(role: .destructive) {
+                            await sectionViewModel.delete(.items([bookmark.id]))
+                        } label: {
+                            Image(systemName: "trash")
+                        }
+                    }
+                    .swipeActions(edge: .leading) {
+                        Button {
+                            sectionViewModel.getInfo(.items([bookmark.id]))
+                        } label: {
+                            Image(systemName: "info")
+                        }
+                        .tint(.accentColor)
+                    }
                 }
             }
-            .width(isCompact ? .none : FaviconImage.LayoutMetrics.size.width)
-            TableColumn("Title", value: \.title)
-            TableColumn("Domain") { bookmark in
-                Text(bookmark.url.formatted(.short))
+            .contextMenu(forSelectionType: Bookmark.ID.self) { selection in
+                sectionViewModel.contextMenu(selection)
+            } primaryAction: { selection in
+                sectionViewModel.open(.items(selection))
             }
-            TableColumn("Date") { bookmark in
-                Text(bookmark.date.formatted(date: .long, time: .standard))
+            .listStyle(.plain)
+        } else {
+            Table(sectionViewModel.bookmarks, selection: $sectionViewModel.selection) {
+                TableColumn("") { bookmark in
+                    FaviconImage(url: bookmark.url)
+                }
+                .width(FaviconImage.LayoutMetrics.size.width)
+                TableColumn("Title", value: \.title)
+                TableColumn("Domain") { bookmark in
+                    Text(bookmark.url.formatted(.short))
+                }
+                TableColumn("Date") { bookmark in
+                    Text(bookmark.date.formatted(date: .long, time: .standard))
+                }
+                TableColumn("Notes") { bookmark in
+                    Text(bookmark.notes)
+                }
+                TableColumn("Tags") { bookmark in
+                    TagsView(bookmark.tags, wraps: false)
+                }
             }
-            TableColumn("Notes") { bookmark in
-                Text(bookmark.notes)
+            .contextMenu(forSelectionType: Bookmark.ID.self) { selection in
+                sectionViewModel.contextMenu(selection)
+            } primaryAction: { selection in
+                sectionViewModel.open(.items(selection))
             }
-            TableColumn("Tags") { bookmark in
-                TagsView(bookmark.tags, wraps: false)
-            }
-        }
-        .contextMenu(forSelectionType: Bookmark.ID.self) { selection in
-            sectionViewModel.contextMenu(selection, openWindow: openWindow)
-        } primaryAction: { selection in
-            sectionViewModel.open(.items(selection))
         }
     }
 

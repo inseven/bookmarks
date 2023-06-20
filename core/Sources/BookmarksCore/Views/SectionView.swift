@@ -29,11 +29,15 @@ public struct SectionView: View {
 
     @StateObject var sectionViewModel: SectionViewModel
 
-    public init(applicationModel: ApplicationModel, sceneModel: SceneModel, section: BookmarksSection) {
+    public init(applicationModel: ApplicationModel,
+                sceneModel: SceneModel,
+                section: BookmarksSection,
+                openWindow: OpenWindowAction) {
         self.applicationModel = applicationModel
         _sectionViewModel = StateObject(wrappedValue: SectionViewModel(applicationModel: applicationModel,
                                                                        sceneModel: sceneModel,
-                                                                       section: section))
+                                                                       section: section,
+                                                                       openWindow: openWindow))
     }
 
     public var body: some View {

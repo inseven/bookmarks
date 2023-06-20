@@ -28,25 +28,24 @@ public struct ContentView: View {
 
     @ObservedObject var applicationModel: ApplicationModel
 
-    @StateObject var sceneModel: SceneModel
+    @MainActor @SceneStorage("sceneState") var sceneState = SceneState()
+
     @State var sheet: ApplicationState? = nil
 
     public init(applicationModel: ApplicationModel) {
         self.applicationModel = applicationModel
-        _sceneModel = StateObject(wrappedValue: SceneModel(settings: applicationModel.settings))
     }
 
     public var body: some View {
         NavigationSplitView {
-            Sidebar()
+            Sidebar(sceneState: $sceneState)
         } detail: {
-            if let section = sceneModel.section {
+            if let section = sceneState.section {
                 SectionView(applicationModel: applicationModel,
-                            sceneModel: sceneModel,
+                            sceneState: $sceneState,
                             section: section,
                             openWindow: openWindow)
                     .id(section)
-                    .environmentObject(sceneModel)
             } else {
                 PlaceholderView("Nothing Selected")
                     .searchable()
@@ -67,7 +66,7 @@ public struct ContentView: View {
             }
         }
 #if os(iOS)
-        .sheet(item: $sceneModel.sheet) { sheet in
+        .sheet(item: $sceneState.sheet) { sheet in
             switch sheet {
             case .tags:
                 PhoneTagsView()
@@ -77,7 +76,7 @@ public struct ContentView: View {
                 PhoneInfoView(id: id)
             }
         }
-        .fullScreenCover(item: $sceneModel.previewURL) { url in
+        .fullScreenCover(item: $sceneState.previewURL) { url in
             PhoneSafariView(url: url)
                 .edgesIgnoringSafeArea(.all)
         }
@@ -90,9 +89,8 @@ public struct ContentView: View {
                 sheet = .logIn
             }
         }
-        .handlesSceneActions()
-        .environmentObject(sceneModel)
-        .focusedSceneObject(sceneModel)
+        .handlesSceneActions($sceneState)
+        .focusedSceneValue(\.sceneState, $sceneState)
     }
 
 }

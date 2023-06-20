@@ -23,5 +23,4 @@ import Foundation
 enum BrowserPreference {
     case app
     case system
-    case user
 }

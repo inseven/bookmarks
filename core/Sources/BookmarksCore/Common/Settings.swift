@@ -38,6 +38,14 @@ final public class Settings: ObservableObject {
         }
     }
 
+    var browser: BrowserPreference {
+        if useInAppBrowser {
+            return .app
+        } else {
+            return .system
+        }
+    }
+
     @Published public var maximumConcurrentThumbnailDownloads: Int {
         didSet {
             defaults.set(maximumConcurrentThumbnailDownloads, forKey: .maximumConcurrentThumbnailDownloads)

@@ -25,6 +25,7 @@ import SwiftUI
 struct PhoneSectionGridView: View {
 
     @EnvironmentObject var applicationModel: ApplicationModel
+    @EnvironmentObject var settings: Settings
     @EnvironmentObject var sectionViewModel: SectionViewModel
 
     var body: some View {
@@ -34,7 +35,7 @@ struct PhoneSectionGridView: View {
                     BookmarkCell(applicationModel: applicationModel, bookmark: bookmark)
                         .aspectRatio(8/9, contentMode: .fit)
                         .onTapGesture {
-                            sectionViewModel.open(.items([bookmark.id]))
+                            sectionViewModel.open(.items([bookmark.id]), browser: settings.browser)
                         }
                         .contextMenu {
                             sectionViewModel.contextMenu([bookmark.id])

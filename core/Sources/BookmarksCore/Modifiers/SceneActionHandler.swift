@@ -22,13 +22,13 @@ import SwiftUI
 
 struct SceneActionHandler: ViewModifier {
 
-    @EnvironmentObject var sceneModel: SceneModel
+    @Binding var sceneState: SceneState
 
     func body(content: Content) -> some View {
         content
             .handlesExternalEvents(preferring: ["/open"], allowing: [])
             .onOpenURL { url in
-                sceneModel.handleURL(url)
+                sceneState.handleURL(url)
             }
     }
 
@@ -36,8 +36,8 @@ struct SceneActionHandler: ViewModifier {
 
 extension View {
 
-    public func handlesSceneActions() -> some View {
-        return modifier(SceneActionHandler())
+    func handlesSceneActions(_ sceneState: Binding<SceneState>) -> some View {
+        return modifier(SceneActionHandler(sceneState: sceneState))
     }
 
 }

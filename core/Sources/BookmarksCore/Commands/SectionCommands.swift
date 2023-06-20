@@ -22,7 +22,7 @@ import SwiftUI
 
 public struct SectionCommands: Commands {
 
-    @FocusedObject var sceneModel: SceneModel?
+    @FocusedBinding(\.sceneState) var sceneState: SceneState?
 
     static func keyEquivalent(_ value: Int) -> KeyEquivalent {
         return KeyEquivalent(String(value).first!)
@@ -36,10 +36,10 @@ public struct SectionCommands: Commands {
         CommandMenu("Go") {
             ForEach(Array(BookmarksSection.defaultSections.enumerated()), id: \.element.id) { index, section in
                 Button(section.navigationTitle) {
-                    sceneModel?.section = section
+                    sceneState?.section = section
                 }
                 .keyboardShortcut(Self.keyEquivalent(index + 1), modifiers: .command)
-                .disabled(sceneModel == nil)
+                .disabled(sceneState == nil)
             }
         }
     }

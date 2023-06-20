@@ -22,7 +22,6 @@ import SwiftUI
 
 public struct BookmarkCommands: Commands {
 
-    @FocusedObject var sceneModel: SceneModel?
     @FocusedObject var sectionViewModel: SectionViewModel?
 
     public init() {
@@ -40,7 +39,7 @@ public struct BookmarkCommands: Commands {
                 .trailingDivider()
             BookmarkShareCommands(sectionViewModel: sectionViewModel ?? SectionViewModel())
                 .trailingDivider()
-            BookmarkTagCommands(sceneModel: sceneModel, sectionViewModel: sectionViewModel ?? SectionViewModel())
+            BookmarkTagCommands(sectionViewModel: sectionViewModel ?? SectionViewModel())
         }
     }
 

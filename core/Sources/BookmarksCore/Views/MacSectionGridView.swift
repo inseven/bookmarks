@@ -27,8 +27,6 @@ import SelectableCollectionView
 
 public struct MacSectionGridView: View {
 
-    @Environment(\.openWindow) var openWindow
-
     @EnvironmentObject var applicationModel: ApplicationModel
     @EnvironmentObject var sectionViewModel: SectionViewModel
 
@@ -51,7 +49,7 @@ public struct MacSectionGridView: View {
                 .shadow(color: .shadow, radius: 3.0)
 
         } contextMenu: { selection in
-            sectionViewModel.contextMenu(selection, openWindow: openWindow)
+            sectionViewModel.contextMenu(selection)
         } primaryAction: { selection in
             sectionViewModel.open(.items(selection))
         } keyDown: { event in

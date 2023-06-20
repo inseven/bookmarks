@@ -52,6 +52,7 @@ public class SectionViewModel: ObservableObject, Runnable {
     private let applicationModel: ApplicationModel?
     private let sceneModel: SceneModel?
     private let section: BookmarksSection
+    private let openWindow: OpenWindowAction?
     private var cancellables: Set<AnyCancellable> = []
 
     public var isPlaceholder: Bool {
@@ -60,10 +61,12 @@ public class SectionViewModel: ObservableObject, Runnable {
 
     public init(applicationModel: ApplicationModel? = nil,
                 sceneModel: SceneModel? = nil,
-                section: BookmarksSection = .all) {
+                section: BookmarksSection = .all,
+                openWindow: OpenWindowAction? = nil) {
         self.applicationModel = applicationModel
         self.sceneModel = sceneModel
         self.section = section
+        self.openWindow = openWindow
         self.query = section.query
         self.title = section.navigationTitle
         self.layoutMode = applicationModel?.settings.layoutMode(for: section) ?? .grid
@@ -222,6 +225,16 @@ public class SectionViewModel: ObservableObject, Runnable {
         return ids.compactMap { bookmarksLookup[$0] }
     }
 
+    @MainActor public func getInfo(_ scope: SelectionScope<Bookmark.ID>) {
+        for bookmark in bookmarks(scope) {
+#if os(iOS)
+            sceneModel?.edit(bookmark)
+#else
+            openWindow?(value: bookmark.id)
+#endif
+        }
+    }
+
     @MainActor func open(_ scope: SelectionScope<Bookmark.ID>,
                          location: Bookmark.Location = .web,
                          browser: BrowserPreference = .user) {
@@ -304,8 +317,7 @@ public class SectionViewModel: ObservableObject, Runnable {
         return Set(bookmarks.map { $0.tags }.reduce([], +))
     }
 
-    @MainActor @MenuItemBuilder public func contextMenu(_ selection: Set<Bookmark.ID>,
-                                                        openWindow: OpenWindowAction? = nil) -> [MenuItem] {
+    @MainActor @MenuItemBuilder public func contextMenu(_ selection: Set<Bookmark.ID>) -> [MenuItem] {
 
         let bookmarks = bookmarks(.items(selection))
         let containsUnreadBookmark = bookmarks.containsUnreadBookmark
@@ -313,15 +325,13 @@ public class SectionViewModel: ObservableObject, Runnable {
 
 #if os(iOS)
         if bookmarks.count == 1, let bookmark = bookmarks.first {
-            MenuItem(LocalizedString("BOOKMARK_MENU_TITLE_GET_INFO"), systemImage: "square.and.pencil") {
-                self.sceneModel?.edit(bookmark)
+            MenuItem(LocalizedString("BOOKMARK_MENU_TITLE_GET_INFO"), systemImage: "info") {
+                self.getInfo(.items([bookmark.id]))
             }
         }
 #else
-        MenuItem(LocalizedString("BOOKMARK_MENU_TITLE_GET_INFO"), systemImage: "square.and.pencil") {
-            for id in selection {
-                openWindow?(value: id)
-            }
+        MenuItem(LocalizedString("BOOKMARK_MENU_TITLE_GET_INFO"), systemImage: "info") {
+            self.getInfo(.items(selection))
         }
 #endif
         Divider()

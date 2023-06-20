@@ -4,6 +4,7 @@ import PackageDescription
 
 let package = Package(
     name: "BookmarksCore",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v16),
         .macOS(.v13)
@@ -32,10 +33,13 @@ let package = Package(
                 .product(name: "TFHpple", package: "hpple"),
                 "WrappingHStack",
                 "HashRainbow",
-                .product(name: "SelectableCollectionView", package: "SelectableCollectionView", condition: .when(platforms: [.macOS])),
+                .product(name: "SelectableCollectionView",
+                         package: "SelectableCollectionView",
+                         condition: .when(platforms: [.macOS])),
             ],
             resources: [
                 .process("Licenses"),
+                .process("Resources"),
             ]),
         .testTarget(
             name: "BookmarksCoreTests",

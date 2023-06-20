@@ -28,3 +28,7 @@ public func Localized(_ layoutMode: LayoutMode) -> String {
         return "List"
     }
 }
+
+func LocalizedString(_ key: String, comment: String? = nil) -> String {
+    return NSLocalizedString(key, bundle: .module, comment: comment ?? "")
+}

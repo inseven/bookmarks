@@ -222,12 +222,14 @@ public class SectionViewModel: ObservableObject, Runnable {
         return ids.compactMap { bookmarksLookup[$0] }
     }
 
-    @MainActor public func open(_ scope: SelectionScope<Bookmark.ID>, location: Bookmark.Location = .web) {
+    @MainActor func open(_ scope: SelectionScope<Bookmark.ID>,
+                         location: Bookmark.Location = .web,
+                         browser: BrowserPreference = .user) {
         for bookmark in bookmarks(scope) {
             guard let url = try? bookmark.url(location) else {
                 continue
             }
-            sceneModel?.showURL(url)
+            sceneModel?.showURL(url, browser: browser)
         }
     }
 
@@ -309,26 +311,35 @@ public class SectionViewModel: ObservableObject, Runnable {
         let containsUnreadBookmark = bookmarks.containsUnreadBookmark
         let containsPublicBookmark = bookmarks.containsPublicBookmark
 
-        MenuItem("Open", systemImage: "safari") {
-            self.open(.items(selection))
-        }
-        MenuItem("Open on Internet Archive", systemImage: "clock") {
-            self.open(.items(selection), location: .internetArchive)
-        }
-        Divider()
 #if os(iOS)
         if bookmarks.count == 1, let bookmark = bookmarks.first {
-            MenuItem("Get Info", systemImage: "square.and.pencil") {
+            MenuItem(LocalizedString("BOOKMARK_MENU_TITLE_GET_INFO"), systemImage: "square.and.pencil") {
                 self.sceneModel?.edit(bookmark)
             }
         }
 #else
-        MenuItem("Get Info", systemImage: "square.and.pencil") {
+        MenuItem(LocalizedString("BOOKMARK_MENU_TITLE_GET_INFO"), systemImage: "square.and.pencil") {
             for id in selection {
                 openWindow?(value: id)
             }
         }
 #endif
+        Divider()
+#if os(iOS)
+        if applicationModel?.settings.useInAppBrowser ?? true {
+            MenuItem(LocalizedString("BOOKMARK_MENU_TITLE_OPEN_IN_BROWSER"), systemImage: "safari") {
+                self.open(.items(selection), browser: .system)
+            }
+        } else {
+            MenuItem(LocalizedString("BOOKMARK_MENU_TITLE_OPEN_IN_APP"), systemImage: "safari") {
+                self.open(.items(selection), browser: .app)
+            }
+        }
+        Divider()
+#endif
+        MenuItem(LocalizedString("BOOKMARK_MENU_TITLE_VIEW_ON_INTERNET_ARCHIVE"), systemImage: "clock") {
+            self.open(.items(selection), location: .internetArchive)
+        }
         Divider()
         MenuItem(containsUnreadBookmark ? "Mark as Read" : "Mark as Unread",
                  systemImage: containsUnreadBookmark ? "circle" : "circle.inset.filled") {

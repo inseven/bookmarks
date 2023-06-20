@@ -30,11 +30,13 @@ public struct BookmarkCommands: Commands {
 
     public var body: some Commands {
         CommandMenu("Bookmark") {
+            BookmarkInfoComands(sectionViewModel: sectionViewModel ?? SectionViewModel())
+                .trailingDivider()
             BookmarkOpenCommands(sectionViewModel: sectionViewModel ?? SectionViewModel())
                 .trailingDivider()
-            BookmarkDesctructiveCommands(sectionViewModel: sectionViewModel ?? SectionViewModel())
-                .trailingDivider()
             BookmarkEditCommands(sectionViewModel: sectionViewModel ?? SectionViewModel())
+                .trailingDivider()
+            BookmarkDesctructiveCommands(sectionViewModel: sectionViewModel ?? SectionViewModel())
                 .trailingDivider()
             BookmarkShareCommands(sectionViewModel: sectionViewModel ?? SectionViewModel())
                 .trailingDivider()

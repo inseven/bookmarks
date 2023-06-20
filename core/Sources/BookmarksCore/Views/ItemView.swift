@@ -61,8 +61,8 @@ public struct ItemView: View {
                     .textFieldStyle(.plain)
                 Divider()
 
-                TokenView("Add tags...", tokens: $model.tokens) { candidate in
-                    return store.suggestions(prefix: candidate, existing: [], count: 1)
+                TokenView("Add tags...", tokens: $model.tokens) { candidate, existing, count in
+                    return store.suggestions(prefix: candidate, existing: existing, count: count)
                 }
                 .padding(.horizontal, 6)
 

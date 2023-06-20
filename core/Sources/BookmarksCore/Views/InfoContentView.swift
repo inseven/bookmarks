@@ -49,8 +49,8 @@ public struct InfoContentView: View {
                         }
                     }
                     Section {
-                        TokenView("Add tags...", tokens: $model.tags) { candidate in
-                            model.suggestions(candidate: candidate, count: 1)
+                        TokenView("Add tags...", tokens: $model.tags) { candidate, existing, count in
+                            model.suggestions(candidate: candidate, existing: existing, count: count)
                         }
                     }
                     Section {

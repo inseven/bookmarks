@@ -38,7 +38,7 @@ struct TagsView: View {
                 if !tags.isEmpty {
                     WrappingHStack(alignment: .leading) {
                         ForEach(tags) { tag in
-                            TagView(tag, color: tag.color())
+                            TagView(tag)
                         }
                     }
                 } else {
@@ -46,7 +46,7 @@ struct TagsView: View {
                 }
             } else {
                 ForEach(tags) { tag in
-                    TagView(tag, color: tag.color())
+                    TagView(tag)
                 }
             }
         }

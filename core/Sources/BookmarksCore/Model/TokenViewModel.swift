@@ -41,12 +41,15 @@ class TokenViewModel: ObservableObject, Runnable {
 
     @Published var items: [Token] = []
     @Published var input: String = ""
+    @Published var suggestions: [String] = []
 
+    let suggestion: (String, [String], Int) -> [String]
     var cancellables: [AnyCancellable] = []
 
-    init(tokens: Binding<[String]>) {
-        _tokens = tokens
-        items = tokens.wrappedValue
+    init(tokens: Binding<[String]>, suggestion: @escaping (String, [String], Int) -> [String]) {
+        self._tokens = tokens
+        self.suggestion = suggestion
+        self.items = tokens.wrappedValue
             .map { Token($0) }
     }
 
@@ -59,6 +62,15 @@ class TokenViewModel: ObservableObject, Runnable {
                 guard let self else { return }
                 self.commit()
             }
+            .store(in: &cancellables)
+
+        $input
+            .combineLatest($items)
+            .receive(on: DispatchQueue.main)
+            .map { [suggestion] input, items in
+                return suggestion(input, items.map({ $0.text }), 5)
+            }
+            .assign(to: \.suggestions, on: self)
             .store(in: &cancellables)
 
         $items
@@ -80,6 +92,11 @@ class TokenViewModel: ObservableObject, Runnable {
         for tag in tags {
             self.items.append(Token(tag))
         }
+        input = ""
+    }
+
+    @MainActor func acceptSuggestion(_ token: String) {
+        items.append(TokenViewModel.Token(token))
         input = ""
     }
 

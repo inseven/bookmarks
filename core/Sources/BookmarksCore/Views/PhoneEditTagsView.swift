@@ -22,67 +22,67 @@
 
 import SwiftUI
 
+import Interact
+
 public struct PhoneEditTagsView: View {
 
-    @EnvironmentObject var tagsModel: TagsModel
+    @ObservedObject var tokenViewModel: TokenViewModel
+
     @Binding var tags: [String]
-    @State var search: String = ""
-    
-    var available: [String] {
-        // TODO: Make this async.
-        return tagsModel.suggestions(prefix: "", existing: tags)
-    }
-    
-    var filteredTags: [String] {
-        // TODO: Make this async.
-        return tagsModel.suggestions(prefix: search, existing: tags)
-    }
 
     public var body: some View {
         NavigationView {
             List {
-                if search.isEmpty {
-                    Section {
-                        if tags.isEmpty {
-                            Text("None")
-                                .foregroundColor(.secondary)
-                        } else {
-                            ForEach(tags.sorted()) { tag in
-                                TagActionButton(tag, role: .destructive) {
-                                    withAnimation {
-                                        tags.removeAll { $0 == tag }
-                                    }
-                                }
-                            }
+                ForEach(tags.sorted()) { tag in
+                    HStack {
+                        TagView(tag)
+                        Spacer()
+                        Button {
+                            tags.removeAll { $0 == tag }
+                        } label: {
+                            Image(systemName: "xmark.circle")
+                                .foregroundColor(.accentColor)
                         }
                     }
                 }
-                if !search.isEmpty && !tags.contains(search.safeKeyword) {
-                    Section("Suggested") {
-                        TagActionButton(search.safeKeyword) {
-                            withAnimation {
-                                tags.append(search.safeKeyword)
-                                search = ""
-                            }
-                        }
-                    }
+            }
+            .listStyle(.plain)
+            .overlay {
+                if tags.isEmpty {
+                    PlaceholderView("No Tags")
                 }
-                if !filteredTags.isEmpty {
-                    Section(search.isEmpty ? "All Tags" : "Matching Tags") {
-                        ForEach(filteredTags) { tag in
-                            TagActionButton(tag) {
-                                withAnimation {
-                                    tags.append(tag)
+            }
+            .safeAreaInset(edge: .bottom) {
+                VStack(spacing: 0) {
+                    Divider()
+                    TextField("Add tag...", text: $tokenViewModel.input)
+                        .keyboardType(.alphabet)
+                        .autocapitalization(.none)
+                        .autocorrectionDisabled()
+                        .onSubmit {
+                            tokenViewModel.commit()
+                        }
+                        .padding()
+                }
+                .background(.background)
+            }
+            .navigationTitle("Tags")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .keyboard) {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            ForEach(tokenViewModel.suggestions) { suggestion in
+                                Button {
+                                    tokenViewModel.acceptSuggestion(suggestion)
+                                } label: {
+                                    TagView(suggestion)
                                 }
                             }
                         }
                     }
                 }
             }
-            .listStyle(.insetGrouped)
-            .searchable(text: $search)
-            .navigationTitle("Edit Tags")
-            .navigationBarTitleDisplayMode(.inline)
             .closeable()
         }
         .navigationViewStyle(.stack)

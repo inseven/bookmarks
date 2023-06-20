@@ -84,9 +84,6 @@ public class Updater {
             }
         }
 
-        // Notify our delegate we're about to start.
-        progress(.active)
-
         // Ensure we can get a log in token.
         guard let token = syncQueue_token() else {
             progress(.failure(BookmarksError.unauthorized))

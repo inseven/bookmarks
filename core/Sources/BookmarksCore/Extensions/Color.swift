@@ -204,6 +204,12 @@ extension Color {
         Color(.sRGBLinear, white: 0, opacity: 0.12)
     }
 
+    var gray: CGFloat? {
+        return cgColor?.converted(to: CGColorSpaceCreateDeviceGray(),
+                                  intent: CGColorRenderingIntent.defaultIntent,
+                                  options: nil)?.components?.first
+    }
+
     init(_ value: Int32) {
         let red = Double(((0xff << 16) & value) >> 16)
         let green = Double(((0xff << 8) & value) >> 8)

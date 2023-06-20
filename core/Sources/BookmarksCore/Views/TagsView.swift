@@ -25,21 +25,29 @@ import WrappingHStack
 struct TagsView: View {
 
     let tags: [String]
+    let wraps: Bool
 
-    init(tags: Set<String>) {
+    init(_ tags: Set<String>, wraps: Bool = true) {
         self.tags = tags.sorted()
+        self.wraps = wraps
     }
 
     var body: some View {
         HStack {
-            if !tags.isEmpty {
-                WrappingHStack(alignment: .leading) {
-                    ForEach(tags) { tag in
-                        TagView(tag, color: tag.color())
+            if wraps {
+                if !tags.isEmpty {
+                    WrappingHStack(alignment: .leading) {
+                        ForEach(tags) { tag in
+                            TagView(tag, color: tag.color())
+                        }
                     }
+                } else {
+                    EmptyView()
                 }
             } else {
-                EmptyView()
+                ForEach(tags) { tag in
+                    TagView(tag, color: tag.color())
+                }
             }
         }
         .font(.footnote)

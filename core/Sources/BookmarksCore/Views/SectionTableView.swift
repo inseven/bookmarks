@@ -55,7 +55,7 @@ struct SectionTableView: View {
                             Text(bookmark.url.formatted(.short))
                                 .foregroundColor(.secondary)
                                 .font(.footnote)
-                            TagsView(tags: bookmark.tags)
+                            TagsView(bookmark.tags)
                         }
                         .lineLimit(1)
                     }
@@ -71,8 +71,11 @@ struct SectionTableView: View {
             TableColumn("Date") { bookmark in
                 Text(bookmark.date.formatted(date: .long, time: .standard))
             }
+            TableColumn("Notes") { bookmark in
+                Text(bookmark.notes)
+            }
             TableColumn("Tags") { bookmark in
-                TagsView(tags: bookmark.tags)
+                TagsView(bookmark.tags, wraps: false)
             }
         }
         .contextMenu(forSelectionType: Bookmark.ID.self) { selection in

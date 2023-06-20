@@ -68,7 +68,7 @@ class TokenViewModel: ObservableObject, Runnable {
             .combineLatest($items)
             .receive(on: DispatchQueue.main)
             .map { [suggestion] input, items in
-                return suggestion(input, items.map({ $0.text }), 5)
+                return suggestion(input, items.map({ $0.text }), 8)
             }
             .assign(to: \.suggestions, on: self)
             .store(in: &cancellables)

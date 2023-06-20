@@ -24,6 +24,8 @@ public struct SelectionToolbar: CustomizableToolbarContent {
 
     struct Content: CustomizableToolbarContent {
 
+        @EnvironmentObject var settings: Settings
+
         @ObservedObject var sectionViewModel: SectionViewModel
 
         var body: some CustomizableToolbarContent {
@@ -41,7 +43,7 @@ public struct SelectionToolbar: CustomizableToolbarContent {
 
             ToolbarItem(id: "open") {
                 Button {
-                    sectionViewModel.open(.selection)
+                    sectionViewModel.open(.selection, browser: settings.browser)
                 } label: {
                     Label("Open", systemImage: "safari")
                 }

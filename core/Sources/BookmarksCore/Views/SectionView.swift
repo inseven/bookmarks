@@ -29,13 +29,13 @@ public struct SectionView: View {
 
     @StateObject var sectionViewModel: SectionViewModel
 
-    public init(applicationModel: ApplicationModel,
-                sceneModel: SceneModel,
+    init(applicationModel: ApplicationModel,
+                sceneState: Binding<SceneState>,
                 section: BookmarksSection,
                 openWindow: OpenWindowAction) {
         self.applicationModel = applicationModel
         _sectionViewModel = StateObject(wrappedValue: SectionViewModel(applicationModel: applicationModel,
-                                                                       sceneModel: sceneModel,
+                                                                       sceneState: sceneState,
                                                                        section: section,
                                                                        openWindow: openWindow))
     }

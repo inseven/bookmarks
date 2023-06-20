@@ -29,7 +29,6 @@ import BookmarksCore
 @main
 struct BookmarksApp: App {
 
-    @FocusedObject var sceneModel: SceneModel?
     @FocusedObject var sectionViewModel: SectionViewModel?
 
     var applicationModel: ApplicationModel

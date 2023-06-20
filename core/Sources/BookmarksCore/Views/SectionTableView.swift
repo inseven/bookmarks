@@ -33,6 +33,7 @@ struct SectionTableView: View {
     private let isCompact = false
 #endif
 
+    @EnvironmentObject var settings: Settings
     @EnvironmentObject var sectionViewModel: SectionViewModel
 
     var body: some View {
@@ -77,7 +78,7 @@ struct SectionTableView: View {
             .contextMenu(forSelectionType: Bookmark.ID.self) { selection in
                 sectionViewModel.contextMenu(selection)
             } primaryAction: { selection in
-                sectionViewModel.open(.items(selection))
+                sectionViewModel.open(.items(selection), browser: settings.browser)
             }
             .listStyle(.plain)
         } else {
@@ -103,7 +104,7 @@ struct SectionTableView: View {
             .contextMenu(forSelectionType: Bookmark.ID.self) { selection in
                 sectionViewModel.contextMenu(selection)
             } primaryAction: { selection in
-                sectionViewModel.open(.items(selection))
+                sectionViewModel.open(.items(selection), browser: settings.browser)
             }
         }
     }

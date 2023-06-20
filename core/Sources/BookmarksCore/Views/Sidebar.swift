@@ -25,27 +25,23 @@ public struct Sidebar: View {
     @EnvironmentObject var applicationModel: ApplicationModel
     @EnvironmentObject var settings: Settings
 
-    @FocusedObject var sceneModel: SceneModel?
-
-    public init() {
-
-    }
+    @Binding var sceneState: SceneState
 
     public var body: some View {
-        SidebarContentView()
+        SidebarContentView(sceneState: $sceneState)
 #if os(iOS)
             .navigationTitle("Bookmarks")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
-                        sceneModel?.showSettings()
+                        sceneState.showSettings()
                     } label: {
                         Image(systemName: "gear")
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        sceneModel?.showTags()
+                        sceneState.showTags()
                     } label: {
                         Image(systemName: "tag")
                     }

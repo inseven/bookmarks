@@ -26,7 +26,7 @@ public protocol Sectionable {
 
 }
 
-public enum BookmarksSection: Equatable {
+public enum BookmarksSection: Equatable, Codable {
 
     public static let defaultSections: [Self] = [
         .all,

@@ -24,16 +24,13 @@ import SwiftUI
 public struct SidebarContentView: View {
 
     @EnvironmentObject var applicationModel: ApplicationModel
-    @EnvironmentObject var sceneModel: SceneModel
     @EnvironmentObject var settings: Settings
 
-    public init() {
-
-    }
+    @Binding var sceneState: SceneState
 
     public var body: some View {
-        List(selection: $sceneModel.section) {
-            if case let .tag(tag) = sceneModel.section,
+        List(selection: $sceneState.section) {
+            if case let .tag(tag) = sceneState .section,
                !settings.favoriteTags.contains(tag),
                !applicationModel.topTags.contains(tag)  {
                 Section("Search") {

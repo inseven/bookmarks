@@ -50,7 +50,7 @@ public class SectionViewModel: ObservableObject, Runnable {
     @Published private var bookmarksLookup: [Bookmark.ID: Bookmark] = [:]
 
     private let applicationModel: ApplicationModel?
-    private let sceneModel: SceneModel?
+    @Binding private var sceneState: SceneState
     private let section: BookmarksSection
     private let openWindow: OpenWindowAction?
     private var cancellables: Set<AnyCancellable> = []
@@ -59,12 +59,12 @@ public class SectionViewModel: ObservableObject, Runnable {
         return applicationModel == nil
     }
 
-    public init(applicationModel: ApplicationModel? = nil,
-                sceneModel: SceneModel? = nil,
-                section: BookmarksSection = .all,
-                openWindow: OpenWindowAction? = nil) {
+    init(applicationModel: ApplicationModel? = nil,
+         sceneState: Binding<SceneState> = Binding.constant(SceneState()),  // TODO: This is ugly.
+         section: BookmarksSection = .all,
+         openWindow: OpenWindowAction? = nil) {
         self.applicationModel = applicationModel
-        self.sceneModel = sceneModel
+        _sceneState = sceneState
         self.section = section
         self.openWindow = openWindow
         self.query = section.query
@@ -228,7 +228,7 @@ public class SectionViewModel: ObservableObject, Runnable {
     @MainActor public func getInfo(_ scope: SelectionScope<Bookmark.ID>) {
         for bookmark in bookmarks(scope) {
 #if os(iOS)
-            sceneModel?.edit(bookmark)
+            sceneState.edit(bookmark)
 #else
             openWindow?(value: bookmark.id)
 #endif
@@ -237,12 +237,12 @@ public class SectionViewModel: ObservableObject, Runnable {
 
     @MainActor func open(_ scope: SelectionScope<Bookmark.ID>,
                          location: Bookmark.Location = .web,
-                         browser: BrowserPreference = .user) {
+                         browser: BrowserPreference) {
         for bookmark in bookmarks(scope) {
             guard let url = try? bookmark.url(location) else {
                 continue
             }
-            sceneModel?.showURL(url, browser: browser)
+            sceneState.showURL(url, browser: browser)
         }
     }
 
@@ -348,7 +348,7 @@ public class SectionViewModel: ObservableObject, Runnable {
         Divider()
 #endif
         MenuItem(LocalizedString("BOOKMARK_MENU_TITLE_VIEW_ON_INTERNET_ARCHIVE"), systemImage: "clock") {
-            self.open(.items(selection), location: .internetArchive)
+            self.open(.items(selection), location: .internetArchive, browser: self.applicationModel?.settings.browser ?? .system)
         }
         Divider()
         MenuItem(containsUnreadBookmark ? "Mark as Read" : "Mark as Unread",

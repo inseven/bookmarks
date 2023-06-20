@@ -18,14 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Combine
 import SwiftUI
 
 import Interact
 
-public class SceneModel: ObservableObject {
+struct SceneState: Codable, RawRepresentable {
 
-    public enum SheetType: Identifiable {
+    public enum SheetType: Identifiable, Codable {
 
         public var id: String {
             switch self {
@@ -43,51 +42,79 @@ public class SceneModel: ObservableObject {
         case edit(Bookmark.ID)
     }
 
-    var settings: Settings
-
-    @Published public var section: BookmarksSection? = .all
-    @Published public var sheet: SheetType? = nil
-    @Published public var previewURL: URL? = nil
-
-    public init(settings: Settings) {
-        self.settings = settings
+    enum CodingKeys: String, CodingKey {
+        case section
+        case sheet
+        case previewURL
     }
 
-    @MainActor public func showTags() {
+    var section: BookmarksSection? = .all
+    var sheet: SheetType? = nil
+    var previewURL: URL? = nil
+
+    init() {
+
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        section = try container.decodeIfPresent(BookmarksSection.self, forKey: .section)
+        sheet = try container.decodeIfPresent(SheetType.self, forKey: .sheet)
+        previewURL = try container.decodeIfPresent(URL.self, forKey: .previewURL)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(section, forKey: .section)
+        try container.encodeIfPresent(sheet, forKey: .sheet)
+        try container.encodeIfPresent(previewURL, forKey: .previewURL)
+    }
+
+    init?(rawValue: String) {
+      guard let data = rawValue.data(using: .utf8),
+        let result = try? JSONDecoder().decode(Self.self, from: data)
+      else {
+        return nil
+      }
+      self = result
+    }
+
+    var rawValue: String {
+      guard let data = try? JSONEncoder().encode(self),
+            let string = String(data: data, encoding: .utf8)
+      else {
+        return "{}"
+      }
+      return string
+    }
+
+    mutating func showTags() {
         sheet = .tags
     }
 
-    @MainActor public func showSettings() {
+    mutating func showSettings() {
         sheet = .settings
     }
 
-    @MainActor public func edit(_ bookmark: Bookmark) {
+    mutating func edit(_ bookmark: Bookmark) {
         sheet = .edit(bookmark.id)
     }
 
-    @MainActor func showURL(_ url: URL, browser: BrowserPreference = .user) {
-        let useInAppBrowser: Bool
+    mutating func showURL(_ url: URL, browser: BrowserPreference) {
         switch browser {
         case .app:
-            useInAppBrowser = true
-        case .system:
-            useInAppBrowser = false
-        case .user:
-            useInAppBrowser = settings.useInAppBrowser
-        }
-        if useInAppBrowser {
             previewURL = url
-        } else {
+        case .system:
             Application.open(url)
         }
     }
 
-    @MainActor public func revealTag(_ tag: String) {
+    mutating func revealTag(_ tag: String) {
         sheet = nil
         section = .tag(tag)
     }
 
-    @MainActor public func handleURL(_ url: URL) {
+    mutating func handleURL(_ url: URL) {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             return
         }
@@ -105,6 +132,19 @@ public class SceneModel: ObservableObject {
         default:
             print("Failed to open unsupported URL '\(url.absoluteString)'.")
         }
+    }
+
+}
+
+struct FocusedSceneStateValueKey: FocusedValueKey {
+    typealias Value = Binding<SceneState>
+}
+
+extension FocusedValues {
+
+    var sceneState: FocusedSceneStateValueKey.Value? {
+        get { self[FocusedSceneStateValueKey.self] }
+        set { self[FocusedSceneStateValueKey.self] = newValue }
     }
 
 }

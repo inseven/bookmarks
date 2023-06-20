@@ -28,6 +28,7 @@ import SelectableCollectionView
 public struct MacSectionGridView: View {
 
     @EnvironmentObject var applicationModel: ApplicationModel
+    @EnvironmentObject var settings: Settings
     @EnvironmentObject var sectionViewModel: SectionViewModel
 
     let layout = ColumnLayout(spacing: 6.0,
@@ -51,7 +52,7 @@ public struct MacSectionGridView: View {
         } contextMenu: { selection in
             sectionViewModel.contextMenu(selection)
         } primaryAction: { selection in
-            sectionViewModel.open(.items(selection))
+            sectionViewModel.open(.items(selection), browser: settings.browser)
         } keyDown: { event in
             if event.keyCode == kVK_Space {
                 sectionViewModel.showPreview()

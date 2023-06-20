@@ -22,12 +22,14 @@ import SwiftUI
 
 struct BookmarkOpenCommands: View {
 
+    @EnvironmentObject var settings: Settings
+
     @ObservedObject var sectionViewModel: SectionViewModel
 
     var body: some View {
 
         Button(LocalizedString("BOOKMARK_MENU_TITLE_OPEN")) {
-            sectionViewModel.open(.selection)
+            sectionViewModel.open(.selection, browser: settings.browser)
         }
         .keyboardShortcut(.return, modifiers: [.command])
         .disabled(sectionViewModel.selection.isEmpty)
@@ -43,7 +45,7 @@ struct BookmarkOpenCommands: View {
         Divider()
 
         Button(LocalizedString("BOOKMARK_MENU_TITLE_VIEW_ON_INTERNET_ARCHIVE")) {
-            sectionViewModel.open(.selection, location: .internetArchive)
+            sectionViewModel.open(.selection, location: .internetArchive, browser: settings.browser)
         }
         .keyboardShortcut(.return, modifiers: [.command, .shift])
         .disabled(sectionViewModel.selection.isEmpty)

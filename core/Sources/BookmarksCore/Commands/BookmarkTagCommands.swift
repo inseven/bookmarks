@@ -22,7 +22,7 @@ import SwiftUI
 
 struct BookmarkTagCommands: View {
 
-    var sceneModel: SceneModel?
+    @FocusedBinding(\.sceneState) var sceneState
 
     @ObservedObject var sectionViewModel: SectionViewModel
 
@@ -31,9 +31,9 @@ struct BookmarkTagCommands: View {
 
             ForEach(Array(sectionViewModel.selectionTags).sorted()) { tag in
                 Button(tag) {
-                    sceneModel?.revealTag(tag)
+                    sceneState?.revealTag(tag)
                 }
-                .disabled(sceneModel == nil)
+                .disabled(sceneState == nil)
             }
 
         }

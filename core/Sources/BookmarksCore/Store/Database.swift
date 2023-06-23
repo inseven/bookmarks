@@ -445,7 +445,7 @@ public class Database {
         }
     }
 
-    public func deleteBookmarks(_ bookmarks: [Bookmark]) async throws {
+    public func delete(bookmarks: [Bookmark]) async throws {
         for bookmark in bookmarks {
             try await deleteBookmark(identifier: bookmark.identifier)
         }

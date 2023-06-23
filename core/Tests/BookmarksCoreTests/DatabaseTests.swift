@@ -164,7 +164,7 @@ class DatabaseTests: XCTestCase {
                              date: Date(timeIntervalSince1970: 10))
 
         try await database.insertOrUpdateBookmarks([item1, item2])
-        try await database.deleteBookmarks([item1])
+        try await database.delete(bookmarks: [item1])
 
         await XCTAssertEqualAsync(try await database.tags().names(), ["cheese", "website"])
         await XCTAssertEqualAsync(try await database.bookmarks(query: True()), [item2])

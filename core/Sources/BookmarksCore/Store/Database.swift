@@ -26,7 +26,7 @@ import SQLite
 
 public protocol DatabaseObserver {
     var id: UUID { get }
-    func databaseDidUpdate(database: Database)
+    func databaseDidUpdate(database: Database, scope: Database.Scope)
 }
 
 extension Bookmark {
@@ -66,6 +66,11 @@ extension String {
 }
 
 public class Database {
+
+    public enum Scope {
+        case bookmark(Bookmark.ID)
+        case all
+    }
 
     class Schema {
 
@@ -212,12 +217,12 @@ public class Database {
         try db.run("PRAGMA foreign_keys = ON")
     }
 
-    fileprivate func syncQueue_notifyObservers() {
+    fileprivate func syncQueue_notifyObservers(scope: Scope) {
         dispatchPrecondition(condition: .onQueue(syncQueue))
         let observers = self.observers
         DispatchQueue.global(qos: .background).async {
             for observer in observers {
-                observer.databaseDidUpdate(database: self)
+                observer.databaseDidUpdate(database: self, scope: scope)
             }
         }
     }
@@ -349,11 +354,11 @@ public class Database {
                     if let existingBookmark = try? self.syncQueue_bookmark(identifier: bookmark.identifier) {
                         if existingBookmark != bookmark {
                             try self.syncQueue_insertOrReplaceBookmark(bookmark)
-                            self.syncQueue_notifyObservers()
+                            self.syncQueue_notifyObservers(scope: .bookmark(bookmark.id))
                         }
                     } else {
                         try self.syncQueue_insertOrReplaceBookmark(bookmark)
-                        self.syncQueue_notifyObservers()
+                        self.syncQueue_notifyObservers(scope: .bookmark(bookmark.id))
                     }
                 }
                 return bookmark
@@ -402,7 +407,7 @@ public class Database {
                         try self.db.run(Schema.tags.delete())
                         try self.db.run(Schema.items_to_tags.delete())
                     }
-                    self.syncQueue_notifyObservers()
+                    self.syncQueue_notifyObservers(scope: .all)
                     completion(result)
                 }
             } catch {
@@ -423,7 +428,7 @@ public class Database {
                         }
                         try self.syncQueue_pruneTags()
                     }
-                    self.syncQueue_notifyObservers()
+                    self.syncQueue_notifyObservers(scope: .bookmark(identifier))
                     completion(result)
                 }
             } catch {
@@ -446,27 +451,21 @@ public class Database {
         }
     }
 
-    private func deleteTag(tag: String, completion: @escaping (Swift.Result<Int, Error>) -> Void) {
-        let completion = DispatchQueue.global().asyncClosure(completion)
-        syncQueue.async {
-            do {
-                try self.db.transaction {
-                    let result = Swift.Result { () -> Int in
-                        try self.db.run(Schema.tags.filter(Schema.name == tag).delete())
-                    }
-                    self.syncQueue_notifyObservers()
-                    completion(result)
-                }
-            } catch {
-                completion(.failure(error))
-            }
-        }
-    }
 
     public func deleteTag(tag: String) async throws {
         _ = try await withCheckedThrowingContinuation { continuation in
-            deleteTag(tag: tag) { result in
-                continuation.resume(with: result)
+            syncQueue.async {
+                do {
+                    try self.db.transaction {
+                        let result = Swift.Result { () -> Int in
+                            try self.db.run(Schema.tags.filter(Schema.name == tag).delete())
+                        }
+                        self.syncQueue_notifyObservers(scope: .all)
+                        continuation.resume(with: result)
+                    }
+                } catch {
+                    continuation.resume(throwing: error)
+                }
             }
         }
     }

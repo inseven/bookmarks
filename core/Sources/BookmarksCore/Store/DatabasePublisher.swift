@@ -40,7 +40,7 @@ class DatabaseSubscription<Target: Subscriber>: Subscription, DatabaseObserver w
         self.database.remove(observer: self)
     }
 
-    func databaseDidUpdate(database: Database) {
+    func databaseDidUpdate(database: Database, scope: Database.Scope) {
         _ = target?.receive(database)
     }
 

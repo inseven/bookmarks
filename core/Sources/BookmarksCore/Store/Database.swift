@@ -244,7 +244,8 @@ public class Database {
         }
     }
 
-    fileprivate func syncQueue_bookmark(identifier: String) throws -> Bookmark {
+    private func syncQueue_bookmark(identifier: String) throws -> Bookmark {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
         let run = try db.prepare(Schema.items.filter(Schema.identifier == identifier).limit(1)).map(Bookmark.init)
         guard let result = run.first else {
             throw BookmarksError.bookmarkNotFoundByIdentifier(identifier)
@@ -260,7 +261,8 @@ public class Database {
                         notes: result.notes)
     }
 
-    fileprivate func syncQueue_fetchOrInsertTag(name: String) throws -> Int64 {
+    private func syncQueue_fetchOrInsertTag(name: String) throws -> Int64 {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
         if let id = try? syncQueue_tag(name: name) {
             return id
         }
@@ -270,7 +272,8 @@ public class Database {
         return id
     }
 
-    fileprivate func syncQueue_tag(name: String) throws -> Int64 {
+    private func syncQueue_tag(name: String) throws -> Int64 {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
         let results = try db.prepare(Schema.tags.filter(Schema.name == name).limit(1)).map { row in
             try row.get(Schema.id)
         }
@@ -281,32 +284,19 @@ public class Database {
     }
 
     private func syncQueue_tags(bookmarkIdentifier: String) throws -> Set<String> {
-        Set(try self.db.prepare(Schema.items_to_tags
-                                    .join(Schema.items, on: Schema.items_to_tags[Schema.itemId] == Schema.items[Schema.id])
-                                    .join(Schema.tags, on: Schema.items_to_tags[Schema.tagId] == Schema.tags[Schema.id])
-                                    .filter(Schema.identifier == bookmarkIdentifier))
-                .map { row -> String in
-                    try row.get(Schema.tags[Schema.name])
-                })
+        dispatchPrecondition(condition: .onQueue(syncQueue))
+        return Set(try self.db.prepare(Schema.items_to_tags
+            .join(Schema.items, on: Schema.items_to_tags[Schema.itemId] == Schema.items[Schema.id])
+            .join(Schema.tags, on: Schema.items_to_tags[Schema.tagId] == Schema.tags[Schema.id])
+            .filter(Schema.identifier == bookmarkIdentifier))
+            .map { row -> String in
+                try row.get(Schema.tags[Schema.name])
+            })
     }
 
     public func tags() async throws -> [Tag] {
         try await run {
             try self.syncQueue_tags()
-        }
-    }
-
-    public func bookmark(identifier: String, completion: @escaping (Swift.Result<Bookmark, Error>) -> Void) {
-        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        syncQueue.async {
-            do {
-                try self.db.transaction {
-                    let result = Swift.Result { try self.syncQueue_bookmark(identifier: identifier) }
-                    completion(result)
-                }
-            } catch {
-                completion(.failure(error))
-            }
         }
     }
 

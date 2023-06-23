@@ -275,7 +275,7 @@ public class Database {
         return result
     }
 
-    fileprivate func syncQueue_tags(bookmarkIdentifier: String) throws -> Set<String> {
+    private func syncQueue_tags(bookmarkIdentifier: String) throws -> Set<String> {
         Set(try self.db.prepare(Schema.items_to_tags
                                     .join(Schema.items, on: Schema.items_to_tags[Schema.itemId] == Schema.items[Schema.id])
                                     .join(Schema.tags, on: Schema.items_to_tags[Schema.tagId] == Schema.tags[Schema.id])
@@ -417,38 +417,27 @@ public class Database {
         }
     }
 
-    private func deleteBookmark(identifier: String, completion: @escaping (Swift.Result<Void, Error>) -> Void) {
-        let completion = DispatchQueue.global().asyncClosure(completion)
-        syncQueue.async {
-            do {
-                try self.db.transaction {
-                    let result = Swift.Result { () -> Void in
-                        let count = try self.db.run(Schema.items.filter(Schema.identifier == identifier).delete())
-                        if count == 0 {
-                            throw BookmarksError.bookmarkNotFoundByIdentifier(identifier)
-                        }
-                        try self.syncQueue_pruneTags()
-                    }
-                    self.syncQueue_notifyObservers(scope: .bookmark(identifier))
-                    completion(result)
-                }
-            } catch {
-                completion(.failure(error))
+    private func syncQueue_delete(bookmark identifier: Bookmark.ID) throws {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
+        try db.transaction {
+            let count = try db.run(Schema.items.filter(Schema.identifier == identifier).delete())
+            if count == 0 {
+                throw BookmarksError.bookmarkNotFoundByIdentifier(identifier)
             }
+            try syncQueue_pruneTags()
+            syncQueue_notifyObservers(scope: .bookmark(identifier))
         }
     }
 
-    public func deleteBookmark(identifier: String) async throws {
-        try await withCheckedThrowingContinuation { continuation in
-            deleteBookmark(identifier: identifier) { result in
-                continuation.resume(with: result)
-            }
+    public func delete(bookmark identifier: Bookmark.ID) async throws {
+        try await run {
+            try self.syncQueue_delete(bookmark: identifier)
         }
     }
 
     public func delete(bookmarks: [Bookmark]) async throws {
         for bookmark in bookmarks {
-            try await deleteBookmark(identifier: bookmark.identifier)
+            try await delete(bookmark: bookmark.identifier)
         }
     }
 

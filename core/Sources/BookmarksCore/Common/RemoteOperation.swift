@@ -76,7 +76,7 @@ struct RefreshOperation: RemoteOperation {
         for identifier in deletedIdentifiers {
             let bookmark = try await database.bookmark(identifier: identifier)
             print("deleting \(bookmark)...")
-            _ = try await database.deleteBookmark(identifier: identifier)
+            try await database.delete(bookmark: identifier)
         }
         print("update complete")
 

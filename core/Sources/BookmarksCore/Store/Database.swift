@@ -340,33 +340,31 @@ public class Database {
         try syncQueue_pruneTags()
     }
 
-    private func insertOrUpdateBookmark(_ bookmark: Bookmark, completion: @escaping (Swift.Result<Bookmark, Error>) -> Void) {
-        let completion = DispatchQueue.global().asyncClosure(completion)
-        syncQueue.async {
-            let result = Swift.Result<Bookmark, Error> {
-                try self.db.transaction {
-                    // N.B. While it would be possible to use an insert or replace strategy directly, we want to ensure
-                    // we only notify observers if the data has actually changed so we instead fetch the item and
-                    // compare.
-                    if let existingBookmark = try? self.syncQueue_bookmark(identifier: bookmark.identifier) {
-                        if existingBookmark != bookmark {
-                            try self.syncQueue_insertOrReplaceBookmark(bookmark)
-                            self.syncQueue_notifyObservers(scope: .bookmark(bookmark.id))
-                        }
-                    } else {
-                        try self.syncQueue_insertOrReplaceBookmark(bookmark)
-                        self.syncQueue_notifyObservers(scope: .bookmark(bookmark.id))
-                    }
+    private func syncQueue_insertOrUpdateBookmark(_ bookmark: Bookmark) throws {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
+        try self.db.transaction {
+            // N.B. While it would be possible to use an insert or replace strategy directly, we want to ensure
+            // we only notify observers if the data has actually changed so we instead fetch the item and
+            // compare.
+            if let existingBookmark = try? self.syncQueue_bookmark(identifier: bookmark.identifier) {
+                if existingBookmark != bookmark {
+                    try self.syncQueue_insertOrReplaceBookmark(bookmark)
+                    self.syncQueue_notifyObservers(scope: .bookmark(bookmark.id))
                 }
-                return bookmark
+            } else {
+                try self.syncQueue_insertOrReplaceBookmark(bookmark)
+                self.syncQueue_notifyObservers(scope: .bookmark(bookmark.id))
             }
-            completion(result)
         }
     }
 
-    public func insertOrUpdateBookmark(_ bookmark: Bookmark) async throws -> Bookmark {
+    public func insertOrUpdateBookmark(_ bookmark: Bookmark) async throws {
         try await withCheckedThrowingContinuation { continuation in
-            self.insertOrUpdateBookmark(bookmark) { result in
+            syncQueue.async {
+                let result = Swift.Result<Void, Error> {
+                    try Task.checkCancellation()
+                    try self.syncQueue_insertOrUpdateBookmark(bookmark)
+                }
                 continuation.resume(with: result)
             }
         }
@@ -374,7 +372,7 @@ public class Database {
 
     public func insertOrUpdateBookmarks(_ bookmarks: [Bookmark]) async throws {
         for bookmark in bookmarks {
-            _ = try await insertOrUpdateBookmark(bookmark)
+            try await insertOrUpdateBookmark(bookmark)
         }
     }
 

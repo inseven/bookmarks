@@ -168,7 +168,7 @@ public class Updater {
 
     public func delete(bookmarks: [Bookmark]) async throws {
         for bookmark in bookmarks {
-            try await self.database.deleteBookmark(identifier: bookmark.identifier)
+            try await self.database.delete(bookmark: bookmark.identifier)
             schedule(operation: DeleteBookmark(bookmark: bookmark))
         }
     }

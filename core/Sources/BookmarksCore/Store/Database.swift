@@ -192,7 +192,19 @@ public class Database {
         }
     }
 
-    fileprivate func syncQueue_migrate() throws {
+    private func run<T>(operation: @escaping () throws -> T) async throws -> T {
+        try await withCheckedThrowingContinuation { continuation in
+            syncQueue.async {
+                let result = Swift.Result<T, Error> {
+                    try Task.checkCancellation()
+                    return try operation()
+                }
+                continuation.resume(with: result)
+            }
+        }
+    }
+
+    private func syncQueue_migrate() throws {
         dispatchPrecondition(condition: .onQueue(syncQueue))
         try db.transaction {
             let currentVersion = db.userVersion
@@ -306,14 +318,8 @@ public class Database {
     }
 
     public func bookmark(identifier: String) async throws -> Bookmark {
-        return try await withCheckedThrowingContinuation { continuation in
-            syncQueue.async {
-                let result = Swift.Result<Bookmark, Error> {
-                    try Task.checkCancellation()
-                    return try self.syncQueue_bookmark(identifier: identifier)
-                }
-                continuation.resume(with: result)
-            }
+        try await run {
+            try self.syncQueue_bookmark(identifier: identifier)
         }
     }
 
@@ -446,7 +452,6 @@ public class Database {
         }
     }
 
-
     public func deleteTag(tag: String) async throws {
         _ = try await withCheckedThrowingContinuation { continuation in
             syncQueue.async {
@@ -575,24 +580,14 @@ public class Database {
     }
 
     public func bookmarks<T: QueryDescription>(query: T) async throws -> [Bookmark] {
-        return try await withCheckedThrowingContinuation { continuation in
-            syncQueue.async {
-                let result = Swift.Result<[Bookmark], Error> {
-                    try self.syncQueue_bookmarks(where: query.sql)
-                }
-                continuation.resume(with: result)
-            }
+        try await run {
+            try self.syncQueue_bookmarks(where: query.sql)
         }
     }
 
     public func count<T: QueryDescription>(query: T) async throws -> Int {
-        return try await withCheckedThrowingContinuation { continuation in
-            syncQueue.async {
-                let result = Swift.Result<Int, Error> {
-                    try self.syncQueue_count(where: query.sql)
-                }
-                continuation.resume(with: result)
-            }
+        try await run {
+            try self.syncQueue_count(where: query.sql)
         }
     }
 

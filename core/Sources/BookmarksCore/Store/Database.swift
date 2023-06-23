@@ -331,19 +331,6 @@ public class Database {
         }
     }
 
-    public func bookmark(url: URL, completion: @escaping (Swift.Result<Bookmark, Error>) -> Void) {
-        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        syncQueue.async {
-            do {
-                try self.db.transaction {
-                    let result = Swift.Result { try self.syncQueue_bookmark(url: url) }
-                    completion(result)
-                }
-            } catch {
-                completion(.failure(error))
-            }
-        }
-    }
 
 
     fileprivate func syncQueue_insertOrReplaceBookmark(_ bookmark: Bookmark) throws {

@@ -160,7 +160,8 @@ public class Database {
     static var schemaVersion: Int32 = Array(migrations.keys).max() ?? 0
 
     let path: URL
-    var syncQueue = DispatchQueue(label: "Database.syncQueue")
+    let syncQueue = DispatchQueue(label: "Database.syncQueue")
+    let targetQueue = DispatchQueue(label: "Database.targetQueue")
     var db: Connection  // Synchronized on syncQueue
     var observers: [DatabaseObserver] = []  // Synchronized on syncQueue
 
@@ -224,15 +225,19 @@ public class Database {
         }
     }
 
-    fileprivate func syncQueue_enableForeignKeys() throws {
+    private func syncQueue_enableForeignKeys() throws {
         dispatchPrecondition(condition: .onQueue(syncQueue))
         try db.run("PRAGMA foreign_keys = ON")
     }
 
-    fileprivate func syncQueue_notifyObservers(scope: Scope) {
+    private func syncQueue_notifyObservers(scope: Scope) {
         dispatchPrecondition(condition: .onQueue(syncQueue))
-        let observers = self.observers
-        DispatchQueue.global(qos: .background).async {
+        let observers = Array(self.observers)
+        // We use the serial `targetQueue` to notify our observers to ensure they don't need to worry about thread
+        // safety issues arising from mutating internal state in the callback. For example, this makes it much easier
+        // for an observer wishing to receive a single change to safely update its state when a change has been received
+        // so it can ignore subsequent changes.
+        targetQueue.async {
             for observer in observers {
                 observer.databaseDidUpdate(database: self, scope: scope)
             }

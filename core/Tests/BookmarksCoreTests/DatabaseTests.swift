@@ -196,7 +196,6 @@ class DatabaseTests: XCTestCase {
         await XCTAssertThrowsErrorAsync(try await database.delete(bookmark: identifier)) { error in
             XCTAssertEqual(error as! BookmarksError, BookmarksError.bookmarkNotFoundByIdentifier(identifier))
         }
-
     }
 
     func testItemUpdateCleansUpTags() async throws {

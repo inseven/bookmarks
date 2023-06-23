@@ -193,7 +193,7 @@ class DatabaseTests: XCTestCase {
 
     func testDeleteItemFailsOnMissingItem() async throws {
         let identifier = UUID().uuidString
-        await XCTAssertThrowsErrorAsync(try await database.deleteBookmark(identifier: identifier)) { error in
+        await XCTAssertThrowsErrorAsync(try await database.delete(bookmark: identifier)) { error in
             XCTAssertEqual(error as! BookmarksError, BookmarksError.bookmarkNotFoundByIdentifier(identifier))
         }
 

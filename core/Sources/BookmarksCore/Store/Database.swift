@@ -591,23 +591,16 @@ public class Database {
         }
     }
 
-    private func identifiers(completion: @escaping (Swift.Result<[String], Error>) -> Void) {
-        let completion = DispatchQueue.global().asyncClosure(completion)
-        syncQueue.async {
-            let result = Swift.Result {
-                try self.db.prepare(Schema.items.select(Schema.identifier)).map { row -> String in
-                    try row.get(Schema.identifier)
-                }
-            }
-            completion(result)
+    private func syncQueue_identifiers() throws -> [String] {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
+        return try self.db.prepare(Schema.items.select(Schema.identifier)).map { row -> String in
+            try row.get(Schema.identifier)
         }
     }
 
     public func identifiers() async throws -> [String] {
-        try await withCheckedThrowingContinuation { continuation in
-            identifiers { result in
-                continuation.resume(with: result)
-            }
+        try await run {
+            try self.syncQueue_identifiers()
         }
     }
 

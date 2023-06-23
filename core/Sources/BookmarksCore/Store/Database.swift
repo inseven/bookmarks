@@ -238,22 +238,6 @@ public class Database {
                         notes: result.notes)
     }
 
-    fileprivate func syncQueue_bookmark(url: URL) throws -> Bookmark {
-        let run = try db.prepare(Schema.items.filter(Schema.url == url.absoluteString).limit(1)).map(Bookmark.init)
-        guard let result = run.first else {
-            throw BookmarksError.bookmarkNotFoundByURL(url)
-        }
-        let tags = try syncQueue_tags(bookmarkIdentifier: result.identifier)
-        return Bookmark(identifier: result.identifier,
-                        title: result.title,
-                        url: result.url,
-                        tags: Set(tags),
-                        date: result.date,
-                        toRead: result.toRead,
-                        shared: result.shared,
-                        notes: result.notes)
-    }
-
     fileprivate func syncQueue_fetchOrInsertTag(name: String) throws -> Int64 {
         if let id = try? syncQueue_tag(name: name) {
             return id
@@ -319,6 +303,10 @@ public class Database {
     public func bookmark(identifier: String) async throws -> Bookmark {
         return try await withCheckedThrowingContinuation { continuation in
             syncQueue.async {
+                guard !Task.isCancelled else {
+                    continuation.resume(throwing: CancellationError())
+                    return
+                }
                 let result = Swift.Result<Bookmark, Error> {
                     try self.syncQueue_bookmark(identifier: identifier)
                 }
@@ -327,19 +315,6 @@ public class Database {
         }
     }
 
-    public func bookmark(url: URL, completion: @escaping (Swift.Result<Bookmark, Error>) -> Void) {
-        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        syncQueue.async {
-            do {
-                try self.db.transaction {
-                    let result = Swift.Result { try self.syncQueue_bookmark(url: url) }
-                    completion(result)
-                }
-            } catch {
-                completion(.failure(error))
-            }
-        }
-    }
 
 
     fileprivate func syncQueue_insertOrReplaceBookmark(_ bookmark: Bookmark) throws {

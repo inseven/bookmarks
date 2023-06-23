@@ -238,22 +238,6 @@ public class Database {
                         notes: result.notes)
     }
 
-    fileprivate func syncQueue_bookmark(url: URL) throws -> Bookmark {
-        let run = try db.prepare(Schema.items.filter(Schema.url == url.absoluteString).limit(1)).map(Bookmark.init)
-        guard let result = run.first else {
-            throw BookmarksError.bookmarkNotFoundByURL(url)
-        }
-        let tags = try syncQueue_tags(bookmarkIdentifier: result.identifier)
-        return Bookmark(identifier: result.identifier,
-                        title: result.title,
-                        url: result.url,
-                        tags: Set(tags),
-                        date: result.date,
-                        toRead: result.toRead,
-                        shared: result.shared,
-                        notes: result.notes)
-    }
-
     fileprivate func syncQueue_fetchOrInsertTag(name: String) throws -> Int64 {
         if let id = try? syncQueue_tag(name: name) {
             return id

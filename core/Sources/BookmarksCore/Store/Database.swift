@@ -290,21 +290,9 @@ public class Database {
                 })
     }
 
-    public func tags(completion: @escaping (Swift.Result<[Tag], Error>) -> Void) {
-        let completion = DispatchQueue.global(qos: .userInitiated).asyncClosure(completion)
-        syncQueue.async {
-            let result = Swift.Result {
-                try self.syncQueue_tags()
-            }
-            completion(result)
-        }
-    }
-
     public func tags() async throws -> [Tag] {
-        try await withCheckedThrowingContinuation { continuation in
-            tags { result in
-                continuation.resume(with: result)
-            }
+        try await run {
+            try self.syncQueue_tags()
         }
     }
 

@@ -308,12 +308,9 @@ public class Database {
     public func bookmark(identifier: String) async throws -> Bookmark {
         return try await withCheckedThrowingContinuation { continuation in
             syncQueue.async {
-                guard !Task.isCancelled else {
-                    continuation.resume(throwing: CancellationError())
-                    return
-                }
                 let result = Swift.Result<Bookmark, Error> {
-                    try self.syncQueue_bookmark(identifier: identifier)
+                    try Task.checkCancellation()
+                    return try self.syncQueue_bookmark(identifier: identifier)
                 }
                 continuation.resume(with: result)
             }

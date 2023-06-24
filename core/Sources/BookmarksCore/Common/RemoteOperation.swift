@@ -67,7 +67,7 @@ struct RefreshOperation: RemoteOperation {
                 continue
             }
             identifiers.insert(bookmark.identifier)
-            _ = try await database.insertOrUpdateBookmark(bookmark)
+            _ = try await database.insertOrUpdate(bookmark: bookmark)
         }
 
         // Delete missing bookmarks.

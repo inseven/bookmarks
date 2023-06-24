@@ -177,14 +177,14 @@ class DatabaseTests: XCTestCase {
                             tags: ["example", "website"],
                             date: Date(timeIntervalSince1970: 0),
                             notes: notes)
-        _ = try await database.insertOrUpdateBookmark(item)
+        _ = try await database.insertOrUpdate(bookmark: item)
         let fetchedItem = try await database.bookmark(identifier: item.identifier)
         XCTAssertEqual(item, fetchedItem)
         XCTAssertEqual(fetchedItem.notes, notes)
 
         var update = item
         update.notes = "Cheese"
-        _ = try await database.insertOrUpdateBookmark(update)
+        _ = try await database.insertOrUpdate(bookmark: update)
         let fetchedUpdate = try await database.bookmark(identifier: item.identifier)
         XCTAssertNotEqual(item, update)
         XCTAssertEqual(update, fetchedUpdate)

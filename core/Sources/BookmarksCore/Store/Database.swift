@@ -308,29 +308,25 @@ public class Database {
     }
 
 
-
-    fileprivate func syncQueue_insertOrReplaceBookmark(_ bookmark: Bookmark) throws {
+    private func syncQueue_insertOrReplace(bookmark: Bookmark) throws {
         let tags = try bookmark.tags.map { try syncQueue_fetchOrInsertTag(name: $0) }
-        let itemId = try self.db.run(
-            Schema.items.insert(or: .replace,
-                                Schema.identifier <- bookmark.identifier,
-                                Schema.title <- bookmark.title,
-                                Schema.url <- bookmark.url.absoluteString,
-                                Schema.date <- bookmark.date,
-                                Schema.toRead <- bookmark.toRead,
-                                Schema.shared <- bookmark.shared,
-                                Schema.notes <- bookmark.notes
-            ))
+        let itemId = try self.db.run(Schema.items.insert(or: .replace,
+                                                         Schema.identifier <- bookmark.identifier,
+                                                         Schema.title <- bookmark.title,
+                                                         Schema.url <- bookmark.url.absoluteString,
+                                                         Schema.date <- bookmark.date,
+                                                         Schema.toRead <- bookmark.toRead,
+                                                         Schema.shared <- bookmark.shared,
+                                                         Schema.notes <- bookmark.notes))
         for tagId in tags {
-            _ = try self.db.run(
-                Schema.items_to_tags.insert(or: .replace,
-                                            Schema.itemId <- itemId,
-                                            Schema.tagId <- tagId))
+            _ = try self.db.run(Schema.items_to_tags.insert(or: .replace,
+                                                            Schema.itemId <- itemId,
+                                                            Schema.tagId <- tagId))
         }
         try syncQueue_pruneTags()
     }
 
-    private func syncQueue_insertOrUpdateBookmark(_ bookmark: Bookmark) throws {
+    private func syncQueue_insertOrUpdate(bookmark: Bookmark) throws {
         dispatchPrecondition(condition: .onQueue(syncQueue))
         try self.db.transaction {
             // N.B. While it would be possible to use an insert or replace strategy directly, we want to ensure
@@ -338,31 +334,25 @@ public class Database {
             // compare.
             if let existingBookmark = try? self.syncQueue_bookmark(identifier: bookmark.identifier) {
                 if existingBookmark != bookmark {
-                    try self.syncQueue_insertOrReplaceBookmark(bookmark)
+                    try self.syncQueue_insertOrReplace(bookmark: bookmark)
                     self.syncQueue_notifyObservers(scope: .bookmark(bookmark.id))
                 }
             } else {
-                try self.syncQueue_insertOrReplaceBookmark(bookmark)
+                try self.syncQueue_insertOrReplace(bookmark: bookmark)
                 self.syncQueue_notifyObservers(scope: .bookmark(bookmark.id))
             }
         }
     }
 
-    public func insertOrUpdateBookmark(_ bookmark: Bookmark) async throws {
-        try await withCheckedThrowingContinuation { continuation in
-            syncQueue.async {
-                let result = Swift.Result<Void, Error> {
-                    try Task.checkCancellation()
-                    try self.syncQueue_insertOrUpdateBookmark(bookmark)
-                }
-                continuation.resume(with: result)
-            }
+    public func insertOrUpdate(bookmark: Bookmark) async throws {
+        try await run {
+            try self.syncQueue_insertOrUpdate(bookmark: bookmark)
         }
     }
 
     public func insertOrUpdateBookmarks(_ bookmarks: [Bookmark]) async throws {
         for bookmark in bookmarks {
-            try await insertOrUpdateBookmark(bookmark)
+            try await insertOrUpdate(bookmark: bookmark)
         }
     }
 

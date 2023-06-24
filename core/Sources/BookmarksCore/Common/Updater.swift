@@ -175,7 +175,7 @@ public class Updater {
 
     public func update(bookmarks: [Bookmark]) async throws {
         for bookmark in bookmarks {
-            _ = try await self.database.insertOrUpdateBookmark(bookmark)
+            _ = try await self.database.insertOrUpdate(bookmark: bookmark)
             schedule(operation: UpdateBookmark(bookmark: bookmark))
         }
     }

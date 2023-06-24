@@ -415,21 +415,17 @@ public class Database {
         }
     }
 
+    private func syncQueue_delete(tag: String) throws {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
+        try self.db.transaction {
+            try self.db.run(Schema.tags.filter(Schema.name == tag).delete())
+            self.syncQueue_notifyObservers(scope: .tag(tag))
+        }
+    }
+
     public func delete(tag: String) async throws {
-        _ = try await withCheckedThrowingContinuation { continuation in
-            syncQueue.async {
-                do {
-                    try self.db.transaction {
-                        let result = Swift.Result { () -> Int in
-                            try self.db.run(Schema.tags.filter(Schema.name == tag).delete())
-                        }
-                        self.syncQueue_notifyObservers(scope: .tag(tag))
-                        continuation.resume(with: result)
-                    }
-                } catch {
-                    continuation.resume(throwing: error)
-                }
-            }
+        try await run {
+            try self.syncQueue_delete(tag: tag)
         }
     }
 

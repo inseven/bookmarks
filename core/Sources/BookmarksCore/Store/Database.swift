@@ -70,6 +70,7 @@ public class Database {
     public enum Scope {
         case bookmark(Bookmark.ID)
         case all
+        case tag(String)
     }
 
     class Schema {
@@ -424,7 +425,7 @@ public class Database {
         }
     }
 
-    public func deleteTag(tag: String) async throws {
+    public func delete(tag: String) async throws {
         _ = try await withCheckedThrowingContinuation { continuation in
             syncQueue.async {
                 do {
@@ -432,7 +433,7 @@ public class Database {
                         let result = Swift.Result { () -> Int in
                             try self.db.run(Schema.tags.filter(Schema.name == tag).delete())
                         }
-                        self.syncQueue_notifyObservers(scope: .all)
+                        self.syncQueue_notifyObservers(scope: .tag(tag))
                         continuation.resume(with: result)
                     }
                 } catch {

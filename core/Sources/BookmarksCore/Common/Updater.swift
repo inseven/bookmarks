@@ -188,7 +188,7 @@ public class Updater {
 
     public func delete(tags: [String]) async throws {
         for tag in tags {
-            try await self.database.deleteTag(tag: tag)
+            try await self.database.delete(tag: tag)
             schedule(operation: DeleteTag(tag: tag))
         }
     }

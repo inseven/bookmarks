@@ -345,7 +345,7 @@ class DatabaseTests: XCTestCase {
         await XCTAssertEqualAsync(try await database.tags().names(),
                                   ["cheese", "example", "robert", "strawberries", "website"])
 
-        try await database.deleteTag(tag: "website")
+        try await database.delete(tag: "website")
         await XCTAssertEqualAsync(try await database.tags().names(),
                                   ["cheese", "example", "robert", "strawberries"])
         await XCTAssertEqualAsync(try await database.bookmarks(query: True()),

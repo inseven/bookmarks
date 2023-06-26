@@ -78,7 +78,7 @@ public struct PhoneSettingsView: View {
                 }
             }
             .navigationBarTitle("Settings", displayMode: .inline)
-            .closeable()
+            .dismissable(.close)
             .sheet(item: $sheet) { sheet in
                 switch sheet {
                 case .about:

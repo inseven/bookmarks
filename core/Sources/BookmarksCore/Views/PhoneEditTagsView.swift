@@ -90,7 +90,7 @@ public struct PhoneEditTagsView: View {
             }
             .navigationTitle("Tags")
             .navigationBarTitleDisplayMode(.inline)
-            .closeable()
+            .dismissable(.done)
             .defaultFocus($focus, .input)
         }
         .navigationViewStyle(.stack)

@@ -32,7 +32,7 @@ public struct PhoneTagsView: View {
         NavigationView {
             TagsContentView(applicationModel: applicationModel)
                 .navigationBarTitle("Tags", displayMode: .inline)
-                .closeable()
+                .dismissable(.close)
         }
     }
 

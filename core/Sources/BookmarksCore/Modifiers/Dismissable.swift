@@ -20,18 +20,43 @@
 
 import SwiftUI
 
-struct Closeable: ViewModifier {
+enum DismissableAction {
+    case close
+    case done
+}
+
+struct Dismissable: ViewModifier {
 
     @Environment(\.dismiss) var dismiss
+
+    let action: DismissableAction
+
+    var placement: ToolbarItemPlacement {
+        switch action {
+        case .close:
+            return .cancellationAction
+        case .done:
+            return .confirmationAction
+        }
+    }
+
+    var text: String {
+        switch action {
+        case .close:
+            return "Close"
+        case .done:
+            return "Done"
+        }
+    }
 
     func body(content: Content) -> some View {
         content
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
+                ToolbarItem(placement: placement) {
                     Button {
                         dismiss()
                     } label: {
-                        Text("Close")
+                        Text(text)
                     }
                 }
             }
@@ -41,8 +66,8 @@ struct Closeable: ViewModifier {
 
 extension View {
 
-    func closeable() -> some View {
-        return modifier(Closeable())
+    func dismissable(_ action: DismissableAction) -> some View {
+        return modifier(Dismissable(action: action))
     }
 
 }

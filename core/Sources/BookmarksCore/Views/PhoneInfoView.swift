@@ -34,7 +34,7 @@ public struct PhoneInfoView: View {
             InfoContentView(applicationModel: applicationModel, id: id)
                 .environmentObject(applicationModel.tagsModel)
                 .navigationBarTitleDisplayMode(.inline)
-                .closeable()
+                .dismissable(.close)
         }
     }
     

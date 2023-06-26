@@ -66,7 +66,7 @@ struct Dismissable: ViewModifier {
 
 extension View {
 
-    func dismissable(_ action: DismissableAction = .close) -> some View {
+    func dismissable(_ action: DismissableAction) -> some View {
         return modifier(Dismissable(action: action))
     }
 

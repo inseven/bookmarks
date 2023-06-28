@@ -59,7 +59,7 @@ public struct SidebarContentView: View {
                 }
             }
             if !settings.favoriteTags.isEmpty {
-                Section("Favorite Tags") {
+                Section("Favorites") {
                     ForEach(settings.favoriteTags.sorted(), id: \.section) { tag in
                         SectionLink(section: .tag(tag))
 #if os(macOS)

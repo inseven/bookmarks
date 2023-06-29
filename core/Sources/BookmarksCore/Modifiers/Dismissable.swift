@@ -20,9 +20,10 @@
 
 import SwiftUI
 
-enum DismissableAction {
+public enum DismissableAction {
     case close
     case done
+    case cancel
 }
 
 struct Dismissable: ViewModifier {
@@ -37,6 +38,8 @@ struct Dismissable: ViewModifier {
             return .cancellationAction
         case .done:
             return .confirmationAction
+        case .cancel:
+            return .cancellationAction
         }
     }
 
@@ -46,6 +49,8 @@ struct Dismissable: ViewModifier {
             return "Close"
         case .done:
             return "Done"
+        case.cancel:
+            return "Cancel"
         }
     }
 
@@ -66,7 +71,7 @@ struct Dismissable: ViewModifier {
 
 extension View {
 
-    func dismissable(_ action: DismissableAction) -> some View {
+    public func dismissable(_ action: DismissableAction) -> some View {
         return modifier(Dismissable(action: action))
     }
 

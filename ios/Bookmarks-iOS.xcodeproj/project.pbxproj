@@ -496,6 +496,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = S4WXAUZQEV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Bookmarks Share Extension/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Bookmarks Share Extension";
@@ -510,6 +511,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks.new.ShareExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Bookmarks Share Extension App Store Profile";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

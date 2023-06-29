@@ -22,7 +22,7 @@ import Foundation
 
 extension Pinboard {
 
-    struct Result: Codable {
+    public struct Result: Codable {
 
         private enum CodingKeys: String, CodingKey {
             case resultCode = "result_code"

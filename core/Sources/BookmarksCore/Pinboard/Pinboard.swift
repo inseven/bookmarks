@@ -124,7 +124,9 @@ public class Pinboard {
         }
     }
 
-    func postsAdd(_ post: Post) async throws -> Result {
+    // TODO: This is a duplciate?
+    // TODO: Post _MUST_ have a description?
+    public func postsAdd(_ post: Post) async throws -> Result {
         guard let url = post.href?.absoluteString else {
             throw BookmarksError.malformedBookmark
         }
@@ -151,7 +153,6 @@ public class Pinboard {
     private func postsAdd(post: Post, replace: Bool, completion: @escaping (Swift.Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
         guard let url = post.href?.absoluteString,
-              let description = post.description,
               let date = post.time else {
             completion(.failure(BookmarksError.malformedBookmark))
             return
@@ -162,7 +163,7 @@ public class Pinboard {
 
         let parameters: [String: String] = [
             "url": url,
-            "description": description,
+            "description": post.description,
             "extended": post.extended,
             "tags": post.tags.joined(separator: " "),
             "dt": dt,

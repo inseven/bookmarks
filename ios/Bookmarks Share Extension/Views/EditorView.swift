@@ -21,47 +21,22 @@
 import SwiftUI
 
 import BookmarksCore
-import Interact
 
-struct ContentView: View {
+struct EditorView: View {
 
-    @Environment(\.dismiss) var dismiss
-
-    @EnvironmentObject var extensionModel: ShareExtensionModel
+    @Binding var post: Pinboard.Post
 
     var body: some View {
-        List {
-            if let post = Binding($extensionModel.post) {
-                EditorView(post: post)
+        Section {
+            TextField("Title", text: $post.description, axis: .vertical)
+            TextField("Notes", text: $post.extended, axis: .vertical)
+                .lineLimit(5...10)
+        }
+        Section {
+            TokenView("Add tags...", tokens: $post.tags) { candidate, existing, count in
+                return []
             }
         }
-        .safeAreaInset(edge: .bottom) {
-            VStack {
-                Button {
-                    extensionModel.save()
-                } label: {
-                    Text("Save")
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.borderedProminent)
-                Button {
-                    extensionModel.save(toRead: true)
-                } label: {
-                    Text("Read Later")
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.bordered)
-            }
-            .controlSize(.large)
-            .padding()
-        }
-        .navigationTitle("Add Bookmark")
-        .navigationBarTitleDisplayMode(.inline)
-        .dismissable(.cancel) {
-            extensionModel.dismiss()
-        }
-        .presents($extensionModel.error)
-        .runs(extensionModel)
     }
 
 }

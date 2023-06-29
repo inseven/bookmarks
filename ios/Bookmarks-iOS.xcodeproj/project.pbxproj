@@ -14,6 +14,7 @@
 		D889F92B2A4E19EC000B0AA8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D889F92A2A4E19EC000B0AA8 /* ContentView.swift */; };
 		D889F92E2A4E1A29000B0AA8 /* ShareExtensionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D889F92D2A4E1A29000B0AA8 /* ShareExtensionModel.swift */; };
 		D889F9312A4E1A6E000B0AA8 /* NSItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D889F9302A4E1A6E000B0AA8 /* NSItemProvider.swift */; };
+		D889F9332A4E347B000B0AA8 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D889F9322A4E347B000B0AA8 /* EditorView.swift */; };
 		D89CF2132A4DE8B5000E2B1C /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89CF2122A4DE8B5000E2B1C /* ShareViewController.swift */; };
 		D89CF2162A4DE8B5000E2B1C /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D89CF2142A4DE8B5000E2B1C /* MainInterface.storyboard */; };
 		D89CF21A2A4DE8B5000E2B1C /* Bookmarks Share Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D89CF2102A4DE8B5000E2B1C /* Bookmarks Share Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -74,6 +75,7 @@
 		D889F92A2A4E19EC000B0AA8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D889F92D2A4E1A29000B0AA8 /* ShareExtensionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareExtensionModel.swift; sourceTree = "<group>"; };
 		D889F9302A4E1A6E000B0AA8 /* NSItemProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSItemProvider.swift; sourceTree = "<group>"; };
+		D889F9322A4E347B000B0AA8 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
 		D89C65E326AF5A8E00D49D11 /* Common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		D89C65E426AF5A8E00D49D11 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		D89C65E526AF5A8E00D49D11 /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 			children = (
 				D889F92A2A4E19EC000B0AA8 /* ContentView.swift */,
 				D889F9272A4E19A6000B0AA8 /* RootView.swift */,
+				D889F9322A4E347B000B0AA8 /* EditorView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -430,6 +433,7 @@
 				D889F9282A4E19A6000B0AA8 /* RootView.swift in Sources */,
 				D889F9312A4E1A6E000B0AA8 /* NSItemProvider.swift in Sources */,
 				D889F92E2A4E1A29000B0AA8 /* ShareExtensionModel.swift in Sources */,
+				D889F9332A4E347B000B0AA8 /* EditorView.swift in Sources */,
 				D89CF2132A4DE8B5000E2B1C /* ShareViewController.swift in Sources */,
 				D889F92B2A4E19EC000B0AA8 /* ContentView.swift in Sources */,
 			);

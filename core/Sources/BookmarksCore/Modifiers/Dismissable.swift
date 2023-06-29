@@ -30,9 +30,10 @@ struct Dismissable: ViewModifier {
 
     @Environment(\.dismiss) var dismiss
 
-    let action: DismissableAction
+    private let action: DismissableAction
+    private let perform: (() -> Void)?
 
-    var placement: ToolbarItemPlacement {
+    private var placement: ToolbarItemPlacement {
         switch action {
         case .close:
             return .cancellationAction
@@ -43,7 +44,7 @@ struct Dismissable: ViewModifier {
         }
     }
 
-    var text: String {
+    private var text: String {
         switch action {
         case .close:
             return "Close"
@@ -54,12 +55,21 @@ struct Dismissable: ViewModifier {
         }
     }
 
+    init(action: DismissableAction, perform: (() -> Void)? = nil) {
+        self.action = action
+        self.perform = perform
+    }
+
     func body(content: Content) -> some View {
         content
             .toolbar {
                 ToolbarItem(placement: placement) {
                     Button {
-                        dismiss()
+                        if let perform {
+                            perform()
+                        } else {
+                            dismiss()
+                        }
                     } label: {
                         Text(text)
                     }
@@ -71,8 +81,8 @@ struct Dismissable: ViewModifier {
 
 extension View {
 
-    public func dismissable(_ action: DismissableAction) -> some View {
-        return modifier(Dismissable(action: action))
+    public func dismissable(_ action: DismissableAction, perform: (() -> Void)? = nil) -> some View {
+        return modifier(Dismissable(action: action, perform: perform))
     }
 
 }

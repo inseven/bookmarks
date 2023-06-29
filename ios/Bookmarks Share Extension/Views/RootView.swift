@@ -18,18 +18,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
+import SwiftUI
 
-extension Pinboard {
+struct RootView: View {
 
-    public struct Result: Codable {
+    @ObservedObject var extensionModel: ShareExtensionModel
 
-        private enum CodingKeys: String, CodingKey {
-            case resultCode = "result_code"
+    var body: some View {
+        NavigationView {
+            ContentView()
+                .environmentObject(extensionModel)
         }
-
-        let resultCode: String
-
     }
 
 }

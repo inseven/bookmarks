@@ -18,18 +18,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
+import SwiftUI
 
-extension Pinboard {
+import BookmarksCore
 
-    public struct Result: Codable {
+struct EditorView: View {
 
-        private enum CodingKeys: String, CodingKey {
-            case resultCode = "result_code"
+    @Binding var post: Pinboard.Post
+
+    var body: some View {
+        Section {
+            TextField("Title", text: $post.description, axis: .vertical)
+            TextField("Notes", text: $post.extended, axis: .vertical)
+                .lineLimit(5...10)
         }
-
-        let resultCode: String
-
+        Section {
+            TokenView("Add tags...", tokens: $post.tags) { candidate, existing, count in
+                return []
+            }
+        }
     }
 
 }

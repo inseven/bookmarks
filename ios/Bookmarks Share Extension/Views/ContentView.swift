@@ -18,34 +18,50 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Combine
+import SwiftUI
 
-extension Publisher {
+import BookmarksCore
+import Interact
 
-    public func asyncMap<T>(_ transform: @escaping (Output) async -> T) -> Publishers.FlatMap<Future<T, Never>, Self> {
-        flatMap { value in
-            Future { promise in
-                Task {
-                    let output = await transform(value)
-                    promise(.success(output))
-                }
+struct ContentView: View {
+
+    @Environment(\.dismiss) var dismiss
+
+    @EnvironmentObject var extensionModel: ShareExtensionModel
+
+    var body: some View {
+        List {
+            if let post = Binding($extensionModel.post) {
+                EditorView(post: post)
             }
         }
-    }
-
-    public func asyncMap<T>(_ transform: @escaping (Output) async throws -> T) -> Publishers.FlatMap<Future<T, Error>, Self> {
-        flatMap { value in
-            Future { promise in
-                Task {
-                    do {
-                        let output = try await transform(value)
-                        promise(.success(output))
-                    } catch {
-                        promise(.failure(error))
-                    }
+        .safeAreaInset(edge: .bottom) {
+            VStack {
+                Button {
+                    extensionModel.save()
+                } label: {
+                    Text("Save")
+                        .frame(maxWidth: .infinity)
                 }
+                .buttonStyle(.borderedProminent)
+                Button {
+                    extensionModel.save(toRead: true)
+                } label: {
+                    Text("Read Later")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
             }
+            .controlSize(.large)
+            .padding()
         }
+        .navigationTitle("Add Bookmark")
+        .navigationBarTitleDisplayMode(.inline)
+        .dismissable(.cancel) {
+            extensionModel.dismiss()
+        }
+        .presents($extensionModel.error)
+        .runs(extensionModel)
     }
 
 }

@@ -20,6 +20,8 @@
 
 import Foundation
 
+import SwiftSoup
+
 enum URLFormat {
     case short
 }
@@ -67,6 +69,18 @@ extension URL: Identifiable {
         case .short:
             return host ?? absoluteString
         }
+    }
+
+    public func document() async throws -> SwiftSoup.Document {
+        let (data, _) = try await URLSession.shared.data(from: self)
+        guard let html = String(data: data, encoding: .utf8) else {
+            throw BookmarksError.invalidResponse
+        }
+        return try SwiftSoup.parse(html, self.absoluteString)
+    }
+
+    public func title() async throws -> String? {
+        return try await document().title()
     }
 
 }

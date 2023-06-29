@@ -29,6 +29,15 @@
         }
       },
       {
+        "package": "SwiftSoup",
+        "repositoryURL": "https://github.com/scinfu/SwiftSoup.git",
+        "state": {
+          "branch": null,
+          "revision": "8b6cf29eead8841a1fa7822481cb3af4ddaadba6",
+          "version": "2.6.1"
+        }
+      },
+      {
         "package": "WrappingHStack",
         "repositoryURL": "https://github.com/ksemianov/WrappingHStack.git",
         "state": {

@@ -18,18 +18,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
+import SwiftUI
+import UIKit
 
-extension Pinboard {
+class ShareViewController: UIHostingController<RootView> {
 
-    public struct Result: Codable {
+    required init?(coder aDecoder: NSCoder) {
+        super.init(rootView: RootView(extensionModel: ShareExtensionModel.shared))
+    }
 
-        private enum CodingKeys: String, CodingKey {
-            case resultCode = "result_code"
-        }
-
-        let resultCode: String
-
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        ShareExtensionModel.shared.extensionContext = extensionContext
     }
 
 }

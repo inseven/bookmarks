@@ -20,16 +20,18 @@
 
 import Foundation
 
-extension Pinboard {
+extension NSItemProvider {
 
-    public struct Result: Codable {
-
-        private enum CodingKeys: String, CodingKey {
-            case resultCode = "result_code"
+    func item(typeIdentifier: String) async throws -> Any? {
+        try await withCheckedThrowingContinuation { continuation in
+            loadItem(forTypeIdentifier: typeIdentifier) { object, error in
+                if let error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+                continuation.resume(returning: error)
+            }
         }
-
-        let resultCode: String
-
     }
 
 }

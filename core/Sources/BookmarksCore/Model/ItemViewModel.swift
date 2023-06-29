@@ -57,7 +57,7 @@ class ItemViewModel: ObservableObject, Runnable {
                 if let post = result.posts.first {
                     DispatchQueue.main.async {
                         self.post = post
-                        self.title = post.description ?? ""  // TODO: Update the model to remove the optionality here.
+                        self.title = post.description
                         self.tokens = post.tags
                     }
                 }

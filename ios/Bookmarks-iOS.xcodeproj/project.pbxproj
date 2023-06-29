@@ -10,6 +10,15 @@
 		D822159B2955C35C0087FBAC /* BookmarksCore in Frameworks */ = {isa = PBXBuildFile; productRef = D822159A2955C35C0087FBAC /* BookmarksCore */; };
 		D864E47121C93FD200EAB9AD /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D864E47021C93FD200EAB9AD /* libxml2.2.tbd */; };
 		D8743909273106C000B676A5 /* Diligence in Frameworks */ = {isa = PBXBuildFile; productRef = D8743908273106C000B676A5 /* Diligence */; };
+		D889F9282A4E19A6000B0AA8 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D889F9272A4E19A6000B0AA8 /* RootView.swift */; };
+		D889F92B2A4E19EC000B0AA8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D889F92A2A4E19EC000B0AA8 /* ContentView.swift */; };
+		D889F92E2A4E1A29000B0AA8 /* ShareExtensionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D889F92D2A4E1A29000B0AA8 /* ShareExtensionModel.swift */; };
+		D889F9312A4E1A6E000B0AA8 /* NSItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D889F9302A4E1A6E000B0AA8 /* NSItemProvider.swift */; };
+		D889F9332A4E347B000B0AA8 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D889F9322A4E347B000B0AA8 /* EditorView.swift */; };
+		D89CF2132A4DE8B5000E2B1C /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89CF2122A4DE8B5000E2B1C /* ShareViewController.swift */; };
+		D89CF2162A4DE8B5000E2B1C /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D89CF2142A4DE8B5000E2B1C /* MainInterface.storyboard */; };
+		D89CF21A2A4DE8B5000E2B1C /* Bookmarks Share Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D89CF2102A4DE8B5000E2B1C /* Bookmarks Share Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D89CF2202A4DFE40000E2B1C /* BookmarksCore in Frameworks */ = {isa = PBXBuildFile; productRef = D89CF21F2A4DFE40000E2B1C /* BookmarksCore */; };
 		D8BDE1182551C56100C95945 /* BookmarksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BDE1172551C56100C95945 /* BookmarksApp.swift */; };
 		D8D3BC0121C6AEBD00D6FB97 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */; };
 		D8D3BC0421C6AEBD00D6FB97 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8D3BC0221C6AEBD00D6FB97 /* LaunchScreen.storyboard */; };
@@ -18,6 +27,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		D89CF2182A4DE8B5000E2B1C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D8D3BBEE21C6AEBC00D6FB97 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D89CF20F2A4DE8B5000E2B1C;
+			remoteInfo = "Bookmarks Share Extension";
+		};
 		D8D3BC0B21C6AEBD00D6FB97 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D8D3BBEE21C6AEBC00D6FB97 /* Project object */;
@@ -34,6 +50,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		D89CF21B2A4DE8B5000E2B1C /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				D89CF21A2A4DE8B5000E2B1C /* Bookmarks Share Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		D82215992955C26E0087FBAC /* core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = core; path = ../core; sourceTree = "<group>"; };
 		D832EECA2481B6D1004C64E3 /* Bookmarks.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Bookmarks.entitlements; sourceTree = "<group>"; };
@@ -41,9 +71,19 @@
 		D864E47021C93FD200EAB9AD /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 		D864E47221C9417F00EAB9AD /* Bookmarks-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bookmarks-Bridging-Header.h"; sourceTree = "<group>"; };
 		D87439072731068C00B676A5 /* diligence */ = {isa = PBXFileReference; lastKnownFileType = folder; name = diligence; path = ../diligence; sourceTree = "<group>"; };
+		D889F9272A4E19A6000B0AA8 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		D889F92A2A4E19EC000B0AA8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D889F92D2A4E1A29000B0AA8 /* ShareExtensionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareExtensionModel.swift; sourceTree = "<group>"; };
+		D889F9302A4E1A6E000B0AA8 /* NSItemProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSItemProvider.swift; sourceTree = "<group>"; };
+		D889F9322A4E347B000B0AA8 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
 		D89C65E326AF5A8E00D49D11 /* Common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		D89C65E426AF5A8E00D49D11 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		D89C65E526AF5A8E00D49D11 /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		D89CF2102A4DE8B5000E2B1C /* Bookmarks Share Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Bookmarks Share Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D89CF2122A4DE8B5000E2B1C /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		D89CF2152A4DE8B5000E2B1C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		D89CF2172A4DE8B5000E2B1C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D89CF2212A4E1144000E2B1C /* Bookmarks Share Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Bookmarks Share Extension.entitlements"; sourceTree = "<group>"; };
 		D8BDE1172551C56100C95945 /* BookmarksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksApp.swift; sourceTree = "<group>"; };
 		D8D3BBF621C6AEBC00D6FB97 /* Bookmarks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bookmarks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8D3BC0021C6AEBD00D6FB97 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -58,6 +98,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		D89CF20D2A4DE8B5000E2B1C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D89CF2202A4DFE40000E2B1C /* BookmarksCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D8D3BBF321C6AEBC00D6FB97 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -110,6 +158,46 @@
 			name = Packages;
 			sourceTree = "<group>";
 		};
+		D889F9292A4E19CC000B0AA8 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D889F92A2A4E19EC000B0AA8 /* ContentView.swift */,
+				D889F9272A4E19A6000B0AA8 /* RootView.swift */,
+				D889F9322A4E347B000B0AA8 /* EditorView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		D889F92C2A4E1A16000B0AA8 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				D889F92D2A4E1A29000B0AA8 /* ShareExtensionModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		D889F92F2A4E1A54000B0AA8 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				D889F9302A4E1A6E000B0AA8 /* NSItemProvider.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		D89CF2112A4DE8B5000E2B1C /* Bookmarks Share Extension */ = {
+			isa = PBXGroup;
+			children = (
+				D89CF2212A4E1144000E2B1C /* Bookmarks Share Extension.entitlements */,
+				D89CF2172A4DE8B5000E2B1C /* Info.plist */,
+				D89CF2122A4DE8B5000E2B1C /* ShareViewController.swift */,
+				D889F92F2A4E1A54000B0AA8 /* Extensions */,
+				D89CF2142A4DE8B5000E2B1C /* MainInterface.storyboard */,
+				D889F92C2A4E1A16000B0AA8 /* Model */,
+				D889F9292A4E19CC000B0AA8 /* Views */,
+			);
+			path = "Bookmarks Share Extension";
+			sourceTree = "<group>";
+		};
 		D8D3BBED21C6AEBC00D6FB97 = {
 			isa = PBXGroup;
 			children = (
@@ -120,6 +208,7 @@
 				D8D3BBF821C6AEBC00D6FB97 /* Bookmarks */,
 				D8D3BC0D21C6AEBD00D6FB97 /* BookmarksTests */,
 				D8D3BC1821C6AEBD00D6FB97 /* BookmarksUITests */,
+				D89CF2112A4DE8B5000E2B1C /* Bookmarks Share Extension */,
 				D8D3BBF721C6AEBC00D6FB97 /* Products */,
 				D864E46F21C93FD200EAB9AD /* Frameworks */,
 			);
@@ -131,6 +220,7 @@
 				D8D3BBF621C6AEBC00D6FB97 /* Bookmarks.app */,
 				D8D3BC0A21C6AEBD00D6FB97 /* BookmarksTests.xctest */,
 				D8D3BC1521C6AEBD00D6FB97 /* BookmarksUITests.xctest */,
+				D89CF2102A4DE8B5000E2B1C /* Bookmarks Share Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -170,6 +260,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		D89CF20F2A4DE8B5000E2B1C /* Bookmarks Share Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D89CF21E2A4DE8B5000E2B1C /* Build configuration list for PBXNativeTarget "Bookmarks Share Extension" */;
+			buildPhases = (
+				D89CF20C2A4DE8B5000E2B1C /* Sources */,
+				D89CF20D2A4DE8B5000E2B1C /* Frameworks */,
+				D89CF20E2A4DE8B5000E2B1C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Bookmarks Share Extension";
+			packageProductDependencies = (
+				D89CF21F2A4DFE40000E2B1C /* BookmarksCore */,
+			);
+			productName = "Bookmarks Share Extension";
+			productReference = D89CF2102A4DE8B5000E2B1C /* Bookmarks Share Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		D8D3BBF521C6AEBC00D6FB97 /* Bookmarks */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D8D3BC1E21C6AEBD00D6FB97 /* Build configuration list for PBXNativeTarget "Bookmarks" */;
@@ -177,10 +287,12 @@
 				D8D3BBF221C6AEBC00D6FB97 /* Sources */,
 				D8D3BBF321C6AEBC00D6FB97 /* Frameworks */,
 				D8D3BBF421C6AEBC00D6FB97 /* Resources */,
+				D89CF21B2A4DE8B5000E2B1C /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				D89CF2192A4DE8B5000E2B1C /* PBXTargetDependency */,
 			);
 			name = Bookmarks;
 			packageProductDependencies = (
@@ -234,10 +346,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastSwiftUpdateCheck = 1240;
+				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1430;
 				ORGANIZATIONNAME = "InSeven Limited";
 				TargetAttributes = {
+					D89CF20F2A4DE8B5000E2B1C = {
+						CreatedOnToolsVersion = 14.3.1;
+					};
 					D8D3BBF521C6AEBC00D6FB97 = {
 						CreatedOnToolsVersion = 10.1;
 					};
@@ -271,11 +386,20 @@
 				D8D3BBF521C6AEBC00D6FB97 /* Bookmarks */,
 				D8D3BC0921C6AEBD00D6FB97 /* BookmarksTests */,
 				D8D3BC1421C6AEBD00D6FB97 /* BookmarksUITests */,
+				D89CF20F2A4DE8B5000E2B1C /* Bookmarks Share Extension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		D89CF20E2A4DE8B5000E2B1C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D89CF2162A4DE8B5000E2B1C /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D8D3BBF421C6AEBC00D6FB97 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -302,6 +426,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		D89CF20C2A4DE8B5000E2B1C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D889F9282A4E19A6000B0AA8 /* RootView.swift in Sources */,
+				D889F9312A4E1A6E000B0AA8 /* NSItemProvider.swift in Sources */,
+				D889F92E2A4E1A29000B0AA8 /* ShareExtensionModel.swift in Sources */,
+				D889F9332A4E347B000B0AA8 /* EditorView.swift in Sources */,
+				D89CF2132A4DE8B5000E2B1C /* ShareViewController.swift in Sources */,
+				D889F92B2A4E19EC000B0AA8 /* ContentView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D8D3BBF221C6AEBC00D6FB97 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -329,6 +466,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		D89CF2192A4DE8B5000E2B1C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D89CF20F2A4DE8B5000E2B1C /* Bookmarks Share Extension */;
+			targetProxy = D89CF2182A4DE8B5000E2B1C /* PBXContainerItemProxy */;
+		};
 		D8D3BC0C21C6AEBD00D6FB97 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D8D3BBF521C6AEBC00D6FB97 /* Bookmarks */;
@@ -342,6 +484,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		D89CF2142A4DE8B5000E2B1C /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D89CF2152A4DE8B5000E2B1C /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
 		D8D3BC0221C6AEBD00D6FB97 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -353,6 +503,66 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		D89CF21C2A4DE8B5000E2B1C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = "Bookmarks Share Extension/Bookmarks Share Extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Bookmarks Share Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Bookmarks Share Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2023 InSeven Limited. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks.new.ShareExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D89CF21D2A4DE8B5000E2B1C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = "Bookmarks Share Extension/Bookmarks Share Extension.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = S4WXAUZQEV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Bookmarks Share Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Bookmarks Share Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2023 InSeven Limited. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks.new.ShareExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Bookmarks Share Extension App Store Profile";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		D8D3BC1C21C6AEBD00D6FB97 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D89C65E526AF5A8E00D49D11 /* Debug.xcconfig */;
@@ -482,6 +692,7 @@
 		D8D3BC1F21C6AEBD00D6FB97 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Bookmarks/Bookmarks.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -504,6 +715,7 @@
 		D8D3BC2021C6AEBD00D6FB97 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Bookmarks/Bookmarks.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
@@ -614,6 +826,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		D89CF21E2A4DE8B5000E2B1C /* Build configuration list for PBXNativeTarget "Bookmarks Share Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D89CF21C2A4DE8B5000E2B1C /* Debug */,
+				D89CF21D2A4DE8B5000E2B1C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		D8D3BBF121C6AEBC00D6FB97 /* Build configuration list for PBXProject "Bookmarks-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -660,6 +881,10 @@
 		D8743908273106C000B676A5 /* Diligence */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Diligence;
+		};
+		D89CF21F2A4DFE40000E2B1C /* BookmarksCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = BookmarksCore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

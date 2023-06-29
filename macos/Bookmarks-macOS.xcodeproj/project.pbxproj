@@ -146,7 +146,6 @@
 				D83D156B2A267940000B70BF /* HostedContentView.swift */,
 				D83D15522A267533000B70BF /* SafariExtensionHandler.swift */,
 				D83D15542A267533000B70BF /* SafariExtensionViewController.swift */,
-				D83D15712A267B22000B70BF /* Extensions */,
 				D83D15562A267533000B70BF /* Resources */,
 				D83D155B2A267533000B70BF /* SafariExtensionViewController.xib */,
 			);
@@ -160,13 +159,6 @@
 				D83D15592A267533000B70BF /* ToolbarItemIcon.pdf */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		D83D15712A267B22000B70BF /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Extensions;
 			sourceTree = "<group>";
 		};
 		D891C447261E32F90024E1A6 = {

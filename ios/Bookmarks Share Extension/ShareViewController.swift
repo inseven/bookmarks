@@ -1,11 +1,22 @@
+// Copyright (c) 2020-2023 InSeven Limited
 //
-//  ShareViewController.swift
-//  Bookmarks Share Extension
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
 //
-//  Created by Jason Barrie Morley on 29/06/2023.
-//  Copyright © 2023 InSeven Limited. All rights reserved.
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
 //
-
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
 
 import UIKit
 import SwiftUI
@@ -13,58 +24,6 @@ import UIKit
 import UniformTypeIdentifiers
 
 import BookmarksCore
-
-// TODO: MainActor assertions
-class ShareExtensionModel: ObservableObject {
-
-    static let shared = ShareExtensionModel()
-
-    @Published var items: [NSExtensionItem] = []
-    @Published var urls: [URL] = []
-
-    init() {
-    }
-
-}
-
-struct ContentView: View {
-
-    @Environment(\.dismiss) var dismiss
-
-    @EnvironmentObject var extensionModel: ShareExtensionModel
-
-    var body: some View {
-        List {
-            ForEach(extensionModel.urls) { item in
-                Text(item.description)
-            }
-        }
-        .navigationTitle("Bookmarks")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button("Save") {
-
-                }
-            }
-        }
-        .dismissable(.cancel)
-    }
-
-}
-
-struct RootView: View {
-
-    @ObservedObject var extensionModel: ShareExtensionModel
-
-    var body: some View {
-        NavigationView {
-            ContentView()
-                .environmentObject(extensionModel)
-        }
-    }
-
-}
 
 class ShareViewController: UIHostingController<RootView> {
 
@@ -74,13 +33,15 @@ class ShareViewController: UIHostingController<RootView> {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        loadItems()
+        reloadItems()
     }
 
-    private func loadItems() {
+    private func reloadItems() {
+        dispatchPrecondition(condition: .onQueue(.main))
         guard let extensionItems = extensionContext?.inputItems as? [NSExtensionItem] else {
             return
         }
+        ShareExtensionModel.shared.urls = []
         extensionItems
             .compactMap { $0.attachments }
             .reduce([], +)
@@ -95,22 +56,6 @@ class ShareViewController: UIHostingController<RootView> {
                     }
                 }
             }
-    }
-
-}
-
-extension NSItemProvider {
-
-    func item(typeIdentifier: String) async throws -> Any? {
-        try await withCheckedThrowingContinuation { continuation in
-            loadItem(forTypeIdentifier: typeIdentifier) { object, error in
-                if let error {
-                    continuation.resume(throwing: error)
-                    return
-                }
-                continuation.resume(returning: error)
-            }
-        }
     }
 
 }

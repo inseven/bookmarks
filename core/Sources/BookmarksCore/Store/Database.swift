@@ -73,11 +73,17 @@ public class Database {
         case tag(String)
     }
 
+    struct Metadata: Codable {
+        var version: Int64
+        var thumbnail: String?
+    }
+
     class Schema {
 
         static let items = Table("items")
         static let tags = Table("tags")
         static let items_to_tags = Table("items_to_tags")
+        static let thumbnails = Table("thumbnails")
 
         static let id = Expression<Int64>("id")
         static let identifier = Expression<String>("identifier")
@@ -90,6 +96,8 @@ public class Database {
         static let name = Expression<String>("name")
         static let itemId = Expression<Int64>("item_id")
         static let tagId = Expression<Int64>("tag_id")
+        static let path = Expression<String>("path")
+        static let version = Expression<Int64>("version")
 
     }
 
@@ -155,6 +163,15 @@ public class Database {
         13: { db in
             print("add index on items.url...")
             try db.run(Schema.items.createIndex(Schema.url))
+        },
+        14: { db in
+            print("create thumbnails table...")
+            try db.run(Schema.thumbnails.create { t in
+                t.column(Schema.id, primaryKey: true)
+                t.column(Schema.version)
+                t.column(Schema.path)
+                t.foreignKey(Schema.id, references: Schema.items, Schema.id, delete: .cascade)
+            })
         },
     ]
 
@@ -307,6 +324,128 @@ public class Database {
         }
     }
 
+    func syncQueue_bookmarkIdentifier(metadataVersionLessThan version: Int64) throws -> Bookmark.ID? {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
+
+        let selectQuery = """
+            SELECT
+                identifier
+            FROM
+                items
+            LEFT JOIN
+                thumbnails
+            ON
+                items.id == thumbnails.id
+            WHERE
+                ifnull(thumbnails.version, 0) < ?
+            ORDER BY
+                date DESC
+            LIMIT 1
+            """
+
+        let statement = try db.prepare(selectQuery)
+        return try statement.run(version)
+            .map { row in
+                return try row.string(0)
+            }
+            .first
+    }
+
+    func identifier(metadataVersionLessThan version: Int64) async throws -> Bookmark.ID? {
+        try await run {
+            try self.syncQueue_bookmarkIdentifier(metadataVersionLessThan: version)
+        }
+    }
+
+    func syncQueue_save(metadata: Metadata, for identifier: Bookmark.ID) throws {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
+        try self.syncQueue_insertOrReplace(metadata: metadata, for: identifier)
+        // TODO: Consider whether this should explicitly be metadata? Probably??
+        self.syncQueue_notifyObservers(scope: .bookmark(identifier))  // TODO: This should take the scope that changed.
+    }
+
+    func save(metadata: Metadata, for identifier: Bookmark.ID) async throws {
+        try await run {
+            try self.syncQueue_save(metadata: metadata, for: identifier)
+        }
+    }
+
+    // TODO: See if I can use the more typesafe version of this?
+    func syncQueue_metadata(identifier: Bookmark.ID) throws -> Metadata? {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
+
+        let selectQuery = """
+            SELECT
+                path
+            FROM
+                items
+            JOIN
+                thumbnails
+            ON
+                items.id == thumbnails.id
+            WHERE
+                items.identifier == ?
+            LIMIT 1
+            """
+
+        let statement = try db.prepare(selectQuery)
+
+        let decoder = JSONDecoder()
+        let results: [Metadata] = try statement.run(identifier)
+            .compactMap { row in
+                let json = try row.string(0)
+                guard let data = json.data(using: .utf8) else {
+                    return nil
+                }
+                return try decoder.decode(Metadata.self, from: data)
+            }
+        guard let result = results.first else {
+            return nil
+        }
+        return result
+    }
+
+    func metadata(identifier: Bookmark.ID) async throws -> Metadata? {
+        try await run {
+            try self.syncQueue_metadata(identifier: identifier)
+        }
+    }
+
+    private func syncQueue_bookmarkId(for identifier: Bookmark.ID) throws -> Int64 {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
+
+        let id = try db.prepare(Schema.items.filter(Schema.identifier == identifier).limit(1))
+            .map { row in
+                try row.get(Database.Schema.id)
+            }
+            .first
+
+        guard let id else {
+            throw BookmarksError.bookmarkNotFoundByIdentifier(identifier)
+        }
+
+        return id
+    }
+
+    private func syncQueue_insertOrReplace(metadata: Metadata, for identifier: Bookmark.ID) throws {
+        dispatchPrecondition(condition: .onQueue(syncQueue))
+
+        let encoder = JSONEncoder()
+        let data = try encoder.encode(metadata)
+        guard let value = String(data: data, encoding: .utf8) else {
+            // TODO: Throw.
+            return
+        }
+
+        // TODO: Consider performance; can we cache the bookmark id?
+        try self.db.transaction {
+            let id = try syncQueue_bookmarkId(for: identifier)
+            try self.db.run(Schema.thumbnails.insert(or: .replace,
+                                                     Schema.id <- id,
+                                                     Schema.version <- metadata.version,
+                                                     Schema.path <- value))
+        }
+    }
 
     private func syncQueue_insertOrReplace(bookmark: Bookmark) throws {
         let tags = try bookmark.tags.map { try syncQueue_fetchOrInsertTag(name: $0) }

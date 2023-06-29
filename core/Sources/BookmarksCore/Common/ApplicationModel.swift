@@ -97,6 +97,28 @@ public class ApplicationModel: ObservableObject {
             .assign(to: \.topTags, on: self)
             .store(in: &cancellables)
 
+        Task {
+            let version: Int64 = 5
+            do {
+                for try await identifier in database.identifiers(metadataVersionLessThan: version) {
+                    // TODO: Should the bookmark also query for the metadata or should this be secondary?
+                    print(identifier)
+                    let bookmark = try await database.bookmark(identifier: identifier)
+                    var metadata = try await database.metadata(identifier: identifier) ?? Database.Metadata(version: 0, thumbnail: nil)
+
+                    print("ITERATOR: \(bookmark.url)")
+                    if metadata.version < version {
+                        print("ITERATOR: Upgrading metadata from \(metadata.version) to \(version)...")
+                        metadata.version = version
+                        metadata.thumbnail = "https://jbmorley.co.uk/photos/2023/03/copenhagen/index-thumbnail.jpg"
+                        try await database.save(metadata: metadata, for: identifier)
+                    }
+                }
+                print("ITERATOR: Done. This should never happen. Boo!")
+            } catch {
+                print("ITERATOR: Fatal failure to process data with error '\(error)'.")
+            }
+        }
     }
 
     public func authenticate(username: String,

@@ -160,7 +160,10 @@ echo "$APPLE_DISTRIBUTION_CERTIFICATE_PASSWORD" | build-tools import-base64-cert
 echo "$MACOS_DEVELOPER_INSTALLER_CERTIFICATE_PASSWORD" | build-tools import-base64-certificate --password "$KEYCHAIN_PATH" "$MACOS_DEVELOPER_INSTALLER_CERTIFICATE"
 
 # Install the provisioning profiles.
-build-tools install-provisioning-profile "profiles/"*
+build-tools install-provisioning-profile "profiles/Bookmarks_App_Store_Profile.mobileprovision"
+build-tools install-provisioning-profile "profiles/Bookmarks_Share_Extension_App_Store_Profile.mobileprovision"
+build-tools install-provisioning-profile "profiles/Bookmarks_Mac_App_Store_Profile.provisionprofile"
+build-tools install-provisioning-profile "profiles/Bookmarks_for_Safari_Mac_App_Store_Profile.provisionprofile"
 
 # Build and archive the iOS project.
 sudo xcode-select --switch "$IOS_XCODE_PATH"

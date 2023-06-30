@@ -30,6 +30,9 @@ public struct Sidebar: View {
     public var body: some View {
         SidebarContentView(sceneState: $sceneState)
 #if os(iOS)
+            .refreshable {
+                await applicationModel.refresh()
+            }
             .navigationTitle("Bookmarks")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

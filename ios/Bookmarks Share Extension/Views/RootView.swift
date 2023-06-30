@@ -25,7 +25,7 @@ struct RootView: View {
     @ObservedObject var extensionModel: ShareExtensionModel
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ContentView()
                 .environmentObject(extensionModel)
         }

@@ -26,91 +26,66 @@ import Interact
 
 import BookmarksCore
 
+protocol ShareExtensionDataSource: NSObject {
+
+    var extensionContext: NSExtensionContext? { get }
+
+}
+
 // TODO: MainActor assertions
 class ShareExtensionModel: ObservableObject, Runnable {
 
-    static let shared = ShareExtensionModel()
-
     @Published var items: [NSExtensionItem] = []
-    @MainActor @Published var urls: [URL] = []
-    @MainActor @Published var url: URL? = nil
     @MainActor @Published var error: Error? = nil
     @MainActor @Published var post: Pinboard.Post? = nil
 
     @MainActor private var cancellables: Set<AnyCancellable> = []
 
-    let pinboard: Pinboard? = {
+    weak var dataSource: ShareExtensionDataSource? = nil
+
+    var pinboard: Pinboard? {
         let settings = Settings()
         guard let apiKey = settings.pinboardApiKey else {
             return nil
         }
         return Pinboard(token: apiKey)
-    }()
-
-    @MainActor var extensionContext: NSExtensionContext? = nil {
-        didSet {
-            dispatchPrecondition(condition: .onQueue(.main))
-            guard let extensionItems = extensionContext?.inputItems as? [NSExtensionItem] else {
-                return
-            }
-            urls = []
-            extensionItems
-                .compactMap { $0.attachments }
-                .reduce([], +)
-                .filter { $0.hasItemConformingToTypeIdentifier(UTType.url.identifier) }
-                .forEach { itemProvider in
-                    itemProvider.loadItem(forTypeIdentifier: UTType.url.identifier) { object, error in
-                        DispatchQueue.main.async { [weak self] in
-                            guard let self else {
-                                return
-                            }
-                            guard let url = object as? URL else {
-                                return
-                            }
-                            self.urls.append(url)
-                        }
-                    }
-                }
-        }
     }
 
     init() {
 
     }
 
-    @MainActor func start() {
-
-        // Get the first URL.
-        $urls
-            .map { $0.first }
-            .receive(on: DispatchQueue.main)
-            .assign(to: \.url, on: self)
-            .store(in: &cancellables)
-
-        // Create the post with initial values.
-        $url
-            .compactMap { $0 }
-            .asyncMap { url in
-                do {
-                    let title = try await url.title()
-                    return Pinboard.Post(href: url, description: title ?? "")
-                } catch {
-                    print("Failed to get contents with error \(error).")
-                    // TODO:
-                    return nil
+    @MainActor func load() {
+        dispatchPrecondition(condition: .onQueue(.main))
+        guard let extensionItem = dataSource?.extensionContext?.inputItems.first as? NSExtensionItem,
+              let attachment = extensionItem.attachments?.first
+        else {
+            return
+        }
+        Task {
+            guard let url = try await attachment.loadItem(forTypeIdentifier: UTType.url.identifier) as? URL else {
+                return
+            }
+            if let post = try await pinboard?.postsGet(url: url).posts.first {
+                await MainActor.run {
+                    self.post = post
+                }
+            } else {
+                let title = try await url.title() ?? ""
+                await MainActor.run {
+                    self.post = Pinboard.Post(href: url, description: title, time: nil)
                 }
             }
-            .assign(to: \.post, on: self)
-            .store(in: &cancellables)
+        }
+    }
+
+    @MainActor func start() {
 
     }
 
     @MainActor func stop() {
         cancellables.removeAll()
     }
-
-
-    // TODO: Get the page title; can I do this from the share item?
 
     @MainActor func save(toRead: Bool = false) {
         guard let pinboard,
@@ -134,11 +109,11 @@ class ShareExtensionModel: ObservableObject, Runnable {
     }
 
     @MainActor func dismiss() {
-        extensionContext?.completeRequest(returningItems: nil)
+        dataSource?.extensionContext?.completeRequest(returningItems: nil)
     }
 
     @MainActor func cancel() {
-        extensionContext?.cancelRequest(withError: CancellationError())
+        dataSource?.extensionContext?.cancelRequest(withError: CancellationError())
     }
 
 }

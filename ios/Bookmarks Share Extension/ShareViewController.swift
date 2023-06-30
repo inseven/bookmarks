@@ -21,15 +21,20 @@
 import SwiftUI
 import UIKit
 
-class ShareViewController: UIHostingController<RootView> {
+class ShareViewController: UIHostingController<RootView>, ShareExtensionDataSource {
+
+    let extensionModel: ShareExtensionModel
 
     required init?(coder aDecoder: NSCoder) {
-        super.init(rootView: RootView(extensionModel: ShareExtensionModel.shared))
+        let extensionModel = ShareExtensionModel()
+        self.extensionModel = extensionModel
+        super.init(rootView: RootView(extensionModel: extensionModel))
+        extensionModel.dataSource = self
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        ShareExtensionModel.shared.extensionContext = extensionContext
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        extensionModel.load()
     }
 
 }

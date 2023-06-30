@@ -22,11 +22,11 @@ import Foundation
 
 extension Pinboard {
 
-    struct Posts: Codable {
+    public struct Posts: Codable {
 
-        let date: Date
-        let user: String
-        let posts: [Post]
+        public let date: Date
+        public let user: String
+        public let posts: [Post]
 
     }
 

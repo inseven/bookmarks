@@ -37,76 +37,77 @@ struct SectionTableView: View {
     @EnvironmentObject var sectionViewModel: SectionViewModel
 
     var body: some View {
-        if isCompact {
-            List(selection: $sectionViewModel.selection) {
-                ForEach(sectionViewModel.bookmarks) { bookmark in
-                    HStack(spacing: LayoutMetrics.horizontalSpacing) {
-                        FaviconImage(url: bookmark.url)
-                        VStack(alignment: .leading) {
-                            HStack {
-                                Text(bookmark.title)
-                                    .lineLimit(2)
-                                Spacer()
-                                Text(bookmark.date.formatted(date: .abbreviated, time: .omitted))
-                                    .foregroundColor(.secondary)
-                                    .font(.footnote)
-                            }
-                            Text(bookmark.url.formatted(.short))
+#if os(iOS)
+        List(selection: $sectionViewModel.selection) {
+            ForEach(sectionViewModel.bookmarks) { bookmark in
+                HStack(spacing: LayoutMetrics.horizontalSpacing) {
+                    FaviconImage(url: bookmark.url)
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text(bookmark.title)
+                                .lineLimit(2)
+                            Spacer()
+                            Text(bookmark.date.formatted(date: .abbreviated, time: .omitted))
                                 .foregroundColor(.secondary)
                                 .font(.footnote)
-                            TagsView(bookmark.tags)
                         }
-                        .lineLimit(1)
+                        Text(bookmark.url.formatted(.short))
+                            .foregroundColor(.secondary)
+                            .font(.footnote)
+                        TagsView(bookmark.tags)
                     }
-                    .swipeActions {
-                        Button(role: .destructive) {
-                            await sectionViewModel.delete(.items([bookmark.id]))
-                        } label: {
-                            Image(systemName: "trash")
-                        }
-                    }
-                    .swipeActions(edge: .leading) {
-                        Button {
-                            sectionViewModel.getInfo(.items([bookmark.id]))
-                        } label: {
-                            Image(systemName: "info")
-                        }
-                        .tint(.accentColor)
+                    .lineLimit(1)
+                }
+                .padding(.all, isCompact ? 0.0 : nil)
+                .swipeActions {
+                    Button(role: .destructive) {
+                        await sectionViewModel.delete(.items([bookmark.id]))
+                    } label: {
+                        Image(systemName: "trash")
                     }
                 }
-            }
-            .contextMenu(forSelectionType: Bookmark.ID.self) { selection in
-                sectionViewModel.contextMenu(selection)
-            } primaryAction: { selection in
-                sectionViewModel.open(.items(selection), browser: settings.browser)
-            }
-            .listStyle(.plain)
-        } else {
-            Table(sectionViewModel.bookmarks, selection: $sectionViewModel.selection) {
-                TableColumn("") { bookmark in
-                    FaviconImage(url: bookmark.url)
+                .swipeActions(edge: .leading) {
+                    Button {
+                        sectionViewModel.getInfo(.items([bookmark.id]))
+                    } label: {
+                        Image(systemName: "info")
+                    }
+                    .tint(.accentColor)
                 }
-                .width(FaviconImage.LayoutMetrics.size.width)
-                TableColumn("Title", value: \.title)
-                TableColumn("Domain") { bookmark in
-                    Text(bookmark.url.formatted(.short))
-                }
-                TableColumn("Date") { bookmark in
-                    Text(bookmark.date.formatted(date: .long, time: .standard))
-                }
-                TableColumn("Notes") { bookmark in
-                    Text(bookmark.notes)
-                }
-                TableColumn("Tags") { bookmark in
-                    TagsView(bookmark.tags, wraps: false)
-                }
-            }
-            .contextMenu(forSelectionType: Bookmark.ID.self) { selection in
-                sectionViewModel.contextMenu(selection)
-            } primaryAction: { selection in
-                sectionViewModel.open(.items(selection), browser: settings.browser)
             }
         }
+        .contextMenu(forSelectionType: Bookmark.ID.self) { selection in
+            sectionViewModel.contextMenu(selection)
+        } primaryAction: { selection in
+            sectionViewModel.open(.items(selection), browser: settings.browser)
+        }
+        .listStyle(.plain)
+#else
+        Table(sectionViewModel.bookmarks, selection: $sectionViewModel.selection) {
+            TableColumn("") { bookmark in
+                FaviconImage(url: bookmark.url)
+            }
+            .width(FaviconImage.LayoutMetrics.size.width)
+            TableColumn("Title", value: \.title)
+            TableColumn("Domain") { bookmark in
+                Text(bookmark.url.formatted(.short))
+            }
+            TableColumn("Date") { bookmark in
+                Text(bookmark.date.formatted(date: .long, time: .standard))
+            }
+            TableColumn("Notes") { bookmark in
+                Text(bookmark.notes)
+            }
+            TableColumn("Tags") { bookmark in
+                TagsView(bookmark.tags, wraps: false)
+            }
+        }
+        .contextMenu(forSelectionType: Bookmark.ID.self) { selection in
+            sectionViewModel.contextMenu(selection)
+        } primaryAction: { selection in
+            sectionViewModel.open(.items(selection), browser: settings.browser)
+        }
+#endif
     }
 
 }

@@ -55,7 +55,7 @@ extension Pinboard {
              meta: String = "",
              shared: Bool = true,
              tags: [String] = [],
-             time: Date = Date(),
+             time: Date? = Date(),
              toRead: Bool = false) {
             self.href = href
             self.description = description

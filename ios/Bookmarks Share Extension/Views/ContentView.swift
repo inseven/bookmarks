@@ -30,33 +30,34 @@ struct ContentView: View {
     @EnvironmentObject var extensionModel: ShareExtensionModel
 
     var body: some View {
-        List {
+        VStack {
             if let post = Binding($extensionModel.post) {
-                EditorView(post: post)
-            }
-        }
-        .safeAreaInset(edge: .bottom) {
-            VStack {
-                Button {
-                    extensionModel.save()
-                } label: {
-                    Text("Save")
-                        .frame(maxWidth: .infinity)
+                List {
+                    EditorView(post: post)
                 }
-                .buttonStyle(.borderedProminent)
-                Button {
-                    extensionModel.save(toRead: true)
-                } label: {
-                    Text("Read Later")
-                        .frame(maxWidth: .infinity)
+            } else {
+                PlaceholderView {
+                    ProgressView()
                 }
-                .buttonStyle(.bordered)
             }
-            .controlSize(.large)
-            .padding()
         }
         .navigationTitle("Add Bookmark")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Menu {
+                    Button("Read Later") {
+                        extensionModel.save(toRead: true)
+                    }
+                }
+                label: {
+                    Text("Save")
+                } primaryAction: {
+                    extensionModel.save()
+                }
+                .disabled(extensionModel.post == nil)
+            }
+        }
         .dismissable(.cancel) {
             extensionModel.dismiss()
         }

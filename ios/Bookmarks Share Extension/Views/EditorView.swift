@@ -37,6 +37,20 @@ struct EditorView: View {
                 return []
             }
         }
+        if let url = post.href {
+            Section {
+                Link(destination: url) {
+                    Text(url.absoluteString)
+                        .multilineTextAlignment(.leading)
+                }
+            } header: {
+
+            } footer: {
+                if let time = post.time {
+                    Text("Created \(time.formatted())")
+                }
+            }
+        }
     }
 
 }

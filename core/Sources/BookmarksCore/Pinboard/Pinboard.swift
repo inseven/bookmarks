@@ -211,7 +211,7 @@ public class Pinboard {
         }
     }
 
-    func postsGet(url: URL) async throws -> Posts {
+    public func postsGet(url: URL) async throws -> Posts {
         let requestURL = endpoint(for: .postsGet)
             .appending(queryItems: [
                 URLQueryItem(name: "url", value: url.absoluteString)

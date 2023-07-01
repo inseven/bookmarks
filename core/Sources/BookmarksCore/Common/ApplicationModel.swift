@@ -62,8 +62,8 @@ public class ApplicationModel: ObservableObject {
         // Create the database.
         // TODO: Handle database initialisation errors #143
         //       https://github.com/inseven/bookmarks/issues/143
-        print("Opening database at '\(Database.sharedStoreURL!.absoluteString)'...")
-        database = try! Database(path: Database.sharedStoreURL!)
+        print("Opening database at '\(Database.sharedStoreURL.absoluteString)'...")
+        database = try! Database(path: Database.sharedStoreURL)
 
         imageCache = FileImageCache(path: documentsURL.appendingPathComponent("thumbnails"))
         downloadManager = DownloadManager(limit: settings.maximumConcurrentThumbnailDownloads)

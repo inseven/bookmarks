@@ -42,7 +42,7 @@ class ShareExtensionModel: ObservableObject, Runnable {
     @MainActor private var cancellables: Set<AnyCancellable> = []
 
     private static let database: Database = {
-        try! Database(path: Database.sharedStoreURL)
+        try! Database(path: Database.sharedStoreURL!)
     }()
 
     let tagsModel: TagsModel

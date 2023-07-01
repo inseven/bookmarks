@@ -93,10 +93,12 @@ public class Database {
 
     }
 
-    public static let sharedStoreURL: URL = {
+    public static let sharedStoreURL: URL? = {
         let fileManager = FileManager.default
-        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let groupURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: "group.uk.co.inseven.bookmarks")!
+        let identifier = "group.uk.co.inseven.bookmarks"
+        guard let groupURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: identifier) else {
+            return nil
+        }
         try? fileManager.createDirectory(atPath: groupURL.path, withIntermediateDirectories: true)
         return groupURL.appendingPathComponent("store.db")
     }()

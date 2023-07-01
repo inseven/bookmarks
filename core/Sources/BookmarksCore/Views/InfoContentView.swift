@@ -22,9 +22,12 @@ import SwiftUI
 
 public struct InfoContentView: View {
 
+    let applicationModel: ApplicationModel
+
     @StateObject var model: InfoContentViewModel
 
     public init(applicationModel: ApplicationModel, id: String) {
+        self.applicationModel = applicationModel
         _model = StateObject(wrappedValue: InfoContentViewModel(applicationModel: applicationModel, id: id))
     }
 
@@ -50,7 +53,9 @@ public struct InfoContentView: View {
                     }
                     Section {
                         TokenView("Add tags...", tokens: $model.tags) { candidate, existing, count in
-                            model.suggestions(candidate: candidate, existing: existing, count: count)
+                            applicationModel.tagsModel.suggestions(candidate: candidate,
+                                                                   existing: existing,
+                                                                   count: count)
                         }
                     }
                     Section {

@@ -41,6 +41,12 @@ class ShareExtensionModel: ObservableObject, Runnable {
 
     @MainActor private var cancellables: Set<AnyCancellable> = []
 
+    private static let database: Database = {
+        try! Database(path: Database.sharedStoreURL)
+    }()
+
+    let tagsModel: TagsModel
+
     weak var dataSource: ShareExtensionDataSource? = nil
 
     var pinboard: Pinboard? {
@@ -52,7 +58,8 @@ class ShareExtensionModel: ObservableObject, Runnable {
     }
 
     init() {
-
+        self.tagsModel = TagsModel(database: Self.database)
+        tagsModel.start()
     }
 
     @MainActor func load() {

@@ -24,6 +24,8 @@ import BookmarksCore
 
 struct EditorView: View {
 
+    @EnvironmentObject var extensionModel: ShareExtensionModel
+
     @Binding var post: Pinboard.Post
 
     var body: some View {
@@ -34,7 +36,7 @@ struct EditorView: View {
         }
         Section {
             TokenView("Add tags...", tokens: $post.tags) { candidate, existing, count in
-                return []
+                return extensionModel.tagsModel.suggestions(candidate: candidate, existing: existing, count: count)
             }
         }
         if let url = post.href {

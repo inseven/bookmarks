@@ -41,20 +41,31 @@ public class ApplicationModel: ObservableObject {
     public var cache: NSCache = NSCache<NSString, SafeImage>()
     public var database: Database
 
-    private var documentsUrl: URL
     private var downloadManager: DownloadManager
     private var updater: Updater
     private var cancellables: Set<AnyCancellable> = []
 
     public init() {
-        documentsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        try! FileManager.default.createDirectory(at: documentsUrl, withIntermediateDirectories: true, attributes: nil)
+
+        // Ensure the documents directory exists.
+        let fileManager = FileManager.default
+        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        try! fileManager.createDirectory(at: documentsURL, withIntermediateDirectories: true, attributes: nil)
+
+        // Clean up the legacy store if it exists.
+        let legacyStoreURL = documentsURL.appendingPathComponent("store.db")
+        if fileManager.fileExists(atPath: legacyStoreURL.path) {
+            print("Legacy store exists; cleaning up.")
+            try? fileManager.removeItem(at: legacyStoreURL)
+        }
+
+        // Create the database.
         // TODO: Handle database initialisation errors #143
         //       https://github.com/inseven/bookmarks/issues/143
-        let storeURL = documentsUrl.appendingPathComponent("store.db")
-        print("Opening database at '\(storeURL.absoluteString)'...")
-        database = try! Database(path: storeURL)
-        imageCache = FileImageCache(path: documentsUrl.appendingPathComponent("thumbnails"))
+        print("Opening database at '\(Database.sharedStoreURL.absoluteString)'...")
+        database = try! Database(path: Database.sharedStoreURL)
+
+        imageCache = FileImageCache(path: documentsURL.appendingPathComponent("thumbnails"))
         downloadManager = DownloadManager(limit: settings.maximumConcurrentThumbnailDownloads)
         thumbnailManager = ThumbnailManager(imageCache: imageCache, downloadManager: downloadManager)
         updater = Updater(database: database, settings: settings)

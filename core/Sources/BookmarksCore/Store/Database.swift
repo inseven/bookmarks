@@ -93,6 +93,14 @@ public class Database {
 
     }
 
+    public static let sharedStoreURL: URL = {
+        let fileManager = FileManager.default
+        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let groupURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: "group.uk.co.inseven.bookmarks")!
+        try? fileManager.createDirectory(atPath: groupURL.path, withIntermediateDirectories: true)
+        return groupURL.appendingPathComponent("store.db")
+    }()
+
     static var migrations: [Int32:(Connection) throws -> Void] = [
         1: { _ in },
         2: { _ in },

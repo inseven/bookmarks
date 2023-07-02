@@ -34,7 +34,7 @@ struct ContentView: View {
         List {
             if let pinboard = extensionModel.pinboard {
                 ForEach(Array(extensionModel.tabs)) { tab in
-                    ItemView(store: extensionModel, pinboard: pinboard, tab: tab)
+                    ItemView(extensionModel: extensionModel, pinboard: pinboard, tab: tab)
                     Divider()
                 }
             } else {

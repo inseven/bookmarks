@@ -26,14 +26,14 @@ import WrappingHStack
 
 public struct ItemView: View {
 
-    let store: Store
+    var extensionModel: SafariExtensionModel
 
     @StateObject var model: ItemViewModel
     @State var title: String? = nil
 
-    public init(store: Store, pinboard: Pinboard, tab: Tab) {
-        self.store = store
-        _model = StateObject(wrappedValue: ItemViewModel(store: store, pinboard: pinboard, tab: tab))
+    public init(extensionModel: SafariExtensionModel, pinboard: Pinboard, tab: Tab) {
+        self.extensionModel = extensionModel
+        _model = StateObject(wrappedValue: ItemViewModel(extensionModel: extensionModel, pinboard: pinboard, tab: tab))
     }
 
     struct LayoutMetrics {
@@ -62,7 +62,7 @@ public struct ItemView: View {
                 Divider()
 
                 TokenView("Add tags...", tokens: $model.tokens) { candidate, existing, count in
-                    return store.suggestions(prefix: candidate, existing: existing, count: count)
+                    return extensionModel.suggestions(prefix: candidate, existing: existing, count: count)
                 }
                 .padding(.horizontal, 6)
 

@@ -28,8 +28,8 @@ protocol RemoteOperation {
     var title: String { get }
 
     func perform(database: Database,
-                 state: Updater.ServiceState,
-                 progress: @escaping (Progress) -> Void) async throws -> Updater.ServiceState
+                 state: Store.ServiceState,
+                 progress: @escaping (Progress) -> Void) async throws -> Store.ServiceState
 
 }
 
@@ -40,8 +40,8 @@ struct RefreshOperation: RemoteOperation {
     let force: Bool
 
     func perform(database: Database,
-                 state: Updater.ServiceState,
-                 progress: @escaping (Progress) -> Void) async throws -> Updater.ServiceState {
+                 state: Store.ServiceState,
+                 progress: @escaping (Progress) -> Void) async throws -> Store.ServiceState {
 
         // Indicate that we're about to start.
         progress(.value(0))
@@ -94,8 +94,8 @@ struct UpdateBookmark: RemoteOperation {
     let bookmark: Bookmark
 
     func perform(database: Database,
-                 state: Updater.ServiceState,
-                 progress: @escaping (Progress) -> Void) async throws -> Updater.ServiceState {
+                 state: Store.ServiceState,
+                 progress: @escaping (Progress) -> Void) async throws -> Store.ServiceState {
         let pinboard = Pinboard(token: state.token)
         let post = Pinboard.Post(bookmark)
         try await pinboard.postsAdd(post: post, replace: true)
@@ -110,8 +110,8 @@ struct DeleteBookmark: RemoteOperation {
     let bookmark: Bookmark
 
     func perform(database: Database,
-                 state: Updater.ServiceState,
-                 progress: @escaping (Progress) -> Void) async throws -> Updater.ServiceState {
+                 state: Store.ServiceState,
+                 progress: @escaping (Progress) -> Void) async throws -> Store.ServiceState {
         let pinboard = Pinboard(token: state.token)
         try await pinboard.postsDelete(url: bookmark.url)
         return state
@@ -125,8 +125,8 @@ struct DeleteTag: RemoteOperation {
     let tag: String
 
     func perform(database: Database,
-                 state: Updater.ServiceState,
-                 progress: @escaping (Progress) -> Void) async throws -> Updater.ServiceState {
+                 state: Store.ServiceState,
+                 progress: @escaping (Progress) -> Void) async throws -> Store.ServiceState {
         let pinboard = Pinboard(token: state.token)
         try await pinboard.tagsDelete(tag)
         return state
@@ -141,8 +141,8 @@ struct RenameTag: RemoteOperation {
     let newTag: String
 
     func perform(database: Database,
-                 state: Updater.ServiceState,
-                 progress: @escaping (Progress) -> Void) async throws -> Updater.ServiceState {
+                 state: Store.ServiceState,
+                 progress: @escaping (Progress) -> Void) async throws -> Store.ServiceState {
         let pinboard = Pinboard(token: state.token)
         try await pinboard.tagsRename(tag, to: newTag)
         return state

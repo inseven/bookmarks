@@ -28,16 +28,6 @@ public struct TagsContentView: View {
         static let indicatorSize = 16.0
     }
 
-#if os(iOS)
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    private var isCompact: Bool { horizontalSizeClass == .compact }
-#else
-    private let isCompact = false
-#endif
-
-    @Environment(\.openURL) var openURL
-
-    @EnvironmentObject var applicationModel: ApplicationModel
     @EnvironmentObject var settings: Settings
 
     @StateObject var model: TagsContentViewModel
@@ -49,21 +39,10 @@ public struct TagsContentView: View {
     public var body: some View {
         Table(of: Database.Tag.self, selection: $model.selection) {
             TableColumn("") { tag in
-                if isCompact {
-                    HStack {
-                        Image(systemName: "circle.fill")
-                            .foregroundColor(tag.name.color())
-                        Text(tag.name)
-                        Spacer()
-                        Text(tag.count.formatted())
-                        Toggle(isOn: $settings.favoriteTags.contains(tag.name))
-                    }
-                } else {
-                    Image(systemName: "circle.fill")
-                        .foregroundColor(tag.name.color())
-                }
+                Image(systemName: "circle.fill")
+                    .foregroundColor(tag.name.color())
             }
-            .width(isCompact ? .none : LayoutMetrics.indicatorSize)
+            .width(LayoutMetrics.indicatorSize)
             TableColumn("Tag") { tag in
                 Text(tag.name)
             }
@@ -85,13 +64,7 @@ public struct TagsContentView: View {
                 Label("Delete", systemImage: "trash")
             }
         } primaryAction: { selection in
-            guard selection.count == 1,
-                  let tag = selection.first,
-                  let actionURL = URL(forOpeningTag: tag) else {
-                return
-            }
-            print(actionURL.absoluteString)
-            openURL(actionURL)
+            model.open(tags: .items(selection))
         }
         .onDeleteCommand {
             model.delete(tags: .selection)

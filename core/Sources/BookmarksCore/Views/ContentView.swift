@@ -69,7 +69,7 @@ public struct ContentView: View {
         .sheet(item: $sceneState.sheet) { sheet in
             switch sheet {
             case .tags:
-                PhoneTagsView()
+                PhoneTagsView(applicationModel: applicationModel)
             case .settings:
                 PhoneSettingsView(settings: applicationModel.settings)
             case .edit(let id):

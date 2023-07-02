@@ -25,7 +25,7 @@ import Interact
 
 class ItemViewModel: ObservableObject, Runnable {
 
-    let store: Store
+    let extensionModel: SafariExtensionModel
     let pinboard: Pinboard
 
     let tab: Tab
@@ -36,13 +36,11 @@ class ItemViewModel: ObservableObject, Runnable {
     @Published var suggestions: [String] = []
 
     @Published var tokens: [String] = []
-    @Published var input: String = ""
-    @Published var newSuggestions: [String] = []
 
     var cancellables: [AnyCancellable] = []
 
-    init(store: Store, pinboard: Pinboard, tab: Tab) {
-        self.store = store
+    init(extensionModel: SafariExtensionModel, pinboard: Pinboard, tab: Tab) {
+        self.extensionModel = extensionModel
         self.pinboard = pinboard
         self.tab = tab
         self.title = tab.title
@@ -69,14 +67,6 @@ class ItemViewModel: ObservableObject, Runnable {
             }
         }
 
-        $input
-            .debounce(for: 0.1, scheduler: DispatchQueue.main)
-            .filter { !$0.isEmpty }
-            .receive(on: DispatchQueue.main)
-            .map { [store] in store.suggestions(prefix: $0, existing: [], count: 1) }
-            .assign(to: \.newSuggestions, on: self)
-            .store(in: &cancellables)
-
     }
 
     func stop() {
@@ -91,7 +81,7 @@ class ItemViewModel: ObservableObject, Runnable {
                     post.tags = tokens
                     _ = try await pinboard.postsAdd(post)
                     DispatchQueue.main.async {
-                        self.store.close(self.tab)
+                        self.extensionModel.close(self.tab)
                     }
                 } else {
                     let post = Pinboard.Post(href: self.tab.url,
@@ -99,7 +89,7 @@ class ItemViewModel: ObservableObject, Runnable {
                                              tags: tokens)
                     _ = try await pinboard.postsAdd(post)
                     DispatchQueue.main.async {
-                        self.store.close(self.tab)
+                        self.extensionModel.close(self.tab)
                     }
                 }
             } catch {
@@ -110,18 +100,18 @@ class ItemViewModel: ObservableObject, Runnable {
 
     func close() {
         withAnimation {
-            store.close(tab)
+            extensionModel.close(tab)
         }
     }
 
     func remove() {
         withAnimation {
-            store.close(tab)
+            extensionModel.close(tab)
         }
     }
 
     func activate() {
-        store.activate(tab)
+        extensionModel.activate(tab)
     }
 
 }

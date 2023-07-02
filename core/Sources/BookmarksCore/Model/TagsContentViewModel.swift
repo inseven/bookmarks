@@ -63,22 +63,23 @@ class TagsContentViewModel: ObservableObject, Runnable {
         cancellables.removeAll()
     }
 
-    @MainActor func delete(tags scope: SelectionScope<String>)  {
-
-        let tags: Set<String>
+    @MainActor private func tags(_ scope: SelectionScope<String>) -> Set<String> {
         switch scope {
         case .items(let items):
-            tags = items
+            return items
         case .selection:
             // Counter-intuitively, we need to generate the intersection of our tags and the current visible filtered
             // tags as SwiftUI doesn't update the selection set as the items in the list change when filtering. It might
             // be cleaner to update the selection ourselves as the list is filtered, but doing it here we avoid thinking
             // too hard about race conditions and only do work when we need the selection updated.
             let visibleTags = Set(filteredTags.map { $0.name })
-            tags = selection
+            return selection
                 .filter { visibleTags.contains($0) }
         }
+    }
 
+    @MainActor func delete(tags scope: SelectionScope<String>) {
+        let tags = tags(scope)
         let title: String
         if tags.count < 5 {
             let summary = tags
@@ -99,6 +100,16 @@ class TagsContentViewModel: ObservableObject, Runnable {
                 self.error = error
             }
         }
+    }
+
+    @MainActor func open(tags scope: SelectionScope<String>) {
+        let tags = tags(scope)
+        guard tags.count == 1,
+              let tag = tags.first,
+              let actionURL = URL(forOpeningTag: tag) else {
+            return
+        }
+        Application.open(actionURL)
     }
 
 }

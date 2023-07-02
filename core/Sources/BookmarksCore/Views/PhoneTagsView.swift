@@ -24,15 +24,50 @@ import SwiftUI
 
 public struct PhoneTagsView: View {
 
-    @Environment(\.dismiss) var dismiss
-
     @EnvironmentObject var applicationModel: ApplicationModel
+    @EnvironmentObject var settings: Settings
+
+    @StateObject var model: TagsContentViewModel
+
+    public init(applicationModel: ApplicationModel) {
+        _model = StateObject(wrappedValue: TagsContentViewModel(applicationModel: applicationModel))
+    }
 
     public var body: some View {
         NavigationView {
-            TagsContentView(applicationModel: applicationModel)
-                .navigationBarTitle("Tags", displayMode: .inline)
-                .dismissable(.close)
+            List(selection: $model.selection) {
+                ForEach(model.filteredTags) { tag in
+                    HStack {
+                        Image(systemName: "circle.fill")
+                            .foregroundColor(tag.name.color())
+                        Text(tag.name)
+                        Spacer()
+                        Text(tag.count.formatted())
+                        Toggle(isOn: $settings.favoriteTags.contains(tag.name))
+                            .foregroundColor(.accentColor)
+                            .toggleStyle(.favorite)
+                    }
+                }
+            }
+            .contextMenu(forSelectionType: String.ID.self) { selection in
+                Button(role: .destructive) {
+                    model.delete(tags: .items(selection))
+                } label: {
+                    Label("Delete", systemImage: "trash")
+                }
+            } primaryAction: { selection in
+                model.open(tags: .items(selection))
+            }
+            .onDeleteCommand {
+                model.delete(tags: .selection)
+            }
+            .listStyle(.plain)
+            .searchable(text: $model.filter)
+            .navigationBarTitle("Tags", displayMode: .inline)
+            .dismissable(.close)
+            .presents($model.confirmation)
+            .presents($model.error)
+            .runs(model)
         }
     }
 

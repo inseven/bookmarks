@@ -70,17 +70,23 @@ class ShareExtensionModel: ObservableObject, Runnable {
             return
         }
         Task {
-            guard let url = try await attachment.loadItem(forTypeIdentifier: UTType.url.identifier) as? URL else {
-                return
-            }
-            if let post = try await pinboard?.postsGet(url: url).posts.first {
-                await MainActor.run {
-                    self.post = post
+            do {
+                guard let url = try await attachment.loadItem(forTypeIdentifier: UTType.url.identifier) as? URL else {
+                    return
                 }
-            } else {
-                let title = try await url.title() ?? ""
+                if let post = try await pinboard?.postsGet(url: url).posts.first {
+                    await MainActor.run {
+                        self.post = post
+                    }
+                } else {
+                    let title = try await url.title() ?? ""
+                    await MainActor.run {
+                        self.post = Pinboard.Post(href: url, description: title, time: nil)
+                    }
+                }
+            } catch {
                 await MainActor.run {
-                    self.post = Pinboard.Post(href: url, description: title, time: nil)
+                    self.error = error
                 }
             }
         }

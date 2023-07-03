@@ -35,25 +35,18 @@ public struct Sidebar: View {
             }
             .navigationTitle("Bookmarks")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        sceneState.showSettings()
+                    } label: {
+                        Image(systemName: "gear")
+                    }
+                }
+                ToolbarItem(placement: .primaryAction) {
                     EditButton()
                 }
-                ToolbarItem(placement: .bottomBar) {
-                    HStack {
-                        Button {
-                            sceneState.showSettings()
-                        } label: {
-                            Image(systemName: "gear")
-                        }
-                        Spacer()
-                        StatusView()
-                        Spacer()
-                        Button {
-                            sceneState.showTags()
-                        } label: {
-                            Image(systemName: "tag")
-                        }
-                    }
+                ToolbarItem(placement: .status) {
+                    StatusView()
                 }
             }
 #endif

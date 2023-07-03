@@ -55,6 +55,15 @@ struct Dismissable: ViewModifier {
         }
     }
 
+    private var isCancellation: Bool {
+        switch action {
+        case .close, .cancel:
+            return true
+        case .done:
+            return false
+        }
+    }
+
     init(action: DismissableAction, perform: (() -> Void)? = nil) {
         self.action = action
         self.perform = perform
@@ -73,6 +82,7 @@ struct Dismissable: ViewModifier {
                     } label: {
                         Text(text)
                     }
+                    .keyboardShortcut(isCancellation ? .cancelAction : .none)
                 }
             }
     }

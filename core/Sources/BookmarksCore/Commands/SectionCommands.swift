@@ -22,21 +22,23 @@ import SwiftUI
 
 public struct SectionCommands: Commands {
 
+    @ObservedObject var settings: Settings
+
     @FocusedBinding(\.sceneState) var sceneState: SceneState?
 
     static func keyEquivalent(_ value: Int) -> KeyEquivalent {
         return KeyEquivalent(String(value).first!)
     }
 
-    public init() {
-        
+    public init(settings: Settings) {
+        self.settings = settings
     }
 
     public var body: some Commands {
         CommandMenu("Go") {
-            ForEach(Array(BookmarksSection.defaultSections.enumerated()), id: \.element.id) { index, section in
-                Button(section.navigationTitle) {
-                    sceneState?.section = section
+            ForEach(Array(settings.librarySections.enumerated()), id: \.element.id) { index, librarySection in
+                Button(librarySection.section.navigationTitle) {
+                    sceneState?.section = librarySection.section
                 }
                 .keyboardShortcut(Self.keyEquivalent(index + 1), modifiers: .command)
                 .disabled(sceneState == nil)

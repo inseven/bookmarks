@@ -30,7 +30,7 @@ extension Scene {
 
             AccountCommands(applicationModel: applicationModel)
             ApplicationCommands()
-            SectionCommands()
+            SectionCommands(settings: applicationModel.settings)
             ViewCommands()
             BookmarkCommands()
 

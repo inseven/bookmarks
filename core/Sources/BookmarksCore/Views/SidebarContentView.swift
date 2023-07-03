@@ -54,8 +54,8 @@ public struct SidebarContentView: View {
                 }
             }
             Section("Library") {
-                ForEach(BookmarksSection.defaultSections) { section in
-                    SectionLink(section: section)
+                ForEach(settings.librarySections) { librarySection in
+                    SectionLink(section: librarySection.section)
                 }
             }
             if !settings.favoriteTags.isEmpty {

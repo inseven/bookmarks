@@ -57,6 +57,9 @@ public struct SidebarContentView: View {
                 ForEach(settings.librarySections) { librarySection in
                     SectionLink(section: librarySection.section)
                 }
+                .onMove { fromOffsets, toOffset in
+                    settings.librarySections.move(fromOffsets: fromOffsets, toOffset: toOffset)
+                }
             }
             if !settings.favoriteTags.isEmpty {
                 Section("Favorites") {

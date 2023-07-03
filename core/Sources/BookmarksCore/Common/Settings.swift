@@ -75,7 +75,11 @@ final public class Settings: ObservableObject {
 
     @Published public var librarySections: [LibrarySection] {
         didSet {
-            defaults.set(librarySections, forKey: .librarySections)
+            do {
+                try defaults.set(codable: librarySections, forKey: .librarySections)
+            } catch {
+                print("Failed to store library sections with error \(error).")
+            }
         }
     }
 
@@ -93,7 +97,7 @@ final public class Settings: ObservableObject {
         maximumConcurrentThumbnailDownloads = defaults.integer(forKey: .maximumConcurrentThumbnailDownloads, default: 3)
         favoriteTags = defaults.object(forKey: .favoriteTags) as? [String] ?? []
         topTagsCount = defaults.integer(forKey: .topTagsCount, default: 5)
-        librarySections = defaults.object(forKey: .librarySections) as? [LibrarySection] ?? [
+        librarySections = (try? defaults.codable(forKey: .librarySections)) ?? [
             LibrarySection(section: .all, isEnabled: true),
             LibrarySection(section: .unread, isEnabled: true),
             LibrarySection(section: .today, isEnabled: true),

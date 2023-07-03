@@ -62,8 +62,14 @@ class ShareExtensionModel: ObservableObject, Runnable {
         tagsModel.start()
     }
 
+    func title(for url: URL, preferredTitle: String?) async throws -> String {
+        if let preferredTitle {
+            return preferredTitle
+        }
+        return try await url.title() ?? ""
+    }
+
     @MainActor func load() {
-        dispatchPrecondition(condition: .onQueue(.main))
         guard let extensionItem = dataSource?.extensionContext?.inputItems.first as? NSExtensionItem,
               let attachment = extensionItem.attachments?.first
         else {
@@ -79,7 +85,7 @@ class ShareExtensionModel: ObservableObject, Runnable {
                         self.post = post
                     }
                 } else {
-                    let title = try await url.title() ?? ""
+                    let title = try await title(for: url, preferredTitle: extensionItem.attributedContentText?.string)
                     await MainActor.run {
                         self.post = Pinboard.Post(href: url, description: title, time: nil)
                     }

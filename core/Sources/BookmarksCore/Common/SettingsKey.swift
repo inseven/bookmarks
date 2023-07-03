@@ -30,6 +30,7 @@ public enum SettingsKey: RawRepresentable {
     case layoutMode(BookmarksSection)
     case topTagsCount
     case showSectionCounts
+    case librarySections
 
     static let layoutModePrefix = "layout-mode-"
 
@@ -49,6 +50,8 @@ public enum SettingsKey: RawRepresentable {
             self = .topTagsCount
         case "show-section-counts":
             self = .showSectionCounts
+        case "library-sections":
+            self = .librarySections
         case _ where rawValue.starts(with: Self.layoutModePrefix):
             let rawSection = String(rawValue.dropFirst(Self.layoutModePrefix.count))
             guard let section = BookmarksSection(rawValue: rawSection) else {
@@ -78,6 +81,8 @@ public enum SettingsKey: RawRepresentable {
             return "show-section-counts"
         case .layoutMode(let section):
             return "\(Self.layoutModePrefix)\(section.rawValue)"
+        case .librarySections:
+            return "library-sections"
         }
     }
 }

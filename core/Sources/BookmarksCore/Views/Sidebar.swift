@@ -43,6 +43,12 @@ public struct Sidebar: View {
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
+                    EditButton()
+                }
+                ToolbarItem(placement: .bottomBar) {
+                    Color.clear
+                }
+                ToolbarItem(placement: .bottomBar) {
                     Button {
                         sceneState.showTags()
                     } label: {

@@ -28,7 +28,6 @@ extension Database {
         let database: Database
         var completion: ((Database.Scope) -> Void)? = nil
 
-        // TODO: Filter by scope.
         init(database: Database, completion: @escaping (Database.Scope) -> Void) {
             self.database = database
             self.completion = completion

@@ -109,25 +109,19 @@ public class ApplicationModel: ObservableObject {
             .store(in: &cancellables)
 
         Task {
-            let version: Int64 = 5
+            let iconURLVersion = 2
             do {
-                for try await identifier in database.identifiers(metadataVersionLessThan: version) {
-                    // TODO: Should the bookmark also query for the metadata or should this be secondary?
-                    print(identifier)
-                    let bookmark = try await database.bookmark(identifier: identifier)
-                    var metadata = try await database.metadata(identifier: identifier) ?? Database.Metadata(version: 0, thumbnail: nil)
-
-                    print("ITERATOR: \(bookmark.url)")
-                    if metadata.version < version {
-                        print("ITERATOR: Upgrading metadata from \(metadata.version) to \(version)...")
-                        metadata.version = version
-                        metadata.thumbnail = "https://jbmorley.co.uk/photos/2023/03/copenhagen/index-thumbnail.jpg"
-                        try await database.save(metadata: metadata, for: identifier)
-                    }
+                // TODO: Rename identifiers
+                // TODO: Would it be better if this accepted an expression that matched the model?
+                for try await var bookmark in database.identifiers(query: IconURLVersionLessThan(iconURLVersion)) {
+                    print("Processing icon URL for '\(bookmark.url)'...")
+                    bookmark.iconURL = bookmark.url.faviconURL
+                    bookmark.iconURLVersion = iconURLVersion
+                    try await database.insertOrUpdate(bookmark: bookmark)
                 }
-                print("ITERATOR: Done. This should never happen. Boo!")
+                assertionFailure("Background processor iterator failed unexpectedly.")
             } catch {
-                print("ITERATOR: Fatal failure to process data with error '\(error)'.")
+                assertionFailure("Background processor iterator failed unexpectedly with error \(error).")
             }
         }
     }

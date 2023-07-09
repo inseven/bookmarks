@@ -22,22 +22,27 @@ import Foundation
 
 extension Database {
 
-    struct Identifiers: AsyncSequence {
-        typealias Element = Bookmark.ID
+//    public func bookmarks<T: QueryDescription>(query: T) async throws -> [Bookmark] {
+
+    // TODO: Await new data should be an option?
+    struct Bookmarks<T: QueryDescription>: AsyncSequence {
+        typealias Element = Bookmark
 
         let database: Database
-        let lessThanVersion: Int64
+        let query: T
 
         struct AsyncIterator: AsyncIteratorProtocol {
 
             let database: Database
-            let lessThanVersion: Int64
+            let query: T
 
-            mutating func next() async throws -> Bookmark.ID? {
+            mutating func next() async throws -> Bookmark? {
                 while true {
-                    if let identifier = try await database.identifier(metadataVersionLessThan: lessThanVersion) {
-                        return identifier
+                    // TODO: This is fetching EVERYTHING and we should definitely not do this.
+                    if let bookmark = try await database.bookmarks(query: query, limit: 1).first {
+                        return bookmark
                     }
+
                     // TODO: Since we're not observing until we've processed the last element this can drop chanegs.
                     _ = await database.wait()
                 }
@@ -45,12 +50,12 @@ extension Database {
         }
 
         func makeAsyncIterator() -> AsyncIterator {
-            return AsyncIterator(database: database, lessThanVersion: lessThanVersion)
+            return AsyncIterator(database: database, query: query)
         }
     }
 
-    func identifiers(metadataVersionLessThan version: Int64) -> Identifiers {
-        return Identifiers(database: self, lessThanVersion: version)
+    func identifiers<T: QueryDescription>(query: T = True()) -> Bookmarks<T> {
+        return Bookmarks(database: self, query: query)
     }
 
 }

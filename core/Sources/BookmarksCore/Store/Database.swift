@@ -554,7 +554,17 @@ public class Database {
 
     public func bookmarks<T: QueryDescription>(query: T) async throws -> [Bookmark] {
         try await run {
-            try self.syncQueue_bookmarks(where: query.sql)
+#if DEBUG
+            let clock = ContinuousClock()
+            var result: [Bookmark] = []
+            let duration = try clock.measure {
+                result = try self.syncQueue_bookmarks(where: query.sql)
+            }
+            print("Query took \(duration).")
+            return result
+#else
+            return try self.syncQueue_bookmarks(where: query.sql)
+#endif
         }
     }
 

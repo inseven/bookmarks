@@ -20,20 +20,14 @@
 
 import SwiftUI
 
-extension Scene {
+struct RootView: View {
 
-    public func commonCommands(applicationModel: ApplicationModel) -> some Scene {
-        commands {
+    @ObservedObject var extensionModel: ShareExtensionModel
 
-            SidebarCommands()
-            ToolbarCommands()
-
-            AccountCommands(applicationModel: applicationModel)
-            ApplicationCommands()
-            SectionCommands(settings: applicationModel.settings)
-            ViewCommands()
-            BookmarkCommands()
-
+    var body: some View {
+        NavigationStack {
+            ContentView()
+                .environmentObject(extensionModel)
         }
     }
 

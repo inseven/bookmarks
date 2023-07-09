@@ -18,23 +18,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import SwiftUI
+import Foundation
 
-extension Scene {
+import Interact
 
-    public func commonCommands(applicationModel: ApplicationModel) -> some Scene {
-        commands {
+extension KeyedDefaults {
 
-            SidebarCommands()
-            ToolbarCommands()
-
-            AccountCommands(applicationModel: applicationModel)
-            ApplicationCommands()
-            SectionCommands(settings: applicationModel.settings)
-            ViewCommands()
-            BookmarkCommands()
-
+    public func codable<T: Codable>(forKey key: Key) throws -> T? {
+        guard let data = object(forKey: key) as? Data else {
+            return nil
         }
+        return try JSONDecoder().decode(T.self, from: data)
+    }
+
+    public func set<T: Codable>(codable: T, forKey key: Key) throws {
+        let data = try JSONEncoder().encode(codable)
+        set(data, forKey: key)
     }
 
 }

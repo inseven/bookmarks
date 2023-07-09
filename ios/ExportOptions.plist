@@ -6,6 +6,8 @@
 	<dict>
 		<key>uk.co.inseven.bookmarks.new</key>
 		<string>Bookmarks App Store Profile</string>
+		<key>uk.co.inseven.bookmarks.new.ShareExtension</key>
+		<string>Bookmarks Share Extension App Store Profile</string>
 	</dict>
 	<key>destination</key>
 	<string>export</string>

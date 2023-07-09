@@ -18,13 +18,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Combine
 import SwiftUI
 
-public protocol Store {
+import BookmarksCore
 
-    func close(_ tab: Tab)
-    func activate(_ tab: Tab)
-    func suggestions(prefix: String, existing: [String], count: Int) -> [String]
+struct EditorView: View {
+
+    @EnvironmentObject var extensionModel: ShareExtensionModel
+
+    @Binding var post: Pinboard.Post
+
+    var body: some View {
+        Section {
+            TextField("Title", text: $post.description, axis: .vertical)
+            TextField("Notes", text: $post.extended, axis: .vertical)
+                .lineLimit(5...10)
+        }
+        Section {
+            TokenView("Add tags...", tokens: $post.tags) { candidate, existing, count in
+                return extensionModel.tagsModel.suggestions(candidate: candidate, existing: existing, count: count)
+            }
+        }
+        if let url = post.href {
+            Section {
+                Link(destination: url) {
+                    Text(url.absoluteString)
+                        .multilineTextAlignment(.leading)
+                }
+            } header: {
+
+            } footer: {
+                if let time = post.time {
+                    Text("Created \(time.formatted())")
+                }
+            }
+        }
+    }
 
 }

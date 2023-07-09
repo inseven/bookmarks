@@ -72,7 +72,17 @@ public class TagsModel: ObservableObject {
         self.tags = []
     }
 
-    @MainActor public func tags(prefix: String) -> [Database.Tag] {
+    @MainActor public func suggestions(candidate: String, existing: [String], count: Int) -> [String] {
+        let existing = Set(existing)
+        return tags(prefix: candidate)
+            .sorted { $0.count > $1.count }
+            .prefix(count + existing.count)
+            .filter { !existing.contains($0.name) }
+            .prefix(count)
+            .map { $0.name }
+    }
+
+    @MainActor private func tags(prefix: String) -> [Database.Tag] {
         return trie.findWordsWithPrefix(prefix: prefix)
             .compactMap { name in
                 guard let count = counts[name] else {
@@ -81,13 +91,6 @@ public class TagsModel: ObservableObject {
                 return Database.Tag(name: name, count: count)
             }
     }
-
-    @MainActor public func suggestions(prefix: String, existing: [String]) -> [String] {
-         let currentTags = Set(existing)
-         let tags = Set(trie.findWordsWithPrefix(prefix: prefix))
-         let suggestions = Array(tags.subtracting(currentTags))
-         return suggestions.sorted()
-     }
 
 }
 

@@ -64,7 +64,14 @@ public struct SectionView: View {
 #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    sectionViewModel.showTags()
+                } label: {
+                    Image(systemName: "tag")
+                }
+            }
+            ToolbarItem(placement: .primaryAction) {
                 Menu {
                     LayoutPicker()
                 } label: {

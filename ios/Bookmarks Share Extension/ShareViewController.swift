@@ -19,22 +19,22 @@
 // SOFTWARE.
 
 import SwiftUI
+import UIKit
 
-extension Scene {
+class ShareViewController: UIHostingController<RootView>, ShareExtensionDataSource {
 
-    public func commonCommands(applicationModel: ApplicationModel) -> some Scene {
-        commands {
+    let extensionModel: ShareExtensionModel
 
-            SidebarCommands()
-            ToolbarCommands()
+    required init?(coder aDecoder: NSCoder) {
+        let extensionModel = ShareExtensionModel()
+        self.extensionModel = extensionModel
+        super.init(rootView: RootView(extensionModel: extensionModel))
+        extensionModel.dataSource = self
+    }
 
-            AccountCommands(applicationModel: applicationModel)
-            ApplicationCommands()
-            SectionCommands(settings: applicationModel.settings)
-            ViewCommands()
-            BookmarkCommands()
-
-        }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        extensionModel.load()
     }
 
 }

@@ -26,7 +26,7 @@ extension Pinboard {
     //       https://github.com/inseven/bookmarks/issues/216
     public struct Post: Codable {
 
-        public var description: String?
+        public var description: String
         public var extended: String
         public var hash: String
         public var href: URL?
@@ -48,14 +48,14 @@ extension Pinboard {
             case toRead = "toread"
         }
 
-        init(href: URL,
+        public init(href: URL,
              description: String = "",
              extended: String = "",
              hash: String = "",
              meta: String = "",
              shared: Bool = true,
              tags: [String] = [],
-             time: Date = Date(),
+             time: Date? = Date(),
              toRead: Bool = false) {
             self.href = href
             self.description = description
@@ -78,7 +78,7 @@ extension Pinboard {
             } catch DecodingError.typeMismatch {
                 // We double check that we can parse the key as a boolean to ensure the structure is as we expect.
                 let _ = try container.decode(Bool.self, forKey: .description)
-                description = nil
+                description = ""
             }
 
             extended = try container.decode(String.self, forKey: .extended)
@@ -103,7 +103,7 @@ extension Bookmark {
                 return nil
         }
         self.init(identifier: post.hash,
-                  title: post.description ?? "",
+                  title: post.description,
                   url: url,
                   tags: Set(post.tags),
                   date: date,

@@ -41,27 +41,38 @@ public class ApplicationModel: ObservableObject {
     public var cache: NSCache = NSCache<NSString, SafeImage>()
     public var database: Database
 
-    private var documentsUrl: URL
     private var downloadManager: DownloadManager
-    private var updater: Updater
+    private var store: Store
     private var cancellables: Set<AnyCancellable> = []
 
     public init() {
-        documentsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        try! FileManager.default.createDirectory(at: documentsUrl, withIntermediateDirectories: true, attributes: nil)
+
+        // Ensure the documents directory exists.
+        let fileManager = FileManager.default
+        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        try! fileManager.createDirectory(at: documentsURL, withIntermediateDirectories: true, attributes: nil)
+
+        // Clean up the legacy store if it exists.
+        let legacyStoreURL = documentsURL.appendingPathComponent("store.db")
+        if fileManager.fileExists(atPath: legacyStoreURL.path) {
+            print("Legacy store exists; cleaning up.")
+            try? fileManager.removeItem(at: legacyStoreURL)
+        }
+
+        // Create the database.
         // TODO: Handle database initialisation errors #143
         //       https://github.com/inseven/bookmarks/issues/143
-        let storeURL = documentsUrl.appendingPathComponent("store.db")
-        print("Opening database at '\(storeURL.absoluteString)'...")
-        database = try! Database(path: storeURL)
-        imageCache = FileImageCache(path: documentsUrl.appendingPathComponent("thumbnails"))
+        print("Opening database at '\(Database.sharedStoreURL.absoluteString)'...")
+        database = try! Database(path: Database.sharedStoreURL)
+
+        imageCache = FileImageCache(path: documentsURL.appendingPathComponent("thumbnails"))
         downloadManager = DownloadManager(limit: settings.maximumConcurrentThumbnailDownloads)
         thumbnailManager = ThumbnailManager(imageCache: imageCache, downloadManager: downloadManager)
-        updater = Updater(database: database, settings: settings)
+        store = Store(database: database, settings: settings)
         tagsModel = TagsModel(database: database)
 
-        updater.delegate = self
-        updater.start()
+        store.delegate = self
+        store.start()
         tagsModel.start()
 
         #if os(macOS)
@@ -125,7 +136,7 @@ public class ApplicationModel: ObservableObject {
                              password: String,
                              completion: @escaping (Result<Void, Error>) -> Void) {
         let completion = DispatchQueue.global().asyncClosure(completion)
-        updater.authenticate(username: username, password: password) { result in
+        store.authenticate(username: username, password: password) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success():
@@ -141,7 +152,7 @@ public class ApplicationModel: ObservableObject {
     public func logout(completion: @escaping (Result<Void, Error>) -> Void) {
         dispatchPrecondition(condition: .onQueue(.main))
         let completion = DispatchQueue.global().asyncClosure(completion)
-        updater.logout { result in
+        store.logout { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success():
@@ -156,7 +167,7 @@ public class ApplicationModel: ObservableObject {
 
     public func refresh() async {
         return await withCheckedContinuation { continuation in
-            updater.refresh(force: true) { error in
+            store.refresh(force: true) { error in
                 // N.B. We ignore the error here as it is currently handled via the delegate callback mechanism.
                 continuation.resume()
             }
@@ -164,19 +175,19 @@ public class ApplicationModel: ObservableObject {
     }
     
     public func delete(bookmarks: [Bookmark]) async throws {
-        try await updater.delete(bookmarks: bookmarks)
+        try await store.delete(bookmarks: bookmarks)
     }
 
     public func update(bookmarks: [Bookmark]) async throws {
-        try await updater.update(bookmarks: bookmarks)
+        try await store.update(bookmarks: bookmarks)
     }
 
     public func rename(tag: String, to newTag: String) async throws {
-        try await updater.rename(tag: tag, to: newTag)
+        try await store.rename(tag: tag, to: newTag)
     }
 
     public func delete(tags: [String]) async throws {
-        try await updater.delete(tags: tags)
+        try await store.delete(tags: tags)
     }
 
     @MainActor public func open(_ bookmarks: Set<Bookmark>,
@@ -207,14 +218,14 @@ public class ApplicationModel: ObservableObject {
     }
 
     @objc func nsApplicationDidBecomeActive() {
-        self.updater.refresh()
+        self.store.refresh()
     }
 
 }
 
-extension ApplicationModel: UpdaterDelegate {
+extension ApplicationModel: StoreDelegate {
 
-    func updater(_ updater: Updater, didProgress progress: Progress) {
+    func store(_ store: Store, didProgress progress: Progress) {
         Task { @MainActor in
             self.progress = progress
             switch progress {

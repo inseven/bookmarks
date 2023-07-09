@@ -19,10 +19,19 @@
 // SOFTWARE.
 
 import Foundation
+import SwiftUI
 
 import Interact
 
 final public class Settings: ObservableObject {
+
+    public struct LibrarySection: Codable, Identifiable {
+
+        public var id: BookmarksSection { section }
+
+        let section: BookmarksSection
+        let isEnabled: Bool
+    }
 
     let defaults = KeyedDefaults<SettingsKey>(defaults: UserDefaults(suiteName: "group.uk.co.inseven.bookmarks")!)
 
@@ -64,6 +73,16 @@ final public class Settings: ObservableObject {
         }
     }
 
+    @Published public var librarySections: [LibrarySection] {
+        didSet {
+            do {
+                try defaults.set(codable: librarySections, forKey: .librarySections)
+            } catch {
+                print("Failed to store library sections with error \(error).")
+            }
+        }
+    }
+
     public var user: String? {
         return pinboardApiKey?.components(separatedBy: ":").first
     }
@@ -78,6 +97,14 @@ final public class Settings: ObservableObject {
         maximumConcurrentThumbnailDownloads = defaults.integer(forKey: .maximumConcurrentThumbnailDownloads, default: 3)
         favoriteTags = defaults.object(forKey: .favoriteTags) as? [String] ?? []
         topTagsCount = defaults.integer(forKey: .topTagsCount, default: 5)
+        librarySections = (try? defaults.codable(forKey: .librarySections)) ?? [
+            LibrarySection(section: .all, isEnabled: true),
+            LibrarySection(section: .unread, isEnabled: true),
+            LibrarySection(section: .today, isEnabled: true),
+            LibrarySection(section: .shared(true), isEnabled: true),
+            LibrarySection(section: .shared(false), isEnabled: true),
+            LibrarySection(section: .untagged, isEnabled: true),
+        ]
     }
 
     public func layoutMode(for section: BookmarksSection) -> LayoutMode {

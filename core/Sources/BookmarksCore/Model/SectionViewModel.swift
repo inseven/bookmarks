@@ -214,6 +214,10 @@ public class SectionViewModel: ObservableObject, Runnable {
         self.bookmarks = []
     }
 
+    @MainActor public func showTags() {
+        sceneState.showTags()
+    }
+
     @MainActor public func bookmarks(_ scope: SelectionScope<Bookmark.ID>) -> [Bookmark] {
         let ids: Set<Bookmark.ID>
         switch scope {

@@ -20,46 +20,49 @@
 
 import SwiftUI
 
-public struct Sidebar: View {
+import BookmarksCore
+import Interact
 
-    @EnvironmentObject var applicationModel: ApplicationModel
-    @EnvironmentObject var settings: Settings
+struct ContentView: View {
 
-    @Binding var sceneState: SceneState
+    @Environment(\.dismiss) var dismiss
 
-    public var body: some View {
-        SidebarContentView(sceneState: $sceneState)
-#if os(iOS)
-            .refreshable {
-                await applicationModel.refresh()
+    @EnvironmentObject var extensionModel: ShareExtensionModel
+
+    var body: some View {
+        VStack {
+            if let post = Binding($extensionModel.post) {
+                List {
+                    EditorView(post: post)
+                }
+            } else {
+                PlaceholderView {
+                    ProgressView()
+                }
             }
-            .navigationTitle("Bookmarks")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        sceneState.showSettings()
-                    } label: {
-                        Image(systemName: "gear")
+        }
+        .navigationTitle("Add Bookmark")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Menu {
+                    Button("Read Later") {
+                        extensionModel.save(toRead: true)
                     }
                 }
-                ToolbarItem(placement: .primaryAction) {
-                    EditButton()
+                label: {
+                    Text("Save")
+                } primaryAction: {
+                    extensionModel.save()
                 }
-                ToolbarItem(placement: .status) {
-                    StatusView()
-                }
+                .disabled(extensionModel.post == nil)
             }
-#endif
-#if os(macOS)
-            .safeAreaInset(edge: .bottom) {
-                VStack(spacing: 0) {
-                    Divider()
-                    StatusView()
-                        .foregroundColor(.secondary)
-                        .padding()
-                }
-            }
-#endif
+        }
+        .dismissable(.cancel) {
+            extensionModel.dismiss()
+        }
+        .presents($extensionModel.error)
+        .runs(extensionModel)
     }
 
 }

@@ -20,13 +20,13 @@
 
 import Foundation
 
-protocol UpdaterDelegate: AnyObject {
+protocol StoreDelegate: AnyObject {
 
-    func updater(_ updater: Updater, didProgress progress: Progress)
+    func store(_ store: Store, didProgress progress: Progress)
 
 }
 
-public class Updater {
+public class Store {
 
     // TODO: ServiceState should be serializable and stored with each service instance.
     struct ServiceState {
@@ -36,14 +36,14 @@ public class Updater {
 
     static var updateTimeoutSeconds = 5 * 60.0
 
-    private let syncQueue = DispatchQueue(label: "Updater.syncQueue")
-    private let targetQueue = DispatchQueue(label: "Updater.targetQueue")
+    private let syncQueue = DispatchQueue(label: "Store.syncQueue")
+    private let targetQueue = DispatchQueue(label: "Store.targetQueue")
     private let database: Database
     private var timer: Timer?
 
     private var settings: Settings
     private var lastUpdate: Date? = nil  // Synchronized on syncQueue
-    weak var delegate: UpdaterDelegate?
+    weak var delegate: StoreDelegate?
 
     private func syncQueue_token() -> String? {
         dispatchPrecondition(condition: .onQueue(syncQueue))
@@ -80,7 +80,7 @@ public class Updater {
 
         let progress = { (progress: Progress) in
             self.targetQueue.async {
-                self.delegate?.updater(self, didProgress: progress)
+                self.delegate?.store(self, didProgress: progress)
             }
         }
 

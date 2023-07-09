@@ -54,12 +54,15 @@ public struct SidebarContentView: View {
                 }
             }
             Section("Library") {
-                ForEach(BookmarksSection.defaultSections) { section in
-                    SectionLink(section: section)
+                ForEach(settings.librarySections) { librarySection in
+                    SectionLink(section: librarySection.section)
+                }
+                .onMove { fromOffsets, toOffset in
+                    settings.librarySections.move(fromOffsets: fromOffsets, toOffset: toOffset)
                 }
             }
             if !settings.favoriteTags.isEmpty {
-                Section("Favorite Tags") {
+                Section("Favorites") {
                     ForEach(settings.favoriteTags.sorted(), id: \.section) { tag in
                         SectionLink(section: .tag(tag))
 #if os(macOS)

@@ -101,6 +101,20 @@ public class Database {
 
     }
 
+    // Default store location.
+    // Unfortunately, when running unsigned under test, the group container creation fails so this code silently fails
+    // over to using the documents directory. This is pretty inelegant as we'd really want a hard failure so it's not
+    // possible to use the incorrect location in production but, absent a better solution, this will have to do.
+    public static let sharedStoreURL: URL = {
+        let fileManager = FileManager.default
+        let identifier = "group.uk.co.inseven.bookmarks"
+        let groupURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: identifier)
+        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let directoryURL = groupURL ?? documentsURL
+        try? fileManager.createDirectory(atPath: directoryURL.path, withIntermediateDirectories: true)
+        return directoryURL.appendingPathComponent("store.db")
+    }()
+
     static var migrations: [Int32:(Connection) throws -> Void] = [
         1: { _ in },
         2: { _ in },

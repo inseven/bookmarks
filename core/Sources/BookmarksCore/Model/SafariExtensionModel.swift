@@ -23,13 +23,16 @@
 import SafariServices
 import SwiftUI
 
-public class SafariExtensionModel: ObservableObject, Store {
+public class SafariExtensionModel: ObservableObject {
 
     let settings = Settings()
+    let tagsModel: TagsModel
 
     @Published public var tabs: [Tab] = []
 
-    var tags = Trie()
+    private static let database: Database = {
+        try! Database(path: Database.sharedStoreURL)
+    }()
 
     public var pinboard: Pinboard? {
         guard let apiKey = settings.pinboardApiKey else {
@@ -39,29 +42,12 @@ public class SafariExtensionModel: ObservableObject, Store {
     }
 
     public init() {
-
+        self.tagsModel = TagsModel(database: Self.database)
+        tagsModel.start()
     }
 
-    public func update() {
-        // TODO: Show the authentication state to the user.
-        guard let pinboard = pinboard else {
-            return
-        }
-        Task {
-            do {
-                let tags = try await pinboard.tagsGet()
-                let trie = Trie(words: tags.keys.map({ $0.lowercased() }))
-                DispatchQueue.main.async {
-                    self.tags = trie
-                }
-            } catch {
-                NSLog("Failed to get tags with error \(error)")
-            }
-        }
-    }
-
-    public func suggestions(prefix: String, existing: [String], count: Int) -> [String] {
-        tags.suggestions(for: prefix, count: count)
+    @MainActor public func suggestions(prefix: String, existing: [String], count: Int) -> [String] {
+        return tagsModel.suggestions(candidate: prefix, existing: existing, count: count)
     }
 
     public func close(_ tab: Tab) {

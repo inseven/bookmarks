@@ -22,7 +22,7 @@ import Combine
 
 extension Publisher {
 
-    func asyncMap<T>(_ transform: @escaping (Output) async -> T) -> Publishers.FlatMap<Future<T, Never>, Self> {
+    public func asyncMap<T>(_ transform: @escaping (Output) async -> T) -> Publishers.FlatMap<Future<T, Never>, Self> {
         flatMap { value in
             Future { promise in
                 Task {
@@ -33,7 +33,7 @@ extension Publisher {
         }
     }
 
-    func asyncMap<T>(_ transform: @escaping (Output) async throws -> T) -> Publishers.FlatMap<Future<T, Error>, Self> {
+    public func asyncMap<T>(_ transform: @escaping (Output) async throws -> T) -> Publishers.FlatMap<Future<T, Error>, Self> {
         flatMap { value in
             Future { promise in
                 Task {

@@ -20,33 +20,53 @@
 
 import SwiftUI
 
-enum DismissableAction {
+public enum DismissableAction {
     case close
     case done
+    case cancel
 }
 
 struct Dismissable: ViewModifier {
 
     @Environment(\.dismiss) var dismiss
 
-    let action: DismissableAction
+    private let action: DismissableAction
+    private let perform: (() -> Void)?
 
-    var placement: ToolbarItemPlacement {
+    private var placement: ToolbarItemPlacement {
         switch action {
         case .close:
             return .cancellationAction
         case .done:
             return .confirmationAction
+        case .cancel:
+            return .cancellationAction
         }
     }
 
-    var text: String {
+    private var text: String {
         switch action {
         case .close:
             return "Close"
         case .done:
             return "Done"
+        case.cancel:
+            return "Cancel"
         }
+    }
+
+    private var isCancellation: Bool {
+        switch action {
+        case .close, .cancel:
+            return true
+        case .done:
+            return false
+        }
+    }
+
+    init(action: DismissableAction, perform: (() -> Void)? = nil) {
+        self.action = action
+        self.perform = perform
     }
 
     func body(content: Content) -> some View {
@@ -54,10 +74,15 @@ struct Dismissable: ViewModifier {
             .toolbar {
                 ToolbarItem(placement: placement) {
                     Button {
-                        dismiss()
+                        if let perform {
+                            perform()
+                        } else {
+                            dismiss()
+                        }
                     } label: {
                         Text(text)
                     }
+                    .keyboardShortcut(isCancellation ? .cancelAction : .none)
                 }
             }
     }
@@ -66,8 +91,8 @@ struct Dismissable: ViewModifier {
 
 extension View {
 
-    func dismissable(_ action: DismissableAction) -> some View {
-        return modifier(Dismissable(action: action))
+    public func dismissable(_ action: DismissableAction, perform: (() -> Void)? = nil) -> some View {
+        return modifier(Dismissable(action: action, perform: perform))
     }
 
 }

@@ -22,6 +22,7 @@ let package = Package(
         .package(path: "./../SelectableCollectionView"),
         .package(url: "https://github.com/ksemianov/WrappingHStack.git", branch: "main"),
         .package(url: "https://github.com/saramah/HashRainbow.git", branch: "main"),
+        .package(url: "https://github.com/scinfu/SwiftSoup.git", from: "2.6.0"),
     ],
     targets: [
         .target(
@@ -33,6 +34,7 @@ let package = Package(
                 .product(name: "TFHpple", package: "hpple"),
                 "WrappingHStack",
                 "HashRainbow",
+                "SwiftSoup",
                 .product(name: "SelectableCollectionView",
                          package: "SelectableCollectionView",
                          condition: .when(platforms: [.macOS])),

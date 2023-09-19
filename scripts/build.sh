@@ -114,6 +114,7 @@ popd
 # Test iOS and macOS.
 
 # iOS
+xcrun simctl list devices
 sudo xcode-select --switch "$IOS_XCODE_PATH"
 build_scheme "Bookmarks iOS" clean build build-for-testing test \
     -sdk iphonesimulator \

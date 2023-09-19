@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>destination</key>
+	<string>export</string>
+	<key>manageAppVersionAndBuildNumber</key>
+	<false/>
+	<key>method</key>
+	<string>app-store</string>
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>uk.co.inseven.bookmarks.new</key>
@@ -9,18 +15,14 @@
 		<key>uk.co.inseven.bookmarks.new.ShareExtension</key>
 		<string>Bookmarks Share Extension App Store Profile</string>
 	</dict>
-	<key>destination</key>
-	<string>export</string>
-	<key>method</key>
-	<string>app-store</string>
+	<key>signingCertificate</key>
+	<string>2AEA1234843D262A1F540E2F27DCC258932B0F57</string>
 	<key>signingStyle</key>
-	<string>automatic</string>
+	<string>manual</string>
 	<key>stripSwiftSymbols</key>
 	<true/>
 	<key>teamID</key>
 	<string>S4WXAUZQEV</string>
-	<key>uploadBitcode</key>
-	<false/>
 	<key>uploadSymbols</key>
 	<true/>
 </dict>

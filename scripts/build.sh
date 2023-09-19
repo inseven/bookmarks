@@ -72,7 +72,7 @@ done
 
 # iPhone to be used for smoke test builds and tests.
 # This doesn't specify the OS version to allow the build script to recover from minor build changes.
-IPHONE_DESTINATION="platform=iOS Simulator,name=iPhone 14 Pro"
+IPHONE_DESTINATION="platform=iOS Simulator,name=iPhone 15 Pro"
 
 # Generate a random string to secure the local keychain.
 export TEMPORARY_KEYCHAIN_PASSWORD=`openssl rand -base64 14`
@@ -114,6 +114,7 @@ popd
 # Test iOS and macOS.
 
 # iOS
+xcrun simctl list devices
 sudo xcode-select --switch "$IOS_XCODE_PATH"
 build_scheme "Bookmarks iOS" clean build build-for-testing test \
     -sdk iphonesimulator \

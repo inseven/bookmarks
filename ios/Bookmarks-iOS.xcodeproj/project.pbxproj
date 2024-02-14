@@ -337,7 +337,7 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1430;
-				ORGANIZATIONNAME = "InSeven Limited";
+				ORGANIZATIONNAME = "Jason Morley";
 				TargetAttributes = {
 					D89CF20F2A4DE8B5000E2B1C = {
 						CreatedOnToolsVersion = 14.3.1;
@@ -502,7 +502,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Bookmarks Share Extension/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Bookmarks Share Extension";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2020-2024 InSeven Limited. All rights reserved.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2020-2024 Jason Morley. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -532,7 +532,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Bookmarks Share Extension/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Bookmarks Share Extension";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2020-2024 InSeven Limited. All rights reserved.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2020-2024 Jason Morley. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

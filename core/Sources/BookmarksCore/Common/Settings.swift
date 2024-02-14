@@ -33,7 +33,7 @@ final public class Settings: ObservableObject {
         let isEnabled: Bool
     }
 
-    let defaults = KeyedDefaults<SettingsKey>(defaults: UserDefaults(suiteName: "group.uk.co.inseven.bookmarks")!)
+    let defaults = KeyedDefaults<SettingsKey>(defaults: UserDefaults(suiteName: "group.uk.co.jbmorley.bookmarks")!)
 
     @Published public var pinboardApiKey: String? {
         didSet {

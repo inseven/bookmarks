@@ -21,6 +21,7 @@
 import Foundation
 
 import Diligence
+import Interact
 
 public struct Legal {
 
@@ -44,7 +45,7 @@ public struct Legal {
     } licenses: {
         License("Bookmarks", author: "Jason Morley", filename: "bookmarks-license", bundle: .module)
         License("HashRainbow", author: "Sarah Barbour", filename: "hashrainbow-license", bundle: .module)
-        License("Interact", author: "InSeven Limited", filename: "interact-license", bundle: .module)
+        License.interact
         License("SelectableCollectionView", author: "Jason Morley", filename: "selectablecollectionview-license", bundle: .module)
         License("Swift Algorithm Club", author: "Matthijs Hollemans and Contributors", filename: "swift-algorithm-club-license", bundle: .module)
         License("SwiftSoup", author: "Nabil Chatbi", filename: "swiftsoup-license", bundle: .module)

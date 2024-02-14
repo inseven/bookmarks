@@ -6,7 +6,7 @@
 	<true/>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.uk.co.inseven.bookmarks</string>
+		<string>group.uk.co.jbmorley.bookmarks</string>
 	</array>
 	<key>com.apple.security.files.user-selected.read-only</key>
 	<true/>

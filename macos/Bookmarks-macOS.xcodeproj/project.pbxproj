@@ -12,7 +12,7 @@
 		D83D15582A267533000B70BF /* script.js in Resources */ = {isa = PBXBuildFile; fileRef = D83D15572A267533000B70BF /* script.js */; };
 		D83D155A2A267533000B70BF /* ToolbarItemIcon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D83D15592A267533000B70BF /* ToolbarItemIcon.pdf */; };
 		D83D155D2A267533000B70BF /* SafariExtensionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D83D155B2A267533000B70BF /* SafariExtensionViewController.xib */; };
-		D83D15622A267533000B70BF /* Bookmarks for Safari.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D83D15502A267533000B70BF /* Bookmarks for Safari.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D83D15622A267533000B70BF /* Bookmarks Safari Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D83D15502A267533000B70BF /* Bookmarks Safari Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D83D15682A26782F000B70BF /* BookmarksCore in Frameworks */ = {isa = PBXBuildFile; productRef = D83D15672A26782F000B70BF /* BookmarksCore */; };
 		D83D156D2A267A0F000B70BF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83D15692A26793F000B70BF /* ContentView.swift */; };
 		D83D156E2A267A12000B70BF /* HostedContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83D156B2A267940000B70BF /* HostedContentView.swift */; };
@@ -59,7 +59,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				D83D15622A267533000B70BF /* Bookmarks for Safari.appex in Embed Foundation Extensions */,
+				D83D15622A267533000B70BF /* Bookmarks Safari Extension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -67,7 +67,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		D83D15502A267533000B70BF /* Bookmarks for Safari.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Bookmarks for Safari.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D83D15502A267533000B70BF /* Bookmarks Safari Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Bookmarks Safari Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D83D15522A267533000B70BF /* SafariExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariExtensionHandler.swift; sourceTree = "<group>"; };
 		D83D15542A267533000B70BF /* SafariExtensionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariExtensionViewController.swift; sourceTree = "<group>"; };
 		D83D15572A267533000B70BF /* script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = script.js; sourceTree = "<group>"; };
@@ -184,7 +184,7 @@
 				D891C450261E32F90024E1A6 /* Bookmarks.app */,
 				D891C462261E32FB0024E1A6 /* BookmarksTests.xctest */,
 				D891C46D261E32FB0024E1A6 /* BookmarksUITests.xctest */,
-				D83D15502A267533000B70BF /* Bookmarks for Safari.appex */,
+				D83D15502A267533000B70BF /* Bookmarks Safari Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -257,9 +257,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D83D154F2A267533000B70BF /* Bookmarks for Safari */ = {
+		D83D154F2A267533000B70BF /* Bookmarks Safari Extension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D83D15662A267533000B70BF /* Build configuration list for PBXNativeTarget "Bookmarks for Safari" */;
+			buildConfigurationList = D83D15662A267533000B70BF /* Build configuration list for PBXNativeTarget "Bookmarks Safari Extension" */;
 			buildPhases = (
 				D83D154C2A267533000B70BF /* Sources */,
 				D83D154D2A267533000B70BF /* Frameworks */,
@@ -269,12 +269,12 @@
 			);
 			dependencies = (
 			);
-			name = "Bookmarks for Safari";
+			name = "Bookmarks Safari Extension";
 			packageProductDependencies = (
 				D83D15672A26782F000B70BF /* BookmarksCore */,
 			);
 			productName = SafariExtension;
-			productReference = D83D15502A267533000B70BF /* Bookmarks for Safari.appex */;
+			productReference = D83D15502A267533000B70BF /* Bookmarks Safari Extension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		D891C44F261E32F90024E1A6 /* Bookmarks */ = {
@@ -380,7 +380,7 @@
 				D891C44F261E32F90024E1A6 /* Bookmarks */,
 				D891C461261E32FB0024E1A6 /* BookmarksTests */,
 				D891C46C261E32FB0024E1A6 /* BookmarksUITests */,
-				D83D154F2A267533000B70BF /* Bookmarks for Safari */,
+				D83D154F2A267533000B70BF /* Bookmarks Safari Extension */,
 			);
 		};
 /* End PBXProject section */
@@ -463,7 +463,7 @@
 /* Begin PBXTargetDependency section */
 		D83D15612A267533000B70BF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D83D154F2A267533000B70BF /* Bookmarks for Safari */;
+			target = D83D154F2A267533000B70BF /* Bookmarks Safari Extension */;
 			targetProxy = D83D15602A267533000B70BF /* PBXContainerItemProxy */;
 		};
 		D891C464261E32FB0024E1A6 /* PBXTargetDependency */ = {
@@ -498,7 +498,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = $BUILD_NUMBER;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				DEVELOPMENT_TEAM = 9GNGYP6YR7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SafariExtension/Info.plist;
@@ -515,7 +515,7 @@
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks.new.SafariExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = "uk.co.jbmorley.bookmarks.apps.appstore.safari-extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -533,7 +533,7 @@
 				CURRENT_PROJECT_VERSION = $BUILD_NUMBER;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=macosx*]" = S4WXAUZQEV;
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = QS82QFHKWB;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SafariExtension/Info.plist;
@@ -550,10 +550,10 @@
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks.new.SafariExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = "uk.co.jbmorley.bookmarks.apps.appstore.safari-extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "Bookmarks for Safari Mac App Store Profile";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "Bookmarks Safari Extension Mac App Store Profile";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -598,7 +598,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				DEVELOPMENT_TEAM = 9GNGYP6YR7;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -665,7 +665,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				DEVELOPMENT_TEAM = 9GNGYP6YR7;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -699,7 +699,7 @@
 				CURRENT_PROJECT_VERSION = $BUILD_NUMBER;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Bookmarks/Preview Content\"";
-				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				DEVELOPMENT_TEAM = 9GNGYP6YR7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Bookmarks/Info.plist;
@@ -708,7 +708,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 0.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks.new;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.jbmorley.bookmarks.apps.appstore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -728,8 +728,8 @@
 				CURRENT_PROJECT_VERSION = $BUILD_NUMBER;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Bookmarks/Preview Content\"";
-				DEVELOPMENT_TEAM = S4WXAUZQEV;
-				"DEVELOPMENT_TEAM[sdk=macosx*]" = S4WXAUZQEV;
+				DEVELOPMENT_TEAM = 9GNGYP6YR7;
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = QS82QFHKWB;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Bookmarks/Info.plist;
@@ -738,7 +738,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 0.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks.new;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.jbmorley.bookmarks.apps.appstore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Bookmarks macOS App Store Profile";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "Bookmarks Mac App Store Profile";
@@ -754,14 +754,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				DEVELOPMENT_TEAM = 9GNGYP6YR7;
 				INFOPLIST_FILE = BookmarksTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksTests;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.jbmorley.bookmarks.apps.appstore.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Bookmarks.app/Contents/MacOS/Bookmarks";
@@ -776,14 +776,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				DEVELOPMENT_TEAM = 9GNGYP6YR7;
 				INFOPLIST_FILE = BookmarksTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksTests;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.jbmorley.bookmarks.apps.appstore.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Bookmarks.app/Contents/MacOS/Bookmarks";
@@ -798,14 +798,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				DEVELOPMENT_TEAM = 9GNGYP6YR7;
 				INFOPLIST_FILE = BookmarksUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.jbmorley.bookmarks.apps.uitests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = Bookmarks;
@@ -820,14 +820,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				DEVELOPMENT_TEAM = 9GNGYP6YR7;
 				INFOPLIST_FILE = BookmarksUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.jbmorley.bookmarks.apps.uitests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = Bookmarks;
@@ -837,7 +837,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D83D15662A267533000B70BF /* Build configuration list for PBXNativeTarget "Bookmarks for Safari" */ = {
+		D83D15662A267533000B70BF /* Build configuration list for PBXNativeTarget "Bookmarks Safari Extension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D83D15642A267533000B70BF /* Debug */,

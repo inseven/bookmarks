@@ -10,19 +10,19 @@
 	<string>app-store</string>
 	<key>provisioningProfiles</key>
 	<dict>
-		<key>uk.co.inseven.bookmarks.new</key>
+		<key>uk.co.jbmorley.bookmarks.apps.appstore</key>
 		<string>Bookmarks App Store Profile</string>
-		<key>uk.co.inseven.bookmarks.new.ShareExtension</key>
+		<key>uk.co.jbmorley.bookmarks.apps.appstore.share-extension</key>
 		<string>Bookmarks Share Extension App Store Profile</string>
 	</dict>
 	<key>signingCertificate</key>
-	<string>2AEA1234843D262A1F540E2F27DCC258932B0F57</string>
+	<string>91DADFE184A1526FA94D4513D5B4C75E1DB3B252</string>
 	<key>signingStyle</key>
 	<string>manual</string>
 	<key>stripSwiftSymbols</key>
 	<true/>
 	<key>teamID</key>
-	<string>S4WXAUZQEV</string>
+	<string>QS82QFHKWB</string>
 	<key>uploadSymbols</key>
 	<true/>
 </dict>

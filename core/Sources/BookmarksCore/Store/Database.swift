@@ -99,7 +99,7 @@ public class Database {
     // possible to use the incorrect location in production but, absent a better solution, this will have to do.
     public static let sharedStoreURL: URL = {
         let fileManager = FileManager.default
-        let identifier = "group.uk.co.inseven.bookmarks"
+        let identifier = "group.uk.co.jbmorley.bookmarks"
         let groupURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: identifier)
         let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
         let directoryURL = groupURL ?? documentsURL

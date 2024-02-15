@@ -3,10 +3,14 @@
 .DS_Store
 .build
 .env
-.jekyll-cache
 .local
 .nova
-_site
 build
 temp
 xcuserdata
+
+/_site
+/build
+/docs/.jekyll-cache
+/docs/_site
+/docs/release-notes

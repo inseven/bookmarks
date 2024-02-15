@@ -27,8 +27,14 @@ public struct Legal {
 
     public static let contents = Contents(repository: "inseven/bookmarks",
                                           copyright: "Copyright © 2020-2024 Jason Morley") {
-        Action("Support", url: URL(address: "support@jbmorley.co.uk", subject: "Bookmarks Support")!)
+
+        let subject = "Bookmarks Support (\(Bundle.main.version ?? "Unknown Version"))"
+
+        Action("Website", url: URL(string: "https://bookmarks.jbmorley.co.uk")!)
+        Action("Privacy Policy", url: URL(string: "https://bookmarks.jbmorley.co.uk/privacy-policy")!)
         Action("GitHub", url: URL(string: "https://github.com/inseven/bookmarks")!)
+        Action("Support", url: URL(address: "support@jbmorley.co.uk", subject: subject)!)
+
     } acknowledgements: {
         Acknowledgements("Developers") {
             Credit("Jason Morley", url: URL(string: "https://jbmorley.co.uk"))

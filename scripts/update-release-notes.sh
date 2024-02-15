@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2020-2024 Jason Morley
+# Copyright (c) 2021-2023 Jason Morley, Tom Sutcliffe
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,13 +20,23 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+set -e
+set -o pipefail
+set -x
+set -u
+
 SCRIPTS_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
 ROOT_DIRECTORY="${SCRIPTS_DIRECTORY}/.."
+RELEASE_NOTES_TEMPLATE_PATH="${SCRIPTS_DIRECTORY}/release-notes.markdown"
+HISTORY_PATH="${SCRIPTS_DIRECTORY}/history.yaml"
+RELEASE_NOTES_DIRECTORY="${ROOT_DIRECTORY}/docs/release-notes"
+RELEASE_NOTES_PATH="${RELEASE_NOTES_DIRECTORY}/index.markdown"
 
-export PYTHONUSERBASE="${ROOT_DIRECTORY}/.local/python"
-mkdir -p "$PYTHONUSERBASE"
-export PATH="${PYTHONUSERBASE}/bin":$PATH
+source "${SCRIPTS_DIRECTORY}/environment.sh"
 
-export PATH=$PATH:"${SCRIPTS_DIRECTORY}/changes"
-export PATH=$PATH:"${SCRIPTS_DIRECTORY}/build-tools"
-export PATH=$PATH:"${ROOT_DIRECTORY}/diligence/scripts"
+
+cd "$ROOT_DIRECTORY"
+
+mkdir -p "$RELEASE_NOTES_DIRECTORY"
+changes notes --all --released --history "$HISTORY_PATH" --template "$RELEASE_NOTES_TEMPLATE_PATH" > "$RELEASE_NOTES_PATH"

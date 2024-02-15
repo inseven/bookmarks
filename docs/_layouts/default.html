@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ site.title }}{% if page.title %} - {{ page.title }}{% endif %}</title>
+    {% if page.description %}<meta name="description" content="{{ page.description }}">{% endif %}
+    {% if site.author %}<meta name="author" content="{{ site.author }}">{% endif %}
+    <link rel="stylesheet" href="/css/style.css">
+    <meta property="og:title" content="{{ site.title }}{% if page.title %} - {{ page.title }}{% endif %}">
+</head>
+<body>
+    {% include navigation.html %}
+    <div class="content">
+        {{ content }}
+    </div>
+    {% include footer.html %}
+</body>
+</html>

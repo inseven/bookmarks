@@ -20,6 +20,8 @@
 
 body {
     font-family: Helvetica, sans-serif;
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
     font-weight: 200;
     margin: 0;
     background-color: var(--background-color);
@@ -37,6 +39,10 @@ a:hover {
 
 p, h1, h2, h3, nav.actions {
     margin: var(--vertical-spacing) 0 0 0;
+}
+
+p {
+    line-height: 1.5em;
 }
 
 ul.navigation {
@@ -107,10 +113,24 @@ nav.actions {
 }
 
 nav.actions a.button {
-    background-color: #1e62e9;
+    background: rgb(48,97,217);
+    background: linear-gradient(0deg, rgba(48,97,217,1) 0%, rgba(86,180,235,1) 100%);
+    border-radius: 12px;
     color: #fff;
-    border-radius: 100px;
-    padding: 0.5em 2em;
+    font-weight: 500;
+    padding: 1rem 2rem;
     display: inline-block;
     text-decoration: none;
+    position: relative;
+}
+
+nav.actions a.button:before {
+  content: " ";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 1.5px solid #fff;
+  border-radius: 9px;
 }

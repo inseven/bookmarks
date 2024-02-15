@@ -10,3 +10,9 @@ title: About
 </p>
 
 # Bookmarks
+
+<p class="tagline">Pinboard client for Mac, iPhone and iPad</p>
+
+<nav class="actions">
+    <a href="https://testflight.apple.com/join/7fQUiiTq" class="button">TestFlight Public Beta</a>
+</nav>

@@ -22,7 +22,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>uk.co.inseven.bookmarks.action</string>
+			<string>uk.co.jbmorley.bookmarks.types.action</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>bookmarks-action</string>

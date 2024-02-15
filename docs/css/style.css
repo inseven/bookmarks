@@ -1,0 +1,116 @@
+:root {
+    --tint-color: color(display-p3 0.946 0.64 0.263);
+    --brand-color: color(display-p3 0.946 0.64 0.263);
+    --text-color: #000000;
+    --background-color: #ffffff;
+    --navigation-background: rgba(255, 255, 255, 0.7);
+    --content-width: 900px;
+    --vertical-spacing: 15px;
+}
+
+@media (prefers-color-scheme: dark) {
+
+    :root {
+        --text-color: #ffffff;
+        --background-color: #181818;
+        --navigation-background: rgba(24, 24, 24, 0.7);
+    }
+
+}
+
+body {
+    font-family: Helvetica, sans-serif;
+    font-weight: 200;
+    margin: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+a {
+    text-decoration: underline;
+    color: var(--text-color);
+}
+
+a:hover {
+    color: var(--brand-color);
+}
+
+p, h1, h2, h3, nav.actions {
+    margin: var(--vertical-spacing) 0 0 0;
+}
+
+ul.navigation {
+    list-style: none;
+    margin: 0;
+    padding: 1em;
+    background-color: white;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box;
+    font-weight: 400;
+    text-align: center;
+    background: var(--navigation-background);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+ul.navigation a {
+    text-decoration: none;
+}
+
+ul.navigation > li {
+    display: inline-block;
+    padding: 0.4em;
+}
+
+.header {
+    text-align: center;
+}
+
+.content {
+    max-width: var(--content-width);
+    margin: auto;
+    padding: 0 2em;
+    font-size: 1.1em;
+}
+
+.tagline {
+    text-align: center;
+    font-size: 1.4em;
+    font-weight: 400;
+}
+
+.footer {
+    max-width: var(--content-width);
+    margin: auto;
+    padding: 2em;
+}
+
+.copyright {
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+    font-size: 3em;
+}
+
+img.hero {
+    max-width: 100%;
+}
+
+nav.actions {
+    text-align: center;
+    margin-top: 30px;
+}
+
+nav.actions a.button {
+    background-color: #1e62e9;
+    color: #fff;
+    border-radius: 100px;
+    padding: 0.5em 2em;
+    display: inline-block;
+    text-decoration: none;
+}

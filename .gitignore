@@ -1,21 +1,12 @@
-# macOS
-.DS_Store
-
-# Xcode
-xcuserdata/
 **.xcuserdatad
-
-# Build
+*.p8
+.DS_Store
+.build
 .env
+.jekyll-cache
+.local
+.nova
+_site
 build
 temp
-.build
-
-# Editors
-.nova
-
-# Libraries
-/.local
-
-# Authentication keys
-*.p8
+xcuserdata

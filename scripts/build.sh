@@ -34,15 +34,9 @@ TEMPORARY_DIRECTORY="${ROOT_DIRECTORY}/temp"
 KEYCHAIN_PATH="${TEMPORARY_DIRECTORY}/temporary.keychain"
 IOS_ARCHIVE_PATH="${BUILD_DIRECTORY}/Bookmarks-iOS.xcarchive"
 MACOS_ARCHIVE_PATH="${BUILD_DIRECTORY}/Bookmarks-macOS.xcarchive"
-FASTLANE_ENV_PATH="${ROOT_DIRECTORY}/fastlane/.env"
-
-CHANGES_DIRECTORY="${SCRIPTS_DIRECTORY}/changes"
-BUILD_TOOLS_DIRECTORY="${SCRIPTS_DIRECTORY}/build-tools"
+ENV_PATH="${ROOT_DIRECTORY}/.env"
 
 RELEASE_SCRIPT_PATH="${SCRIPTS_DIRECTORY}/release.sh"
-
-PATH=$PATH:$CHANGES_DIRECTORY
-PATH=$PATH:$BUILD_TOOLS_DIRECTORY
 
 IOS_XCODE_PATH=${IOS_XCODE_PATH:-/Applications/Xcode.app}
 MACOS_XCODE_PATH=${MACOS_XCODE_PATH:-/Applications/Xcode.app}
@@ -78,9 +72,9 @@ IPHONE_DESTINATION="platform=iOS Simulator,name=iPhone 15 Pro"
 export TEMPORARY_KEYCHAIN_PASSWORD=`openssl rand -base64 14`
 
 # Source the Fastlane .env file if it exists to make local development easier.
-if [ -f "$FASTLANE_ENV_PATH" ] ; then
+if [ -f "$ENV_PATH" ] ; then
     echo "Sourcing .env..."
-    source "$FASTLANE_ENV_PATH"
+    source "$ENV_PATH"
 fi
 
 function xcode_project {

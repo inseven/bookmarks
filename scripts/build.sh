@@ -71,7 +71,7 @@ IPHONE_DESTINATION="platform=iOS Simulator,name=iPhone 15 Pro"
 # Generate a random string to secure the local keychain.
 export TEMPORARY_KEYCHAIN_PASSWORD=`openssl rand -base64 14`
 
-# Source the Fastlane .env file if it exists to make local development easier.
+# Source the .env file if it exists to make local development easier.
 if [ -f "$ENV_PATH" ] ; then
     echo "Sourcing .env..."
     source "$ENV_PATH"
@@ -176,9 +176,6 @@ xcodebuild \
     -exportPath "$BUILD_DIRECTORY" \
     -exportOptionsPlist "ios/ExportOptions.plist"
 
-IPA_BASENAME="Bookmarks.ipa"
-IPA_PATH="$BUILD_DIRECTORY/$IPA_BASENAME"
-
 # Build and archive the macOS project.
 sudo xcode-select --switch "$MACOS_XCODE_PATH"
 xcode_project \
@@ -194,9 +191,6 @@ xcodebuild \
     -exportArchive \
     -exportPath "$BUILD_DIRECTORY" \
     -exportOptionsPlist "macos/ExportOptions.plist"
-
-APP_BASENAME="Bookmarks.app"
-APP_PATH="$BUILD_DIRECTORY/$APP_BASENAME"
 
 # Archive the build directory.
 ZIP_BASENAME="build-${VERSION_NUMBER}-${BUILD_NUMBER}.zip"

@@ -1,4 +1,4 @@
-// Copyright (c) 2020-2023 InSeven Limited
+// Copyright (c) 2020-2024 Jason Morley
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -59,20 +59,20 @@ extension BookmarksSection: RawRepresentable {
 
     public init?(rawValue: RawValue) {
         switch rawValue {
-        case "uk.co.inseven.bookmarks.all-bookmarks":
+        case "uk.co.jbmorley.bookmarks.sections.all-bookmarks":
             self = .all
-        case "uk.co.inseven.bookmarks.untagged":
+        case "uk.co.jbmorley.bookmarks.sections.untagged":
             self = .untagged
-        case "uk.co.inseven.bookmarks.unread":
+        case "uk.co.jbmorley.bookmarks.sections.unread":
             self = .unread
-        case "uk.co.inseven.bookmarks.today":
+        case "uk.co.jbmorley.bookmarks.sections.today":
             self = .today
-        case "uk.co.inseven.bookmarks.shared":
+        case "uk.co.jbmorley.bookmarks.sections.shared":
             self = .shared(true)
-        case "uk.co.inseven.bookmarks.shared.false":
+        case "uk.co.jbmorley.bookmarks.sections.shared.false":
             self = .shared(false)
-        case _ where rawValue.starts(with: "uk.co.inseven.bookmarks.tags."):
-            self = .tag(String(rawValue.dropFirst("uk.co.inseven.bookmarks.tags.".count)))
+        case _ where rawValue.starts(with: "uk.co.jbmorley.bookmarks.sections.tags."):
+            self = .tag(String(rawValue.dropFirst("uk.co.jbmorley.bookmarks.sections.tags.".count)))
         default:
             return nil
         }
@@ -81,19 +81,19 @@ extension BookmarksSection: RawRepresentable {
     public var rawValue: RawValue {
         switch self {
         case .all:
-            return "uk.co.inseven.bookmarks.all-bookmarks"
+            return "uk.co.jbmorley.bookmarks.sections.all-bookmarks"
         case .untagged:
-            return "uk.co.inseven.bookmarks.untagged"
+            return "uk.co.jbmorley.bookmarks.sections.untagged"
         case .unread:
-            return "uk.co.inseven.bookmarks.unread"
+            return "uk.co.jbmorley.bookmarks.sections.unread"
         case .today:
-            return "uk.co.inseven.bookmarks.today"
+            return "uk.co.jbmorley.bookmarks.sections.today"
         case .shared(true):
-            return "uk.co.inseven.bookmarks.shared"
+            return "uk.co.jbmorley.bookmarks.sections.shared"
         case .shared(false):
-            return "uk.co.inseven.bookmarks.shared.false"
+            return "uk.co.jbmorley.bookmarks.sections.shared.false"
         case .tag(let tag):
-            return "uk.co.inseven.bookmarks.tags.\(tag)"
+            return "uk.co.jbmorley.bookmarks.sections.tags.\(tag)"
         }
     }
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2020-2023 InSeven Limited
+# Copyright (c) 2020-2024 Jason Morley
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,10 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
 SCRIPTS_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 ROOT_DIRECTORY="${SCRIPTS_DIRECTORY}/.."
 
 export PYTHONUSERBASE="${ROOT_DIRECTORY}/.local/python"
 mkdir -p "$PYTHONUSERBASE"
 export PATH="${PYTHONUSERBASE}/bin":$PATH
+
+export PATH=$PATH:"${SCRIPTS_DIRECTORY}/changes"
+export PATH=$PATH:"${SCRIPTS_DIRECTORY}/build-tools"
+export PATH=$PATH:"${ROOT_DIRECTORY}/diligence/scripts"

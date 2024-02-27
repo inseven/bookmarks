@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/apple/swift-docc-plugin",
         "state": {
           "branch": null,
-          "revision": "9b1258905c21fc1b97bf03d1b4ca12c4ec4e5fda",
-          "version": "1.2.0"
+          "revision": "26ac5758409154cc448d7ab82389c520fa8a8247",
+          "version": "1.3.0"
         }
       },
       {
@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/scinfu/SwiftSoup.git",
         "state": {
           "branch": null,
-          "revision": "8b6cf29eead8841a1fa7822481cb3af4ddaadba6",
-          "version": "2.6.1"
+          "revision": "f83c097597094a04124eb6e0d1e894d24129af87",
+          "version": "2.7.0"
         }
       },
       {
@@ -42,7 +42,7 @@
         "repositoryURL": "https://github.com/ksemianov/WrappingHStack.git",
         "state": {
           "branch": "main",
-          "revision": "7b48e1f19d337cf934d725bff54cac9519e285d8",
+          "revision": "3300f68b6bf5f8a75ee7ca8a40f136a558053d10",
           "version": null
         }
       }

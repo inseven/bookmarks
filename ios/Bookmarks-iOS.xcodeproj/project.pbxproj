@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 53;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -337,7 +337,7 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1430;
-				ORGANIZATIONNAME = "InSeven Limited";
+				ORGANIZATIONNAME = "Jason Morley";
 				TargetAttributes = {
 					D89CF20F2A4DE8B5000E2B1C = {
 						CreatedOnToolsVersion = 14.3.1;
@@ -498,11 +498,11 @@
 				CODE_SIGN_ENTITLEMENTS = "Bookmarks Share Extension/Bookmarks Share Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = $BUILD_NUMBER;
-				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				DEVELOPMENT_TEAM = QS82QFHKWB;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Bookmarks Share Extension/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Bookmarks Share Extension";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2023 InSeven Limited. All rights reserved.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2020-2024 Jason Morley. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -510,7 +510,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 0.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks.new.ShareExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = "uk.co.jbmorley.bookmarks.apps.appstore.share-extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -528,11 +528,11 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = $BUILD_NUMBER;
 				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = S4WXAUZQEV;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = QS82QFHKWB;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Bookmarks Share Extension/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Bookmarks Share Extension";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2023 InSeven Limited. All rights reserved.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2020-2024 Jason Morley. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -540,7 +540,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 0.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks.new.ShareExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = "uk.co.jbmorley.bookmarks.apps.appstore.share-extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Bookmarks Share Extension App Store Profile";
@@ -685,14 +685,14 @@
 				CODE_SIGN_ENTITLEMENTS = Bookmarks/Bookmarks.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = $BUILD_NUMBER;
-				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				DEVELOPMENT_TEAM = QS82QFHKWB;
 				INFOPLIST_FILE = Bookmarks/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks.new;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.jbmorley.bookmarks.apps.appstore;
 				PRODUCT_NAME = Bookmarks;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Bookmarks/Bookmarks-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -709,15 +709,15 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = $BUILD_NUMBER;
-				DEVELOPMENT_TEAM = S4WXAUZQEV;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = S4WXAUZQEV;
+				DEVELOPMENT_TEAM = 9GNGYP6YR7;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = QS82QFHKWB;
 				INFOPLIST_FILE = Bookmarks/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.bookmarks.new;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.jbmorley.bookmarks.apps.appstore;
 				PRODUCT_NAME = Bookmarks;
 				PROVISIONING_PROFILE_SPECIFIER = "Bookmarks App Store Profile";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Bookmarks App Store Profile";
@@ -734,14 +734,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				DEVELOPMENT_TEAM = QS82QFHKWB;
 				INFOPLIST_FILE = BookmarksTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksTests;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.jbmorley.bookmarks.apps.appstore.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -756,14 +756,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				DEVELOPMENT_TEAM = QS82QFHKWB;
 				INFOPLIST_FILE = BookmarksTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksTests;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.jbmorley.bookmarks.apps.appstore.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -776,7 +776,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				DEVELOPMENT_TEAM = QS82QFHKWB;
 				INFOPLIST_FILE = BookmarksUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -784,7 +784,7 @@
 					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.jbmorley.bookmarks.apps.uitests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -797,7 +797,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				DEVELOPMENT_TEAM = QS82QFHKWB;
 				INFOPLIST_FILE = BookmarksUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -805,7 +805,7 @@
 					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.inseven.BookmarksUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.jbmorley.bookmarks.apps.uitests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

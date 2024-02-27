@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2020-2023 InSeven Limited
+# Copyright (c) 2020-2024 Jason Morley
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -36,7 +36,7 @@ xcrun altool --validate-app \
     --type ios
 xcrun altool --upload-app \
     -f "$1" \
-    --primary-bundle-id "uk.co.inseven.bookmarks" \
+    --primary-bundle-id "uk.co.jbmorley.bookmarks.apps.appstore" \
     --apiKey "$APPLE_API_KEY_ID" \
     --apiIssuer "$APPLE_API_KEY_ISSUER_ID" \
     --type ios
@@ -50,7 +50,7 @@ xcrun altool --validate-app \
     --type macos
 xcrun altool --upload-app \
     -f "$2" \
-    --primary-bundle-id "uk.co.inseven.bookmarks" \
+    --primary-bundle-id "uk.co.jbmorley.bookmarks.apps.appstore" \
     --apiKey "$APPLE_API_KEY_ID" \
     --apiIssuer "$APPLE_API_KEY_ISSUER_ID" \
     --type macos

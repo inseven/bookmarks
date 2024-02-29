@@ -11,6 +11,15 @@
         }
       },
       {
+        "package": "Licensable",
+        "repositoryURL": "https://github.com/inseven/licensable",
+        "state": {
+          "branch": null,
+          "revision": "a8ad62c6fde5aca29a47459b0687e580eee203dd",
+          "version": "0.0.13"
+        }
+      },
+      {
         "package": "SwiftDocCPlugin",
         "repositoryURL": "https://github.com/apple/swift-docc-plugin",
         "state": {

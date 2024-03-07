@@ -78,11 +78,12 @@ class ShareExtensionModel: ObservableObject, Runnable {
         let preferredTitle = extensionItem.attributedContentText?.string
         attachment.loadItem(forTypeIdentifier: UTType.url.identifier) { item, error in
             if let error {
-                print("Failed to load item with error \(error).")
+                DispatchQueue.main.async {
+                    self.error = error
+                }
                 return
             }
             guard let url = item as? URL else {
-                print("Unexpected item type.")
                 return
             }
             Task {

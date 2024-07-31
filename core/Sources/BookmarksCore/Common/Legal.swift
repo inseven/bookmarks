@@ -1,4 +1,4 @@
-// Copyright (c) 2020-2023 InSeven Limited
+// Copyright (c) 2020-2024 Jason Morley
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,14 +21,20 @@
 import Foundation
 
 import Diligence
+import Interact
 
 public struct Legal {
 
     public static let contents = Contents(repository: "inseven/bookmarks",
-                                          copyright: "Copyright © 2020-2023 InSeven Limited") {
-        Action("Support", url: URL(address: "support@inseven.co.uk", subject: "Bookmarks Support")!)
+                                          copyright: "Copyright © 2020-2024 Jason Morley") {
+
+        let subject = "Bookmarks Support (\(Bundle.main.version ?? "Unknown Version"))"
+
+        Action("Website", url: URL(string: "https://bookmarks.jbmorley.co.uk")!)
+        Action("Privacy Policy", url: URL(string: "https://bookmarks.jbmorley.co.uk/privacy-policy")!)
         Action("GitHub", url: URL(string: "https://github.com/inseven/bookmarks")!)
-        Action("InSeven Limited", url: URL(string: "https://inseven.co.uk")!)
+        Action("Support", url: URL(address: "support@jbmorley.co.uk", subject: subject)!)
+
     } acknowledgements: {
         Acknowledgements("Developers") {
             Credit("Jason Morley", url: URL(string: "https://jbmorley.co.uk"))
@@ -43,9 +49,9 @@ public struct Legal {
             Credit("Terrence Talbot")
         }
     } licenses: {
-        License("Bookmarks", author: "InSeven Limited", filename: "bookmarks-license", bundle: .module)
+        License("Bookmarks", author: "Jason Morley", filename: "bookmarks-license", bundle: .module)
         License("HashRainbow", author: "Sarah Barbour", filename: "hashrainbow-license", bundle: .module)
-        License("Interact", author: "InSeven Limited", filename: "interact-license", bundle: .module)
+        License(Interact.Package.name, author: Interact.Package.author, url: Interact.Package.licenseURL)
         License("SelectableCollectionView", author: "Jason Morley", filename: "selectablecollectionview-license", bundle: .module)
         License("Swift Algorithm Club", author: "Matthijs Hollemans and Contributors", filename: "swift-algorithm-club-license", bundle: .module)
         License("SwiftSoup", author: "Nabil Chatbi", filename: "swiftsoup-license", bundle: .module)

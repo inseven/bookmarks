@@ -1,4 +1,4 @@
-// Copyright (c) 2020-2023 InSeven Limited
+// Copyright (c) 2020-2024 Jason Morley
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -75,24 +75,33 @@ class ShareExtensionModel: ObservableObject, Runnable {
         else {
             return
         }
-        Task {
-            do {
-                guard let url = try await attachment.loadItem(forTypeIdentifier: UTType.url.identifier) as? URL else {
-                    return
-                }
-                if let post = try await pinboard?.postsGet(url: url).posts.first {
-                    await MainActor.run {
-                        self.post = post
-                    }
-                } else {
-                    let title = try await title(for: url, preferredTitle: extensionItem.attributedContentText?.string)
-                    await MainActor.run {
-                        self.post = Pinboard.Post(href: url, description: title, time: nil)
-                    }
-                }
-            } catch {
-                await MainActor.run {
+        let preferredTitle = extensionItem.attributedContentText?.string
+        attachment.loadItem(forTypeIdentifier: UTType.url.identifier) { item, error in
+            if let error {
+                DispatchQueue.main.async {
                     self.error = error
+                }
+                return
+            }
+            guard let url = item as? URL else {
+                return
+            }
+            Task {
+                do {
+                    if let post = try await self.pinboard?.postsGet(url: url).posts.first {
+                        await MainActor.run {
+                            self.post = post
+                        }
+                    } else {
+                        let title = try await self.title(for: url, preferredTitle: preferredTitle)
+                        await MainActor.run {
+                            self.post = Pinboard.Post(href: url, description: title, time: nil)
+                        }
+                    }
+                } catch {
+                    await MainActor.run {
+                        self.error = error
+                    }
                 }
             }
         }

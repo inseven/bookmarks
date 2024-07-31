@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2020-2023 InSeven Limited
+# Copyright (c) 2020-2024 Jason Morley
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,6 @@ environment_path="${scripts_directory}/environment.sh"
 source "$environment_path"
 
 # Install the Python dependencies
-pip3 install --user pipenv
 PIPENV_PIPFILE="$changes_directory/Pipfile" pipenv install
 PIPENV_PIPFILE="$build_tools_directory/Pipfile" pipenv install
 

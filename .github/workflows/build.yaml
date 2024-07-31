@@ -6,7 +6,7 @@ on:
   push:
     branches: [ main ]
   schedule:
-    - cron:  '0 1 * * *'
+    - cron:  '0 9 * * *'
   workflow_dispatch:
 
 jobs:
@@ -18,7 +18,7 @@ jobs:
     steps:
 
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         submodules: recursive
         fetch-depth: 0
@@ -28,14 +28,14 @@ jobs:
 
     - name: Build, test, and release
       env:
-        APPLE_DISTRIBUTION_CERTIFICATE_BASE64: ${{ secrets.APPLE_DISTRIBUTION_CERTIFICATE_BASE64 }}
-        APPLE_DISTRIBUTION_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_DISTRIBUTION_CERTIFICATE_PASSWORD }}
-        MACOS_DEVELOPER_INSTALLER_CERTIFICATE: ${{ secrets.MACOS_DEVELOPER_INSTALLER_CERTIFICATE }}
-        MACOS_DEVELOPER_INSTALLER_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_DEVELOPER_INSTALLER_CERTIFICATE_PASSWORD }}
+        APPLE_DISTRIBUTION_CERTIFICATE_BASE64: ${{ secrets.PERSONAL_APPLE_DISTRIBUTION_CERTIFICATE_BASE64 }}
+        APPLE_DISTRIBUTION_CERTIFICATE_PASSWORD: ${{ secrets.PERSONAL_APPLE_DISTRIBUTION_CERTIFICATE_PASSWORD }}
+        MACOS_DEVELOPER_INSTALLER_CERTIFICATE_BASE64: ${{ secrets.PERSONAL_MACOS_DEVELOPER_INSTALLER_CERTIFICATE_BASE64 }}
+        MACOS_DEVELOPER_INSTALLER_CERTIFICATE_PASSWORD: ${{ secrets.PERSONAL_MACOS_DEVELOPER_INSTALLER_CERTIFICATE_PASSWORD }}
 
-        APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
-        APPLE_API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
-        APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+        APPLE_API_KEY_BASE64: ${{ secrets.PERSONAL_APPLE_API_KEY_BASE64 }}
+        APPLE_API_KEY_ISSUER_ID: ${{ secrets.PERSONAL_APPLE_API_KEY_ISSUER_ID }}
+        APPLE_API_KEY_ID: ${{ secrets.PERSONAL_APPLE_API_KEY_ID }}
 
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         RELEASE: ${{ github.ref == 'refs/heads/main' }}
@@ -44,7 +44,70 @@ jobs:
         scripts/build.sh
 
     - name: Archive the binary
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         path: build/build-*.zip
         if-no-files-found: error
+
+  website-build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Checkout required submodules
+      run: |
+        git submodule update --init --depth 1 scripts/build-tools
+        git submodule update --init --depth 1 scripts/changes
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.9"
+
+    - name: Install pipenv
+      run: |
+        python -m pip install --upgrade pipenv wheel
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18
+
+    - name: Install dependencies
+      run: scripts/install-dependencies.sh
+
+    - name: Build website
+      run: |
+        scripts/build-website.sh
+        chmod -v -R +rX "_site/"
+
+    - name: Upload Pages artifact
+      uses: actions/upload-pages-artifact@v3
+
+  website-deploy:
+
+    needs: website-build
+    if: ${{ github.ref == 'refs/heads/main' }}
+
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    # Specify runner + deployment step
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4 # or the latest "vX.X.X" version tag for this action

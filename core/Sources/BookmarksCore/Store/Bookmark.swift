@@ -1,4 +1,4 @@
-// Copyright (c) 2020-2023 InSeven Limited
+// Copyright (c) 2020-2024 Jason Morley
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ public struct Bookmark: Equatable {
     static var placeholder: Self {
         return Self(identifier: "",
                     title: "",
-                    url: URL(string: "https://inseven.co.uk")!,
+                    url: URL(string: "https://jbmorley.co.uk")!,
                     tags: [],
                     date: .now,
                     toRead: false,

@@ -56,7 +56,7 @@ GEM
     rb-fsevent (0.11.1)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    rexml (3.3.2)
+    rexml (3.3.3)
       strscan
     rouge (3.30.0)
     safe_yaml (1.0.5)
@@ -78,6 +78,7 @@ DEPENDENCIES
   jekyll (~> 4.2.0)
   jekyll-feed (~> 0.12)
   minima (~> 2.5)
+  rexml (>= 3.3.2)
   tzinfo (~> 1.2)
   tzinfo-data
   wdm (~> 0.1.1)

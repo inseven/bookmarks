@@ -1,8 +1,8 @@
 [submodule "ios/hpple"]
-	path = hpple
+	path = dependencies/hpple
         url = git@github.com:jbmorley/hpple.git
 [submodule "interact"]
-	path = interact
+	path = dependencies/interact
 	url = git@github.com:jbmorley/interact.git
 [submodule "scripts/changes"]
 	path = scripts/changes
@@ -11,11 +11,11 @@
 	path = scripts/build-tools
 	url = https://github.com/jbmorley/build-tools.git
 [submodule "diligence"]
-	path = diligence
+	path = dependencies/diligence
 	url = git@github.com:inseven/diligence.git
 [submodule "SQLite.swift"]
-	path = SQLite.swift
+	path = dependencies/SQLite.swift
 	url = git@github.com:jbmorley/SQLite.swift.git
 [submodule "SelectableCollectionView"]
-	path = SelectableCollectionView
+	path = dependencies/SelectableCollectionView
 	url = git@github.com:jbmorley/SelectableCollectionView.git

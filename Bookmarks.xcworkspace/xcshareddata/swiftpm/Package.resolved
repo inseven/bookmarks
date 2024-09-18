@@ -1,70 +1,50 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "Cassowary",
-        "repositoryURL": "https://github.com/tribalworldwidelondon/CassowarySwift.git",
-        "state": {
-          "branch": null,
-          "revision": "7de8fee8331ad13eabb8de639fab0fde7a8f0d77",
-          "version": "2.0.1"
-        }
-      },
-      {
-        "package": "HashRainbow",
-        "repositoryURL": "https://github.com/saramah/HashRainbow.git",
-        "state": {
-          "branch": "main",
-          "revision": "3eb3d2ce3b3fce35bcde312ed074a9c237d714ab",
-          "version": null
-        }
-      },
-      {
-        "package": "Licensable",
-        "repositoryURL": "https://github.com/inseven/licensable",
-        "state": {
-          "branch": null,
-          "revision": "a8ad62c6fde5aca29a47459b0687e580eee203dd",
-          "version": "0.0.13"
-        }
-      },
-      {
-        "package": "SwiftDocCPlugin",
-        "repositoryURL": "https://github.com/apple/swift-docc-plugin",
-        "state": {
-          "branch": null,
-          "revision": "26ac5758409154cc448d7ab82389c520fa8a8247",
-          "version": "1.3.0"
-        }
-      },
-      {
-        "package": "SymbolKit",
-        "repositoryURL": "https://github.com/apple/swift-docc-symbolkit",
-        "state": {
-          "branch": null,
-          "revision": "b45d1f2ed151d057b54504d653e0da5552844e34",
-          "version": "1.0.0"
-        }
-      },
-      {
-        "package": "SwiftSoup",
-        "repositoryURL": "https://github.com/scinfu/SwiftSoup.git",
-        "state": {
-          "branch": null,
-          "revision": "f83c097597094a04124eb6e0d1e894d24129af87",
-          "version": "2.7.0"
-        }
-      },
-      {
-        "package": "WrappingHStack",
-        "repositoryURL": "https://github.com/ksemianov/WrappingHStack.git",
-        "state": {
-          "branch": "main",
-          "revision": "3300f68b6bf5f8a75ee7ca8a40f136a558053d10",
-          "version": null
-        }
+  "pins" : [
+    {
+      "identity" : "cassowaryswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tribalworldwidelondon/CassowarySwift.git",
+      "state" : {
+        "revision" : "7de8fee8331ad13eabb8de639fab0fde7a8f0d77",
+        "version" : "2.0.1"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "hashrainbow",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/saramah/HashRainbow.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "3eb3d2ce3b3fce35bcde312ed074a9c237d714ab"
+      }
+    },
+    {
+      "identity" : "licensable",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/inseven/licensable",
+      "state" : {
+        "revision" : "a8ad62c6fde5aca29a47459b0687e580eee203dd",
+        "version" : "0.0.13"
+      }
+    },
+    {
+      "identity" : "swiftsoup",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/scinfu/SwiftSoup.git",
+      "state" : {
+        "revision" : "f83c097597094a04124eb6e0d1e894d24129af87",
+        "version" : "2.7.0"
+      }
+    },
+    {
+      "identity" : "wrappinghstack",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ksemianov/WrappingHStack.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "3300f68b6bf5f8a75ee7ca8a40f136a558053d10"
+      }
+    }
+  ],
+  "version" : 2
 }

@@ -23,6 +23,8 @@ import SwiftUI
 
 import Interact
 
+import SelectableCollectionView
+
 extension MenuItem {
 
     init(_ title: String, systemImage: String? = nil, role: ButtonRole? = nil, action: @escaping () async -> Void) {

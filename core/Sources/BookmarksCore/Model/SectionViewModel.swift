@@ -24,6 +24,8 @@ import SwiftUI
 
 import Interact
 
+import SelectableCollectionView
+
 public class SectionViewModel: ObservableObject, Runnable {
 
     public enum State {

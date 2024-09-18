@@ -18,21 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
-import SwiftUI
+import SQLite
 
-import Interact
-
-import SelectableCollectionView
-
-extension MenuItem {
-
-    init(_ title: String, systemImage: String? = nil, role: ButtonRole? = nil, action: @escaping () async -> Void) {
-        self.init(title, systemImage: systemImage, role: role) {
-            Task {
-                await action()
-            }
-        }
-    }
-
-}
+// Unfortunately Foundation has now introduced `Expression` so we need to ensure the one from SQLite takes precedence.
+ typealias Expression = SQLite.Expression

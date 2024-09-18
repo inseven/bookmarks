@@ -35,9 +35,7 @@ let package = Package(
                 "WrappingHStack",
                 "HashRainbow",
                 "SwiftSoup",
-                .product(name: "SelectableCollectionView",
-                         package: "SelectableCollectionView",
-                         condition: .when(platforms: [.macOS])),
+                .product(name: "SelectableCollectionView", package: "SelectableCollectionView"),
             ],
             resources: [
                 .process("Licenses"),

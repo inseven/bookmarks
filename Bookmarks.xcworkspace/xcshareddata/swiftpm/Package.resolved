@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "Cassowary",
+        "repositoryURL": "https://github.com/tribalworldwidelondon/CassowarySwift.git",
+        "state": {
+          "branch": null,
+          "revision": "7de8fee8331ad13eabb8de639fab0fde7a8f0d77",
+          "version": "2.0.1"
+        }
+      },
+      {
         "package": "HashRainbow",
         "repositoryURL": "https://github.com/saramah/HashRainbow.git",
         "state": {

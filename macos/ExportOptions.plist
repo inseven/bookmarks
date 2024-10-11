@@ -5,11 +5,11 @@
 	<key>destination</key>
 	<string>export</string>
 	<key>installerSigningCertificate</key>
-	<string>C44BC9291462AE6729496E2CAC18CE475688F8CD</string>
+	<string>3rd Party Mac Developer Installer</string>
 	<key>manageAppVersionAndBuildNumber</key>
 	<false/>
 	<key>method</key>
-	<string>app-store</string>
+	<string>app-store-connect</string>
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>uk.co.jbmorley.bookmarks.apps.appstore</key>
@@ -18,7 +18,7 @@
 		<string>Bookmarks Safari Extension Mac App Store Profile</string>
 	</dict>
 	<key>signingCertificate</key>
-	<string>91DADFE184A1526FA94D4513D5B4C75E1DB3B252</string>
+	<string>Apple Distribution</string>
 	<key>signingStyle</key>
 	<string>manual</string>
 	<key>teamID</key>

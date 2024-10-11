@@ -90,7 +90,6 @@
 		D891C46D261E32FB0024E1A6 /* BookmarksUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookmarksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D891C471261E32FB0024E1A6 /* BookmarksUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksUITests.swift; sourceTree = "<group>"; };
 		D891C473261E32FB0024E1A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D8A0D75A262015E700C9F190 /* interact */ = {isa = PBXFileReference; lastKnownFileType = folder; name = interact; path = ../interact; sourceTree = "<group>"; };
 		D8CD4A6828AB8DB800D57F34 /* SelectableCollectionView */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SelectableCollectionView; path = ../SelectableCollectionView; sourceTree = "<group>"; };
 		D8CF8C6D261E34A300E52E85 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8CF8CC1261E369D00E52E85 /* BookmarksCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BookmarksCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -168,7 +167,6 @@
 				D8ECA5E02640583900947EEC /* Debug.xcconfig */,
 				D8ECA5DE2640580E00947EEC /* Release.xcconfig */,
 				D8ECA5DF2640582200947EEC /* Common.xcconfig */,
-				D8A0D75A262015E700C9F190 /* interact */,
 				D891C452261E32F90024E1A6 /* Bookmarks */,
 				D891C465261E32FB0024E1A6 /* BookmarksTests */,
 				D891C470261E32FB0024E1A6 /* BookmarksUITests */,

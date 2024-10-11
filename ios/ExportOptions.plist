@@ -7,7 +7,7 @@
 	<key>manageAppVersionAndBuildNumber</key>
 	<false/>
 	<key>method</key>
-	<string>app-store</string>
+	<string>app-store-connect</string>
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>uk.co.jbmorley.bookmarks.apps.appstore</key>
@@ -16,7 +16,7 @@
 		<string>Bookmarks Share Extension App Store Profile</string>
 	</dict>
 	<key>signingCertificate</key>
-	<string>91DADFE184A1526FA94D4513D5B4C75E1DB3B252</string>
+	<string>Apple Distribution</string>
 	<key>signingStyle</key>
 	<string>manual</string>
 	<key>stripSwiftSymbols</key>

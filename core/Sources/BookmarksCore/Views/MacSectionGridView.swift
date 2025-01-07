@@ -65,6 +65,7 @@ public struct MacSectionGridView: View {
             }
             return false
         }
+        .frame(minWidth: 640, minHeight: 480)
     }
 
 }

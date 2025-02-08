@@ -1,4 +1,4 @@
-// Copyright (c) 2020-2024 Jason Morley
+// Copyright (c) 2020-2025 Jason Morley
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@ import Interact
 public struct Legal {
 
     public static let contents = Contents(repository: "inseven/bookmarks",
-                                          copyright: "Copyright © 2020-2024 Jason Morley") {
+                                          copyright: "Copyright © 2020-2025 Jason Morley") {
 
         let subject = "Bookmarks Support (\(Bundle.main.version ?? "Unknown Version"))"
 

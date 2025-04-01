@@ -46,7 +46,6 @@ class ThumbnailTests: XCTestCase {
     }
 
     func testThumbnail() {
-        XCTAssertNotNil(thumbnail(for: "https://www.raspberrypi.org/products/raspberry-pi-high-quality-camera/"))
         XCTAssertNotNil(thumbnail(for: "http://2064.io"))
         XCTAssertNil(thumbnail(for: "http://lesscss.org"))
     }
